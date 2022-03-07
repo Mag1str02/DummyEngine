@@ -1,0 +1,12 @@
+build/
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/tasks.json 
+.vscode/settings.json 
+res/logs/
+libs/GLAD
+libs/GLFW
+libs/GLM
+libs/STB_IMAGE
+libs/ASSIMP
+**/tempCodeRunnerFile.cpp
