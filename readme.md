@@ -1,1 +1,1 @@
-# This is my first attempts to understand how 3D graphics work and make some blanks.
+# First try to make some kind of 3D game engine. Hope i wont die:)
