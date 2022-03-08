@@ -6,8 +6,17 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
+#include "../Texture/texture.h"
 
 namespace fs = std::filesystem;
+
+struct Material {
+    Texture* diffuse;
+    Texture* specular;
+    Texture* emmission;
+
+    float shininess;
+};
 
 class ShaderProgram {
 private:
@@ -37,4 +46,6 @@ public:
     void SetVec3f(const std::string& uniform_name, glm::vec3 vec);
     void SetVec3i(const std::string& uniform_name, int x, int y, int z);
     void SetMat4fv(const std::string& uniform_name, glm::mat4 value);
+
+    void SetMaterial(const std::string& uniform_name, Material value);
 };

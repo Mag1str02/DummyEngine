@@ -12,6 +12,7 @@ ShaderProgram::ShaderProgram() {
 void ShaderProgram::Init(std::string name) {
     _name = name;
     _sp_id = glCreateProgram();
+    Logger::Info("loading", "SP id: " + std::to_string(_sp_id));
 }
 void ShaderProgram::SmartInit(const fs::path& path_to_file) {
     Init(path_to_file.filename().string());
@@ -89,4 +90,15 @@ void ShaderProgram::SetVec3f(const std::string& uniform_name, glm::vec3 vec) {
 void ShaderProgram::SetVec3i(const std::string& uniform_name, int x, int y, int z) {
     Use();
     glUniform3i(PosOf(uniform_name), x, y, z);
+}
+
+void ShaderProgram::SetMaterial(const std::string& uniform_name, Material value) {
+    Use();
+    value.diffuse->BindToUnit(1);
+    value.specular->BindToUnit(2);
+    value.emmission->BindToUnit(3);
+    SetInt(uniform_name + ".diffuse", 1);
+    SetInt(uniform_name + ".specular", 2);
+    SetInt(uniform_name + ".emmision", 3);
+    SetFloat(uniform_name + ".shininess", value.shininess);
 }

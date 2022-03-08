@@ -9,7 +9,6 @@
 #include "../Wrappings/ApplicationWindow/application_window.h"
 #include "../Wrappings/ShaderProgram/shader_program.h"
 
-
 ApplicationWindow application_window;
 ShaderProgram sp_basic_texture;
 VAO rect;
@@ -41,13 +40,11 @@ int main() {
 
     application_window.StartLoop();
 
-    glfwTerminate();
-
     return 0;
 }
 
 void Initialize() {
-    std::cout << LOG_DIR / "loading.txt" << std::endl;
+    std::cout << WORKING_DIR << std::endl;
     Logger::Open(LOG_DIR / "loading.txt", "loading");
     Logger::Info("Logger initialized.", "loading");
     application_window.Init("First");

@@ -16,12 +16,24 @@ add_library(my_lib STATIC
     ./libs/STB_IMAGE/stb_image.cpp   
 
     ./src/Memory/VAO/vao.cpp
+    ./src/Memory/TextureManager/texture_manager.cpp
+
+    ./src/Objects/LightSources/PointLight/point_light.cpp
+    ./src/Objects/LightSources/SpotLight/spot_light.cpp
+    ./src/Objects/LightSources/DirectionalLight/directional_light.cpp
+    ./src/Objects/LightSources/LightManager/light_manager.cpp
+    ./src/Objects/Position/position.cpp
+    ./src/Objects/Cameras/FPSCamera/fps_camera.cpp
+    ./src/Objects/Models/Model/model.cpp
+    ./src/Objects/Models/Mesh/mesh.cpp
 
     ./src/UnSorted/Logger/logger.cpp
+    ./src/UnSorted/InputManager/input_manager.cpp
 
     ./src/Wrappings/ApplicationWindow/application_window.cpp
     ./src/Wrappings/Shader/shader.cpp
     ./src/Wrappings/ShaderProgram/shader_program.cpp
+    ./src/Wrappings/Texture/texture.cpp
 )
 
 ADD_CUSTOM_COMMAND(TARGET my_lib
@@ -36,8 +48,13 @@ add_executable(First
     ./src/Mains/first.cpp
 )
 
+add_executable(Model
+    ./src/Mains/model.cpp
+)
+
 target_link_libraries(my_lib PRIVATE glad)
 target_link_libraries(my_lib PRIVATE glfw3)
 target_link_libraries(my_lib PRIVATE assimp)
 
 target_link_libraries(First PRIVATE my_lib)
+target_link_libraries(Model PRIVATE my_lib)

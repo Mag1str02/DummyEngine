@@ -42,6 +42,7 @@ void ApplicationWindow::Init(std::string name) {
     LoadGLAD();
     glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSwapInterval(0);
+    SetFullScreen(0);
     Logger::Info("loading", "Application Window initialized: " + _name);
 }
 void ApplicationWindow::SetFullScreen(int id) {
