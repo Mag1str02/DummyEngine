@@ -32,7 +32,7 @@ void VAO::Init(const std::vector<float>& vertices, const std::vector<unsigned in
 void VAO::SetFloatAttribute(GLuint index, GLint size, GLboolean normalized, unsigned int stride, unsigned int offset) {
     glBindBuffer(GL_ARRAY_BUFFER, _vbo);
     glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride * sizeof(float), (void*)(offset * sizeof(float)));
-    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(index);
 }
 
 void VAO::Use() {

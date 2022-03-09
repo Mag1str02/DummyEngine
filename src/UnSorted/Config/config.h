@@ -13,7 +13,7 @@ const size_t MAX_INPUT_FRAME_AMOUNT = 100;
 
 const float DEFAULT_CAMERA_FOV = 60.0f;
 const float DEFAULT_CAMERA_ASPECT = 16.0f / 9.0f;
-const float DEFAULT_NEAR_PLANE = 0.1f;
+const float DEFAULT_NEAR_PLANE = 0.0000001f;
 const float DEFAULT_FAR_PLANE = 2000.0f;
 
 const fs::path WORKING_DIR = (fs::current_path().filename() == "build" ? fs::canonical(fs::current_path() / "..") : fs::current_path());

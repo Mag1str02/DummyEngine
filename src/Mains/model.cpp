@@ -27,7 +27,7 @@ bool cursor_mode = true;
 
 InputManager input_manager;
 ApplicationWindow application_window;
-ShaderProgram sp_phong;
+ShaderProgram sp_textured_phong, sp_colored_phong;
 FPSCamera camera;
 Model backpack, train, cube;
 
@@ -68,7 +68,8 @@ void Initialize() {
 }
 void LoadShaders() {
     Logger::Info("loading", "Loading shaders.");
-    sp_phong.SmartInit(SHADER_DIR / "Phong");
+    sp_textured_phong.SmartInit(SHADER_DIR / "TexturedPhong");
+    sp_colored_phong.SmartInit(SHADER_DIR / "ColoredPhong");
 
     light_manager.AddDirectionalLight(&sun);
     light_manager.AddDirectionalLight(&moon);
@@ -126,7 +127,7 @@ void SetObjectProperties() {
 
 void ProcessInput() {
     float sensitivity = 0.07;
-    float speed = 10;
+    float speed = 0.5;
 
     input_manager.ReadFrame();
 
@@ -201,25 +202,36 @@ void UpdateWorld() {
     flashlight.position = camera.GetPos();
     flashlight.direction = camera.GetDir();
 
-    sp_phong.SetMat4fv("rotation", e);
-    sp_phong.SetMat4fv("model", e);
+    sp_textured_phong.SetMat4fv("rotation", e);
+    sp_textured_phong.SetMat4fv("model", e);
+    sp_colored_phong.SetVec3f("view_pos", camera.GetPos());
+    sp_colored_phong.SetMat4fv("rotation", e);
+    sp_colored_phong.SetMat4fv("model", e);
+    sp_colored_phong.SetVec3f("view_pos", camera.GetPos());
 }
 void Draw() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
-    light_manager.UpdateLights(sp_phong);
-    sp_phong.Use();
+    light_manager.UpdateLights(sp_textured_phong);
+    light_manager.UpdateLights(sp_colored_phong);
     e = glm::mat4(1.0);
-    sp_phong.SetMat4fv("rotation", e);
-    sp_phong.SetMat4fv("model", e);
-    backpack.Draw(camera, sp_phong);
-    train.Draw(camera, sp_phong);
-    e = glm::scale(e, glm::vec3(500, 1,500));
-    e = glm::translate(e, glm::vec3(0, -10, 0));
-    sp_phong.SetMat4fv("model", e);
-    cube.Draw(camera, sp_phong);
+    sp_colored_phong.SetMat4fv("rotation", e);
+    sp_colored_phong.SetMat4fv("model", e);
+    sp_colored_phong.SetVec3f("color", 1.0, 0.5, 1.0);
+    sp_textured_phong.SetMat4fv("rotation", e);
+    e = glm::translate(e, glm::vec3(20, 0, 0));
+    sp_textured_phong.SetMat4fv("model", e);
+    backpack.Draw(camera, sp_textured_phong);
+
+    e = glm::mat4(1.0);
+    train.Draw(camera, sp_colored_phong);
+    e = glm::scale(e, glm::vec3(500, 1, 500));
+    e = glm::translate(e, glm::vec3(0, -3, 0));
+    sp_colored_phong.SetVec3f("color", 0.5, 1.0, 1.0);
+    sp_colored_phong.SetMat4fv("model", e);
+    cube.Draw(camera, sp_colored_phong);
 
     // glDisable(GL_DEPTH_TEST);
     // sp_basic_texture.Use();
