@@ -29,7 +29,7 @@ InputManager input_manager;
 ApplicationWindow application_window;
 ShaderProgram sp_textured_phong, sp_colored_phong;
 FPSCamera camera;
-Model backpack, train, cube;
+Model backpack, train, cube, cubes;
 
 LightManager light_manager;
 DirectionalLight sun, moon;
@@ -84,8 +84,9 @@ void LoadShaders() {
 }
 void LoadModels() {
     backpack.Init(MODEL_DIR / "Backpack" / "backpack.obj");
-    train.Init(MODEL_DIR / "Train" / "train.obj");
+    train.Init(MODEL_DIR / "Train" / "train1.obj");
     cube.Init(MODEL_DIR / "Cube" / "cube.obj");
+    cubes.Init(MODEL_DIR / "Cubes" / "cubes.obj");
 }
 void SetObjectProperties() {
     camera.SetPos(glm::vec3(0.0f, 0.0f, 10.0f));
@@ -223,15 +224,20 @@ void Draw() {
     sp_textured_phong.SetMat4fv("rotation", e);
     e = glm::translate(e, glm::vec3(20, 0, 0));
     sp_textured_phong.SetMat4fv("model", e);
-    backpack.Draw(camera, sp_textured_phong);
+    // backpack.Draw(camera, sp_textured_phong);
 
     e = glm::mat4(1.0);
-    train.Draw(camera, sp_colored_phong);
+    for (size_t i = 0; i < 20; ++i) {
+        e = glm::translate(e, glm::vec3(0, 0, 10));
+        sp_colored_phong.SetMat4fv("model", e);
+        train.Draw(camera, sp_colored_phong);
+    }
+
     e = glm::scale(e, glm::vec3(500, 1, 500));
     e = glm::translate(e, glm::vec3(0, -3, 0));
     sp_colored_phong.SetVec3f("color", 0.5, 1.0, 1.0);
     sp_colored_phong.SetMat4fv("model", e);
-    cube.Draw(camera, sp_colored_phong);
+    // cube.Draw(camera, sp_colored_phong);
 
     // glDisable(GL_DEPTH_TEST);
     // sp_basic_texture.Use();

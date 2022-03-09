@@ -57,13 +57,20 @@ void ApplicationWindow::SetWindowed() {
 }
 
 void ApplicationWindow::StartLoop() {
+    double avarage_frame_time = 0;
+    double prev_time;
+    size_t frame_amount = 0;
     while (!glfwWindowShouldClose(_window)) {
+        prev_time = glfwGetTime();
         glfwPollEvents();
         _process_input();
         _update_world_func();
         _draw_func();
         glfwSwapBuffers(_window);
+        avarage_frame_time = (avarage_frame_time * frame_amount + glfwGetTime() - prev_time) / (frame_amount + 1);
+        frame_amount++;
     }
+    Logger::Info("loading", "Avarage frame time: " + std::to_string(avarage_frame_time) + "s" + " FPS: " + std::to_string(1.0 / avarage_frame_time));
 }
 
 void ApplicationWindow::SetDrawFunc(void (*draw_func)()) {

@@ -73,11 +73,17 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
         }
         vertices.push_back(vertex);
     }
+    unsigned int mn = 10000000, mx = 0;
     for (size_t i = 0; i < mesh->mNumFaces; ++i) {
         aiFace face = mesh->mFaces[i];
-        for (size_t j = 0; j < face.mNumIndices; ++j)
+        for (size_t j = 0; j < face.mNumIndices; ++j) {
             indices.push_back(face.mIndices[j]);
+            mn = std::min(mn, (unsigned int)face.mIndices[j]);
+            mx = std::max(mx, (unsigned int)face.mIndices[j]);
+        }
     }
+    Logger::Warning("loading", "Mesh: " + std::to_string(_meshes_amount) + " Vertices: " + std::to_string(mesh->mNumVertices) + " Indices : (" +
+                                   std::to_string(mn) + ", " + std::to_string(mx) + ")");
     if (mesh->mMaterialIndex >= 0) {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
         std::vector<Texture> diffuse_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");

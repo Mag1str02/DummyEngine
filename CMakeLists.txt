@@ -15,8 +15,11 @@ INCLUDE_DIRECTORIES(libs/GLM/)
 add_library(my_lib STATIC  
     ./libs/STB_IMAGE/stb_image.cpp   
 
-    ./src/Memory/VAO/vao.cpp
+    ./src/Loaders/ModelLoader/model_loader.cpp
+
+    ./src/Memory/MeshManager/mesh_manager.cpp
     ./src/Memory/TextureManager/texture_manager.cpp
+    ./src/Memory/VAO/vao.cpp
 
     ./src/Objects/LightSources/PointLight/point_light.cpp
     ./src/Objects/LightSources/SpotLight/spot_light.cpp
@@ -24,8 +27,6 @@ add_library(my_lib STATIC
     ./src/Objects/LightSources/LightManager/light_manager.cpp
     ./src/Objects/Position/position.cpp
     ./src/Objects/Cameras/FPSCamera/fps_camera.cpp
-    ./src/Objects/Models/Model/model.cpp
-    ./src/Objects/Models/Mesh/mesh.cpp
 
     ./src/UnSorted/Logger/logger.cpp
     ./src/UnSorted/InputManager/input_manager.cpp
