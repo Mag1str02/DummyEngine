@@ -99,7 +99,7 @@ void main() {
     vec3 view_direction = normalize(view_pos - frag_pos);
 
     vec3 result = vec3(0.0);
-
+    
     for (int i = 0; i < light_amount.x; ++i) {
         result += DirectionalLightImpact(directional_lights[i], normalized_normal, view_direction);
     }
@@ -109,6 +109,6 @@ void main() {
     for (int i = 0; i < light_amount.z; ++i) {
         result += SpotLightImpact(spot_lights[i], normalized_normal, view_direction, frag_pos);
     }
-
+    
     frag_color = vec4(result, 1.0);
 }

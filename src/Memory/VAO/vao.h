@@ -4,24 +4,32 @@
 #include <filesystem>
 #include <iostream>
 
+#include "../../Objects/Models/Mesh/mesh.h"
+
 namespace fs = std::filesystem;
 
-class VAO {
+class VAO
+{
 private:
     unsigned int _vao, _vbo, _ebo;
+    size_t _indices_amount;
 
 public:
     VAO();
     ~VAO();
 
-    VAO(const std::vector<float>& vertices, const std::vector<unsigned int>& indices);
-    void Init(const std::vector<float>& vertices, const std::vector<unsigned int>& indices);
+    VAO(const std::vector<float> &vertices, const std::vector<unsigned int> &indices);
+    void Init(const std::vector<float> &vertices, const std::vector<unsigned int> &indices);
+    void Init(const Mesh &mesh);
 
     void SetFloatAttribute(GLuint index, GLint size, GLboolean normalized, unsigned int stride, unsigned int offset);
 
-    void Use();
+    void Draw() const;
+    void Use() const;
 
     unsigned int GetVAOId();
     unsigned int GetVBOId();
     unsigned int GetEBOId();
+
+    void Clear();
 };

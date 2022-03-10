@@ -7,25 +7,22 @@
 
 #include "../../Cameras/FPSCamera/fps_camera.h"
 #include "../Mesh/mesh.h"
+#include "../../../Memory/VAO/vao.h"
+#include "../../../Wrappings/ShaderProgram/shader_program.h"
+#include "../../../Wrappings/Texture/texture.h"
 
 namespace fs = std::filesystem;
 
-class Model {
+class Model
+{
+private:
+    std::vector<VAO> _meshes;
+    std::vector<std::vector<Texture>> _textures;
+
+    void BindTextures(ShaderProgram &shader_program, size_t id) const;
+
 public:
     Model();
-    Model(const fs::path& path_to_model);
-    void Init(const fs::path& path_to_model);
-    void Draw(const FPSCamera& camera, ShaderProgram& shader_program);
-
-private:
-    std::vector<Mesh> _meshes;
-    std::string _directory;
-    size_t _meshes_amount = 0;
-    size_t _verices_amount = 0;
-    size_t _node_amount = 0;
-
-    void LoadModel(const fs::path& path_to_model);
-    void ProcessNode(aiNode* node, const aiScene* scene);
-    Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
-    std::vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+    void AddMesh(const Mesh &mesh);
+    void Draw(ShaderProgram &shader_program) const;
 };

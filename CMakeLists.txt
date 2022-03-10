@@ -18,6 +18,7 @@ add_library(my_lib STATIC
     ./src/Loaders/ModelLoader/model_loader.cpp
 
     ./src/Memory/MeshManager/mesh_manager.cpp
+    ./src/Memory/ModelManager/model_manager.cpp
     ./src/Memory/TextureManager/texture_manager.cpp
     ./src/Memory/VAO/vao.cpp
 
@@ -25,6 +26,8 @@ add_library(my_lib STATIC
     ./src/Objects/LightSources/SpotLight/spot_light.cpp
     ./src/Objects/LightSources/DirectionalLight/directional_light.cpp
     ./src/Objects/LightSources/LightManager/light_manager.cpp
+    ./src/Objects/Models/Model/model.cpp
+    ./src/Objects/Models/Mesh/mesh.cpp
     ./src/Objects/Position/position.cpp
     ./src/Objects/Cameras/FPSCamera/fps_camera.cpp
 
