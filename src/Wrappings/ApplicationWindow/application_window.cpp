@@ -70,7 +70,8 @@ void ApplicationWindow::StartLoop() {
         avarage_frame_time = (avarage_frame_time * frame_amount + glfwGetTime() - prev_time) / (frame_amount + 1);
         frame_amount++;
     }
-    Logger::Info("loading", "Avarage frame time: " + std::to_string(avarage_frame_time) + "s" + " FPS: " + std::to_string(1.0 / avarage_frame_time));
+    Logger::Info("rendering",
+                 "Avarage frame time: " + std::to_string(avarage_frame_time) + "s" + " FPS: " + std::to_string(1.0 / avarage_frame_time));
 }
 
 void ApplicationWindow::SetDrawFunc(void (*draw_func)()) {

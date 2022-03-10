@@ -26,7 +26,7 @@ void VAO::Init(const std::vector<float> &vertices, const std::vector<unsigned in
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-    Logger::Info("loading", "Created VAO: " + std::to_string(_vao) + " Indicies amount: " + std::to_string(_indices_amount));
+    //Logger::Info("loading", "Created VAO: " + std::to_string(_vao) + " Indicies amount: " + std::to_string(_indices_amount));
 }
 void VAO::Init(const Mesh &mesh)
 {
@@ -49,7 +49,7 @@ void VAO::Init(const Mesh &mesh)
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
 
-    Logger::Info("loading", "Created VAO: " + std::to_string(_vao) + " Indicies amount: " + std::to_string(_indices_amount));
+    //Logger::Info("loading", "Created VAO: " + std::to_string(_vao) + " Indicies amount: " + std::to_string(_indices_amount));
 }
 
 void VAO::SetFloatAttribute(GLuint index, GLint size, GLboolean normalized, unsigned int stride, unsigned int offset)

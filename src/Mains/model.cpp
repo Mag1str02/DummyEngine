@@ -23,72 +23,25 @@
 #include "../Wrappings/ApplicationWindow/application_window.h"
 #include "../Wrappings/ShaderProgram/shader_program.h"
 
-std::vector<float> vertices = {
-    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-    0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+std::vector<float> vertices = {-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f,  -0.5f, -0.5f, 1.0f, 0.0f, 0.5f,  0.5f,  -0.5f, 1.0f, 1.0f,
+                               0.5f,  0.5f,  -0.5f, 1.0f, 1.0f, -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f, -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
 
-    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-    0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-    0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-    0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-    -0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
-    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+                               -0.5f, -0.5f, 0.5f,  0.0f, 0.0f, 0.5f,  -0.5f, 0.5f,  1.0f, 0.0f, 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+                               0.5f,  0.5f,  0.5f,  1.0f, 1.0f, -0.5f, 0.5f,  0.5f,  0.0f, 1.0f, -0.5f, -0.5f, 0.5f,  0.0f, 0.0f,
 
-    -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-    -0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-    -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+                               -0.5f, 0.5f,  0.5f,  1.0f, 0.0f, -0.5f, 0.5f,  -0.5f, 1.0f, 1.0f, -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+                               -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, -0.5f, -0.5f, 0.5f,  0.0f, 0.0f, -0.5f, 0.5f,  0.5f,  1.0f, 0.0f,
 
-    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-    0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+                               0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.5f,  0.5f,  -0.5f, 1.0f, 1.0f, 0.5f,  -0.5f, -0.5f, 0.0f, 1.0f,
+                               0.5f,  -0.5f, -0.5f, 0.0f, 1.0f, 0.5f,  -0.5f, 0.5f,  0.0f, 0.0f, 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
-    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
-    0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-    0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+                               -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.5f,  -0.5f, -0.5f, 1.0f, 1.0f, 0.5f,  -0.5f, 0.5f,  1.0f, 0.0f,
+                               0.5f,  -0.5f, 0.5f,  1.0f, 0.0f, -0.5f, -0.5f, 0.5f,  0.0f, 0.0f, -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
 
-    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-    -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
-    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f};
-std::vector<unsigned int> indices = {
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    20,
-    21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
+                               -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f, 0.5f,  0.5f,  -0.5f, 1.0f, 1.0f, 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+                               0.5f,  0.5f,  0.5f,  1.0f, 0.0f, -0.5f, 0.5f,  0.5f,  0.0f, 0.0f, -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f};
+std::vector<unsigned int> indices = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17,
+                                     18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
 
 glm::mat4 e = glm::mat4(1.0f);
 
@@ -116,8 +69,7 @@ void ProcessInput();
 void UpdateWorld();
 void Draw();
 
-int main()
-{
+int main() {
     Initialize();
     LoadShaders();
     LoadModels();
@@ -130,8 +82,7 @@ int main()
     return 0;
 }
 
-void Initialize()
-{
+void Initialize() {
     std::cout << WORKING_DIR << std::endl;
     Logger::Open(LOG_DIR / "loading.txt", "loading");
     Logger::Info("loading", "Logger initialized.");
@@ -142,8 +93,7 @@ void Initialize()
     application_window.SetDrawFunc(Draw);
     input_manager.SetWindow(application_window.GetWindow());
 }
-void LoadShaders()
-{
+void LoadShaders() {
     Logger::Stage("loading", "LOADING SHADERS");
     sp_textured_phong.SmartInit(SHADER_DIR / "TexturedPhong");
     sp_colored_phong.SmartInit(SHADER_DIR / "ColoredPhong");
@@ -159,26 +109,25 @@ void LoadShaders()
 
     Logger::Info("loading", "Shaders loaded.");
 }
-void LoadModels()
-{
+void LoadModels() {
     Logger::Stage("loading", "LOADING MODELS");
     MeshManager::AddModel("train", MODEL_DIR / "Train" / "train1.obj");
     MeshManager::AddModel("backpack", MODEL_DIR / "Backpack" / "Backpack.obj");
     MeshManager::AddModel("cube", MODEL_DIR / "Cube" / "cube.obj");
     MeshManager::AddModel("cubes", MODEL_DIR / "Cubes" / "cubes.obj");
+    MeshManager::CompressModel("train");
+    MeshManager::CompressModel("backpack");
     MeshManager::CompressModel("cubes");
     MeshManager::DumbModels();
 }
-void InitModels()
-{
+void InitModels() {
     Logger::Stage("loading", "INITIALIZING MODELS");
     backpack = ModelManager::GetModel("backpack");
     train = ModelManager::GetModel("train");
     cube = ModelManager::GetModel("cube");
     cubes = ModelManager::GetModel("cubes");
 }
-void SetObjectProperties()
-{
+void SetObjectProperties() {
     Logger::Stage("loading", "SETTING OBJECTS PROPERTIES");
     camera.SetPos(glm::vec3(0.0f, 0.0f, 100.0f));
 
@@ -217,38 +166,28 @@ void SetObjectProperties()
     lamp.outer_cone_cos = cos(glm::radians(17.5));
 }
 
-void ProcessInput()
-{
+void ProcessInput() {
     float sensitivity = 0.07;
     float speed = 0.5;
 
     input_manager.ReadFrame();
 
-    if (input_manager.KeyReleased(GLFW_KEY_TAB))
-    {
-        if (cursor_mode)
-        {
+    if (input_manager.KeyReleased(GLFW_KEY_TAB)) {
+        if (cursor_mode) {
             glfwSetInputMode(application_window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             cursor_mode = false;
-        }
-        else
-        {
+        } else {
             glfwSetInputMode(application_window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             cursor_mode = true;
         }
     }
 
-    if (input_manager.KeyReleased(GLFW_KEY_F11))
-    {
-        if (application_window.GetScreenSizeState() == ScreenSizeState::fullscreen)
-        {
+    if (input_manager.KeyReleased(GLFW_KEY_F11)) {
+        if (application_window.GetScreenSizeState() == ScreenSizeState::fullscreen) {
             application_window.SetWindowed();
-        }
-        else
-        {
+        } else {
             int monitor_id = 0;
-            if (input_manager.KeyDown(GLFW_KEY_1))
-            {
+            if (input_manager.KeyDown(GLFW_KEY_1)) {
                 monitor_id = 1;
             }
             application_window.SetFullScreen(monitor_id);
@@ -260,49 +199,39 @@ void ProcessInput()
     glfwGetWindowSize(application_window.GetWindow(), &width, &height);
     camera.SetAspect(double(width) / height);
 
-    if (!cursor_mode)
-    {
+    if (!cursor_mode) {
         return;
     }
 
     camera.RotateY(input_manager.CursorXOffset() * sensitivity);
     camera.RotateX(input_manager.CursorYOffset() * sensitivity / 16 * 9);
 
-    if (input_manager.KeyDown(GLFW_KEY_LEFT_SHIFT))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_LEFT_SHIFT)) {
         speed = 50.0f;
     }
-    if (input_manager.KeyDown(GLFW_KEY_ESCAPE))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_ESCAPE)) {
         glfwSetWindowShouldClose(application_window.GetWindow(), true);
     }
-    if (input_manager.KeyDown(GLFW_KEY_S))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_S)) {
         camera.MoveInLocal(glm::vec3(0.0f, 0.0f, -1.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_W))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_W)) {
         camera.MoveInLocal(glm::vec3(0.0f, 0.0f, 1.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_D))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_D)) {
         camera.MoveInLocal(glm::vec3(1.0f, 0.0f, 0.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_A))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_A)) {
         camera.MoveInLocal(glm::vec3(-1.0f, 0.0f, 0.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_SPACE))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_SPACE)) {
         camera.MoveInWorld(glm::vec3(0.0f, 1.0f, 0.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_C))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_C)) {
         camera.MoveInWorld(glm::vec3(0.0f, -1.0f, 0.0f) * speed * input_manager.FrameTime());
     }
 }
-void UpdateWorld()
-{
+void UpdateWorld() {
     static size_t frame;
     // Logger::Stage("rendering", "Frame: " + std::to_string(frame++));
     glm::vec3 center(0, 20, 0);
@@ -316,8 +245,7 @@ void UpdateWorld()
     flashlight.position = camera.GetPos();
     flashlight.direction = camera.GetDir();
 }
-void Draw()
-{
+void Draw() {
     sp_textured_phong.SetMat4fv("projection", camera.GetProjectionMatrix());
     sp_textured_phong.SetMat4fv("view", camera.GetViewMatrix());
     sp_textured_phong.SetVec3f("view_pos", camera.GetPos());
@@ -332,16 +260,21 @@ void Draw()
     glEnable(GL_DEPTH_TEST);
 
     e = glm::mat4(1.0);
+    sp_textured_phong.SetMat4fv("rotation", e);
+    e = glm::translate(e, glm::vec3(0, 50, 0));
+    sp_textured_phong.SetMat4fv("model", e);
+    backpack->Draw(sp_textured_phong);
+
+    e = glm::mat4(1.0);
     sp_colored_phong.SetMat4fv("rotation", e);
     sp_colored_phong.SetMat4fv("model", e);
     sp_colored_phong.SetVec3f("color", 1.0, 0.5, 1.0);
 
     e = glm::mat4(1.0);
 
-    for (size_t i = 0; i < 4; ++i)
-    {
+    for (size_t i = 0; i < 100; ++i) {
         e = glm::translate(e, glm::vec3(0, 0, 10));
         sp_colored_phong.SetMat4fv("model", e);
-        cubes->Draw(sp_colored_phong);
+        train->Draw(sp_colored_phong);
     }
 }
