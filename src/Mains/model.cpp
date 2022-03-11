@@ -1,5 +1,3 @@
-#include "../Objects/Models/Model/model.h"
-
 #include <GLAD/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -17,35 +15,15 @@
 #include "../Objects/LightSources/LightManager/light_manager.h"
 #include "../Objects/LightSources/PointLight/point_light.h"
 #include "../Objects/LightSources/SpotLight/spot_light.h"
+#include "../Objects/Model/model.h"
 #include "../UnSorted/Config/config.h"
 #include "../UnSorted/InputManager/input_manager.h"
 #include "../UnSorted/Logger/logger.h"
 #include "../Wrappings/ApplicationWindow/application_window.h"
 #include "../Wrappings/ShaderProgram/shader_program.h"
 
-std::vector<float> vertices = {-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f,  -0.5f, -0.5f, 1.0f, 0.0f, 0.5f,  0.5f,  -0.5f, 1.0f, 1.0f,
-                               0.5f,  0.5f,  -0.5f, 1.0f, 1.0f, -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f, -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-
-                               -0.5f, -0.5f, 0.5f,  0.0f, 0.0f, 0.5f,  -0.5f, 0.5f,  1.0f, 0.0f, 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-                               0.5f,  0.5f,  0.5f,  1.0f, 1.0f, -0.5f, 0.5f,  0.5f,  0.0f, 1.0f, -0.5f, -0.5f, 0.5f,  0.0f, 0.0f,
-
-                               -0.5f, 0.5f,  0.5f,  1.0f, 0.0f, -0.5f, 0.5f,  -0.5f, 1.0f, 1.0f, -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-                               -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, -0.5f, -0.5f, 0.5f,  0.0f, 0.0f, -0.5f, 0.5f,  0.5f,  1.0f, 0.0f,
-
-                               0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.5f,  0.5f,  -0.5f, 1.0f, 1.0f, 0.5f,  -0.5f, -0.5f, 0.0f, 1.0f,
-                               0.5f,  -0.5f, -0.5f, 0.0f, 1.0f, 0.5f,  -0.5f, 0.5f,  0.0f, 0.0f, 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-                               -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.5f,  -0.5f, -0.5f, 1.0f, 1.0f, 0.5f,  -0.5f, 0.5f,  1.0f, 0.0f,
-                               0.5f,  -0.5f, 0.5f,  1.0f, 0.0f, -0.5f, -0.5f, 0.5f,  0.0f, 0.0f, -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-
-                               -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f, 0.5f,  0.5f,  -0.5f, 1.0f, 1.0f, 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-                               0.5f,  0.5f,  0.5f,  1.0f, 0.0f, -0.5f, 0.5f,  0.5f,  0.0f, 0.0f, -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f};
-std::vector<unsigned int> indices = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17,
-                                     18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
-
 glm::mat4 e = glm::mat4(1.0f);
 
-VAO cu;
 bool cursor_mode = true;
 
 InputManager input_manager;
@@ -70,11 +48,13 @@ void UpdateWorld();
 void Draw();
 
 int main() {
+    double start = glfwGetTime();
     Initialize();
     LoadShaders();
     LoadModels();
     InitModels();
     SetObjectProperties();
+    Logger::Info("loading", "Main", "Loading time: " + std::to_string(glfwGetTime() - start) + "s");
     Logger::Close("loading");
     Logger::Open(LOG_DIR / "rendering.txt", "rendering");
     application_window.StartLoop();
@@ -85,8 +65,8 @@ int main() {
 void Initialize() {
     std::cout << WORKING_DIR << std::endl;
     Logger::Open(LOG_DIR / "loading.txt", "loading");
-    Logger::Info("loading", "Logger initialized.");
-    Logger::Stage("loading", "INITIALIZETION");
+    Logger::Info("loading", "Main", "Logger initialized.");
+    Logger::Stage("loading", "Main", "INITIALIZETION");
     application_window.Init("First");
     application_window.SetProcessInputFunc(ProcessInput);
     application_window.SetUpdateWorldFunc(UpdateWorld);
@@ -94,7 +74,7 @@ void Initialize() {
     input_manager.SetWindow(application_window.GetWindow());
 }
 void LoadShaders() {
-    Logger::Stage("loading", "LOADING SHADERS");
+    Logger::Stage("loading", "Main", "LOADING SHADERS");
     sp_textured_phong.SmartInit(SHADER_DIR / "TexturedPhong");
     sp_colored_phong.SmartInit(SHADER_DIR / "ColoredPhong");
 
@@ -107,10 +87,10 @@ void LoadShaders() {
     light_manager.AddSpotLight(&flashlight);
     light_manager.AddSpotLight(&lamp);
 
-    Logger::Info("loading", "Shaders loaded.");
+    Logger::Info("loading", "Main", "Shaders loaded.");
 }
 void LoadModels() {
-    Logger::Stage("loading", "LOADING MODELS");
+    Logger::Stage("loading", "Main", "LOADING MODELS");
     MeshManager::AddModel("train", MODEL_DIR / "Train" / "train1.obj");
     MeshManager::AddModel("backpack", MODEL_DIR / "Backpack" / "Backpack.obj");
     MeshManager::AddModel("cube", MODEL_DIR / "Cube" / "cube.obj");
@@ -121,14 +101,14 @@ void LoadModels() {
     MeshManager::DumbModels();
 }
 void InitModels() {
-    Logger::Stage("loading", "INITIALIZING MODELS");
+    Logger::Stage("loading", "Main", "INITIALIZING MODELS");
     backpack = ModelManager::GetModel("backpack");
     train = ModelManager::GetModel("train");
     cube = ModelManager::GetModel("cube");
     cubes = ModelManager::GetModel("cubes");
 }
 void SetObjectProperties() {
-    Logger::Stage("loading", "SETTING OBJECTS PROPERTIES");
+    Logger::Stage("loading", "Main", "SETTING OBJECTS PROPERTIES");
     camera.SetPos(glm::vec3(0.0f, 0.0f, 100.0f));
 
     moon.ambient = glm::vec3(0.2f, 0.56f, 1.0f) * 0.02f;

@@ -11,7 +11,7 @@ std::string Shader::ReadShaderFile(const fs::path& path_to_file) {
 
     std::ifstream fin(path_to_file);
     if (!fin.is_open()) {
-        Logger::Error("loading", "Can't open shader source file: (" + path_to_file.string() + ")");
+        Logger::Error("loading", "Shader", "Can't open shader source file: (" + path_to_file.string() + ")");
         return source_string;
     }
     try {
@@ -19,10 +19,10 @@ std::string Shader::ReadShaderFile(const fs::path& path_to_file) {
             source_string.append(line + "\n");
         }
     } catch (...) {
-        Logger::Error("loading", "Failed to read shader source file: (" + path_to_file.string() + ")");
+        Logger::Error("loading", "Shader", "Failed to read shader source file: (" + path_to_file.string() + ")");
         return source_string;
     }
-    Logger::Info("loading", "Shader source file readed: (" + path_to_file.string() + ")");
+    Logger::Info("loading", "Shader", "Shader source file readed: (" + path_to_file.string() + ")");
     return source_string;
 }
 void Shader::CheckShader(const fs::path& path_to_file) {
@@ -31,10 +31,10 @@ void Shader::CheckShader(const fs::path& path_to_file) {
     glGetShaderiv(_shader_id, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(_shader_id, MAX_COMPILE_ERROR_LEN, NULL, infoLog);
-        Logger::Error("loading", "Failed to compile shader: (" + path_to_file.string() + ")\n" + std::string(infoLog));
+        Logger::Error("loading", "Shader", "Failed to compile shader: (" + path_to_file.string() + ")\n" + std::string(infoLog));
         return;
     }
-    Logger::Info("loading", "Shader source file successfully compiled: (" + path_to_file.string() + ")");
+    Logger::Info("loading", "Shader", "Shader source file successfully compiled: (" + path_to_file.string() + ")");
 }
 
 Shader::Shader() {

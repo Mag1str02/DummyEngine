@@ -1,20 +1,18 @@
 #include "texture_loader.h"
+
 #include "../../../libs/STB_IMAGE/stb_image.h"
 #include "../../UnSorted/Logger/logger.h"
 
-TextureLoader::TextureLoader()
-{
+TextureLoader::TextureLoader() {
 }
-TextureLoader &TextureLoader::Get()
-{
+TextureLoader& TextureLoader::Get() {
     static TextureLoader texture_loader;
     return texture_loader;
 }
 
-Texture2D TextureLoader::ILoadTexture2D(const fs::path &path, Texture2DType texture_type)
-{
+Texture2D TextureLoader::ILoadTexture2D(const fs::path& path, Texture2DType texture_type) {
     unsigned int texture_id;
-    unsigned char *texture_data;
+    unsigned char* texture_data;
     int width, height, nrChannels;
     std::string format_s;
     GLenum format;
@@ -22,29 +20,27 @@ Texture2D TextureLoader::ILoadTexture2D(const fs::path &path, Texture2DType text
     stbi_set_flip_vertically_on_load(true);
     texture_data = stbi_load(path.string().c_str(), &width, &height, &nrChannels, 0);
 
-    if (!texture_data)
-    {
-        Logger::Error("loading", "Couldn't load texture: (" + path.string() + ")");
+    if (!texture_data) {
+        Logger::Error("loading", "TextureLoader", "Couldn't load texture: (" + path.string() + ")");
         return Texture2D(-1, Texture2DType::uninitialized);
     }
-    switch (nrChannels)
-    {
-    case 1:
-        format_s = "RED";
-        format = GL_RED;
-        break;
-    case 3:
-        format_s = "RGB";
-        format = GL_RGB;
-        break;
-    case 4:
-        format_s = "RGBA";
-        format = GL_RGBA;
-        break;
-    default:
-        format_s = "UNKNOWN";
-        format = -1;
-        break;
+    switch (nrChannels) {
+        case 1:
+            format_s = "RED";
+            format = GL_RED;
+            break;
+        case 3:
+            format_s = "RGB";
+            format = GL_RGB;
+            break;
+        case 4:
+            format_s = "RGBA";
+            format = GL_RGBA;
+            break;
+        default:
+            format_s = "UNKNOWN";
+            format = -1;
+            break;
     }
     glGenTextures(1, &texture_id);
     glActiveTexture(GL_TEXTURE0);
@@ -59,11 +55,10 @@ Texture2D TextureLoader::ILoadTexture2D(const fs::path &path, Texture2DType text
 
     stbi_image_free(texture_data);
 
-    Logger::Info("loading", "Texture loaded successfully: (Format: " + format_s + ")(Path: " + path.string() + ")");
+    Logger::Info("loading", "TextureLoader", "Texture loaded successfully: (Format: " + format_s + ")(Path: " + path.string() + ")");
     return Texture2D(texture_id, texture_type);
 }
 
-Texture2D TextureLoader::LoadTexture2D(const fs::path &path, Texture2DType texture_type)
-{
+Texture2D TextureLoader::LoadTexture2D(const fs::path& path, Texture2DType texture_type) {
     return Get().ILoadTexture2D(path, texture_type);
 }

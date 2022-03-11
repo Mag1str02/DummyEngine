@@ -5,11 +5,11 @@
 
 #include <assimp/Importer.hpp>
 
-#include "../../Cameras/FPSCamera/fps_camera.h"
-#include "../../../Structs/Mesh/mesh.h"
-#include "../../../Memory/VAO/vao.h"
-#include "../../../Wrappings/ShaderProgram/shader_program.h"
-#include "../../../Structs/Textures/Texture2D/texture_2d.h"
+#include "../Cameras/FPSCamera/fps_camera.h"
+#include "../../Structs/Mesh/mesh.h"
+#include "../../Memory/VAO/vao.h"
+#include "../../Wrappings/ShaderProgram/shader_program.h"
+#include "../../Structs/Textures/Texture2D/texture_2d.h"
 
 namespace fs = std::filesystem;
 

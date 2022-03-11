@@ -27,7 +27,7 @@ add_library(my_lib STATIC
     ./src/Objects/LightSources/SpotLight/spot_light.cpp
     ./src/Objects/LightSources/DirectionalLight/directional_light.cpp
     ./src/Objects/LightSources/LightManager/light_manager.cpp
-    ./src/Objects/Models/Model/model.cpp
+    ./src/Objects/Model/model.cpp
     ./src/Objects/Position/position.cpp
     ./src/Objects/Cameras/FPSCamera/fps_camera.cpp
 

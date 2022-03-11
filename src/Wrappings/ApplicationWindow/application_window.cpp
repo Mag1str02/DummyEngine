@@ -4,17 +4,17 @@
 
 void ApplicationWindow::CheckWindow() {
     if (_window == NULL) {
-        Logger::Fatal("loading", "Failed to create GLFW Window: " + _name);
+        Logger::Fatal("loading", "ApplicationWindow", "Failed to create GLFW Window: " + _name);
         throw std::exception();
     }
-    Logger::Info("loading", "GLFW Window created: " + _name);
+    Logger::Info("loading", "ApplicationWindow", "GLFW Window created: " + _name);
 }
 void ApplicationWindow::LoadGLAD() {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        Logger::Fatal("loading", "Failed to initialize GLAD");
+        Logger::Fatal("loading", "ApplicationWindow", "Failed to initialize GLAD");
         throw std::exception();
     }
-    Logger::Info("loading", "GLAD Initialized");
+    Logger::Info("loading", "ApplicationWindow", "GLAD Initialized");
 }
 
 GLFWmonitor* ApplicationWindow::GetMonitor(int id) {
@@ -43,7 +43,7 @@ void ApplicationWindow::Init(std::string name) {
     glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSwapInterval(0);
     SetFullScreen(0);
-    Logger::Info("loading", "Application Window initialized: " + _name);
+    Logger::Info("loading", "ApplicationWindow", "Application Window initialized: " + _name);
 }
 void ApplicationWindow::SetFullScreen(int id) {
     GLFWmonitor* monitor = GetMonitor(id);
@@ -70,7 +70,7 @@ void ApplicationWindow::StartLoop() {
         avarage_frame_time = (avarage_frame_time * frame_amount + glfwGetTime() - prev_time) / (frame_amount + 1);
         frame_amount++;
     }
-    Logger::Info("rendering",
+    Logger::Info("rendering", "ApplicationWindow",
                  "Avarage frame time: " + std::to_string(avarage_frame_time) + "s" + " FPS: " + std::to_string(1.0 / avarage_frame_time));
 }
 

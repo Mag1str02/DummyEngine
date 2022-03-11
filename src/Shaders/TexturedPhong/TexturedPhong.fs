@@ -5,11 +5,11 @@
 #define MAX_SPOT_LIGHT_AMOUNT 64
 
 struct Material {
-    sampler2D texture_diffuse1;
-    sampler2D texture_diffuse2;
-    sampler2D texture_diffuse3;
-    sampler2D texture_specular1;
-    sampler2D texture_specular2;
+    sampler2D diffuse1;
+    sampler2D diffuse2;
+    sampler2D diffuse3;
+    sampler2D specular1;
+    sampler2D specular2;
 };
 struct Light {
     vec3 ambient;
@@ -51,14 +51,14 @@ uniform PointLight point_lights[MAX_POINT_LIGHT_AMOUNT];
 vec3 DirectionalLightImpact(DirectionalLight direction_light, vec3 normal, vec3 view_direction) {
     vec3 normalized_light_ray = normalize(-direction_light.direction);
 
-    vec3 ambient = direction_light.light.ambient * vec3(texture(material.texture_diffuse1, texture_cords));
+    vec3 ambient = direction_light.light.ambient * vec3(texture(material.diffuse1, texture_cords));
 
     float bounce_angle_cos = max(dot(normal, normalized_light_ray), 0.0);
-    vec3 diffuse = bounce_angle_cos * direction_light.light.diffuse * vec3(texture(material.texture_diffuse1, texture_cords));
+    vec3 diffuse = bounce_angle_cos * direction_light.light.diffuse * vec3(texture(material.diffuse1, texture_cords));
 
     vec3 reflected_ray = reflect(-normalized_light_ray, normal);
     float spec = pow(max(dot(view_direction, reflected_ray), 0.0), 32);
-    vec3 specular = spec * direction_light.light.specular * vec3(texture(material.texture_specular1, texture_cords));
+    vec3 specular = spec * direction_light.light.specular * vec3(texture(material.specular1, texture_cords));
 
     return ambient + diffuse + specular;
 }
@@ -77,9 +77,9 @@ vec3 PointLightImpact(PointLight point_light, vec3 normal, vec3 view_direction, 
 
     float attenuation = 1.0 / (point_light.clq.x + point_light.clq.y * dist + point_light.clq.z * (dist * dist));
 
-    vec3 ambient = point_light.light.ambient * vec3(texture(material.texture_diffuse1, texture_cords));
-    vec3 diffuse = bounce_angle_cos * point_light.light.diffuse * vec3(texture(material.texture_diffuse1, texture_cords));
-    vec3 specular = spec * point_light.light.specular * vec3(texture(material.texture_specular1, texture_cords));
+    vec3 ambient = point_light.light.ambient * vec3(texture(material.diffuse1, texture_cords));
+    vec3 diffuse = bounce_angle_cos * point_light.light.diffuse * vec3(texture(material.diffuse1, texture_cords));
+    vec3 specular = spec * point_light.light.specular * vec3(texture(material.specular1, texture_cords));
 
     return (ambient + diffuse + specular) * attenuation;
 }

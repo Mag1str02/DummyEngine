@@ -4,7 +4,7 @@
 #include <map>
 #include "../../Structs/Mesh/mesh.h"
 #include "../VAO/vao.h"
-#include "../../Objects/Models/Model/model.h"
+#include "../../Objects/Model/model.h"
 
 class ModelManager
 {

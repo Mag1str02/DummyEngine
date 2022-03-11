@@ -12,6 +12,9 @@ TextureManager &TextureManager::Get()
 
 bool TextureManager::IAddTexture2D(const fs::path &path_to_file, const std::string &name, Texture2DType type)
 {
+    if(_file_to_name.find(path_to_file.string()) != _file_to_name.end()){
+        return false;
+    }
     Texture2D texture = TextureLoader::LoadTexture2D(path_to_file, type);
     if (texture.GetType() == Texture2DType::uninitialized)
     {
