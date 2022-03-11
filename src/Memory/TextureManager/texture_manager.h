@@ -2,17 +2,25 @@
 
 #include <map>
 
-#include "../../Wrappings/Texture/texture.h"
+#include "../../Structs/Textures/Texture2D/texture_2D.h"
 
 namespace fs = std::filesystem;
 
-class TextureManager {
+class TextureManager
+{
 private:
-    std::map<std::string, Texture> textures;
+    std::map<std::string, Texture2D> _textures_2D;
+    std::map<std::string, std::string> _file_to_name;
+
     TextureManager();
-    static TextureManager& GetManager();
-    Texture IAddTexture(const fs::path& path_to_file);
+    static TextureManager &Get();
+
+    bool IAddTexture2D(const fs::path &path_to_file, const std::string &name, Texture2DType type);
+
+    const Texture2D *IGetTexure2D(const std::string &name) const;
 
 public:
-    static Texture AddTexture(const fs::path& path_to_file);
+    static bool AddTexture2D(const fs::path &path_to_file, const std::string &name, Texture2DType type);
+
+    static const Texture2D *GetTexure2D(const std::string &name);
 };

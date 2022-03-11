@@ -272,7 +272,7 @@ void Draw() {
 
     e = glm::mat4(1.0);
 
-    for (size_t i = 0; i < 100; ++i) {
+    for (size_t i = 0; i < 20; ++i) {
         e = glm::translate(e, glm::vec3(0, 0, 10));
         sp_colored_phong.SetMat4fv("model", e);
         train->Draw(sp_colored_phong);

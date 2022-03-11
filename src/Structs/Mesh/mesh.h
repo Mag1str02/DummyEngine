@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "../../../Wrappings/Texture/texture.h"
+#include "../Textures/Texture2D/texture_2D.h"
 
 struct Vertex
 {
@@ -15,7 +15,7 @@ struct Mesh
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
-    std::vector<Texture> textures;
+    std::vector<const Texture2D *> textures;
 
     Mesh &operator+=(const Mesh &other);
 };

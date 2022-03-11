@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <map>
-#include "../../Objects/Models/Mesh/mesh.h"
+#include "../../Structs/Mesh/mesh.h"
 #include "../VAO/vao.h"
 #include "../../Objects/Models/Model/model.h"
 

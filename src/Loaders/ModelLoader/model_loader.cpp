@@ -1,7 +1,8 @@
 #include "model_loader.h"
 
-#include "../../Objects/Models/Mesh/mesh.h"
+#include <assimp/postprocess.h>
 #include "../../Memory/TextureManager/texture_manager.h"
+#include "../../UnSorted/Logger/logger.h"
 
 ModelLoader::ModelLoader()
 {
@@ -13,20 +14,21 @@ ModelLoader &ModelLoader::Get()
     return model_loader;
 }
 
-void ModelLoader::IReadModel(const fs::path &path, std::vector<Mesh> &meshes)
+void ModelLoader::IReadModel(const fs::path &path, std::vector<Mesh> &meshes, const std::string &model_name)
 {
     _current_mesh_id = 0;
     _current_buffer = &meshes;
     _meshes_amount = 0;
     _nodes_amount = 0;
     _verices_amount = 0;
+    _model_name = model_name;
     const aiScene *scene = _importer.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         Logger::Error("loading", std::string("Failed To Load Scene: (" + path.string() + ")\n") + _importer.GetErrorString());
         return;
     }
-    _directory = fs::canonical(path / "..").string();
+    _directory = fs::canonical(path / "..");
     IReadModelProperties(scene->mRootNode, scene);
     meshes.resize(_meshes_amount);
 
@@ -84,23 +86,25 @@ void ModelLoader::IProcessMesh(aiMesh *mesh, const aiScene *scene)
     if (mesh->mMaterialIndex >= 0)
     {
         aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-        std::vector<Texture> diffuse_maps = ILoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+        std::vector<const Texture2D *> diffuse_maps = ILoadMaterialTextures(material, aiTextureType_DIFFUSE, Texture2DType::diffuse);
         current_mesh.textures.insert(current_mesh.textures.end(), diffuse_maps.begin(), diffuse_maps.end());
-        std::vector<Texture> specular_maps = ILoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+        std::vector<const Texture2D *> specular_maps = ILoadMaterialTextures(material, aiTextureType_SPECULAR, Texture2DType::specular);
         current_mesh.textures.insert(current_mesh.textures.end(), specular_maps.begin(), specular_maps.end());
     }
     _current_mesh_id++;
 }
-std::vector<Texture> ModelLoader::ILoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
+std::vector<const Texture2D *> ModelLoader::ILoadMaterialTextures(aiMaterial *mat, aiTextureType type, Texture2DType texture_type)
 {
-    std::vector<Texture> textures;
+    std::string texture_name;
+    aiString file_name;
+
+    std::vector<const Texture2D *> textures;
     for (size_t i = 0; i < mat->GetTextureCount(type); i++)
     {
-        aiString str;
-        mat->GetTexture(type, i, &str);
-        Texture texture = TextureManager::AddTexture(_directory + "\\" + str.C_Str());
-        texture.SetType(typeName);
-        textures.push_back(texture);
+        mat->GetTexture(type, i, &file_name);
+        texture_name = _model_name + "." + Texture2DTypeToString(texture_type);
+        TextureManager::AddTexture2D(_directory / file_name.C_Str(), texture_name, texture_type);
+        textures.push_back(TextureManager::GetTexure2D(texture_name));
     }
     return textures;
 }
@@ -118,7 +122,7 @@ void ModelLoader::IReadModelProperties(aiNode *node, const aiScene *scene)
     }
 }
 
-void ModelLoader::ReadModel(const fs::path &path, std::vector<Mesh> &meshes)
+void ModelLoader::ReadModel(const fs::path &path, std::vector<Mesh> &meshes, const std::string &model_name)
 {
-    Get().IReadModel(path, meshes);
+    Get().IReadModel(path, meshes, model_name);
 }

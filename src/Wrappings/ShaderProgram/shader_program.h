@@ -6,19 +6,11 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
-#include "../Texture/texture.h"
 
 namespace fs = std::filesystem;
 
-struct Material {
-    Texture* diffuse;
-    Texture* specular;
-    Texture* emmission;
-
-    float shininess;
-};
-
-class ShaderProgram {
+class ShaderProgram
+{
 private:
     unsigned int _sp_id;
     std::string _name;
@@ -29,23 +21,21 @@ private:
 public:
     ShaderProgram();
     void Init(std::string name);
-    void SmartInit(const fs::path& path_to_file);
+    void SmartInit(const fs::path &path_to_file);
     ~ShaderProgram();
 
-    void AddShader(const fs::path& path_to_file, GLuint shader_type);
+    void AddShader(const fs::path &path_to_file, GLuint shader_type);
     void LinkProgram();
     void Use();
 
-    int PosOf(const std::string& filename);
+    int PosOf(const std::string &filename);
 
-    void SetFloat(const std::string& uniform_name, float value);
-    void SetInt(const std::string& uniform_name, int value);
-    void SetVec4f(const std::string& uniform_name, float x, float y, float z, float w);
-    void SetVec4f(const std::string& uniform_name, glm::vec4 value);
-    void SetVec3f(const std::string& uniform_name, float x, float y, float z);
-    void SetVec3f(const std::string& uniform_name, glm::vec3 vec);
-    void SetVec3i(const std::string& uniform_name, int x, int y, int z);
-    void SetMat4fv(const std::string& uniform_name, glm::mat4 value);
-
-    void SetMaterial(const std::string& uniform_name, Material value);
+    void SetFloat(const std::string &uniform_name, float value);
+    void SetInt(const std::string &uniform_name, int value);
+    void SetVec4f(const std::string &uniform_name, float x, float y, float z, float w);
+    void SetVec4f(const std::string &uniform_name, glm::vec4 value);
+    void SetVec3f(const std::string &uniform_name, float x, float y, float z);
+    void SetVec3f(const std::string &uniform_name, glm::vec3 vec);
+    void SetVec3i(const std::string &uniform_name, int x, int y, int z);
+    void SetMat4fv(const std::string &uniform_name, glm::mat4 value);
 };

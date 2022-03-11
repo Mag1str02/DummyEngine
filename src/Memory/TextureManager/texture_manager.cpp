@@ -1,24 +1,42 @@
 #include "texture_manager.h"
+#include "../../Loaders/TextureLoader/texture_loader.h"
 
-#include <iostream>
-
-
-TextureManager::TextureManager() {
+TextureManager::TextureManager()
+{
 }
-TextureManager& TextureManager::GetManager() {
-    static TextureManager tx;
-    return tx;
+TextureManager &TextureManager::Get()
+{
+    static TextureManager texture_manager;
+    return texture_manager;
 }
 
-Texture TextureManager::IAddTexture(const fs::path& path_to_file) {
-    if (textures.find(path_to_file.string()) == textures.end()) {
-        Texture texture;
-        texture.Init(path_to_file);
-        textures[path_to_file.string()] = texture;
+bool TextureManager::IAddTexture2D(const fs::path &path_to_file, const std::string &name, Texture2DType type)
+{
+    Texture2D texture = TextureLoader::LoadTexture2D(path_to_file, type);
+    if (texture.GetType() == Texture2DType::uninitialized)
+    {
+        return false;
     }
-    return textures[path_to_file.string()];
+    _file_to_name[path_to_file.string()] = name;
+    _textures_2D[name] = texture;
+    return true;
 }
 
-Texture TextureManager::AddTexture(const fs::path& path_to_file) {
-    return GetManager().IAddTexture(path_to_file);
+const Texture2D *TextureManager::IGetTexure2D(const std::string &name) const
+{
+    if (_textures_2D.find(name) == _textures_2D.end())
+    {
+        return nullptr;
+    }
+    return &(_textures_2D.at(name));
+}
+
+bool TextureManager::AddTexture2D(const fs::path &path_to_file, const std::string &name, Texture2DType type)
+{
+    return Get().IAddTexture2D(path_to_file, name, type);
+}
+
+const Texture2D *TextureManager::GetTexure2D(const std::string &name)
+{
+    return Get().IGetTexure2D(name);
 }

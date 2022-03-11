@@ -1,4 +1,5 @@
 #include "model.h"
+#include "../../../UnSorted/Logger/logger.h"
 
 void Model::BindTextures(ShaderProgram &shader_program, size_t id) const
 {
@@ -6,8 +7,7 @@ void Model::BindTextures(ShaderProgram &shader_program, size_t id) const
     unsigned int specularNr = 1;
     for (unsigned int i = 0; i < _textures[id].size(); i++)
     {
-        glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
-        // retrieve texture number (the N in diffuse_textureN)
+        glActiveTexture(GL_TEXTURE0 + i); 
         std::string number;
         std::string name = _textures[id][i].GetType();
         if (name == "texture_diffuse")

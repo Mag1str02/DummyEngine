@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "../../Objects/Models/Mesh/mesh.h"
+#include "../../Structs/Mesh/mesh.h"
 
 class MeshManager
 {

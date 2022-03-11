@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <iostream>
 
-#include "../../Objects/Models/Mesh/mesh.h"
+#include "../../Structs/Mesh/mesh.h"
 
 namespace fs = std::filesystem;
 
