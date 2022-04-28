@@ -1,5 +1,7 @@
 #include "input_manager.h"
+
 #include "../Config/config.h"
+
 
 void InputManager::PushButton(int button_id) {
     _current_frame.key_states[button_id] = glfwGetKey(_window, button_id);
@@ -16,23 +18,9 @@ void InputManager::SetWindow(GLFWwindow* window) {
 void InputManager::ReadFrame() {
     _current_frame.time = glfwGetTime();
     glfwGetCursorPos(_window, &_current_frame.x_pos, &_current_frame.y_pos);
-
-    PushButton(GLFW_KEY_ESCAPE);
-
-    PushButton(GLFW_KEY_LEFT_SHIFT);
-    PushButton(GLFW_KEY_TAB);
-    PushButton(GLFW_KEY_F11);
-    PushButton(GLFW_KEY_0);
-    PushButton(GLFW_KEY_1);
-
-    PushButton(GLFW_KEY_S);
-    PushButton(GLFW_KEY_W);
-    PushButton(GLFW_KEY_D);
-    PushButton(GLFW_KEY_A);
-    PushButton(GLFW_KEY_Q);
-    PushButton(GLFW_KEY_E);
-    PushButton(GLFW_KEY_SPACE);
-    PushButton(GLFW_KEY_C);
+    for (size_t i = 0; i < 349; ++i) {
+        PushButton(i);
+    }
 
     _frames.push_front(_current_frame);
 
