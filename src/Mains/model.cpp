@@ -7,20 +7,20 @@
 #include <glm/gtx/transform.hpp>
 #include <iostream>
 
-#include "../Memory/MeshManager/mesh_manager.h"
-#include "../Memory/ModelManager/model_manager.h"
-#include "../Memory/VAO/vao.h"
-#include "../Objects/Cameras/FPSCamera/fps_camera.h"
-#include "../Objects/LightSources/DirectionalLight/directional_light.h"
-#include "../Objects/LightSources/LightManager/light_manager.h"
-#include "../Objects/LightSources/PointLight/point_light.h"
-#include "../Objects/LightSources/SpotLight/spot_light.h"
-#include "../Objects/Model/model.h"
-#include "../UnSorted/Config/config.h"
-#include "../UnSorted/InputManager/input_manager.h"
-#include "../UnSorted/Logger/logger.h"
-#include "../Wrappings/ApplicationWindow/application_window.h"
-#include "../Wrappings/ShaderProgram/shader_program.h"
+#include "../Core/Memory/MeshManager/mesh_manager.h"
+#include "../Core/Memory/ModelManager/model_manager.h"
+#include "../Core/Memory/VAO/vao.h"
+#include "../Core/Objects/Cameras/FPSCamera/fps_camera.h"
+#include "../Core/Objects/LightSources/DirectionalLight/directional_light.h"
+#include "../Core/Objects/LightSources/LightManager/light_manager.h"
+#include "../Core/Objects/LightSources/PointLight/point_light.h"
+#include "../Core/Objects/LightSources/SpotLight/spot_light.h"
+#include "../Core/Objects/Model/model.h"
+#include "../Config/config.h"
+#include "../Core/UserInput/InputManager/input_manager.h"
+#include "../ToolBox/Dev/Logger/logger.h"
+#include "../Core/Wrappings/ApplicationWindow/application_window.h"
+#include "../Core/Wrappings/ShaderProgram/shader_program.h"
 
 glm::mat4 e = glm::mat4(1.0f);
 

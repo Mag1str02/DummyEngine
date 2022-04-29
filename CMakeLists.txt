@@ -15,31 +15,31 @@ INCLUDE_DIRECTORIES(libs/GLM/)
 add_library(my_lib STATIC  
     ./libs/STB_IMAGE/stb_image.cpp   
 
-    ./src/Loaders/ModelLoader/model_loader.cpp
-    ./src/Loaders/TextureLoader/texture_loader.cpp
+    ./src/ToolBox/Loaders/ModelLoader/model_loader.cpp
+    ./src/ToolBox/Loaders/TextureLoader/texture_loader.cpp
 
-    ./src/Memory/MeshManager/mesh_manager.cpp
-    ./src/Memory/ModelManager/model_manager.cpp
-    ./src/Memory/TextureManager/texture_manager.cpp
-    ./src/Memory/VAO/vao.cpp
+    ./src/Core/Memory/MeshManager/mesh_manager.cpp
+    ./src/Core/Memory/ModelManager/model_manager.cpp
+    ./src/Core/Memory/TextureManager/texture_manager.cpp
+    ./src/Core/Memory/VAO/vao.cpp
 
-    ./src/Objects/LightSources/PointLight/point_light.cpp
-    ./src/Objects/LightSources/SpotLight/spot_light.cpp
-    ./src/Objects/LightSources/DirectionalLight/directional_light.cpp
-    ./src/Objects/LightSources/LightManager/light_manager.cpp
-    ./src/Objects/Model/model.cpp
-    ./src/Objects/Position/position.cpp
-    ./src/Objects/Cameras/FPSCamera/fps_camera.cpp
+    ./src/Core/Objects/LightSources/PointLight/point_light.cpp
+    ./src/Core/Objects/LightSources/SpotLight/spot_light.cpp
+    ./src/Core/Objects/LightSources/DirectionalLight/directional_light.cpp
+    ./src/Core/Objects/LightSources/LightManager/light_manager.cpp
+    ./src/Core/Objects/Model/model.cpp
+    ./src/Core/Objects/Position/position.cpp
+    ./src/Core/Objects/Cameras/FPSCamera/fps_camera.cpp
 
-    ./src/Structs/Mesh/mesh.cpp
-    ./src/Structs/Textures/Texture2D/texture_2D.cpp
+    ./src/Core/Structs/Meshes/mesh.cpp
+    ./src/Core/Structs/Textures/Texture2D/texture_2D.cpp
 
-    ./src/UnSorted/Logger/logger.cpp
-    ./src/UnSorted/InputManager/input_manager.cpp
+    ./src/ToolBox/Dev/Logger/logger.cpp
+    ./src/Core/UserInput/InputManager/input_manager.cpp
 
-    ./src/Wrappings/ApplicationWindow/application_window.cpp
-    ./src/Wrappings/Shader/shader.cpp
-    ./src/Wrappings/ShaderProgram/shader_program.cpp
+    ./src/Core/Wrappings/ApplicationWindow/application_window.cpp
+    ./src/Core/Wrappings/Shader/shader.cpp
+    ./src/Core/Wrappings/ShaderProgram/shader_program.cpp
 )
 
 ADD_CUSTOM_COMMAND(TARGET my_lib
