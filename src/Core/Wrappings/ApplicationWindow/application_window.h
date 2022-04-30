@@ -18,13 +18,14 @@ private:
     void (*_process_input)();
 
     void CheckWindow();
-    void LoadGLAD();
+
     GLFWmonitor* GetMonitor(int id);
 
     static void DefaultFrameBufferSizeCallback(GLFWwindow* window, int width, int height);
 
 public:
     ApplicationWindow();
+    void MakeCurrentContext();
 
     void Init(std::string name);
     void SetFullScreen(int id);

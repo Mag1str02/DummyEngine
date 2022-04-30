@@ -1,3 +1,5 @@
+#include "../Core/Objects/Model/model.h"
+
 #include <GLAD/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -7,6 +9,7 @@
 #include <glm/gtx/transform.hpp>
 #include <iostream>
 
+#include "../Config/config.h"
 #include "../Core/Memory/MeshManager/mesh_manager.h"
 #include "../Core/Memory/ModelManager/model_manager.h"
 #include "../Core/Memory/VAO/vao.h"
@@ -15,12 +18,10 @@
 #include "../Core/Objects/LightSources/LightManager/light_manager.h"
 #include "../Core/Objects/LightSources/PointLight/point_light.h"
 #include "../Core/Objects/LightSources/SpotLight/spot_light.h"
-#include "../Core/Objects/Model/model.h"
-#include "../Config/config.h"
 #include "../Core/UserInput/InputManager/input_manager.h"
-#include "../ToolBox/Dev/Logger/logger.h"
 #include "../Core/Wrappings/ApplicationWindow/application_window.h"
 #include "../Core/Wrappings/ShaderProgram/shader_program.h"
+#include "../ToolBox/Dev/Logger/logger.h"
 
 glm::mat4 e = glm::mat4(1.0f);
 
@@ -48,17 +49,15 @@ void UpdateWorld();
 void Draw();
 
 int main() {
-    double start = glfwGetTime();
     Initialize();
     LoadShaders();
     LoadModels();
     InitModels();
     SetObjectProperties();
-    Logger::Info("loading", "Main", "Loading time: " + std::to_string(glfwGetTime() - start) + "s");
+    Logger::Info("loading", "Main", "Loading time: " + std::to_string(glfwGetTime()) + "s");
     Logger::Close("loading");
     Logger::Open(LOG_DIR / "rendering.txt", "rendering");
     application_window.StartLoop();
-
     return 0;
 }
 
@@ -67,11 +66,18 @@ void Initialize() {
     Logger::Open(LOG_DIR / "loading.txt", "loading");
     Logger::Info("loading", "Main", "Logger initialized.");
     Logger::Stage("loading", "Main", "INITIALIZETION");
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
     application_window.Init("First");
     application_window.SetProcessInputFunc(ProcessInput);
     application_window.SetUpdateWorldFunc(UpdateWorld);
     application_window.SetDrawFunc(Draw);
     input_manager.SetWindow(application_window.GetWindow());
+    glEnable(GL_MULTISAMPLE);
+    glEnable(GL_DEPTH_TEST);
 }
 void LoadShaders() {
     Logger::Stage("loading", "Main", "LOADING SHADERS");
@@ -232,12 +238,12 @@ void Draw() {
     sp_colored_phong.SetMat4fv("projection", camera.GetProjectionMatrix());
     sp_colored_phong.SetMat4fv("view", camera.GetViewMatrix());
     sp_colored_phong.SetVec3f("view_pos", camera.GetPos());
+
     light_manager.UpdateLights(sp_textured_phong);
     light_manager.UpdateLights(sp_colored_phong);
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
 
     e = glm::mat4(1.0);
     sp_textured_phong.SetMat4fv("rotation", e);
@@ -252,7 +258,7 @@ void Draw() {
 
     e = glm::mat4(1.0);
 
-    for (size_t i = 0; i < 20; ++i) {
+    for (size_t i = 0; i < 100; ++i) {
         e = glm::translate(e, glm::vec3(0, 0, 10));
         sp_colored_phong.SetMat4fv("model", e);
         train->Draw(sp_colored_phong);

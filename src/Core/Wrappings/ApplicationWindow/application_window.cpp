@@ -9,7 +9,8 @@ void ApplicationWindow::CheckWindow() {
     }
     Logger::Info("loading", "ApplicationWindow", "GLFW Window created: " + _name);
 }
-void ApplicationWindow::LoadGLAD() {
+void ApplicationWindow::MakeCurrentContext() {
+    glfwMakeContextCurrent(_window);
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         Logger::Fatal("loading", "ApplicationWindow", "Failed to initialize GLAD");
         throw std::exception();
@@ -30,19 +31,15 @@ ApplicationWindow::ApplicationWindow() {
 }
 
 void ApplicationWindow::Init(std::string name) {
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    _name = name;
     _window = glfwCreateWindow(1080, 720, name.c_str(), NULL, NULL);
     _screen_size_state = ScreenSizeState::windowed;
     CheckWindow();
+    MakeCurrentContext();
     glfwSetFramebufferSizeCallback(_window, DefaultFrameBufferSizeCallback);
-    glfwMakeContextCurrent(_window);
-    LoadGLAD();
-    glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSwapInterval(0);
     SetFullScreen(0);
+    glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     Logger::Info("loading", "ApplicationWindow", "Application Window initialized: " + _name);
 }
 void ApplicationWindow::SetFullScreen(int id) {

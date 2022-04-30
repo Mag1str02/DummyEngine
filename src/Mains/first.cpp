@@ -3,11 +3,11 @@
 
 #include <iostream>
 
-#include "../Memory/VAO/vao.h"
-#include "../UnSorted/Config/config.h"
-#include "../UnSorted/Logger/logger.h"
-#include "../Wrappings/ApplicationWindow/application_window.h"
-#include "../Wrappings/ShaderProgram/shader_program.h"
+#include "../Config/config.h"
+#include "../Core/Memory/VAO/vao.h"
+#include "../Core/Wrappings/ApplicationWindow/application_window.h"
+#include "../Core/Wrappings/ShaderProgram/shader_program.h"
+#include "../ToolBox/Dev/Logger/logger.h"
 
 ApplicationWindow application_window;
 ShaderProgram sp_basic_texture;
@@ -46,11 +46,17 @@ int main() {
 void Initialize() {
     std::cout << WORKING_DIR << std::endl;
     Logger::Open(LOG_DIR / "loading.txt", "loading");
-    Logger::Info("Logger initialized.", "loading");
+    Logger::Info("Logger initialized.", "Main", "loading");
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
     application_window.Init("First");
     application_window.SetProcessInputFunc(ProcessInput);
     application_window.SetUpdateWorldFunc(UpdateWorld);
     application_window.SetDrawFunc(Draw);
+    application_window.MakeCurrentContext();
 }
 void InitShaders() {
     sp_basic_texture.SmartInit(SHADER_DIR / "BasicTriangle");

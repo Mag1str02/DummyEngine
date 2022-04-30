@@ -58,9 +58,14 @@ add_executable(Model
     ./src/Mains/model.cpp
 )
 
+add_executable(Windows
+    ./src/Mains/multiple_windows.cpp
+)
+
 target_link_libraries(my_lib PRIVATE glad)
 target_link_libraries(my_lib PRIVATE glfw3)
 target_link_libraries(my_lib PRIVATE assimp)
 
 target_link_libraries(First PRIVATE my_lib)
 target_link_libraries(Model PRIVATE my_lib)
+target_link_libraries(Windows PRIVATE my_lib)
