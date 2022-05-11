@@ -264,3 +264,17 @@ void Draw() {
         train->Draw(sp_colored_phong);
     }
 }
+
+class A {
+private:
+    void (*_draw)();
+
+public:
+    void SetDrawFunc(void (*draw)()) {
+        _draw = draw;
+    }
+    void Draw() {
+        _draw();
+    }
+};
+
