@@ -10,6 +10,10 @@
 #include <iostream>
 
 #include "../Config/config.h"
+#include "../Core/ECS/Component/component_array.hpp"
+#include "../Core/ECS/Component/component_manager.hpp"
+#include "../Core/ECS/Entity/entity.hpp"
+#include "../Core/ECS/Entity/entity_manager.hpp"
 #include "../Core/Memory/MeshManager/mesh_manager.h"
 #include "../Core/Memory/ModelManager/model_manager.h"
 #include "../Core/Memory/VAO/vao.h"
@@ -22,6 +26,8 @@
 #include "../Core/Wrappings/ApplicationWindow/application_window.h"
 #include "../Core/Wrappings/ShaderProgram/shader_program.h"
 #include "../ToolBox/Dev/Logger/logger.h"
+
+using namespace DE;
 
 glm::mat4 e = glm::mat4(1.0f);
 
@@ -78,6 +84,7 @@ void Initialize() {
     input_manager.SetWindow(application_window.GetWindow());
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_DEPTH_TEST);
+    ComponentArray<int> comp;
 }
 void LoadShaders() {
     Logger::Stage("loading", "Main", "LOADING SHADERS");
@@ -264,17 +271,3 @@ void Draw() {
         train->Draw(sp_colored_phong);
     }
 }
-
-class A {
-private:
-    void (*_draw)();
-
-public:
-    void SetDrawFunc(void (*draw)()) {
-        _draw = draw;
-    }
-    void Draw() {
-        _draw();
-    }
-};
-
