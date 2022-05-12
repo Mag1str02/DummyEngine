@@ -5,24 +5,28 @@
 #define H_MAX_ENTITY_AMOUNT 1
 #define H_MAX_COMPONENT_AMOUNT 2
 
-namespace DE {
+namespace DE
+{
 
-class Initializer {
-private:
-    friend class EntityManager;
-    template <typename ComponentType>
-    friend class ComponentArray;
+    class Initializer
+    {
+    private:
+        friend class EntityManager;
+        template <typename ComponentType>
+        friend class ComponentArray;
 
-    int64_t _max_entity_amount;
-    int64_t _max_component_amount;
+        int64_t _max_entity_amount;
+        int64_t _max_component_amount;
 
-    Initializer();
+        Initializer();
 
-public:
-    static Initializer& Get();
+    public:
+        static Initializer &Get();
 
-    void SetHint(uint64_t hint_id, int64_t hint_value);
-};
+        void SetHint(uint64_t hint_id, int64_t hint_value);
+    };
+    void deInitialize();
+    void deTerminate();
 
-void deHint(int64_t hint_id, int64_t hint_value);
-}  // namespace DE
+    void deHint(int64_t hint_id, int64_t hint_value);
+} // namespace DE

@@ -24,7 +24,17 @@ namespace DE
         case H_MAX_COMPONENT_AMOUNT:
             _max_component_amount = hint_value;
             break;
+        default:
+            break;
         }
+    }
+
+    void deInitialize()
+    {
+        Initializer::Get().SetHint(-1, 2);
+    }
+    void deTerminate()
+    {
     }
 
     void deHint(uint64_t hint_id, int64_t hint_value)

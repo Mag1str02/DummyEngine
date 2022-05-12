@@ -6,7 +6,7 @@
 namespace DE
 {
     using ComponentId = uint16_t;
-    
+
     class ComponentManager
     {
     private:
@@ -69,6 +69,9 @@ namespace DE
             {
                 component_array->EntityDestroyed(id);
             }
+        }
+        size_t ComponentArrayAmount(){
+            return _component_arrays.size();
         }
     };
 }

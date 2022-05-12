@@ -2,6 +2,7 @@
 
 #include <queue>
 
+#include "../../../ToolBox/Dev/Logger/logger.h"
 #include "../../Initializer/initializer.h"
 
 namespace DE
@@ -27,6 +28,7 @@ namespace DE
                 _available_entities.push(i);
             }
             _entities_amount = 0;
+            Logger::Info("ECS", "EntityManager", "EntityManager created with max entities amount: " + std::to_string(_max_entities_amount));
         }
 
     public:
@@ -43,18 +45,11 @@ namespace DE
                 return -1;
             }
             EntityId new_entity = _available_entities.front();
+            Logger::Info("ECS", "EntityManager", "Entity created: " + std::to_string(new_entity));
             _available_entities.pop();
             _available[new_entity] = false;
             ++_entities_amount;
             return new_entity;
-        }
-        EntityId GetEntity(EntityId id)
-        {
-            if (!_available[id])
-            {
-                return id;
-            }
-            return -1;
         }
         void DestroyEntity(EntityId entity)
         {
@@ -65,20 +60,14 @@ namespace DE
             _available[entity] = true;
             --_entities_amount;
             _available_entities.push(entity);
+            Logger::Info("ECS", "EntityManager", "Entity destroyed: " + std::to_string(entity));
+        }
+        void Terminate(){
+            for(size_t i = 0; i < _max_entities_amount; ++i){
+                if(_available[i]){
+                    ComponentManager::Get().EntityDestroyed(i);
+                }
+            }
         }
     };
-
-    EntityId deCreateEntity()
-    {
-        return EntityManager::Get().CreateEntity();
-    }
-    EntityId deGetEntity(EntityId entity)
-    {
-        return EntityManager::Get().GetEntity(entity);
-    }
-    void deDestroyEntity(EntityId entity)
-    {
-        EntityManager::Get().DestroyEntity(entity);
-    }
-
 } // namespace DE
