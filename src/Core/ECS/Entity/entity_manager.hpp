@@ -4,6 +4,7 @@
 
 #include "../../../ToolBox/Dev/Logger/logger.h"
 #include "../../Initializer/initializer.h"
+#include "../Component/component_manager.hpp"
 
 namespace DE
 {
@@ -21,14 +22,6 @@ namespace DE
 
         EntityManager()
         {
-            _max_entities_amount = Initializer::Get()._max_entity_amount;
-            _available.assign(_max_entities_amount, true);
-            for (size_t i = 0; i < _max_entities_amount; ++i)
-            {
-                _available_entities.push(i);
-            }
-            _entities_amount = 0;
-            Logger::Info("ECS", "EntityManager", "EntityManager created with max entities amount: " + std::to_string(_max_entities_amount));
         }
 
     public:
@@ -62,12 +55,28 @@ namespace DE
             _available_entities.push(entity);
             Logger::Info("ECS", "EntityManager", "Entity destroyed: " + std::to_string(entity));
         }
-        void Terminate(){
-            for(size_t i = 0; i < _max_entities_amount; ++i){
-                if(_available[i]){
+        void Initialize()
+        {
+            _max_entities_amount = Initializer::Get()._max_entity_amount;
+            _available.assign(_max_entities_amount, true);
+            for (size_t i = 0; i < _max_entities_amount; ++i)
+            {
+                _available_entities.push(i);
+            }
+            _entities_amount = 0;
+            Logger::Info("ECS", "EntityManager", "EntityManager created with max entities amount: " + std::to_string(_max_entities_amount));
+        }
+        void Terminate()
+        {
+            for (size_t i = 0; i < _max_entities_amount; ++i)
+            {
+                if (_available[i])
+                {
                     ComponentManager::Get().EntityDestroyed(i);
                 }
             }
+            _available.clear();
+            Logger::Info("ECS", "EntityManager", "EntityManager terminated.");
         }
     };
 } // namespace DE

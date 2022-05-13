@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "../../../ToolBox/Dev/Logger/logger.h"
 #include "component_array.hpp"
 
 namespace DE
@@ -21,13 +22,10 @@ namespace DE
         void RegisterComponent()
         {
             const char *component_name = typeid(ComponentType).name();
-            if (_component_type.find(component_name) == _component_type.end())
-            {
-                _component_type[component_name] = _component_type.size();
-                _component_arrays[component_name] = std::make_shared<ComponentArray<ComponentType>>();
-            }
+            _component_type[component_name] = _component_type.size();
+            _component_arrays[component_name] = std::make_shared<ComponentArray<ComponentType>>();
+            Logger::Info("ECS", "ComponentManger", "Registered Component: " + std::string(component_name));
         }
-
         template <typename ComponentType>
         std::shared_ptr<ComponentArray<ComponentType>> GetComponentArray()
         {
@@ -49,6 +47,7 @@ namespace DE
         void AddComponent(EntityId id, ComponentType component)
         {
             GetComponentArray<ComponentType>()->InsertComponent(id, component);
+            Logger::Info("ECS", "ComponentManager", "Added Component: " + std::string(typeid(ComponentType).name()) + " to Entity: " + std::to_string(id));
         }
 
         template <typename ComponentType>
@@ -70,7 +69,8 @@ namespace DE
                 component_array->EntityDestroyed(id);
             }
         }
-        size_t ComponentArrayAmount(){
+        size_t ComponentArrayAmount()
+        {
             return _component_arrays.size();
         }
     };

@@ -1,11 +1,12 @@
 #include "initializer.h"
+#include "../ECS/Entity/entity_manager.hpp"
 
 namespace DE
 {
 
     Initializer::Initializer()
     {
-        _max_entity_amount = 5000;
+        _max_entity_amount = 1000;
         _max_component_amount = 128;
     }
 
@@ -32,6 +33,8 @@ namespace DE
     void deInitialize()
     {
         Initializer::Get().SetHint(-1, 2);
+        EntityManager::Get().Initialize();
+
     }
     void deTerminate()
     {
