@@ -5,41 +5,34 @@
 #include <iostream>
 
 #include "../Config/config.h"
-#include "../Core/Initializer/initializer.h"
 #include "../Core/ECS/Component/component_array.hpp"
 #include "../Core/ECS/Component/component_manager.hpp"
 #include "../Core/ECS/Entity/entity.hpp"
 #include "../Core/ECS/Entity/entity_manager.hpp"
+#include "../Core/Initializer/initializer.h"
 #include "../ToolBox/Dev/Logger/logger.h"
 
 using namespace DE;
 
-struct Transformation
-{
+struct Transformation {
     glm::vec3 position;
     glm::vec3 rotation;
     glm::vec3 scale;
 };
 
-struct Mesh
-{
+struct Mesh {
     unsigned int vao_id;
 };
 
-struct Health
-{
+struct Health {
     size_t health;
 };
 
-int main()
-{
+int main() {
     Logger::Open(LOG_DIR / "ECS.txt", "ECS");
     deInitialize();
-    Entity a, b, c;
-    a.Create();
-    b.Create();
-    a.AddComponent<Health>();
-    b.AddComponent<Transformation>();
+    std::vector<Entity> entities(10);
+    entities[0].Create();
     deTerminate();
     std::cout << "FINE!" << std::endl;
     return 0;

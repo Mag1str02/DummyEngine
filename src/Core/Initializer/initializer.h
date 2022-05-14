@@ -23,7 +23,7 @@ namespace DE
     public:
         static Initializer &Get();
 
-        void SetHint(uint64_t hint_id, int64_t hint_value);
+        void SetHint(int64_t hint_id, int64_t hint_value);
     };
     void deInitialize();
     void deTerminate();

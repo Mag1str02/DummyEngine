@@ -40,8 +40,7 @@ FPSCamera camera;
 const Model *backpack, *train, *cube, *cubes;
 Entity e1, e2;
 
-struct Transformation
-{
+struct Transformation {
     glm::vec3 position;
     glm::vec3 rotation;
     glm::vec3 scale;
@@ -62,28 +61,26 @@ void ProcessInput();
 void UpdateWorld();
 void Draw();
 
-int main()
-{
+int main() {
     Initialize();
     LoadShaders();
     LoadModels();
     InitModels();
     SetObjectProperties();
-    Logger::Info("loading", "Main", "ComponentArrayAmount: " + std::to_string(ComponentManager::Get().ComponentArrayAmount()));
     Logger::Info("loading", "Main", "Loading time: " + std::to_string(glfwGetTime()) + "s");
     Logger::Close("loading");
     Logger::Open(LOG_DIR / "rendering.txt", "rendering");
     application_window.StartLoop();
-    EntityManager::Get().Terminate();
+    deTerminate();
+    ComponentManager::Get().LogState();
     glfwTerminate();
     return 0;
 }
 
-void Initialize()
-{
+void Initialize() {
     std::cout << WORKING_DIR << std::endl;
     Logger::Open(LOG_DIR / "loading.txt", "loading");
-    Logger::Open(LOG_DIR / "ECS.txt", "ECS"); 
+    Logger::Open(LOG_DIR / "ECS.txt", "ECS");
     Logger::Info("loading", "Main", "Logger initialized.");
     Logger::Stage("loading", "Main", "INITIALIZETION");
     glfwInit();
@@ -91,6 +88,7 @@ void Initialize()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_SAMPLES, 4);
+    deInitialize();
     application_window.Init("First");
     application_window.SetProcessInputFunc(ProcessInput);
     application_window.SetUpdateWorldFunc(UpdateWorld);
@@ -98,14 +96,12 @@ void Initialize()
     input_manager.SetWindow(application_window.GetWindow());
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_DEPTH_TEST);
-    DE::Initializer::Get();
     e1.Create();
     Entity e3;
     e3.Create();
     e3.AddComponent<Transformation>();
 }
-void LoadShaders()
-{
+void LoadShaders() {
     Logger::Stage("loading", "Main", "LOADING SHADERS");
     sp_textured_phong.SmartInit(SHADER_DIR / "TexturedPhong");
     sp_colored_phong.SmartInit(SHADER_DIR / "ColoredPhong");
@@ -121,8 +117,7 @@ void LoadShaders()
 
     Logger::Info("loading", "Main", "Shaders loaded.");
 }
-void LoadModels()
-{
+void LoadModels() {
     Logger::Stage("loading", "Main", "LOADING MODELS");
     MeshManager::AddModel("train", MODEL_DIR / "Train" / "train1.obj");
     MeshManager::AddModel("backpack", MODEL_DIR / "Backpack" / "Backpack.obj");
@@ -133,16 +128,14 @@ void LoadModels()
     MeshManager::CompressModel("cubes");
     MeshManager::DumbModels();
 }
-void InitModels()
-{
+void InitModels() {
     Logger::Stage("loading", "Main", "INITIALIZING MODELS");
     backpack = ModelManager::GetModel("backpack");
     train = ModelManager::GetModel("train");
     cube = ModelManager::GetModel("cube");
     cubes = ModelManager::GetModel("cubes");
 }
-void SetObjectProperties()
-{
+void SetObjectProperties() {
     Logger::Stage("loading", "Main", "SETTING OBJECTS PROPERTIES");
     camera.SetPos(glm::vec3(0.0f, 0.0f, 100.0f));
 
@@ -181,38 +174,28 @@ void SetObjectProperties()
     lamp.outer_cone_cos = cos(glm::radians(17.5));
 }
 
-void ProcessInput()
-{
+void ProcessInput() {
     float sensitivity = 0.07;
     float speed = 0.5;
 
     input_manager.ReadFrame();
 
-    if (input_manager.KeyReleased(GLFW_KEY_TAB))
-    {
-        if (cursor_mode)
-        {
+    if (input_manager.KeyReleased(GLFW_KEY_TAB)) {
+        if (cursor_mode) {
             glfwSetInputMode(application_window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             cursor_mode = false;
-        }
-        else
-        {
+        } else {
             glfwSetInputMode(application_window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             cursor_mode = true;
         }
     }
 
-    if (input_manager.KeyReleased(GLFW_KEY_F11))
-    {
-        if (application_window.GetScreenSizeState() == ScreenSizeState::fullscreen)
-        {
+    if (input_manager.KeyReleased(GLFW_KEY_F11)) {
+        if (application_window.GetScreenSizeState() == ScreenSizeState::fullscreen) {
             application_window.SetWindowed();
-        }
-        else
-        {
+        } else {
             int monitor_id = 0;
-            if (input_manager.KeyDown(GLFW_KEY_1))
-            {
+            if (input_manager.KeyDown(GLFW_KEY_1)) {
                 monitor_id = 1;
             }
             application_window.SetFullScreen(monitor_id);
@@ -224,49 +207,39 @@ void ProcessInput()
     glfwGetWindowSize(application_window.GetWindow(), &width, &height);
     camera.SetAspect(double(width) / height);
 
-    if (!cursor_mode)
-    {
+    if (!cursor_mode) {
         return;
     }
 
     camera.RotateY(input_manager.CursorXOffset() * sensitivity);
     camera.RotateX(input_manager.CursorYOffset() * sensitivity / 16 * 9);
 
-    if (input_manager.KeyDown(GLFW_KEY_LEFT_SHIFT))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_LEFT_SHIFT)) {
         speed = 50.0f;
     }
-    if (input_manager.KeyDown(GLFW_KEY_ESCAPE))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_ESCAPE)) {
         glfwSetWindowShouldClose(application_window.GetWindow(), true);
     }
-    if (input_manager.KeyDown(GLFW_KEY_S))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_S)) {
         camera.MoveInLocal(glm::vec3(0.0f, 0.0f, -1.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_W))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_W)) {
         camera.MoveInLocal(glm::vec3(0.0f, 0.0f, 1.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_D))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_D)) {
         camera.MoveInLocal(glm::vec3(1.0f, 0.0f, 0.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_A))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_A)) {
         camera.MoveInLocal(glm::vec3(-1.0f, 0.0f, 0.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_SPACE))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_SPACE)) {
         camera.MoveInWorld(glm::vec3(0.0f, 1.0f, 0.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_C))
-    {
+    if (input_manager.KeyDown(GLFW_KEY_C)) {
         camera.MoveInWorld(glm::vec3(0.0f, -1.0f, 0.0f) * speed * input_manager.FrameTime());
     }
 }
-void UpdateWorld()
-{
+void UpdateWorld() {
     static size_t frame;
     // Logger::Stage("rendering", "Frame: " + std::to_string(frame++));
     glm::vec3 center(0, 20, 0);
@@ -280,8 +253,7 @@ void UpdateWorld()
     flashlight.position = camera.GetPos();
     flashlight.direction = camera.GetDir();
 }
-void Draw()
-{
+void Draw() {
     sp_textured_phong.SetMat4fv("projection", camera.GetProjectionMatrix());
     sp_textured_phong.SetMat4fv("view", camera.GetViewMatrix());
     sp_textured_phong.SetVec3f("view_pos", camera.GetPos());
@@ -308,8 +280,7 @@ void Draw()
 
     e = glm::mat4(1.0);
 
-    for (size_t i = 0; i < 5; ++i)
-    {
+    for (size_t i = 0; i < 100; ++i) {
         e = glm::translate(e, glm::vec3(0, 0, 10));
         sp_colored_phong.SetMat4fv("model", e);
         train->Draw(sp_colored_phong);
