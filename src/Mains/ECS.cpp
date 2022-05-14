@@ -30,9 +30,12 @@ struct Health {
 
 int main() {
     Logger::Open(LOG_DIR / "ECS.txt", "ECS");
+    deHint(H_MAX_ENTITY_AMOUNT, 1000);
     deInitialize();
-    std::vector<Entity> entities(10);
-    entities[0].Create();
+
+    Entity a;
+    a.AddComponent<Health>();
+
     deTerminate();
     std::cout << "FINE!" << std::endl;
     return 0;

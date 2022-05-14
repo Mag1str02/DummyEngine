@@ -38,7 +38,7 @@ ApplicationWindow application_window;
 ShaderProgram sp_textured_phong, sp_colored_phong;
 FPSCamera camera;
 const Model *backpack, *train, *cube, *cubes;
-Entity e1, e2;
+std::vector<Entity> entities;
 
 struct Transformation {
     glm::vec3 position;
@@ -67,12 +67,15 @@ int main() {
     LoadModels();
     InitModels();
     SetObjectProperties();
+    entities.push_back(Entity());
+    entities[0].AddComponent<Transformation>();
+    ComponentManager::Get().LogState();
+    EntityManager::Get().LogState();
     Logger::Info("loading", "Main", "Loading time: " + std::to_string(glfwGetTime()) + "s");
     Logger::Close("loading");
     Logger::Open(LOG_DIR / "rendering.txt", "rendering");
     application_window.StartLoop();
     deTerminate();
-    ComponentManager::Get().LogState();
     glfwTerminate();
     return 0;
 }
@@ -96,10 +99,6 @@ void Initialize() {
     input_manager.SetWindow(application_window.GetWindow());
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_DEPTH_TEST);
-    e1.Create();
-    Entity e3;
-    e3.Create();
-    e3.AddComponent<Transformation>();
 }
 void LoadShaders() {
     Logger::Stage("loading", "Main", "LOADING SHADERS");

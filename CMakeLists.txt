@@ -18,6 +18,8 @@ add_library(my_lib STATIC
     ./src/ToolBox/Loaders/ModelLoader/model_loader.cpp
     ./src/ToolBox/Loaders/TextureLoader/texture_loader.cpp
 
+    ./src/Core/Addition/some_funcs.cpp
+
     ./src/Core/ECS/Component/component_array.hpp
     ./src/Core/ECS/Component/component_manager.hpp
     ./src/Core/ECS/Entity/entity.hpp

@@ -3,11 +3,14 @@
 #include <cinttypes>
 #include <iostream>
 
+#include "../../../ToolBox/Dev/Logger/logger.h"
+#include "../../Addition/some_funcs.h"
+#include "../../Addition/types.h"
 #include "../../Initializer/initializer.h"
+
 
 namespace DE {
 
-using EntityId = int64_t;
 class IComponentArray {
 public:
     virtual ~IComponentArray() = default;
@@ -35,11 +38,15 @@ public:
     void InsertComponent(EntityId id, const ComponentType& component) {
         if (_entity_to_index.find(id) != _entity_to_index.end()) {
             _component_array[_entity_to_index[id]] = component;
+            Logger::Info("ECS", "ComponentArray",
+                         "Changed existing component (" + NormalTypeName(typeid(ComponentType).name()) + ") of Entity (" + std::to_string(id) + ")");
         } else {
             _entity_to_index[id] = _entity_amount;
             _component_array[_entity_amount] = component;
             _index_to_entity[_entity_amount] = id;
             ++_entity_amount;
+            Logger::Info("ECS", "ComponentArray",
+                         "Added component (" + NormalTypeName(typeid(ComponentType).name()) + ") to Entity (" + std::to_string(id) + ")");
         }
     }
     void RemoveComponent(EntityId id) {
@@ -54,20 +61,22 @@ public:
             _index_to_entity.erase(last_component_index);
             _entity_to_index.erase(id);
             --_entity_amount;
+            Logger::Info("ECS", "ComponentArray",
+                         "Removed component " + NormalTypeName(typeid(ComponentType).name()) + " from Entity " + std::to_string(id));
         }
     }
     void EntityDestroyed(EntityId id) override {
         RemoveComponent(id);
     }
 
-    ComponentType* GetComponent(EntityId id) {
+    ComponentType& GetComponent(EntityId id) {
         if (_entity_to_index.find(id) == _entity_to_index.end()) {
-            return nullptr;
+            InsertComponent(id, ComponentType());
         }
-        return &(_component_array[_entity_to_index[id]]);
+        return _component_array[_entity_to_index[id]];
     }
 
-    std::string LogState() const {
+    std::string LogState() const override {
         std::string log_state = "";
         log_state.append("Entity to Index:\n");
         for (const auto& [entity, index] : _entity_to_index) {

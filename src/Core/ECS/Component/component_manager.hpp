@@ -3,13 +3,16 @@
 #include <memory>
 
 #include "../../../ToolBox/Dev/Logger/logger.h"
+#include "../../Addition/some_funcs.h"
 #include "component_array.hpp"
 
+
 namespace DE {
-using ComponentId = uint16_t;
 
 class ComponentManager {
 private:
+    friend class EntityManager;
+    friend class Entity;
     std::unordered_map<std::string, std::shared_ptr<IComponentArray>> _component_arrays;
     std::unordered_map<std::string, ComponentId> _component_type;
 
@@ -31,32 +34,13 @@ private:
         return std::static_pointer_cast<ComponentArray<ComponentType>>(_component_arrays[typeid(ComponentType).name()]);
     }
 
-    std::string NormalTypeName(const std::string& s_name) {
-        for (size_t i = 1; i < s_name.size(); ++i) {
-            if ('0' > s_name[i] || s_name[i] > '9') {
-                return s_name.substr(i, s_name.size() - i);
-            }
-        }
-        return s_name;
-    }
-
-public:
-    static ComponentManager& Get() {
-        static ComponentManager component_manager;
-        return component_manager;
-    }
-
     template <typename ComponentType>
     void AddComponent(EntityId id, ComponentType component) {
         GetComponentArray<ComponentType>()->InsertComponent(id, component);
-        Logger::Info("ECS", "ComponentManager",
-                     "Added Component (" + NormalTypeName(typeid(ComponentType).name()) + ") to Entity (" + std::to_string(id) + ")");
     }
     template <typename ComponentType>
     void RemoveComponent(EntityId id) {
         GetComponentArray<ComponentType>()->RemoveComponent(id);
-        Logger::Info("ECS", "ComponentManager",
-                     "Removed Component " + NormalTypeName(typeid(ComponentType).name()) + " from Entity " + std::to_string(id));
     }
     void EntityDestroyed(EntityId id) {
         for (auto& [name, component_array] : _component_arrays) {
@@ -65,8 +49,14 @@ public:
     }
 
     template <typename ComponentType>
-    ComponentType* GetComponent(EntityId id) {
+    ComponentType& GetComponent(EntityId id) {
         return GetComponentArray<ComponentType>()->GetComponent(id);
+    }
+
+public:
+    static ComponentManager& Get() {
+        static ComponentManager component_manager;
+        return component_manager;
     }
 
     void LogState() {
