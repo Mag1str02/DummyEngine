@@ -6,18 +6,12 @@
 #include "../../Addition/some_funcs.h"
 #include "component_array.hpp"
 
-
 namespace DE {
 
 class ComponentManager {
 private:
-    friend class EntityManager;
-    friend class Entity;
     std::unordered_map<std::string, std::shared_ptr<IComponentArray>> _component_arrays;
     std::unordered_map<std::string, ComponentId> _component_type;
-
-    ComponentManager() {
-    }
 
     template <typename ComponentType>
     void RegisterComponent() {
@@ -26,6 +20,11 @@ private:
         _component_arrays[component_name] = std::make_shared<ComponentArray<ComponentType>>();
         Logger::Info("ECS", "ComponentManager", "Registered Component (" + NormalTypeName(component_name) + ")");
     }
+
+public:
+    ComponentManager() {
+    }
+
     template <typename ComponentType>
     std::shared_ptr<ComponentArray<ComponentType>> GetComponentArray() {
         if (_component_arrays.find(typeid(ComponentType).name()) == _component_arrays.end()) {
@@ -37,6 +36,7 @@ private:
     template <typename ComponentType>
     void AddComponent(EntityId id, ComponentType component) {
         GetComponentArray<ComponentType>()->InsertComponent(id, component);
+        //._signatures[_component_type[typeid(ComponentType).name()]] = 1;
     }
     template <typename ComponentType>
     void RemoveComponent(EntityId id) {
@@ -53,10 +53,9 @@ private:
         return GetComponentArray<ComponentType>()->GetComponent(id);
     }
 
-public:
-    static ComponentManager& Get() {
-        static ComponentManager component_manager;
-        return component_manager;
+    template <typename ComponentType>
+    ComponentId GetComponentId(ComponentType component = ComponentType()) {
+        return _component_type[typeid(ComponentType).name()];
     }
 
     void LogState() {

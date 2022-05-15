@@ -14,7 +14,6 @@ class EntityManager {
 private:
     using Signature = std::bitset<MAX_COMPONENT_AMOUNT>;
 
-    friend class Entity;
     friend class Initializer;
 
     bool _valid;
@@ -23,6 +22,7 @@ private:
     std::vector<Signature> _signatures;
     uint64_t _entities_amount;
 
+public:
     EntityManager() {
         _valid = false;
     }
@@ -47,26 +47,34 @@ private:
         Logger::Info("ECS", "EntityManager", "Entity instance created (" + std::to_string(entity_id) + ")");
         return entity_id;
     }
-    void DestroyInstance(EntityId entity_id) {
+    bool DestroyInstance(EntityId entity_id) {
         --_ref_count[entity_id];
 
         Logger::Info("ECS", "EntityManager", "Entity instance destroyed (" + std::to_string(entity_id) + ")");
 
         if (!_ref_count[entity_id]) {
             DestroyEntity(entity_id);
+            return true;
         }
+        return false;
     }
     void DestroyEntity(EntityId entity_id) {
-        ComponentManager::Get().EntityDestroyed(entity_id);
         _available_entities.push(entity_id);
         --_entities_amount;
 
         Logger::Info("ECS", "EntityManager", "Entity destroyed (" + std::to_string(entity_id) + ")");
     }
 
+    void AddComponent(EntityId entity_id, ComponentId component_id) {
+        _signatures[entity_id][component_id] = 1;
+    }
+    void RemoveComponent(EntityId entity_id, ComponentId component_id) {
+        _signatures[entity_id][component_id] = 0;
+    }
+
     void Initialize() {
         _ref_count.assign(Initializer::Get()._max_entity_amount, 0);
-        _signatures.resize(Initializer::Get()._max_entity_amount);
+        _signatures.assign(Initializer::Get()._max_entity_amount, Signature());
 
         for (size_t i = 0; i < _ref_count.size(); ++i) {
             _available_entities.push(i);
@@ -87,12 +95,6 @@ private:
         _valid = false;
 
         Logger::Info("ECS", "EntityManager", "EntityManager terminated.");
-    }
-
-public:
-    static EntityManager& Get() {
-        static EntityManager entity_manager;
-        return entity_manager;
     }
 
     void LogState() {

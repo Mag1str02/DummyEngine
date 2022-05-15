@@ -8,7 +8,6 @@
 #include "../../Addition/types.h"
 #include "../../Initializer/initializer.h"
 
-
 namespace DE {
 
 class IComponentArray {
@@ -70,9 +69,6 @@ public:
     }
 
     ComponentType& GetComponent(EntityId id) {
-        if (_entity_to_index.find(id) == _entity_to_index.end()) {
-            InsertComponent(id, ComponentType());
-        }
         return _component_array[_entity_to_index[id]];
     }
 
