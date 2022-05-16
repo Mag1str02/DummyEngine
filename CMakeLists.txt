@@ -24,6 +24,7 @@ add_library(my_lib STATIC
     ./src/Core/ECS/Component/component_manager.hpp
     ./src/Core/ECS/Entity/entity.hpp
     ./src/Core/ECS/Entity/entity_manager.hpp
+    ./src/Core/Ecs/System/system.hpp
 
     ./src/Core/Initializer/initializer.cpp
 

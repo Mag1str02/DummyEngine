@@ -1,6 +1,7 @@
 #include "initializer.h"
 
 #include "../ECS/Entity/entity_manager.hpp"
+#include "../ECS/Component/component_manager.hpp"
 
 namespace DE {
 
@@ -23,8 +24,12 @@ void Initializer::SetHint(int64_t hint_id, int64_t hint_value) {
 }
 
 void Initializer::Initialize() {
+    EntityManager::Get().Initialize();
+    ComponentManager::Get();
 }
 void Initializer::Terminate() {
+    EntityManager::Get().Terminate();
+    ComponentManager::Get().Terminate();
 }
 
 void deInitialize() {
