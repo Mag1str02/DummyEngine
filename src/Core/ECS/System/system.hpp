@@ -3,20 +3,17 @@
 #include "../../Addition/types.h"
 #include "../Component/component_manager.hpp"
 
-namespace DE
-{
-    class ISystem
-    {
-    protected:
-        template <typename ComponentType>
-        std::shared_ptr<ComponentArray<ComponentType>> GetComponentArray()
-        {
-            return ComponentManager::Get().GetComponentArray<ComponentType>();
-        }
+namespace DE {
+class System {
+protected:
+    template <typename ComponentType>
+    ComponentArray<ComponentType>& GetComponentArray() {
+        return *(ComponentManager::Get().GetComponentArray<ComponentType>());
+    }
 
-    public:
-        virtual ~ISystem() = default;
-        virtual void Update(double dt) = 0;
-    };
+public:
+    virtual ~System() = default;
+    virtual void Update(double dt) = 0;
+};
 
-}
+}  // namespace DE

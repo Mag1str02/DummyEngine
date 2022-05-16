@@ -2,6 +2,7 @@
 
 #include "../ECS/Entity/entity_manager.hpp"
 #include "../ECS/Component/component_manager.hpp"
+#include "../ECS/System/system_manager.hpp"
 
 namespace DE {
 
@@ -30,6 +31,7 @@ void Initializer::Initialize() {
 void Initializer::Terminate() {
     EntityManager::Get().Terminate();
     ComponentManager::Get().Terminate();
+    SystemManager::Terminate();
 }
 
 void deInitialize() {
