@@ -77,6 +77,10 @@ add_executable(ECS
     ./src/Mains/ECS.cpp
 )
 
+add_executable(New_Model
+    ./src/Mains/new_model.cpp
+)
+
 target_link_libraries(my_lib PRIVATE glad)
 target_link_libraries(my_lib PRIVATE glfw3)
 target_link_libraries(my_lib PRIVATE assimp)
