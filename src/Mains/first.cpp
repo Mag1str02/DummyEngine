@@ -1,13 +1,4 @@
-#include <GLAD/glad.h>
-#include <GLFW/glfw3.h>
-
-#include <iostream>
-
-#include "../Config/config.h"
-#include "../Core/Memory/VAO/vao.h"
-#include "../Core/Wrappings/ApplicationWindow/application_window.h"
-#include "../Core/Wrappings/ShaderProgram/shader_program.h"
-#include "../ToolBox/Dev/Logger/logger.h"
+#include "../Engine/Addition/de_lib.h"
 
 ApplicationWindow application_window;
 ShaderProgram sp_basic_texture;

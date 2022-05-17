@@ -1,8 +1,4 @@
-#include <GLAD/glad.h>
-#include <GLFW/glfw3.h>
-
-#include <cmath>
-#include <iostream>
+#include "../Engine/Addition/de_lib.h"
 
 int main(void) {
     GLFWwindow* window1;

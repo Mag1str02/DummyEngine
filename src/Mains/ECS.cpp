@@ -1,12 +1,4 @@
-#include <glm/gtc/constants.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/rotate_vector.hpp>
-#include <glm/gtx/transform.hpp>
-#include <iostream>
-
-#include "../Config/config.h"
-#include "../Core/Addition/de_lib.h"
-#include "../ToolBox/Dev/Logger/logger.h"
+#include "../Engine/Addition/de_lib.h"
 
 using namespace DE;
 

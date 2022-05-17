@@ -1,4 +1,4 @@
-#include "../Core/Addition/de_lib.h"
+#include "../Engine/Addition/de_lib.h"
 
 using namespace DE;
 
@@ -12,12 +12,6 @@ ShaderProgram sp_textured_phong, sp_colored_phong;
 FPSCamera camera;
 const Model *backpack, *train, *cube, *cubes;
 std::vector<Entity> entities;
-
-struct Transformation {
-    glm::vec3 position;
-    glm::vec3 rotation;
-    glm::vec3 scale;
-};
 
 LightManager light_manager;
 DirectionalLight sun, moon;
@@ -40,8 +34,6 @@ int main() {
     LoadModels();
     InitModels();
     SetObjectProperties();
-    entities.push_back(Entity());
-    entities[0].AddComponent<Transformation>();
     ComponentManager::Get().LogState();
     EntityManager::Get().LogState();
     Logger::Info("loading", "Main", "Loading time: " + std::to_string(glfwGetTime()) + "s");

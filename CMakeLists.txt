@@ -15,42 +15,42 @@ INCLUDE_DIRECTORIES(libs/GLM/)
 add_library(my_lib STATIC  
     ./libs/STB_IMAGE/stb_image.cpp   
 
-    ./src/ToolBox/Loaders/ModelLoader/model_loader.cpp
-    ./src/ToolBox/Loaders/TextureLoader/texture_loader.cpp
+    ./src/Engine/ToolBox/Loaders/ModelLoader/model_loader.cpp
+    ./src/Engine/ToolBox/Loaders/TextureLoader/texture_loader.cpp
 
-    ./src/Core/Addition/some_funcs.cpp
+    ./src/Engine/Addition/some_funcs.cpp
 
-    ./src/Core/ECS/Component/component_array.hpp
-    ./src/Core/ECS/Component/component_manager.hpp
-    ./src/Core/ECS/Entity/entity.hpp
-    ./src/Core/ECS/Entity/entity_manager.hpp
-    ./src/Core/Ecs/System/system.hpp
-    ./src/Core/Ecs/System/system_manager.hpp
+    ./src/Engine/Core/ECS/Component/component_array.hpp
+    ./src/Engine/Core/ECS/Component/component_manager.hpp
+    ./src/Engine/Core/ECS/Entity/entity.hpp
+    ./src/Engine/Core/ECS/Entity/entity_manager.hpp
+    ./src/Engine/Core/Ecs/System/system.hpp
+    ./src/Engine/Core/Ecs/System/system_manager.hpp
 
-    ./src/Core/Initializer/initializer.cpp
+    ./src/Engine/Core/Initializer/initializer.cpp
 
-    ./src/Core/Memory/MeshManager/mesh_manager.cpp
-    ./src/Core/Memory/ModelManager/model_manager.cpp
-    ./src/Core/Memory/TextureManager/texture_manager.cpp
-    ./src/Core/Memory/VAO/vao.cpp
+    ./src/Engine/Core/Memory/MeshManager/mesh_manager.cpp
+    ./src/Engine/Core/Memory/ModelManager/model_manager.cpp
+    ./src/Engine/Core/Memory/TextureManager/texture_manager.cpp
+    ./src/Engine/Core/Memory/VAO/vao.cpp
 
-    ./src/Core/Objects/LightSources/PointLight/point_light.cpp
-    ./src/Core/Objects/LightSources/SpotLight/spot_light.cpp
-    ./src/Core/Objects/LightSources/DirectionalLight/directional_light.cpp
-    ./src/Core/Objects/LightSources/LightManager/light_manager.cpp
-    ./src/Core/Objects/Model/model.cpp
-    ./src/Core/Objects/Position/position.cpp
-    ./src/Core/Objects/Cameras/FPSCamera/fps_camera.cpp
+    ./src/Engine/Core/Objects/LightSources/PointLight/point_light.cpp
+    ./src/Engine/Core/Objects/LightSources/SpotLight/spot_light.cpp
+    ./src/Engine/Core/Objects/LightSources/DirectionalLight/directional_light.cpp
+    ./src/Engine/Core/Objects/LightSources/LightManager/light_manager.cpp
+    ./src/Engine/Core/Objects/Model/model.cpp
+    ./src/Engine/Core/Objects/Position/position.cpp
+    ./src/Engine/Core/Objects/Cameras/FPSCamera/fps_camera.cpp
 
-    ./src/Core/Structs/Meshes/mesh.cpp
-    ./src/Core/Structs/Textures/Texture2D/texture_2D.cpp
+    ./src/Engine/Core/Structs/Meshes/mesh.cpp
+    ./src/Engine/Core/Structs/Textures/Texture2D/texture_2D.cpp
 
-    ./src/ToolBox/Dev/Logger/logger.cpp
-    ./src/Core/UserInput/InputManager/input_manager.cpp
+    ./src/Engine/ToolBox/Dev/Logger/logger.cpp
+    ./src/Engine/Core/UserInput/InputManager/input_manager.cpp
 
-    ./src/Core/Wrappings/ApplicationWindow/application_window.cpp
-    ./src/Core/Wrappings/Shader/shader.cpp
-    ./src/Core/Wrappings/ShaderProgram/shader_program.cpp
+    ./src/Engine/Core/Wrappings/ApplicationWindow/application_window.cpp
+    ./src/Engine/Core/Wrappings/Shader/shader.cpp
+    ./src/Engine/Core/Wrappings/ShaderProgram/shader_program.cpp
 )
 
 ADD_CUSTOM_COMMAND(TARGET my_lib
@@ -89,3 +89,5 @@ target_link_libraries(First PRIVATE my_lib)
 target_link_libraries(Model PRIVATE my_lib)
 target_link_libraries(Windows PRIVATE my_lib)
 target_link_libraries(ECS PRIVATE my_lib)
+target_link_libraries(New_Model PRIVATE my_lib)
+
