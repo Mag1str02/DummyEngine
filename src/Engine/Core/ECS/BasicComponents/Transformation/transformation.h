@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 namespace DE {
-class Position {
+class Transformation {
 private:
     bool _update_model;
     bool _update_rotation;
@@ -17,7 +17,7 @@ private:
     void UpdateRotationMatrix();
 
 public:
-    Position();
+    Transformation();
 
     void SetAnglesOffset(glm::vec3 angles);
     void SetAngles(glm::vec3 angles);

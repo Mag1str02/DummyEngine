@@ -25,6 +25,7 @@ void Initializer::SetHint(int64_t hint_id, int64_t hint_value) {
 }
 
 void Initializer::Initialize() {
+    
     EntityManager::Get().Initialize();
     ComponentManager::Get();
 }

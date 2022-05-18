@@ -24,8 +24,9 @@ add_library(my_lib STATIC
     ./src/Engine/Core/ECS/Component/component_manager.hpp
     ./src/Engine/Core/ECS/Entity/entity.hpp
     ./src/Engine/Core/ECS/Entity/entity_manager.hpp
-    ./src/Engine/Core/Ecs/System/system.hpp
-    ./src/Engine/Core/Ecs/System/system_manager.hpp
+    ./src/Engine/Core/ECS/System/system.hpp
+    ./src/Engine/Core/ECS/System/system_manager.hpp
+    ./src/Engine/Core/ECS/BasicComponents/Transformation/transformation.cpp
 
     ./src/Engine/Core/Initializer/initializer.cpp
 
@@ -39,7 +40,6 @@ add_library(my_lib STATIC
     ./src/Engine/Core/Objects/LightSources/DirectionalLight/directional_light.cpp
     ./src/Engine/Core/Objects/LightSources/LightManager/light_manager.cpp
     ./src/Engine/Core/Objects/Model/model.cpp
-    ./src/Engine/Core/Objects/Position/position.cpp
     ./src/Engine/Core/Objects/Cameras/FPSCamera/fps_camera.cpp
 
     ./src/Engine/Core/Structs/Meshes/mesh.cpp

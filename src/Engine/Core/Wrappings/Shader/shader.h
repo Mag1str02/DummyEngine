@@ -3,37 +3,35 @@
 #include <GLAD/glad.h>
 
 #include <filesystem>
+#include <queue>
 #include <string>
 
 #include "../../../Addition/types.h"
+#include "../../Initializer/intitalizable.h"
+
 namespace DE {
 namespace fs = std::filesystem;
 
 class Shader {
 private:
-    class ShaderManager {
+    friend class ShaderProgram;
+
+    class ShaderManager : public Initializable {
     private:
-        std::vector<ShaderId> _shader_id;
-        std::vector<ReferenceCount> _ref_count;
-        std::unordered_map<InstanceId, size_t> _instance_to_index;
-        ShaderManager() {
-        }
+        std::unordered_map<ShaderId, ReferenceCount> _reference_count;
+
+        ShaderManager();
+        void DestroyShader(ShaderId shader_id);
 
     public:
-        static ShaderManager& Get() {
-            static ShaderManager shader_manager;
-            return shader_manager;
-        }
-        void Add() {
-            _shader_id.push_back(ShaderId());
-        }
+        static ShaderManager& Get();
 
-        /*
-        std::pair<InstanceId, ShaderId> CreateShader(GLenum type) {
-            _shader_id.push_back(glCreateShader(type));
-            _shader_id.push_back()
-        }
-        */
+        void Initialize() override;
+        void Terminate() override;
+
+        ShaderId CreateShader(GLenum type);
+        ShaderId CreateInstance(ShaderId shader_id);
+        void DestroyInstance(ShaderId shader_id);
     };
 
     ShaderId _shader_id;
@@ -43,10 +41,13 @@ private:
 
 public:
     Shader();
-    Shader(const fs::path& path_to_file, GLenum type);
+    Shader(const fs::path& path_to_file, ::GLenum type);
+    Shader(const Shader& other);
+    Shader(Shader&& other);
+    Shader& operator=(const Shader& other);
+    Shader& operator=(Shader&& other);
+    ~Shader();
 
-    void Init(const fs::path& path_to_file, GLenum type);
-
-    unsigned int GetId() const;
+    void Init(const fs::path& path_to_file, ::GLenum type);
 };
 }  // namespace DE

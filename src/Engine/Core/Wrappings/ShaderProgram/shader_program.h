@@ -6,25 +6,50 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
+
+#include "../Shader/shader.h"
+
 namespace DE {
 namespace fs = std::filesystem;
 
 class ShaderProgram {
 private:
-    unsigned int _sp_id;
-    std::string _name;
-    std::vector<unsigned int> _shader_ids;
+    class ShaderProgramManager : public Initializable {
+    private:
+        std::unordered_map<ShaderProgramId, ReferenceCount> _reference_count;
+
+        ShaderProgramManager();
+        void DestroyShaderProgram(ShaderProgramId shader_id);
+
+    public:
+        static ShaderProgramManager& Get();
+
+        void Initialize() override;
+        void Terminate() override;
+
+        ShaderProgramId CreateShaderProgram();
+        ShaderProgramId CreateInstance(ShaderProgramId shader_id);
+        void DestroyInstance(ShaderProgramId shader_id);
+    };
+
+    ShaderProgramId _shader_program_id;
+    std::vector<Shader> _shaders;
 
     void Check();
     int PosOf(const std::string& filename);
 
 public:
     ShaderProgram();
+    ShaderProgram(const ShaderProgram& other);
+    ShaderProgram(ShaderProgram&& other);
+    ShaderProgram& operator=(const ShaderProgram& other);
+    ShaderProgram& operator=(ShaderProgram&& other);
     ~ShaderProgram();
-    
-    void Init(std::string name);
+
+    void Init();
     void SmartInit(const fs::path& path_to_file);
 
+    void AddShader(Shader shader);
     void AddShader(const fs::path& path_to_file, GLuint shader_type);
     void LinkProgram();
     void Use();

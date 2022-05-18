@@ -5,58 +5,129 @@
 
 #include "../../../../Config/config.h"
 #include "../../../ToolBox/Dev/Logger/logger.h"
-#include "../Shader/shader.h"
+
 namespace DE {
-ShaderProgram::ShaderProgram() {
+
+ShaderProgram::ShaderProgramManager::ShaderProgramManager() {
 }
-void ShaderProgram::Init(std::string name) {
-    _name = name;
-    _sp_id = glCreateProgram();
-    Logger::Info("loading", "ShaderProgram", "Shader program (" + name + ") initialized with id: " + std::to_string(_sp_id));
+
+ShaderProgram::ShaderProgramManager& ShaderProgram::ShaderProgramManager::Get() {
+    static ShaderProgramManager shader_program_manager;
+    return shader_program_manager;
+}
+
+void ShaderProgram::ShaderProgramManager::Initialize() {
+    _initialized = true;
+}
+void ShaderProgram::ShaderProgramManager::Terminate() {
+    _initialized = false;
+    _reference_count.clear();
+}
+
+ShaderProgramId ShaderProgram::ShaderProgramManager::CreateShaderProgram() {
+    ShaderProgramId shader_program_id = glCreateProgram();
+    _reference_count[shader_program_id] = 1;
+    return shader_program_id;
+}
+ShaderProgramId ShaderProgram::ShaderProgramManager::CreateInstance(ShaderProgramId shader_program_id) {
+    if (shader_program_id == ShaderProgramId(-1)) {
+        return ShaderProgramId(-1);
+    }
+    ++_reference_count[shader_program_id];
+    return shader_program_id;
+}
+void ShaderProgram::ShaderProgramManager::DestroyInstance(ShaderProgramId shader_program_id) {
+    if (!_initialized) {
+        return;
+    }
+    if (shader_program_id == ShaderProgramId(-1)) {
+        return;
+    }
+    --_reference_count[shader_program_id];
+    if (_reference_count[shader_program_id] == 0) {
+        DestroyShaderProgram(shader_program_id);
+    }
+}
+void ShaderProgram::ShaderProgramManager::DestroyShaderProgram(ShaderProgramId shader_program_id) {
+    glDeleteShader(shader_program_id);
+    _reference_count.erase(shader_program_id);
+}
+
+ShaderProgram::ShaderProgram() {
+    _shader_program_id = ShaderProgramId(-1);
+}
+ShaderProgram::ShaderProgram(const ShaderProgram& other) {
+    _shader_program_id = ShaderProgramManager::Get().CreateInstance(other._shader_program_id);
+}
+ShaderProgram::ShaderProgram(ShaderProgram&& other) {
+    _shader_program_id = ShaderProgramManager::Get().CreateInstance(other._shader_program_id);
+}
+ShaderProgram& ShaderProgram::operator=(const ShaderProgram& other) {
+    if (&other == this) {
+        return *this;
+    }
+    ShaderProgramManager::Get().DestroyInstance(_shader_program_id);
+    _shader_program_id = ShaderProgramManager::Get().CreateInstance(other._shader_program_id);
+    return *this;
+}
+ShaderProgram& ShaderProgram::operator=(ShaderProgram&& other) {
+    if (&other == this) {
+        return *this;
+    }
+    ShaderProgramManager::Get().DestroyInstance(_shader_program_id);
+    _shader_program_id = ShaderProgramManager::Get().CreateInstance(other._shader_program_id);
+    return *this;
+}
+
+ShaderProgram::~ShaderProgram() {
+    ShaderProgramManager::Get().DestroyInstance(_shader_program_id);
+}
+void ShaderProgram::Init() {
+    _shader_program_id = ShaderProgramManager::Get().CreateShaderProgram();
+    Logger::Info("loading", "ShaderProgram", "Shader program (" + std::to_string(_shader_program_id) + ") initialized.");
 }
 void ShaderProgram::SmartInit(const fs::path& path_to_file) {
-    Init(path_to_file.filename().string());
+    Init();
     AddShader((path_to_file / path_to_file.filename()).string() + ".vs", GL_VERTEX_SHADER);
     AddShader((path_to_file / path_to_file.filename()).string() + ".fs", GL_FRAGMENT_SHADER);
     LinkProgram();
 }
-ShaderProgram::~ShaderProgram() {
-    glDeleteProgram(_sp_id);
-}
 
+void ShaderProgram::AddShader(Shader shader) {
+    glAttachShader(_shader_program_id, shader._shader_id);
+    _shaders.push_back(shader);
+}
 void ShaderProgram::AddShader(const fs::path& path_to_file, GLuint shader_type) {
     Shader shader(path_to_file, shader_type);
-    glAttachShader(_sp_id, shader.GetId());
-    _shader_ids.push_back(shader.GetId());
+    glAttachShader(_shader_program_id, shader._shader_id);
+    _shaders.push_back(shader);
 }
 void ShaderProgram::LinkProgram() {
-    glLinkProgram(_sp_id);
-    for (const auto& shader : _shader_ids) {
-        glDeleteShader(shader);
-    }
-    _shader_ids.clear();
+    glLinkProgram(_shader_program_id);
+    _shaders.clear();
+
     Check();
 }
 void ShaderProgram::Use() {
-    glUseProgram(_sp_id);
+    glUseProgram(_shader_program_id);
 }
 
 void ShaderProgram::Check() {
     int success;
     char info_log[MAX_COMPILE_ERROR_LEN];
-    glGetProgramiv(_sp_id, GL_LINK_STATUS, &success);
+    glGetProgramiv(_shader_program_id, GL_LINK_STATUS, &success);
     if (!success) {
-        glGetProgramInfoLog(_sp_id, 512, NULL, info_log);
-        Logger::Error("loading", "ShaderProgram", "Failed to link shader program: " + _name + "\n" + info_log);
+        glGetProgramInfoLog(_shader_program_id, 512, NULL, info_log);
+        Logger::Error("loading", "ShaderProgram", "Failed to link shader program (" + std::to_string(_shader_program_id) + ")\n" + info_log);
         throw std::exception();
     }
-    Logger::Info("loading", "ShaderProgram", "Shader program linked successfully: " + _name);
+    Logger::Info("loading", "ShaderProgram", "Shader program (" + std::to_string(_shader_program_id) + ") linked successfully");
 }
 
 int ShaderProgram::PosOf(const std::string& uniform_name) {
-    // Logger::Info("rendering", "Unifrom pos: " + std::to_string(glGetUniformLocation(_sp_id, uniform_name.c_str())) + " Name: " + uniform_name + "
-    // SP id: " + std::to_string(_sp_id));
-    return glGetUniformLocation(_sp_id, uniform_name.c_str());
+    // Logger::Info("rendering", "Unifrom pos: " + std::to_string(glGetUniformLocation(_shader_program_id, uniform_name.c_str())) + " Name: " +
+    // uniform_name + " SP id: " + std::to_string(_shader_program_id));
+    return glGetUniformLocation(_shader_program_id, uniform_name.c_str());
 }
 
 void ShaderProgram::SetFloat(const std::string& uniform_name, float value) {

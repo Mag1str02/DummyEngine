@@ -6,6 +6,7 @@ glm::mat4 e = glm::mat4(1.0f);
 
 bool cursor_mode = true;
 
+LightManager light_manager;
 InputManager input_manager;
 ApplicationWindow application_window;
 ShaderProgram sp_textured_phong, sp_colored_phong;
@@ -13,12 +14,15 @@ FPSCamera camera;
 const Model *backpack, *train, *cube, *cubes;
 std::vector<Entity> entities;
 
-LightManager light_manager;
 DirectionalLight sun, moon;
 PointLight lamp_white, lamp_magenta;
 SpotLight flashlight, lamp;
 
+std::unordered_map<std::string, Entity> scene;
+
 void Initialize();
+
+void CreateEntityies();
 void LoadShaders();
 void LoadModels();
 void InitModels();
@@ -30,6 +34,7 @@ void Draw();
 
 int main() {
     Initialize();
+    CreateEntityies();
     LoadShaders();
     LoadModels();
     InitModels();
@@ -49,7 +54,6 @@ void Initialize() {
     std::cout << WORKING_DIR << std::endl;
     Logger::Open(LOG_DIR / "loading.txt", "loading");
     Logger::Open(LOG_DIR / "ECS.txt", "ECS");
-    Logger::Info("loading", "Main", "Logger initialized.");
     Logger::Stage("loading", "Main", "INITIALIZETION");
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -65,22 +69,42 @@ void Initialize() {
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_DEPTH_TEST);
 }
+
+void CreateEntityies() {
+    scene["player"] = Entity();
+    scene["backpack"] = Entity();
+    scene["train"] = Entity();
+    scene["sun"] = Entity();
+    scene["moon"] = Entity();
+    scene["lamp_white"] = Entity();
+    scene["lamp_magenta"] = Entity();
+    scene["flashlight"] = Entity();
+    scene["lamp"] = Entity();
+}
 void LoadShaders() {
     Logger::Stage("loading", "Main", "LOADING SHADERS");
-    sp_textured_phong.SmartInit(SHADER_DIR / "TexturedPhong");
-    sp_colored_phong.SmartInit(SHADER_DIR / "ColoredPhong");
+    scene["train"].AddComponent<ShaderProgram>();
+    scene["backpack"].AddComponent<ShaderProgram>();
+    scene["train"].GetComponent<ShaderProgram>().SmartInit(SHADER_DIR / "ColoredPhong");
+    scene["backpack"].GetComponent<ShaderProgram>().SmartInit(SHADER_DIR / "TexturedPhong");
 
-    light_manager.AddDirectionalLight(&sun);
-    light_manager.AddDirectionalLight(&moon);
+    scene["sun"].AddComponent<DirectionalLight>();
+    scene["moon"].AddComponent<DirectionalLight>();
+    scene["lamp_white"].AddComponent<PointLight>();
+    scene["lamp_magenta"].AddComponent<PointLight>();
+    scene["flashlight"].AddComponent<SpotLight>();
+    scene["lamp"].AddComponent<SpotLight>();
 
-    light_manager.AddPointLight(&lamp_white);
-    light_manager.AddPointLight(&lamp_magenta);
-
-    light_manager.AddSpotLight(&flashlight);
-    light_manager.AddSpotLight(&lamp);
+    light_manager.AddDirectionalLight(scene["sun"]);
+    light_manager.AddDirectionalLight(scene["moon"]);
+    light_manager.AddPointLight(scene["lamp_white"]);
+    light_manager.AddPointLight(scene["lamp_magenta"]);
+    light_manager.AddSpotLight(scene["flashlight"]);
+    light_manager.AddSpotLight(scene["lamp"]);
 
     Logger::Info("loading", "Main", "Shaders loaded.");
 }
+
 void LoadModels() {
     Logger::Stage("loading", "Main", "LOADING MODELS");
     MeshManager::AddModel("train", MODEL_DIR / "Train" / "train1.obj");

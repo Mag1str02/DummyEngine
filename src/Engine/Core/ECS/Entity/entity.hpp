@@ -1,9 +1,10 @@
 #pragma once
 
-#include "../../../ToolBox/Dev/Logger/logger.h"
 #include "../../../Addition/types.h"
+#include "../../../ToolBox/Dev/Logger/logger.h"
 #include "../Component/component_manager.hpp"
 #include "entity_manager.hpp"
+
 
 namespace DE {
 
@@ -34,6 +35,7 @@ public:
         if (&other == this) {
             return *this;
         }
+        EntityManager::Get().DestroyInstance(_id);
         _id = EntityManager::Get().CopyEntity(other._id);
         // Logger::Info("ECS", "Entity", "Assigned by operator=");
         return *this;
@@ -42,6 +44,7 @@ public:
         if (&other == this) {
             return *this;
         }
+        EntityManager::Get().DestroyInstance(_id);
         _id = EntityManager::Get().CopyEntity(other._id);
         // Logger::Info("ECS", "Entity", "Assigned by move operator=");
         return *this;

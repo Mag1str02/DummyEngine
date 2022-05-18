@@ -100,6 +100,21 @@ void Test2() {
     deTerminate();
     Entity::Log();
 }
+void Test3() {
+    deInitialize();
+    Entity::Log();
+
+    Entity a;
+    Entity b;
+    Entity c;
+    Entity::Log();
+    c = a;
+    Entity::Log();
+    c = b;
+    Entity::Log();
+    deTerminate();
+    Entity::Log();
+}
 
 int main() {
     Logger::Open(LOG_DIR / "ECS.txt", "ECS");
@@ -107,6 +122,8 @@ int main() {
     Test1();
     Logger::Stage("ECS", "Main", "TEST 2");
     Test2();
+    Logger::Stage("ECS", "Main", "TEST 3");
+    Test3();
     std::cout << "FINE!" << std::endl;
     return 0;
 }
