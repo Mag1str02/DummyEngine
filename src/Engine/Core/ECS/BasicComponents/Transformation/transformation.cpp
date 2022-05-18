@@ -33,6 +33,10 @@ Transformation::Transformation()
 {
 }
 
+void Transformation::MoveInWorld(glm::vec3 delta) {
+    _pos += delta;
+    _update_model = true;
+}
 void Transformation::SetScale(glm::vec3 scale) {
     _scale = scale;
     _update_model = true;

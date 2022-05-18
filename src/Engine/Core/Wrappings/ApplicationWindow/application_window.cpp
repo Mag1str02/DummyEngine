@@ -1,6 +1,7 @@
 #include "application_window.h"
 
 #include "../../../ToolBox/Dev/Logger/logger.h"
+#include "../../ECS/System/system_manager.hpp"
 namespace DE {
 void ApplicationWindow::CheckWindow() {
     if (_window == NULL) {
@@ -58,11 +59,13 @@ void ApplicationWindow::StartLoop() {
     double prev_time;
     size_t frame_amount = 0;
     while (!glfwWindowShouldClose(_window)) {
+        double prev_frame_time = glfwGetTime() - prev_time;
         prev_time = glfwGetTime();
         glfwPollEvents();
         _process_input();
         _update_world_func();
         _draw_func();
+        SystemManager::Update(prev_frame_time);
         glfwSwapBuffers(_window);
         avarage_frame_time = (avarage_frame_time * frame_amount + glfwGetTime() - prev_time) / (frame_amount + 1);
         frame_amount++;

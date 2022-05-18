@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "../../../ToolBox/Dev/Logger/logger.h"
 #include "../../../Addition/some_funcs.h"
+#include "../../../ToolBox/Dev/Logger/logger.h"
 #include "component_array.hpp"
 
 namespace DE {

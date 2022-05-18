@@ -1,10 +1,11 @@
 #pragma once
 
+#include <iostream>
+
 #include "../../../Addition/types.h"
 #include "../../../ToolBox/Dev/Logger/logger.h"
 #include "../Component/component_manager.hpp"
 #include "entity_manager.hpp"
-
 
 namespace DE {
 
@@ -71,6 +72,7 @@ public:
     ComponentType& GetComponent() {
         if (ComponentManager::Get().GetComponentId<ComponentType>() == -1) {
             EntityManager::Get().ExtendSignatures();
+            ComponentManager::Get().RegisterComponent<ComponentType>();
         }
         if (!EntityManager::Get().GetComponent(_id, ComponentManager::Get().GetComponentId<ComponentType>())) {
             ComponentManager::Get().AddComponent<ComponentType>(_id);

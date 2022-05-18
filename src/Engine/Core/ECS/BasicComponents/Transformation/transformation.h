@@ -6,7 +6,7 @@ class Transformation {
 private:
     bool _update_model;
     bool _update_rotation;
-    
+
     glm::vec3 _scale;
     glm::vec3 _pos, _pos_offset;
     glm::vec3 _angles, _angles_offset;
@@ -19,6 +19,7 @@ private:
 public:
     Transformation();
 
+    void MoveInWorld(glm::vec3 delta);
     void SetAnglesOffset(glm::vec3 angles);
     void SetAngles(glm::vec3 angles);
     void SetPosOffset(glm::vec3 offset);
