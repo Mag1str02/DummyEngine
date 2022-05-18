@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/transform.hpp>
+
 namespace DE {
 void Transformation::UpdateModelMatrix() {
     _model_matrix = glm::mat4(1.0f);

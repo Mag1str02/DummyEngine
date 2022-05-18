@@ -6,23 +6,16 @@ glm::mat4 e = glm::mat4(1.0f);
 
 bool cursor_mode = true;
 
-LightManager light_manager;
 InputManager input_manager;
 ApplicationWindow application_window;
-ShaderProgram sp_textured_phong, sp_colored_phong;
-FPSCamera camera;
 const Model *backpack, *train, *cube, *cubes;
-std::vector<Entity> entities;
-
-DirectionalLight sun, moon;
-PointLight lamp_white, lamp_magenta;
-SpotLight flashlight, lamp;
 
 std::unordered_map<std::string, Entity> scene;
 
 void Initialize();
 
-void CreateEntityies();
+void CreateEntities();
+void RegisterSystems();
 void LoadShaders();
 void LoadModels();
 void InitModels();
@@ -32,9 +25,11 @@ void ProcessInput();
 void UpdateWorld();
 void Draw();
 
-int main() {
+int main()
+{
     Initialize();
-    CreateEntityies();
+    RegisterSystems();
+    CreateEntities();
     LoadShaders();
     LoadModels();
     InitModels();
@@ -50,7 +45,8 @@ int main() {
     return 0;
 }
 
-void Initialize() {
+void Initialize()
+{
     std::cout << WORKING_DIR << std::endl;
     Logger::Open(LOG_DIR / "loading.txt", "loading");
     Logger::Open(LOG_DIR / "ECS.txt", "ECS");
@@ -60,6 +56,7 @@ void Initialize() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_SAMPLES, 4);
+    deHint(H_MAX_ENTITY_AMOUNT, 10);
     deInitialize();
     application_window.Init("First");
     application_window.SetProcessInputFunc(ProcessInput);
@@ -70,7 +67,12 @@ void Initialize() {
     glEnable(GL_DEPTH_TEST);
 }
 
-void CreateEntityies() {
+void RegisterSystems()
+{
+    SystemManager::RegisterSystem<LightManager>();
+}
+void CreateEntities()
+{
     scene["player"] = Entity();
     scene["backpack"] = Entity();
     scene["train"] = Entity();
@@ -80,13 +82,18 @@ void CreateEntityies() {
     scene["lamp_magenta"] = Entity();
     scene["flashlight"] = Entity();
     scene["lamp"] = Entity();
-}
-void LoadShaders() {
-    Logger::Stage("loading", "Main", "LOADING SHADERS");
+
+    scene["player"].AddComponent<FPSCamera>();
+
+    scene["backpack"].AddComponent<Transformation>();
+    scene["train"].AddComponent<Transformation>();
+    scene["lamp_white"].AddComponent<Transformation>();
+    scene["lamp_magenta"].AddComponent<Transformation>();
+    scene["lamp"].AddComponent<Transformation>();
+    scene["flashlight"].AddComponent<Transformation>();
+
     scene["train"].AddComponent<ShaderProgram>();
     scene["backpack"].AddComponent<ShaderProgram>();
-    scene["train"].GetComponent<ShaderProgram>().SmartInit(SHADER_DIR / "ColoredPhong");
-    scene["backpack"].GetComponent<ShaderProgram>().SmartInit(SHADER_DIR / "TexturedPhong");
 
     scene["sun"].AddComponent<DirectionalLight>();
     scene["moon"].AddComponent<DirectionalLight>();
@@ -94,18 +101,18 @@ void LoadShaders() {
     scene["lamp_magenta"].AddComponent<PointLight>();
     scene["flashlight"].AddComponent<SpotLight>();
     scene["lamp"].AddComponent<SpotLight>();
-
-    light_manager.AddDirectionalLight(scene["sun"]);
-    light_manager.AddDirectionalLight(scene["moon"]);
-    light_manager.AddPointLight(scene["lamp_white"]);
-    light_manager.AddPointLight(scene["lamp_magenta"]);
-    light_manager.AddSpotLight(scene["flashlight"]);
-    light_manager.AddSpotLight(scene["lamp"]);
+}
+void LoadShaders()
+{
+    Logger::Stage("loading", "Main", "LOADING SHADERS");
+    scene["train"].GetComponent<ShaderProgram>().SmartInit(SHADER_DIR / "ColoredPhong");
+    scene["backpack"].GetComponent<ShaderProgram>().SmartInit(SHADER_DIR / "TexturedPhong");
 
     Logger::Info("loading", "Main", "Shaders loaded.");
 }
 
-void LoadModels() {
+void LoadModels()
+{
     Logger::Stage("loading", "Main", "LOADING MODELS");
     MeshManager::AddModel("train", MODEL_DIR / "Train" / "train1.obj");
     MeshManager::AddModel("backpack", MODEL_DIR / "Backpack" / "Backpack.obj");
@@ -116,15 +123,26 @@ void LoadModels() {
     MeshManager::CompressModel("cubes");
     MeshManager::DumbModels();
 }
-void InitModels() {
+void InitModels()
+{
     Logger::Stage("loading", "Main", "INITIALIZING MODELS");
     backpack = ModelManager::GetModel("backpack");
     train = ModelManager::GetModel("train");
     cube = ModelManager::GetModel("cube");
     cubes = ModelManager::GetModel("cubes");
 }
-void SetObjectProperties() {
+void SetObjectProperties()
+{
     Logger::Stage("loading", "Main", "SETTING OBJECTS PROPERTIES");
+    FPSCamera &camera = scene["player"].GetComponent<FPSCamera>();
+
+    DirectionalLight &sun = scene["sun"].GetComponent<DirectionalLight>();
+    DirectionalLight &moon = scene["moon"].GetComponent<DirectionalLight>();
+    PointLight &lamp_white = scene["lamp_white"].GetComponent<PointLight>();
+    PointLight &lamp_magenta = scene["lamp_magenta"].GetComponent<PointLight>();
+    SpotLight &flashlight = scene["flashlight"].GetComponent<SpotLight>();
+    SpotLight &lamp = scene["lamp"].GetComponent<SpotLight>();
+
     camera.SetPos(glm::vec3(0.0f, 0.0f, 100.0f));
 
     moon.ambient = glm::vec3(0.2f, 0.56f, 1.0f) * 0.02f;
@@ -162,28 +180,39 @@ void SetObjectProperties() {
     lamp.outer_cone_cos = cos(glm::radians(17.5));
 }
 
-void ProcessInput() {
+void ProcessInput()
+{
+    FPSCamera &camera = scene["player"].GetComponent<FPSCamera>();
     float sensitivity = 0.07;
     float speed = 0.5;
 
     input_manager.ReadFrame();
 
-    if (input_manager.KeyReleased(GLFW_KEY_TAB)) {
-        if (cursor_mode) {
+    if (input_manager.KeyReleased(GLFW_KEY_TAB))
+    {
+        if (cursor_mode)
+        {
             glfwSetInputMode(application_window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             cursor_mode = false;
-        } else {
+        }
+        else
+        {
             glfwSetInputMode(application_window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             cursor_mode = true;
         }
     }
 
-    if (input_manager.KeyReleased(GLFW_KEY_F11)) {
-        if (application_window.GetScreenSizeState() == ScreenSizeState::fullscreen) {
+    if (input_manager.KeyReleased(GLFW_KEY_F11))
+    {
+        if (application_window.GetScreenSizeState() == ScreenSizeState::fullscreen)
+        {
             application_window.SetWindowed();
-        } else {
+        }
+        else
+        {
             int monitor_id = 0;
-            if (input_manager.KeyDown(GLFW_KEY_1)) {
+            if (input_manager.KeyDown(GLFW_KEY_1))
+            {
                 monitor_id = 1;
             }
             application_window.SetFullScreen(monitor_id);
@@ -195,39 +224,49 @@ void ProcessInput() {
     glfwGetWindowSize(application_window.GetWindow(), &width, &height);
     camera.SetAspect(double(width) / height);
 
-    if (!cursor_mode) {
+    if (!cursor_mode)
+    {
         return;
     }
 
     camera.RotateY(input_manager.CursorXOffset() * sensitivity);
     camera.RotateX(input_manager.CursorYOffset() * sensitivity / 16 * 9);
 
-    if (input_manager.KeyDown(GLFW_KEY_LEFT_SHIFT)) {
+    if (input_manager.KeyDown(GLFW_KEY_LEFT_SHIFT))
+    {
         speed = 50.0f;
     }
-    if (input_manager.KeyDown(GLFW_KEY_ESCAPE)) {
+    if (input_manager.KeyDown(GLFW_KEY_ESCAPE))
+    {
         glfwSetWindowShouldClose(application_window.GetWindow(), true);
     }
-    if (input_manager.KeyDown(GLFW_KEY_S)) {
+    if (input_manager.KeyDown(GLFW_KEY_S))
+    {
         camera.MoveInLocal(glm::vec3(0.0f, 0.0f, -1.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_W)) {
+    if (input_manager.KeyDown(GLFW_KEY_W))
+    {
         camera.MoveInLocal(glm::vec3(0.0f, 0.0f, 1.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_D)) {
+    if (input_manager.KeyDown(GLFW_KEY_D))
+    {
         camera.MoveInLocal(glm::vec3(1.0f, 0.0f, 0.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_A)) {
+    if (input_manager.KeyDown(GLFW_KEY_A))
+    {
         camera.MoveInLocal(glm::vec3(-1.0f, 0.0f, 0.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_SPACE)) {
+    if (input_manager.KeyDown(GLFW_KEY_SPACE))
+    {
         camera.MoveInWorld(glm::vec3(0.0f, 1.0f, 0.0f) * speed * input_manager.FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_C)) {
+    if (input_manager.KeyDown(GLFW_KEY_C))
+    {
         camera.MoveInWorld(glm::vec3(0.0f, -1.0f, 0.0f) * speed * input_manager.FrameTime());
     }
 }
-void UpdateWorld() {
+void UpdateWorld()
+{
     static size_t frame;
     // Logger::Stage("rendering", "Frame: " + std::to_string(frame++));
     glm::vec3 center(0, 20, 0);
@@ -241,7 +280,8 @@ void UpdateWorld() {
     flashlight.position = camera.GetPos();
     flashlight.direction = camera.GetDir();
 }
-void Draw() {
+void Draw()
+{
     sp_textured_phong.SetMat4fv("projection", camera.GetProjectionMatrix());
     sp_textured_phong.SetMat4fv("view", camera.GetViewMatrix());
     sp_textured_phong.SetVec3f("view_pos", camera.GetPos());
@@ -268,7 +308,8 @@ void Draw() {
 
     e = glm::mat4(1.0);
 
-    for (size_t i = 0; i < 100; ++i) {
+    for (size_t i = 0; i < 100; ++i)
+    {
         e = glm::translate(e, glm::vec3(0, 0, 10));
         sp_colored_phong.SetMat4fv("model", e);
         train->Draw(sp_colored_phong);

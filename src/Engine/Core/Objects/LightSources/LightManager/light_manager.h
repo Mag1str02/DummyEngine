@@ -7,26 +7,20 @@
 #include "../DirectionalLight/directional_light.h"
 #include "../PointLight/point_light.h"
 #include "../SpotLight/spot_light.h"
+#include "../../../ECS/System/system.hpp"
 
+namespace DE
+{
+    class LightManager : public System
+    {
+    private:
+        void ActivatePointLight(ShaderProgram &shader_program, const PointLight &point_light, int id);
+        void ActivateDirectionalLight(ShaderProgram &shader_program, const DirectionalLight &directional, int id);
+        void ActivateSpotLight(ShaderProgram &shader_program, const SpotLight &spot_light, int id);
 
-namespace DE {
-class LightManager {
-private:
-    std::vector<Entity> _point_lights;
-    std::vector<Entity> _directional_lights;
-    std::vector<Entity> _spot_lights;
+    public:
+        LightManager();
 
-    void ActivatePointLight(ShaderProgram& shader_program, int id);
-    void ActivateDirectionalLight(ShaderProgram& shader_program, int id);
-    void ActivateSpotLight(ShaderProgram& shader_program, int id);
-
-public:
-    LightManager();
-
-    void AddPointLight(Entity point_light);
-    void AddDirectionalLight(Entity directional_light);
-    void AddSpotLight(Entity spot_light);
-
-    void UpdateLights(ShaderProgram& shader_program);
-};
-}  // namespace DE
+        void Update(double dt) override;
+    };
+} // namespace DE

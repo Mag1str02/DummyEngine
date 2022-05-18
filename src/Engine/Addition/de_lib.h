@@ -10,6 +10,7 @@
 
 #include "../../Config/config.h"
 #include "../ToolBox/Dev/Logger/logger.h"
+#include "../Core/ECS/BasicComponents/Transformation/transformation.h"
 #include "../Core/ECS/Component/component_array.hpp"
 #include "../Core/ECS/Component/component_manager.hpp"
 #include "../Core/ECS/Entity/entity.hpp"

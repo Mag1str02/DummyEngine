@@ -2,50 +2,57 @@
 
 using namespace DE;
 
-struct Transformation {
-    glm::vec3 position;
-    glm::vec3 rotation;
-    glm::vec3 scale;
-};
-
-struct Health {
+struct Health
+{
     double health;
+    Health() {}
+    Health(double h) : health(h) {}
 };
-struct Healing {
+struct Healing
+{
     double heal_per_sec;
+    Healing() {}
+    Healing(double h) : heal_per_sec(h) {}
 };
 
-class HealingSystem : public System {
+class HealingSystem : public System
+{
 
 public:
-    HealingSystem() {
+    HealingSystem()
+    {
     }
-    void Update(double dt) override {
-        auto& health_array = GetComponentArray<Health>();
-        auto& healing_array = GetComponentArray<Healing>();
-        for (auto it : health_array) {
-            if (healing_array.HasComponent(it.first)) {
+    void Update(double dt) override
+    {
+        auto &health_array = GetComponentArray<Health>();
+        auto &healing_array = GetComponentArray<Healing>();
+        for (auto it : health_array)
+        {
+            if (healing_array.HasComponent(it.first))
+            {
                 it.second.health += dt * healing_array[it.first].heal_per_sec;
             }
         }
     }
 };
 
-void Test1() {
+void Test1()
+{
     deHint(H_MAX_ENTITY_AMOUNT, 1000);
     deInitialize();
     Entity::Log();
 
-    Entity* a = new Entity();
+    Entity *a = new Entity();
     Entity::Log();
 
     a->AddComponent<Health>();
     Entity::Log();
 
     std::vector<Entity> entities;
-    for (size_t i = 0; i < 5; ++i) {
+    for (size_t i = 0; i < 5; ++i)
+    {
         entities.push_back(Entity());
-        auto& h = entities.back().GetComponent<Health>();
+        auto &h = entities.back().GetComponent<Health>();
         Entity::Log();
     }
 
@@ -60,7 +67,8 @@ void Test1() {
     deTerminate();
     Entity::Log();
 }
-void Test2() {
+void Test2()
+{
     deInitialize();
     SystemManager::RegisterSystem<HealingSystem>();
     SystemManager::CalculateOrder();
@@ -72,7 +80,8 @@ void Test2() {
 
     log_healing = "Healing: ";
     log_health = "Health: ";
-    for (size_t i = 0; i < 5; ++i) {
+    for (size_t i = 0; i < 5; ++i)
+    {
         entities[i].AddComponent<Health>(Health(i * 10));
         entities[i].AddComponent<Healing>(Healing((5 - i) * 5));
         log_healing.append(std::to_string(entities[i].GetComponent<Healing>().heal_per_sec) + " ");
@@ -87,9 +96,11 @@ void Test2() {
 
     log_healing = "Healing: ";
     log_health = "Health: ";
-    for (size_t i = 0; i < 5; ++i) {
+    for (size_t i = 0; i < 5; ++i)
+    {
         log_health.append(std::to_string(entities[i].GetComponent<Health>().health) + " ");
-        if (i != 4) {
+        if (i != 4)
+        {
             log_healing.append(std::to_string(entities[i].GetComponent<Healing>().heal_per_sec) + " ");
         }
     }
@@ -100,7 +111,8 @@ void Test2() {
     deTerminate();
     Entity::Log();
 }
-void Test3() {
+void Test3()
+{
     deInitialize();
     Entity::Log();
 
@@ -116,7 +128,8 @@ void Test3() {
     Entity::Log();
 }
 
-int main() {
+int main()
+{
     Logger::Open(LOG_DIR / "ECS.txt", "ECS");
     Logger::Stage("ECS", "Main", "TEST 1");
     Test1();
