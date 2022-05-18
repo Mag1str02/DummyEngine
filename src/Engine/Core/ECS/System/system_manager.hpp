@@ -1,9 +1,13 @@
 #pragma once
 
+#include <GLAD/glad.h>
+#include <GLFW/glfw3.h>
+
 #include <unordered_map>
 
 #include "../../../Addition/types.h"
 #include "system.hpp"
+
 
 namespace DE {
 class SystemManager {
@@ -14,6 +18,9 @@ private:
     std::vector<std::vector<SystemId>> _processing_layers;
     size_t _max_layer_width;
 
+    std::vector<double> _avarage_frame_time;
+    size_t _frame_amount;
+
     SystemManager() {
     }
     static SystemManager& Get() {
@@ -23,11 +30,15 @@ private:
 
 public:
     static void Update(double dt) {
+        double prev_time;
         for (const auto& layer : Get()._processing_layers) {
             for (const auto& system : layer) {
+                prev_time = glfwGetTime();
                 Get()._system_array[system]->Update(dt);
+                Get()._avarage_frame_time[system] = (Get()._avarage_frame_time[system] * Get()._frame_amount + glfwGetTime() - prev_time) / (Get()._frame_amount + 1);
             }
         }
+        ++Get()._frame_amount;
     }
 
     template <typename Before, typename After>
@@ -45,6 +56,8 @@ public:
             Get()._processing_layers[0].push_back(i);
         }
         Get()._max_layer_width = Get()._system_id.size();
+        Get()._avarage_frame_time.resize(Get()._system_array.size());
+        Get()._frame_amount = 0;
     }
 
     template <typename SystemType>
@@ -60,6 +73,9 @@ public:
         Get()._system_array.clear();
         Get()._system_id.clear();
         Get()._order_graph.clear();
+        for (size_t i = 0; i < Get()._avarage_frame_time.size(); ++i) {
+            Logger::Info("rendering", "SystemManager", "System (" + std::to_string(i) + ") avarage frame time (" + std::to_string(Get()._avarage_frame_time[i]) + "s)");
+        }
     }
 };
 }  // namespace DE

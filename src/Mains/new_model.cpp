@@ -36,8 +36,8 @@ public:
     }
 
     void Update(double dt) override {
-        // scene["flashlight"].GetComponent<SpotLight>().position = scene["player"].GetComponent<FPSCamera>().GetPos();
-        // scene["flashlight"].GetComponent<SpotLight>().direction = scene["player"].GetComponent<FPSCamera>().GetDir();
+        scene["flashlight"].GetComponent<SpotLight>().position = scene["player"].GetComponent<FPSCamera>().GetPos();
+        scene["flashlight"].GetComponent<SpotLight>().direction = scene["player"].GetComponent<FPSCamera>().GetDir();
 
         auto& manipulators = GetComponentArray<LinearManipulator>();
         auto& positions = GetComponentArray<Transformation>();
@@ -62,7 +62,6 @@ public:
 
         auto& camera = scene["player"].GetComponent<FPSCamera>();
         scene["train"].GetComponent<ShaderProgram>().SetVec3f("color", 1.0, 0.5, 1.0);
-        // scene["surface"].GetComponent<ShaderProgram>().SetVec3f("color", 0.1, 0.6, 0.1);
         for (auto [entity_id, shader] : shaders) {
             shader.SetMat4fv("projection", camera.GetProjectionMatrix());
             shader.SetMat4fv("view", camera.GetViewMatrix());
@@ -72,8 +71,6 @@ public:
             transformations[entity_id].Update();
             shaders[entity_id].SetMat4fv("rotation", transformations[entity_id].GetRotationMatrix());
             shaders[entity_id].SetMat4fv("model", transformations[entity_id].GetModelMatrix());
-            // shaders[entity_id].SetMat4fv("rotation", glm::mat4(1.0f));
-            // shaders[entity_id].SetMat4fv("model", glm::mat4(1.0f));
             models[entity_id]->Draw(shaders[entity_id]);
         }
     }
@@ -121,7 +118,7 @@ void Initialize() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_SAMPLES, 4);
-    deHint(H_MAX_ENTITY_AMOUNT, 50);
+    deHint(H_MAX_ENTITY_AMOUNT, 500);
     deInitialize();
     application_window.Init("First");
     application_window.SetProcessInputFunc(ProcessInput);
@@ -162,6 +159,8 @@ void CreateEntities() {
     scene["flashlight"] = Entity();
     scene["lamp"] = Entity();
     scene["surface"] = Entity();
+    scene["colored_phong"] = Entity();
+    scene["textured_phong"] = Entity();
 
     EntityManager::Get().LogState();
 
@@ -194,9 +193,12 @@ void CreateEntities() {
 }
 void LoadShaders() {
     Logger::Stage("loading", "Main", "LOADING SHADERS");
-    scene["train"].GetComponent<ShaderProgram>().SmartInit(SHADER_DIR / "ColoredPhong");
-    scene["surface"].AddComponent<ShaderProgram>(scene["train"].GetComponent<ShaderProgram>());
-    scene["backpack"].GetComponent<ShaderProgram>().SmartInit(SHADER_DIR / "TexturedPhong");
+    scene["colored_phong"].GetComponent<UniqueShader>().shader_program.SmartInit(SHADER_DIR / "ColoredPhong");
+    scene["textured_phong"].GetComponent<UniqueShader>().shader_program.SmartInit(SHADER_DIR / "TexturedPhong");
+    scene["train"].AddComponent<ShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
+    scene["surface"].AddComponent<ShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
+    scene["backpack"].AddComponent<ShaderProgram>(scene["textured_phong"].GetComponent<UniqueShader>().shader_program);
+
     Logger::Info("loading", "Main", "Shaders loaded.");
 }
 
@@ -216,6 +218,13 @@ void InitModels() {
     scene["backpack"].AddComponent<const Model*>(ModelManager::GetModel("backpack"));
     scene["train"].AddComponent<const Model*>(ModelManager::GetModel("train"));
     scene["surface"].AddComponent<const Model*>(ModelManager::GetModel("cube"));
+
+    for (size_t i = 0; i < 100; ++i) {
+        scene["train" + std::to_string(i)].AddComponent<const Model*>(ModelManager::GetModel("train"));
+        scene["train" + std::to_string(i)].GetComponent<Transformation>().SetPos(glm::vec3(0, 100, 300 - i * 600 / 100));
+        scene["train" + std::to_string(i)].AddComponent<ShaderProgram>(scene["train"].GetComponent<ShaderProgram>());
+        scene["train" + std::to_string(i)].AddComponent<Drawable>();
+    }
 }
 void SetObjectProperties() {
     Logger::Stage("loading", "Main", "SETTING OBJECTS PROPERTIES");

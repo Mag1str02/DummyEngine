@@ -30,27 +30,23 @@ void LightManager::ActivateSpotLight(ShaderProgram& shader_program, const SpotLi
 LightManager::LightManager() {
 }
 void LightManager::Update(double dt) {
-    auto& shader_programs = GetComponentArray<ShaderProgram>();
+    auto& shader_programs = GetComponentArray<UniqueShader>();
     auto& point_lights = GetComponentArray<PointLight>();
     auto& directional_lights = GetComponentArray<DirectionalLight>();
     auto& spot_lights = GetComponentArray<SpotLight>();
-    for (auto [entity_id, shader_program] : shader_programs) {
-        std::cout << "Writing to shader." << std::endl;
+    for (auto [entity_id, unique_shader] : shader_programs) {
+        auto& shader_program = unique_shader.shader_program;
         int cnt_dir_light = 0;
         int cnt_point_light = 0;
         int cnt_spot_light = 0;
         for (auto [entity_id, directional_light] : directional_lights) {
-            ActivateDirectionalLight(shader_program, directional_light, cnt_dir_light);
-            std::cout << "Dir light " << cnt_dir_light << std::endl;
-            ++cnt_dir_light;
+            ActivateDirectionalLight(shader_program, directional_light, cnt_dir_light++);
         }
         for (auto [entity_id, point_light] : point_lights) {
             ActivatePointLight(shader_program, point_light, cnt_point_light++);
-            std::cout << "Point light " << cnt_point_light << std::endl;
         }
         for (auto [entity_id, spot_light] : spot_lights) {
             ActivateSpotLight(shader_program, spot_light, cnt_spot_light++);
-            std::cout << "Spot light " << cnt_spot_light << std::endl;
         }
         shader_program.SetVec3i("light_amount", cnt_dir_light, cnt_point_light, cnt_spot_light);
     }
