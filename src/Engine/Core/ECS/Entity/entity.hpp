@@ -15,7 +15,13 @@ private:
 
 public:
     Entity() {
-        _id = EntityManager::Get().CreateEntity();
+        auto [id, created] = EntityManager::Get().CreateEntity();
+        _id = id;
+
+        if (created) {
+            ComponentManager::Get().ExtendArrays();
+        }
+
         // Logger::Info("ECS", "Entity", "Created by constructor");
     }
     Entity(const Entity& other) {
@@ -27,7 +33,7 @@ public:
         // Logger::Info("ECS", "Entity", "Created by move constructor");
     }
     ~Entity() {
-        if (EntityManager::Get()._valid) {
+        if (EntityManager::Get()._initialized) {
             EntityManager::Get().DestroyInstance(_id);
         }
         // Logger::Info("ECS", "Entity", "Destructed.");

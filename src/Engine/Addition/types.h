@@ -4,8 +4,6 @@
 
 namespace DE {
 
-class NotEnoughAvailableEntities : public std::exception {};
-
 using EntityId = int64_t;
 using InstanceId = int64_t;
 using ReferenceCount = int64_t;

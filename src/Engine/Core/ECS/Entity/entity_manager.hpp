@@ -3,33 +3,37 @@
 #include <queue>
 #include <vector>
 
-#include "../../../ToolBox/Dev/Logger/logger.h"
 #include "../../../Addition/const.h"
 #include "../../../Addition/types.h"
-#include "../../Initializer/initializer.h"
+#include "../../../ToolBox/Dev/Logger/logger.h"
+#include "../../Initializer/intitalizable.h"
 
 namespace DE {
 
-class EntityManager {
+class EntityManager : public Initializable {
 private:
     using Signature = std::vector<bool>;
 
     friend class Entity;
     friend class Initializer;
 
-    bool _valid;
     uint64_t _entities_amount;
+    uint64_t _component_amount;
     std::queue<EntityId> _available_entities;
     std::vector<uint16_t> _ref_count;
     std::vector<Signature> _signatures;
 
     EntityManager() {
-        _valid = false;
+        _initialized = false;
     }
 
-    EntityId CreateEntity() {
+    std::pair<EntityId, bool> CreateEntity() {
+        bool new_entity_created = false;
         if (_available_entities.empty()) {
-            throw NotEnoughAvailableEntities();
+            _available_entities.push(_signatures.size());
+            _ref_count.push_back(0);
+            _signatures.push_back(Signature(_component_amount, false));
+            new_entity_created = true;
         }
 
         EntityId entity_id = _available_entities.front();
@@ -40,7 +44,7 @@ private:
         Logger::Info("ECS", "EntityManager", "Entity created (" + std::to_string(entity_id) + ")");
         Logger::Info("ECS", "EntityManager", "Entity instance created (" + std::to_string(entity_id) + ")");
 
-        return entity_id;
+        return std::make_pair(entity_id, new_entity_created);
     }
     EntityId CopyEntity(EntityId entity_id) {
         ++_ref_count[entity_id];
@@ -76,36 +80,29 @@ private:
     }
 
     void ExtendSignatures() {
+        ++_component_amount;
         for (auto& signature : _signatures) {
             signature.push_back(false);
         }
     }
 
-    void Initialize() {
-        _ref_count.assign(Initializer::Get()._max_entity_amount, 0);
-        _signatures.assign(Initializer::Get()._max_entity_amount, Signature());
-
-        for (size_t i = 0; i < _ref_count.size(); ++i) {
-            _available_entities.push(i);
-        }
-
+    void Initialize() override {
+        _initialized = true;
         _entities_amount = 0;
-        _valid = true;
+        _component_amount = 0;
 
-        Logger::Info("ECS", "EntityManager", "EntityManager created with max entities amount (" + std::to_string(_ref_count.size()) + ")");
+        Logger::Info("ECS", "EntityManager", "EntityManager created with max entities amount (" + std::to_string(_entities_amount) + ")");
     }
-    void Terminate() {
-        for (size_t i = 0; i < _ref_count.size(); ++i) {
-            if (_ref_count[i]) {
-                DestroyEntity(i);
-                _ref_count[i] = 0;
-            }
-        }
+    void Terminate() override {
+        _initialized = false;
+
         while (!_available_entities.empty()) {
             _available_entities.pop();
         }
-
-        _valid = false;
+        _ref_count.clear();
+        _signatures.clear();
+        _entities_amount = 0;
+        _component_amount = 0;
 
         Logger::Info("ECS", "EntityManager", "EntityManager terminated.");
     }

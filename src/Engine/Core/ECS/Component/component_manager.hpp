@@ -14,6 +14,7 @@ private:
 
     std::unordered_map<std::string, std::shared_ptr<IComponentArray>> _component_arrays;
     std::unordered_map<std::string, ComponentId> _component_id;
+    size_t _entity_amount;
 
     ComponentManager() {
     }
@@ -21,8 +22,10 @@ private:
     template <typename ComponentType>
     void RegisterComponent() {
         const char* component_name = typeid(ComponentType).name();
+
         _component_id[component_name] = _component_id.size();
-        _component_arrays[component_name] = std::make_shared<ComponentArray<ComponentType>>();
+        _component_arrays[component_name] = std::make_shared<ComponentArray<ComponentType>>(ComponentArray<ComponentType>(_entity_amount));
+
         Logger::Info("ECS", "ComponentManager", "Registered Component (" + NormalTypeName(component_name) + ")");
     }
 
@@ -57,6 +60,13 @@ private:
     void Terminate() {
         _component_arrays.clear();
         _component_id.clear();
+    }
+
+    void ExtendArrays() {
+        ++_entity_amount;
+        for (auto& [name, component_array] : _component_arrays) {
+            component_array->ExtendArray();
+        }
     }
 
 public:
