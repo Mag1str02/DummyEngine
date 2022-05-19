@@ -13,12 +13,9 @@ INCLUDE_DIRECTORIES(libs/GLAD/include)
 INCLUDE_DIRECTORIES(libs/GLM/)
 
 add_library(my_lib STATIC  
-    ./libs/STB_IMAGE/stb_image.cpp   
+    ./libs/STB_IMAGE/stb_image.cpp  
+    
 
-    ./src/Engine/ToolBox/Loaders/ModelLoader/model_loader.cpp
-    ./src/Engine/ToolBox/Loaders/TextureLoader/texture_loader.cpp
-
-    ./src/Engine/Addition/some_funcs.cpp
 
     ./src/Engine/Core/ECS/Component/component_array.hpp
     ./src/Engine/Core/ECS/Component/component_manager.hpp
@@ -35,6 +32,8 @@ add_library(my_lib STATIC
     ./src/Engine/Core/Memory/TextureManager/texture_manager.cpp
     ./src/Engine/Core/Memory/VAO/vao.cpp
 
+    ./src/Engine/Addition/some_funcs.cpp
+
     ./src/Engine/Core/Objects/LightSources/PointLight/point_light.cpp
     ./src/Engine/Core/Objects/LightSources/SpotLight/spot_light.cpp
     ./src/Engine/Core/Objects/LightSources/DirectionalLight/directional_light.cpp
@@ -42,15 +41,21 @@ add_library(my_lib STATIC
     ./src/Engine/Core/Objects/Model/model.cpp
     ./src/Engine/Core/Objects/Cameras/FPSCamera/fps_camera.cpp
 
+    ./src/Engine/Core/Renderer/Shader/shader.cpp
+    ./src/Engine/Core/Renderer/ShaderProgram/shader_program.cpp    
+
     ./src/Engine/Core/Structs/Meshes/mesh.cpp
     ./src/Engine/Core/Structs/Textures/Texture2D/texture_2D.cpp
 
-    ./src/Engine/ToolBox/Dev/Logger/logger.cpp
     ./src/Engine/Core/UserInput/InputManager/input_manager.cpp
 
     ./src/Engine/Core/Wrappings/ApplicationWindow/application_window.cpp
-    ./src/Engine/Core/Wrappings/Shader/shader.cpp
-    ./src/Engine/Core/Wrappings/ShaderProgram/shader_program.cpp
+
+
+    
+    ./src/Engine/ToolBox/Dev/Logger/logger.cpp
+    ./src/Engine/ToolBox/Loaders/ModelLoader/model_loader.cpp
+    ./src/Engine/ToolBox/Loaders/TextureLoader/texture_loader.cpp
 )
 
 ADD_CUSTOM_COMMAND(TARGET my_lib

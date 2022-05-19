@@ -3,8 +3,8 @@
 #include "../ECS/Component/component_manager.hpp"
 #include "../ECS/Entity/entity_manager.hpp"
 #include "../ECS/System/system_manager.hpp"
-#include "../Wrappings/Shader/shader.h"
-#include "../Wrappings/ShaderProgram/shader_program.h"
+#include "../Renderer/Shader/shader.h"
+#include "../Renderer/ShaderProgram/shader_program.h"
 
 namespace DE {
 
@@ -30,16 +30,16 @@ void Initializer::Initialize() {
     EntityManager::Get().Initialize();
     ComponentManager::Get();
 
-    Shader::ShaderManager::Get().Initialize();
-    ShaderProgram::ShaderProgramManager::Get().Initialize();
+    Shader::ShaderManager::Initialize();
+    ShaderProgram::ShaderProgramManager::Initialize();
 }
 void Initializer::Terminate() {
     EntityManager::Get().Terminate();
     ComponentManager::Get().Terminate();
     SystemManager::Terminate();
 
-    Shader::ShaderManager::Get().Terminate();
-    ShaderProgram::ShaderProgramManager::Get().Terminate();
+    Shader::ShaderManager::Terminate();
+    ShaderProgram::ShaderProgramManager::Terminate();
 }
 
 void deInitialize() {

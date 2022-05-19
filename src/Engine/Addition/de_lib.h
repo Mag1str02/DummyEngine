@@ -29,5 +29,5 @@
 #include "../Core/Objects/Model/model.h"
 #include "../Core/UserInput/InputManager/input_manager.h"
 #include "../Core/Wrappings/ApplicationWindow/application_window.h"
-#include "../Core/Wrappings/ShaderProgram/shader_program.h"
+#include "../Core/Renderer/ShaderProgram/shader_program.h"
 

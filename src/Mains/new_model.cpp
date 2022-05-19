@@ -2,8 +2,6 @@
 
 using namespace DE;
 
-glm::mat4 e = glm::mat4(1.0f);
-
 bool cursor_mode = true;
 
 InputManager input_manager;
@@ -30,6 +28,17 @@ struct LinearManipulator {
     }
 };
 
+struct ScaleManipulator {
+    double min_scale, max_scale;
+    double time_offset;
+
+    ScaleManipulator() : min_scale(0), max_scale(2), time_offset(0) {
+    }
+    glm::vec3 GetScale() {
+        return glm::vec3(((max_scale + min_scale) / 2) + ((max_scale - min_scale) / 2) * (std::sin(time_offset + glfwGetTime())));
+    }
+};
+
 class MovingSystem : public System {
 public:
     MovingSystem() {
@@ -41,8 +50,12 @@ public:
 
         auto& manipulators = GetComponentArray<LinearManipulator>();
         auto& positions = GetComponentArray<Transformation>();
+        auto& scales = GetComponentArray<ScaleManipulator>();
         for (auto [entity_id, linear_manipulator] : manipulators) {
             positions[entity_id].MoveInWorld(linear_manipulator.Update(dt));
+        }
+        for (auto [entity_id, scale] : scales) {
+            positions[entity_id].SetScale(scale.GetScale());
         }
     }
 };
@@ -111,7 +124,7 @@ int main() {
 void Initialize() {
     std::cout << WORKING_DIR << std::endl;
     Logger::Open(LOG_DIR / "loading.txt", "loading");
-    Logger::Open(LOG_DIR / "ECS.txt", "ECS");
+    // Logger::Open(LOG_DIR / "ECS.txt", "ECS");
     Logger::Stage("loading", "Main", "INITIALIZETION");
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -122,8 +135,6 @@ void Initialize() {
     deInitialize();
     application_window.Init("First");
     application_window.SetProcessInputFunc(ProcessInput);
-    application_window.SetUpdateWorldFunc(UpdateWorld);
-    application_window.SetDrawFunc(Draw);
     input_manager.SetWindow(application_window.GetWindow());
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_DEPTH_TEST);
@@ -219,10 +230,18 @@ void InitModels() {
     scene["train"].AddComponent<const Model*>(ModelManager::GetModel("train"));
     scene["surface"].AddComponent<const Model*>(ModelManager::GetModel("cube"));
 
-    for (size_t i = 0; i < 100; ++i) {
-        scene["train" + std::to_string(i)].AddComponent<const Model*>(ModelManager::GetModel("train"));
-        scene["train" + std::to_string(i)].GetComponent<Transformation>().SetPos(glm::vec3(0, 100, 300 - i * 600 / 100));
+    for (int i = 0; i < 500; ++i) {
+        scene["train" + std::to_string(i)].AddComponent<const Model*>(ModelManager::GetModel("cubes"));
+        scene["train" + std::to_string(i)].GetComponent<Transformation>().SetPos(glm::vec3(0, 100, 300 - i * 12));
         scene["train" + std::to_string(i)].AddComponent<ShaderProgram>(scene["train"].GetComponent<ShaderProgram>());
+        scene["train" + std::to_string(i)].AddComponent<LinearManipulator>();
+        scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().current_time = i * 3.14 / 16;
+        scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().radius = 15;
+        scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().dir = glm::vec3(std::sin(i * 3.14 / 16), std::cos(i * 3.14 / 16), 0);
+        scene["train" + std::to_string(i)].AddComponent<ScaleManipulator>();
+        scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().min_scale = -1;
+        scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().max_scale = 1;
+        scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().time_offset = i * 3.14 / 16;
         scene["train" + std::to_string(i)].AddComponent<Drawable>();
     }
 }
@@ -347,8 +366,4 @@ void ProcessInput() {
     if (input_manager.KeyDown(GLFW_KEY_C)) {
         camera.MoveInWorld(glm::vec3(0.0f, -1.0f, 0.0f) * speed * input_manager.FrameTime());
     }
-}
-void UpdateWorld() {
-}
-void Draw() {
 }

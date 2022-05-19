@@ -8,35 +8,21 @@
 
 namespace DE {
 
-ShaderProgram::ShaderProgramManager::ShaderProgramManager() {
-}
+//*----------------------------------------------------------------------------------------------------
 
-ShaderProgram::ShaderProgramManager& ShaderProgram::ShaderProgramManager::Get() {
-    static ShaderProgramManager shader_program_manager;
-    return shader_program_manager;
-}
-
-void ShaderProgram::ShaderProgramManager::Initialize() {
-    _initialized = true;
-}
-void ShaderProgram::ShaderProgramManager::Terminate() {
-    _initialized = false;
-    _reference_count.clear();
-}
-
-ShaderProgramId ShaderProgram::ShaderProgramManager::CreateShaderProgram() {
+ShaderProgramId ShaderProgram::ShaderProgramManager::ICreateShaderProgram() {
     ShaderProgramId shader_program_id = glCreateProgram();
     _reference_count[shader_program_id] = 1;
     return shader_program_id;
 }
-ShaderProgramId ShaderProgram::ShaderProgramManager::CreateInstance(ShaderProgramId shader_program_id) {
+ShaderProgramId ShaderProgram::ShaderProgramManager::ICreateInstance(ShaderProgramId shader_program_id) {
     if (shader_program_id == ShaderProgramId(-1)) {
         return ShaderProgramId(-1);
     }
     ++_reference_count[shader_program_id];
     return shader_program_id;
 }
-void ShaderProgram::ShaderProgramManager::DestroyInstance(ShaderProgramId shader_program_id) {
+void ShaderProgram::ShaderProgramManager::IDestroyInstance(ShaderProgramId shader_program_id) {
     if (!_initialized) {
         return;
     }
@@ -48,42 +34,15 @@ void ShaderProgram::ShaderProgramManager::DestroyInstance(ShaderProgramId shader
         DestroyShaderProgram(shader_program_id);
     }
 }
-void ShaderProgram::ShaderProgramManager::DestroyShaderProgram(ShaderProgramId shader_program_id) {
+void ShaderProgram::ShaderProgramManager::IDestroyShaderProgram(ShaderProgramId shader_program_id) {
     glDeleteShader(shader_program_id);
     _reference_count.erase(shader_program_id);
 }
 
-ShaderProgram::ShaderProgram() {
-    _shader_program_id = ShaderProgramId(-1);
-}
-ShaderProgram::ShaderProgram(const ShaderProgram& other) {
-    _shader_program_id = ShaderProgramManager::Get().CreateInstance(other._shader_program_id);
-}
-ShaderProgram::ShaderProgram(ShaderProgram&& other) {
-    _shader_program_id = ShaderProgramManager::Get().CreateInstance(other._shader_program_id);
-}
-ShaderProgram& ShaderProgram::operator=(const ShaderProgram& other) {
-    if (&other == this) {
-        return *this;
-    }
-    ShaderProgramManager::Get().DestroyInstance(_shader_program_id);
-    _shader_program_id = ShaderProgramManager::Get().CreateInstance(other._shader_program_id);
-    return *this;
-}
-ShaderProgram& ShaderProgram::operator=(ShaderProgram&& other) {
-    if (&other == this) {
-        return *this;
-    }
-    ShaderProgramManager::Get().DestroyInstance(_shader_program_id);
-    _shader_program_id = ShaderProgramManager::Get().CreateInstance(other._shader_program_id);
-    return *this;
-}
+//*--------------------------------------------------
 
-ShaderProgram::~ShaderProgram() {
-    ShaderProgramManager::Get().DestroyInstance(_shader_program_id);
-}
 void ShaderProgram::Init() {
-    _shader_program_id = ShaderProgramManager::Get().CreateShaderProgram();
+    _shader_program_id = ShaderProgramManager::CreateShaderProgram();
     Logger::Info("loading", "ShaderProgram", "Shader program (" + std::to_string(_shader_program_id) + ") initialized.");
 }
 void ShaderProgram::SmartInit(const fs::path& path_to_file) {
@@ -129,7 +88,6 @@ int ShaderProgram::PosOf(const std::string& uniform_name) {
     // uniform_name + " SP id: " + std::to_string(_shader_program_id));
     return glGetUniformLocation(_shader_program_id, uniform_name.c_str());
 }
-
 void ShaderProgram::SetFloat(const std::string& uniform_name, float value) {
     Use();
     glUniform1f(PosOf(uniform_name), value);
@@ -146,12 +104,10 @@ void ShaderProgram::SetVec4f(const std::string& uniform_name, glm::vec4 value) {
     Use();
     glUniform4f(PosOf(uniform_name), value.x, value.y, value.z, value.w);
 }
-
 void ShaderProgram::SetMat4fv(const std::string& uniform_name, glm::mat4 value) {
     Use();
     glUniformMatrix4fv(PosOf(uniform_name), 1, GL_FALSE, glm::value_ptr(value));
 }
-
 void ShaderProgram::SetVec3f(const std::string& uniform_name, float x, float y, float z) {
     Use();
     glUniform3f(PosOf(uniform_name), x, y, z);
@@ -164,4 +120,66 @@ void ShaderProgram::SetVec3i(const std::string& uniform_name, int x, int y, int 
     Use();
     glUniform3i(PosOf(uniform_name), x, y, z);
 }
+
+//*----------------------------------------------------------------------------------------------------
+
+ShaderProgram::ShaderProgramManager::ShaderProgramManager() {
+}
+ShaderProgram::ShaderProgramManager& ShaderProgram::ShaderProgramManager::Get() {
+    static ShaderProgramManager shader_program_manager;
+    return shader_program_manager;
+}
+
+void ShaderProgram::ShaderProgramManager::Initialize() {
+    Get()._initialized = true;
+}
+void ShaderProgram::ShaderProgramManager::Terminate() {
+    Get()._initialized = false;
+    Get()._reference_count.clear();
+}
+
+ShaderProgramId ShaderProgram::ShaderProgramManager::CreateShaderProgram() {
+    return ShaderProgramManager::Get().ICreateShaderProgram();
+}
+ShaderProgramId ShaderProgram::ShaderProgramManager::CreateInstance(ShaderProgramId shader_program_id) {
+    return ShaderProgramManager::Get().ICreateInstance(shader_program_id);
+}
+void ShaderProgram::ShaderProgramManager::DestroyInstance(ShaderProgramId shader_program_id) {
+    ShaderProgramManager::Get().IDestroyInstance(shader_program_id);
+}
+void ShaderProgram::ShaderProgramManager::DestroyShaderProgram(ShaderProgramId shader_program_id) {
+    ShaderProgramManager::Get().IDestroyShaderProgram(shader_program_id);
+}
+
+//*--------------------------------------------------
+
+ShaderProgram::ShaderProgram() {
+    _shader_program_id = ShaderProgramId(-1);
+}
+ShaderProgram::ShaderProgram(const ShaderProgram& other) {
+    _shader_program_id = ShaderProgramManager::CreateInstance(other._shader_program_id);
+}
+ShaderProgram::ShaderProgram(ShaderProgram&& other) {
+    _shader_program_id = ShaderProgramManager::CreateInstance(other._shader_program_id);
+}
+ShaderProgram& ShaderProgram::operator=(const ShaderProgram& other) {
+    if (&other == this) {
+        return *this;
+    }
+    ShaderProgramManager::DestroyInstance(_shader_program_id);
+    _shader_program_id = ShaderProgramManager::CreateInstance(other._shader_program_id);
+    return *this;
+}
+ShaderProgram& ShaderProgram::operator=(ShaderProgram&& other) {
+    if (&other == this) {
+        return *this;
+    }
+    ShaderProgramManager::DestroyInstance(_shader_program_id);
+    _shader_program_id = ShaderProgramManager::CreateInstance(other._shader_program_id);
+    return *this;
+}
+ShaderProgram::~ShaderProgram() {
+    ShaderProgramManager::DestroyInstance(_shader_program_id);
+}
+
 }  // namespace DE

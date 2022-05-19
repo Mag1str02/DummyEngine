@@ -13,8 +13,6 @@ private:
     ScreenSizeState _screen_size_state;
     std::string _name;
 
-    void (*_draw_func)();
-    void (*_update_world_func)();
     void (*_process_input)();
 
     void CheckWindow();
@@ -33,9 +31,7 @@ public:
 
     void StartLoop();
 
-    void SetDrawFunc(void (*draw_func)());
     void SetProcessInputFunc(void (*process_input)());
-    void SetUpdateWorldFunc(void (*update_world_func)());
     void SetFrameBufferSizeCallback(void (*frame_buffer_size_callback)(GLFWwindow* window, int width, int height));
 
     ScreenSizeState GetScreenSizeState() const;

@@ -64,8 +64,6 @@ void ApplicationWindow::StartLoop() {
         prev_time = glfwGetTime();
         glfwPollEvents();
         _process_input();
-        _update_world_func();
-        _draw_func();
         SystemManager::Update(prev_frame_time);
         glfwSwapBuffers(_window);
         max_frame_time = std::max(max_frame_time, glfwGetTime() - prev_time);
@@ -76,12 +74,6 @@ void ApplicationWindow::StartLoop() {
     Logger::Info("rendering", "ApplicationWindow", "Avarage frame time: " + std::to_string(max_frame_time) + "s" + " FPS: " + std::to_string(1.0 / max_frame_time));
 }
 
-void ApplicationWindow::SetDrawFunc(void (*draw_func)()) {
-    _draw_func = draw_func;
-}
-void ApplicationWindow::SetUpdateWorldFunc(void (*update_world_func)()) {
-    _update_world_func = update_world_func;
-}
 void ApplicationWindow::SetProcessInputFunc(void (*process_input)()) {
     _process_input = process_input;
 }

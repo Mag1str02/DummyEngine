@@ -2,39 +2,26 @@
 
 #include <fstream>
 
-#include "../../../../Config/config.h"
+#include "../../../Addition/const.h"
 #include "../../../ToolBox/Dev/Logger/logger.h"
+
 namespace DE {
 
-Shader::ShaderManager::ShaderManager() {
-}
+//*----------------------------------------------------------------------------------------------------
 
-Shader::ShaderManager& Shader::ShaderManager::Get() {
-    static ShaderManager shader_manager;
-    return shader_manager;
-}
-
-void Shader::ShaderManager::Initialize() {
-    _initialized = true;
-}
-void Shader::ShaderManager::Terminate() {
-    _initialized = false;
-    _reference_count.clear();
-}
-
-ShaderId Shader::ShaderManager::CreateShader(GLenum type) {
+ShaderId Shader::ShaderManager::ICreateShader(GLenum type) {
     ShaderId shader_id = glCreateShader(type);
     _reference_count[shader_id] = 1;
     return shader_id;
 }
-ShaderId Shader::ShaderManager::CreateInstance(ShaderId shader_id) {
+ShaderId Shader::ShaderManager::ICreateInstance(ShaderId shader_id) {
     if (shader_id == ShaderId(-1)) {
         return ShaderId(-1);
     }
     ++_reference_count[shader_id];
     return shader_id;
 }
-void Shader::ShaderManager::DestroyInstance(ShaderId shader_id) {
+void Shader::ShaderManager::IDestroyInstance(ShaderId shader_id) {
     if (!_initialized) {
         return;
     }
@@ -46,9 +33,25 @@ void Shader::ShaderManager::DestroyInstance(ShaderId shader_id) {
         DestroyShader(shader_id);
     }
 }
-void Shader::ShaderManager::DestroyShader(ShaderId shader_id) {
+void Shader::ShaderManager::IDestroyShader(ShaderId shader_id) {
     glDeleteShader(shader_id);
     _reference_count.erase(shader_id);
+}
+
+//*--------------------------------------------------
+
+Shader::Shader(const fs::path& path_to_file, ::GLenum type) {
+    Init(path_to_file, type);
+}
+
+void Shader::Init(const fs::path& path_to_file, ::GLenum type) {
+    std::string source = ReadShaderFile(path_to_file);
+    const char* source_c_str = source.c_str();
+
+    _shader_id = ShaderManager::CreateShader(type);
+    glShaderSource(_shader_id, 1, &source_c_str, NULL);
+    glCompileShader(_shader_id);
+    CheckShader(path_to_file);
 }
 
 std::string Shader::ReadShaderFile(const fs::path& path_to_file) {
@@ -83,45 +86,64 @@ void Shader::CheckShader(const fs::path& path_to_file) {
     Logger::Info("loading", "Shader", "Shader source file successfully compiled: (" + path_to_file.string() + ")");
 }
 
+//*----------------------------------------------------------------------------------------------------
+
 Shader::Shader() {
     _shader_id = ShaderId(-1);
 }
 Shader::Shader(const Shader& other) {
-    _shader_id = ShaderManager::Get().CreateInstance(other._shader_id);
+    _shader_id = ShaderManager::CreateInstance(other._shader_id);
 }
 Shader::Shader(Shader&& other) {
-    _shader_id = ShaderManager::Get().CreateInstance(other._shader_id);
-}
-Shader::Shader(const fs::path& path_to_file, ::GLenum type) {
-    Init(path_to_file, type);
+    _shader_id = ShaderManager::CreateInstance(other._shader_id);
 }
 Shader& Shader::operator=(const Shader& other) {
     if (&other == this) {
         return *this;
     }
-    ShaderManager::Get().DestroyInstance(_shader_id);
-    _shader_id = ShaderManager::Get().CreateInstance(other._shader_id);
+    ShaderManager::DestroyInstance(_shader_id);
+    _shader_id = ShaderManager::CreateInstance(other._shader_id);
     return *this;
 }
 Shader& Shader::operator=(Shader&& other) {
     if (&other == this) {
         return *this;
     }
-    ShaderManager::Get().DestroyInstance(_shader_id);
-    _shader_id = ShaderManager::Get().CreateInstance(other._shader_id);
+    ShaderManager::DestroyInstance(_shader_id);
+    _shader_id = ShaderManager::CreateInstance(other._shader_id);
     return *this;
 }
 Shader::~Shader() {
-    ShaderManager::Get().DestroyInstance(_shader_id);
+    ShaderManager::DestroyInstance(_shader_id);
 }
 
-void Shader::Init(const fs::path& path_to_file, ::GLenum type) {
-    std::string source = ReadShaderFile(path_to_file);
-    const char* source_c_str = source.c_str();
-
-    _shader_id = ShaderManager::Get().CreateShader(type);
-    glShaderSource(_shader_id, 1, &source_c_str, NULL);
-    glCompileShader(_shader_id);
-    CheckShader(path_to_file);
+//*--------------------------------------------------
+Shader::ShaderManager::ShaderManager() {
 }
+Shader::ShaderManager& Shader::ShaderManager::Get() {
+    static ShaderManager shader_manager;
+    return shader_manager;
+}
+
+void Shader::ShaderManager::Initialize() {
+    Get()._initialized = true;
+}
+void Shader::ShaderManager::Terminate() {
+    Get()._initialized = false;
+    Get()._reference_count.clear();
+}
+
+ShaderId Shader::ShaderManager::CreateShader(GLenum type) {
+    return ShaderManager::Get().ICreateShader(type);
+}
+ShaderId Shader::ShaderManager::CreateInstance(ShaderId shader_id) {
+    return ShaderManager::Get().ICreateInstance(shader_id);
+}
+void Shader::ShaderManager::DestroyInstance(ShaderId shader_id) {
+    ShaderManager::Get().IDestroyInstance(shader_id);
+}
+void Shader::ShaderManager::DestroyShader(ShaderId shader_id) {
+    ShaderManager::Get().IDestroyShader(shader_id);
+}
+
 }  // namespace DE
