@@ -3,43 +3,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
-#include "../../../../Config/config.h"
+#include "../../../Addition/const.h"
 #include "../../../ToolBox/Dev/Logger/logger.h"
 
 namespace DE {
 
 //*----------------------------------------------------------------------------------------------------
-
-ShaderProgramId ShaderProgram::ShaderProgramManager::ICreateShaderProgram() {
-    ShaderProgramId shader_program_id = glCreateProgram();
-    _reference_count[shader_program_id] = 1;
-    return shader_program_id;
-}
-ShaderProgramId ShaderProgram::ShaderProgramManager::ICreateInstance(ShaderProgramId shader_program_id) {
-    if (shader_program_id == ShaderProgramId(-1)) {
-        return ShaderProgramId(-1);
-    }
-    ++_reference_count[shader_program_id];
-    return shader_program_id;
-}
-void ShaderProgram::ShaderProgramManager::IDestroyInstance(ShaderProgramId shader_program_id) {
-    if (!_initialized) {
-        return;
-    }
-    if (shader_program_id == ShaderProgramId(-1)) {
-        return;
-    }
-    --_reference_count[shader_program_id];
-    if (_reference_count[shader_program_id] == 0) {
-        DestroyShaderProgram(shader_program_id);
-    }
-}
-void ShaderProgram::ShaderProgramManager::IDestroyShaderProgram(ShaderProgramId shader_program_id) {
-    glDeleteShader(shader_program_id);
-    _reference_count.erase(shader_program_id);
-}
-
-//*--------------------------------------------------
 
 void ShaderProgram::Init() {
     _shader_program_id = ShaderProgramManager::CreateShaderProgram();
@@ -121,37 +90,38 @@ void ShaderProgram::SetVec3i(const std::string& uniform_name, int x, int y, int 
     glUniform3i(PosOf(uniform_name), x, y, z);
 }
 
-//*----------------------------------------------------------------------------------------------------
-
-ShaderProgram::ShaderProgramManager::ShaderProgramManager() {
-}
-ShaderProgram::ShaderProgramManager& ShaderProgram::ShaderProgramManager::Get() {
-    static ShaderProgramManager shader_program_manager;
-    return shader_program_manager;
-}
-
-void ShaderProgram::ShaderProgramManager::Initialize() {
-    Get()._initialized = true;
-}
-void ShaderProgram::ShaderProgramManager::Terminate() {
-    Get()._initialized = false;
-    Get()._reference_count.clear();
-}
-
-ShaderProgramId ShaderProgram::ShaderProgramManager::CreateShaderProgram() {
-    return ShaderProgramManager::Get().ICreateShaderProgram();
-}
-ShaderProgramId ShaderProgram::ShaderProgramManager::CreateInstance(ShaderProgramId shader_program_id) {
-    return ShaderProgramManager::Get().ICreateInstance(shader_program_id);
-}
-void ShaderProgram::ShaderProgramManager::DestroyInstance(ShaderProgramId shader_program_id) {
-    ShaderProgramManager::Get().IDestroyInstance(shader_program_id);
-}
-void ShaderProgram::ShaderProgramManager::DestroyShaderProgram(ShaderProgramId shader_program_id) {
-    ShaderProgramManager::Get().IDestroyShaderProgram(shader_program_id);
-}
-
 //*--------------------------------------------------
+
+ShaderProgramId ShaderProgram::ShaderProgramManager::ICreateShaderProgram() {
+    ShaderProgramId shader_program_id = glCreateProgram();
+    _reference_count[shader_program_id] = 1;
+    return shader_program_id;
+}
+ShaderProgramId ShaderProgram::ShaderProgramManager::ICreateInstance(ShaderProgramId shader_program_id) {
+    if (shader_program_id == ShaderProgramId(-1)) {
+        return ShaderProgramId(-1);
+    }
+    ++_reference_count[shader_program_id];
+    return shader_program_id;
+}
+void ShaderProgram::ShaderProgramManager::IDestroyInstance(ShaderProgramId shader_program_id) {
+    if (!_initialized) {
+        return;
+    }
+    if (shader_program_id == ShaderProgramId(-1)) {
+        return;
+    }
+    --_reference_count[shader_program_id];
+    if (_reference_count[shader_program_id] == 0) {
+        IDestroyShaderProgram(shader_program_id);
+    }
+}
+void ShaderProgram::ShaderProgramManager::IDestroyShaderProgram(ShaderProgramId shader_program_id) {
+    glDeleteShader(shader_program_id);
+    _reference_count.erase(shader_program_id);
+}
+
+//*----------------------------------------------------------------------------------------------------
 
 ShaderProgram::ShaderProgram() {
     _shader_program_id = ShaderProgramId(-1);
@@ -180,6 +150,36 @@ ShaderProgram& ShaderProgram::operator=(ShaderProgram&& other) {
 }
 ShaderProgram::~ShaderProgram() {
     ShaderProgramManager::DestroyInstance(_shader_program_id);
+}
+
+//*--------------------------------------------------
+
+ShaderProgram::ShaderProgramManager::ShaderProgramManager() {
+}
+ShaderProgram::ShaderProgramManager& ShaderProgram::ShaderProgramManager::Get() {
+    static ShaderProgramManager shader_program_manager;
+    return shader_program_manager;
+}
+
+void ShaderProgram::ShaderProgramManager::Initialize() {
+    Get()._initialized = true;
+}
+void ShaderProgram::ShaderProgramManager::Terminate() {
+    Get()._initialized = false;
+    Get()._reference_count.clear();
+}
+
+ShaderProgramId ShaderProgram::ShaderProgramManager::CreateShaderProgram() {
+    return ShaderProgramManager::Get().ICreateShaderProgram();
+}
+ShaderProgramId ShaderProgram::ShaderProgramManager::CreateInstance(ShaderProgramId shader_program_id) {
+    return ShaderProgramManager::Get().ICreateInstance(shader_program_id);
+}
+void ShaderProgram::ShaderProgramManager::DestroyInstance(ShaderProgramId shader_program_id) {
+    ShaderProgramManager::Get().IDestroyInstance(shader_program_id);
+}
+void ShaderProgram::ShaderProgramManager::DestroyShaderProgram(ShaderProgramId shader_program_id) {
+    ShaderProgramManager::Get().IDestroyShaderProgram(shader_program_id);
 }
 
 }  // namespace DE

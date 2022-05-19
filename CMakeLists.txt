@@ -14,7 +14,7 @@ INCLUDE_DIRECTORIES(libs/GLM/)
 
 add_library(my_lib STATIC  
     ./libs/STB_IMAGE/stb_image.cpp  
-    
+
 
 
     ./src/Engine/Core/ECS/Component/component_array.hpp
@@ -29,8 +29,6 @@ add_library(my_lib STATIC
 
     ./src/Engine/Core/Memory/MeshManager/mesh_manager.cpp
     ./src/Engine/Core/Memory/ModelManager/model_manager.cpp
-    ./src/Engine/Core/Memory/TextureManager/texture_manager.cpp
-    ./src/Engine/Core/Memory/VAO/vao.cpp
 
     ./src/Engine/Addition/some_funcs.cpp
 
@@ -41,11 +39,14 @@ add_library(my_lib STATIC
     ./src/Engine/Core/Objects/Model/model.cpp
     ./src/Engine/Core/Objects/Cameras/FPSCamera/fps_camera.cpp
 
+    ./src/Engine/Core/Renderer/Buffers/VAO/vao.cpp
+    ./src/Engine/Core/Renderer/Buffers/EBO/ebo.cpp
+    ./src/Engine/Core/Renderer/Buffers/VBO/vbo.cpp
     ./src/Engine/Core/Renderer/Shader/shader.cpp
     ./src/Engine/Core/Renderer/ShaderProgram/shader_program.cpp    
+    ./src/Engine/Core/Renderer/Textures/Texture2D/texture_2D.cpp
 
     ./src/Engine/Core/Structs/Meshes/mesh.cpp
-    ./src/Engine/Core/Structs/Textures/Texture2D/texture_2D.cpp
 
     ./src/Engine/Core/UserInput/InputManager/input_manager.cpp
 

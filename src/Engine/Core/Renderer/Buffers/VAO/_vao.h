@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "../../Structs/Meshes/mesh.h"
- 
+
 namespace DE {
 namespace fs = std::filesystem;
 

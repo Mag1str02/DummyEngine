@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "../Textures/Texture2D/texture_2D.h"
+
 namespace DE {
 struct Vertex {
     glm::vec3 position;

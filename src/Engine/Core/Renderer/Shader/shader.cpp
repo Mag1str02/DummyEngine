@@ -9,37 +9,6 @@ namespace DE {
 
 //*----------------------------------------------------------------------------------------------------
 
-ShaderId Shader::ShaderManager::ICreateShader(GLenum type) {
-    ShaderId shader_id = glCreateShader(type);
-    _reference_count[shader_id] = 1;
-    return shader_id;
-}
-ShaderId Shader::ShaderManager::ICreateInstance(ShaderId shader_id) {
-    if (shader_id == ShaderId(-1)) {
-        return ShaderId(-1);
-    }
-    ++_reference_count[shader_id];
-    return shader_id;
-}
-void Shader::ShaderManager::IDestroyInstance(ShaderId shader_id) {
-    if (!_initialized) {
-        return;
-    }
-    if (shader_id == ShaderId(-1)) {
-        return;
-    }
-    --_reference_count[shader_id];
-    if (_reference_count[shader_id] == 0) {
-        DestroyShader(shader_id);
-    }
-}
-void Shader::ShaderManager::IDestroyShader(ShaderId shader_id) {
-    glDeleteShader(shader_id);
-    _reference_count.erase(shader_id);
-}
-
-//*--------------------------------------------------
-
 Shader::Shader(const fs::path& path_to_file, ::GLenum type) {
     Init(path_to_file, type);
 }
@@ -84,6 +53,37 @@ void Shader::CheckShader(const fs::path& path_to_file) {
         return;
     }
     Logger::Info("loading", "Shader", "Shader source file successfully compiled: (" + path_to_file.string() + ")");
+}
+
+//*--------------------------------------------------
+
+ShaderId Shader::ShaderManager::ICreateShader(GLenum type) {
+    ShaderId shader_id = glCreateShader(type);
+    _reference_count[shader_id] = 1;
+    return shader_id;
+}
+ShaderId Shader::ShaderManager::ICreateInstance(ShaderId shader_id) {
+    if (shader_id == ShaderId(-1)) {
+        return ShaderId(-1);
+    }
+    ++_reference_count[shader_id];
+    return shader_id;
+}
+void Shader::ShaderManager::IDestroyInstance(ShaderId shader_id) {
+    if (!_initialized) {
+        return;
+    }
+    if (shader_id == ShaderId(-1)) {
+        return;
+    }
+    --_reference_count[shader_id];
+    if (_reference_count[shader_id] == 0) {
+        IDestroyShader(shader_id);
+    }
+}
+void Shader::ShaderManager::IDestroyShader(ShaderId shader_id) {
+    glDeleteShader(shader_id);
+    _reference_count.erase(shader_id);
 }
 
 //*----------------------------------------------------------------------------------------------------
