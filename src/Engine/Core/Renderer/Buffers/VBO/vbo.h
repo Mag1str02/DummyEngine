@@ -2,6 +2,7 @@
 #include <GLAD/glad.h>
 
 #include <unordered_map>
+#include <vector>
 
 #include "../../../../Addition/types.h"
 
@@ -10,8 +11,15 @@ namespace DE {
 class VertexBuffer {
 
 public:
-
-    void Bind();
+    void Bind() const;
+    template <typename VertexType>
+    void AllocateStorage(const std::vector<VertexType>& storage, GLenum usage = GL_STATIC_DRAW) {
+        glBindBuffer(GL_ARRAY_BUFFER, _buffer_id);
+        glBufferData(GL_ARRAY_BUFFER, storage.size() * sizeof(VertexType), &storage[0], usage);
+    }
+    void AllocateStorage(GLsizeiptr size, const GLvoid* data = nullptr, GLenum usage = GL_STATIC_DRAW);
+    void SetSubData(GLintptr offset, GLsizeiptr size, const void* data);
+    void SetFloatAttribute(GLuint index, GLint size, unsigned int offset, unsigned int stride, GLboolean normalized = GL_FALSE);
 
     VertexBuffer();
     VertexBuffer(const VertexBuffer& other);

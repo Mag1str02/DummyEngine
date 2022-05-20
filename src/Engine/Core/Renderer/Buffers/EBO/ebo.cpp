@@ -4,6 +4,22 @@ namespace DE {
 
 //*----------------------------------------------------------------------------------------------------
 
+void ElementBuffer::Bind() {
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_id);
+}
+void ElementBuffer::AllocateStorage(GLsizeiptr size, const GLvoid* data, GLenum usage) {
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_id);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, usage);
+}
+void ElementBuffer::AllocateStorage(const std::vector<unsigned int>& storage, GLenum usage) {
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_id);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, storage.size() * sizeof(unsigned int), &storage[0], usage);
+}
+void ElementBuffer::SetSubData(GLintptr offset, GLsizeiptr size, const void* data) {
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_id);
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
+}
+
 //*--------------------------------------------------
 
 BufferId ElementBuffer::ElementBufferManager::CreateElementBuffer() {

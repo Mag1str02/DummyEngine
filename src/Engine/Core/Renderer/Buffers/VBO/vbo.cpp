@@ -4,8 +4,22 @@ namespace DE {
 
 //*----------------------------------------------------------------------------------------------------
 
-void VertexBuffer::Bind() {
+void VertexBuffer::Bind() const {
     glBindBuffer(GL_ARRAY_BUFFER, _buffer_id);
+}
+
+void VertexBuffer::AllocateStorage(GLsizeiptr size, const GLvoid* data, GLenum usage) {
+    glBindBuffer(GL_ARRAY_BUFFER, _buffer_id);
+    glBufferData(GL_ARRAY_BUFFER, size, data, usage);
+}
+void VertexBuffer::SetSubData(GLintptr offset, GLsizeiptr size, const void* data) {
+    glBindBuffer(GL_ARRAY_BUFFER, _buffer_id);
+    glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+}
+void VertexBuffer::SetFloatAttribute(GLuint index, GLint size, unsigned int offset, unsigned int stride, GLboolean normalized) {
+    glBindBuffer(GL_ARRAY_BUFFER, _buffer_id);
+    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride * sizeof(float), (void*)(offset * sizeof(float)));
+    glEnableVertexAttribArray(index);
 }
 
 //*--------------------------------------------------

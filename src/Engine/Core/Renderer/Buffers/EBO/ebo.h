@@ -2,6 +2,7 @@
 #include <GLAD/glad.h>
 
 #include <unordered_map>
+#include <vector>
 
 #include "../../../../Addition/types.h"
 
@@ -10,6 +11,11 @@ namespace DE {
 class ElementBuffer {
 
 public:
+    void Bind() const;
+    void AllocateStorage(GLsizeiptr size, const GLvoid* data = nullptr, GLenum usage = GL_STATIC_DRAW);
+    void AllocateStorage(const std::vector<unsigned int>& storage, GLenum usage = GL_STATIC_DRAW);
+    void SetSubData(GLintptr offset, GLsizeiptr size, const void* data);
+
     ElementBuffer();
     ElementBuffer(const ElementBuffer& other);
     ElementBuffer(ElementBuffer&& other);

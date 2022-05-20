@@ -12,8 +12,6 @@ namespace DE {
 class VertexArray {
 
 public:
-    void SetVertexAttribute(const VertexBuffer& buffer, GLuint index, GLint size, GLboolean normalized, unsigned int stride, unsigned int offset);
-    void SetElementBuffer(const VertexBuffer& buffer, GLuint index, GLint size, GLboolean normalized, unsigned int stride, unsigned int offset);
 
     VertexArray();
     VertexArray(const VertexArray& other);
