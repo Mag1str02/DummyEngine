@@ -4,12 +4,14 @@
 #include <unordered_map>
 
 #include "../../../../Addition/types.h"
+#include "../../RenderData/render_data.h"
 
 namespace DE {
 
 class Texture2D {
 
 public:
+    void SetData(const Texture2DData& data);
     void BindToUnit(TextureUnitId unit_id) const;
 
     Texture2D();
@@ -24,8 +26,8 @@ private:
 
     class Texture2DManager {
     private:
-        std::unordered_map<Texture2DId, ReferenceCount> _reference_count;
         bool _initialized;
+        std::unordered_map<Texture2DId, ReferenceCount> _reference_count;
 
         Texture2DManager();
 

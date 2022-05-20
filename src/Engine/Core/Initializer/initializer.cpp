@@ -3,8 +3,12 @@
 #include "../ECS/Component/component_manager.hpp"
 #include "../ECS/Entity/entity_manager.hpp"
 #include "../ECS/System/system_manager.hpp"
+#include "../Renderer/Buffers/EBO/ebo.h"
+#include "../Renderer/Buffers/VAO/vao.h"
+#include "../Renderer/Buffers/VBO/vbo.h"
 #include "../Renderer/Shader/shader.h"
 #include "../Renderer/ShaderProgram/shader_program.h"
+
 
 namespace DE {
 
@@ -32,6 +36,10 @@ void Initializer::Initialize() {
 
     Shader::ShaderManager::Initialize();
     ShaderProgram::ShaderProgramManager::Initialize();
+
+    VertexBuffer::VertexBufferManager::Get().Initialize();
+    VertexArray::VertexArrayManager::Get().Initialize();
+    ElementBuffer::ElementBufferManager::Get().Initialize();
 }
 void Initializer::Terminate() {
     EntityManager::Get().Terminate();
@@ -40,6 +48,10 @@ void Initializer::Terminate() {
 
     Shader::ShaderManager::Terminate();
     ShaderProgram::ShaderProgramManager::Terminate();
+
+    VertexBuffer::VertexBufferManager::Get().Terminate();
+    VertexArray::VertexArrayManager::Get().Terminate();
+    ElementBuffer::ElementBufferManager::Get().Terminate();
 }
 
 void deInitialize() {

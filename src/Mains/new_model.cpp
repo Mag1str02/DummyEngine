@@ -1,3 +1,4 @@
+#include "../../../libs/STB_IMAGE/stb_image_write.cpp"
 #include "../Engine/Addition/de_lib.h"
 
 using namespace DE;
@@ -66,7 +67,7 @@ public:
 
     void Update(double dt) override {
         auto& drawables = GetComponentArray<Drawable>();
-        auto& models = GetComponentArray<const Model*>();
+        auto& models = GetComponentArray<RenderModel>();
         auto& shaders = GetComponentArray<ShaderProgram>();
         auto& transformations = GetComponentArray<Transformation>();
 
@@ -82,9 +83,19 @@ public:
         }
         for (auto [entity_id, drawable] : drawables) {
             transformations[entity_id].Update();
-            shaders[entity_id].SetMat4fv("rotation", transformations[entity_id].GetRotationMatrix());
-            shaders[entity_id].SetMat4fv("model", transformations[entity_id].GetModelMatrix());
-            models[entity_id]->Draw(shaders[entity_id]);
+            ShaderProgram& shader_program = shaders[entity_id];
+            shader_program.SetMat4fv("rotation", transformations[entity_id].GetRotationMatrix());
+            shader_program.SetMat4fv("model", transformations[entity_id].GetModelMatrix());
+            RenderModel& model = models[entity_id];
+            for (const auto& mesh : model.render_meshes) {
+                mesh.material.specular_map.BindToUnit(1);
+                mesh.material.diffuse_map.BindToUnit(2);
+                shader_program.SetInt("material.specular", 1);
+                shader_program.SetInt("material.diffuse", 2);
+                mesh.vertex_array.Bind();
+                glDrawElements(GL_TRIANGLES, mesh.indices_amount, GL_UNSIGNED_INT, 0);
+            }
+            glBindVertexArray(0);
         }
     }
 };
@@ -95,7 +106,6 @@ void RegisterSystems();
 void CreateEntities();
 void LoadShaders();
 void LoadModels();
-void InitModels();
 void SetObjectProperties();
 
 void ProcessInput();
@@ -108,7 +118,6 @@ int main() {
     CreateEntities();
     LoadShaders();
     LoadModels();
-    InitModels();
     SetObjectProperties();
     ComponentManager::Get().LogState();
     EntityManager::Get().LogState();
@@ -150,16 +159,6 @@ void RegisterSystems() {
     SystemManager::CalculateOrder();
 }
 void CreateEntities() {
-    //* Player - 0
-    //* backpack - 2
-    //* train - 4
-    //* lamp_white - 10
-    //* lamp_magenta - 1
-    //* lamp - 5
-    //* flashlight - 9
-    //* sun - 6
-    //* moon - 8
-
     scene["player"] = Entity();
     scene["backpack"] = Entity();
     scene["train"] = Entity();
@@ -215,23 +214,33 @@ void LoadShaders() {
 
 void LoadModels() {
     Logger::Stage("loading", "Main", "LOADING MODELS");
-    MeshManager::AddModel("train", MODEL_DIR / "Train" / "train1.obj");
-    MeshManager::AddModel("backpack", MODEL_DIR / "Backpack" / "Backpack.obj");
-    MeshManager::AddModel("cube", MODEL_DIR / "Cube" / "cube.obj");
-    MeshManager::AddModel("cubes", MODEL_DIR / "Cubes" / "cubes.obj");
-    MeshManager::CompressModel("train");
-    MeshManager::CompressModel("backpack");
-    MeshManager::CompressModel("cubes");
-    MeshManager::DumbModels();
-}
-void InitModels() {
-    Logger::Stage("loading", "Main", "INITIALIZING MODELS");
-    scene["backpack"].AddComponent<const Model*>(ModelManager::GetModel("backpack"));
-    scene["train"].AddComponent<const Model*>(ModelManager::GetModel("train"));
-    scene["surface"].AddComponent<const Model*>(ModelManager::GetModel("cube"));
+    RenderModelData train, backpack, cube, cubes;
+    RenderModel r_train, r_backpack, r_cube, r_cubes;
+
+    ModelLoader::LoadModel(MODEL_DIR / "Train" / "train1.obj", train);
+    ModelLoader::LoadModel(MODEL_DIR / "Backpack" / "Backpack.obj", backpack);
+    ModelLoader::LoadModel(MODEL_DIR / "Cube" / "cube.obj", cube);
+    ModelLoader::LoadModel(MODEL_DIR / "Cubes" / "cubes.obj", cubes);
+
+    Texture2DData& data = backpack.meshes[0].material.specular_map;
+
+    train.Compress();
+    backpack.Compress();
+    cubes.Compress();
+    cube.Compress();
+
+    r_backpack.FillData(backpack);
+    r_train.FillData(train);
+    r_cube.FillData(cube);
+    r_cubes.FillData(cubes);
+
+    scene["backpack"].AddComponent<RenderModel>(r_backpack);
+    scene["train"].AddComponent<RenderModel>(r_train);
+    scene["surface"].AddComponent<RenderModel>(r_cube);
+    scene["cubes"].AddComponent<RenderModel>(r_cubes);
 
     for (int i = 0; i < 500; ++i) {
-        scene["train" + std::to_string(i)].AddComponent<const Model*>(ModelManager::GetModel("cubes"));
+        scene["train" + std::to_string(i)].AddComponent<RenderModel>(scene["cubes"].GetComponent<RenderModel>());
         scene["train" + std::to_string(i)].GetComponent<Transformation>().SetPos(glm::vec3(0, 100, 300 - i * 12));
         scene["train" + std::to_string(i)].AddComponent<ShaderProgram>(scene["train"].GetComponent<ShaderProgram>());
         scene["train" + std::to_string(i)].AddComponent<LinearManipulator>();

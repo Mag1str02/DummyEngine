@@ -1,7 +1,10 @@
 #include "texture_loader.h"
+#include <windows.h>
+#include <iostream>
 
 #include "../../../libs/STB_IMAGE/stb_image.h"
 #include "../../Dev/Logger/logger.h"
+
 namespace DE {
 TextureLoader::TextureLoader() {
 }
@@ -10,56 +13,50 @@ TextureLoader& TextureLoader::Get() {
     return texture_loader;
 }
 
-Texture2D TextureLoader::ILoadTexture2D(const fs::path& path, Texture2DType texture_type) {
-    unsigned int texture_id;
-    unsigned char* texture_data;
-    int width, height, nrChannels;
+Texture2DData TextureLoader::ILoadTexture2D(const fs::path& path) {
+    Texture2DData texture_data;
+    unsigned char* stb_data;
+    unsigned char* new_data;
+    int nrChannels;
     std::string format_s;
-    GLenum format;
 
     stbi_set_flip_vertically_on_load(true);
-    texture_data = stbi_load(path.string().c_str(), &width, &height, &nrChannels, 0);
+    Logger::Stage("loading", "TextureLoader", path.string());
+    stb_data = stbi_load(path.string().c_str(), &texture_data.width, &texture_data.height, &nrChannels, 0);
 
-    if (!texture_data) {
+    if (!stb_data) {
         Logger::Error("loading", "TextureLoader", "Couldn't load texture: (" + path.string() + ")");
-        return Texture2D(-1, Texture2DType::uninitialized);
+        return Texture2DData(std::make_shared<unsigned char*>(nullptr), -1, -1, -1);
     }
+
+    new_data = (unsigned char*)malloc(sizeof(unsigned char) * texture_data.width * texture_data.height * nrChannels);
+    memcpy(new_data, stb_data, sizeof(unsigned char) * texture_data.width * texture_data.height * nrChannels);
+    stbi_image_free(stb_data);
+    texture_data.data = std::make_shared<unsigned char*>(new_data);
+
     switch (nrChannels) {
         case 1:
             format_s = "RED";
-            format = GL_RED;
+            texture_data.format = GL_RED;
             break;
         case 3:
             format_s = "RGB";
-            format = GL_RGB;
+            texture_data.format = GL_RGB;
             break;
         case 4:
             format_s = "RGBA";
-            format = GL_RGBA;
+            texture_data.format = GL_RGBA;
             break;
         default:
             format_s = "UNKNOWN";
-            format = -1;
             break;
     }
-    glGenTextures(1, &texture_id);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, texture_data);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    stbi_image_free(texture_data);
 
     Logger::Info("loading", "TextureLoader", "Texture loaded successfully: (Format: " + format_s + ")(Path: " + path.string() + ")");
-    return Texture2D(texture_id, texture_type);
+    return texture_data;
 }
 
-Texture2D TextureLoader::LoadTexture2D(const fs::path& path, Texture2DType texture_type) {
-    return Get().ILoadTexture2D(path, texture_type);
+Texture2DData TextureLoader::LoadTexture2D(const fs::path& path) {
+    return Get().ILoadTexture2D(path);
 }
 }  // namespace DE

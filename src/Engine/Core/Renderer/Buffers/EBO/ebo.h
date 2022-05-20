@@ -45,6 +45,7 @@ private:
         void Terminate();
     };
 
+public:
     BufferId _buffer_id;
 };
 }  // namespace DE

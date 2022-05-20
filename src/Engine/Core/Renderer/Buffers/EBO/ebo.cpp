@@ -4,7 +4,7 @@ namespace DE {
 
 //*----------------------------------------------------------------------------------------------------
 
-void ElementBuffer::Bind() {
+void ElementBuffer::Bind() const {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_id);
 }
 void ElementBuffer::AllocateStorage(GLsizeiptr size, const GLvoid* data, GLenum usage) {
@@ -13,7 +13,7 @@ void ElementBuffer::AllocateStorage(GLsizeiptr size, const GLvoid* data, GLenum 
 }
 void ElementBuffer::AllocateStorage(const std::vector<unsigned int>& storage, GLenum usage) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_id);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, storage.size() * sizeof(unsigned int), &storage[0], usage);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, storage.size() * sizeof(unsigned int), &(storage[0]), usage);
 }
 void ElementBuffer::SetSubData(GLintptr offset, GLsizeiptr size, const void* data) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_id);
@@ -25,6 +25,7 @@ void ElementBuffer::SetSubData(GLintptr offset, GLsizeiptr size, const void* dat
 BufferId ElementBuffer::ElementBufferManager::CreateElementBuffer() {
     ::GLuint buffer_id;
     glGenBuffers(1, &buffer_id);
+    _reference_count[buffer_id] = 1;
     return buffer_id;
 }
 BufferId ElementBuffer::ElementBufferManager::CreateInstance(BufferId buffer_id) {

@@ -1,6 +1,7 @@
 #include "vao.h"
 
 namespace DE {
+    
 VAO::VAO() {
 }
 VAO::VAO(const std::vector<float>& vertices, const std::vector<unsigned int>& indices) {

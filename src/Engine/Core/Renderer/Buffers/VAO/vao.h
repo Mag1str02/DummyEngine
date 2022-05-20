@@ -6,12 +6,13 @@
 #include "../../../../Addition/types.h"
 #include "../VBO/vbo.h"
 
-
 namespace DE {
 
 class VertexArray {
 
 public:
+    void Bind() const;
+    void UnBind() const;
 
     VertexArray();
     VertexArray(const VertexArray& other);
@@ -41,7 +42,7 @@ private:
         void Initialize();
         void Terminate();
     };
-
+public:
     BufferId _buffer_id;
 };
 }  // namespace DE

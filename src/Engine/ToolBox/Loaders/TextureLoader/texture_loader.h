@@ -4,7 +4,8 @@
 #include <filesystem>
 #include <string>
 
-#include "../../../Core/Structs/Textures/Texture2D/texture_2D.h"
+#include "../../../Core/Renderer/RenderData/render_data.h"
+
 namespace DE {
 namespace fs = std::filesystem;
 
@@ -13,9 +14,9 @@ private:
     TextureLoader();
     static TextureLoader& Get();
 
-    Texture2D ILoadTexture2D(const fs::path& path, Texture2DType texture_type);
+    Texture2DData ILoadTexture2D(const fs::path& path);
 
 public:
-    static Texture2D LoadTexture2D(const fs::path& path, Texture2DType texture_type);
+    static Texture2DData LoadTexture2D(const fs::path& path);
 };
 }  // namespace DE

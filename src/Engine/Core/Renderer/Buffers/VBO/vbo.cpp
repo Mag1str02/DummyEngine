@@ -27,6 +27,7 @@ void VertexBuffer::SetFloatAttribute(GLuint index, GLint size, unsigned int offs
 BufferId VertexBuffer::VertexBufferManager::CreateVertexBuffer() {
     ::GLuint buffer_id;
     glGenBuffers(1, &buffer_id);
+    _reference_count[buffer_id] = 1;
     return buffer_id;
 }
 BufferId VertexBuffer::VertexBufferManager::CreateInstance(BufferId buffer_id) {

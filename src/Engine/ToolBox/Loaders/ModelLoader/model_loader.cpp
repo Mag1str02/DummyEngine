@@ -2,8 +2,9 @@
 
 #include <assimp/postprocess.h>
 
-#include "../../../Core/Memory/TextureManager/texture_manager.h"
 #include "../../Dev/Logger/logger.h"
+#include "../TextureLoader/texture_loader.h"
+
 
 namespace DE {
 ModelLoader::ModelLoader() {
@@ -14,28 +15,28 @@ ModelLoader& ModelLoader::Get() {
     return model_loader;
 }
 
-void ModelLoader::IReadModel(const fs::path& path, std::vector<Mesh>& meshes, const std::string& model_name) {
-    _current_mesh_id = 0;
-    _current_buffer = &meshes;
-    _meshes_amount = 0;
-    _nodes_amount = 0;
-    _verices_amount = 0;
-    _model_name = model_name;
+void ModelLoader::ILoadModel(const fs::path& path, RenderModelData& data) {
     const aiScene* scene = _importer.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         Logger::Error("loading", "ModelLoader", std::string("Failed To Load Scene: (" + path.string() + ")\n") + _importer.GetErrorString());
         return;
     }
-    _directory = fs::canonical(path / "..");
-    IReadModelProperties(scene->mRootNode, scene);
-    meshes.resize(_meshes_amount);
 
+    _current_mesh_id = 0;
+    _meshes_amount = 0;
+    _nodes_amount = 0;
+    _verices_amount = 0;
+    _current_data = &data;
+    _directory = fs::canonical(path / "..");
+    //Logger::Warning("loading", "ModelLoader", _directory.string());
+
+    IReadModelProperties(scene->mRootNode, scene);
+    data.meshes.resize(_meshes_amount);
     IProcessNode(scene->mRootNode, scene);
 
     Logger::Info("loading", "ModelLoader", "Model loaded: " + path.string());
     Logger::Info("loading", "ModelLoader",
-                 "Model properties: Nodes - " + std::to_string(_nodes_amount) + " | Meshes - " + std::to_string(_meshes_amount) + " | Vertices - " +
-                     std::to_string(_verices_amount));
+                 "Model properties: Nodes - " + std::to_string(_nodes_amount) + " | Meshes - " + std::to_string(_meshes_amount) + " | Vertices - " + std::to_string(_verices_amount));
 }
 void ModelLoader::IProcessNode(aiNode* node, const aiScene* scene) {
     for (size_t i = 0; i < node->mNumMeshes; ++i) {
@@ -47,9 +48,9 @@ void ModelLoader::IProcessNode(aiNode* node, const aiScene* scene) {
     }
 }
 void ModelLoader::IProcessMesh(aiMesh* mesh, const aiScene* scene) {
-    Mesh& current_mesh = _current_buffer->at(_current_mesh_id);
+    RenderMeshData& current_mesh = _current_data->meshes[_current_mesh_id];
     for (size_t i = 0; i < mesh->mNumVertices; ++i) {
-        Vertex vertex;
+        Vertex3D vertex;
 
         vertex.position.x = mesh->mVertices[i].x;
         vertex.position.y = mesh->mVertices[i].y;
@@ -75,25 +76,27 @@ void ModelLoader::IProcessMesh(aiMesh* mesh, const aiScene* scene) {
     }
     if (mesh->mMaterialIndex >= 0) {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-        std::vector<const Texture2D*> diffuse_maps = ILoadMaterialTextures(material, aiTextureType_DIFFUSE, Texture2DType::diffuse);
-        current_mesh.textures.insert(current_mesh.textures.end(), diffuse_maps.begin(), diffuse_maps.end());
-        std::vector<const Texture2D*> specular_maps = ILoadMaterialTextures(material, aiTextureType_SPECULAR, Texture2DType::specular);
-        current_mesh.textures.insert(current_mesh.textures.end(), specular_maps.begin(), specular_maps.end());
+        current_mesh.material.diffuse_map = ILoadMaterialTexture(material, aiTextureType_DIFFUSE);
+        current_mesh.material.specular_map = ILoadMaterialTexture(material, aiTextureType_SPECULAR);
     }
-    _current_mesh_id++;
+    ++_current_mesh_id;
 }
-std::vector<const Texture2D*> ModelLoader::ILoadMaterialTextures(aiMaterial* mat, aiTextureType type, Texture2DType texture_type) {
-    std::string texture_name;
+Texture2DData ModelLoader::ILoadMaterialTexture(aiMaterial* mat, aiTextureType type) {
+    Texture2DData texture_data;
     aiString file_name;
-
-    std::vector<const Texture2D*> textures;
-    for (size_t i = 0; i < mat->GetTextureCount(type); i++) {
-        mat->GetTexture(type, i, &file_name);
-        texture_name = _model_name + "." + Texture2DTypeToString(texture_type);
-        TextureManager::AddTexture2D(_directory / file_name.C_Str(), texture_name, texture_type);
-        textures.push_back(TextureManager::GetTexure2D(texture_name));
+    fs::path texture_path;
+    if (mat->GetTextureCount(type) > 1) {
+        Logger::Warning("loading", "ModelLoader", "Model has more multiple textures of same type. Loading only first one.");
     }
-    return textures;
+    mat->GetTexture(type, 0, &file_name);
+    //Logger::Warning("loading", "ModelLoader", file_name.C_Str());
+    //Logger::Warning("loading", "ModelLoader", std::to_string(mat->GetTextureCount(type)));
+    texture_path = _directory / file_name.C_Str();
+    if (_path_to_texture_data.find(texture_path.string()) == _path_to_texture_data.end()) {
+        _path_to_texture_data[texture_path.string()] = TextureLoader::LoadTexture2D(texture_path);
+    }
+    texture_data = _path_to_texture_data[texture_path.string()];
+    return texture_data;
 }
 void ModelLoader::IReadModelProperties(aiNode* node, const aiScene* scene) {
     ++_nodes_amount;
@@ -106,7 +109,7 @@ void ModelLoader::IReadModelProperties(aiNode* node, const aiScene* scene) {
     }
 }
 
-void ModelLoader::ReadModel(const fs::path& path, std::vector<Mesh>& meshes, const std::string& model_name) {
-    Get().IReadModel(path, meshes, model_name);
+void ModelLoader::LoadModel(const fs::path& path, RenderModelData& data) {
+    Get().ILoadModel(path, data);
 }
 }  // namespace DE

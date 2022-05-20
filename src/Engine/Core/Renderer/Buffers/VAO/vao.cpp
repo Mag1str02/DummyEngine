@@ -1,14 +1,23 @@
 #include "vao.h"
 
+
 namespace DE {
 
 //*----------------------------------------------------------------------------------------------------
+
+void VertexArray::Bind() const {
+    glBindVertexArray(_buffer_id);
+}
+void VertexArray::UnBind() const {
+    glBindVertexArray(0);
+}
 
 //*--------------------------------------------------
 
 BufferId VertexArray::VertexArrayManager::CreateVertexArray() {
     ::GLuint buffer_id;
-    glGenBuffers(1, &buffer_id);
+    glGenVertexArrays(1, &buffer_id);
+    _reference_count[buffer_id] = 1;
     return buffer_id;
 }
 BufferId VertexArray::VertexArrayManager::CreateInstance(BufferId buffer_id) {
@@ -25,7 +34,7 @@ void VertexArray::VertexArrayManager::DestroyInstance(BufferId buffer_id) {
     }
 }
 void VertexArray::VertexArrayManager::DestroyVertexArray(BufferId buffer_id) {
-    glDeleteBuffers(1, &buffer_id);
+    glDeleteVertexArrays(1, &buffer_id);
 }
 
 //*----------------------------------------------------------------------------------------------------
