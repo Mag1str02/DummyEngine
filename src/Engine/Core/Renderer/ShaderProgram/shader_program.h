@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "../Shader/shader.h"
+#include "../RenderStructs/render_structs.h"
 
 namespace DE {
 namespace fs = std::filesystem;
@@ -30,6 +31,7 @@ public:
     void SetVec3f(const std::string& uniform_name, glm::vec3 vec);
     void SetVec3i(const std::string& uniform_name, int x, int y, int z);
     void SetMat4fv(const std::string& uniform_name, glm::mat4 value);
+    void SetMaterial(const std::string& uniform_name, Material mat);
 
     ShaderProgram();
     ShaderProgram(const ShaderProgram& other);

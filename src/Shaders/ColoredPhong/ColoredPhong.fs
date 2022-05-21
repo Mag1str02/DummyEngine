@@ -4,6 +4,9 @@
 #define MAX_DIRECTIONAL_LIGHT_AMOUNT 16
 #define MAX_SPOT_LIGHT_AMOUNT 64
 
+struct Material {
+    vec3 diffuse_color;
+};
 struct Light {
     vec3 ambient;
     vec3 diffuse;
@@ -36,7 +39,7 @@ out vec4 frag_color;
 
 uniform vec3 view_pos;
 uniform ivec3 light_amount;
-uniform vec3 color;
+uniform Material material;
 uniform DirectionalLight directional_lights[MAX_DIRECTIONAL_LIGHT_AMOUNT];
 uniform SpotLight spot_lights[MAX_SPOT_LIGHT_AMOUNT];
 uniform PointLight point_lights[MAX_POINT_LIGHT_AMOUNT];
@@ -44,14 +47,14 @@ uniform PointLight point_lights[MAX_POINT_LIGHT_AMOUNT];
 vec3 DirectionalLightImpact(DirectionalLight direction_light, vec3 normal, vec3 view_direction) {
     vec3 normalized_light_ray = normalize(-direction_light.direction);
 
-    vec3 ambient = direction_light.light.ambient * color;
+    vec3 ambient = direction_light.light.ambient * material.diffuse_color;
 
     float bounce_angle_cos = max(dot(normal, normalized_light_ray), 0.0);
-    vec3 diffuse = bounce_angle_cos * direction_light.light.diffuse * color;
+    vec3 diffuse = bounce_angle_cos * direction_light.light.diffuse * material.diffuse_color;
 
     vec3 reflected_ray = reflect(-normalized_light_ray, normal);
     float spec = pow(max(dot(view_direction, reflected_ray), 0.0), 32);
-    vec3 specular = spec * direction_light.light.specular * color;
+    vec3 specular = spec * direction_light.light.specular * material.diffuse_color;
 
     return ambient + diffuse + specular;
 }
@@ -70,9 +73,9 @@ vec3 PointLightImpact(PointLight point_light, vec3 normal, vec3 view_direction, 
 
     float attenuation = 1.0 / (point_light.clq.x + point_light.clq.y * dist + point_light.clq.z * (dist * dist));
 
-    vec3 ambient = point_light.light.ambient * color;
-    vec3 diffuse = bounce_angle_cos * point_light.light.diffuse * color;
-    vec3 specular = spec * point_light.light.specular * color;
+    vec3 ambient = point_light.light.ambient * material.diffuse_color;
+    vec3 diffuse = bounce_angle_cos * point_light.light.diffuse * material.diffuse_color;
+    vec3 specular = spec * point_light.light.specular * material.diffuse_color;
 
     return (ambient + diffuse + specular) * attenuation;
 }

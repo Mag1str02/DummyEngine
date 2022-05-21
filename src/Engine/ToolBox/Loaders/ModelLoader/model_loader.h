@@ -12,6 +12,7 @@ namespace fs = std::filesystem;
 
 class ModelLoader {
 private:
+    enum ColorType { none, diffuse, specular, ambient };
     size_t _meshes_amount;
     size_t _verices_amount;
     size_t _nodes_amount;
@@ -30,6 +31,7 @@ private:
     void IProcessNode(aiNode* node, const aiScene* scene);
     void IProcessMesh(aiMesh* mesh, const aiScene* scene);
     Texture2DData ILoadMaterialTexture(aiMaterial* mat, aiTextureType type);
+    glm::vec3 IGetmaterialColor(aiMaterial* mat, ColorType type);
     void IReadModelProperties(aiNode* node, const aiScene* scene);
 
 public:

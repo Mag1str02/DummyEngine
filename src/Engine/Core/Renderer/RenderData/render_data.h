@@ -12,7 +12,7 @@ struct Texture2DData {
     std::shared_ptr<unsigned char*> data = std::make_shared<unsigned char*>(nullptr);
     int width;
     int height;
-    GLenum format;
+    GLint format;
 };
 
 struct MaterialData {

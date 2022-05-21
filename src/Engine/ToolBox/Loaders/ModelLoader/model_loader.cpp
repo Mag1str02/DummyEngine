@@ -2,9 +2,10 @@
 
 #include <assimp/postprocess.h>
 
+#include <iostream>
+
 #include "../../Dev/Logger/logger.h"
 #include "../TextureLoader/texture_loader.h"
-
 
 namespace DE {
 ModelLoader::ModelLoader() {
@@ -28,7 +29,7 @@ void ModelLoader::ILoadModel(const fs::path& path, RenderModelData& data) {
     _verices_amount = 0;
     _current_data = &data;
     _directory = fs::canonical(path / "..");
-    //Logger::Warning("loading", "ModelLoader", _directory.string());
+    // Logger::Warning("loading", "ModelLoader", _directory.string());
 
     IReadModelProperties(scene->mRootNode, scene);
     data.meshes.resize(_meshes_amount);
@@ -76,10 +77,29 @@ void ModelLoader::IProcessMesh(aiMesh* mesh, const aiScene* scene) {
     }
     if (mesh->mMaterialIndex >= 0) {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+        current_mesh.material.diffuse_color = IGetmaterialColor(material, ColorType::diffuse);
         current_mesh.material.diffuse_map = ILoadMaterialTexture(material, aiTextureType_DIFFUSE);
         current_mesh.material.specular_map = ILoadMaterialTexture(material, aiTextureType_SPECULAR);
     }
     ++_current_mesh_id;
+}
+glm::vec3 ModelLoader::IGetmaterialColor(aiMaterial* mat, ColorType type) {
+    aiColor3D color(0.f, 0.f, 0.f);
+    switch (type) {
+        case ColorType::diffuse:
+            mat->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+            break;
+        case ColorType::specular:
+            mat->Get(AI_MATKEY_COLOR_SPECULAR, color);
+            break;
+        case ColorType::ambient:
+            mat->Get(AI_MATKEY_COLOR_AMBIENT, color);
+            break;
+        default:
+            break;
+    }
+    glm::vec3 res(color.r, color.g, color.b);
+    return res;
 }
 Texture2DData ModelLoader::ILoadMaterialTexture(aiMaterial* mat, aiTextureType type) {
     Texture2DData texture_data;
@@ -89,8 +109,8 @@ Texture2DData ModelLoader::ILoadMaterialTexture(aiMaterial* mat, aiTextureType t
         Logger::Warning("loading", "ModelLoader", "Model has more multiple textures of same type. Loading only first one.");
     }
     mat->GetTexture(type, 0, &file_name);
-    //Logger::Warning("loading", "ModelLoader", file_name.C_Str());
-    //Logger::Warning("loading", "ModelLoader", std::to_string(mat->GetTextureCount(type)));
+    // Logger::Warning("loading", "ModelLoader", file_name.C_Str());
+    // Logger::Warning("loading", "ModelLoader", std::to_string(mat->GetTextureCount(type)));
     texture_path = _directory / file_name.C_Str();
     if (_path_to_texture_data.find(texture_path.string()) == _path_to_texture_data.end()) {
         _path_to_texture_data[texture_path.string()] = TextureLoader::LoadTexture2D(texture_path);

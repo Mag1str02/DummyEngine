@@ -1,6 +1,6 @@
 #include "texture_loader.h"
+
 #include <windows.h>
-#include <iostream>
 
 #include "../../../libs/STB_IMAGE/stb_image.h"
 #include "../../Dev/Logger/logger.h"
@@ -22,11 +22,12 @@ Texture2DData TextureLoader::ILoadTexture2D(const fs::path& path) {
 
     stbi_set_flip_vertically_on_load(true);
     Logger::Stage("loading", "TextureLoader", path.string());
+
     stb_data = stbi_load(path.string().c_str(), &texture_data.width, &texture_data.height, &nrChannels, 0);
 
     if (!stb_data) {
         Logger::Error("loading", "TextureLoader", "Couldn't load texture: (" + path.string() + ")");
-        return Texture2DData(std::make_shared<unsigned char*>(nullptr), -1, -1, -1);
+        return Texture2DData(std::make_shared<unsigned char*>(nullptr), 0, 0, 0);
     }
 
     new_data = (unsigned char*)malloc(sizeof(unsigned char) * texture_data.width * texture_data.height * nrChannels);
@@ -51,7 +52,6 @@ Texture2DData TextureLoader::ILoadTexture2D(const fs::path& path) {
             format_s = "UNKNOWN";
             break;
     }
-
     Logger::Info("loading", "TextureLoader", "Texture loaded successfully: (Format: " + format_s + ")(Path: " + path.string() + ")");
     return texture_data;
 }

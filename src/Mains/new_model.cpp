@@ -16,16 +16,18 @@ struct LinearManipulator {
     glm::vec3 dir;
     double radius;
     double current_time;
+    double speed;
 
     LinearManipulator()
         : dir(0, 0, 1),
           radius(10),
-          current_time(0){
+          current_time(0),
+          speed(1){
 
           };
     glm::vec3 Update(double dt) {
         current_time += dt;
-        return dir * float((std::sin(current_time) - std::sin(current_time - dt)) * radius);
+        return dir * float((std::sin(current_time * speed) - std::sin((current_time - dt) * speed)) * radius);
     }
 };
 
@@ -52,11 +54,15 @@ public:
         auto& manipulators = GetComponentArray<LinearManipulator>();
         auto& positions = GetComponentArray<Transformation>();
         auto& scales = GetComponentArray<ScaleManipulator>();
+        auto& point_lights = GetComponentArray<PointLight>();
         for (auto [entity_id, linear_manipulator] : manipulators) {
             positions[entity_id].MoveInWorld(linear_manipulator.Update(dt));
         }
         for (auto [entity_id, scale] : scales) {
             positions[entity_id].SetScale(scale.GetScale());
+        }
+        for (auto [entity_id, point_light] : point_lights) {
+            point_light.position = positions[entity_id].GetPos();
         }
     }
 };
@@ -75,7 +81,6 @@ public:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         auto& camera = scene["player"].GetComponent<FPSCamera>();
-        scene["train"].GetComponent<ShaderProgram>().SetVec3f("color", 1.0, 0.5, 1.0);
         for (auto [entity_id, shader] : shaders) {
             shader.SetMat4fv("projection", camera.GetProjectionMatrix());
             shader.SetMat4fv("view", camera.GetViewMatrix());
@@ -88,10 +93,7 @@ public:
             shader_program.SetMat4fv("model", transformations[entity_id].GetModelMatrix());
             RenderModel& model = models[entity_id];
             for (const auto& mesh : model.render_meshes) {
-                mesh.material.specular_map.BindToUnit(1);
-                mesh.material.diffuse_map.BindToUnit(2);
-                shader_program.SetInt("material.specular", 1);
-                shader_program.SetInt("material.diffuse", 2);
+                shader_program.SetMaterial("material", mesh.material);
                 mesh.vertex_array.Bind();
                 glDrawElements(GL_TRIANGLES, mesh.indices_amount, GL_UNSIGNED_INT, 0);
             }
@@ -140,7 +142,6 @@ void Initialize() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_SAMPLES, 4);
-    deHint(H_MAX_ENTITY_AMOUNT, 500);
     deInitialize();
     application_window.Init("First");
     application_window.SetProcessInputFunc(ProcessInput);
@@ -217,27 +218,32 @@ void LoadModels() {
     RenderModelData train, backpack, cube, cubes;
     RenderModel r_train, r_backpack, r_cube, r_cubes;
 
-    ModelLoader::LoadModel(MODEL_DIR / "Train" / "train1.obj", train);
-    ModelLoader::LoadModel(MODEL_DIR / "Backpack" / "Backpack.obj", backpack);
+    ModelLoader::LoadModel(MODEL_DIR / "Train" / "train.obj", train);
+    ModelLoader::LoadModel(MODEL_DIR / "Castle" / "castle.obj", backpack);
     ModelLoader::LoadModel(MODEL_DIR / "Cube" / "cube.obj", cube);
     ModelLoader::LoadModel(MODEL_DIR / "Cubes" / "cubes.obj", cubes);
 
-    Texture2DData& data = backpack.meshes[0].material.specular_map;
-
     train.Compress();
-    backpack.Compress();
+    // backpack.Compress();
     cubes.Compress();
     cube.Compress();
 
-    r_backpack.FillData(backpack);
     r_train.FillData(train);
+    r_backpack.FillData(backpack);
     r_cube.FillData(cube);
     r_cubes.FillData(cubes);
 
     scene["backpack"].AddComponent<RenderModel>(r_backpack);
     scene["train"].AddComponent<RenderModel>(r_train);
-    scene["surface"].AddComponent<RenderModel>(r_cube);
+    scene["surface"].AddComponent<RenderModel>(r_cubes);
     scene["cubes"].AddComponent<RenderModel>(r_cubes);
+
+    scene["lamp_white"].AddComponent<RenderModel>(r_cube);
+    scene["lamp_magenta"].AddComponent<RenderModel>(r_cube);
+    scene["lamp_white"].AddComponent<Drawable>();
+    scene["lamp_magenta"].AddComponent<Drawable>();
+    scene["lamp_white"].AddComponent<ShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
+    scene["lamp_magenta"].AddComponent<ShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
 
     for (int i = 0; i < 500; ++i) {
         scene["train" + std::to_string(i)].AddComponent<RenderModel>(scene["cubes"].GetComponent<RenderModel>());
@@ -247,6 +253,7 @@ void LoadModels() {
         scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().current_time = i * 3.14 / 16;
         scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().radius = 15;
         scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().dir = glm::vec3(std::sin(i * 3.14 / 16), std::cos(i * 3.14 / 16), 0);
+        scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().speed = std::sin(i * 3.14 / 8) + 1;
         scene["train" + std::to_string(i)].AddComponent<ScaleManipulator>();
         scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().min_scale = -1;
         scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().max_scale = 1;
@@ -270,6 +277,16 @@ void SetObjectProperties() {
     PointLight& lamp_magenta = scene["lamp_magenta"].GetComponent<PointLight>();
     SpotLight& flashlight = scene["flashlight"].GetComponent<SpotLight>();
     SpotLight& lamp = scene["lamp"].GetComponent<SpotLight>();
+
+    scene["lamp_white"].GetComponent<LinearManipulator>().dir = glm::vec3(1, 0, 0);
+    scene["lamp_white"].GetComponent<LinearManipulator>().radius = 50;
+    scene["lamp_white"].GetComponent<LinearManipulator>().speed = 0.5;
+    scene["lamp_white"].GetComponent<Transformation>().SetPos(glm::vec3(0, 20, 0));
+
+    scene["lamp_magenta"].GetComponent<LinearManipulator>().dir = glm::vec3(0, 0, 1);
+    scene["lamp_magenta"].GetComponent<LinearManipulator>().radius = 50;
+    scene["lamp_magenta"].GetComponent<LinearManipulator>().speed = 0.5;
+    scene["lamp_magenta"].GetComponent<Transformation>().SetPos(glm::vec3(0, 10, 0));
 
     camera.SetPos(glm::vec3(0.0f, 0.0f, 10.0f));
 

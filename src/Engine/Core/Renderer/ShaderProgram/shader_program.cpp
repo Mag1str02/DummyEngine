@@ -89,6 +89,20 @@ void ShaderProgram::SetVec3i(const std::string& uniform_name, int x, int y, int 
     Use();
     glUniform3i(PosOf(uniform_name), x, y, z);
 }
+void ShaderProgram::SetMaterial(const std::string& uniform_name, Material mat) {
+    Use();
+    glUniform3f(PosOf(uniform_name + ".ambient_color"), mat.ambient_color.x, mat.ambient_color.y, mat.ambient_color.z);
+    glUniform3f(PosOf(uniform_name + ".diffuse_color"), mat.diffuse_color.x, mat.diffuse_color.y, mat.diffuse_color.z);
+    glUniform3f(PosOf(uniform_name + ".specular_color"), mat.specular_color.x, mat.specular_color.y, mat.specular_color.z);
+    glUniform1f(PosOf(uniform_name + ".shininess"), mat.shininess);
+    glUniform1i(PosOf(uniform_name + ".specular_map"), 1);
+    glUniform1i(PosOf(uniform_name + ".diffuse_map"), 2);
+    glUniform1i(PosOf(uniform_name + ".normal_map"), 3);
+
+    mat.specular_map.BindToUnit(1);
+    mat.diffuse_map.BindToUnit(2);
+    mat.normal_map.BindToUnit(3);
+}
 
 //*--------------------------------------------------
 

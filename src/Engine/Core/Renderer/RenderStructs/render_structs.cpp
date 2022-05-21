@@ -6,6 +6,7 @@ namespace DE {
 
 void RenderMesh::FillData(const RenderMeshData& data) {
     vertex_array.Bind();
+
     vertex_buffer.AllocateStorage(data.vertices.size() * sizeof(Vertex3D), &(data.vertices[0]));
     vertex_buffer.SetFloatAttribute(0, 3, 0, 8);
     vertex_buffer.SetFloatAttribute(1, 3, 3, 8);
@@ -21,6 +22,7 @@ void RenderMesh::FillData(const RenderMeshData& data) {
     material.specular_map.SetData(data.material.specular_map);
     material.diffuse_map.SetData(data.material.diffuse_map);
     material.normal_map.SetData(data.material.normal_map);
+
     vertex_array.UnBind();
 }
 
