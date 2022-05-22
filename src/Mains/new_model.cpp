@@ -182,7 +182,7 @@ void CreateEntities() {
     scene["backpack"].AddComponent<Transformation>();
 
     scene["sponza"].AddComponent<Transformation>();
-    //scene["sponza"].AddComponent<Drawable>();
+    scene["sponza"].AddComponent<Drawable>();
     scene["sponza"].AddComponent<ShaderProgram>();
 
     scene["train"].AddComponent<Transformation>();
@@ -255,8 +255,8 @@ void LoadModels() {
     scene["lamp_white"].AddComponent<ShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
     scene["lamp_magenta"].AddComponent<ShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
 
-    for (int i = 0; i < 500; ++i) {
-        scene["train" + std::to_string(i)].AddComponent<RenderModel>(scene["cubes"].GetComponent<RenderModel>());
+    for (int i = 0; i < 200; ++i) {
+        scene["train" + std::to_string(i)].AddComponent<RenderModel>(scene["train"].GetComponent<RenderModel>());
         scene["train" + std::to_string(i)].GetComponent<Transformation>().SetPos(glm::vec3(0, 100, 300 - i * 12));
         scene["train" + std::to_string(i)].AddComponent<ShaderProgram>(scene["train"].GetComponent<ShaderProgram>());
         scene["train" + std::to_string(i)].AddComponent<LinearManipulator>();

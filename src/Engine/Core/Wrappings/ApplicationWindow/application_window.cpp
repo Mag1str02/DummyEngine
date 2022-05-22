@@ -41,7 +41,7 @@ void ApplicationWindow::Init(std::string name) {
     MakeCurrentContext();
     glfwSetFramebufferSizeCallback(_window, DefaultFrameBufferSizeCallback);
     glfwSwapInterval(0);
-    SetFullScreen(0);
+    SetFullScreen(1);
     glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     Logger::Info("loading", "ApplicationWindow", "Application Window initialized: " + _name);
 }

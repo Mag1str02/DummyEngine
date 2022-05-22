@@ -5,7 +5,6 @@
 #include <iomanip>
 #include <iostream>
 
-
 namespace DE {
 
 void FrameTimeReader::EnterArea(std::string area_name) {
@@ -61,6 +60,12 @@ void FrameTimeReader::PrintFrame() {
 
 FrameTimeReader::FrameTimeReader() {
     system("cls");
+    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO cursorInfo;
+    GetConsoleCursorInfo(out, &cursorInfo);
+    cursorInfo.bVisible = false;  // set the cursor visibility
+    SetConsoleCursorInfo(out, &cursorInfo);
+
     _root = new Node();
     _root->name = "Frame";
     _root->current_child_id = 0;
