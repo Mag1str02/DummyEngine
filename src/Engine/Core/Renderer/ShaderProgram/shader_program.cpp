@@ -46,7 +46,7 @@ void ShaderProgram::Check() {
     glGetProgramiv(_shader_program_id, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(_shader_program_id, 512, NULL, info_log);
-        Logger::Error("loading", "ShaderProgram", "Failed to link shader program (" + std::to_string(_shader_program_id) + ")\n" + info_log);
+        Logger::Fatal("loading", "ShaderProgram", "Failed to link shader program (" + std::to_string(_shader_program_id) + ")\n" + info_log);
         throw std::exception();
     }
     Logger::Info("loading", "ShaderProgram", "Shader program (" + std::to_string(_shader_program_id) + ") linked successfully");

@@ -47,6 +47,7 @@ add_library(my_lib STATIC
     ./src/Engine/Core/Wrappings/ApplicationWindow/application_window.cpp
 
     ./src/Engine/ToolBox/Dev/Logger/logger.cpp
+    ./src/Engine/ToolBox/Dev/FrameTimeReader/frame_time_reader.cpp
     ./src/Engine/ToolBox/Loaders/ModelLoader/model_loader.cpp
     ./src/Engine/ToolBox/Loaders/TextureLoader/texture_loader.cpp
 )

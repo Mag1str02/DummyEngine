@@ -1,7 +1,9 @@
 #include "application_window.h"
 
+#include "../../../ToolBox/Dev/FrameTimeReader/frame_time_reader.h"
 #include "../../../ToolBox/Dev/Logger/logger.h"
 #include "../../ECS/System/system_manager.hpp"
+
 namespace DE {
 void ApplicationWindow::CheckWindow() {
     if (_window == NULL) {
@@ -62,13 +64,24 @@ void ApplicationWindow::StartLoop() {
     while (!glfwWindowShouldClose(_window)) {
         double prev_frame_time = glfwGetTime() - prev_time;
         prev_time = glfwGetTime();
+        DE_FTR_ENTER("");
+        DE_FTR_ENTER("Poll Events");
         glfwPollEvents();
+        DE_FTR_LEAVE();
+        DE_FTR_ENTER("Process Input");
         _process_input();
+        DE_FTR_LEAVE();
+        DE_FTR_ENTER("System Processing");
         SystemManager::Update(prev_frame_time);
+        DE_FTR_LEAVE();
+        DE_FTR_ENTER("Frame Swap");
         glfwSwapBuffers(_window);
         max_frame_time = std::max(max_frame_time, glfwGetTime() - prev_time);
         avarage_frame_time = (avarage_frame_time * frame_amount + glfwGetTime() - prev_time) / (frame_amount + 1);
         frame_amount++;
+        DE_FTR_LEAVE();
+        DE_FTR_LEAVE();
+        DE_FTR_PRINT();
     }
     Logger::Info("rendering", "ApplicationWindow", "Avarage frame time: " + std::to_string(avarage_frame_time) + "s" + " FPS: " + std::to_string(1.0 / avarage_frame_time));
     Logger::Info("rendering", "ApplicationWindow", "Avarage frame time: " + std::to_string(max_frame_time) + "s" + " FPS: " + std::to_string(1.0 / max_frame_time));

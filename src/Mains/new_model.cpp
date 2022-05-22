@@ -1,4 +1,3 @@
-#include "../../../libs/STB_IMAGE/stb_image_write.cpp"
 #include "../Engine/Addition/de_lib.h"
 
 using namespace DE;
@@ -48,6 +47,7 @@ public:
     }
 
     void Update(double dt) override {
+        DE_FTR_ENTER("Moving System");
         scene["flashlight"].GetComponent<SpotLight>().position = scene["player"].GetComponent<FPSCamera>().GetPos();
         scene["flashlight"].GetComponent<SpotLight>().direction = scene["player"].GetComponent<FPSCamera>().GetDir();
 
@@ -64,6 +64,7 @@ public:
         for (auto [entity_id, point_light] : point_lights) {
             point_light.position = positions[entity_id].GetPos();
         }
+        DE_FTR_LEAVE();
     }
 };
 class DrawSystem : public System {
@@ -72,6 +73,7 @@ public:
     }
 
     void Update(double dt) override {
+        DE_FTR_ENTER("Draw System");
         auto& drawables = GetComponentArray<Drawable>();
         auto& models = GetComponentArray<RenderModel>();
         auto& shaders = GetComponentArray<ShaderProgram>();
@@ -99,6 +101,7 @@ public:
             }
             glBindVertexArray(0);
         }
+        DE_FTR_LEAVE();
     }
 };
 
@@ -135,7 +138,7 @@ int main() {
 void Initialize() {
     std::cout << WORKING_DIR << std::endl;
     Logger::Open(LOG_DIR / "loading.txt", "loading");
-    // Logger::Open(LOG_DIR / "ECS.txt", "ECS");
+    Logger::Open(LOG_DIR / "ECS.txt", "ECS");
     Logger::Stage("loading", "Main", "INITIALIZETION");
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -162,6 +165,7 @@ void RegisterSystems() {
 void CreateEntities() {
     scene["player"] = Entity();
     scene["backpack"] = Entity();
+    scene["sponza"] = Entity();
     scene["train"] = Entity();
     scene["sun"] = Entity();
     scene["moon"] = Entity();
@@ -173,11 +177,13 @@ void CreateEntities() {
     scene["colored_phong"] = Entity();
     scene["textured_phong"] = Entity();
 
-    EntityManager::Get().LogState();
-
     scene["player"].AddComponent<FPSCamera>();
 
     scene["backpack"].AddComponent<Transformation>();
+
+    scene["sponza"].AddComponent<Transformation>();
+    //scene["sponza"].AddComponent<Drawable>();
+    scene["sponza"].AddComponent<ShaderProgram>();
 
     scene["train"].AddComponent<Transformation>();
     scene["lamp_white"].AddComponent<Transformation>();
@@ -209,25 +215,28 @@ void LoadShaders() {
     scene["train"].AddComponent<ShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
     scene["surface"].AddComponent<ShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
     scene["backpack"].AddComponent<ShaderProgram>(scene["textured_phong"].GetComponent<UniqueShader>().shader_program);
+    scene["sponza"].AddComponent<ShaderProgram>(scene["textured_phong"].GetComponent<UniqueShader>().shader_program);
 
     Logger::Info("loading", "Main", "Shaders loaded.");
 }
 
 void LoadModels() {
     Logger::Stage("loading", "Main", "LOADING MODELS");
-    RenderModelData train, backpack, cube, cubes;
-    RenderModel r_train, r_backpack, r_cube, r_cubes;
+    RenderModelData train, backpack, cube, cubes, sponza;
+    RenderModel r_train, r_backpack, r_cube, r_cubes, r_sponza;
 
     ModelLoader::LoadModel(MODEL_DIR / "Train" / "train.obj", train);
-    ModelLoader::LoadModel(MODEL_DIR / "Castle" / "castle.obj", backpack);
+    ModelLoader::LoadModel(MODEL_DIR / "Backpack" / "backpack.obj", backpack);
     ModelLoader::LoadModel(MODEL_DIR / "Cube" / "cube.obj", cube);
     ModelLoader::LoadModel(MODEL_DIR / "Cubes" / "cubes.obj", cubes);
+    ModelLoader::LoadModel(MODEL_DIR / "Sponza" / "sponza.obj", sponza);
 
     train.Compress();
-    // backpack.Compress();
+    backpack.Compress();
     cubes.Compress();
     cube.Compress();
 
+    r_sponza.FillData(sponza);
     r_train.FillData(train);
     r_backpack.FillData(backpack);
     r_cube.FillData(cube);
@@ -237,6 +246,7 @@ void LoadModels() {
     scene["train"].AddComponent<RenderModel>(r_train);
     scene["surface"].AddComponent<RenderModel>(r_cubes);
     scene["cubes"].AddComponent<RenderModel>(r_cubes);
+    scene["sponza"].AddComponent<RenderModel>(r_sponza);
 
     scene["lamp_white"].AddComponent<RenderModel>(r_cube);
     scene["lamp_magenta"].AddComponent<RenderModel>(r_cube);
@@ -263,6 +273,9 @@ void LoadModels() {
 }
 void SetObjectProperties() {
     Logger::Stage("loading", "Main", "SETTING OBJECTS PROPERTIES");
+
+    scene["sponza"].GetComponent<Transformation>().SetPos(glm::vec3(0, 50, 0));
+    scene["sponza"].GetComponent<Transformation>().SetScale(glm::vec3(0.01));
 
     scene["backpack"].GetComponent<Transformation>().SetPos(glm::vec3(30, 0, 0));
     scene["backpack"].GetComponent<LinearManipulator>().radius = 0;

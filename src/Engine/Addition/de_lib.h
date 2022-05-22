@@ -10,6 +10,7 @@
 
 #include "../../Config/config.h"
 #include "../ToolBox/Dev/Logger/logger.h"
+#include "../ToolBox/Dev/FrameTimeReader/frame_time_reader.h"
 #include "../Core/ECS/BasicComponents/Transformation/transformation.h"
 #include "../Core/ECS/Component/component_array.hpp"
 #include "../Core/ECS/Component/component_manager.hpp"
@@ -27,5 +28,6 @@
 #include "../Core/Renderer/ShaderProgram/shader_program.h"
 #include "../Core/Renderer/RenderStructs/render_structs.h"
 #include "../ToolBox/Loaders/ModelLoader/model_loader.h"
+
 
 

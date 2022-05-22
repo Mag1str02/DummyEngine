@@ -1,4 +1,5 @@
 #include "light_manager.h"
+#include "../../../../ToolBox/Dev/FrameTimeReader/frame_time_reader.h"
 
 #include <iostream>
 namespace DE {
@@ -30,6 +31,7 @@ void LightManager::ActivateSpotLight(ShaderProgram& shader_program, const SpotLi
 LightManager::LightManager() {
 }
 void LightManager::Update(double dt) {
+    DE_FTR_ENTER("Light Passing System");
     auto& shader_programs = GetComponentArray<UniqueShader>();
     auto& point_lights = GetComponentArray<PointLight>();
     auto& directional_lights = GetComponentArray<DirectionalLight>();
@@ -50,5 +52,6 @@ void LightManager::Update(double dt) {
         }
         shader_program.SetVec3i("light_amount", cnt_dir_light, cnt_point_light, cnt_spot_light);
     }
+    DE_FTR_LEAVE();
 }
 }  // namespace DE
