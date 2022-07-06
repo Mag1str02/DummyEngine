@@ -48,7 +48,7 @@ add_subdirectory(libs/glad)
 
 target_include_directories(my_lib
     PUBLIC libs/glfw/include
-    PUBLIC libs/glad/include
+    PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/libs/glad/include
     PUBLIC libs/glm
     PUBLIC libs/assimp/include
     PUBLIC libs/stb_image

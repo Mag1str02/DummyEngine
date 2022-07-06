@@ -7,3 +7,6 @@
 [submodule "libs/STB_IMAGE"]
 	path = libs/STB_IMAGE
 	url = https://github.com/nothings/stb
+[submodule "libs/GLAD"]
+	path = libs/GLAD
+	url = https://github.com/Dav1dde/glad

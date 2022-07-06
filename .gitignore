@@ -4,6 +4,5 @@ build/
 .vscode/tasks.json 
 .vscode/settings.json 
 res/logs/
-libs/GLAD
 libs/ASSIMP
 **/tempCodeRunnerFile.cpp
