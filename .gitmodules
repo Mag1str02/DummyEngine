@@ -1,0 +1,3 @@
+[submodule "libs/GLM"]
+	path = libs/GLM
+	url = https://github.com/g-truc/glm

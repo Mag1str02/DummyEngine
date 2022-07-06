@@ -6,7 +6,6 @@ build/
 res/logs/
 libs/GLAD
 libs/GLFW
-libs/GLM
 libs/STB_IMAGE
 libs/ASSIMP
 **/tempCodeRunnerFile.cpp
