@@ -65,6 +65,8 @@ target_link_libraries(my_lib
     PUBLIC assimp
 )
 
+ADD_CUSTOM_COMMAND(TARGET my_lib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/libs/ASSIMP/lib/libassimp.dll ${PROJECT_BINARY_DIR}/.)
+
 add_executable(First ./src/Mains/first.cpp)
 add_executable(Model ./src/Mains/model.cpp)
 add_executable(Windows ./src/Mains/multiple_windows.cpp)
