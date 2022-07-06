@@ -372,8 +372,9 @@ void ProcessInput() {
 
     int width, height;
     glfwGetWindowSize(application_window.GetWindow(), &width, &height);
-    camera.SetAspect(double(width) / height);
-
+    if (height != 0 && width != 0) {
+        camera.SetAspect(double(width) / height);
+    }
     if (!cursor_mode) {
         return;
     }
