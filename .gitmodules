@@ -4,3 +4,6 @@
 [submodule "libs/GLFW"]
 	path = libs/GLFW
 	url = https://github.com/glfw/glfw
+[submodule "libs/STB_IMAGE"]
+	path = libs/STB_IMAGE
+	url = https://github.com/nothings/stb

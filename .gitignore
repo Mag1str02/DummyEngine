@@ -5,6 +5,5 @@ build/
 .vscode/settings.json 
 res/logs/
 libs/GLAD
-libs/STB_IMAGE
 libs/ASSIMP
 **/tempCodeRunnerFile.cpp

@@ -1,5 +1,7 @@
 #pragma once
 
+#define STB_IMAGE_IMPLEMENTATION
+
 #include <GLAD/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -7,6 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/transform.hpp>
+
+#include <stb_image.h>
 
 #include "../../Config/config.h"
 #include "../ToolBox/Dev/Logger/logger.h"

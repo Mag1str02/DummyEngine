@@ -5,12 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(Test)
 
-# INCLUDE_DIRECTORIES(libs/ASSIMP/include)
-# INCLUDE_DIRECTORIES(libs/GLM/)
-
 add_library(my_lib
-    ./libs/STB_IMAGE/stb_image.cpp  
-
     ./src/Engine/Core/ECS/Component/component_array.hpp
     ./src/Engine/Core/ECS/Component/component_manager.hpp
     ./src/Engine/Core/ECS/Entity/entity.hpp
@@ -56,6 +51,7 @@ target_include_directories(my_lib
     PUBLIC libs/glad/include
     PUBLIC libs/glm
     PUBLIC libs/assimp/include
+    PUBLIC libs/stb_image
 )
 
 target_link_directories(my_lib
