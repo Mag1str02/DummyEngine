@@ -5,14 +5,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(Test)
 
-add_subdirectory(./libs/GLAD ${CMAKE_CURRENT_BINARY_DIR}/GLAD)
+# INCLUDE_DIRECTORIES(libs/ASSIMP/include)
+# INCLUDE_DIRECTORIES(libs/GLM/)
 
-INCLUDE_DIRECTORIES(libs/ASSIMP/include)
-INCLUDE_DIRECTORIES(libs/GLFW/include)
-INCLUDE_DIRECTORIES(libs/GLAD/include)
-INCLUDE_DIRECTORIES(libs/GLM/)
-
-add_library(my_lib STATIC  
+add_library(my_lib
     ./libs/STB_IMAGE/stb_image.cpp  
 
     ./src/Engine/Core/ECS/Component/component_array.hpp
@@ -52,41 +48,38 @@ add_library(my_lib STATIC
     ./src/Engine/ToolBox/Loaders/TextureLoader/texture_loader.cpp
 )
 
-ADD_CUSTOM_COMMAND(TARGET my_lib
-          POST_BUILD
-          COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/libs/ASSIMP/lib/libassimp.dll ${PROJECT_BINARY_DIR}/.
-          COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/libs/GLFW/lib/glfw3.dll ${PROJECT_BINARY_DIR}/.
+add_subdirectory(libs/glfw)
+add_subdirectory(libs/glad)
+
+target_include_directories(my_lib
+    PUBLIC libs/glfw/include
+    PUBLIC libs/glad/include
+    PUBLIC libs/glm
+    PUBLIC libs/assimp/include
 )
 
-set_target_properties(my_lib PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/MyLib)
-
-add_executable(First
-    ./src/Mains/first.cpp
+target_link_directories(my_lib
+    PUBLIC libs/glad/src
+    PUBLIC libs/glfw/src
 )
 
-add_executable(Model
-    ./src/Mains/model.cpp
+target_link_libraries(my_lib
+    PUBLIC glad
+    PUBLIC glfw
+    PUBLIC assimp
 )
 
-add_executable(Windows
-    ./src/Mains/multiple_windows.cpp
-)
+add_executable(First ./src/Mains/first.cpp)
+add_executable(Model ./src/Mains/model.cpp)
+add_executable(Windows ./src/Mains/multiple_windows.cpp)
+add_executable(ECS ./src/Mains/ECS.cpp)
+add_executable(New_Model ./src/Mains/new_model.cpp)
+add_executable(Hello_window ./src/Mains/hello_window.cpp)
 
-add_executable(ECS
-    ./src/Mains/ECS.cpp
-)
-
-add_executable(New_Model
-    ./src/Mains/new_model.cpp
-)
-
-target_link_libraries(my_lib PRIVATE glad)
-target_link_libraries(my_lib PRIVATE glfw3)
-target_link_libraries(my_lib PRIVATE assimp)
-
-target_link_libraries(First PRIVATE my_lib)
-target_link_libraries(Model PRIVATE my_lib)
-target_link_libraries(Windows PRIVATE my_lib)
-target_link_libraries(ECS PRIVATE my_lib)
-target_link_libraries(New_Model PRIVATE my_lib)
+target_link_libraries(First PUBLIC my_lib)
+target_link_libraries(Model PUBLIC my_lib)
+target_link_libraries(Windows PUBLIC my_lib)
+target_link_libraries(ECS PUBLIC my_lib)
+target_link_libraries(New_Model PUBLIC my_lib)
+target_link_libraries(Hello_window PUBLIC my_lib)
 
