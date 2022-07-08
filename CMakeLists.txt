@@ -57,6 +57,7 @@ target_include_directories(my_lib
 target_link_directories(my_lib
     PUBLIC libs/glad/src
     PUBLIC libs/glfw/src
+    PUBLIC libs/assimp/lib
 )
 
 target_link_libraries(my_lib
