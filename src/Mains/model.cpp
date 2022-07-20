@@ -7,7 +7,7 @@ glm::mat4 e = glm::mat4(1.0f);
 bool cursor_mode = true;
 
 Input input_manager;
-ApplicationWindow application_window;
+Window application_window;
 GLShaderProgram sp_textured_phong, sp_colored_phong;
 FPSCamera camera;
 const Model *backpack, *train, *cube, *cubes;

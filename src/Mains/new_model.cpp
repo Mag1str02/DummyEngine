@@ -4,7 +4,7 @@ using namespace DE;
 
 bool cursor_mode = true;
 
-ApplicationWindow application_window;
+Window application_window;
 
 std::unordered_map<std::string, Entity> scene;
 
@@ -72,6 +72,7 @@ public:
 
     void Update(double dt) override {
         DE_FTR_ENTER("Draw System");
+
         auto& drawables = GetComponentArray<Drawable>();
         auto& models = GetComponentArray<RenderModel>();
         auto& shaders = GetComponentArray<GLShaderProgram>();

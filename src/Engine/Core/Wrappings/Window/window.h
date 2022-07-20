@@ -1,40 +1,40 @@
 #pragma once
 
-#include <GLAD/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <string>
+
 namespace DE {
 enum ScreenSizeState { none, windowed, borderless_windowed, fullscreen };
 
-class ApplicationWindow {
+class Window {
 private:
+    struct WindowState {
+        std::string name;
+        ScreenSizeState screen_size_state;
+        uint16_t width;
+        uint16_t height;
+    }
+
     GLFWwindow* _window;
-    ScreenSizeState _screen_size_state;
-    std::string _name;
-
-    void (*_process_input)();
-
-    void CheckWindow();
+    WindowState _state;
 
     GLFWmonitor* GetMonitor(int id);
 
     static void DefaultFrameBufferSizeCallback(GLFWwindow* window, int width, int height);
 
-public:
-    ApplicationWindow();
-    void MakeCurrentContext();
+public: 
+    Window();
 
     void Init(std::string name);
-    void SetFullScreen(int id);
-    void SetWindowed();
 
-    void StartLoop();
+    void FullScreen(int id);
+    void BorderlessWindowed();
+    void Windowed();
 
-    void SetProcessInputFunc(void (*process_input)());
     void SetFrameBufferSizeCallback(void (*frame_buffer_size_callback)(GLFWwindow* window, int width, int height));
 
-    ScreenSizeState GetScreenSizeState() const;
+    WindowState GetWindowState() const;
     GLFWwindow* GetWindow();
 };
 }  // namespace DE
