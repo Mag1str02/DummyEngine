@@ -33,7 +33,7 @@ add_library(my_lib
     ./src/Engine/Core/Rendering/RendererOpenGL/ShaderProgram/gl_shader_program.cpp    
     ./src/Engine/Core/Rendering/RendererOpenGL/Textures/Texture2D/gl_texture_2D.cpp
 
-    ./src/Engine/Core/UserInput/InputManager/input_manager.cpp
+    ./src/Engine/Core/Input/input.cpp
 
     ./src/Engine/Core/Wrappings/ApplicationWindow/application_window.cpp
 

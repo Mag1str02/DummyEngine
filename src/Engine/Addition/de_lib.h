@@ -27,7 +27,7 @@
 #include "../Core/Objects/LightSources/LightManager/light_manager.h"
 #include "../Core/Objects/LightSources/PointLight/point_light.h"
 #include "../Core/Objects/LightSources/SpotLight/spot_light.h"
-#include "../Core/UserInput/InputManager/input_manager.h"
+#include "../Core/Input/input.h"
 #include "../Core/Wrappings/ApplicationWindow/application_window.h"
 #include "../Core/Rendering/RendererOpenGL/ShaderProgram/gl_shader_program.h"
 #include "../Core/Rendering/RendererOpenGL/RenderStructs/gl_render_structs.h"

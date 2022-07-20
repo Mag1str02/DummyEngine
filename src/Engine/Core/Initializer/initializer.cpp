@@ -12,13 +12,6 @@
 
 namespace DE {
 
-using GLRenderer::GLElementBuffer;
-using GLRenderer::GLShader;
-using GLRenderer::GLShaderProgram;
-using GLRenderer::GLVertexArray;
-using GLRenderer::GLVertexBuffer;
-
-
 Initializer::Initializer() {
     _max_entity_amount = 1000;
 }

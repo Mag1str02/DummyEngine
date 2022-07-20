@@ -6,7 +6,7 @@
 #include "../../../../Initializer/initializer.h"
 #include "../VBO/gl_vbo.h"
 
-namespace DE::GLRenderer {
+namespace DE {
 
 class GLVertexArray {
 
@@ -22,7 +22,7 @@ public:
     ~GLVertexArray();
 
 private:
-    friend class DE::Initializer;
+    friend class Initializer;
 
     class VertexArrayManager {
     private:

@@ -6,7 +6,7 @@
 
 #include "../../../../Initializer/initializer.h"
 
-namespace DE::GLRenderer {
+namespace DE {
 
 class GLVertexBuffer {
 
@@ -24,7 +24,7 @@ public:
     ~GLVertexBuffer();
 
 private:
-    friend class DE::Initializer;
+    friend class Initializer;
 
     class VertexBufferManager {
     private:

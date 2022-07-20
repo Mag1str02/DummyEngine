@@ -6,7 +6,7 @@
 
 #include "../../../../Initializer/initializer.h"
 
-namespace DE::GLRenderer  {
+namespace DE  {
 
 class GLElementBuffer{
 
@@ -24,7 +24,7 @@ public:
     ~GLElementBuffer();
 
 private:
-    friend class DE::Initializer;
+    friend class Initializer;
 
     class ElementBufferManager {
     private:
@@ -45,7 +45,6 @@ private:
         void Terminate();
     };
 
-public:
     unsigned int _buffer_id;
 };
 }  // namespace DE

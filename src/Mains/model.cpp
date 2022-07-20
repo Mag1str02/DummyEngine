@@ -6,7 +6,7 @@ glm::mat4 e = glm::mat4(1.0f);
 
 bool cursor_mode = true;
 
-InputManager input_manager;
+Input input_manager;
 ApplicationWindow application_window;
 GLShaderProgram sp_textured_phong, sp_colored_phong;
 FPSCamera camera;

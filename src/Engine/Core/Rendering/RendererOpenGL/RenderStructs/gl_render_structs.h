@@ -6,7 +6,7 @@
 #include "../Textures/Texture2D/gl_texture_2D.h"
 #include "../../RenderData/render_data.h"
 
-namespace DE::GLRenderer {
+namespace DE {
 
 struct GLMaterial {
     glm::vec3 ambient_color;

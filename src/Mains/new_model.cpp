@@ -1,11 +1,9 @@
 #include "../Engine/Addition/de_lib.h"
 
-using namespace DE::GLRenderer;
 using namespace DE;
 
 bool cursor_mode = true;
 
-InputManager input_manager;
 ApplicationWindow application_window;
 
 std::unordered_map<std::string, Entity> scene;
@@ -148,7 +146,7 @@ void Initialize() {
     deInitialize();
     application_window.Init("First");
     application_window.SetProcessInputFunc(ProcessInput);
-    input_manager.SetWindow(application_window.GetWindow());
+    Input::SetWindow(application_window.GetWindow());
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_DEPTH_TEST);
 }
@@ -345,9 +343,9 @@ void ProcessInput() {
     float sensitivity = 0.07;
     float speed = 15;
 
-    input_manager.ReadFrame();
+    Input::ReadFrame();
 
-    if (input_manager.KeyReleased(GLFW_KEY_TAB)) {
+    if (Input::KeyReleased(GLFW_KEY_TAB)) {
         if (cursor_mode) {
             glfwSetInputMode(application_window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             cursor_mode = false;
@@ -357,17 +355,17 @@ void ProcessInput() {
         }
     }
 
-    if (input_manager.KeyReleased(GLFW_KEY_F11)) {
+    if (Input::KeyReleased(GLFW_KEY_F11)) {
         if (application_window.GetScreenSizeState() == ScreenSizeState::fullscreen) {
             application_window.SetWindowed();
         } else {
             int monitor_id = 0;
-            if (input_manager.KeyDown(GLFW_KEY_1)) {
+            if (Input::KeyDown(GLFW_KEY_1)) {
                 monitor_id = 1;
             }
             application_window.SetFullScreen(monitor_id);
         }
-        input_manager.SetWindow(application_window.GetWindow());
+        Input::SetWindow(application_window.GetWindow());
     }
 
     int width, height;
@@ -379,32 +377,32 @@ void ProcessInput() {
         return;
     }
 
-    camera.RotateY(input_manager.CursorXOffset() * sensitivity);
-    camera.RotateX(input_manager.CursorYOffset() * sensitivity / 16 * 9);
+    camera.RotateY(Input::CursorXOffset() * sensitivity);
+    camera.RotateX(Input::CursorYOffset() * sensitivity / 16 * 9);
 
-    if (input_manager.KeyDown(GLFW_KEY_LEFT_SHIFT)) {
+    if (Input::KeyDown(GLFW_KEY_LEFT_SHIFT)) {
         speed = 50.0f;
     }
-    if (input_manager.KeyDown(GLFW_KEY_ESCAPE)) {
+    if (Input::KeyDown(GLFW_KEY_ESCAPE)) {
         glfwSetWindowShouldClose(application_window.GetWindow(), true);
     }
-    if (input_manager.KeyDown(GLFW_KEY_S)) {
-        camera.MoveInLocal(glm::vec3(0.0f, 0.0f, -1.0f) * speed * input_manager.FrameTime());
+    if (Input::KeyDown(GLFW_KEY_S)) {
+        camera.MoveInLocal(glm::vec3(0.0f, 0.0f, -1.0f) * speed * Input::FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_W)) {
-        camera.MoveInLocal(glm::vec3(0.0f, 0.0f, 1.0f) * speed * input_manager.FrameTime());
+    if (Input::KeyDown(GLFW_KEY_W)) {
+        camera.MoveInLocal(glm::vec3(0.0f, 0.0f, 1.0f) * speed * Input::FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_D)) {
-        camera.MoveInLocal(glm::vec3(1.0f, 0.0f, 0.0f) * speed * input_manager.FrameTime());
+    if (Input::KeyDown(GLFW_KEY_D)) {
+        camera.MoveInLocal(glm::vec3(1.0f, 0.0f, 0.0f) * speed * Input::FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_A)) {
-        camera.MoveInLocal(glm::vec3(-1.0f, 0.0f, 0.0f) * speed * input_manager.FrameTime());
+    if (Input::KeyDown(GLFW_KEY_A)) {
+        camera.MoveInLocal(glm::vec3(-1.0f, 0.0f, 0.0f) * speed * Input::FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_SPACE)) {
-        camera.MoveInWorld(glm::vec3(0.0f, 1.0f, 0.0f) * speed * input_manager.FrameTime());
+    if (Input::KeyDown(GLFW_KEY_SPACE)) {
+        camera.MoveInWorld(glm::vec3(0.0f, 1.0f, 0.0f) * speed * Input::FrameTime());
     }
-    if (input_manager.KeyDown(GLFW_KEY_C)) {
-        camera.MoveInWorld(glm::vec3(0.0f, -1.0f, 0.0f) * speed * input_manager.FrameTime());
+    if (Input::KeyDown(GLFW_KEY_C)) {
+        camera.MoveInWorld(glm::vec3(0.0f, -1.0f, 0.0f) * speed * Input::FrameTime());
     }
 }
 

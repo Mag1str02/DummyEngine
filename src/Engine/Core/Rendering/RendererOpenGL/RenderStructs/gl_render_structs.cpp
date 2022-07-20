@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace DE::GLRenderer {
+namespace DE {
 
 void GLRenderMesh::FillData(const RenderMeshData& data) {
     vertex_array.Bind();

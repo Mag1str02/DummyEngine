@@ -6,7 +6,7 @@
 #include "../../../../../Addition/types.h"
 #include "../../../RenderData/render_data.h"
 
-namespace DE::GLRenderer {
+namespace DE {
 
 class GLTexture2D {
 

@@ -8,7 +8,7 @@
 
 #include "../../../Initializer/initializer.h"
 
-namespace DE::GLRenderer {
+namespace DE {
 namespace fs = std::filesystem;
 
 class GLShader {
@@ -24,7 +24,7 @@ public:
     ~GLShader();
 
 private:
-    friend class DE::Initializer;
+    friend class Initializer;
     friend class GLShaderProgram;
 
     class ShaderManager {

@@ -4,7 +4,7 @@
 
 #include "../../../../../ToolBox/Dev/Logger/logger.h"
 
-namespace DE::GLRenderer {
+namespace DE {
 
 //*----------------------------------------------------------------------------------------------------
 

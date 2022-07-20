@@ -11,7 +11,7 @@
 #include "../../../Initializer/initializer.h"
 #include "../RenderStructs/gl_render_structs.h"
 
-namespace DE::GLRenderer {
+namespace DE {
 namespace fs = std::filesystem;
 
 class GLShaderProgram {
@@ -42,7 +42,7 @@ public:
     ~GLShaderProgram();
 
 private:
-    friend class DE::Initializer;
+    friend class Initializer;
     class ShaderProgramManager {
     private:
         bool _initialized;

@@ -12,8 +12,6 @@
 
 namespace DE {
 
-using GLRenderer::GLShaderProgram;
-
 struct UniqueShader {
     GLShaderProgram shader_program;
 };
