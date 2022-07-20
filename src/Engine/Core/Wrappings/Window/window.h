@@ -1,40 +1,51 @@
 #pragma once
 
+#include <GLAD/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <cstdint>
 #include <string>
 
 namespace DE {
-enum ScreenSizeState { none, windowed, borderless_windowed, fullscreen };
+
+enum class WindowMode { none, windowed, borderless_windowed, fullscreen };
+
+struct WindowState {
+    std::string name;
+    WindowMode window_mode;
+    uint16_t width;
+    uint16_t height;
+};
 
 class Window {
 private:
-    struct WindowState {
-        std::string name;
-        ScreenSizeState screen_size_state;
-        uint16_t width;
-        uint16_t height;
-    }
+    friend class GLRenderer;
 
     GLFWwindow* _window;
     WindowState _state;
 
-    GLFWmonitor* GetMonitor(int id);
+    GLFWmonitor* GetMonitor(uint16_t id);
 
-    static void DefaultFrameBufferSizeCallback(GLFWwindow* window, int width, int height);
-
-public: 
+public:
     Window();
 
-    void Init(std::string name);
+    void Init();
 
-    void FullScreen(int id);
+    void FullScreen(uint16_t id);
     void BorderlessWindowed();
     void Windowed();
 
     void SetFrameBufferSizeCallback(void (*frame_buffer_size_callback)(GLFWwindow* window, int width, int height));
 
-    WindowState GetWindowState() const;
+    void MakeCurrentContext() const;
+    void Update(double dt);
+    void SwapBuffers();
+    bool ShouldClose() const;
+
+    static void DefaultFramebufferSizeCallback(GLFWwindow* window, int width, int height);
+    void SetName(std::string name);
+    WindowState GetState() const;
+    // Temporary func.
     GLFWwindow* GetWindow();
 };
 }  // namespace DE

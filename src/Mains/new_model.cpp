@@ -357,7 +357,7 @@ void ProcessInput() {
     }
 
     if (Input::KeyReleased(GLFW_KEY_F11)) {
-        if (application_window.GetScreenSizeState() == ScreenSizeState::fullscreen) {
+        if (application_window.GetScreenSizeState() == WindowMode::fullscreen) {
             application_window.SetWindowed();
         } else {
             int monitor_id = 0;

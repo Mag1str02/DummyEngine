@@ -32,10 +32,12 @@ add_library(my_lib
     ./src/Engine/Core/Rendering/RendererOpenGL/RenderStructs/gl_render_structs.cpp
     ./src/Engine/Core/Rendering/RendererOpenGL/ShaderProgram/gl_shader_program.cpp    
     ./src/Engine/Core/Rendering/RendererOpenGL/Textures/Texture2D/gl_texture_2D.cpp
+    ./src/Engine/Core/Rendering/RendererOpenGL/Renderer/gl_renderer.cpp
 
     ./src/Engine/Core/Input/input.cpp
 
-    ./src/Engine/Core/Wrappings/ApplicationWindow/application_window.cpp
+    ./src/Engine/Core/Wrappings/Window/window.cpp
+    ./src/Engine/Core/Wrappings/Application/application.cpp
 
     ./src/Engine/ToolBox/Dev/Logger/logger.cpp
     ./src/Engine/ToolBox/Dev/FrameTimeReader/frame_time_reader.cpp
@@ -68,17 +70,17 @@ target_link_libraries(my_lib
 
 ADD_CUSTOM_COMMAND(TARGET my_lib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/libs/ASSIMP/lib/libassimp.dll ${PROJECT_BINARY_DIR}/.)
 
-add_executable(First ./src/Mains/first.cpp)
-add_executable(Model ./src/Mains/model.cpp)
-add_executable(Windows ./src/Mains/multiple_windows.cpp)
-add_executable(ECS ./src/Mains/ECS.cpp)
-add_executable(New_Model ./src/Mains/new_model.cpp)
-add_executable(Hello_window ./src/Mains/hello_window.cpp)
+add_executable(Test ./src/Mains/test.cpp)
+# add_executable(New_Model ./src/Mains/new_model.cpp)
+# add_executable(First ./src/Mains/first.cpp)
+# add_executable(Windows ./src/Mains/multiple_windows.cpp)
+# add_executable(ECS ./src/Mains/ECS.cpp)
+# add_executable(Hello_window ./src/Mains/hello_window.cpp)
 
-target_link_libraries(First PUBLIC my_lib)
-target_link_libraries(Model PUBLIC my_lib)
-target_link_libraries(Windows PUBLIC my_lib)
-target_link_libraries(ECS PUBLIC my_lib)
-target_link_libraries(New_Model PUBLIC my_lib)
-target_link_libraries(Hello_window PUBLIC my_lib)
+target_link_libraries(Test PUBLIC my_lib)
+# target_link_libraries(New_Model PUBLIC my_lib)
+# target_link_libraries(First PUBLIC my_lib)
+# target_link_libraries(Windows PUBLIC my_lib)
+# target_link_libraries(ECS PUBLIC my_lib)
+# target_link_libraries(Hello_window PUBLIC my_lib)
 
