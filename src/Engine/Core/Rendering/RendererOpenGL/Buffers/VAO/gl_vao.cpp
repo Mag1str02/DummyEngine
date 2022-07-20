@@ -1,30 +1,30 @@
-#include "vao.h"
+#include "gl_vao.h"
 
 
-namespace DE {
+namespace DE::GLRenderer {
 
 //*----------------------------------------------------------------------------------------------------
 
-void VertexArray::Bind() const {
+void GLVertexArray::Bind() const {
     glBindVertexArray(_buffer_id);
 }
-void VertexArray::UnBind() const {
+void GLVertexArray::UnBind() const {
     glBindVertexArray(0);
 }
 
 //*--------------------------------------------------
 
-BufferId VertexArray::VertexArrayManager::CreateVertexArray() {
+unsigned int GLVertexArray::VertexArrayManager::CreateVertexArray() {
     ::GLuint buffer_id;
     glGenVertexArrays(1, &buffer_id);
     _reference_count[buffer_id] = 1;
     return buffer_id;
 }
-BufferId VertexArray::VertexArrayManager::CreateInstance(BufferId buffer_id) {
+unsigned int GLVertexArray::VertexArrayManager::CreateInstance(unsigned int buffer_id) {
     ++_reference_count[buffer_id];
     return buffer_id;
 }
-void VertexArray::VertexArrayManager::DestroyInstance(BufferId buffer_id) {
+void GLVertexArray::VertexArrayManager::DestroyInstance(unsigned int buffer_id) {
     if (!_initialized) {
         return;
     }
@@ -33,22 +33,22 @@ void VertexArray::VertexArrayManager::DestroyInstance(BufferId buffer_id) {
         DestroyVertexArray(buffer_id);
     }
 }
-void VertexArray::VertexArrayManager::DestroyVertexArray(BufferId buffer_id) {
+void GLVertexArray::VertexArrayManager::DestroyVertexArray(unsigned int buffer_id) {
     glDeleteVertexArrays(1, &buffer_id);
 }
 
 //*----------------------------------------------------------------------------------------------------
 
-VertexArray::VertexArray() {
+GLVertexArray::GLVertexArray() {
     _buffer_id = VertexArrayManager::Get().CreateVertexArray();
 }
-VertexArray::VertexArray(const VertexArray& other) {
+GLVertexArray::GLVertexArray(const GLVertexArray& other) {
     _buffer_id = VertexArrayManager::Get().CreateInstance(other._buffer_id);
 }
-VertexArray::VertexArray(VertexArray&& other) {
+GLVertexArray::GLVertexArray(GLVertexArray&& other) {
     _buffer_id = VertexArrayManager::Get().CreateInstance(other._buffer_id);
 }
-VertexArray& VertexArray::operator=(const VertexArray& other) {
+GLVertexArray& GLVertexArray::operator=(const GLVertexArray& other) {
     if (&other == this) {
         return *this;
     }
@@ -56,7 +56,7 @@ VertexArray& VertexArray::operator=(const VertexArray& other) {
     _buffer_id = VertexArrayManager::Get().CreateInstance(other._buffer_id);
     return *this;
 }
-VertexArray& VertexArray::operator=(VertexArray&& other) {
+GLVertexArray& GLVertexArray::operator=(GLVertexArray&& other) {
     if (&other == this) {
         return *this;
     }
@@ -64,24 +64,24 @@ VertexArray& VertexArray::operator=(VertexArray&& other) {
     _buffer_id = VertexArrayManager::Get().CreateInstance(other._buffer_id);
     return *this;
 }
-VertexArray::~VertexArray() {
+GLVertexArray::~GLVertexArray() {
     VertexArrayManager::Get().DestroyInstance(_buffer_id);
 }
 
 //*--------------------------------------------------
 
-VertexArray::VertexArrayManager::VertexArrayManager() {
+GLVertexArray::VertexArrayManager::VertexArrayManager() {
     _initialized = false;
 }
-VertexArray::VertexArrayManager& VertexArray::VertexArrayManager::Get() {
+GLVertexArray::VertexArrayManager& GLVertexArray::VertexArrayManager::Get() {
     static VertexArrayManager vertex_buffer_manager;
     return vertex_buffer_manager;
 }
 
-void VertexArray::VertexArrayManager::Initialize() {
+void GLVertexArray::VertexArrayManager::Initialize() {
     _initialized = true;
 }
-void VertexArray::VertexArrayManager::Terminate() {
+void GLVertexArray::VertexArrayManager::Terminate() {
     _initialized = false;
     _reference_count.clear();
 }

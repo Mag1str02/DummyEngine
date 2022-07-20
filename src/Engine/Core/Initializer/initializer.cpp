@@ -3,14 +3,21 @@
 #include "../ECS/Component/component_manager.hpp"
 #include "../ECS/Entity/entity_manager.hpp"
 #include "../ECS/System/system_manager.hpp"
-#include "../Rendering/RendererOpenGL/Buffers/EBO/ebo.h"
-#include "../Rendering/RendererOpenGL/Buffers/VAO/vao.h"
-#include "../Rendering/RendererOpenGL/Buffers/VBO/vbo.h"
-#include "../Rendering/RendererOpenGL/Shader/shader.h"
-#include "../Rendering/RendererOpenGL/ShaderProgram/shader_program.h"
 
+#include "../Rendering/RendererOpenGL/Buffers/EBO/gl_ebo.h"
+#include "../Rendering/RendererOpenGL/Buffers/VAO/gl_vao.h"
+#include "../Rendering/RendererOpenGL/Buffers/VBO/gl_vbo.h"
+#include "../Rendering/RendererOpenGL/Shader/gl_shader.h"
+#include "../Rendering/RendererOpenGL/ShaderProgram/gl_shader_program.h"
 
 namespace DE {
+
+using GLRenderer::GLElementBuffer;
+using GLRenderer::GLShader;
+using GLRenderer::GLShaderProgram;
+using GLRenderer::GLVertexArray;
+using GLRenderer::GLVertexBuffer;
+
 
 Initializer::Initializer() {
     _max_entity_amount = 1000;
@@ -34,24 +41,24 @@ void Initializer::Initialize() {
     EntityManager::Get().Initialize();
     ComponentManager::Get();
 
-    Shader::ShaderManager::Initialize();
-    ShaderProgram::ShaderProgramManager::Initialize();
+    GLShader::ShaderManager::Initialize();
+    GLShaderProgram::ShaderProgramManager::Initialize();
 
-    VertexBuffer::VertexBufferManager::Get().Initialize();
-    VertexArray::VertexArrayManager::Get().Initialize();
-    ElementBuffer::ElementBufferManager::Get().Initialize();
+    GLVertexBuffer::VertexBufferManager::Get().Initialize();
+    GLVertexArray::VertexArrayManager::Get().Initialize();
+    GLElementBuffer::ElementBufferManager::Get().Initialize();
 }
 void Initializer::Terminate() {
     EntityManager::Get().Terminate();
     ComponentManager::Get().Terminate();
     SystemManager::Terminate();
 
-    Shader::ShaderManager::Terminate();
-    ShaderProgram::ShaderProgramManager::Terminate();
+    GLShader::ShaderManager::Terminate();
+    GLShaderProgram::ShaderProgramManager::Terminate();
 
-    VertexBuffer::VertexBufferManager::Get().Terminate();
-    VertexArray::VertexArrayManager::Get().Terminate();
-    ElementBuffer::ElementBufferManager::Get().Terminate();
+    GLVertexBuffer::VertexBufferManager::Get().Terminate();
+    GLVertexArray::VertexArrayManager::Get().Terminate();
+    GLElementBuffer::ElementBufferManager::Get().Terminate();
 }
 
 void deInitialize() {

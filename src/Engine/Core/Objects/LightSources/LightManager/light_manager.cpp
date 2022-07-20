@@ -4,20 +4,20 @@
 #include <iostream>
 namespace DE {
 
-void LightManager::ActivatePointLight(ShaderProgram& shader_program, const PointLight& point_light, int id) {
+void LightManager::ActivatePointLight(GLShaderProgram& shader_program, const PointLight& point_light, int id) {
     shader_program.SetVec3f("point_lights[" + std::to_string(id) + "].light.ambient", point_light.ambient);
     shader_program.SetVec3f("point_lights[" + std::to_string(id) + "].light.diffuse", point_light.diffuse);
     shader_program.SetVec3f("point_lights[" + std::to_string(id) + "].light.specular", point_light.specular);
     shader_program.SetVec3f("point_lights[" + std::to_string(id) + "].position", point_light.position);
     shader_program.SetVec3f("point_lights[" + std::to_string(id) + "].clq", point_light.clq);
 }
-void LightManager::ActivateDirectionalLight(ShaderProgram& shader_program, const DirectionalLight& directional_light, int id) {
+void LightManager::ActivateDirectionalLight(GLShaderProgram& shader_program, const DirectionalLight& directional_light, int id) {
     shader_program.SetVec3f("directional_lights[" + std::to_string(id) + "].light.ambient", directional_light.ambient);
     shader_program.SetVec3f("directional_lights[" + std::to_string(id) + "].light.diffuse", directional_light.diffuse);
     shader_program.SetVec3f("directional_lights[" + std::to_string(id) + "].light.specular", directional_light.specular);
     shader_program.SetVec3f("directional_lights[" + std::to_string(id) + "].direction", directional_light.direction);
 }
-void LightManager::ActivateSpotLight(ShaderProgram& shader_program, const SpotLight& spot_light, int id) {
+void LightManager::ActivateSpotLight(GLShaderProgram& shader_program, const SpotLight& spot_light, int id) {
     shader_program.SetVec3f("spot_lights[" + std::to_string(id) + "].point_light.light.ambient", spot_light.ambient);
     shader_program.SetVec3f("spot_lights[" + std::to_string(id) + "].point_light.light.diffuse", spot_light.diffuse);
     shader_program.SetVec3f("spot_lights[" + std::to_string(id) + "].point_light.light.specular", spot_light.specular);

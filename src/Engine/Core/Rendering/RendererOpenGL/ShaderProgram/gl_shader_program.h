@@ -7,18 +7,19 @@
 #include <string>
 #include <vector>
 
-#include "../Shader/shader.h"
-#include "../RenderStructs/render_structs.h"
+#include "../Shader/gl_shader.h"
+#include "../../../Initializer/initializer.h"
+#include "../RenderStructs/gl_render_structs.h"
 
-namespace DE {
+namespace DE::GLRenderer {
 namespace fs = std::filesystem;
 
-class ShaderProgram {
+class GLShaderProgram {
 public:
     void Init();
     void SmartInit(const fs::path& path_to_file);
 
-    void AddShader(Shader shader);
+    void AddShader(GLShader shader);
     void AddShader(const fs::path& path_to_file, GLuint shader_type);
     void LinkProgram();
     void Use();
@@ -31,28 +32,28 @@ public:
     void SetVec3f(const std::string& uniform_name, glm::vec3 vec);
     void SetVec3i(const std::string& uniform_name, int x, int y, int z);
     void SetMat4fv(const std::string& uniform_name, glm::mat4 value);
-    void SetMaterial(const std::string& uniform_name, Material mat);
+    void SetMaterial(const std::string& uniform_name, GLMaterial mat);
 
-    ShaderProgram();
-    ShaderProgram(const ShaderProgram& other);
-    ShaderProgram(ShaderProgram&& other);
-    ShaderProgram& operator=(const ShaderProgram& other);
-    ShaderProgram& operator=(ShaderProgram&& other);
-    ~ShaderProgram();
+    GLShaderProgram();
+    GLShaderProgram(const GLShaderProgram& other);
+    GLShaderProgram(GLShaderProgram&& other);
+    GLShaderProgram& operator=(const GLShaderProgram& other);
+    GLShaderProgram& operator=(GLShaderProgram&& other);
+    ~GLShaderProgram();
 
 private:
-    friend class Initializer;
+    friend class DE::Initializer;
     class ShaderProgramManager {
     private:
         bool _initialized;
-        std::unordered_map<ShaderProgramId, ReferenceCount> _reference_count;
+        std::unordered_map<unsigned int, int64_t> _reference_count;
 
         ShaderProgramManager();
 
-        ShaderProgramId ICreateShaderProgram();
-        ShaderProgramId ICreateInstance(ShaderProgramId shader_id);
-        void IDestroyInstance(ShaderProgramId shader_id);
-        void IDestroyShaderProgram(ShaderProgramId shader_id);
+        unsigned int ICreateShaderProgram();
+        unsigned int ICreateInstance(unsigned int shader_id);
+        void IDestroyInstance(unsigned int shader_id);
+        void IDestroyShaderProgram(unsigned int shader_id);
 
         static ShaderProgramManager& Get();
 
@@ -60,14 +61,14 @@ private:
         static void Initialize();
         static void Terminate();
 
-        static ShaderProgramId CreateShaderProgram();
-        static ShaderProgramId CreateInstance(ShaderProgramId shader_id);
-        static void DestroyInstance(ShaderProgramId shader_id);
-        static void DestroyShaderProgram(ShaderProgramId shader_id);
+        static unsigned int CreateShaderProgram();
+        static unsigned int CreateInstance(unsigned int shader_id);
+        static void DestroyInstance(unsigned int shader_id);
+        static void DestroyShaderProgram(unsigned int shader_id);
     };
 
-    ShaderProgramId _shader_program_id;
-    std::vector<Shader> _shaders;
+    unsigned int _shader_program_id;
+    std::vector<GLShader> _shaders;
 
     void Check();
     int PosOf(const std::string& filename);

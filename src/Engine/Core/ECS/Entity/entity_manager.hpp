@@ -6,17 +6,17 @@
 #include "../../../Addition/const.h"
 #include "../../../Addition/types.h"
 #include "../../../ToolBox/Dev/Logger/logger.h"
-#include "../../Initializer/intitalizable.h"
 
 namespace DE {
 
-class EntityManager : public Initializable {
+class EntityManager {
 private:
     using Signature = std::vector<bool>;
 
     friend class Entity;
     friend class Initializer;
 
+    bool _initialized;
     uint64_t _entities_amount;
     uint64_t _component_amount;
     std::queue<EntityId> _available_entities;
@@ -86,14 +86,14 @@ private:
         }
     }
 
-    void Initialize() override {
+    void Initialize() {
         _initialized = true;
         _entities_amount = 0;
         _component_amount = 0;
 
         Logger::Info("ECS", "EntityManager", "EntityManager created with max entities amount (" + std::to_string(_entities_amount) + ")");
     }
-    void Terminate() override {
+    void Terminate() {
         _initialized = false;
 
         while (!_available_entities.empty()) {

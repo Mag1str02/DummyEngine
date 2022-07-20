@@ -1,8 +1,8 @@
 #include "texture_loader.h"
 
+#include <stb_image.h>
 #include <windows.h>
 
-#include <stb_image.h>
 #include "../../Dev/Logger/logger.h"
 
 namespace DE {
@@ -27,7 +27,7 @@ Texture2DData TextureLoader::ILoadTexture2D(const fs::path& path) {
 
     if (!stb_data) {
         Logger::Error("loading", "TextureLoader", "Couldn't load texture: (" + path.string() + ")");
-        return Texture2DData(std::make_shared<unsigned char*>(nullptr), 0, 0, 0);
+        return Texture2DData(std::make_shared<unsigned char*>(nullptr), 0, 0, Texture2DFormat::UNKNOWN);
     }
 
     new_data = (unsigned char*)malloc(sizeof(unsigned char) * texture_data.width * texture_data.height * nrChannels);
@@ -38,18 +38,19 @@ Texture2DData TextureLoader::ILoadTexture2D(const fs::path& path) {
     switch (nrChannels) {
         case 1:
             format_s = "RED";
-            texture_data.format = GL_RED;
+            texture_data.format = Texture2DFormat::RED;
             break;
         case 3:
             format_s = "RGB";
-            texture_data.format = GL_RGB;
+            texture_data.format = Texture2DFormat::RGB;
             break;
         case 4:
             format_s = "RGBA";
-            texture_data.format = GL_RGBA;
+            texture_data.format = Texture2DFormat::RGBA;
             break;
         default:
             format_s = "UNKNOWN";
+            texture_data.format = Texture2DFormat::UNKNOWN;
             break;
     }
     Logger::Info("loading", "TextureLoader", "Texture loaded successfully: (Format: " + format_s + ")(Path: " + path.string() + ")");

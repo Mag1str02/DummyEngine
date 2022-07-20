@@ -6,6 +6,7 @@
 
 namespace DE {
 
+
 class Initializer {
 private:
     template <typename ComponentType>

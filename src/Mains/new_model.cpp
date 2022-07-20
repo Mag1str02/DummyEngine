@@ -1,5 +1,6 @@
 #include "../Engine/Addition/de_lib.h"
 
+using namespace DE::GLRenderer;
 using namespace DE;
 
 bool cursor_mode = true;
@@ -29,7 +30,6 @@ struct LinearManipulator {
         return dir * float((std::sin(current_time * speed) - std::sin((current_time - dt) * speed)) * radius);
     }
 };
-
 struct ScaleManipulator {
     double min_scale, max_scale;
     double time_offset;
@@ -76,7 +76,7 @@ public:
         DE_FTR_ENTER("Draw System");
         auto& drawables = GetComponentArray<Drawable>();
         auto& models = GetComponentArray<RenderModel>();
-        auto& shaders = GetComponentArray<ShaderProgram>();
+        auto& shaders = GetComponentArray<GLShaderProgram>();
         auto& transformations = GetComponentArray<Transformation>();
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -90,7 +90,7 @@ public:
         }
         for (auto [entity_id, drawable] : drawables) {
             transformations[entity_id].Update();
-            ShaderProgram& shader_program = shaders[entity_id];
+            GLShaderProgram& shader_program = shaders[entity_id];
             shader_program.SetMat4fv("rotation", transformations[entity_id].GetRotationMatrix());
             shader_program.SetMat4fv("model", transformations[entity_id].GetModelMatrix());
             RenderModel& model = models[entity_id];
@@ -183,7 +183,7 @@ void CreateEntities() {
 
     scene["sponza"].AddComponent<Transformation>();
     scene["sponza"].AddComponent<Drawable>();
-    scene["sponza"].AddComponent<ShaderProgram>();
+    scene["sponza"].AddComponent<GLShaderProgram>();
 
     scene["train"].AddComponent<Transformation>();
     scene["lamp_white"].AddComponent<Transformation>();
@@ -196,8 +196,8 @@ void CreateEntities() {
     scene["train"].AddComponent<Drawable>();
     scene["surface"].AddComponent<Drawable>();
 
-    scene["train"].AddComponent<ShaderProgram>();
-    scene["backpack"].AddComponent<ShaderProgram>();
+    scene["train"].AddComponent<GLShaderProgram>();
+    scene["backpack"].AddComponent<GLShaderProgram>();
 
     scene["backpack"].AddComponent<LinearManipulator>();
 
@@ -212,10 +212,10 @@ void LoadShaders() {
     Logger::Stage("loading", "Main", "LOADING SHADERS");
     scene["colored_phong"].GetComponent<UniqueShader>().shader_program.SmartInit(SHADER_DIR / "ColoredPhong");
     scene["textured_phong"].GetComponent<UniqueShader>().shader_program.SmartInit(SHADER_DIR / "TexturedPhong");
-    scene["train"].AddComponent<ShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
-    scene["surface"].AddComponent<ShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
-    scene["backpack"].AddComponent<ShaderProgram>(scene["textured_phong"].GetComponent<UniqueShader>().shader_program);
-    scene["sponza"].AddComponent<ShaderProgram>(scene["textured_phong"].GetComponent<UniqueShader>().shader_program);
+    scene["train"].AddComponent<GLShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
+    scene["surface"].AddComponent<GLShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
+    scene["backpack"].AddComponent<GLShaderProgram>(scene["textured_phong"].GetComponent<UniqueShader>().shader_program);
+    scene["sponza"].AddComponent<GLShaderProgram>(scene["textured_phong"].GetComponent<UniqueShader>().shader_program);
 
     Logger::Info("loading", "Main", "Shaders loaded.");
 }
@@ -252,13 +252,13 @@ void LoadModels() {
     scene["lamp_magenta"].AddComponent<RenderModel>(r_cube);
     scene["lamp_white"].AddComponent<Drawable>();
     scene["lamp_magenta"].AddComponent<Drawable>();
-    scene["lamp_white"].AddComponent<ShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
-    scene["lamp_magenta"].AddComponent<ShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
+    scene["lamp_white"].AddComponent<GLShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
+    scene["lamp_magenta"].AddComponent<GLShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
 
     for (int i = 0; i < 200; ++i) {
         scene["train" + std::to_string(i)].AddComponent<RenderModel>(scene["train"].GetComponent<RenderModel>());
         scene["train" + std::to_string(i)].GetComponent<Transformation>().SetPos(glm::vec3(0, 100, 300 - i * 12));
-        scene["train" + std::to_string(i)].AddComponent<ShaderProgram>(scene["train"].GetComponent<ShaderProgram>());
+        scene["train" + std::to_string(i)].AddComponent<GLShaderProgram>(scene["train"].GetComponent<GLShaderProgram>());
         scene["train" + std::to_string(i)].AddComponent<LinearManipulator>();
         scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().current_time = i * 3.14 / 16;
         scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().radius = 15;

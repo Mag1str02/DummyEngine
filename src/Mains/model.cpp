@@ -8,7 +8,7 @@ bool cursor_mode = true;
 
 InputManager input_manager;
 ApplicationWindow application_window;
-ShaderProgram sp_textured_phong, sp_colored_phong;
+GLShaderProgram sp_textured_phong, sp_colored_phong;
 FPSCamera camera;
 const Model *backpack, *train, *cube, *cubes;
 std::vector<Entity> entities;

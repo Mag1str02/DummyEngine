@@ -8,11 +8,13 @@
 
 namespace DE {
 
+enum class Texture2DFormat { UNKNOWN = 0, RED, RGB, RGBA };
+
 struct Texture2DData {
     std::shared_ptr<unsigned char*> data = std::make_shared<unsigned char*>(nullptr);
     int width;
     int height;
-    GLint format;
+    Texture2DFormat format;
 };
 
 struct MaterialData {

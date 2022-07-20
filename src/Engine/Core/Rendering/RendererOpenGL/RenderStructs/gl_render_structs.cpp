@@ -1,10 +1,10 @@
-#include "render_structs.h"
+#include "gl_render_structs.h"
 
 #include <iostream>
 
-namespace DE {
+namespace DE::GLRenderer {
 
-void RenderMesh::FillData(const RenderMeshData& data) {
+void GLRenderMesh::FillData(const RenderMeshData& data) {
     vertex_array.Bind();
 
     vertex_buffer.AllocateStorage(data.vertices.size() * sizeof(Vertex3D), &(data.vertices[0]));

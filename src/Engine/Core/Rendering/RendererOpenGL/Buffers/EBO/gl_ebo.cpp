@@ -1,38 +1,38 @@
-#include "ebo.h"
+#include "gl_ebo.h"
 
-namespace DE {
+namespace DE::GLRenderer {
 
 //*----------------------------------------------------------------------------------------------------
 
-void ElementBuffer::Bind() const {
+void GLElementBuffer::Bind() const {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_id);
 }
-void ElementBuffer::AllocateStorage(GLsizeiptr size, const GLvoid* data, GLenum usage) {
+void GLElementBuffer::AllocateStorage(GLsizeiptr size, const GLvoid* data, GLenum usage) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_id);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, usage);
 }
-void ElementBuffer::AllocateStorage(const std::vector<unsigned int>& storage, GLenum usage) {
+void GLElementBuffer::AllocateStorage(const std::vector<unsigned int>& storage, GLenum usage) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_id);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, storage.size() * sizeof(unsigned int), &(storage[0]), usage);
 }
-void ElementBuffer::SetSubData(GLintptr offset, GLsizeiptr size, const void* data) {
+void GLElementBuffer::SetSubData(GLintptr offset, GLsizeiptr size, const void* data) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_id);
     glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
 }
 
 //*--------------------------------------------------
 
-BufferId ElementBuffer::ElementBufferManager::CreateElementBuffer() {
+unsigned int GLElementBuffer::ElementBufferManager::CreateElementBuffer() {
     ::GLuint buffer_id;
     glGenBuffers(1, &buffer_id);
     _reference_count[buffer_id] = 1;
     return buffer_id;
 }
-BufferId ElementBuffer::ElementBufferManager::CreateInstance(BufferId buffer_id) {
+unsigned int GLElementBuffer::ElementBufferManager::CreateInstance(unsigned int buffer_id) {
     ++_reference_count[buffer_id];
     return buffer_id;
 }
-void ElementBuffer::ElementBufferManager::DestroyInstance(BufferId buffer_id) {
+void GLElementBuffer::ElementBufferManager::DestroyInstance(unsigned int buffer_id) {
     if (!_initialized) {
         return;
     }
@@ -41,22 +41,22 @@ void ElementBuffer::ElementBufferManager::DestroyInstance(BufferId buffer_id) {
         DestroyElementBuffer(buffer_id);
     }
 }
-void ElementBuffer::ElementBufferManager::DestroyElementBuffer(BufferId buffer_id) {
+void GLElementBuffer::ElementBufferManager::DestroyElementBuffer(unsigned int buffer_id) {
     glDeleteBuffers(1, &buffer_id);
 }
 
 //*----------------------------------------------------------------------------------------------------
 
-ElementBuffer::ElementBuffer() {
+GLElementBuffer::GLElementBuffer() {
     _buffer_id = ElementBufferManager::Get().CreateElementBuffer();
 }
-ElementBuffer::ElementBuffer(const ElementBuffer& other) {
+GLElementBuffer::GLElementBuffer(const GLElementBuffer& other) {
     _buffer_id = ElementBufferManager::Get().CreateInstance(other._buffer_id);
 }
-ElementBuffer::ElementBuffer(ElementBuffer&& other) {
+GLElementBuffer::GLElementBuffer(GLElementBuffer&& other) {
     _buffer_id = ElementBufferManager::Get().CreateInstance(other._buffer_id);
 }
-ElementBuffer& ElementBuffer::operator=(const ElementBuffer& other) {
+GLElementBuffer& GLElementBuffer::operator=(const GLElementBuffer& other) {
     if (&other == this) {
         return *this;
     }
@@ -64,7 +64,7 @@ ElementBuffer& ElementBuffer::operator=(const ElementBuffer& other) {
     _buffer_id = ElementBufferManager::Get().CreateInstance(other._buffer_id);
     return *this;
 }
-ElementBuffer& ElementBuffer::operator=(ElementBuffer&& other) {
+GLElementBuffer& GLElementBuffer::operator=(GLElementBuffer&& other) {
     if (&other == this) {
         return *this;
     }
@@ -72,24 +72,24 @@ ElementBuffer& ElementBuffer::operator=(ElementBuffer&& other) {
     _buffer_id = ElementBufferManager::Get().CreateInstance(other._buffer_id);
     return *this;
 }
-ElementBuffer::~ElementBuffer() {
+GLElementBuffer::~GLElementBuffer() {
     ElementBufferManager::Get().DestroyInstance(_buffer_id);
 }
 
 //*--------------------------------------------------
 
-ElementBuffer::ElementBufferManager::ElementBufferManager() {
+GLElementBuffer::ElementBufferManager::ElementBufferManager() {
     _initialized = false;
 }
-ElementBuffer::ElementBufferManager& ElementBuffer::ElementBufferManager::Get() {
+GLElementBuffer::ElementBufferManager& GLElementBuffer::ElementBufferManager::Get() {
     static ElementBufferManager vertex_buffer_manager;
     return vertex_buffer_manager;
 }
 
-void ElementBuffer::ElementBufferManager::Initialize() {
+void GLElementBuffer::ElementBufferManager::Initialize() {
     _initialized = true;
 }
-void ElementBuffer::ElementBufferManager::Terminate() {
+void GLElementBuffer::ElementBufferManager::Terminate() {
     _initialized = false;
     _reference_count.clear();
 }
