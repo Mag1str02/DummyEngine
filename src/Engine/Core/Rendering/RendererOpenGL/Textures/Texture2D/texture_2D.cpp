@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "../../../../ToolBox/Dev/Logger/logger.h"
+#include "../../../../../ToolBox/Dev/Logger/logger.h"
 
 namespace DE {
 
@@ -13,10 +13,6 @@ void Texture2D::SetData(const Texture2DData& texture_data) {
     glBindTexture(GL_TEXTURE_2D, _texture_id);
 
     glTexImage2D(GL_TEXTURE_2D, 0, texture_data.format, texture_data.width, texture_data.height, 0, texture_data.format, GL_UNSIGNED_BYTE, *(texture_data.data));
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glGenerateMipmap(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, 0);
 }

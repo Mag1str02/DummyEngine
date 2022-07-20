@@ -5,7 +5,7 @@
 #include <assimp/Importer.hpp>
 #include <filesystem>
 
-#include "../../../Core/Renderer/RenderData/render_data.h"
+#include "../../../Core/Rendering/RenderData/render_data.h"
 
 namespace DE {
 namespace fs = std::filesystem;

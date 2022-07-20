@@ -4,7 +4,7 @@
 
 #include "../../../ECS/Entity/entity.hpp"
 #include "../../../ECS/System/system.hpp"
-#include "../../../Renderer/ShaderProgram/shader_program.h"
+#include "../../../Rendering/RendererOpenGL/ShaderProgram/shader_program.h"
 #include "../DirectionalLight/directional_light.h"
 #include "../PointLight/point_light.h"
 #include "../SpotLight/spot_light.h"

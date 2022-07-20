@@ -3,11 +3,11 @@
 #include "../ECS/Component/component_manager.hpp"
 #include "../ECS/Entity/entity_manager.hpp"
 #include "../ECS/System/system_manager.hpp"
-#include "../Renderer/Buffers/EBO/ebo.h"
-#include "../Renderer/Buffers/VAO/vao.h"
-#include "../Renderer/Buffers/VBO/vbo.h"
-#include "../Renderer/Shader/shader.h"
-#include "../Renderer/ShaderProgram/shader_program.h"
+#include "../Rendering/RendererOpenGL/Buffers/EBO/ebo.h"
+#include "../Rendering/RendererOpenGL/Buffers/VAO/vao.h"
+#include "../Rendering/RendererOpenGL/Buffers/VBO/vbo.h"
+#include "../Rendering/RendererOpenGL/Shader/shader.h"
+#include "../Rendering/RendererOpenGL/ShaderProgram/shader_program.h"
 
 
 namespace DE {

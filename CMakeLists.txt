@@ -24,14 +24,14 @@ add_library(my_lib
     ./src/Engine/Core/Objects/LightSources/LightManager/light_manager.cpp
     ./src/Engine/Core/Objects/Cameras/FPSCamera/fps_camera.cpp
 
-    ./src/Engine/Core/Renderer/Buffers/VAO/vao.cpp
-    ./src/Engine/Core/Renderer/Buffers/EBO/ebo.cpp
-    ./src/Engine/Core/Renderer/Buffers/VBO/vbo.cpp
-    ./src/Engine/Core/Renderer/Shader/shader.cpp
-    ./src/Engine/Core/Renderer/RenderStructs/render_structs.cpp
-    ./src/Engine/Core/Renderer/RenderData/render_data.cpp
-    ./src/Engine/Core/Renderer/ShaderProgram/shader_program.cpp    
-    ./src/Engine/Core/Renderer/Textures/Texture2D/texture_2D.cpp
+    ./src/Engine/Core/Rendering/RendererOpenGL/Buffers/VAO/vao.cpp
+    ./src/Engine/Core/Rendering/RendererOpenGL/Buffers/EBO/ebo.cpp
+    ./src/Engine/Core/Rendering/RendererOpenGL/Buffers/VBO/vbo.cpp
+    ./src/Engine/Core/Rendering/RendererOpenGL/Shader/shader.cpp
+    ./src/Engine/Core/Rendering/RendererOpenGL/RenderStructs/render_structs.cpp
+    ./src/Engine/Core/Rendering/RenderData/render_data.cpp
+    ./src/Engine/Core/Rendering/RendererOpenGL/ShaderProgram/shader_program.cpp    
+    ./src/Engine/Core/Rendering/RendererOpenGL/Textures/Texture2D/texture_2D.cpp
 
     ./src/Engine/Core/UserInput/InputManager/input_manager.cpp
 

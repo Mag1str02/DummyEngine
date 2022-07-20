@@ -2,7 +2,7 @@
 
 #include <windows.h>
 
-#include "../../../libs/STB_IMAGE/stb_image.h"
+#include <stb_image.h>
 #include "../../Dev/Logger/logger.h"
 
 namespace DE {
