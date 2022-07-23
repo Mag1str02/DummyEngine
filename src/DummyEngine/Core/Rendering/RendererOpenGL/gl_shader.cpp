@@ -117,12 +117,12 @@ namespace DE
         GLint pos = glGetUniformLocation(_shader_id, uniform_name.c_str());
         glUniformMatrix4fv(pos, 1, GL_FALSE, glm::value_ptr(value));
     }
-    void GLShader::SetMaterial(const std::string& uniform_name, Material mat) const
+    void GLShader::SetMaterial(const std::string& uniform_name, const Material& mat) const
     {
         SetFloat3(uniform_name + ".ambient_color", mat.ambient_color.x, mat.ambient_color.y, mat.ambient_color.z);
         SetFloat3(uniform_name + ".diffuse_color", mat.diffuse_color.x, mat.diffuse_color.y, mat.diffuse_color.z);
         SetFloat3(uniform_name + ".specular_color", mat.specular_color.x, mat.specular_color.y, mat.specular_color.z);
-        
+
         SetInt(uniform_name + ".shininess", mat.shininess);
         SetInt(uniform_name + ".specular_map", 1);
         SetInt(uniform_name + ".diffuse_map", 2);

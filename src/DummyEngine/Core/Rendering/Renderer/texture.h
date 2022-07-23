@@ -1,10 +1,23 @@
 #pragma once
 
 #include "DummyEngine/Addition/base.h"
-#include "DummyEngine/Core/Rendering/Renderer/render_data.h"
 
 namespace DE
 {
+    enum class TextureFormat
+    {
+        None = 0,
+        RED,
+        RGB,
+        RGBA
+    };
+    struct TextureData
+    {
+        Ref<unsigned char*> data;
+        uint32_t width;
+        uint32_t height;
+        TextureFormat format;
+    };
 
     class Texture
     {

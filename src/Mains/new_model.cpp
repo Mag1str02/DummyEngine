@@ -10,7 +10,7 @@ struct Drawable
 
 struct LinearManipulator
 {
-    glm::vec3 dir;
+    Vec3 dir;
     double radius;
     double current_time;
     double speed;
@@ -22,7 +22,7 @@ struct LinearManipulator
         speed(1){
 
         };
-    glm::vec3 Update(double dt)
+    Vec3 Update(double dt)
     {
         current_time += dt;
         return dir * float((std::sin(current_time * speed) - std::sin((current_time - dt) * speed)) * radius);
@@ -34,10 +34,10 @@ struct ScaleManipulator
     double time_offset;
 
     ScaleManipulator() : min_scale(0), max_scale(2), time_offset(0) {}
-    glm::vec3 GetScale()
+    Vec3 GetScale()
     {
-        return glm::vec3(((max_scale + min_scale) / 2) +
-                         ((max_scale - min_scale) / 2) * (std::sin(time_offset + glfwGetTime())));
+        return Vec3(((max_scale + min_scale) / 2) +
+                    ((max_scale - min_scale) / 2) * (std::sin(time_offset + glfwGetTime())));
     }
 };
 
@@ -86,8 +86,7 @@ public:
         auto& shaders = GetComponentArray<Ref<Shader>>();
         auto& transformations = GetComponentArray<Transformation>();
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        Renderer::Clear();
 
         auto& camera = scene["player"].GetComponent<FPSCamera>();
         for (auto [entity_id, shader] : shaders)
@@ -104,13 +103,7 @@ public:
             shader->Bind();
             shader->SetMat4("rotation", transformations[entity_id].GetRotationMatrix());
             shader->SetMat4("model", transformations[entity_id].GetModelMatrix());
-            RenderModel& model = models[entity_id];
-            for (const auto& mesh : model.render_meshes)
-            {
-                shader->SetMaterial("material", mesh.material);
-                mesh.vertex_array->Bind();
-                glDrawElements(GL_TRIANGLES, mesh.vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, 0);
-            }
+            Renderer::Submit(shader,  models[entity_id]);
         }
         DE_FTR_LEAVE();
     }
@@ -146,7 +139,7 @@ private:
     {
         Logger::Stage("loading", "Main", "INITIALIZETION");
         Input::SetWindow(_window->GetWindow());
-        Renderer::Init(API::OpenGL);
+        Renderer::SetClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     }
     void RegisterSystems()
     {
@@ -275,13 +268,13 @@ private:
         for (int i = 0; i < 2; ++i)
         {
             scene["train" + std::to_string(i)].AddComponent<RenderModel>(scene["train"].GetComponent<RenderModel>());
-            scene["train" + std::to_string(i)].GetComponent<Transformation>().SetPos(glm::vec3(0, 100, 300 - i * 12));
+            scene["train" + std::to_string(i)].GetComponent<Transformation>().SetPos(Vec3(0, 100, 300 - i * 12));
             scene["train" + std::to_string(i)].AddComponent<Ref<Shader>>(scene["train"].GetComponent<Ref<Shader>>());
             scene["train" + std::to_string(i)].AddComponent<LinearManipulator>();
             scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().current_time = i * 3.14 / 16;
             scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().radius = 15;
             scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().dir =
-                glm::vec3(std::sin(i * 3.14 / 16), std::cos(i * 3.14 / 16), 0);
+                Vec3(std::sin(i * 3.14 / 16), std::cos(i * 3.14 / 16), 0);
             scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().speed = std::sin(i * 3.14 / 8) + 1;
             scene["train" + std::to_string(i)].AddComponent<ScaleManipulator>();
             scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().min_scale = -1;
@@ -294,14 +287,14 @@ private:
     {
         Logger::Stage("loading", "Main", "SETTING OBJECTS PROPERTIES");
 
-        // scene["sponza"].GetComponent<Transformation>().SetPos(glm::vec3(0, 50, 0));
-        // scene["sponza"].GetComponent<Transformation>().SetScale(glm::vec3(0.01));
+        // scene["sponza"].GetComponent<Transformation>().SetPos(Vec3(0, 50, 0));
+        // scene["sponza"].GetComponent<Transformation>().SetScale(Vec3(0.01));
 
-        scene["backpack"].GetComponent<Transformation>().SetPos(glm::vec3(30, 0, 0));
+        scene["backpack"].GetComponent<Transformation>().SetPos(Vec3(30, 0, 0));
         scene["backpack"].GetComponent<LinearManipulator>().radius = 0;
 
-        scene["surface"].GetComponent<Transformation>().SetPos(glm::vec3(0, -10, 0));
-        scene["surface"].GetComponent<Transformation>().SetScale(glm::vec3(500, 0.1, 500));
+        scene["surface"].GetComponent<Transformation>().SetPos(Vec3(0, -10, 0));
+        scene["surface"].GetComponent<Transformation>().SetScale(Vec3(500, 0.1, 500));
 
         FPSCamera& camera = scene["player"].GetComponent<FPSCamera>();
         DirectionalLight& sun = scene["sun"].GetComponent<DirectionalLight>();
@@ -311,51 +304,51 @@ private:
         SpotLight& flashlight = scene["flashlight"].GetComponent<SpotLight>();
         SpotLight& lamp = scene["lamp"].GetComponent<SpotLight>();
 
-        scene["lamp_white"].GetComponent<LinearManipulator>().dir = glm::vec3(1, 0, 0);
+        scene["lamp_white"].GetComponent<LinearManipulator>().dir = Vec3(1, 0, 0);
         scene["lamp_white"].GetComponent<LinearManipulator>().radius = 50;
         scene["lamp_white"].GetComponent<LinearManipulator>().speed = 0.5;
-        scene["lamp_white"].GetComponent<Transformation>().SetPos(glm::vec3(0, 20, 0));
+        scene["lamp_white"].GetComponent<Transformation>().SetPos(Vec3(0, 20, 0));
 
-        scene["lamp_magenta"].GetComponent<LinearManipulator>().dir = glm::vec3(0, 0, 1);
+        scene["lamp_magenta"].GetComponent<LinearManipulator>().dir = Vec3(0, 0, 1);
         scene["lamp_magenta"].GetComponent<LinearManipulator>().radius = 50;
         scene["lamp_magenta"].GetComponent<LinearManipulator>().speed = 0.5;
-        scene["lamp_magenta"].GetComponent<Transformation>().SetPos(glm::vec3(0, 10, 0));
+        scene["lamp_magenta"].GetComponent<Transformation>().SetPos(Vec3(0, 10, 0));
 
-        camera.SetPos(glm::vec3(0.0f, 0.0f, 10.0f));
+        camera.SetPos(Vec3(0.0f, 0.0f, 10.0f));
 
-        moon.ambient = glm::vec3(0.2f, 0.56f, 1.0f) * 0.02f;
-        moon.diffuse = glm::vec3(0.2f, 0.56f, 1.0f) * 0.3f;
-        moon.specular = glm::vec3(0.2f, 0.56f, 1.0f) * 0.6f;
-        moon.direction = glm::normalize(glm::vec3(0, -1, 2));
+        moon.ambient = Vec3(0.2f, 0.56f, 1.0f) * 0.02f;
+        moon.diffuse = Vec3(0.2f, 0.56f, 1.0f) * 0.3f;
+        moon.specular = Vec3(0.2f, 0.56f, 1.0f) * 0.6f;
+        moon.direction = glm::normalize(Vec3(0, -1, 2));
 
-        sun.ambient = glm::vec3(1.0f, 0.73f, 0.2f) * 0.02f;
-        sun.diffuse = glm::vec3(1.0f, 0.73f, 0.2f) * 0.6f;
-        sun.specular = glm::vec3(1.0f, 0.73f, 0.2f) * 0.3f;
-        sun.direction = glm::normalize(glm::vec3(0, 1, -2));
+        sun.ambient = Vec3(1.0f, 0.73f, 0.2f) * 0.02f;
+        sun.diffuse = Vec3(1.0f, 0.73f, 0.2f) * 0.6f;
+        sun.specular = Vec3(1.0f, 0.73f, 0.2f) * 0.3f;
+        sun.direction = glm::normalize(Vec3(0, 1, -2));
 
         lamp_white.ambient = COLOR_WHITE * 0.1f;
         lamp_white.diffuse = COLOR_WHITE * 0.3f;
         lamp_white.specular = COLOR_WHITE * 0.6f;
-        lamp_white.clq = glm::vec3(1.0f, 0.007f, 0.0002f);
+        lamp_white.clq = Vec3(1.0f, 0.007f, 0.0002f);
 
         lamp_magenta.ambient = COLOR_MAGENTA * 0.1f;
         lamp_magenta.diffuse = COLOR_MAGENTA * 0.6f;
         lamp_magenta.specular = COLOR_MAGENTA * 0.3f;
-        lamp_magenta.clq = glm::vec3(1.0f, 0.022f, 0.0019f);
+        lamp_magenta.clq = Vec3(1.0f, 0.022f, 0.0019f);
 
         flashlight.ambient = COLOR_WHITE * 0.1f;
         flashlight.diffuse = COLOR_WHITE * 0.4f;
         flashlight.specular = COLOR_WHITE * 0.4f;
-        flashlight.clq = glm::vec3(1.0f, 0.007f, 0.0002f);
+        flashlight.clq = Vec3(1.0f, 0.007f, 0.0002f);
         flashlight.inner_cone_cos = cos(glm::radians(12.5));
         flashlight.outer_cone_cos = cos(glm::radians(20.5));
 
         lamp.ambient = COLOR_RED * 0.1f;
         lamp.diffuse = COLOR_RED * 0.6f;
         lamp.specular = COLOR_RED * 0.4f;
-        lamp.clq = glm::vec3(1.0f, 0.022f, 0.0019f);
-        lamp.position = glm::vec3(0.0f, 50.0f, 0.0f);
-        lamp.direction = glm::vec3(0.0f, -1.0f, 0.0f);
+        lamp.clq = Vec3(1.0f, 0.022f, 0.0019f);
+        lamp.position = Vec3(0.0f, 50.0f, 0.0f);
+        lamp.direction = Vec3(0.0f, -1.0f, 0.0f);
         lamp.inner_cone_cos = cos(glm::radians(12.5));
         lamp.outer_cone_cos = cos(glm::radians(17.5));
     }
@@ -424,27 +417,27 @@ private:
         }
         if (Input::KeyDown(GLFW_KEY_S))
         {
-            camera.MoveInLocal(glm::vec3(0.0f, 0.0f, -1.0f) * speed * dt);
+            camera.MoveInLocal(Vec3(0.0f, 0.0f, -1.0f) * speed * dt);
         }
         if (Input::KeyDown(GLFW_KEY_W))
         {
-            camera.MoveInLocal(glm::vec3(0.0f, 0.0f, 1.0f) * speed * dt);
+            camera.MoveInLocal(Vec3(0.0f, 0.0f, 1.0f) * speed * dt);
         }
         if (Input::KeyDown(GLFW_KEY_D))
         {
-            camera.MoveInLocal(glm::vec3(1.0f, 0.0f, 0.0f) * speed * dt);
+            camera.MoveInLocal(Vec3(1.0f, 0.0f, 0.0f) * speed * dt);
         }
         if (Input::KeyDown(GLFW_KEY_A))
         {
-            camera.MoveInLocal(glm::vec3(-1.0f, 0.0f, 0.0f) * speed * dt);
+            camera.MoveInLocal(Vec3(-1.0f, 0.0f, 0.0f) * speed * dt);
         }
         if (Input::KeyDown(GLFW_KEY_SPACE))
         {
-            camera.MoveInWorld(glm::vec3(0.0f, 1.0f, 0.0f) * speed * dt);
+            camera.MoveInWorld(Vec3(0.0f, 1.0f, 0.0f) * speed * dt);
         }
         if (Input::KeyDown(GLFW_KEY_C))
         {
-            camera.MoveInWorld(glm::vec3(0.0f, -1.0f, 0.0f) * speed * dt);
+            camera.MoveInWorld(Vec3(0.0f, -1.0f, 0.0f) * speed * dt);
         }
     }
 

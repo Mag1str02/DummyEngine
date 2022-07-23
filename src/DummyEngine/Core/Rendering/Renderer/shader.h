@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DummyEngine/Addition/base.h"
-#include "DummyEngine/Core/Rendering/Renderer/renderer.h"
+#include "DummyEngine/Core/Rendering/Renderer/render_data.h"
 
 namespace DE
 {
@@ -40,7 +40,7 @@ namespace DE
         virtual void SetInt3(const std::string& uniform_name, int x, int y, int z) const = 0;
         virtual void SetInt4(const std::string& uniform_name, int x, int y, int z, int w) const = 0;
         virtual void SetMat4(const std::string& uniform_name, Mat4 value) const = 0;
-        virtual void SetMaterial(const std::string& uniform_name, Material mat) const = 0;
+        virtual void SetMaterial(const std::string& uniform_name, const Material& mat) const = 0;
 
         virtual const std::string& GetName() const = 0;
 

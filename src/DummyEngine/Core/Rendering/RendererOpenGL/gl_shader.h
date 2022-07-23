@@ -4,6 +4,7 @@
 
 #include "DummyEngine/Addition/base.h"
 #include "DummyEngine/Core/Rendering/Renderer/shader.h"
+#include "DummyEngine/Core/Rendering/Renderer/render_data.h"
 
 namespace DE
 {
@@ -36,7 +37,7 @@ namespace DE
         virtual void SetInt3(const std::string& uniform_name, int x, int y, int z) const override;
         virtual void SetInt4(const std::string& uniform_name, int x, int y, int z, int w) const override;
         virtual void SetMat4(const std::string& uniform_name, Mat4 value) const override;
-        virtual void SetMaterial(const std::string& uniform_name, Material mat) const override;
+        virtual void SetMaterial(const std::string& uniform_name, const Material& mat) const override;
 
         virtual const std::string& GetName() const;
 

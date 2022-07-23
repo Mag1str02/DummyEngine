@@ -2,7 +2,8 @@
 
 #include "DummyEngine/Addition/base.h"
 
-namespace DE {
+namespace DE
+{
     enum class BufferElementType
     {
         None = 0,
@@ -22,7 +23,8 @@ namespace DE {
         Dynamic
     };
 
-    struct BufferElement {
+    struct BufferElement
+    {
         BufferElementType type;
         uint32_t size;
         size_t offset;
@@ -70,8 +72,7 @@ namespace DE {
         virtual void SetLayout(const BufferLayout& layout) = 0;
 
         static Ref<VertexBuffer> Create(uint32_t size, BufferUsage usage = BufferUsage::Static);
-        static Ref<VertexBuffer> Create(const void* data, uint32_t size,
-                                        BufferUsage usage = BufferUsage::Static);
+        static Ref<VertexBuffer> Create(const void* data, uint32_t size, BufferUsage usage = BufferUsage::Static);
     };
 
     class IndexBuffer

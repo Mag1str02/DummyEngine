@@ -1,7 +1,7 @@
 #include "DummyEngine/Core/Wrappings/application.h"
 #include "DummyEngine/ToolBox/Dev/frame_time_reader.h"
 #include "DummyEngine/Core/ECS/system_manager.hpp"
-#include "DummyEngine/Core/Rendering/RendererOpenGL/gl_renderer.h"
+#include "DummyEngine/Core/Rendering/Renderer/renderer.h"
 
 namespace DE {
 
@@ -28,8 +28,8 @@ void Application::OnLoad() {
 
 void Application::Start() {
     _window->Init();
-    GLRenderer::Load(_window);
-    GLRenderer::SetDefaultState();
+    Renderer::Init(API::OpenGL);
+    Renderer::Load(_window);
     OnLoad();
     double frame_begin, frame_end, prev_frame_time = 0.001;
     while (!_window->ShouldClose()) {

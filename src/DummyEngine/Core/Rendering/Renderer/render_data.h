@@ -1,19 +1,11 @@
-#pragma once
-
-#include <GLAD/glad.h>
+#pragma once    
 
 #include "DummyEngine/Addition/base.h"
-
+#include "DummyEngine/Core/Rendering/Renderer/texture.h"
+#include "DummyEngine/Core/Rendering/Renderer/vertex_array.h"
 
 namespace DE
 {
-    enum class TextureFormat
-    {
-        None = 0,
-        RED,
-        RGB,
-        RGBA
-    };
     struct Vertex3D
     {
         Vec3 position;
@@ -21,13 +13,7 @@ namespace DE
         Vec2 tex_coords;
     };
 
-    struct TextureData
-    {
-        Ref<unsigned char*> data;
-        uint32_t width;
-        uint32_t height;
-        TextureFormat format;
-    };
+   
     struct MaterialData
     {
         Vec3 ambient_color;
@@ -52,6 +38,30 @@ namespace DE
         std::vector<RenderMeshData> meshes;
 
         void Compress();
+    };
+
+    struct Material
+    {
+        Vec3 ambient_color;
+        Vec3 diffuse_color;
+        Vec3 specular_color;
+        float shininess;
+        Ref<Texture> specular_map;
+        Ref<Texture> diffuse_map;
+        Ref<Texture> normal_map;
+    };
+    struct RenderMesh
+    {
+        Material material;
+        Ref<VertexArray> vertex_array;
+
+        void FillData(const RenderMeshData& data);
+    };
+    struct RenderModel
+    {
+        std::vector<RenderMesh> meshes;
+
+        void FillData(const RenderModelData& data);
     };
 
 }  // namespace DE

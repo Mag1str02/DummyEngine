@@ -30,4 +30,4 @@ const glm::vec3 COLOR_BLUE(0.0f, 0.0f, 1.0f);
 const glm::vec3 COLOR_GREEN(0.0f, 1.0f, 0.0f);
 const glm::vec3 COLOR_YELLOW(1.0f, 1.0f, 0.0f);
 
-#define DE_ENABLED_FRAME_TIME_READER 0
+#define DE_ENABLED_FRAME_TIME_READER 1

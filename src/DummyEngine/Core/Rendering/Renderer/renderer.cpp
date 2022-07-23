@@ -1,53 +1,81 @@
 #include "DummyEngine/Core/Rendering/Renderer/renderer.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/gl_render_api.h"
 
 namespace DE
 {
 
-    void RenderMesh::FillData(const RenderMeshData& data)
+    Scope<RenderAPI> Renderer::_render_api = nullptr;
+
+    void Renderer::Init(API api)
     {
-        vertex_array = VertexArray::Create();
+        switch (api)
+        {
+            case API::OpenGL: _render_api = CreateScope<GLRenderAPI>(); break;
 
-        Ref<VertexBuffer> vertex_buffer =
-            VertexBuffer::Create(&data.vertices[0], data.vertices.size() * sizeof(Vertex3D));
-        Ref<IndexBuffer> index_buffer = IndexBuffer::Create(&data.indices[0], data.indices.size());
-
-        BufferLayout layout({BufferElement(BufferElementType::Float3),
-                             BufferElement(BufferElementType::Float3),
-                             BufferElement(BufferElementType::Float2)});
-        vertex_buffer->SetLayout(layout);
-
-        material.ambient_color = data.material.ambient_color;
-        material.specular_color = data.material.specular_color;
-        material.diffuse_color = data.material.diffuse_color;
-        material.shininess = data.material.shininess;
-        
-        material.specular_map = Texture::Create(data.material.specular_map);
-        material.diffuse_map = Texture::Create(data.material.diffuse_map);
-        material.normal_map = Texture::Create(data.material.normal_map);
-        
-        vertex_array->AddVertexBuffer(vertex_buffer);
-        vertex_array->SetIndexBuffer(index_buffer);
+            case API::Vulkan: _render_api = nullptr; break;
+            case API::None: _render_api = nullptr; break;
+        }
+    }
+    void Renderer::Load(const Window* window)
+    {
+        _render_api->Load(window);
+        _render_api->SetDefaultState();
+    }
+    void Renderer::OnWindowResize(uint32_t width, uint32_t height)
+    {
+        _render_api->SetViewport(0, 0, width, height);
     }
 
-    void RenderModel::FillData(const RenderModelData& data)
+    void Renderer::Clear()
     {
-        render_meshes.resize(data.meshes.size());
-        for (size_t i = 0; i < data.meshes.size(); ++i)
+        _render_api->Clear();
+    }
+
+    void Renderer::Submit(Ref<Shader> shader, const Ref<VertexArray>& vertex_array, const Mat4& trasformation)
+    {
+        shader->Bind();
+        vertex_array->Bind();
+        glDrawElements(GL_TRIANGLES, vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, 0);
+    }
+    void Renderer::Submit(Ref<Shader> shader, const RenderMesh& mesh, const Mat4& trasformation)
+    {
+        shader->Bind();
+        shader->SetMaterial("u_Material", mesh.material);
+        mesh.vertex_array->Bind();
+        _render_api->DrawIndexed(mesh.vertex_array);
+    }
+    void Renderer::Submit(Ref<Shader> shader, const RenderModel& model, const Mat4& trasformation)
+    {
+        shader->Bind();
+        for (const auto& mesh : model.meshes)
         {
-            render_meshes[i].FillData(data.meshes[i]);
+            shader->SetMaterial("u_Material", mesh.material);
+            mesh.vertex_array->Bind();
+            _render_api->DrawIndexed(mesh.vertex_array);
         }
+    }
+
+    void Renderer::Enable(RenderSetting setting)
+    {
+        _render_api->Enable(setting);
+    }
+    void Renderer::Disable(RenderSetting setting)
+    {
+        _render_api->Disable(setting);
+    }
+
+    void Renderer::SetClearColor(Vec4 color)
+    {
+        _render_api->SetClearColor(color);
+    }
+    void Renderer::SetClearColor(float r, float g, float b, float a)
+    {
+        _render_api->SetClearColor(Vec4(r, g, b, a));
     }
 
     API Renderer::CurrentAPI()
     {
-        return _render_api;
+        return _render_api->GetAPI();
     }
-    void Renderer::Init(API api)
-    {
-        _render_api = api;
-    }
-    void Renderer::Terminate()
-    {
-        _render_api = API::None;
-    }
+
 }  // namespace DE

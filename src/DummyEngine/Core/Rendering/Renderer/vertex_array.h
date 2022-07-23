@@ -1,7 +1,5 @@
 #pragma once
 
-#include <GLAD/glad.h>
-
 #include "DummyEngine/Addition/base.h"
 #include "DummyEngine/Core/Rendering/Renderer/vertex_buffer.h"
 

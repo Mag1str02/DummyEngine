@@ -38,7 +38,7 @@ set(ENGINE_SOURCES
     src/DummyEngine/Core/Rendering/RendererOpenGL/gl_vbo.cpp
     src/DummyEngine/Core/Rendering/RendererOpenGL/gl_shader.cpp
     src/DummyEngine/Core/Rendering/RendererOpenGL/gl_texture.cpp
-    src/DummyEngine/Core/Rendering/RendererOpenGL/gl_renderer.cpp
+    src/DummyEngine/Core/Rendering/RendererOpenGL/gl_render_api.cpp
 
     src/DummyEngine/Core/Input/input.cpp
 

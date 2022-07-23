@@ -2,7 +2,7 @@
 #include "DummyEngine/ToolBox/Dev/frame_time_reader.h"
 #include "DummyEngine/ToolBox/Dev/logger.h"
 #include "DummyEngine/Core/ECS/system_manager.hpp"
-#include "DummyEngine/Core/Rendering/RendererOpenGL/gl_renderer.h"
+#include "DummyEngine/Core/Rendering/Renderer/renderer.h"
 
 namespace DE {
 
@@ -48,7 +48,7 @@ void Window::SetFrameBufferSizeCallback(void (*frame_buffer_size_callback)(GLFWw
 }
 
 void Window::DefaultFramebufferSizeCallback(GLFWwindow* window, int width, int height) {
-    GLRenderer::SetViewport(width, height, 0, 0);
+    Renderer::OnWindowResize(width, height);
 }
 void Window::Update(double dt) {
 }
