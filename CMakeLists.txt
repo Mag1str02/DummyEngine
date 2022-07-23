@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(Test)
 
 set(ENGINE_SOURCES 
+    src/DummyEngine/Addition/base.h    
     src/DummyEngine/Addition/de_lib.h    
 
     src/DummyEngine/Core/ECS/component_array.hpp
@@ -26,14 +27,17 @@ set(ENGINE_SOURCES
     src/DummyEngine/Core/Objects/LightSources/light_manager.cpp
     src/DummyEngine/Core/Objects/Cameras/fps_camera.cpp
 
+    src/DummyEngine/Core/Rendering/Renderer/vertex_array.cpp
+    src/DummyEngine/Core/Rendering/Renderer/vertex_buffer.cpp
+    src/DummyEngine/Core/Rendering/Renderer/renderer.cpp
     src/DummyEngine/Core/Rendering/Renderer/render_data.cpp
+    src/DummyEngine/Core/Rendering/Renderer/shader.cpp
+    src/DummyEngine/Core/Rendering/Renderer/texture.cpp
+
     src/DummyEngine/Core/Rendering/RendererOpenGL/gl_vao.cpp
-    src/DummyEngine/Core/Rendering/RendererOpenGL/gl_ebo.cpp
     src/DummyEngine/Core/Rendering/RendererOpenGL/gl_vbo.cpp
     src/DummyEngine/Core/Rendering/RendererOpenGL/gl_shader.cpp
-    src/DummyEngine/Core/Rendering/RendererOpenGL/gl_render_structs.cpp
-    src/DummyEngine/Core/Rendering/RendererOpenGL/gl_shader_program.cpp    
-    src/DummyEngine/Core/Rendering/RendererOpenGL/gl_texture_2D.cpp
+    src/DummyEngine/Core/Rendering/RendererOpenGL/gl_texture.cpp
     src/DummyEngine/Core/Rendering/RendererOpenGL/gl_renderer.cpp
 
     src/DummyEngine/Core/Input/input.cpp

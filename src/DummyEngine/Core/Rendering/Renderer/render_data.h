@@ -4,44 +4,54 @@
 
 #include "DummyEngine/Addition/base.h"
 
-namespace DE {
 
-enum class Texture2DFormat { UNKNOWN = 0, RED, RGB, RGBA };
+namespace DE
+{
+    enum class TextureFormat
+    {
+        None = 0,
+        RED,
+        RGB,
+        RGBA
+    };
+    struct Vertex3D
+    {
+        Vec3 position;
+        Vec3 normal;
+        Vec2 tex_coords;
+    };
 
-struct Texture2DData {
-    std::shared_ptr<unsigned char*> data = std::make_shared<unsigned char*>(nullptr);
-    int width;
-    int height;
-    Texture2DFormat format;
-};
+    struct TextureData
+    {
+        Ref<unsigned char*> data;
+        uint32_t width;
+        uint32_t height;
+        TextureFormat format;
+    };
+    struct MaterialData
+    {
+        Vec3 ambient_color;
+        Vec3 diffuse_color;
+        Vec3 specular_color;
+        float shininess;
+        TextureData specular_map;
+        TextureData diffuse_map;
+        TextureData normal_map;
+    };
 
-struct MaterialData {
-    glm::vec3 ambient_color;
-    glm::vec3 diffuse_color;
-    glm::vec3 specular_color;
-    float shininess;
-    Texture2DData specular_map;
-    Texture2DData diffuse_map;
-    Texture2DData normal_map;
-};
+    struct RenderMeshData
+    {
+        std::vector<Vertex3D> vertices;
+        std::vector<uint32_t> indices;
+        MaterialData material;
 
-struct Vertex3D {
-    glm::vec3 position;
-    glm::vec3 normal;
-    glm::vec2 tex_coords;
-};
+        RenderMeshData& operator+=(const RenderMeshData& other);
+    };
+    struct RenderModelData
+    {
+        std::vector<RenderMeshData> meshes;
 
-struct RenderMeshData {
-    std::vector<Vertex3D> vertices;
-    std::vector<unsigned int> indices;
-    MaterialData material;
+        void Compress();
+    };
 
-    RenderMeshData& operator+=(const RenderMeshData& other);
-};
-
-struct RenderModelData {
-    std::vector<RenderMeshData> meshes;
-
-    void Compress();
-};
 }  // namespace DE

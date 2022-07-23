@@ -15,7 +15,7 @@ private:
     size_t _verices_amount;
     size_t _nodes_amount;
     size_t _current_mesh_id;
-    std::unordered_map<std::string, Texture2DData> _path_to_texture_data;
+    std::unordered_map<std::string, TextureData> _path_to_texture_data;
 
     fs::path _directory;
     RenderModelData* _current_data;
@@ -28,7 +28,7 @@ private:
     void ILoadModel(const fs::path& path, RenderModelData& data);
     void IProcessNode(aiNode* node, const aiScene* scene);
     void IProcessMesh(aiMesh* mesh, const aiScene* scene);
-    Texture2DData ILoadMaterialTexture(aiMaterial* mat, aiTextureType type);
+    TextureData ILoadMaterialTexture(aiMaterial* mat, aiTextureType type);
     glm::vec3 IGetmaterialColor(aiMaterial* mat, ColorType type);
     void IReadModelProperties(aiNode* node, const aiScene* scene);
 

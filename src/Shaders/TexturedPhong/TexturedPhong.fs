@@ -1,4 +1,4 @@
-#version 330 core
+#version 450 core
 
 #define MAX_POINT_LIGHT_AMOUNT 64
 #define MAX_DIRECTIONAL_LIGHT_AMOUNT 16

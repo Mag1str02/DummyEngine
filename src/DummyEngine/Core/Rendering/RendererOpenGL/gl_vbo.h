@@ -3,48 +3,60 @@
 #include <GLAD/glad.h>
 
 #include "DummyEngine/Addition/base.h"
-#include "DummyEngine/Core/Initializer/initializer.h"
+#include "DummyEngine/Core/Rendering/Renderer/vertex_buffer.h"
 
-namespace DE {
+namespace DE
+{
 
-class GLVertexBuffer {
-
-public:
-    void Bind() const;
-    void AllocateStorage(GLsizeiptr size, const GLvoid* data = nullptr, GLenum usage = GL_STATIC_DRAW);
-    void SetSubData(GLintptr offset, GLsizeiptr size, const void* data);
-    void SetFloatAttribute(GLuint index, GLint size, unsigned int offset, unsigned int stride, GLboolean normalized = GL_FALSE);
-
-    GLVertexBuffer();
-    GLVertexBuffer(const GLVertexBuffer& other);
-    GLVertexBuffer(GLVertexBuffer&& other);
-    GLVertexBuffer& operator=(const GLVertexBuffer& other);
-    GLVertexBuffer& operator=(GLVertexBuffer&& other);
-    ~GLVertexBuffer();
-
-private:
-    friend class Initializer;
-
-    class VertexBufferManager {
-    private:
-        bool _initialized;
-        std::unordered_map<unsigned int, int64_t> _reference_count;
-
-        VertexBufferManager();
+    class GLVertexBuffer : public VertexBuffer
+    {
 
     public:
-        static VertexBufferManager& Get();
+        GLVertexBuffer() = delete;
+        GLVertexBuffer(const GLVertexBuffer& other) = delete;
+        GLVertexBuffer(GLVertexBuffer&& other) = delete;
+        GLVertexBuffer& operator=(const GLVertexBuffer& other) = delete;
+        GLVertexBuffer& operator=(GLVertexBuffer&& other) = delete;
 
-        unsigned int CreateVertexBuffer();
-        unsigned int CreateInstance(unsigned int buffer_id);
-        void DestroyInstance(unsigned int buffer_id);
-        void DestroyVertexBuffer(unsigned int buffer_id);
+        GLVertexBuffer(uint32_t size, BufferUsage usage = BufferUsage::Static);
+        GLVertexBuffer(const void* data, uint32_t size, BufferUsage usage = BufferUsage::Static);
 
-        void Initialize();
-        void Terminate();
+        virtual ~GLVertexBuffer();
+
+        virtual void Bind() const override;
+        virtual void UnBind() const override;
+
+        virtual const BufferLayout& GetLayout() const override;
+        virtual void SetLayout(const BufferLayout& layout) override;
+
+        virtual void SetData(const void* data, uint32_t size) override;
+
+    private:
+        static GLenum BufferUsafeToGLBufferUsage(BufferUsage usage);
+
+        BufferLayout _layout;
+        GLuint _buffer_id;
     };
 
-public:
-    unsigned int _buffer_id;
-};
+    class GLIndexBuffer : public IndexBuffer
+    {
+    public:
+        GLIndexBuffer() = delete;
+        GLIndexBuffer(const GLIndexBuffer& other) = delete;
+        GLIndexBuffer(GLIndexBuffer&& other) = delete;
+        GLIndexBuffer& operator=(const GLIndexBuffer& other) = delete;
+        GLIndexBuffer& operator=(GLIndexBuffer&& other) = delete;
+
+        GLIndexBuffer(const uint32_t* indices, uint32_t count);
+        virtual ~GLIndexBuffer();
+
+        virtual void Bind() const override;
+        virtual void UnBind() const override;
+
+        virtual uint32_t IndicesAmount() const override;
+
+    private:
+        GLuint _buffer_id;
+        uint32_t _indices_amount;
+    };
 }  // namespace DE

@@ -2,47 +2,30 @@
 #include <GLAD/glad.h>
 
 #include "DummyEngine/Addition/base.h"
-#include "DummyEngine/Core/Initializer/initializer.h"
-#include "DummyEngine/Core/Rendering/RendererOpenGL/gl_vbo.h"
+#include "DummyEngine/Core/Rendering/Renderer/vertex_array.h"
 
-
-namespace DE {
-
-class GLVertexArray {
-
-public:
-    void Bind() const;
-    void UnBind() const;
-
-    GLVertexArray();
-    GLVertexArray(const GLVertexArray& other);
-    GLVertexArray(GLVertexArray&& other);
-    GLVertexArray& operator=(const GLVertexArray& other);
-    GLVertexArray& operator=(GLVertexArray&& other);
-    ~GLVertexArray();
-
-private:
-    friend class Initializer;
-
-    class VertexArrayManager {
-    private:
-        bool _initialized;
-        std::unordered_map<unsigned int, int64_t> _reference_count;
-
-        VertexArrayManager();
-
+namespace DE
+{
+    class GLVertexArray : public VertexArray
+    {
     public:
-        static VertexArrayManager& Get();
+        GLVertexArray();
+        virtual ~GLVertexArray();
 
-        unsigned int CreateVertexArray();
-        unsigned int CreateInstance(unsigned int buffer_id);
-        void DestroyInstance(unsigned int buffer_id);
-        void DestroyVertexArray(unsigned int buffer_id);
+        virtual void Bind() const override;
+        virtual void UnBind() const override;
 
-        void Initialize();
-        void Terminate();
+        virtual void AddVertexBuffer(const Ref<VertexBuffer>& vertex_buffer) override;
+        virtual void SetIndexBuffer(const Ref<IndexBuffer>& index_buffer) override;
+
+        virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const override;
+        virtual const Ref<IndexBuffer>& GetIndexBuffer() const override;
+
+    private:
+        std::vector<Ref<VertexBuffer>> _vertex_buffers;
+        Ref<IndexBuffer> _index_buffer;
+
+        GLuint _array_id;
+        uint32_t _current_atribute_id;
     };
-public:
-    unsigned int _buffer_id;
-};
 }  // namespace DE

@@ -5,43 +5,49 @@ using namespace DE;
 using Scene = std::unordered_map<std::string, Entity>;
 Scene scene;
 
-struct Drawable {};
+struct Drawable
+{};
 
-struct LinearManipulator {
+struct LinearManipulator
+{
     glm::vec3 dir;
     double radius;
     double current_time;
     double speed;
 
-    LinearManipulator()
-        : dir(0, 0, 1),
-          radius(10),
-          current_time(0),
-          speed(1){
+    LinearManipulator() :
+        dir(0, 0, 1),
+        radius(10),
+        current_time(0),
+        speed(1){
 
-          };
-    glm::vec3 Update(double dt) {
+        };
+    glm::vec3 Update(double dt)
+    {
         current_time += dt;
         return dir * float((std::sin(current_time * speed) - std::sin((current_time - dt) * speed)) * radius);
     }
 };
-struct ScaleManipulator {
+struct ScaleManipulator
+{
     double min_scale, max_scale;
     double time_offset;
 
-    ScaleManipulator() : min_scale(0), max_scale(2), time_offset(0) {
-    }
-    glm::vec3 GetScale() {
-        return glm::vec3(((max_scale + min_scale) / 2) + ((max_scale - min_scale) / 2) * (std::sin(time_offset + glfwGetTime())));
+    ScaleManipulator() : min_scale(0), max_scale(2), time_offset(0) {}
+    glm::vec3 GetScale()
+    {
+        return glm::vec3(((max_scale + min_scale) / 2) +
+                         ((max_scale - min_scale) / 2) * (std::sin(time_offset + glfwGetTime())));
     }
 };
 
-class MovingSystem : public System {
+class MovingSystem : public System
+{
 public:
-    MovingSystem() {
-    }
+    MovingSystem() {}
 
-    void Update(double dt) override {
+    void Update(double dt) override
+    {
         DE_FTR_ENTER("Moving System");
 
         scene["flashlight"].GetComponent<SpotLight>().position = scene["player"].GetComponent<FPSCamera>().GetPos();
@@ -51,64 +57,75 @@ public:
         auto& positions = GetComponentArray<Transformation>();
         auto& scales = GetComponentArray<ScaleManipulator>();
         auto& point_lights = GetComponentArray<PointLight>();
-        for (auto [entity_id, linear_manipulator] : manipulators) {
+        for (auto [entity_id, linear_manipulator] : manipulators)
+        {
             positions[entity_id].MoveInWorld(linear_manipulator.Update(dt));
         }
-        for (auto [entity_id, scale] : scales) {
+        for (auto [entity_id, scale] : scales)
+        {
             positions[entity_id].SetScale(scale.GetScale());
         }
-        for (auto [entity_id, point_light] : point_lights) {
+        for (auto [entity_id, point_light] : point_lights)
+        {
             point_light.position = positions[entity_id].GetPos();
         }
         DE_FTR_LEAVE();
     }
 };
-class DrawSystem : public System {
+class DrawSystem : public System
+{
 public:
-    DrawSystem() {
-    }
+    DrawSystem() {}
 
-    void Update(double dt) override {
+    void Update(double dt) override
+    {
         DE_FTR_ENTER("Draw System");
 
         auto& drawables = GetComponentArray<Drawable>();
         auto& models = GetComponentArray<RenderModel>();
-        auto& shaders = GetComponentArray<GLShaderProgram>();
+        auto& shaders = GetComponentArray<Ref<Shader>>();
         auto& transformations = GetComponentArray<Transformation>();
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         auto& camera = scene["player"].GetComponent<FPSCamera>();
-        for (auto [entity_id, shader] : shaders) {
-            shader.SetMat4fv("projection", camera.GetProjectionMatrix());
-            shader.SetMat4fv("view", camera.GetViewMatrix());
-            shader.SetVec3f("view_pos", camera.GetPos());
+        for (auto [entity_id, shader] : shaders)
+        {
+            shader->Bind();
+            shader->SetMat4("projection", camera.GetProjectionMatrix());
+            shader->SetMat4("view", camera.GetViewMatrix());
+            shader->SetFloat3("view_pos", camera.GetPos());
         }
-        for (auto [entity_id, drawable] : drawables) {
+        for (auto [entity_id, drawable] : drawables)
+        {
             transformations[entity_id].Update();
-            GLShaderProgram& shader_program = shaders[entity_id];
-            shader_program.SetMat4fv("rotation", transformations[entity_id].GetRotationMatrix());
-            shader_program.SetMat4fv("model", transformations[entity_id].GetModelMatrix());
+            auto shader = shaders[entity_id];
+            shader->Bind();
+            shader->SetMat4("rotation", transformations[entity_id].GetRotationMatrix());
+            shader->SetMat4("model", transformations[entity_id].GetModelMatrix());
             RenderModel& model = models[entity_id];
-            for (const auto& mesh : model.render_meshes) {
-                shader_program.SetMaterial("material", mesh.material);
-                mesh.vertex_array.Bind();
-                glDrawElements(GL_TRIANGLES, mesh.indices_amount, GL_UNSIGNED_INT, 0);
+            for (const auto& mesh : model.render_meshes)
+            {
+                shader->SetMaterial("material", mesh.material);
+                mesh.vertex_array->Bind();
+                glDrawElements(GL_TRIANGLES, mesh.vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, 0);
             }
-            glBindVertexArray(0);
         }
         DE_FTR_LEAVE();
     }
 };
 
-class TestApplication : public Application {
+class TestApplication : public Application
+{
 public:
-    TestApplication(std::string name) : Application(name) {
+    TestApplication(std::string name) : Application(name)
+    {
         cursor_mode = true;
     }
 
-    virtual void OnLoad() override {
+    virtual void OnLoad() override
+    {
         Initialize();
         RegisterSystems();
         CreateEntities();
@@ -119,16 +136,20 @@ public:
         ComponentManager::Get().LogState();
         EntityManager::Get().LogState();
     }
-    virtual void Update(double dt) override {
+    virtual void Update(double dt) override
+    {
         ProcessInput(dt);
     }
 
 private:
-    void Initialize() {
+    void Initialize()
+    {
         Logger::Stage("loading", "Main", "INITIALIZETION");
         Input::SetWindow(_window->GetWindow());
+        Renderer::Init(API::OpenGL);
     }
-    void RegisterSystems() {
+    void RegisterSystems()
+    {
         SystemManager::RegisterSystem<MovingSystem>();
         SystemManager::RegisterSystem<LightManager>();
         SystemManager::RegisterSystem<DrawSystem>();
@@ -138,10 +159,11 @@ private:
         SystemManager::CalculateOrder();
     }
 
-    void CreateEntities() {
+    void CreateEntities()
+    {
         scene["player"] = Entity();
         scene["backpack"] = Entity();
-        scene["sponza"] = Entity();
+        // scene["sponza"] = Entity();
         scene["train"] = Entity();
         scene["sun"] = Entity();
         scene["moon"] = Entity();
@@ -157,9 +179,9 @@ private:
 
         scene["backpack"].AddComponent<Transformation>();
 
-        scene["sponza"].AddComponent<Transformation>();
-        scene["sponza"].AddComponent<Drawable>();
-        scene["sponza"].AddComponent<GLShaderProgram>();
+        // scene["sponza"].AddComponent<Transformation>();
+        // scene["sponza"].AddComponent<Drawable>();
+        // scene["sponza"].AddComponent<Ref<Shader>>();
 
         scene["train"].AddComponent<Transformation>();
         scene["lamp_white"].AddComponent<Transformation>();
@@ -172,8 +194,8 @@ private:
         scene["train"].AddComponent<Drawable>();
         scene["surface"].AddComponent<Drawable>();
 
-        scene["train"].AddComponent<GLShaderProgram>();
-        scene["backpack"].AddComponent<GLShaderProgram>();
+        scene["train"].AddComponent<Ref<Shader>>();
+        scene["backpack"].AddComponent<Ref<Shader>>();
 
         scene["backpack"].AddComponent<LinearManipulator>();
 
@@ -184,61 +206,82 @@ private:
         scene["flashlight"].AddComponent<SpotLight>();
         scene["lamp"].AddComponent<SpotLight>();
     }
-    void LoadShaders() {
+    void LoadShaders()
+    {
         Logger::Stage("loading", "Main", "LOADING SHADERS");
-        scene["colored_phong"].GetComponent<UniqueShader>().shader_program.SmartInit(SHADER_DIR / "ColoredPhong");
-        scene["textured_phong"].GetComponent<UniqueShader>().shader_program.SmartInit(SHADER_DIR / "TexturedPhong");
-        scene["train"].AddComponent<GLShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
-        scene["surface"].AddComponent<GLShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
-        scene["backpack"].AddComponent<GLShaderProgram>(scene["textured_phong"].GetComponent<UniqueShader>().shader_program);
-        scene["sponza"].AddComponent<GLShaderProgram>(scene["textured_phong"].GetComponent<UniqueShader>().shader_program);
+
+        Ref<Shader> colored_phong = Shader::Create(
+            "ColoredPhong",
+            {{.type = ShaderPartType::Vertex, .path = SHADER_DIR / "ColoredPhong" / "ColoredPhong.vs"},
+             {.type = ShaderPartType::Fragment, .path = SHADER_DIR / "ColoredPhong" / "ColoredPhong.fs"}});
+        Ref<Shader> textured_phong = Shader::Create(
+            "TexturedPhong",
+            {{.type = ShaderPartType::Vertex, .path = SHADER_DIR / "TexturedPhong" / "TexturedPhong.vs"},
+             {.type = ShaderPartType::Fragment, .path = SHADER_DIR / "TexturedPhong" / "TexturedPhong.fs"}});
+
+        scene["colored_phong"].GetComponent<UniqueShader>().shader = colored_phong;
+        scene["textured_phong"].GetComponent<UniqueShader>().shader = textured_phong;
+        scene["train"].AddComponent<Ref<Shader>>(colored_phong);
+        scene["surface"].AddComponent<Ref<Shader>>(colored_phong);
+        scene["backpack"].AddComponent<Ref<Shader>>(textured_phong);
+        // scene["sponza"].AddComponent<Ref<Shader>>(textured_phong);
 
         Logger::Info("loading", "Main", "Shaders loaded.");
     }
 
-    void LoadModels() {
+    void LoadModels()
+    {
         Logger::Stage("loading", "Main", "LOADING MODELS");
-        RenderModelData train, backpack, cube, cubes, sponza;
-        RenderModel r_train, r_backpack, r_cube, r_cubes, r_sponza;
+
+        RenderModelData train, backpack, cube, cubes;
+        RenderModel r_train, r_backpack, r_cube, r_cubes;
 
         ModelLoader::LoadModel(MODEL_DIR / "Train" / "train.obj", train);
         ModelLoader::LoadModel(MODEL_DIR / "Backpack" / "backpack.obj", backpack);
         ModelLoader::LoadModel(MODEL_DIR / "Cube" / "cube.obj", cube);
         ModelLoader::LoadModel(MODEL_DIR / "Cubes" / "cubes.obj", cubes);
-        ModelLoader::LoadModel(MODEL_DIR / "Sponza" / "sponza.obj", sponza);
+        // ModelLoader::LoadModel(MODEL_DIR / "Sponza" / "sponza.obj", sponza);
+
+        Logger::Stage("loading", "Main", "Models Loaded");
 
         train.Compress();
         backpack.Compress();
         cubes.Compress();
         cube.Compress();
 
-        r_sponza.FillData(sponza);
+        Logger::Stage("loading", "Main", "Compressed");
+
+        // r_sponza.FillData(sponza);
         r_train.FillData(train);
         r_backpack.FillData(backpack);
         r_cube.FillData(cube);
         r_cubes.FillData(cubes);
 
+        Logger::Stage("loading", "Main", "Data Filled");
+
         scene["backpack"].AddComponent<RenderModel>(r_backpack);
         scene["train"].AddComponent<RenderModel>(r_train);
         scene["surface"].AddComponent<RenderModel>(r_cubes);
         scene["cubes"].AddComponent<RenderModel>(r_cubes);
-        scene["sponza"].AddComponent<RenderModel>(r_sponza);
+        // scene["sponza"].AddComponent<RenderModel>(r_sponza);
 
         scene["lamp_white"].AddComponent<RenderModel>(r_cube);
         scene["lamp_magenta"].AddComponent<RenderModel>(r_cube);
         scene["lamp_white"].AddComponent<Drawable>();
         scene["lamp_magenta"].AddComponent<Drawable>();
-        scene["lamp_white"].AddComponent<GLShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
-        scene["lamp_magenta"].AddComponent<GLShaderProgram>(scene["colored_phong"].GetComponent<UniqueShader>().shader_program);
+        scene["lamp_white"].AddComponent<Ref<Shader>>(scene["colored_phong"].GetComponent<UniqueShader>().shader);
+        scene["lamp_magenta"].AddComponent<Ref<Shader>>(scene["colored_phong"].GetComponent<UniqueShader>().shader);
 
-        for (int i = 0; i < 2; ++i) {
+        for (int i = 0; i < 2; ++i)
+        {
             scene["train" + std::to_string(i)].AddComponent<RenderModel>(scene["train"].GetComponent<RenderModel>());
             scene["train" + std::to_string(i)].GetComponent<Transformation>().SetPos(glm::vec3(0, 100, 300 - i * 12));
-            scene["train" + std::to_string(i)].AddComponent<GLShaderProgram>(scene["train"].GetComponent<GLShaderProgram>());
+            scene["train" + std::to_string(i)].AddComponent<Ref<Shader>>(scene["train"].GetComponent<Ref<Shader>>());
             scene["train" + std::to_string(i)].AddComponent<LinearManipulator>();
             scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().current_time = i * 3.14 / 16;
             scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().radius = 15;
-            scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().dir = glm::vec3(std::sin(i * 3.14 / 16), std::cos(i * 3.14 / 16), 0);
+            scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().dir =
+                glm::vec3(std::sin(i * 3.14 / 16), std::cos(i * 3.14 / 16), 0);
             scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().speed = std::sin(i * 3.14 / 8) + 1;
             scene["train" + std::to_string(i)].AddComponent<ScaleManipulator>();
             scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().min_scale = -1;
@@ -247,11 +290,12 @@ private:
             scene["train" + std::to_string(i)].AddComponent<Drawable>();
         }
     }
-    void SetObjectProperties() {
+    void SetObjectProperties()
+    {
         Logger::Stage("loading", "Main", "SETTING OBJECTS PROPERTIES");
 
-        scene["sponza"].GetComponent<Transformation>().SetPos(glm::vec3(0, 50, 0));
-        scene["sponza"].GetComponent<Transformation>().SetScale(glm::vec3(0.01));
+        // scene["sponza"].GetComponent<Transformation>().SetPos(glm::vec3(0, 50, 0));
+        // scene["sponza"].GetComponent<Transformation>().SetScale(glm::vec3(0.01));
 
         scene["backpack"].GetComponent<Transformation>().SetPos(glm::vec3(30, 0, 0));
         scene["backpack"].GetComponent<LinearManipulator>().radius = 0;
@@ -316,29 +360,39 @@ private:
         lamp.outer_cone_cos = cos(glm::radians(17.5));
     }
 
-    void ProcessInput(float dt) {
+    void ProcessInput(float dt)
+    {
         FPSCamera& camera = scene["player"].GetComponent<FPSCamera>();
         float sensitivity = 0.07;
         float speed = 15;
 
         Input::ReadFrame();
 
-        if (Input::KeyReleased(GLFW_KEY_TAB)) {
-            if (cursor_mode) {
+        if (Input::KeyReleased(GLFW_KEY_TAB))
+        {
+            if (cursor_mode)
+            {
                 glfwSetInputMode(_window->GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
                 cursor_mode = false;
-            } else {
+            }
+            else
+            {
                 glfwSetInputMode(_window->GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
                 cursor_mode = true;
             }
         }
 
-        if (Input::KeyReleased(GLFW_KEY_F11)) {
-            if (_window->GetState().window_mode == WindowMode::fullscreen) {
+        if (Input::KeyReleased(GLFW_KEY_F11))
+        {
+            if (_window->GetState().window_mode == WindowMode::fullscreen)
+            {
                 _window->Windowed();
-            } else {
+            }
+            else
+            {
                 int monitor_id = 0;
-                if (Input::KeyDown(GLFW_KEY_1)) {
+                if (Input::KeyDown(GLFW_KEY_1))
+                {
                     monitor_id = 1;
                 }
                 _window->FullScreen(monitor_id);
@@ -348,38 +402,48 @@ private:
 
         int width, height;
         glfwGetWindowSize(_window->GetWindow(), &width, &height);
-        if (height != 0 && width != 0) {
+        if (height != 0 && width != 0)
+        {
             camera.SetAspect(double(width) / height);
         }
-        if (!cursor_mode) {
+        if (!cursor_mode)
+        {
             return;
         }
 
         camera.RotateY(Input::CursorXOffset() * sensitivity);
         camera.RotateX(Input::CursorYOffset() * sensitivity / 16 * 9);
 
-        if (Input::KeyDown(GLFW_KEY_LEFT_SHIFT)) {
+        if (Input::KeyDown(GLFW_KEY_LEFT_SHIFT))
+        {
             speed = 50.0f;
         }
-        if (Input::KeyDown(GLFW_KEY_ESCAPE)) {
+        if (Input::KeyDown(GLFW_KEY_ESCAPE))
+        {
             glfwSetWindowShouldClose(_window->GetWindow(), true);
         }
-        if (Input::KeyDown(GLFW_KEY_S)) {
+        if (Input::KeyDown(GLFW_KEY_S))
+        {
             camera.MoveInLocal(glm::vec3(0.0f, 0.0f, -1.0f) * speed * dt);
         }
-        if (Input::KeyDown(GLFW_KEY_W)) {
+        if (Input::KeyDown(GLFW_KEY_W))
+        {
             camera.MoveInLocal(glm::vec3(0.0f, 0.0f, 1.0f) * speed * dt);
         }
-        if (Input::KeyDown(GLFW_KEY_D)) {
+        if (Input::KeyDown(GLFW_KEY_D))
+        {
             camera.MoveInLocal(glm::vec3(1.0f, 0.0f, 0.0f) * speed * dt);
         }
-        if (Input::KeyDown(GLFW_KEY_A)) {
+        if (Input::KeyDown(GLFW_KEY_A))
+        {
             camera.MoveInLocal(glm::vec3(-1.0f, 0.0f, 0.0f) * speed * dt);
         }
-        if (Input::KeyDown(GLFW_KEY_SPACE)) {
+        if (Input::KeyDown(GLFW_KEY_SPACE))
+        {
             camera.MoveInWorld(glm::vec3(0.0f, 1.0f, 0.0f) * speed * dt);
         }
-        if (Input::KeyDown(GLFW_KEY_C)) {
+        if (Input::KeyDown(GLFW_KEY_C))
+        {
             camera.MoveInWorld(glm::vec3(0.0f, -1.0f, 0.0f) * speed * dt);
         }
     }
@@ -387,7 +451,8 @@ private:
     bool cursor_mode;
 };
 
-int main() {
+int main()
+{
     TestApplication application("Test Application");
     application.Start();
     return 0;

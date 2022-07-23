@@ -98,8 +98,8 @@ glm::vec3 ModelLoader::IGetmaterialColor(aiMaterial* mat, ColorType type) {
     glm::vec3 res(color.r, color.g, color.b);
     return res;
 }
-Texture2DData ModelLoader::ILoadMaterialTexture(aiMaterial* mat, aiTextureType type) {
-    Texture2DData texture_data;
+TextureData ModelLoader::ILoadMaterialTexture(aiMaterial* mat, aiTextureType type) {
+    TextureData texture_data;
     aiString file_name;
     fs::path texture_path;
     if (mat->GetTextureCount(type) > 1) {
@@ -110,7 +110,7 @@ Texture2DData ModelLoader::ILoadMaterialTexture(aiMaterial* mat, aiTextureType t
     // Logger::Warning("loading", "ModelLoader", std::to_string(mat->GetTextureCount(type)));
     texture_path = _directory / file_name.C_Str();
     if (_path_to_texture_data.find(texture_path.string()) == _path_to_texture_data.end()) {
-        _path_to_texture_data[texture_path.string()] = TextureLoader::LoadTexture2D(texture_path);
+        _path_to_texture_data[texture_path.string()] = TextureLoader::LoadTexture(texture_path);
     }
     texture_data = _path_to_texture_data[texture_path.string()];
     return texture_data;
