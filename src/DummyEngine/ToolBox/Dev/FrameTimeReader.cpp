@@ -2,7 +2,7 @@
 
 namespace DE {
 
-void FrameTimeReader::EnterArea(std::string area_name) {
+void FrameTimeReader::EnterScope(std::string area_name) {
     if (area_name == "") {
         // std::cout << "enter root" << std::endl;
         m_Current = m_Root;
@@ -23,7 +23,7 @@ void FrameTimeReader::EnterArea(std::string area_name) {
     ++(m_Current->current_child_id);
     m_Current = next_node;
 }
-void FrameTimeReader::LeaveArea() {
+void FrameTimeReader::LeaveScope() {
     // std::cout << "leave " << m_Current->name << std::endl;
     m_Current->delta_time = std::chrono::system_clock::now() - m_Current->begin_time;
     m_Current = m_Current->parent;

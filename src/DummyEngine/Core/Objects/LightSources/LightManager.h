@@ -7,22 +7,25 @@
 #include "DummyEngine/Core/Objects/LightSources/PointLight.h"
 #include "DummyEngine/Core/Objects/LightSources/SpotLight.h"
 
+namespace DE
+{
 
-namespace DE {
+    struct UniqueShader
+    {
+        Ref<Shader> shader;
+    };
 
-struct UniqueShader {
-    Ref<Shader> shader;
-};
+    class LightManager : public System
+    {
+    private:
+        void ActivatePointLight(Ref<Shader> shader, const PointLight& point_light, int id);
+        void ActivateDirectionalLight(Ref<Shader> shader, const DirectionalLight& directional, int id);
+        void ActivateSpotLight(Ref<Shader> shader, const SpotLight& spot_light, int id);
 
-class LightManager : public System {
-private:
-    void ActivatePointLight(Ref<Shader> shader, const PointLight& point_light, int id);
-    void ActivateDirectionalLight(Ref<Shader> shader, const DirectionalLight& directional, int id);
-    void ActivateSpotLight(Ref<Shader> shader, const SpotLight& spot_light, int id);
-
-public:
-    LightManager();
-
-    void Update(double dt) override;
-};
+    public:
+        LightManager();
+        virtual std::string GetName() const override;
+        
+        void Update(double dt) override;
+    };
 }  // namespace DE

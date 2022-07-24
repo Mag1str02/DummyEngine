@@ -29,7 +29,7 @@ namespace DE
             {
                 for (const auto& system : layer)
                 {
-                    m_SystemArray[system]->Update(dt);
+                    DE_PROFILE_SCOPE(m_SystemArray[system]->GetName(), m_SystemArray[system]->Update(dt););
                 }
             }
         }

@@ -46,11 +46,13 @@ class MovingSystem : public System
 {
 public:
     MovingSystem() {}
+    virtual std::string GetName() const override
+    {
+        return "MovingSystem";
+    }
 
     void Update(double dt) override
     {
-        DE_FTR_ENTER("Moving System");
-
         scene["flashlight"].GetComponent<SpotLight>().position = scene["player"].GetComponent<FPSCamera>().GetPos();
         scene["flashlight"].GetComponent<SpotLight>().direction = scene["player"].GetComponent<FPSCamera>().GetDir();
 
@@ -70,18 +72,18 @@ public:
         {
             point_light.position = positions[entity_id].GetPos();
         }
-        DE_FTR_LEAVE();
     }
 };
 class DrawSystem : public System
 {
 public:
     DrawSystem() {}
-
+    virtual std::string GetName() const override
+    {
+        return "DrawSystem";
+    }
     void Update(double dt) override
     {
-        DE_FTR_ENTER("Draw System");
-
         auto& drawables = GetComponentArray<Drawable>();
         auto& models = GetComponentArray<RenderModel>();
         auto& shaders = GetComponentArray<Ref<Shader>>();
@@ -104,9 +106,8 @@ public:
             shader->Bind();
             shader->SetMat4("rotation", transformations[entity_id].GetRotationMatrix());
             shader->SetMat4("model", transformations[entity_id].GetModelMatrix());
-            Renderer::Submit(shader,  models[entity_id]);
+            Renderer::Submit(shader, models[entity_id]);
         }
-        DE_FTR_LEAVE();
     }
 };
 

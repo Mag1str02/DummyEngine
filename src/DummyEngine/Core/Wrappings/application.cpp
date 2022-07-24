@@ -38,28 +38,18 @@ namespace DE
         double frame_begin, frame_end, prev_frame_time = 0.001;
         while (!m_Window->ShouldClose())
         {
-            DE_FTR_ENTER("");
-            frame_begin = glfwGetTime();
+            DE_PROFILE_SCOPE("", {
+                frame_begin = glfwGetTime();
 
-            DE_FTR_ENTER("Poll Events");
-            glfwPollEvents();
-            DE_FTR_LEAVE();
+                DE_PROFILE_SCOPE("Poll Events", glfwPollEvents());
+                DE_PROFILE_SCOPE("Application Update Function", Update(prev_frame_time));
+                DE_PROFILE_SCOPE("System Processing", SystemManager::Update(prev_frame_time));
+                DE_PROFILE_SCOPE("System Processing", m_Window->SwapBuffers());
 
-            DE_FTR_ENTER("Application Update Function");
-            Update(prev_frame_time);
-            DE_FTR_LEAVE();
+                frame_end = glfwGetTime();
+                prev_frame_time = frame_end - frame_begin;
+            });
 
-            DE_FTR_ENTER("System Processing");
-            SystemManager::Update(prev_frame_time);
-            DE_FTR_LEAVE();
-
-            DE_FTR_ENTER("Frame Swap");
-            m_Window->SwapBuffers();
-            DE_FTR_LEAVE();
-
-            frame_end = glfwGetTime();
-            prev_frame_time = frame_end - frame_begin;
-            DE_FTR_LEAVE();
             DE_FTR_PRINT();
         }
     }
