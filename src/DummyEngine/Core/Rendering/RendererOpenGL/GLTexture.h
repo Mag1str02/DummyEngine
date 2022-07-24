@@ -25,7 +25,7 @@ namespace DE
         virtual uint32_t Width() const override;
         virtual uint32_t Height() const override;
 
-        virtual void SetData(const void* data) override;
+        virtual void SetData(const void* data, uint32_t size) override;
 
         virtual void Bind(uint32_t slot) const override;
 

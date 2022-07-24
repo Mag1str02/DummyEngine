@@ -1,5 +1,4 @@
 #include "DummyEngine/ToolBox/Dev/Logger.h"
-#include "DummyEngine/Config/config.h"
 
 namespace DE {
 namespace fs = std::filesystem;
@@ -49,7 +48,7 @@ void Logger::IClose(const std::string& log_name) {
 }
 void Logger::IWrite(const std::string& log_name, const std::string& author, const std::string& massage, const std::string& message_type) {
     IPrintTime(m_Fstreams[log_name]);
-    m_Fstreams[log_name] << std::setw(MAX_MESSAGE_TYPE_LENGTH) << ("[" + message_type + "]") << " " << author << ": " << massage << std::endl;
+    m_Fstreams[log_name] << std::setw(Config::GetI(DE_CFG_MAX_MESSAGE_TYPE_LENGTH)) << ("[" + message_type + "]") << " " << author << ": " << massage << std::endl;
 }
 void Logger::IError(const std::string& log_name, const std::string& author, const std::string& massage) {
     IWrite(log_name, author, massage, "ERROR");

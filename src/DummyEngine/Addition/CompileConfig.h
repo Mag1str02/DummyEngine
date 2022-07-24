@@ -1,0 +1,4 @@
+#pragma once
+
+#define DE_ENABLE_FRAME_TIME_READER 1
+#define DE_ENABLE_ASSERTS 1

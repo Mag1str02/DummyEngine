@@ -5,7 +5,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(Test)
 
-set(ENGINE_SOURCES 
+set(ENGINE_SOURCES  
+    src/DummyEngine/Addition/Assert.cpp
     src/DummyEngine/Addition/Base.h   
     src/DummyEngine/Addition/Config.cpp
     src/DummyEngine/Addition/DummyEngine.h    

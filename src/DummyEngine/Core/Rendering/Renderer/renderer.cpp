@@ -11,9 +11,16 @@ namespace DE
         switch (api)
         {
             case API::OpenGL: m_RenderAPI = CreateScope<GLRenderAPI>(); break;
-
-            case API::Vulkan: m_RenderAPI = nullptr; break;
-            case API::None: m_RenderAPI = nullptr; break;
+            case API::Vulkan: {
+                DE_ASSERT(false, "Attempt to init Renderer with VulkanAPI which is currently unsupported.");
+                m_RenderAPI = nullptr;
+                break;
+            }
+            case API::None: {
+                DE_ASSERT(false, "Attempt to init Renderer without RenderingAPI.");
+                m_RenderAPI = nullptr;
+                break;
+            }
         }
     }
     void Renderer::Load(const Window* window)

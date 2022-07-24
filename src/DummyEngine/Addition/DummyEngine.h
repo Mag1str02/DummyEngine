@@ -8,7 +8,6 @@
 #include <stb_image.h>
 
 #include "DummyEngine/Addition/Base.h"
-#include "DummyEngine/Config/Config.h"
 
 #include "DummyEngine/Core/ECS/Entity.hpp"
 #include "DummyEngine/Core/ECS/SystemManager.hpp"

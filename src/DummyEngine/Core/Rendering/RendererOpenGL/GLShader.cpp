@@ -25,7 +25,7 @@ namespace DE
         glLinkProgram(m_ShaderId);
 
         int success;
-        char info_log[Config::Get(DE_CFG_MAX_COMPILE_ERROR_LEN)];
+        char info_log[Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN)];
         glGetProgramiv(m_ShaderId, GL_LINK_STATUS, &success);
         if (!success)
         {
@@ -33,7 +33,7 @@ namespace DE
             Logger::Fatal("loading",
                           "GLShaderProgram",
                           "Failed to link shader program (" + std::to_string(m_ShaderId) + ")\n" + info_log);
-            throw std::exception();
+            throw std::runtime_error("Failed to compile shader.");
         }
         Logger::Info(
             "loading", "GLShaderProgram", "GLShader program (" + std::to_string(m_ShaderId) + ") linked successfully");
@@ -173,11 +173,11 @@ namespace DE
         m_Parts.push_back(shader_part);
 
         int success = 1;
-        char infoLog[Config::Get(DE_CFG_MAX_COMPILE_ERROR_LEN)];
+        char infoLog[Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN)];
         glGetShaderiv(m_ShaderId, GL_COMPILE_STATUS, &success);
         if (!success)
         {
-            glGetShaderInfoLog(m_ShaderId, Config::Get(DE_CFG_MAX_COMPILE_ERROR_LEN), NULL, infoLog);
+            glGetShaderInfoLog(m_ShaderId, Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN), NULL, infoLog);
             Logger::Error("loading",
                           "GLShader",
                           "Failed to compile shader: (" + part.path.string() + ")\n" + std::string(infoLog));

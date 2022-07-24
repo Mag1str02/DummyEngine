@@ -1,4 +1,5 @@
 #include "../DummyEngine/Addition/DummyEngine.h"
+#include "../DummyEngine/Config/Config.h"
 
 using namespace DE;
 

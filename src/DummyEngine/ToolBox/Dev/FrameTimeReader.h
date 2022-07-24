@@ -1,7 +1,6 @@
 #pragma once
 
 #include "DummyEngine/Addition/Base.h"
-#include "DummyEngine/Config/config.h"
 
 namespace DE {
 class FrameTimeReader {

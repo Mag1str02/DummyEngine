@@ -24,6 +24,8 @@
 #include <queue>
 
 #include "Config.h"
+#include "Assert.h"
+
 
 namespace DE
 {
@@ -47,4 +49,6 @@ namespace DE
     using Vec4 = glm::vec4;
     using Vec3 = glm::vec3;
     using Vec2 = glm::vec2;
+
+
 }  // namespace DE

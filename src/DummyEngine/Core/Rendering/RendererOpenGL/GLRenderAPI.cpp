@@ -23,6 +23,7 @@ namespace DE
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
         {
             Logger::Fatal("loading", "GLRenderer", "Failed to load OpenGL for window: " + window->GetState().name);
+            DE_ASSERT(false, "Failed to load OpenGL for window:" + window->GetState().name);
             return false;
         }
         Logger::Info("loading", "GLRenderer", "OpenGL loaded for window: " + window->GetState().name);

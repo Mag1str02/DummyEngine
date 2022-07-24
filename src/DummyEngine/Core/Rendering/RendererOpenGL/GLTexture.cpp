@@ -13,6 +13,7 @@ namespace DE
             case TextureFormat::RGBA: return GL_RGBA;
             case TextureFormat::None: return GL_RED;
         }
+        return GL_RED;
     }
     GLenum TextureFormatToGLTextureInternalFormat(TextureFormat format)
     {
@@ -23,6 +24,7 @@ namespace DE
             case TextureFormat::RGBA: return GL_RGBA8;
             case TextureFormat::None: return GL_R8;
         }
+        return GL_R8;
     }
 
     GLTexture::GLTexture(uint32_t width, uint32_t height, TextureFormat format) :
@@ -75,8 +77,9 @@ namespace DE
         return m_Height;
     }
 
-    void GLTexture::SetData(const void* data)
+    void GLTexture::SetData(const void* data, uint32_t size)
     {
+        DE_ASSERT(size == m_Width * m_Height, "Data size mismatches texture size.");
         glTextureSubImage2D(m_TextureId, 0, 0, 0, m_Width, m_Height, m_Format, GL_UNSIGNED_BYTE, data);
     }
 

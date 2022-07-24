@@ -12,13 +12,6 @@ Initializer& Initializer::Get() {
     return initializer;
 }
 
-void Initializer::SetHint(int64_t hint_id, int64_t hint_value) {
-    switch (hint_id) {
-        default:
-            break;
-    }
-}
-
 void Initializer::Initialize() {
     EntityManager::Get().Initialize();
     ComponentManager::Get();
@@ -34,9 +27,5 @@ void deInitialize() {
 }
 void deTerminate() {
     Initializer::Get().Terminate();
-}
-
-void deHint(int64_t hint_id, int64_t hint_value) {
-    Initializer::Get().SetHint(hint_id, hint_value);
 }
 }  // namespace DE

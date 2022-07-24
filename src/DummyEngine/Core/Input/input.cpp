@@ -1,5 +1,4 @@
 #include "DummyEngine/Core/Input/Input.h"
-#include "DummyEngine/Config/config.h"
 
 namespace DE {
 void Input::IAddButton(int16_t button_id) {
@@ -23,7 +22,7 @@ void Input::IReadFrame() {
 
     m_Frames.push_front(m_CurrentFrame);
 
-    if (m_Frames.size() > MAX_INPUT_FRAME_AMOUNT) {
+    if (m_Frames.size() > Config::GetI(DE_CFG_MAX_INPUT_FRAME_AMOUNT)) {
         m_Frames.pop_back();
     }
 }
