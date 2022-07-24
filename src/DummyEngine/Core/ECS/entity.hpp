@@ -1,6 +1,5 @@
 #pragma once
 
-#include "DummyEngine/Addition/types.h"
 #include "DummyEngine/ToolBox/Dev/logger.h"
 #include "DummyEngine/Core/ECS/component_manager.hpp"
 #include "DummyEngine/Core/ECS/entity_manager.hpp"

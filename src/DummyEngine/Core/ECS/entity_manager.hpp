@@ -1,8 +1,6 @@
 #pragma once
 
 #include "DummyEngine/Addition/base.h"
-#include "DummyEngine/Addition/const.h"
-#include "DummyEngine/Addition/types.h"
 #include "DummyEngine/ToolBox/Dev/logger.h"
 
 namespace DE {

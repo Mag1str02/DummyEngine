@@ -23,6 +23,8 @@
 #include <cstdint>
 #include <queue>
 
+#include "config.h"
+
 namespace DE
 {
     template <typename T>

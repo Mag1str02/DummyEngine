@@ -1,6 +1,5 @@
 #pragma once
 
-#include "DummyEngine/Addition/types.h"
 #include "DummyEngine/Core/ECS/component_manager.hpp"
 
 namespace DE {

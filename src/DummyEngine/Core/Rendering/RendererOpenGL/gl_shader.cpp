@@ -1,5 +1,4 @@
 #include "DummyEngine/Core/Rendering/RendererOpenGL/gl_shader.h"
-#include "DummyEngine/Addition/const.h"
 #include "DummyEngine/ToolBox/Dev/logger.h"
 
 namespace DE
@@ -26,7 +25,7 @@ namespace DE
         glLinkProgram(_shader_id);
 
         int success;
-        char info_log[MAX_COMPILE_ERROR_LEN];
+        char info_log[Config::Get(DE_CFG_MAX_COMPILE_ERROR_LEN)];
         glGetProgramiv(_shader_id, GL_LINK_STATUS, &success);
         if (!success)
         {
@@ -174,11 +173,11 @@ namespace DE
         _parts.push_back(shader_part);
 
         int success = 1;
-        char infoLog[MAX_COMPILE_ERROR_LEN];
+        char infoLog[Config::Get(DE_CFG_MAX_COMPILE_ERROR_LEN)];
         glGetShaderiv(_shader_id, GL_COMPILE_STATUS, &success);
         if (!success)
         {
-            glGetShaderInfoLog(_shader_id, MAX_COMPILE_ERROR_LEN, NULL, infoLog);
+            glGetShaderInfoLog(_shader_id, Config::Get(DE_CFG_MAX_COMPILE_ERROR_LEN), NULL, infoLog);
             Logger::Error("loading",
                           "GLShader",
                           "Failed to compile shader: (" + part.path.string() + ")\n" + std::string(infoLog));

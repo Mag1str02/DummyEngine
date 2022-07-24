@@ -6,7 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(Test)
 
 set(ENGINE_SOURCES 
-    src/DummyEngine/Addition/base.h    
+    src/DummyEngine/Addition/base.h   
+    src/DummyEngine/Addition/config.cpp
     src/DummyEngine/Addition/de_lib.h    
 
     src/DummyEngine/Core/ECS/component_array.hpp
@@ -18,8 +19,6 @@ set(ENGINE_SOURCES
     src/DummyEngine/Core/ECS/transformation.cpp
 
     src/DummyEngine/Core/Initializer/initializer.cpp
-
-    src/DummyEngine/Addition/some_funcs.cpp
 
     src/DummyEngine/Core/Objects/LightSources/point_light.cpp
     src/DummyEngine/Core/Objects/LightSources/spot_light.cpp
