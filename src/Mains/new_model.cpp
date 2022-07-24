@@ -1,4 +1,4 @@
-#include "../DummyEngine/Addition/de_lib.h"
+#include "../DummyEngine/Addition/DummyEngine.h"
 
 using namespace DE;
 
@@ -138,7 +138,7 @@ private:
     void Initialize()
     {
         Logger::Stage("loading", "Main", "INITIALIZETION");
-        Input::SetWindow(_window->GetWindow());
+        Input::SetWindow(m_Window->GetWindow());
         Renderer::SetClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     }
     void RegisterSystems()
@@ -365,21 +365,21 @@ private:
         {
             if (cursor_mode)
             {
-                glfwSetInputMode(_window->GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+                glfwSetInputMode(m_Window->GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
                 cursor_mode = false;
             }
             else
             {
-                glfwSetInputMode(_window->GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+                glfwSetInputMode(m_Window->GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
                 cursor_mode = true;
             }
         }
 
         if (Input::KeyReleased(GLFW_KEY_F11))
         {
-            if (_window->GetState().window_mode == WindowMode::fullscreen)
+            if (m_Window->GetState().window_mode == WindowMode::fullscreen)
             {
-                _window->Windowed();
+                m_Window->Windowed();
             }
             else
             {
@@ -388,13 +388,13 @@ private:
                 {
                     monitor_id = 1;
                 }
-                _window->FullScreen(monitor_id);
+                m_Window->FullScreen(monitor_id);
             }
-            Input::SetWindow(_window->GetWindow());
+            Input::SetWindow(m_Window->GetWindow());
         }
 
         int width, height;
-        glfwGetWindowSize(_window->GetWindow(), &width, &height);
+        glfwGetWindowSize(m_Window->GetWindow(), &width, &height);
         if (height != 0 && width != 0)
         {
             camera.SetAspect(double(width) / height);
@@ -413,7 +413,7 @@ private:
         }
         if (Input::KeyDown(GLFW_KEY_ESCAPE))
         {
-            glfwSetWindowShouldClose(_window->GetWindow(), true);
+            glfwSetWindowShouldClose(m_Window->GetWindow(), true);
         }
         if (Input::KeyDown(GLFW_KEY_S))
         {

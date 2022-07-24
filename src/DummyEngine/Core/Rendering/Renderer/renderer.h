@@ -1,10 +1,10 @@
 #pragma once
 
-#include "DummyEngine/Addition/base.h"
-#include "DummyEngine/Core/Rendering/Renderer/vertex_array.h"
-#include "DummyEngine/Core/Rendering/Renderer/texture.h"
-#include "DummyEngine/Core/Rendering/Renderer/render_api.h"
-#include "DummyEngine/Core/Rendering/Renderer/shader.h"
+#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
+#include "DummyEngine/Core/Rendering/Renderer/Texture.h"
+#include "DummyEngine/Core/Rendering/Renderer/RenderAPI.h"
+#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 
 namespace DE
 {
@@ -29,7 +29,7 @@ namespace DE
         static API CurrentAPI();
 
     private:
-        static Scope<RenderAPI> _render_api;
+        static Scope<RenderAPI> m_RenderAPI;
     };
 
 }  // namespace DE

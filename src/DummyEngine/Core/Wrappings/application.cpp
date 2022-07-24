@@ -1,7 +1,7 @@
-#include "DummyEngine/Core/Wrappings/application.h"
-#include "DummyEngine/ToolBox/Dev/frame_time_reader.h"
-#include "DummyEngine/Core/ECS/system_manager.hpp"
-#include "DummyEngine/Core/Rendering/Renderer/renderer.h"
+#include "DummyEngine/Core/Wrappings/Application.h"
+#include "DummyEngine/ToolBox/Dev/FrameTimeReader.h"
+#include "DummyEngine/Core/ECS/SystemManager.hpp"
+#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
 namespace DE {
 
@@ -10,11 +10,11 @@ Application::Application(std::string name) {
     Logger::Open(LOG_DIR / "ECS.txt", "ECS");
     InitGLFW();
     deInitialize();
-    _window = new Window();
-    _window->SetName(name);
+    m_Window = new Window();
+    m_Window->SetName(name);
 }
 Application::~Application() {
-    delete _window;
+    delete m_Window;
 
     Logger::Info("loading", "Main", "Loading time: " + std::to_string(glfwGetTime()) + "s");
     Logger::Close("ECS");
@@ -27,12 +27,12 @@ void Application::OnLoad() {
 }
 
 void Application::Start() {
-    _window->Init();
+    m_Window->Init();
     Renderer::Init(API::OpenGL);
-    Renderer::Load(_window);
+    Renderer::Load(m_Window);
     OnLoad();
     double frame_begin, frame_end, prev_frame_time = 0.001;
-    while (!_window->ShouldClose()) {
+    while (!m_Window->ShouldClose()) {
         DE_FTR_ENTER("");
         frame_begin = glfwGetTime();
 
@@ -49,7 +49,7 @@ void Application::Start() {
         DE_FTR_LEAVE();
 
         DE_FTR_ENTER("Frame Swap");
-        _window->SwapBuffers();
+        m_Window->SwapBuffers();
         DE_FTR_LEAVE();
 
         frame_end = glfwGetTime();
@@ -78,7 +78,7 @@ void Application::SetDefaultGLFWSettings() {
 }
 
 }  // namespace DE
-   /*     while (!glfwWindowShouldClose(_window)) {
+   /*     while (!glfwWindowShouldClose(m_Window)) {
               double prev_frame_time = glfwGetTime() - prev_time;
               prev_time = glfwGetTime();
               DE_FTR_ENTER("");
@@ -92,7 +92,7 @@ void Application::SetDefaultGLFWSettings() {
               SystemManager::Update(prev_frame_time);
               DE_FTR_LEAVE();
               DE_FTR_ENTER("Frame Swap");
-              glfwSwapBuffers(_window);
+              glfwSwapBuffers(m_Window);
               max_frame_time = std::max(max_frame_time, glfwGetTime() - prev_time);
               avarage_frame_time = (avarage_frame_time * frame_amount + glfwGetTime() - prev_time) / (frame_amount + 1);
               frame_amount++;

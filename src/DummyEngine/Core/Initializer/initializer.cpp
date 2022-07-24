@@ -1,12 +1,11 @@
-#include "DummyEngine/Core/Initializer/initializer.h"
-#include "DummyEngine/Core/ECS/component_manager.hpp"
-#include "DummyEngine/Core/ECS/entity_manager.hpp"
-#include "DummyEngine/Core/ECS/system_manager.hpp"
+#include "DummyEngine/Core/Initializer/Initializer.h"
+#include "DummyEngine/Core/ECS/ComponentManager.hpp"
+#include "DummyEngine/Core/ECS/EntityManager.hpp"
+#include "DummyEngine/Core/ECS/SystemManager.hpp"
 
 namespace DE {
 
 Initializer::Initializer() {
-    _max_entity_amount = 1000;
 }
 Initializer& Initializer::Get() {
     static Initializer initializer;

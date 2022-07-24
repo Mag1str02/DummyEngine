@@ -1,54 +1,54 @@
-#include "DummyEngine/Core/Input/input.h"
+#include "DummyEngine/Core/Input/Input.h"
 #include "DummyEngine/Config/config.h"
 
 namespace DE {
 void Input::IAddButton(int16_t button_id) {
-    _current_frame.key_states[button_id] = glfwGetKey(_window, button_id);
+    m_CurrentFrame.key_states[button_id] = glfwGetKey(m_WindowHandle, button_id);
 }
 
 Input::Input() {
 }
 
 void Input::ISetWindow(GLFWwindow* window) {
-    _window = window;
+    m_WindowHandle = window;
     IReadFrame();
     IReadFrame();
 }
 void Input::IReadFrame() {
-    _current_frame.time = glfwGetTime();
-    glfwGetCursorPos(_window, &_current_frame.x_pos, &_current_frame.y_pos);
+    m_CurrentFrame.time = glfwGetTime();
+    glfwGetCursorPos(m_WindowHandle, &m_CurrentFrame.x_pos, &m_CurrentFrame.y_pos);
     for (size_t i = 0; i < 349; ++i) {
         IAddButton(i);
     }
 
-    _frames.push_front(_current_frame);
+    m_Frames.push_front(m_CurrentFrame);
 
-    if (_frames.size() > MAX_INPUT_FRAME_AMOUNT) {
-        _frames.pop_back();
+    if (m_Frames.size() > MAX_INPUT_FRAME_AMOUNT) {
+        m_Frames.pop_back();
     }
 }
 
 float Input::IFrameTime() const {
-    return _frames[0].time - _frames[1].time;
+    return m_Frames[0].time - m_Frames[1].time;
 }
 double Input::ICursorXOffset() const {
-    return _frames[0].x_pos - _frames[1].x_pos;
+    return m_Frames[0].x_pos - m_Frames[1].x_pos;
 }
 double Input::ICursorYOffset() const {
-    return _frames[0].y_pos - _frames[1].y_pos;
+    return m_Frames[0].y_pos - m_Frames[1].y_pos;
 }
 
 bool Input::IKeyReleased(int16_t key_id) const {
-    return !_frames[0].key_states.at(key_id) && _frames[1].key_states.at(key_id);
+    return !m_Frames[0].key_states.at(key_id) && m_Frames[1].key_states.at(key_id);
 }
 bool Input::IKeyPressed(int16_t key_id) const {
-    return _frames[0].key_states.at(key_id) && !_frames[1].key_states.at(key_id);
+    return m_Frames[0].key_states.at(key_id) && !m_Frames[1].key_states.at(key_id);
 }
 bool Input::IKeyDown(int16_t key_id) const {
-    return _frames[0].key_states.at(key_id);
+    return m_Frames[0].key_states.at(key_id);
 }
 bool Input::IKeyUp(int16_t key_id) const {
-    return !_frames[0].key_states.at(key_id);
+    return !m_Frames[0].key_states.at(key_id);
 }
 
 Input& Input::Get() {

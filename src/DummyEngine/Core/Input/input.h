@@ -2,7 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include "DummyEngine/Addition/base.h"
+#include "DummyEngine/Addition/Base.h"
 
 namespace DE {
 
@@ -15,9 +15,9 @@ struct InputFrame {
 
 class Input {
 private:
-    GLFWwindow* _window;
-    InputFrame _current_frame;
-    std::deque<InputFrame> _frames;
+    GLFWwindow* m_WindowHandle;
+    InputFrame m_CurrentFrame;
+    std::deque<InputFrame> m_Frames;
 
     void ISetWindow(GLFWwindow* window);
     void IAddButton(int16_t button_id);

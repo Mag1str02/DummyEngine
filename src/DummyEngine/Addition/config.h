@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base.h"
+#include "Base.h"
 
 namespace DE
 {
@@ -20,4 +20,5 @@ namespace DE
         static Configs m_Configs;
     };
 
+#define DE_ENABLE_FRAME_TIME_READER 1
 }  // namespace DE

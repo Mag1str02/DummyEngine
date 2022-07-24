@@ -1,14 +1,14 @@
 #pragma once
 
-#include "DummyEngine/Addition/base.h"
+#include "DummyEngine/Addition/Base.h"
 
 namespace DE {
 namespace fs = std::filesystem;
 
 class Logger {
 private:
-    std::set<std::string> _openned_files;
-    std::map<std::string, std::ofstream> _ofstreams;
+    std::set<std::string> m_Files;
+    std::map<std::string, std::ofstream> m_Fstreams;
 
     Logger();
     ~Logger();

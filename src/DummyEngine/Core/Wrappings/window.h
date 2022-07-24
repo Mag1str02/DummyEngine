@@ -3,7 +3,7 @@
 #include <GLAD/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "DummyEngine/Addition/base.h"
+#include "DummyEngine/Addition/Base.h"
 
 namespace DE {
 
@@ -20,8 +20,8 @@ class Window {
 private:
     friend class GLRenderer;
 
-    GLFWwindow* _window;
-    WindowState _state;
+    GLFWwindow* m_WindowHandle;
+    WindowState m_State;
 
     GLFWmonitor* GetMonitor(uint16_t id);
 

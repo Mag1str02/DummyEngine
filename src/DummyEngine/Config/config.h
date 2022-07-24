@@ -1,8 +1,7 @@
 #pragma once
 
-#include <filesystem>
-#include <glm/glm.hpp>
-#include <string>
+#include "DummyEngine/Addition/Base.h"
+using namespace DE;
 
 namespace fs = std::filesystem;
 
@@ -23,11 +22,9 @@ const fs::path LOG_DIR = RES_DIR / "Logs";
 const fs::path SHADER_DIR = SOURCE_DIR / "Shaders";
 const fs::path MODEL_DIR = RES_DIR / "Models";
 
-const glm::vec3 COLOR_MAGENTA(1.0f, 0.0f, 1.0f);
-const glm::vec3 COLOR_WHITE(1.0f, 1.0f, 1.0f);
-const glm::vec3 COLOR_RED(1.0f, 0.0f, 0.0f);
-const glm::vec3 COLOR_BLUE(0.0f, 0.0f, 1.0f);
-const glm::vec3 COLOR_GREEN(0.0f, 1.0f, 0.0f);
-const glm::vec3 COLOR_YELLOW(1.0f, 1.0f, 0.0f);
-
-#define DE_ENABLED_FRAME_TIME_READER 1
+const Vec3 COLOR_MAGENTA(1.0f, 0.0f, 1.0f);
+const Vec3 COLOR_WHITE(1.0f, 1.0f, 1.0f);
+const Vec3 COLOR_RED(1.0f, 0.0f, 0.0f);
+const Vec3 COLOR_BLUE(0.0f, 0.0f, 1.0f);
+const Vec3 COLOR_GREEN(0.0f, 1.0f, 0.0f);
+const Vec3 COLOR_YELLOW(1.0f, 1.0f, 0.0f);

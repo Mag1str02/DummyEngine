@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DummyEngine/Addition/base.h"
-#include "DummyEngine/Core/Rendering/Renderer/render_data.h"
+#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
 
 namespace DE
 {

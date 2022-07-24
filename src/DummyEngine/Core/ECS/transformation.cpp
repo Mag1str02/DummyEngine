@@ -1,107 +1,107 @@
-#include "DummyEngine/Core/ECS/transformation.h"
+#include "DummyEngine/Core/ECS/Transformation.h"
 
 namespace DE {
 void Transformation::UpdateModelMatrix() {
-    _model_matrix = glm::mat4(1.0f);
-    _model_matrix = glm::translate(_model_matrix, _pos + _pos_offset);
-    _model_matrix *= _rotation_matrix;
-    _model_matrix = glm::scale(_model_matrix, _scale);
-    _update_model = false;
+    m_ModelMatrix = Mat4(1.0f);
+    m_ModelMatrix = glm::translate(m_ModelMatrix, m_Pos + m_PosOffset);
+    m_ModelMatrix *= m_RotationMatrix;
+    m_ModelMatrix = glm::scale(m_ModelMatrix, m_Scale);
+    m_UpdateModel = false;
 }
 void Transformation::UpdateRotationMatrix() {
-    _rotation_matrix = glm::mat4(1.0f);
-    _rotation_matrix = glm::rotate(_rotation_matrix, _angles.z + _angles_offset.z, glm::vec3(0.0f, 0.0f, 1.0f));
-    _rotation_matrix = glm::rotate(_rotation_matrix, _angles.y + _angles_offset.y, glm::vec3(0.0f, 1.0f, 0.0f));
-    _rotation_matrix = glm::rotate(_rotation_matrix, _angles.x + _angles_offset.x, glm::vec3(1.0f, 0.0f, 0.0f));
+    m_RotationMatrix = Mat4(1.0f);
+    m_RotationMatrix = glm::rotate(m_RotationMatrix, m_Angles.z + m_AnglesOffet.z, Vec3(0.0f, 0.0f, 1.0f));
+    m_RotationMatrix = glm::rotate(m_RotationMatrix, m_Angles.y + m_AnglesOffet.y, Vec3(0.0f, 1.0f, 0.0f));
+    m_RotationMatrix = glm::rotate(m_RotationMatrix, m_Angles.x + m_AnglesOffet.x, Vec3(1.0f, 0.0f, 0.0f));
     UpdateModelMatrix();
-    _update_rotation = false;
+    m_UpdateRotation = false;
 }
 
 Transformation::Transformation()
-    : _scale(glm::vec3(1.0f)),                     //
-      _update_model(true),                         //
-      _update_rotation(true),                      //
-      _pos(glm::vec3(0.0f, 0.0f, 0.0f)),           //
-      _pos_offset(glm::vec3(0.0f, 0.0f, 0.0f)),    //
-      _angles(glm::vec3(0.0f, 0.0f, 0.0f)),        //
-      _angles_offset(glm::vec3(0.0f, 0.0f, 0.0f))  //
+    : m_Scale(Vec3(1.0f)),                     //
+      m_UpdateModel(true),                         //
+      m_UpdateRotation(true),                      //
+      m_Pos(Vec3(0.0f, 0.0f, 0.0f)),           //
+      m_PosOffset(Vec3(0.0f, 0.0f, 0.0f)),    //
+      m_Angles(Vec3(0.0f, 0.0f, 0.0f)),        //
+      m_AnglesOffet(Vec3(0.0f, 0.0f, 0.0f))  //
 {
 }
 
-void Transformation::MoveInWorld(glm::vec3 delta) {
-    _pos += delta;
-    _update_model = true;
+void Transformation::MoveInWorld(Vec3 delta) {
+    m_Pos += delta;
+    m_UpdateModel = true;
 }
-void Transformation::SetScale(glm::vec3 scale) {
-    _scale = scale;
-    _update_model = true;
+void Transformation::SetScale(Vec3 scale) {
+    m_Scale = scale;
+    m_UpdateModel = true;
 }
 void Transformation::SetScale(float scale) {
-    _scale = glm::vec3(scale);
-    _update_model = true;
+    m_Scale = Vec3(scale);
+    m_UpdateModel = true;
 }
-void Transformation::SetPosOffset(glm::vec3 offset) {
-    _pos_offset = offset;
-    _update_model = true;
+void Transformation::SetPosOffset(Vec3 offset) {
+    m_PosOffset = offset;
+    m_UpdateModel = true;
 }
-void Transformation::SetPos(glm::vec3 pos) {
-    _pos = pos;
-    _update_model = true;
+void Transformation::SetPos(Vec3 pos) {
+    m_Pos = pos;
+    m_UpdateModel = true;
 }
 void Transformation::SetPitch(float pitch) {
-    _angles.x = pitch;
-    _update_rotation = true;
+    m_Angles.x = pitch;
+    m_UpdateRotation = true;
 }
 void Transformation::SetYaw(float yaw) {
-    _angles.y = yaw;
-    _update_rotation = true;
+    m_Angles.y = yaw;
+    m_UpdateRotation = true;
 }
 void Transformation::SetRoll(float roll) {
-    _angles.z = roll;
-    _update_rotation = true;
+    m_Angles.z = roll;
+    m_UpdateRotation = true;
 }
-void Transformation::SetAngles(glm::vec3 angles) {
-    _angles = angles;
-    _update_rotation = true;
+void Transformation::SetAngles(Vec3 angles) {
+    m_Angles = angles;
+    m_UpdateRotation = true;
 }
-void Transformation::SetAnglesOffset(glm::vec3 angles) {
-    _angles_offset = angles;
-    _update_rotation = true;
+void Transformation::SetAnglesOffset(Vec3 angles) {
+    m_AnglesOffet = angles;
+    m_UpdateRotation = true;
 }
 
-glm::mat4 Transformation::GetModelMatrix() const {
-    return _model_matrix;
+Mat4 Transformation::GetModelMatrix() const {
+    return m_ModelMatrix;
 }
-glm::mat4 Transformation::GetRotationMatrix() const {
-    return _rotation_matrix;
+Mat4 Transformation::GetRotationMatrix() const {
+    return m_RotationMatrix;
 }
-glm::vec3 Transformation::GetPos() const {
-    return _pos;
+Vec3 Transformation::GetPos() const {
+    return m_Pos;
 }
-glm::vec3 Transformation::GetPosOffset() const {
-    return _pos_offset;
+Vec3 Transformation::GetPosOffset() const {
+    return m_PosOffset;
 }
-glm::vec3 Transformation::GetAngles() const {
-    return _angles;
+Vec3 Transformation::GetAngles() const {
+    return m_Angles;
 }
 float Transformation::GetPitch() const {
-    return _angles.x;
+    return m_Angles.x;
 }
 float Transformation::GetYaw() const {
-    return _angles.y;
+    return m_Angles.y;
 }
 float Transformation::GetRoll() const {
-    return _angles.z;
+    return m_Angles.z;
 }
-glm::vec3 Transformation::GetScale() const {
-    return _scale;
+Vec3 Transformation::GetScale() const {
+    return m_Scale;
 }
 
 void Transformation::Update() {
-    if (_update_rotation) {
+    if (m_UpdateRotation) {
         UpdateRotationMatrix();
     }
-    if (_update_model) {
+    if (m_UpdateModel) {
         UpdateModelMatrix();
     }
 }

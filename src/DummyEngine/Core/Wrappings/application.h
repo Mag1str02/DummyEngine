@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DummyEngine/Core/Wrappings/window.h"
+#include "DummyEngine/Core/Wrappings/Window.h"
 
 namespace DE {
 class Application {
@@ -18,7 +18,7 @@ public:
     virtual void Update(double dt);
 
 protected:
-    Window* _window;
+    Window* m_Window;
 
 private:
     void SetDefaultGLFWSettings();

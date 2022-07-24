@@ -1,19 +1,19 @@
 #pragma once
 
-#include "DummyEngine/ToolBox/Dev/logger.h"
-#include "DummyEngine/Core/ECS/component_manager.hpp"
-#include "DummyEngine/Core/ECS/entity_manager.hpp"
+#include "DummyEngine/ToolBox/Dev/Logger.h"
+#include "DummyEngine/Core/ECS/ComponentManager.hpp"
+#include "DummyEngine/Core/ECS/EntityManager.hpp"
 
 namespace DE {
 
 class Entity {
 private:
-    EntityId _id;
+    EntityId m_ID;
 
 public:
     Entity() {
         auto [id, created] = EntityManager::Get().CreateEntity();
-        _id = id;
+        m_ID = id;
 
         if (created) {
             ComponentManager::Get().ExtendArrays();
@@ -22,16 +22,16 @@ public:
         // Logger::Info("ECS", "Entity", "Created by constructor");
     }
     Entity(const Entity& other) {
-        _id = EntityManager::Get().CopyEntity(other._id);
+        m_ID = EntityManager::Get().CopyEntity(other.m_ID);
         // Logger::Info("ECS", "Entity", "Created by copy constructor");
     }
     Entity(Entity&& other) {
-        _id = EntityManager::Get().CopyEntity(other._id);
+        m_ID = EntityManager::Get().CopyEntity(other.m_ID);
         // Logger::Info("ECS", "Entity", "Created by move constructor");
     }
     ~Entity() {
-        if (EntityManager::Get()._initialized) {
-            EntityManager::Get().DestroyInstance(_id);
+        if (EntityManager::Get().m_Initialized) {
+            EntityManager::Get().DestroyInstance(m_ID);
         }
         // Logger::Info("ECS", "Entity", "Destructed.");
     }
@@ -39,8 +39,8 @@ public:
         if (&other == this) {
             return *this;
         }
-        EntityManager::Get().DestroyInstance(_id);
-        _id = EntityManager::Get().CopyEntity(other._id);
+        EntityManager::Get().DestroyInstance(m_ID);
+        m_ID = EntityManager::Get().CopyEntity(other.m_ID);
         // Logger::Info("ECS", "Entity", "Assigned by operator=");
         return *this;
     }
@@ -48,8 +48,8 @@ public:
         if (&other == this) {
             return *this;
         }
-        EntityManager::Get().DestroyInstance(_id);
-        _id = EntityManager::Get().CopyEntity(other._id);
+        EntityManager::Get().DestroyInstance(m_ID);
+        m_ID = EntityManager::Get().CopyEntity(other.m_ID);
         // Logger::Info("ECS", "Entity", "Assigned by move operator=");
         return *this;
     }
@@ -59,16 +59,16 @@ public:
         if (ComponentManager::Get().GetComponentId<ComponentType>() == -1) {
             EntityManager::Get().ExtendSignatures();
         }
-        ComponentManager::Get().AddComponent(_id, component);
-        EntityManager::Get().AddComponent(_id, ComponentManager::Get().GetComponentId<ComponentType>());
+        ComponentManager::Get().AddComponent(m_ID, component);
+        EntityManager::Get().AddComponent(m_ID, ComponentManager::Get().GetComponentId<ComponentType>());
     }
     template <typename ComponentType>
     void RemoveComponent() {
         if (ComponentManager::Get().GetComponentId<ComponentType>() == -1) {
             EntityManager::Get().ExtendSignatures();
         }
-        ComponentManager::Get().RemoveComponent<ComponentType>(_id);
-        EntityManager::Get().RemoveComponent(_id, ComponentManager::Get().GetComponentId<ComponentType>());
+        ComponentManager::Get().RemoveComponent<ComponentType>(m_ID);
+        EntityManager::Get().RemoveComponent(m_ID, ComponentManager::Get().GetComponentId<ComponentType>());
     }
 
     template <typename ComponentType>
@@ -77,11 +77,11 @@ public:
             EntityManager::Get().ExtendSignatures();
             ComponentManager::Get().RegisterComponent<ComponentType>();
         }
-        if (!EntityManager::Get().GetComponent(_id, ComponentManager::Get().GetComponentId<ComponentType>())) {
-            ComponentManager::Get().AddComponent<ComponentType>(_id);
-            EntityManager::Get().AddComponent(_id, ComponentManager::Get().GetComponentId<ComponentType>());
+        if (!EntityManager::Get().GetComponent(m_ID, ComponentManager::Get().GetComponentId<ComponentType>())) {
+            ComponentManager::Get().AddComponent<ComponentType>(m_ID);
+            EntityManager::Get().AddComponent(m_ID, ComponentManager::Get().GetComponentId<ComponentType>());
         }
-        return ComponentManager::Get().GetComponent<ComponentType>(_id);
+        return ComponentManager::Get().GetComponent<ComponentType>(m_ID);
     }
 
     static void Log() {

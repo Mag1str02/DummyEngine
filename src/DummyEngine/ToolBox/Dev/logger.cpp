@@ -1,4 +1,4 @@
-#include "DummyEngine/ToolBox/Dev/logger.h"
+#include "DummyEngine/ToolBox/Dev/Logger.h"
 #include "DummyEngine/Config/config.h"
 
 namespace DE {
@@ -7,7 +7,7 @@ namespace fs = std::filesystem;
 Logger::Logger() {
 }
 Logger::~Logger() {
-    for (auto& [name, out] : _ofstreams) {
+    for (auto& [name, out] : m_Fstreams) {
         IInfo(name, "Logger", "Log closed.");
         out.close();
     }
@@ -37,19 +37,19 @@ void Logger::IPrintValue(std::ostream& out, const int& value) {
 }
 
 void Logger::IOpen(const fs::path& path_to_file, const std::string& log_name) {
-    if (_openned_files.contains(path_to_file.string())) {
+    if (m_Files.contains(path_to_file.string())) {
         return;
     }
-    _openned_files.insert(path_to_file.string());
-    _ofstreams[log_name].open(path_to_file);
+    m_Files.insert(path_to_file.string());
+    m_Fstreams[log_name].open(path_to_file);
 }
 void Logger::IClose(const std::string& log_name) {
     IInfo(log_name, "Logger", "Log closed.");
-    _ofstreams[log_name].close();
+    m_Fstreams[log_name].close();
 }
 void Logger::IWrite(const std::string& log_name, const std::string& author, const std::string& massage, const std::string& message_type) {
-    IPrintTime(_ofstreams[log_name]);
-    _ofstreams[log_name] << std::setw(MAX_MESSAGE_TYPE_LENGTH) << ("[" + message_type + "]") << " " << author << ": " << massage << std::endl;
+    IPrintTime(m_Fstreams[log_name]);
+    m_Fstreams[log_name] << std::setw(MAX_MESSAGE_TYPE_LENGTH) << ("[" + message_type + "]") << " " << author << ": " << massage << std::endl;
 }
 void Logger::IError(const std::string& log_name, const std::string& author, const std::string& massage) {
     IWrite(log_name, author, massage, "ERROR");

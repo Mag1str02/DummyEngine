@@ -23,7 +23,7 @@
 #include <cstdint>
 #include <queue>
 
-#include "config.h"
+#include "Config.h"
 
 namespace DE
 {

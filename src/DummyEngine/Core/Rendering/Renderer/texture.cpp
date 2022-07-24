@@ -1,6 +1,6 @@
-#include "DummyEngine/Core/Rendering/Renderer/texture.h"
-#include "DummyEngine/Core/Rendering/RendererOpenGL/gl_texture.h"
-#include "DummyEngine/Core/Rendering/Renderer/renderer.h"
+#include "DummyEngine/Core/Rendering/Renderer/Texture.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLTexture.h"
+#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
 namespace DE
 {
