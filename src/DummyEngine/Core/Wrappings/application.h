@@ -20,8 +20,5 @@ public:
 protected:
     Window* m_Window;
 
-private:
-    void SetDefaultGLFWSettings();
-    bool InitGLFW();
 };
 }  // namespace DE

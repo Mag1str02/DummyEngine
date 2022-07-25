@@ -16,7 +16,7 @@ private:
     void IPrintTime(std::ostream& out);
     void IPrintValue(std::ostream& out, const int& value);
 
-    void IOpen(const fs::path& path_to_file, const std::string& log_name);
+    void IOpen(const Path& path_to_file, const std::string& log_name);
     void IClose(const std::string& log_name);
     void IWrite(const std::string& log_name, const std::string& author, const std::string& massage, const std::string& message_type);
     void IError(const std::string& log_name, const std::string& author, const std::string& massage);
@@ -28,7 +28,7 @@ private:
 public:
     static Logger& Get();
 
-    static void Open(const fs::path& path_to_file, const std::string& log_name);
+    static void Open(const Path& path_to_file, const std::string& log_name);
     static void Close(const std::string& log_name);
     static void Write(const std::string& log_name, const std::string& author, const std::string& massage, const std::string& message_type);
     static void Error(const std::string& log_name, const std::string& author, const std::string& massage);

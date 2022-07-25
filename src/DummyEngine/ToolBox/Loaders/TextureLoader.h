@@ -10,6 +10,6 @@ namespace DE
     class TextureLoader
     {
     public:
-        static TextureData LoadTexture(const fs::path& path);
+        static TextureData LoadTexture(const Path& path);
     };
 }  // namespace DE

@@ -11,7 +11,7 @@
 
 #include "DummyEngine/Core/ECS/Entity.hpp"
 #include "DummyEngine/Core/ECS/SystemManager.hpp"
-#include "DummyEngine/Core/ECS/Transformation.h"
+#include "DummyEngine/Core/ECS/Components.h"
 
 #include "DummyEngine/Core/Initializer/Initializer.h"
 #include "DummyEngine/Core/Input/Input.h"

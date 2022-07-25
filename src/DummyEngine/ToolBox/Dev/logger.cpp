@@ -35,7 +35,7 @@ void Logger::IPrintValue(std::ostream& out, const int& value) {
     out << '0' << value;
 }
 
-void Logger::IOpen(const fs::path& path_to_file, const std::string& log_name) {
+void Logger::IOpen(const Path& path_to_file, const std::string& log_name) {
     if (m_Files.contains(path_to_file.string())) {
         return;
     }
@@ -72,7 +72,7 @@ Logger& Logger::Get() {
     return logger;
 }
 
-void Logger::Open(const fs::path& path_to_file, const std::string& log_name) {
+void Logger::Open(const Path& path_to_file, const std::string& log_name) {
     Get().IOpen(path_to_file, log_name);
 }
 void Logger::Close(const std::string& log_name) {

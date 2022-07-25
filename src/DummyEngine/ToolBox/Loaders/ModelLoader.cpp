@@ -13,7 +13,7 @@ ModelLoader& ModelLoader::Get() {
     return model_loader;
 }
 
-void ModelLoader::ILoadModel(const fs::path& path, RenderModelData& data) {
+void ModelLoader::ILoadModel(const Path& path, RenderModelData& data) {
     const aiScene* scene = m_Importer.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         Logger::Error("loading", "ModelLoader", std::string("Failed To Load Scene: (" + path.string() + ")\n") + m_Importer.GetErrorString());
@@ -101,7 +101,7 @@ Vec3 ModelLoader::IGetmaterialColor(aiMaterial* mat, ColorType type) {
 TextureData ModelLoader::ILoadMaterialTexture(aiMaterial* mat, aiTextureType type) {
     TextureData texture_data;
     aiString file_name;
-    fs::path texture_path;
+    Path texture_path;
     if (mat->GetTextureCount(type) > 1) {
         Logger::Warning("loading", "ModelLoader", "Model has more multiple textures of same type. Loading only first one.");
     }
@@ -126,7 +126,7 @@ void ModelLoader::IReadModelProperties(aiNode* node, const aiScene* scene) {
     }
 }
 
-void ModelLoader::LoadModel(const fs::path& path, RenderModelData& data) {
+void ModelLoader::LoadModel(const Path& path, RenderModelData& data) {
     Get().ILoadModel(path, data);
 }
 }  // namespace DE

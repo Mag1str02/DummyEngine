@@ -17,7 +17,7 @@ namespace DE
     struct ShaderPart
     {
         ShaderPartType type;
-        fs::path path;
+        Path path;
     };
 
     class Shader

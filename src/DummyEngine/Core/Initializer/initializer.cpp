@@ -1,31 +1,56 @@
+#include <GLFW/glfw3.h>
+
 #include "DummyEngine/Core/Initializer/Initializer.h"
 #include "DummyEngine/Core/ECS/ComponentManager.hpp"
 #include "DummyEngine/Core/ECS/EntityManager.hpp"
 #include "DummyEngine/Core/ECS/SystemManager.hpp"
 
-namespace DE {
+namespace DE
+{
 
-Initializer::Initializer() {
-}
-Initializer& Initializer::Get() {
-    static Initializer initializer;
-    return initializer;
-}
+    Initializer::Initializer() {}
+    Initializer& Initializer::Get()
+    {
+        static Initializer initializer;
+        return initializer;
+    }
 
-void Initializer::Initialize() {
-    EntityManager::Get().Initialize();
-    ComponentManager::Get();
-}
-void Initializer::Terminate() {
-    EntityManager::Get().Terminate();
-    ComponentManager::Get().Terminate();
-    SystemManager::Terminate();
-}
+    void Initializer::InitGLFW()
+    {
+        if (!glfwInit())
+        {
+            DE_ASSERT(false, "Failed to initialize GLFW.");
+        }
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        Logger::Info("loading", "Initializer", "GLFW initialized.");
+    }
+    void Initializer::TerminateGLFW()
+    {
+        glfwTerminate();
+    }
 
-void deInitialize() {
-    Initializer::Get().Initialize();
-}
-void deTerminate() {
-    Initializer::Get().Terminate();
-}
+    void Initializer::Initialize()
+    {
+        InitGLFW();
+        EntityManager::Get().Initialize();
+        ComponentManager::Get();
+    }
+    void Initializer::Terminate()
+    {
+        EntityManager::Get().Terminate();
+        ComponentManager::Get().Terminate();
+        SystemManager::Terminate();
+        TerminateGLFW();
+    }
+
+    void deInitialize()
+    {
+        Initializer::Get().Initialize();
+    }
+    void deTerminate()
+    {
+        Initializer::Get().Terminate();
+    }
 }  // namespace DE

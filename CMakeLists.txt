@@ -17,7 +17,7 @@ set(ENGINE_SOURCES
     src/DummyEngine/Core/ECS/EntityManager.hpp
     src/DummyEngine/Core/ECS/System.hpp
     src/DummyEngine/Core/ECS/SystemManager.hpp
-    src/DummyEngine/Core/ECS/Transformation.cpp
+    src/DummyEngine/Core/ECS/Components.cpp
 
     src/DummyEngine/Core/Initializer/Initializer.cpp
 
@@ -55,6 +55,11 @@ add_library(dummy_engine_lib
    ${ENGINE_SOURCES}
 )
 
+target_compile_definitions(dummy_engine_lib PRIVATE 
+ DE_ENABLE_FRAME_TIME_READER=1
+ DE_ENABLE_ASSERTS=1
+ )
+
 add_subdirectory(libs/glfw)
 add_subdirectory(libs/glad)
 
@@ -79,14 +84,16 @@ target_link_libraries(dummy_engine_lib
     PUBLIC assimp
 )
 
+
+
 ADD_CUSTOM_COMMAND(TARGET dummy_engine_lib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/libs/ASSIMP/lib/libassimp.dll ${PROJECT_BINARY_DIR}/.)
 
-add_executable(New_Model src/Mains/new_model.cpp)
-# add_executable(Test src/Mains/test.cpp)
-# add_executable(First src/Mains/first.cpp)
-# add_executable(Windows src/Mains/multiple_windows.cpp)
-# add_executable(ECS src/Mains/ECS.cpp)
-# add_executable(Hello_window src/Mains/hello_window.cpp)
+add_executable(New_Model src/Examples/new_model.cpp)
+# add_executable(Test src/Examples/test.cpp)
+# add_executable(First src/Examples/first.cpp)
+# add_executable(Windows src/Examples/multiple_windows.cpp)
+# add_executable(ECS src/Examples/ECS.cpp)
+# add_executable(Hello_window src/Examples/hello_window.cpp)
 
 target_link_libraries(New_Model PUBLIC dummy_engine_lib)
 # target_link_libraries(Test PUBLIC dummy_engine_lib)

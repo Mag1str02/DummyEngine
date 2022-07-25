@@ -42,7 +42,7 @@ namespace DE
         virtual const std::string& GetName() const;
 
     private:
-        static std::string ReadPartFromFile(const fs::path& path_to_file);
+        static std::string ReadPartFromFile(const Path& path_to_file);
 
         void AddPart(ShaderPart part);
 

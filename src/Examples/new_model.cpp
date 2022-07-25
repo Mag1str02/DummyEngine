@@ -1,5 +1,5 @@
-#include "../DummyEngine/Addition/DummyEngine.h"
-#include "../DummyEngine/Config/Config.h"
+
+#include "Config.h"
 
 using namespace DE;
 
@@ -60,17 +60,18 @@ public:
         auto& positions = GetComponentArray<Transformation>();
         auto& scales = GetComponentArray<ScaleManipulator>();
         auto& point_lights = GetComponentArray<PointLight>();
+
         for (auto [entity_id, linear_manipulator] : manipulators)
         {
-            positions[entity_id].MoveInWorld(linear_manipulator.Update(dt));
+            positions[entity_id].translation += linear_manipulator.Update(dt);
         }
         for (auto [entity_id, scale] : scales)
         {
-            positions[entity_id].SetScale(scale.GetScale());
+            positions[entity_id].scale = scale.GetScale();
         }
         for (auto [entity_id, point_light] : point_lights)
         {
-            point_light.position = positions[entity_id].GetPos();
+            point_light.position = positions[entity_id].translation;
         }
     }
 };
@@ -95,18 +96,12 @@ public:
         for (auto [entity_id, shader] : shaders)
         {
             shader->Bind();
-            shader->SetMat4("projection", camera.GetProjectionMatrix());
-            shader->SetMat4("view", camera.GetViewMatrix());
-            shader->SetFloat3("view_pos", camera.GetPos());
+            shader->SetMat4("u_ViewProjection", camera.GetViewProjection());
+            shader->SetFloat3("u_CameraPos", camera.GetPos());
         }
         for (auto [entity_id, drawable] : drawables)
         {
-            transformations[entity_id].Update();
-            auto shader = shaders[entity_id];
-            shader->Bind();
-            shader->SetMat4("rotation", transformations[entity_id].GetRotationMatrix());
-            shader->SetMat4("model", transformations[entity_id].GetModelMatrix());
-            Renderer::Submit(shader, models[entity_id]);
+            Renderer::Submit(shaders[entity_id], models[entity_id], transformations[entity_id].GetTransform());
         }
     }
 };
@@ -158,7 +153,7 @@ private:
     {
         scene["player"] = Entity();
         scene["backpack"] = Entity();
-        // scene["sponza"] = Entity();
+        scene["sponza"] = Entity();
         scene["train"] = Entity();
         scene["sun"] = Entity();
         scene["moon"] = Entity();
@@ -174,9 +169,9 @@ private:
 
         scene["backpack"].AddComponent<Transformation>();
 
-        // scene["sponza"].AddComponent<Transformation>();
-        // scene["sponza"].AddComponent<Drawable>();
-        // scene["sponza"].AddComponent<Ref<Shader>>();
+        scene["sponza"].AddComponent<Transformation>();
+        scene["sponza"].AddComponent<Drawable>();
+        scene["sponza"].AddComponent<Ref<Shader>>();
 
         scene["train"].AddComponent<Transformation>();
         scene["lamp_white"].AddComponent<Transformation>();
@@ -219,7 +214,7 @@ private:
         scene["train"].AddComponent<Ref<Shader>>(colored_phong);
         scene["surface"].AddComponent<Ref<Shader>>(colored_phong);
         scene["backpack"].AddComponent<Ref<Shader>>(textured_phong);
-        // scene["sponza"].AddComponent<Ref<Shader>>(textured_phong);
+        scene["sponza"].AddComponent<Ref<Shader>>(textured_phong);
 
         Logger::Info("loading", "Main", "Shaders loaded.");
     }
@@ -228,14 +223,14 @@ private:
     {
         Logger::Stage("loading", "Main", "LOADING MODELS");
 
-        RenderModelData train, backpack, cube, cubes;
-        RenderModel r_train, r_backpack, r_cube, r_cubes;
+        RenderModelData train, backpack, cube, cubes,sponza;
+        RenderModel r_train, r_backpack, r_cube, r_cubes,r_sponza;
 
         ModelLoader::LoadModel(MODEL_DIR / "Train" / "train.obj", train);
         ModelLoader::LoadModel(MODEL_DIR / "Backpack" / "backpack.obj", backpack);
         ModelLoader::LoadModel(MODEL_DIR / "Cube" / "cube.obj", cube);
         ModelLoader::LoadModel(MODEL_DIR / "Cubes" / "cubes.obj", cubes);
-        // ModelLoader::LoadModel(MODEL_DIR / "Sponza" / "sponza.obj", sponza);
+        ModelLoader::LoadModel(MODEL_DIR / "Sponza" / "sponza.obj", sponza);
 
         Logger::Stage("loading", "Main", "Models Loaded");
 
@@ -246,7 +241,7 @@ private:
 
         Logger::Stage("loading", "Main", "Compressed");
 
-        // r_sponza.FillData(sponza);
+        r_sponza.FillData(sponza);
         r_train.FillData(train);
         r_backpack.FillData(backpack);
         r_cube.FillData(cube);
@@ -258,7 +253,7 @@ private:
         scene["train"].AddComponent<RenderModel>(r_train);
         scene["surface"].AddComponent<RenderModel>(r_cubes);
         scene["cubes"].AddComponent<RenderModel>(r_cubes);
-        // scene["sponza"].AddComponent<RenderModel>(r_sponza);
+        scene["sponza"].AddComponent<RenderModel>(r_sponza);
 
         scene["lamp_white"].AddComponent<RenderModel>(r_cube);
         scene["lamp_magenta"].AddComponent<RenderModel>(r_cube);
@@ -270,7 +265,7 @@ private:
         for (int i = 0; i < 2; ++i)
         {
             scene["train" + std::to_string(i)].AddComponent<RenderModel>(scene["train"].GetComponent<RenderModel>());
-            scene["train" + std::to_string(i)].GetComponent<Transformation>().SetPos(Vec3(0, 100, 300 - i * 12));
+            scene["train" + std::to_string(i)].GetComponent<Transformation>().translation = Vec3(0, 100, 300 - i * 12);
             scene["train" + std::to_string(i)].AddComponent<Ref<Shader>>(scene["train"].GetComponent<Ref<Shader>>());
             scene["train" + std::to_string(i)].AddComponent<LinearManipulator>();
             scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().current_time = i * 3.14 / 16;
@@ -289,14 +284,14 @@ private:
     {
         Logger::Stage("loading", "Main", "SETTING OBJECTS PROPERTIES");
 
-        // scene["sponza"].GetComponent<Transformation>().SetPos(Vec3(0, 50, 0));
-        // scene["sponza"].GetComponent<Transformation>().SetScale(Vec3(0.01));
+        scene["sponza"].GetComponent<Transformation>().translation = Vec3(0, 50, 0);
+        scene["sponza"].GetComponent<Transformation>().scale = Vec3(0.01);
 
-        scene["backpack"].GetComponent<Transformation>().SetPos(Vec3(30, 0, 0));
+        scene["backpack"].GetComponent<Transformation>().translation = Vec3(30, 0, 0);
         scene["backpack"].GetComponent<LinearManipulator>().radius = 0;
 
-        scene["surface"].GetComponent<Transformation>().SetPos(Vec3(0, -10, 0));
-        scene["surface"].GetComponent<Transformation>().SetScale(Vec3(500, 0.1, 500));
+        scene["surface"].GetComponent<Transformation>().translation = Vec3(0, -10, 0);
+        scene["surface"].GetComponent<Transformation>().scale = Vec3(500, 0.1, 500);
 
         FPSCamera& camera = scene["player"].GetComponent<FPSCamera>();
         DirectionalLight& sun = scene["sun"].GetComponent<DirectionalLight>();
@@ -309,12 +304,12 @@ private:
         scene["lamp_white"].GetComponent<LinearManipulator>().dir = Vec3(1, 0, 0);
         scene["lamp_white"].GetComponent<LinearManipulator>().radius = 50;
         scene["lamp_white"].GetComponent<LinearManipulator>().speed = 0.5;
-        scene["lamp_white"].GetComponent<Transformation>().SetPos(Vec3(0, 20, 0));
+        scene["lamp_white"].GetComponent<Transformation>().translation = Vec3(0, 20, 0);
 
         scene["lamp_magenta"].GetComponent<LinearManipulator>().dir = Vec3(0, 0, 1);
         scene["lamp_magenta"].GetComponent<LinearManipulator>().radius = 50;
         scene["lamp_magenta"].GetComponent<LinearManipulator>().speed = 0.5;
-        scene["lamp_magenta"].GetComponent<Transformation>().SetPos(Vec3(0, 10, 0));
+        scene["lamp_magenta"].GetComponent<Transformation>().translation = Vec3(0, 10, 0);
 
         camera.SetPos(Vec3(0.0f, 0.0f, 10.0f));
 

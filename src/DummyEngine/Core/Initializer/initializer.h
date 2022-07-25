@@ -13,6 +13,9 @@ namespace DE
 
         Initializer();
 
+        void InitGLFW();
+        void TerminateGLFW();
+
     public:
         static Initializer& Get();
         void Initialize();

@@ -17,9 +17,9 @@ namespace DE
         static void OnWindowResize(uint32_t width, uint32_t height);
 
         static void Clear();
-        static void Submit(Ref<Shader> shader, const Ref<VertexArray>& mesh, const Mat4& trasgormation = Mat4(1.0f));
-        static void Submit(Ref<Shader> shader, const RenderMesh& mesh, const Mat4& trasgormation = Mat4(1.0f));
-        static void Submit(Ref<Shader> shader, const RenderModel& mesh, const Mat4& trasgormation = Mat4(1.0f));
+        static void Submit(Ref<Shader> shader, const Ref<VertexArray>& mesh, const Mat4& trasform = Mat4(1.0f));
+        static void Submit(Ref<Shader> shader, const RenderMesh& mesh, const Mat4& trasform = Mat4(1.0f));
+        static void Submit(Ref<Shader> shader, const RenderModel& mesh, const Mat4& trasform = Mat4(1.0f));
 
         static void Enable(RenderSetting setting);
         static void Disable(RenderSetting setting);

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "DummyEngine/Addition/CompileConfig.h"
-
 namespace DE
 {
     void DEAssert(const char* expr_str, bool expr, const char* file, int line, std::string msg);

@@ -38,22 +38,25 @@ namespace DE
         m_RenderAPI->Clear();
     }
 
-    void Renderer::Submit(Ref<Shader> shader, const Ref<VertexArray>& vertex_array, const Mat4& trasformation)
+    void Renderer::Submit(Ref<Shader> shader, const Ref<VertexArray>& vertex_array, const Mat4& trasform)
     {
         shader->Bind();
+        shader->SetMat4("u_Transform", trasform);
         vertex_array->Bind();
         glDrawElements(GL_TRIANGLES, vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, 0);
     }
-    void Renderer::Submit(Ref<Shader> shader, const RenderMesh& mesh, const Mat4& trasformation)
+    void Renderer::Submit(Ref<Shader> shader, const RenderMesh& mesh, const Mat4& trasform)
     {
         shader->Bind();
         shader->SetMaterial("u_Material", mesh.material);
+        shader->SetMat4("u_Transform", trasform);
         mesh.vertex_array->Bind();
         m_RenderAPI->DrawIndexed(mesh.vertex_array);
     }
-    void Renderer::Submit(Ref<Shader> shader, const RenderModel& model, const Mat4& trasformation)
+    void Renderer::Submit(Ref<Shader> shader, const RenderModel& model, const Mat4& trasform)
     {
         shader->Bind();
+        shader->SetMat4("u_Transform", trasform);
         for (const auto& mesh : model.meshes)
         {
             shader->SetMaterial("u_Material", mesh.material);

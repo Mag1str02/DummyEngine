@@ -17,7 +17,7 @@ private:
     size_t m_CurrentMeshId;
     std::unordered_map<std::string, TextureData> m_PathToTextureData;
 
-    fs::path m_CurrentDirectory;
+    Path m_CurrentDirectory;
     RenderModelData* m_CurrentData;
 
     Assimp::Importer m_Importer;
@@ -25,7 +25,7 @@ private:
 
     static ModelLoader& Get();
 
-    void ILoadModel(const fs::path& path, RenderModelData& data);
+    void ILoadModel(const Path& path, RenderModelData& data);
     void IProcessNode(aiNode* node, const aiScene* scene);
     void IProcessMesh(aiMesh* mesh, const aiScene* scene);
     TextureData ILoadMaterialTexture(aiMaterial* mat, aiTextureType type);
@@ -33,6 +33,6 @@ private:
     void IReadModelProperties(aiNode* node, const aiScene* scene);
 
 public:
-    static void LoadModel(const fs::path& path, RenderModelData& data);
+    static void LoadModel(const Path& path, RenderModelData& data);
 };
 }  // namespace DE

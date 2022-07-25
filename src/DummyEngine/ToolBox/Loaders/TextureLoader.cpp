@@ -6,7 +6,7 @@
 namespace DE
 {
 
-    TextureData TextureLoader::LoadTexture(const fs::path& path)
+    TextureData TextureLoader::LoadTexture(const Path& path)
     {
         int width, height, nrChannels;
         TextureData texture_data;

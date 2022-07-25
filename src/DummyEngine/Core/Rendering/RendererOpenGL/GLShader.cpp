@@ -137,7 +137,7 @@ namespace DE
         return m_Name;
     }
 
-    std::string GLShader::ReadPartFromFile(const fs::path& path_to_file)
+    std::string GLShader::ReadPartFromFile(const Path& path_to_file)
     {
         std::string line;
         std::string source_string;
