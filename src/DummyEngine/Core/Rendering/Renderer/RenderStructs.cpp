@@ -1,4 +1,4 @@
-#include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
+#include "Core/Rendering/Renderer/RenderStructs.h"
 
 namespace DE
 {

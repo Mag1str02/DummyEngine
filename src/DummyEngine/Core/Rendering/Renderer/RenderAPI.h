@@ -1,8 +1,8 @@
 #pragma once
 
-#include "DummyEngine/Addition/Base.h"
-#include "DummyEngine/Core/Wrappings/Window.h"
-#include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
+#include "Addition/Base.h"
+#include "Core/Wrappings/Window.h"
+#include "Core/Rendering/Renderer/VertexArray.h"
 
 namespace DE
 {

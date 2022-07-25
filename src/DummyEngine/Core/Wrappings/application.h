@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DummyEngine/Core/Wrappings/Window.h"
+#include "Core/Wrappings/Window.h"
 
 namespace DE {
 class Application {

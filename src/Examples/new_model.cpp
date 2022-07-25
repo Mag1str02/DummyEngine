@@ -202,12 +202,12 @@ private:
 
         Ref<Shader> colored_phong = Shader::Create(
             "ColoredPhong",
-            {{.type = ShaderPartType::Vertex, .path = SHADER_DIR / "ColoredPhong" / "ColoredPhong.vs"},
-             {.type = ShaderPartType::Fragment, .path = SHADER_DIR / "ColoredPhong" / "ColoredPhong.fs"}});
+            {{.type = ShaderPartType::Vertex, .path = Config::GetPath(DE_CFG_SHADER_PATH) / "ColoredPhong" / "ColoredPhong.vs"},
+             {.type = ShaderPartType::Fragment, .path = Config::GetPath(DE_CFG_SHADER_PATH) / "ColoredPhong" / "ColoredPhong.fs"}});
         Ref<Shader> textured_phong = Shader::Create(
             "TexturedPhong",
-            {{.type = ShaderPartType::Vertex, .path = SHADER_DIR / "TexturedPhong" / "TexturedPhong.vs"},
-             {.type = ShaderPartType::Fragment, .path = SHADER_DIR / "TexturedPhong" / "TexturedPhong.fs"}});
+            {{.type = ShaderPartType::Vertex, .path = Config::GetPath(DE_CFG_SHADER_PATH) / "TexturedPhong" / "TexturedPhong.vs"},
+             {.type = ShaderPartType::Fragment, .path = Config::GetPath(DE_CFG_SHADER_PATH) / "TexturedPhong" / "TexturedPhong.fs"}});
 
         scene["colored_phong"].GetComponent<UniqueShader>().shader = colored_phong;
         scene["textured_phong"].GetComponent<UniqueShader>().shader = textured_phong;
@@ -223,14 +223,14 @@ private:
     {
         Logger::Stage("loading", "Main", "LOADING MODELS");
 
-        RenderModelData train, backpack, cube, cubes,sponza;
-        RenderModel r_train, r_backpack, r_cube, r_cubes,r_sponza;
+        RenderModelData train, backpack, cube, cubes, sponza;
+        RenderModel r_train, r_backpack, r_cube, r_cubes, r_sponza;
 
-        ModelLoader::LoadModel(MODEL_DIR / "Train" / "train.obj", train);
-        ModelLoader::LoadModel(MODEL_DIR / "Backpack" / "backpack.obj", backpack);
-        ModelLoader::LoadModel(MODEL_DIR / "Cube" / "cube.obj", cube);
-        ModelLoader::LoadModel(MODEL_DIR / "Cubes" / "cubes.obj", cubes);
-        ModelLoader::LoadModel(MODEL_DIR / "Sponza" / "sponza.obj", sponza);
+        ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Train" / "train.obj", train);
+        ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Backpack" / "backpack.obj", backpack);
+        ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Cube" / "cube.obj", cube);
+        ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Cubes" / "cubes.obj", cubes);
+        ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Sponza" / "sponza.obj", sponza);
 
         Logger::Stage("loading", "Main", "Models Loaded");
 

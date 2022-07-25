@@ -1,10 +1,10 @@
 #pragma once
 
-#include "DummyEngine/Addition/Base.h"
-#include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
-#include "DummyEngine/Core/Rendering/Renderer/Texture.h"
-#include "DummyEngine/Core/Rendering/Renderer/RenderAPI.h"
-#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
+#include "Addition/Base.h"
+#include "Core/Rendering/Renderer/VertexArray.h"
+#include "Core/Rendering/Renderer/Texture.h"
+#include "Core/Rendering/Renderer/RenderAPI.h"
+#include "Core/Rendering/Renderer/Shader.h"
 
 namespace DE
 {

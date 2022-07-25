@@ -1,5 +1,5 @@
-#include "DummyEngine/Core/Rendering/RendererOpenGL/GLTexture.h"
-#include "DummyEngine/ToolBox/Dev/Logger.h"
+#include "Core/Rendering/RendererOpenGL/GLTexture.h"
+#include "ToolBox/Dev/Logger.h"
 
 namespace DE
 {

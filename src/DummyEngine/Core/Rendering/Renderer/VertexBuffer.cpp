@@ -1,6 +1,6 @@
-#include "DummyEngine/Core/Rendering/Renderer/VertexBuffer.h"
-#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
-#include "DummyEngine/Core/Rendering/RendererOpenGL/GLVertexBuffer.h"
+#include "Core/Rendering/Renderer/VertexBuffer.h"
+#include "Core/Rendering/Renderer/Renderer.h"
+#include "Core/Rendering/RendererOpenGL/GLVertexBuffer.h"
 
 namespace DE
 {

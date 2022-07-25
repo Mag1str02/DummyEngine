@@ -1,12 +1,12 @@
-[submodule "libs/GLM"]
-	path = libs/GLM
+[submodule "src/DummyEngine/Libs/GLM"]
+	path = src/DummyEngine/Libs/GLM
 	url = https://github.com/g-truc/glm
-[submodule "libs/GLFW"]
-	path = libs/GLFW
+[submodule "src/DummyEngine/Libs/GLFW"]
+	path = src/DummyEngine/Libs/GLFW
 	url = https://github.com/glfw/glfw
-[submodule "libs/STB_IMAGE"]
-	path = libs/STB_IMAGE
+[submodule "src/DummyEngine/Libs/STB_IMAGE"]
+	path = src/DummyEngine/Libs/STB_IMAGE
 	url = https://github.com/nothings/stb
-[submodule "libs/GLAD"]
-	path = libs/GLAD
+[submodule "src/DummyEngine/Libs/GLAD"]
+	path = src/DummyEngine/Libs/GLAD
 	url = https://github.com/Dav1dde/glad

@@ -1,8 +1,8 @@
-#include "DummyEngine/Core/Wrappings/Window.h"
-#include "DummyEngine/ToolBox/Dev/FrameTimeReader.h"
-#include "DummyEngine/ToolBox/Dev/Logger.h"
-#include "DummyEngine/Core/ECS/SystemManager.hpp"
-#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "Core/Wrappings/Window.h"
+#include "ToolBox/Dev/FrameTimeReader.h"
+#include "ToolBox/Dev/Logger.h"
+#include "Core/ECS/SystemManager.hpp"
+#include "Core/Rendering/Renderer/Renderer.h"
 
 namespace DE
 {

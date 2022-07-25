@@ -1,5 +1,5 @@
-#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
-#include "DummyEngine/Core/Rendering/RendererOpenGL/GLRenderAPI.h"
+#include "Core/Rendering/Renderer/Renderer.h"
+#include "Core/Rendering/RendererOpenGL/GLRenderAPI.h"
 
 namespace DE
 {

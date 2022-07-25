@@ -1,9 +1,9 @@
 #include <GLFW/glfw3.h>
 
-#include "DummyEngine/Core/Initializer/Initializer.h"
-#include "DummyEngine/Core/ECS/ComponentManager.hpp"
-#include "DummyEngine/Core/ECS/EntityManager.hpp"
-#include "DummyEngine/Core/ECS/SystemManager.hpp"
+#include "Core/Initializer/Initializer.h"
+#include "Core/ECS/ComponentManager.hpp"
+#include "Core/ECS/EntityManager.hpp"
+#include "Core/ECS/SystemManager.hpp"
 
 namespace DE
 {

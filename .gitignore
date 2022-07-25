@@ -1,8 +1,10 @@
-build/
-.vscode/c_cpp_properties.json
-.vscode/launch.json
-.vscode/tasks.json 
-.vscode/settings.json 
-res/logs/
-libs/ASSIMP
+**.exe
 **/tempCodeRunnerFile.cpp
+
+.vscode/
+build/
+
+Sandbox/Assets/Logs/**
+Sandbox/**.dll
+
+src/DummyEngine/libs/ASSIMP

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DummyEngine/Addition/Base.h"
-#include "DummyEngine/ToolBox/Dev/Logger.h"
+#include "Addition/Base.h"
+#include "ToolBox/Dev/Logger.h"
 
 namespace DE {
 

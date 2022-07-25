@@ -1,4 +1,4 @@
-#include "DummyEngine/Core/Objects/LightSources/SpotLight.h"
+#include "Core/Objects/LightSources/SpotLight.h"
 
 namespace DE {
 SpotLight::SpotLight() {

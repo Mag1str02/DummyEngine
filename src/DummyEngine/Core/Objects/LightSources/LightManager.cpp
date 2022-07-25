@@ -1,5 +1,5 @@
-#include "DummyEngine/Core/Objects/LightSources/LightManager.h"
-#include "DummyEngine/ToolBox/Dev/FrameTimeReader.h"
+#include "Core/Objects/LightSources/LightManager.h"
+#include "ToolBox/Dev/FrameTimeReader.h"
 
 namespace DE
 {

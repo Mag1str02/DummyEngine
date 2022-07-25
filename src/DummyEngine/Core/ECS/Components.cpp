@@ -1,4 +1,4 @@
-#include "DummyEngine/Core/ECS/Components.h"
+#include "Core/ECS/Components.h"
 
 namespace DE
 {

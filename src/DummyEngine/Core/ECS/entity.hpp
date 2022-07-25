@@ -1,8 +1,8 @@
 #pragma once
 
-#include "DummyEngine/ToolBox/Dev/Logger.h"
-#include "DummyEngine/Core/ECS/ComponentManager.hpp"
-#include "DummyEngine/Core/ECS/EntityManager.hpp"
+#include "ToolBox/Dev/Logger.h"
+#include "Core/ECS/ComponentManager.hpp"
+#include "Core/ECS/EntityManager.hpp"
 
 namespace DE {
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DummyEngine/Core/Objects/LightSources/PointLight.h"
-#include "DummyEngine/Addition/Base.h"
+#include "Core/Objects/LightSources/PointLight.h"
+#include "Addition/Base.h"
 
 namespace DE {
 class SpotLight : public PointLight {

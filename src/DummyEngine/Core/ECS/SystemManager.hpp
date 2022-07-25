@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DummyEngine/ToolBox/Dev/FrameTimeReader.h"
-#include "DummyEngine/Core/ECS/System.hpp"
+#include "ToolBox/Dev/FrameTimeReader.h"
+#include "Core/ECS/System.hpp"
 
 namespace DE
 {

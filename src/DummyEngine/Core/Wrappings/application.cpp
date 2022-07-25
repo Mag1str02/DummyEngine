@@ -1,7 +1,7 @@
-#include "DummyEngine/Core/Wrappings/Application.h"
-#include "DummyEngine/ToolBox/Dev/FrameTimeReader.h"
-#include "DummyEngine/Core/ECS/SystemManager.hpp"
-#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "Core/Wrappings/Application.h"
+#include "ToolBox/Dev/FrameTimeReader.h"
+#include "Core/ECS/SystemManager.hpp"
+#include "Core/Rendering/Renderer/Renderer.h"
 
 namespace DE
 {
@@ -9,8 +9,8 @@ namespace DE
     Application::Application(std::string name)
     {
         Config::Init();
-        Logger::Open(Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "loading.txt", "loading");
-        Logger::Open(Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "ECS.txt", "ECS");
+        Logger::Open(Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Assets/Logs" / "loading.txt", "loading");
+        Logger::Open(Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Assets/Logs" / "ECS.txt", "ECS");
         deInitialize();
         m_Window = new Window();
         m_Window->SetName(name);

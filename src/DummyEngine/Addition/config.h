@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DummyEngine/Addition/Types.h"
+#include "Addition/Types.h"
 
 namespace DE
 {
@@ -15,6 +15,10 @@ namespace DE
 #define DE_CFG_DEFAULT_CAMERA_FAR_PLANE 4
 
 #define DE_CFG_EXECUTABLE_PATH 1
+#define DE_CFG_ASSET_PATH 2
+#define DE_CFG_LOG_PATH 3
+#define DE_CFG_MODEL_PATH 4
+#define DE_CFG_SHADER_PATH 5
 
     class Config
     {
@@ -38,6 +42,10 @@ namespace DE
             float c_DefaultCameraFarPlane = 2000.0f;
 
             Path c_ExecutablePath;
+            Path c_ShaderPath;
+            Path c_ModelPath;
+            Path c_AssetPath;
+            Path c_LogPath;
         };
         static Configs m_Configs;
     };

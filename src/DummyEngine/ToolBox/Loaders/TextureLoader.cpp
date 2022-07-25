@@ -1,7 +1,7 @@
 #include <stb_image.h>
 
-#include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
-#include "DummyEngine/ToolBox/Dev/Logger.h"
+#include "ToolBox/Loaders/TextureLoader.h"
+#include "ToolBox/Dev/Logger.h"
 
 namespace DE
 {

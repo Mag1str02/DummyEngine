@@ -1,9 +1,9 @@
 #pragma once
 
-#include "DummyEngine/Addition/Base.h"
+#include "Addition/Base.h"
 
-#include "DummyEngine/ToolBox/Dev/Logger.h"
-#include "DummyEngine/Core/Initializer/Initializer.h"
+#include "ToolBox/Dev/Logger.h"
+#include "Core/Initializer/Initializer.h"
 
 namespace DE
 {

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "DummyEngine/Core/ECS/Entity.hpp"
-#include "DummyEngine/Core/ECS/System.hpp"
-#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
-#include "DummyEngine/Core/Objects/LightSources/DirectionalLight.h"
-#include "DummyEngine/Core/Objects/LightSources/PointLight.h"
-#include "DummyEngine/Core/Objects/LightSources/SpotLight.h"
+#include "Core/ECS/Entity.hpp"
+#include "Core/ECS/System.hpp"
+#include "Core/Rendering/Renderer/Shader.h"
+#include "Core/Objects/LightSources/DirectionalLight.h"
+#include "Core/Objects/LightSources/PointLight.h"
+#include "Core/Objects/LightSources/SpotLight.h"
 
 namespace DE
 {

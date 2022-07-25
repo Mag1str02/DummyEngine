@@ -1,4 +1,4 @@
-#include "DummyEngine/Core/Objects/LightSources/PointLight.h"
+#include "Core/Objects/LightSources/PointLight.h"
 
 namespace DE {
 PointLight::PointLight() {

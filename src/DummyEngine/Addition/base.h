@@ -23,9 +23,9 @@
 #include <cstdint>
 #include <queue>
 
-#include "DummyEngine/Addition/Types.h"
-#include "DummyEngine/Addition/Config.h"
-#include "DummyEngine/Addition/Assert.h"
+#include "Addition/Types.h"
+#include "Addition/Config.h"
+#include "Addition/Assert.h"
 
 namespace DE
 {

@@ -1,4 +1,4 @@
-#include "DummyEngine/Core/Objects/LightSources/DirectionalLight.h"
+#include "Core/Objects/LightSources/DirectionalLight.h"
 
 namespace DE {
 DirectionalLight::DirectionalLight() {

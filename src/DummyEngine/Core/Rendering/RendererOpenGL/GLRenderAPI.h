@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DummyEngine/Core/Rendering/Renderer/RenderAPI.h"
+#include "Core/Rendering/Renderer/RenderAPI.h"
 
 namespace DE
 {

@@ -1,5 +1,7 @@
-#include "DummyEngine/Addition/Config.h"
-#include "DummyEngine/Addition/Assert.h"
+#include "Addition/Config.h"
+#include "Addition/Assert.h"
+#include <iostream>
+#include <windows.h>
 
 namespace DE
 {
@@ -32,7 +34,11 @@ namespace DE
     {
         switch (setting)
         {
-            case DE_CFG_EXECUTABLE_PATH : return m_Configs.c_ExecutablePath;
+            case DE_CFG_EXECUTABLE_PATH: return m_Configs.c_ExecutablePath;
+            case DE_CFG_ASSET_PATH: return m_Configs.c_AssetPath;
+            case DE_CFG_LOG_PATH: return m_Configs.c_LogPath;
+            case DE_CFG_MODEL_PATH: return m_Configs.c_ModelPath;
+            case DE_CFG_SHADER_PATH: return m_Configs.c_ShaderPath;
             default: DE_ASSERT(false, "Wrong config requested.");
         }
         return Path(".");
@@ -40,5 +46,13 @@ namespace DE
     void Config::Init()
     {
         m_Configs.c_ExecutablePath = fs::current_path();
+
+        m_Configs.c_AssetPath = m_Configs.c_ExecutablePath / "Assets";
+        m_Configs.c_LogPath = m_Configs.c_AssetPath / "Logs";
+        m_Configs.c_ModelPath = m_Configs.c_AssetPath / "Models";
+        m_Configs.c_ShaderPath = m_Configs.c_AssetPath / "Shaders";
+
+        std::cout << m_Configs.c_ExecutablePath << std::endl;
+        Sleep(2000);
     }
 }  // namespace DE

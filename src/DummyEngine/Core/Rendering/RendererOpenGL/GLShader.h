@@ -2,9 +2,9 @@
 
 #include <GLAD/glad.h>
 
-#include "DummyEngine/Addition/Base.h"
-#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
-#include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
+#include "Addition/Base.h"
+#include "Core/Rendering/Renderer/Shader.h"
+#include "Core/Rendering/Renderer/RenderStructs.h"
 
 namespace DE
 {

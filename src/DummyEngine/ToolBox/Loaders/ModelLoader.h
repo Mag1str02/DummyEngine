@@ -3,7 +3,7 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 
-#include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
+#include "Core/Rendering/Renderer/RenderStructs.h"
 
 namespace DE {
 namespace fs = std::filesystem;

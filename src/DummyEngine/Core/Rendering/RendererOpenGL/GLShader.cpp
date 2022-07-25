@@ -1,5 +1,5 @@
-#include "DummyEngine/Core/Rendering/RendererOpenGL/GLShader.h"
-#include "DummyEngine/ToolBox/Dev/Logger.h"
+#include "Core/Rendering/RendererOpenGL/GLShader.h"
+#include "ToolBox/Dev/Logger.h"
 
 namespace DE
 {

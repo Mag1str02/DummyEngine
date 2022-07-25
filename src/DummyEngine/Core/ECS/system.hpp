@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DummyEngine/Core/ECS/ComponentManager.hpp"
+#include "Core/ECS/ComponentManager.hpp"
 
 namespace DE
 {

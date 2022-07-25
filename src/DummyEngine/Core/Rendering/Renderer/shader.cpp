@@ -1,6 +1,6 @@
-#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
-#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
-#include "DummyEngine/Core/Rendering/RendererOpenGL/GLShader.h"
+#include "Core/Rendering/Renderer/Shader.h"
+#include "Core/Rendering/Renderer/Renderer.h"
+#include "Core/Rendering/RendererOpenGL/GLShader.h"
 
 namespace DE
 {

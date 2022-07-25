@@ -2,8 +2,8 @@
 
 #include <GLAD/glad.h>
 
-#include "DummyEngine/Addition/Base.h"
-#include "DummyEngine/Core/Rendering/Renderer/Texture.h"
+#include "Addition/Base.h"
+#include "Core/Rendering/Renderer/Texture.h"
 
 namespace DE
 {
