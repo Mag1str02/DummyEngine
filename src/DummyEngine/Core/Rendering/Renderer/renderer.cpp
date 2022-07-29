@@ -3,11 +3,17 @@
 
 namespace DE
 {
-
+    Scope<FrameStatistics> Renderer::m_FrameStatistics = nullptr;
     Scope<RenderAPI> Renderer::m_RenderAPI = nullptr;
+
+    void FrameStatistics::Reset()
+    {
+        m_DrawCallsAmount = 0;
+    }
 
     void Renderer::Init(API api)
     {
+        m_FrameStatistics = CreateScope<FrameStatistics>();
         switch (api)
         {
             case API::OpenGL: m_RenderAPI = CreateScope<GLRenderAPI>(); break;
@@ -33,17 +39,23 @@ namespace DE
         m_RenderAPI->SetViewport(0, 0, width, height);
     }
 
+    void Renderer::BeginFrame()
+    {
+        m_FrameStatistics->Reset();
+    }
+    void Renderer::EndFrame() {}
+
     void Renderer::Clear()
     {
         m_RenderAPI->Clear();
     }
-
     void Renderer::Submit(Ref<Shader> shader, const Ref<VertexArray>& vertex_array, const Mat4& trasform)
     {
         shader->Bind();
         shader->SetMat4("u_Transform", trasform);
         vertex_array->Bind();
         glDrawElements(GL_TRIANGLES, vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, 0);
+        ++m_FrameStatistics->m_DrawCallsAmount;
     }
     void Renderer::Submit(Ref<Shader> shader, const RenderMesh& mesh, const Mat4& trasform)
     {
@@ -52,6 +64,7 @@ namespace DE
         shader->SetMat4("u_Transform", trasform);
         mesh.vertex_array->Bind();
         m_RenderAPI->DrawIndexed(mesh.vertex_array);
+        ++m_FrameStatistics->m_DrawCallsAmount;
     }
     void Renderer::Submit(Ref<Shader> shader, const RenderModel& model, const Mat4& trasform)
     {
@@ -62,6 +75,7 @@ namespace DE
             shader->SetMaterial("u_Material", mesh.material);
             mesh.vertex_array->Bind();
             m_RenderAPI->DrawIndexed(mesh.vertex_array);
+            ++m_FrameStatistics->m_DrawCallsAmount;
         }
     }
 
@@ -88,4 +102,8 @@ namespace DE
         return m_RenderAPI->GetAPI();
     }
 
+    FrameStatistics Renderer::GetStatistics()
+    {
+        return *m_FrameStatistics;
+    }
 }  // namespace DE

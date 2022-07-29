@@ -6,18 +6,6 @@
 
 namespace DE
 {
-    enum class API
-    {
-        None = 0,
-        OpenGL,
-        Vulkan
-    };
-    enum class RenderSetting
-    {
-        None = 0,
-        DepthTest,
-        MultiSampling
-    };
 
     class RenderAPI
     {

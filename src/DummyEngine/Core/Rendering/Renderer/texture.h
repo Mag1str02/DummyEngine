@@ -4,13 +4,7 @@
 
 namespace DE
 {
-    enum class TextureFormat
-    {
-        None = 0,
-        RED,
-        RGB,
-        RGBA
-    };
+    
     struct TextureData
     {
         Ref<unsigned char*> data;

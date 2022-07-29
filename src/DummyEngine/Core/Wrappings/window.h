@@ -7,8 +7,6 @@
 
 namespace DE {
 
-enum class WindowMode { none, windowed, borderless_windowed, fullscreen };
-
 struct WindowState {
     std::string name;
     WindowMode window_mode;

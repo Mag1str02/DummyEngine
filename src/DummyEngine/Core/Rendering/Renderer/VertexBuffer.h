@@ -4,25 +4,7 @@
 
 namespace DE
 {
-    enum class BufferElementType
-    {
-        None = 0,
-        Float,
-        Float2,
-        Float3,
-        Float4,
-        Int,
-        Int2,
-        Int3,
-        Int4
-    };
-    enum class BufferUsage
-    {
-        None = 0,
-        Static,
-        Dynamic
-    };
-
+    
     struct BufferElement
     {
         BufferElementType type;

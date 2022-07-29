@@ -1,7 +1,5 @@
 #include "Addition/Config.h"
 #include "Addition/Assert.h"
-#include <iostream>
-#include <windows.h>
 
 namespace DE
 {
@@ -43,16 +41,19 @@ namespace DE
         }
         return Path(".");
     }
+    API Config::GetRenderAPI()
+    {
+        return m_Configs.c_RenderAPI;
+    }
     void Config::Init()
     {
         m_Configs.c_ExecutablePath = fs::current_path();
 
         m_Configs.c_AssetPath = m_Configs.c_ExecutablePath / "Assets";
-        m_Configs.c_LogPath = m_Configs.c_AssetPath / "Logs";
+        m_Configs.c_LogPath = m_Configs.c_ExecutablePath / "Logs";
         m_Configs.c_ModelPath = m_Configs.c_AssetPath / "Models";
         m_Configs.c_ShaderPath = m_Configs.c_AssetPath / "Shaders";
 
-        std::cout << m_Configs.c_ExecutablePath << std::endl;
-        Sleep(2000);
+        m_Configs.c_RenderAPI = API::OpenGL;
     }
 }  // namespace DE

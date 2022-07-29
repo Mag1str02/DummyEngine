@@ -6,9 +6,7 @@ project(DummyEngineLib)
 
 set(ENGINE_SOURCES  
     Addition/Assert.cpp
-    Addition/Base.h   
     Addition/Config.cpp
-    Addition/DummyEngine.h    
 
     Core/ECS/ComponentArray.hpp
     Core/ECS/ComponentManager.hpp

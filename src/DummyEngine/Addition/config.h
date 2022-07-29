@@ -20,12 +20,16 @@ namespace DE
 #define DE_CFG_MODEL_PATH 4
 #define DE_CFG_SHADER_PATH 5
 
+#define DE_CFG_RENDER_API 1
+
     class Config
     {
     public:
         static uint32_t GetI(uint32_t setting);
         static float GetF(uint32_t setting);
         static Path GetPath(uint32_t setting);
+        
+        static API GetRenderAPI();
 
         static void Init();
 
@@ -46,6 +50,8 @@ namespace DE
             Path c_ModelPath;
             Path c_AssetPath;
             Path c_LogPath;
+
+            API c_RenderAPI;
         };
         static Configs m_Configs;
     };

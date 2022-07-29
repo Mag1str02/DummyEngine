@@ -1,4 +1,5 @@
 #include "ToolBox/Dev/FrameTimeReader.h"
+#include "Core/Rendering/Renderer/Renderer.h"
 
 namespace DE
 {
@@ -57,6 +58,8 @@ namespace DE
         if (node == m_Root)
         {
             std::cout << std::endl;
+            FrameStatistics statistics = Renderer::GetStatistics();
+            std::cout << "DrawCalls: " << statistics.m_DrawCallsAmount;
         }
     }
 

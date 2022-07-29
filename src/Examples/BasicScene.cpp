@@ -1,7 +1,13 @@
-
-#include "Config.h"
+#include "../DummyEngine/Addition/DummyEngine.h"
 
 using namespace DE;
+
+const Vec3 COLOR_MAGENTA(1.0f, 0.0f, 1.0f);
+const Vec3 COLOR_WHITE(1.0f, 1.0f, 1.0f);
+const Vec3 COLOR_RED(1.0f, 0.0f, 0.0f);
+const Vec3 COLOR_BLUE(0.0f, 0.0f, 1.0f);
+const Vec3 COLOR_GREEN(0.0f, 1.0f, 0.0f);
+const Vec3 COLOR_YELLOW(1.0f, 1.0f, 0.0f);
 
 using Scene = std::unordered_map<std::string, Entity>;
 Scene scene;
@@ -200,14 +206,18 @@ private:
     {
         Logger::Stage("loading", "Main", "LOADING SHADERS");
 
-        Ref<Shader> colored_phong = Shader::Create(
-            "ColoredPhong",
-            {{.type = ShaderPartType::Vertex, .path = Config::GetPath(DE_CFG_SHADER_PATH) / "ColoredPhong" / "ColoredPhong.vs"},
-             {.type = ShaderPartType::Fragment, .path = Config::GetPath(DE_CFG_SHADER_PATH) / "ColoredPhong" / "ColoredPhong.fs"}});
-        Ref<Shader> textured_phong = Shader::Create(
-            "TexturedPhong",
-            {{.type = ShaderPartType::Vertex, .path = Config::GetPath(DE_CFG_SHADER_PATH) / "TexturedPhong" / "TexturedPhong.vs"},
-             {.type = ShaderPartType::Fragment, .path = Config::GetPath(DE_CFG_SHADER_PATH) / "TexturedPhong" / "TexturedPhong.fs"}});
+        Ref<Shader> colored_phong =
+            Shader::Create("ColoredPhong",
+                           {{.type = ShaderPartType::Vertex,
+                             .path = Config::GetPath(DE_CFG_SHADER_PATH) / "ColoredPhong" / "ColoredPhong.vs"},
+                            {.type = ShaderPartType::Fragment,
+                             .path = Config::GetPath(DE_CFG_SHADER_PATH) / "ColoredPhong" / "ColoredPhong.fs"}});
+        Ref<Shader> textured_phong =
+            Shader::Create("TexturedPhong",
+                           {{.type = ShaderPartType::Vertex,
+                             .path = Config::GetPath(DE_CFG_SHADER_PATH) / "TexturedPhong" / "TexturedPhong.vs"},
+                            {.type = ShaderPartType::Fragment,
+                             .path = Config::GetPath(DE_CFG_SHADER_PATH) / "TexturedPhong" / "TexturedPhong.fs"}});
 
         scene["colored_phong"].GetComponent<UniqueShader>().shader = colored_phong;
         scene["textured_phong"].GetComponent<UniqueShader>().shader = textured_phong;

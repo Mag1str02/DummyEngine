@@ -4,7 +4,7 @@
 .vscode/
 build/
 
-Sandbox/Assets/Logs/**
+Sandbox/Logs/**
 Sandbox/**.dll
 
 src/DummyEngine/libs/ASSIMP

@@ -5,15 +5,6 @@
 
 namespace DE
 {
-    namespace fs = std::filesystem;
-    enum class ShaderPartType
-    {
-        None = 0,
-        Vertex,
-        Geometry,
-        Fragment
-    };
-
     struct ShaderPart
     {
         ShaderPartType type;
