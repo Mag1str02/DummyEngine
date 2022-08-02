@@ -6,5 +6,7 @@ build/
 
 Sandbox/Logs/**
 Sandbox/**.dll
+Sandbox/**.yml
 
+src/DummyEngine/libs/YAML
 src/DummyEngine/libs/ASSIMP
