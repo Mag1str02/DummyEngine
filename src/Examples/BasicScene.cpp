@@ -9,11 +9,9 @@ const Vec3 COLOR_BLUE(0.0f, 0.0f, 1.0f);
 const Vec3 COLOR_GREEN(0.0f, 1.0f, 0.0f);
 const Vec3 COLOR_YELLOW(1.0f, 1.0f, 0.0f);
 
-using Scene = std::unordered_map<std::string, Entity>;
 Scene scene;
 
-struct Drawable
-{};
+void FillScene() {}
 
 struct LinearManipulator
 {
@@ -81,43 +79,13 @@ public:
         }
     }
 };
-class DrawSystem : public System
-{
-public:
-    DrawSystem() {}
-    virtual std::string GetName() const override
-    {
-        return "DrawSystem";
-    }
-    void Update(double dt) override
-    {
-        auto& drawables = GetComponentArray<Drawable>();
-        auto& models = GetComponentArray<RenderModel>();
-        auto& shaders = GetComponentArray<Ref<Shader>>();
-        auto& transformations = GetComponentArray<Transformation>();
-
-        Renderer::Clear();
-
-        auto& camera = scene["player"].GetComponent<FPSCamera>();
-        for (auto [entity_id, shader] : shaders)
-        {
-            shader->Bind();
-            shader->SetMat4("u_ViewProjection", camera.GetViewProjection());
-            shader->SetFloat3("u_CameraPos", camera.GetPos());
-        }
-        for (auto [entity_id, drawable] : drawables)
-        {
-            Renderer::Submit(shaders[entity_id], models[entity_id], transformations[entity_id].GetTransform());
-        }
-    }
-};
 
 class TestApplication : public Application
 {
 public:
     TestApplication(std::string name) : Application(name)
     {
-        cursor_mode = true;
+        cursor_mode = false;
     }
 
     virtual void OnLoad() override
@@ -128,13 +96,12 @@ public:
         LoadShaders();
         LoadModels();
         SetObjectProperties();
-
-        ComponentManager::Get().LogState();
-        EntityManager::Get().LogState();
     }
     virtual void Update(double dt) override
     {
         ProcessInput(dt);
+        scene.OnUpdate(dt);
+        scene.Render();
     }
 
 private:
@@ -146,61 +113,63 @@ private:
     }
     void RegisterSystems()
     {
-        SystemManager::RegisterSystem<MovingSystem>();
-        SystemManager::RegisterSystem<LightManager>();
-        SystemManager::RegisterSystem<DrawSystem>();
-
-        SystemManager::AddOrder<MovingSystem, LightManager>();
-        SystemManager::AddOrder<LightManager, DrawSystem>();
-        SystemManager::CalculateOrder();
+        scene.RegisterSystem<MovingSystem>();
+        scene.RegisterSystem<LightManager>();
     }
 
     void CreateEntities()
     {
-        scene["player"] = Entity();
-        scene["backpack"] = Entity();
-        scene["sponza"] = Entity();
-        scene["train"] = Entity();
-        scene["sun"] = Entity();
-        scene["moon"] = Entity();
-        scene["lamp_white"] = Entity();
-        scene["lamp_magenta"] = Entity();
-        scene["flashlight"] = Entity();
-        scene["lamp"] = Entity();
-        scene["surface"] = Entity();
-        scene["colored_phong"] = Entity();
-        scene["textured_phong"] = Entity();
+        // Creating entities
+        {
+            auto player = scene.CreateEntity("player");
+            auto sponza = scene.CreateEntity("sponza");
+            auto train = scene.CreateEntity("train");
+            auto sun = scene.CreateEntity("sun");
+            auto moon = scene.CreateEntity("moon");
+            auto lamp_white = scene.CreateEntity("lamp_white");
+            auto lamp_magenta = scene.CreateEntity("lamp_magenta");
+            auto flashlight = scene.CreateEntity("flashlight");
+            auto lamp = scene.CreateEntity("lamp");
+            auto surface = scene.CreateEntity("surface");
+            auto colored_phong = scene.CreateEntity("colored_phong");
+            auto textured_phong = scene.CreateEntity("textured_phong");
+            auto backpack = scene.CreateEntity("backpack");
+        }
+        // Adding componenets
+        {
+            scene["player"].AddComponent<FPSCamera>();
 
-        scene["player"].AddComponent<FPSCamera>();
+            scene["backpack"].AddComponent<Transformation>();
+            scene["backpack"].AddComponent<LinearManipulator>();
 
-        scene["backpack"].AddComponent<Transformation>();
+            scene["sponza"].AddComponent<Transformation>();
+            scene["sponza"].AddComponent<Ref<Shader>>();
 
-        scene["sponza"].AddComponent<Transformation>();
-        scene["sponza"].AddComponent<Drawable>();
-        scene["sponza"].AddComponent<Ref<Shader>>();
+            scene["train"].AddComponent<Transformation>();
+            scene["lamp_white"].AddComponent<Transformation>();
+            scene["lamp_magenta"].AddComponent<Transformation>();
+            scene["lamp"].AddComponent<Transformation>();
+            scene["flashlight"].AddComponent<Transformation>();
+            scene["surface"].AddComponent<Transformation>();
 
-        scene["train"].AddComponent<Transformation>();
-        scene["lamp_white"].AddComponent<Transformation>();
-        scene["lamp_magenta"].AddComponent<Transformation>();
-        scene["lamp"].AddComponent<Transformation>();
-        scene["flashlight"].AddComponent<Transformation>();
-        scene["surface"].AddComponent<Transformation>();
+            scene["train"].AddComponent<Ref<Shader>>();
+            scene["backpack"].AddComponent<Ref<Shader>>();
 
-        scene["backpack"].AddComponent<Drawable>();
-        scene["train"].AddComponent<Drawable>();
-        scene["surface"].AddComponent<Drawable>();
+            scene["backpack"].AddComponent<LinearManipulator>();
 
-        scene["train"].AddComponent<Ref<Shader>>();
-        scene["backpack"].AddComponent<Ref<Shader>>();
+            scene["sun"].AddComponent<DirectionalLight>();
+            scene["moon"].AddComponent<DirectionalLight>();
+            scene["lamp_white"].AddComponent<PointLight>();
+            scene["lamp_magenta"].AddComponent<PointLight>();
+            scene["flashlight"].AddComponent<SpotLight>();
+            scene["lamp"].AddComponent<SpotLight>();
 
-        scene["backpack"].AddComponent<LinearManipulator>();
+            scene["lamp_white"].AddComponent<LinearManipulator>();
+            scene["lamp_magenta"].AddComponent<LinearManipulator>();
 
-        scene["sun"].AddComponent<DirectionalLight>();
-        scene["moon"].AddComponent<DirectionalLight>();
-        scene["lamp_white"].AddComponent<PointLight>();
-        scene["lamp_magenta"].AddComponent<PointLight>();
-        scene["flashlight"].AddComponent<SpotLight>();
-        scene["lamp"].AddComponent<SpotLight>();
+            scene["colored_phong"].AddComponent<UniqueShader>();
+            scene["textured_phong"].AddComponent<UniqueShader>();
+        }
     }
     void LoadShaders()
     {
@@ -221,6 +190,8 @@ private:
 
         scene["colored_phong"].GetComponent<UniqueShader>().shader = colored_phong;
         scene["textured_phong"].GetComponent<UniqueShader>().shader = textured_phong;
+
+        scene["cubes"].AddComponent<Ref<Shader>>(colored_phong);
         scene["train"].AddComponent<Ref<Shader>>(colored_phong);
         scene["surface"].AddComponent<Ref<Shader>>(colored_phong);
         scene["backpack"].AddComponent<Ref<Shader>>(textured_phong);
@@ -262,33 +233,31 @@ private:
         scene["backpack"].AddComponent<RenderModel>(r_backpack);
         scene["train"].AddComponent<RenderModel>(r_train);
         scene["surface"].AddComponent<RenderModel>(r_cubes);
-        scene["cubes"].AddComponent<RenderModel>(r_cubes);
         scene["sponza"].AddComponent<RenderModel>(r_sponza);
 
         scene["lamp_white"].AddComponent<RenderModel>(r_cube);
         scene["lamp_magenta"].AddComponent<RenderModel>(r_cube);
-        scene["lamp_white"].AddComponent<Drawable>();
-        scene["lamp_magenta"].AddComponent<Drawable>();
+
         scene["lamp_white"].AddComponent<Ref<Shader>>(scene["colored_phong"].GetComponent<UniqueShader>().shader);
         scene["lamp_magenta"].AddComponent<Ref<Shader>>(scene["colored_phong"].GetComponent<UniqueShader>().shader);
 
-        for (int i = 0; i < 2; ++i)
-        {
-            scene["train" + std::to_string(i)].AddComponent<RenderModel>(scene["train"].GetComponent<RenderModel>());
-            scene["train" + std::to_string(i)].GetComponent<Transformation>().translation = Vec3(0, 100, 300 - i * 12);
-            scene["train" + std::to_string(i)].AddComponent<Ref<Shader>>(scene["train"].GetComponent<Ref<Shader>>());
-            scene["train" + std::to_string(i)].AddComponent<LinearManipulator>();
-            scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().current_time = i * 3.14 / 16;
-            scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().radius = 15;
-            scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().dir =
-                Vec3(std::sin(i * 3.14 / 16), std::cos(i * 3.14 / 16), 0);
-            scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().speed = std::sin(i * 3.14 / 8) + 1;
-            scene["train" + std::to_string(i)].AddComponent<ScaleManipulator>();
-            scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().min_scale = -1;
-            scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().max_scale = 1;
-            scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().time_offset = i * 3.14 / 16;
-            scene["train" + std::to_string(i)].AddComponent<Drawable>();
-        }
+        // for (int i = 0; i < 2; ++i)
+        // {
+        //     scene["train" + std::to_string(i)].AddComponent<RenderModel>(scene["train"].GetComponent<RenderModel>());
+        //     scene["train" + std::to_string(i)].GetComponent<Transformation>().translation = Vec3(0, 100, 300 - i *
+        //     12); scene["train" +
+        //     std::to_string(i)].AddComponent<Ref<Shader>>(scene["train"].GetComponent<Ref<Shader>>()); scene["train" +
+        //     std::to_string(i)].AddComponent<LinearManipulator>(); scene["train" +
+        //     std::to_string(i)].GetComponent<LinearManipulator>().current_time = i * 3.14 / 16; scene["train" +
+        //     std::to_string(i)].GetComponent<LinearManipulator>().radius = 15; scene["train" +
+        //     std::to_string(i)].GetComponent<LinearManipulator>().dir =
+        //         Vec3(std::sin(i * 3.14 / 16), std::cos(i * 3.14 / 16), 0);
+        //     scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().speed = std::sin(i * 3.14 / 8) + 1;
+        //     scene["train" + std::to_string(i)].AddComponent<ScaleManipulator>();
+        //     scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().min_scale = -1;
+        //     scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().max_scale = 1;
+        //     scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().time_offset = i * 3.14 / 16;
+        // }
     }
     void SetObjectProperties()
     {

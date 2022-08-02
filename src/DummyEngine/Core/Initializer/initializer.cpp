@@ -24,6 +24,8 @@ namespace DE
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        // TODO: Move multisampling somewhere else...
+        glfwWindowHint(GLFW_SAMPLES, 4);
         Logger::Info("loading", "Initializer", "GLFW initialized.");
     }
     void Initializer::TerminateGLFW()
@@ -34,14 +36,9 @@ namespace DE
     void Initializer::Initialize()
     {
         InitGLFW();
-        EntityManager::Get().Initialize();
-        ComponentManager::Get();
     }
     void Initializer::Terminate()
     {
-        EntityManager::Get().Terminate();
-        ComponentManager::Get().Terminate();
-        SystemManager::Terminate();
         TerminateGLFW();
     }
 

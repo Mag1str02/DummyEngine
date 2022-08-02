@@ -2,6 +2,7 @@
 #include "ToolBox/Dev/FrameTimeReader.h"
 #include "Core/ECS/SystemManager.hpp"
 #include "Core/Rendering/Renderer/Renderer.h"
+#include "Core/Initializer/initializer.h"
 
 namespace DE
 {
@@ -42,7 +43,6 @@ namespace DE
 
                 DE_PROFILE_SCOPE("Poll Events", glfwPollEvents());
                 DE_PROFILE_SCOPE("Application Update Function", Update(prev_frame_time));
-                DE_PROFILE_SCOPE("System Processing", SystemManager::Update(prev_frame_time));
                 DE_PROFILE_SCOPE("Buffer Swap", m_Window->SwapBuffers());
 
                 Renderer::EndFrame();

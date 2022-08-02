@@ -5,6 +5,10 @@
 
 namespace DE
 {
+
+    using ComponentId = int16_t;
+    using EntityId = int64_t;
+
     using Mat4 = glm::mat4;
     using Vec4 = glm::vec4;
     using Vec3 = glm::vec3;

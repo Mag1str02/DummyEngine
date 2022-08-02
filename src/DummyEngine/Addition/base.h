@@ -22,10 +22,12 @@
 #include <windows.h>
 #include <cstdint>
 #include <queue>
+#include <random>
 
 #include "Addition/Types.h"
 #include "Addition/Config.h"
 #include "Addition/Assert.h"
+#include "Addition/UUID.h"
 
 namespace DE
 {
@@ -44,13 +46,7 @@ namespace DE
     {
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
-
-    using Mat4 = glm::mat4;
-    using Vec4 = glm::vec4;
-    using Vec3 = glm::vec3;
-    using Vec2 = glm::vec2;
-    using Path = std::filesystem::path;
-
+    
     namespace fs = std::filesystem;
 
 }  // namespace DE

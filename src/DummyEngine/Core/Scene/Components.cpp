@@ -1,7 +1,10 @@
-#include "Core/ECS/Components.h"
+#include "Core/Scene/Components.h"
 
 namespace DE
 {
+
+    Tag::Tag(const std::string& tag) : tag(tag) {}
+
     Mat4 Transformation::GetTransform() const
     {
         return glm::translate(glm::mat4(1.0f), translation + translation_offset) *

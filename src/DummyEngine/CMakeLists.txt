@@ -7,6 +7,7 @@ project(DummyEngineLib)
 set(ENGINE_SOURCES  
     Addition/Assert.cpp
     Addition/Config.cpp
+    Addition/UUID.cpp
 
     Core/ECS/ComponentArray.hpp
     Core/ECS/ComponentManager.hpp
@@ -14,9 +15,12 @@ set(ENGINE_SOURCES
     Core/ECS/EntityManager.hpp
     Core/ECS/System.hpp
     Core/ECS/SystemManager.hpp
-    Core/ECS/Components.cpp
+    Core/ECS/ECSStorage.hpp
 
     Core/Initializer/Initializer.cpp
+    
+    Core/Scene/Components.cpp
+    Core/Scene/Scene.cpp
 
     Core/Objects/LightSources/PointLight.cpp
     Core/Objects/LightSources/SpotLight.cpp
@@ -52,8 +56,8 @@ add_library(DummyEngineLib
    ${ENGINE_SOURCES}
 )
 
-target_compile_definitions(DummyEngineLib PRIVATE 
- DE_ENABLE_FRAME_TIME_READER=1
+target_compile_definitions(DummyEngineLib PUBLIC 
+ DE_ENABLE_FRAME_TIME_READER=0
  DE_ENABLE_ASSERTS=1
  )
 

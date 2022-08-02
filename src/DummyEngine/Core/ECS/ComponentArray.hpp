@@ -1,14 +1,11 @@
 #pragma once
 
 #include "Addition/Base.h"
-
 #include "ToolBox/Dev/Logger.h"
-#include "Core/Initializer/Initializer.h"
 
 namespace DE
 {
-    using EntityId = int64_t;
-    
+
     class IComponentArray
     {
     protected:
@@ -111,6 +108,8 @@ namespace DE
         }
         ComponentType& operator[](EntityId entity_id)
         {
+            DE_ASSERT(0 <= entity_id && entity_id < m_EntityAmount.size(), "Wrong enitity id.");
+            DE_ASSERT(m_EntityAmount[entity_id] != -1, "Given entity has no such component.");
             return m_ComponentArray.at(m_EntityAmount[entity_id]);
         }
 

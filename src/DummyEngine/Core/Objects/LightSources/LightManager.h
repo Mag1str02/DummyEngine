@@ -2,6 +2,7 @@
 
 #include "Core/ECS/Entity.hpp"
 #include "Core/ECS/System.hpp"
+#include "Core/Scene/Components.h"
 #include "Core/Rendering/Renderer/Shader.h"
 #include "Core/Objects/LightSources/DirectionalLight.h"
 #include "Core/Objects/LightSources/PointLight.h"
@@ -9,11 +10,6 @@
 
 namespace DE
 {
-
-    struct UniqueShader
-    {
-        Ref<Shader> shader;
-    };
 
     class LightManager : public System
     {
@@ -25,7 +21,7 @@ namespace DE
     public:
         LightManager();
         virtual std::string GetName() const override;
-        
+
         void Update(double dt) override;
     };
 }  // namespace DE

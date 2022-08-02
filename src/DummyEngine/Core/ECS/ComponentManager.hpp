@@ -6,15 +6,12 @@
 
 namespace DE
 {
-    using ComponentId = int16_t;
     class ComponentManager
     {
     private:
-        friend class Entity;
-        friend class Initializer;
-
-        std::unordered_map<std::string, std::shared_ptr<IComponentArray>> m_ComponentArrays;
+        std::unordered_map<std::string, Ref<IComponentArray>> m_ComponentArrays;
         std::unordered_map<std::string, ComponentId> m_ComponentId;
+
         size_t m_EntityAmount;
 
         static std::string NormalTypeName(const std::string& s_name)
@@ -29,8 +26,6 @@ namespace DE
             return s_name;
         }
 
-        ComponentManager() {}
-
         template <typename ComponentType>
         void RegisterComponent()
         {
@@ -42,6 +37,9 @@ namespace DE
 
             Logger::Info("ECS", "ComponentManager", "Registered Component (" + NormalTypeName(component_name) + ")");
         }
+
+    public:
+        ComponentManager() = default;
 
         template <typename ComponentType>
         void AddComponent(EntityId entity_id, ComponentType component = ComponentType())
@@ -75,32 +73,9 @@ namespace DE
             }
             return -1;
         }
-
-        void Initialize() {}
-        void Terminate()
-        {
-            m_ComponentArrays.clear();
-            m_ComponentId.clear();
-        }
-
-        void ExtendArrays()
-        {
-            ++m_EntityAmount;
-            for (auto& [name, component_array] : m_ComponentArrays)
-            {
-                component_array->ExtendArray();
-            }
-        }
-
-    public:
-        static ComponentManager& Get()
-        {
-            static ComponentManager component_manager;
-            return component_manager;
-        }
-
+   
         template <typename ComponentType>
-        std::shared_ptr<ComponentArray<ComponentType>> GetComponentArray()
+        Ref<ComponentArray<ComponentType>> GetComponentArray()
         {
             if (m_ComponentArrays.find(typeid(ComponentType).name()) == m_ComponentArrays.end())
             {
@@ -109,21 +84,13 @@ namespace DE
             return std::static_pointer_cast<ComponentArray<ComponentType>>(
                 m_ComponentArrays[typeid(ComponentType).name()]);
         }
-
-        void LogState()
+        void ExtendArrays()
         {
-            std::string log =
-                "Current "
-                "State.\n----------------------------------------------------------------------------------------------"
-                "-\n";
-            for (const auto& [name, component_array] : m_ComponentArrays)
+            ++m_EntityAmount;
+            for (auto& [name, component_array] : m_ComponentArrays)
             {
-                log.append("Component type " + NormalTypeName(name) + "\n");
-                log.append(component_array->LogState());
+                component_array->ExtendArray();
             }
-            log.append(
-                "-----------------------------------------------------------------------------------------------");
-            Logger::Info("ECS", "ComponentManager", log);
         }
-    };
+         };
 }  // namespace DE

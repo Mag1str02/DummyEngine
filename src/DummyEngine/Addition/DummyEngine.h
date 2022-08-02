@@ -11,7 +11,9 @@
 
 #include "Core/ECS/Entity.hpp"
 #include "Core/ECS/SystemManager.hpp"
-#include "Core/ECS/Components.h"
+
+#include "Core/Scene/Scene.h"
+#include "Core/Scene/Components.h"
 
 #include "Core/Initializer/Initializer.h"
 #include "Core/Input/Input.h"
