@@ -9,9 +9,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/../Sandbox)
 add_subdirectory(src/DummyEngine)
 
 add_executable(BasicScene src/Examples/BasicScene.cpp)
-add_executable(Empty src/Examples/Empty.cpp)
-add_executable(UUID src/Examples/UUID.cpp)
+add_executable(HelloTriangle src/Examples/HelloTriangle.cpp)
 
 target_link_libraries(BasicScene PUBLIC DummyEngineLib)
-target_link_libraries(Empty PUBLIC DummyEngineLib)
-target_link_libraries(UUID PUBLIC DummyEngineLib)
+target_link_libraries(HelloTriangle PUBLIC DummyEngineLib)
