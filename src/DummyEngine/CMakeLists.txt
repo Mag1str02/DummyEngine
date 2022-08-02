@@ -4,6 +4,9 @@ set(CMAKE_CXX_STANDARD 20)
 
 project(DummyEngineLib)
 
+set(SANDBOX_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../Sandbox)
+set(EXTERNAL_LIBS_DIR libs)
+set(DE_LIB_SOURCE_DIR .) 
 set(ENGINE_SOURCES  
     Addition/Assert.cpp
     Addition/Config.cpp
@@ -65,18 +68,16 @@ add_subdirectory(libs/glfw)
 add_subdirectory(libs/glad)
 
 target_include_directories(DummyEngineLib
-    PUBLIC libs/glfw/include
+    PUBLIC ${EXTERNAL_LIBS_DIR}/glfw/include
     PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/libs/glad/include
-    PUBLIC libs/glm
-    PUBLIC libs/assimp/include
-    PUBLIC libs/stb_image
-    PUBLIC .
+    PUBLIC ${EXTERNAL_LIBS_DIR}/glm
+    PUBLIC ${EXTERNAL_LIBS_DIR}/assimp/include
+    PUBLIC ${EXTERNAL_LIBS_DIR}/stb_image 
+    PUBLIC ${DE_LIB_SOURCE_DIR}
 )
 
 target_link_directories(DummyEngineLib
-    PUBLIC libs/glad/src
-    PUBLIC libs/glfw/src
-    PUBLIC libs/assimp/lib
+    PUBLIC ${EXTERNAL_LIBS_DIR}/assimp/lib
 )
 
 target_link_libraries(DummyEngineLib
@@ -85,4 +86,4 @@ target_link_libraries(DummyEngineLib
     PUBLIC assimp
 )
 
-add_custom_command(TARGET DummyEngineLib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/libs/Assimp/lib/libassimp.dll  ${CMAKE_CURRENT_BINARY_DIR}/../../../Sandbox)
+add_custom_command(TARGET DummyEngineLib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/libs/Assimp/lib/libassimp.dll  ${SANDBOX_DIR})
