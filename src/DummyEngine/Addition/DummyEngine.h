@@ -4,6 +4,7 @@
 
 #include <GLAD/glad.h>
 #include <GLFW/glfw3.h>
+#include <YAML-CPP/yaml.h>
 
 #include <stb_image.h>
 

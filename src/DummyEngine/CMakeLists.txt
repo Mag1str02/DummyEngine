@@ -4,6 +4,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 project(DummyEngineLib)
 
+SET(YAML_CPP_STATIC_LIBRARY TRUE)
 set(SANDBOX_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../Sandbox)
 set(EXTERNAL_LIBS_DIR libs)
 set(DE_LIB_SOURCE_DIR .) 
@@ -64,15 +65,24 @@ target_compile_definitions(DummyEngineLib PUBLIC
  DE_ENABLE_ASSERTS=1
  )
 
+# set(yaml-cpp_DIR ${CMAKE_CURRENT_BINARY_DIR}/libs/YAML)
+# find_package(yaml-cpp)
+
+# message(STATUS "XD")
+# message(STATUS "YAML include dir: ${yaml-cpp_INCLUDE_DIR}")
+# message(STATUS "YAML link libs: ${yaml-cpp_LIBRARIES}")
+
 add_subdirectory(libs/glfw)
 add_subdirectory(libs/glad)
+add_subdirectory(libs/yaml)
 
 target_include_directories(DummyEngineLib
     PUBLIC ${EXTERNAL_LIBS_DIR}/glfw/include
     PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/libs/glad/include
     PUBLIC ${EXTERNAL_LIBS_DIR}/glm
     PUBLIC ${EXTERNAL_LIBS_DIR}/assimp/include
-    PUBLIC ${EXTERNAL_LIBS_DIR}/stb_image 
+    PUBLIC ${EXTERNAL_LIBS_DIR}/stb_image   
+    PUBLIC ${EXTERNAL_LIBS_DIR}/yaml/include
     PUBLIC ${DE_LIB_SOURCE_DIR}
 )
 
@@ -84,6 +94,7 @@ target_link_libraries(DummyEngineLib
     PUBLIC glad
     PUBLIC glfw
     PUBLIC assimp
+    # PUBLIC yaml-cpp
 )
 
 add_custom_command(TARGET DummyEngineLib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/libs/Assimp/lib/libassimp.dll  ${SANDBOX_DIR})

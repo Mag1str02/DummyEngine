@@ -10,6 +10,8 @@ add_subdirectory(src/DummyEngine)
 
 add_executable(BasicScene src/Examples/BasicScene.cpp)
 add_executable(HelloTriangle src/Examples/HelloTriangle.cpp)
+add_executable(YAMLTest src/Examples/YAML.cpp)
 
 target_link_libraries(BasicScene PUBLIC DummyEngineLib)
 target_link_libraries(HelloTriangle PUBLIC DummyEngineLib)
+target_link_libraries(YAMLTest PUBLIC DummyEngineLib)
