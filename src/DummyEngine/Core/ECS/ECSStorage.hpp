@@ -10,11 +10,6 @@ namespace DE
 {
     class ECSStorage
     {
-    private:
-        EntityManager m_EntityManager;
-        ComponentManager m_ComponentManager;
-        SystemManager m_SystemManager;
-
     public:
         ECSStorage() = default;
 
@@ -44,8 +39,7 @@ namespace DE
             m_EntityManager.AddComponent(id, m_ComponentManager.GetComponentId<ComponentType>());
             return m_ComponentManager.GetComponent<ComponentType>(id);
         }
-        template <typename ComponentType>
-        void RemoveComponent(EntityId id)
+        template <typename ComponentType> void RemoveComponent(EntityId id)
         {
             DE_ASSERT(m_ComponentManager.GetComponentId<ComponentType>() != -1,
                       "Attempt to access non existing component arry.");
@@ -55,21 +49,23 @@ namespace DE
             m_ComponentManager.RemoveComponent<ComponentType>(id);
             m_EntityManager.RemoveComponent(id, m_ComponentManager.GetComponentId<ComponentType>());
         }
-        template <typename ComponentType>
-        ComponentType& GetComponent(EntityId id)
+        template <typename ComponentType> ComponentType& GetComponent(EntityId id)
         {
             DE_ASSERT(m_ComponentManager.GetComponentId<ComponentType>() != -1,
                       "Attempt to access non existing component array.");
             return m_ComponentManager.GetComponent<ComponentType>(id);
         }
-        template <typename ComponentType>
-        bool HasComponent(EntityId id)
+        template <typename ComponentType> bool HasComponent(EntityId id)
         {
             return m_ComponentManager.GetComponentArray<ComponentType>()->HasComponent(id);
         }
 
-        template <typename SystemType>
-        void RegisterSystem()
+        template <typename ComponentType> ComponentArray<ComponentType>& GetComponentArray()
+        {
+            return *m_ComponentManager.GetComponentArray<ComponentType>();
+        }
+
+        template <typename SystemType> void RegisterSystem()
         {
             m_SystemManager.RegisterSystem<SystemType>()->Bind(&m_ComponentManager);
         }
@@ -78,10 +74,9 @@ namespace DE
             m_SystemManager.Update(dt);
         }
 
-        template <typename ComponentType>
-        ComponentArray<ComponentType>& GetComponentArray()
-        {
-            return *m_ComponentManager.GetComponentArray<ComponentType>();
-        }
+    private:
+        EntityManager m_EntityManager;
+        ComponentManager m_ComponentManager;
+        SystemManager m_SystemManager;
     };
 }  // namespace DE

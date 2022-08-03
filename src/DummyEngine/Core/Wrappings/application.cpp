@@ -26,6 +26,7 @@ namespace DE
     }
 
     void Application::OnLoad() {}
+    void Application::OnClose() {}
 
     void Application::Start()
     {
@@ -53,6 +54,7 @@ namespace DE
 
             DE_FTR_PRINT();
         }
+        OnClose();
     }
     void Application::Update(double dt) {}
 

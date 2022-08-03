@@ -19,8 +19,7 @@ namespace DE
         virtual std::string LogState() const = 0;
     };
 
-    template <typename ComponentType>
-    class ComponentArray : public IComponentArray
+    template <typename ComponentType> class ComponentArray : public IComponentArray
     {
     public:
         class iterator

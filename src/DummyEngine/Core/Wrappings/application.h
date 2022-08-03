@@ -16,6 +16,7 @@ public:
     virtual void Start();
     virtual void OnLoad();
     virtual void Update(double dt);
+    virtual void OnClose();
 
 protected:
     Window* m_Window;

@@ -4,7 +4,6 @@
 
 #include <GLAD/glad.h>
 #include <GLFW/glfw3.h>
-#include <YAML-CPP/yaml.h>
 
 #include <stb_image.h>
 
@@ -28,3 +27,4 @@
 #include "ToolBox/Dev/FrameTimeReader.h"
 #include "ToolBox/Dev/Logger.h"
 #include "ToolBox/Loaders/ModelLoader.h"
+#include "ToolBox/Loaders/SceneLoader.h"

@@ -5,6 +5,9 @@
 
 namespace DE
 {
+
+    Scene::Scene(const std::string& name) : m_Name(name) {}
+
     Entity Scene::CreateEntity(std::string name)
     {
         EntityId entity_id = m_Storage.CreateEntity();
@@ -66,6 +69,11 @@ namespace DE
     Entity Scene::operator[](const std::string& name)
     {
         return Entity(m_EntityByName[name], this);
+    }
+
+    std::string Scene::GetName() const
+    {
+        return m_Name;
     }
 
     FPSCamera& Scene::GetCamera()

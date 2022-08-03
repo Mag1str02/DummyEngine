@@ -9,7 +9,8 @@ const Vec3 COLOR_BLUE(0.0f, 0.0f, 1.0f);
 const Vec3 COLOR_GREEN(0.0f, 1.0f, 0.0f);
 const Vec3 COLOR_YELLOW(1.0f, 1.0f, 0.0f);
 
-Scene scene;
+Ref<Scene> r_scene = CreateRef<Scene>("BasicScene");
+Scene& scene = *r_scene;
 
 void FillScene() {}
 
@@ -96,6 +97,10 @@ public:
         LoadShaders();
         LoadModels();
         SetObjectProperties();
+    }
+    virtual void OnClose() override
+    {
+        SceneLoader::SaveScene(r_scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / (r_scene->GetName() + ".yml"));
     }
     virtual void Update(double dt) override
     {

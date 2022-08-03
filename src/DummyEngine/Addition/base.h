@@ -8,6 +8,8 @@
 #include <glm/gtx/vector_angle.hpp>
 #include <glm/glm.hpp>
 
+#include <YAML-CPP/yaml.h>
+
 #include <memory>
 #include <iostream>
 #include <iomanip>
@@ -23,6 +25,7 @@
 #include <cstdint>
 #include <queue>
 #include <random>
+#include <cxxabi.h>
 
 #include "Addition/Types.h"
 #include "Addition/Config.h"
@@ -46,7 +49,20 @@ namespace DE
     {
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
-    
+
     namespace fs = std::filesystem;
 
+    template <typename T>
+    std::string DemangleName()
+    {
+        std::string res;
+        int status;
+        char* realname;
+        const std::type_info& ti = typeid(T);
+
+        realname = abi::__cxa_demangle(ti.name(), 0, 0, &status);
+        res = realname;
+        free(realname);
+        return res;
+    }
 }  // namespace DE

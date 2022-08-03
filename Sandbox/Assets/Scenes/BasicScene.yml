@@ -1,0 +1,98 @@
+Scene:
+  Name: BasicScene
+  Entities:
+    -
+      - Tag: backpack
+      - UUID: 1278258232288313138
+      - Transformation:
+          Translation: [30, 0, 0]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [1, 1, 1]
+          ScaleOffset: [0, 0, 0]
+    -
+      - Tag: textured_phong
+      - UUID: 17148893993186594326
+    -
+      - Tag: surface
+      - UUID: 7371968575737597111
+      - Transformation:
+          Translation: [0, -10, 0]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [500, 0.100000001, 500]
+          ScaleOffset: [0, 0, 0]
+    -
+      - Tag: lamp
+      - UUID: 15359563768897941674
+      - Transformation:
+          Translation: [0, 0, 0]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [1, 1, 1]
+          ScaleOffset: [0, 0, 0]
+    -
+      - Tag: lamp_magenta
+      - UUID: 5877501489975932932
+      - Transformation:
+          Translation: [0, 10, 39.0713081]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [1, 1, 1]
+          ScaleOffset: [0, 0, 0]
+    -
+      - Tag: colored_phong
+      - UUID: 10138671638381572243
+    -
+      - Tag: lamp_white
+      - UUID: 16063800448546566608
+      - Transformation:
+          Translation: [39.0713081, 20, 0]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [1, 1, 1]
+          ScaleOffset: [0, 0, 0]
+    -
+      - Tag: moon
+      - UUID: 3902712440392185057
+    -
+      - Tag: sun
+      - UUID: 2896173377957993421
+    -
+      - Tag: flashlight
+      - UUID: 9657408222795498780
+      - Transformation:
+          Translation: [0, 0, 0]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [1, 1, 1]
+          ScaleOffset: [0, 0, 0]
+    -
+      - Tag: train
+      - UUID: 8365033014386356403
+      - Transformation:
+          Translation: [0, 0, 0]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [1, 1, 1]
+          ScaleOffset: [0, 0, 0]
+    -
+      - Tag: sponza
+      - UUID: 1856149254330485205
+      - Transformation:
+          Translation: [0, 50, 0]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [0.00999999978, 0.00999999978, 0.00999999978]
+          ScaleOffset: [0, 0, 0]
+    -
+      - Tag: player
+      - UUID: 2050158244580799184

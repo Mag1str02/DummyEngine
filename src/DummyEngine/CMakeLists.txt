@@ -54,7 +54,8 @@ set(ENGINE_SOURCES
     ToolBox/Dev/Logger.cpp
     ToolBox/Dev/FrameTimeReader.cpp
     ToolBox/Loaders/ModelLoader.cpp
-    ToolBox/Loaders/TextureLoader.cpp
+    ToolBox/Loaders/TextureLoader.cpp 
+    ToolBox/Loaders/SceneLoader.cpp
 )
 
 add_library(DummyEngineLib

@@ -8,6 +8,7 @@ namespace DE
     {
     public:
         UUID();
+        UUID(uint64_t id) : m_UUID(id) {}
         UUID(const UUID&) = default;
 
         operator uint64_t() const

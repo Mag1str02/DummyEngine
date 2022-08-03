@@ -19,24 +19,21 @@ namespace DE
             m_Scene = nullptr;
         }
 
-        template <typename ComponentType>
-        ComponentType& AddComponent(ComponentType component = ComponentType())
+        template <typename ComponentType> ComponentType& AddComponent(ComponentType component = ComponentType())
         {
             DE_ASSERT(
                 m_Scene != nullptr,
                 "Entity either was not initialized properly, or was destroyed before using AddComponent command.");
             return m_Scene->m_Storage.AddComponent(m_Id, component);
         }
-        template <typename ComponentType>
-        void RemoveComponent()
+        template <typename ComponentType> void RemoveComponent()
         {
             DE_ASSERT(
                 m_Scene != nullptr,
                 "Entity either was not initialized properly, or was destroyed before using RemoveComponent command.");
             m_Scene->m_Storage.RemoveComponent<ComponentType>(m_Id);
         }
-        template <typename ComponentType>
-        ComponentType& GetComponent()
+        template <typename ComponentType> ComponentType& GetComponent()
         {
             DE_ASSERT(
                 m_Scene != nullptr,
@@ -44,8 +41,7 @@ namespace DE
             DE_ASSERT(HasComponent<ComponentType>(), "Trying to access non-existing component.");
             return m_Scene->m_Storage.GetComponent<ComponentType>(m_Id);
         }
-        template <typename ComponentType>
-        bool HasComponent()
+        template <typename ComponentType> bool HasComponent()
         {
             DE_ASSERT(
                 m_Scene != nullptr,
