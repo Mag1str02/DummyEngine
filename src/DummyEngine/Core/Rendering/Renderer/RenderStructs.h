@@ -1,4 +1,4 @@
-#pragma once    
+#pragma once
 
 #include "Addition/Base.h"
 #include "Core/Rendering/Renderer/Texture.h"
@@ -13,16 +13,15 @@ namespace DE
         Vec2 tex_coords;
     };
 
-   
     struct MaterialData
     {
         Vec3 ambient_color;
         Vec3 diffuse_color;
         Vec3 specular_color;
         float shininess;
-        TextureData specular_map;
-        TextureData diffuse_map;
-        TextureData normal_map;
+        Ref<TextureData> specular_map;
+        Ref<TextureData> diffuse_map;
+        Ref<TextureData> normal_map;
     };
 
     struct RenderMeshData
@@ -36,6 +35,7 @@ namespace DE
     struct RenderModelData
     {
         std::vector<RenderMeshData> meshes;
+        Path path;
 
         void Compress();
     };
@@ -55,13 +55,14 @@ namespace DE
         Material material;
         Ref<VertexArray> vertex_array;
 
-        void FillData(const RenderMeshData& data);
+        void FillData(RenderMeshData data);
     };
     struct RenderModel
     {
         std::vector<RenderMesh> meshes;
+        Path path;
 
-        void FillData(const RenderModelData& data);
+        void FillData(Ref<RenderModelData> data);
     };
 
 }  // namespace DE

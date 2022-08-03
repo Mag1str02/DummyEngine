@@ -3,7 +3,8 @@ Scene:
   Entities:
     -
       - Tag: backpack
-      - UUID: 1278258232288313138
+      - UUID: 3189771202314176677
+      - RenderModel: Assets\Models\Backpack\backpack.obj
       - Transformation:
           Translation: [30, 0, 0]
           TranslationOffset: [0, 0, 0]
@@ -12,11 +13,12 @@ Scene:
           Scale: [1, 1, 1]
           ScaleOffset: [0, 0, 0]
     -
-      - Tag: textured_phong
-      - UUID: 17148893993186594326
+      - Tag: colored_phong
+      - UUID: 14295386815383597848
     -
       - Tag: surface
-      - UUID: 7371968575737597111
+      - UUID: 17259563369603580855
+      - RenderModel: Assets\Models\Cubes\cubes.obj
       - Transformation:
           Translation: [0, -10, 0]
           TranslationOffset: [0, 0, 0]
@@ -25,8 +27,38 @@ Scene:
           Scale: [500, 0.100000001, 500]
           ScaleOffset: [0, 0, 0]
     -
+      - Tag: flashlight
+      - UUID: 1565514020661425331
+      - Transformation:
+          Translation: [0, 0, 0]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [1, 1, 1]
+          ScaleOffset: [0, 0, 0]
+    -
+      - Tag: moon
+      - UUID: 10056352093374640638
+    -
+      - Tag: textured_phong
+      - UUID: 4030242030975308286
+    -
       - Tag: lamp
-      - UUID: 15359563768897941674
+      - UUID: 5998588434992890355
+      - Transformation:
+          Translation: [0, 0, 0]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [1, 1, 1]
+          ScaleOffset: [0, 0, 0]
+    -
+      - Tag: sun
+      - UUID: 6259107798497506350
+    -
+      - Tag: train
+      - UUID: 13293606266328090492
+      - RenderModel: Assets\Models\Train\train.obj
       - Transformation:
           Translation: [0, 0, 0]
           TranslationOffset: [0, 0, 0]
@@ -36,48 +68,21 @@ Scene:
           ScaleOffset: [0, 0, 0]
     -
       - Tag: lamp_magenta
-      - UUID: 5877501489975932932
+      - UUID: 2141142337822825793
+      - RenderModel: Assets\Models\Cube\cube.obj
       - Transformation:
-          Translation: [0, 10, 39.0713081]
+          Translation: [0, 10, -21.2970943]
           TranslationOffset: [0, 0, 0]
           Rotation: [0, 0, 0]
           RotationOffset: [0, 0, 0]
           Scale: [1, 1, 1]
           ScaleOffset: [0, 0, 0]
-    -
-      - Tag: colored_phong
-      - UUID: 10138671638381572243
     -
       - Tag: lamp_white
-      - UUID: 16063800448546566608
+      - UUID: 11111539292852736739
+      - RenderModel: Assets\Models\Cube\cube.obj
       - Transformation:
-          Translation: [39.0713081, 20, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [1, 1, 1]
-          ScaleOffset: [0, 0, 0]
-    -
-      - Tag: moon
-      - UUID: 3902712440392185057
-    -
-      - Tag: sun
-      - UUID: 2896173377957993421
-    -
-      - Tag: flashlight
-      - UUID: 9657408222795498780
-      - Transformation:
-          Translation: [0, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [1, 1, 1]
-          ScaleOffset: [0, 0, 0]
-    -
-      - Tag: train
-      - UUID: 8365033014386356403
-      - Transformation:
-          Translation: [0, 0, 0]
+          Translation: [-21.2970943, 20, 0]
           TranslationOffset: [0, 0, 0]
           Rotation: [0, 0, 0]
           RotationOffset: [0, 0, 0]
@@ -85,7 +90,8 @@ Scene:
           ScaleOffset: [0, 0, 0]
     -
       - Tag: sponza
-      - UUID: 1856149254330485205
+      - UUID: 11096372485773917954
+      - RenderModel: Assets\Models\Sponza\sponza.obj
       - Transformation:
           Translation: [0, 50, 0]
           TranslationOffset: [0, 0, 0]
@@ -95,4 +101,4 @@ Scene:
           ScaleOffset: [0, 0, 0]
     -
       - Tag: player
-      - UUID: 2050158244580799184
+      - UUID: 741279745446550155

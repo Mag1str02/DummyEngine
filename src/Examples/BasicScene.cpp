@@ -209,21 +209,21 @@ private:
     {
         Logger::Stage("loading", "Main", "LOADING MODELS");
 
-        RenderModelData train, backpack, cube, cubes, sponza;
+        Ref<RenderModelData> train, backpack, cube, cubes, sponza;
         RenderModel r_train, r_backpack, r_cube, r_cubes, r_sponza;
 
-        ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Train" / "train.obj", train);
-        ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Backpack" / "backpack.obj", backpack);
-        ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Cube" / "cube.obj", cube);
-        ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Cubes" / "cubes.obj", cubes);
-        ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Sponza" / "sponza.obj", sponza);
+        train = ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Train" / "train.obj");
+        backpack = ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Backpack" / "backpack.obj");
+        cube = ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Cube" / "cube.obj");
+        cubes = ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Cubes" / "cubes.obj");
+        sponza = ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Sponza" / "sponza.obj");
 
         Logger::Stage("loading", "Main", "Models Loaded");
 
-        train.Compress();
-        backpack.Compress();
-        cubes.Compress();
-        cube.Compress();
+        train->Compress();
+        backpack->Compress();
+        cubes->Compress();
+        cube->Compress();
 
         Logger::Stage("loading", "Main", "Compressed");
 

@@ -1,10 +1,12 @@
 #include "Core/Rendering/Renderer/Renderer.h"
 #include "Core/Rendering/RendererOpenGL/GLRenderAPI.h"
+#include "ToolBox/Loaders/TextureLoader.h"
 
 namespace DE
 {
     Scope<FrameStatistics> Renderer::m_FrameStatistics = nullptr;
     Scope<RenderAPI> Renderer::m_RenderAPI = nullptr;
+    Ref<Texture> Renderer::m_DefaultTexture = nullptr;
 
     void FrameStatistics::Reset()
     {
@@ -33,6 +35,7 @@ namespace DE
     {
         m_RenderAPI->Load(window);
         m_RenderAPI->SetDefaultState();
+        GenDefaultTexture();
     }
     void Renderer::OnWindowResize(uint32_t width, uint32_t height)
     {
@@ -97,13 +100,35 @@ namespace DE
         m_RenderAPI->SetClearColor(Vec4(r, g, b, a));
     }
 
+    Ref<Texture> Renderer::GetDefaultTexture()
+    {
+        return m_DefaultTexture;
+    }
     API Renderer::CurrentAPI()
     {
         return m_RenderAPI->GetAPI();
     }
-
     FrameStatistics Renderer::GetStatistics()
     {
         return *m_FrameStatistics;
     }
+
+    //TODO: Think to move somewhere else...
+    void Renderer::GenDefaultTexture()
+    {
+        Ref<TextureData> texture_data = CreateRef<TextureData>();
+
+        texture_data->width = 1;
+        texture_data->height = 1;
+        texture_data->format = TextureFormat::RGBA;
+        texture_data->data = CreateRef<unsigned char*>((unsigned char*)malloc(sizeof(unsigned char) * 4));
+
+        (*texture_data->data)[0] = 255;
+        (*texture_data->data)[1] = 255;
+        (*texture_data->data)[2] = 255;
+        (*texture_data->data)[3] = 255;
+
+        m_DefaultTexture = Texture::Create(*texture_data);
+    }
+
 }  // namespace DE

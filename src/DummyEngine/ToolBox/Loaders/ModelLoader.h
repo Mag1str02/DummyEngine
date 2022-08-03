@@ -5,34 +5,43 @@
 
 #include "Core/Rendering/Renderer/RenderStructs.h"
 
-namespace DE {
-namespace fs = std::filesystem;
+namespace DE
+{
+    namespace fs = std::filesystem;
 
-class ModelLoader {
-private:
-    enum ColorType { none, diffuse, specular, ambient };
-    size_t m_MeshesAmount;
-    size_t m_VerticesAmount;
-    size_t m_NodesAmount;
-    size_t m_CurrentMeshId;
-    std::unordered_map<std::string, TextureData> m_PathToTextureData;
+    class ModelLoader
+    {
+    public:
+        static Ref<RenderModelData> LoadModel(const Path& path);
 
-    Path m_CurrentDirectory;
-    RenderModelData* m_CurrentData;
+    private:
+        enum ColorType
+        {
+            none,
+            diffuse,
+            specular,
+            ambient
+        };
 
-    Assimp::Importer m_Importer;
-    ModelLoader();
+        struct LoaderState
+        {
+            size_t m_VerticesAmount;
+            size_t m_NodesAmount;
+            size_t m_CurrentMeshId;
+            size_t m_MeshesAmount;
+            Path m_CurrentDirectory;
 
-    static ModelLoader& Get();
+            Ref<RenderModelData> m_CurrentData;
+            std::unordered_map<Path, Ref<RenderModelData>> m_ModelDataByPath;
+            Assimp::Importer m_Importer;
+        };
 
-    void ILoadModel(const Path& path, RenderModelData& data);
-    void IProcessNode(aiNode* node, const aiScene* scene);
-    void IProcessMesh(aiMesh* mesh, const aiScene* scene);
-    TextureData ILoadMaterialTexture(aiMaterial* mat, aiTextureType type);
-    Vec3 IGetmaterialColor(aiMaterial* mat, ColorType type);
-    void IReadModelProperties(aiNode* node, const aiScene* scene);
+        static LoaderState m_State;
 
-public:
-    static void LoadModel(const Path& path, RenderModelData& data);
-};
+        static void ProcessNode(aiNode* node, const aiScene* scene);
+        static void ProcessMesh(aiMesh* mesh, const aiScene* scene);
+        static Vec3 GetColor(aiMaterial* mat, ColorType type);
+        static Ref<TextureData> GetTexture(aiMaterial* mat, aiTextureType type);
+        static void ReadModelProperties(aiNode* node, const aiScene* scene);
+    };
 }  // namespace DE

@@ -35,12 +35,17 @@ namespace DE
         static void SetClearColor(Vec4 color);
         static void SetClearColor(float r, float g, float b, float a);
 
+        static Ref<Texture> GetDefaultTexture();
+
         static API CurrentAPI();
         static FrameStatistics GetStatistics();
 
     private:
+        static void GenDefaultTexture();
+
         static Scope<FrameStatistics> m_FrameStatistics;
         static Scope<RenderAPI> m_RenderAPI;
+        static Ref<Texture> m_DefaultTexture;
     };
 
 }  // namespace DE

@@ -7,6 +7,7 @@ namespace DE
     
     struct TextureData
     {
+        //TODO: Actually it is a memory leak... Fix type of data storage...
         Ref<unsigned char*> data;
         uint32_t width;
         uint32_t height;

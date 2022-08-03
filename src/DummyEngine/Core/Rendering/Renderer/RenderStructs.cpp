@@ -1,7 +1,20 @@
 #include "Core/Rendering/Renderer/RenderStructs.h"
+#include "Core/Rendering/Renderer/Renderer.h"
 
 namespace DE
 {
+    Ref<Texture> SetupTexture(Ref<TextureData> texture_data)
+    {
+        if (texture_data)
+        {
+            return Texture::Create(*texture_data);
+        }
+        else
+        {
+            return Renderer::GetDefaultTexture();
+        }
+    }
+
     RenderMeshData& RenderMeshData::operator+=(const RenderMeshData& other)
     {
         size_t sz = vertices.size();
@@ -25,7 +38,7 @@ namespace DE
         }
         meshes = new_vec;
     }
-    void RenderMesh::FillData(const RenderMeshData& data)
+    void RenderMesh::FillData(RenderMeshData data)
     {
         vertex_array = VertexArray::Create();
 
@@ -43,19 +56,20 @@ namespace DE
         material.diffuse_color = data.material.diffuse_color;
         material.shininess = data.material.shininess;
 
-        material.specular_map = Texture::Create(data.material.specular_map);
-        material.diffuse_map = Texture::Create(data.material.diffuse_map);
-        material.normal_map = Texture::Create(data.material.normal_map);
+        material.specular_map = SetupTexture(data.material.specular_map);
+        material.diffuse_map = SetupTexture(data.material.diffuse_map);
+        material.normal_map = SetupTexture(data.material.normal_map);
 
         vertex_array->AddVertexBuffer(vertex_buffer);
         vertex_array->SetIndexBuffer(index_buffer);
     }
-    void RenderModel::FillData(const RenderModelData& data)
+    void RenderModel::FillData(Ref<RenderModelData> data)
     {
-        meshes.resize(data.meshes.size());
-        for (size_t i = 0; i < data.meshes.size(); ++i)
+        path = data->path;
+        meshes.resize(data->meshes.size());
+        for (size_t i = 0; i < data->meshes.size(); ++i)
         {
-            meshes[i].FillData(data.meshes[i]);
+            meshes[i].FillData(data->meshes[i]);
         }
     }
 

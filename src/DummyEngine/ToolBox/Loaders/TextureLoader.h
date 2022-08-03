@@ -10,6 +10,16 @@ namespace DE
     class TextureLoader
     {
     public:
-        static TextureData LoadTexture(const Path& path);
+        static Ref<TextureData> Load(const Path& path);
+        static Ref<TextureData> Get(const Path& path);
+
+    private:
+        struct LoaderState
+        {
+            std::unordered_map<fs::path, Ref<TextureData>> m_TextureDataByPath;
+            Ref<TextureData> m_CurrentData;
+        };
+
+        static LoaderState m_State; 
     };
 }  // namespace DE
