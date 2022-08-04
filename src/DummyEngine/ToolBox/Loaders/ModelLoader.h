@@ -12,7 +12,7 @@ namespace DE
     class ModelLoader
     {
     public:
-        static Ref<RenderModelData> LoadModel(const Path& path);
+        static Ref<RenderModelData> Load(const Path& path);
 
     private:
         enum ColorType

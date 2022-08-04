@@ -13,8 +13,9 @@ namespace DE
         Scene(const std::string& name = "Scene");
 
         Entity CreateEntity(std::string name = "Entity");
-        Entity GetEntityByUUID(UUID uuid);
-        Entity GetEntityByName(const std::string& name);
+        Entity CreateEntityWithUUID(UUID uuid, std::string name = "Entity");
+        Entity GetByUUID(UUID uuid);
+        Entity GetByName(const std::string& name);
 
         void OnUpdate(double dt);
         void Render();
@@ -23,14 +24,16 @@ namespace DE
 
         std::string GetName() const;
 
-        template <typename System>
-        void RegisterSystem()
+        template <typename System> void RegisterSystem()
         {
             m_Storage.RegisterSystem<System>();
         }
 
     private:
         friend class SceneLoader;
+
+        Entity CreateEmptyEntity();
+        void UpdateEmptyEntity(Entity entity);
 
         void OnEntityDestroy(Entity entity);
         FPSCamera& GetCamera();

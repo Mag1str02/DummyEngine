@@ -14,7 +14,7 @@ namespace DE
         }
     }
 
-    GLShader::GLShader(const std::string& name, std::initializer_list<ShaderPart>& shader_parts)
+    GLShader::GLShader(const std::string& name, const std::vector<ShaderPart>& shader_parts)
     {
         m_Name = name;
         m_ShaderParts = shader_parts;

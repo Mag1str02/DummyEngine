@@ -19,7 +19,7 @@ namespace DE
         GLShader& operator=(Shader&& other) = delete;
         GLShader& operator=(const Shader& other) = delete;
 
-        GLShader(const std::string& name, std::initializer_list<ShaderPart>& shader_parts);
+        GLShader(const std::string& name, const std::vector<ShaderPart>& shader_parts);
         virtual ~GLShader();
 
         virtual void Bind() const override;

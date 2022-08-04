@@ -50,6 +50,8 @@ namespace DE
         }
 
     private:
+        friend class Scene;
+
         EntityId m_Id;
         Scene* m_Scene;
     };

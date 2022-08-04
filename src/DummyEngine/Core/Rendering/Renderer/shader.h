@@ -39,6 +39,6 @@ namespace DE
         virtual const std::string& GetName() const = 0;
         virtual const std::vector<ShaderPart>& GetParts() const = 0;
 
-        static Ref<Shader> Create(std::string name, std::initializer_list<ShaderPart> initializers);
+        static Ref<Shader> Create(const std::string& name, const std::vector<ShaderPart>& initializers);
     };
 }  // namespace DE

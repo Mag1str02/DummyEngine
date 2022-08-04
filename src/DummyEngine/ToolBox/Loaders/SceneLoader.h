@@ -13,15 +13,11 @@ namespace DE
     class SceneLoader
     {
     public:
-        static void SaveScene(Ref<Scene> scene, Path path);
-        static Ref<Scene> LoadScene(Path path);
+        static void Save(Ref<Scene> scene, Path path);
+        static void Load(Ref<Scene> scene, Path path);
 
-        template <typename ComponentType> static YAML::Node GetComponentNode(ComponentType component)
-        {
-            YAML::Node n_Component;
-            n_Component["UnknownComponent"] = DemangleName<ComponentType>();
-            return n_Component;
-        }
+        template <typename ComponentType> static YAML::Node SaveComponent(ComponentType component);
+        template <typename ComponentType> static void LoadComponent(YAML::Node n_Component, Entity& entity);
 
     private:
         template <typename ComponentType> static void TryToSaveComponent(YAML::Node& n_Entity, Entity entity);
@@ -29,6 +25,12 @@ namespace DE
         static YAML::Node SaveModels();
         static YAML::Node SaveShaders();
         static YAML::Node SaveAssets();
+
+        static void LoadShaders(YAML::Node n_Shaders);
+        static void LoadModels(YAML::Node n_Models);
+        static void LoadAssets(YAML::Node n_Assets);
+        static void LoadEntity(YAML::Node n_Entity, Ref<Scene> scene);
+        static void LoadEntities(YAML::Node n_Entities, Ref<Scene> scene);
 
         struct LoaderState
         {

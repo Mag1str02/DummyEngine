@@ -25,13 +25,29 @@ namespace DE
 
         return new_entity;
     }
-    Entity Scene::GetEntityByUUID(UUID uuid)
+    Entity Scene::CreateEntityWithUUID(UUID uuid, std::string name)
+    {
+        EntityId entity_id = m_Storage.CreateEntity();
+        Entity new_entity(entity_id, this);
+
+        DE_ASSERT(m_EntityByUUID.find(uuid) == m_EntityByUUID.end(), "UUID collision occured.");
+        DE_ASSERT(m_EntityByName.find(name) == m_EntityByName.end(), "Name collision occured.");
+
+        new_entity.AddComponent(Tag(name));
+        new_entity.AddComponent(Id(uuid));
+
+        m_EntityByUUID[uuid] = entity_id;
+        m_EntityByName[name] = entity_id;
+
+        return new_entity;
+    }
+    Entity Scene::GetByUUID(UUID uuid)
     {
         DE_ASSERT(m_EntityByUUID.find(uuid) != m_EntityByUUID.end(),
                   "Entity with name " + std::to_string(uuid) + " not found.");
         return Entity(m_EntityByUUID.at(uuid), this);
     }
-    Entity Scene::GetEntityByName(const std::string& name)
+    Entity Scene::GetByName(const std::string& name)
     {
         DE_ASSERT(m_EntityByName.find(name) != m_EntityByName.end(), "Entity with name " + name + " not found.");
         return Entity(m_EntityByName.at(name), this);
@@ -68,12 +84,32 @@ namespace DE
 
     Entity Scene::operator[](const std::string& name)
     {
+        DE_ASSERT(m_EntityByName.find(name) != m_EntityByName.end(), "Entity with name " + name + " not found.");
         return Entity(m_EntityByName.at(name), this);
     }
 
     std::string Scene::GetName() const
     {
         return m_Name;
+    }
+
+    Entity Scene::CreateEmptyEntity()
+    {
+        EntityId entity_id = m_Storage.CreateEntity();
+        Entity new_entity(entity_id, this);
+
+        return new_entity;
+    }
+    void Scene::UpdateEmptyEntity(Entity entity)
+    {
+        Id id = entity.GetComponent<Id>();
+        Tag tag = entity.GetComponent<Tag>();
+
+        DE_ASSERT(m_EntityByUUID.find(id) == m_EntityByUUID.end(), "UUID collision occured.");
+        DE_ASSERT(m_EntityByName.find(tag) == m_EntityByName.end(), "Name collision occured.");
+
+        m_EntityByUUID[id] = entity.m_Id;
+        m_EntityByName[tag] = entity.m_Id;
     }
 
     FPSCamera& Scene::GetCamera()

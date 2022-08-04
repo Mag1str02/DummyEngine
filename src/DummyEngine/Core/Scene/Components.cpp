@@ -2,7 +2,8 @@
 
 namespace DE
 {
-
+    Id::Id(UUID uuid) : id(uuid) {}
+    
     Tag::Tag(const std::string& tag) : tag(tag) {}
 
     Mat4 Transformation::GetTransform() const

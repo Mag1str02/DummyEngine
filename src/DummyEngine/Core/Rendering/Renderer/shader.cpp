@@ -22,7 +22,7 @@ namespace DE
         return ShaderPartType::None;
     }
 
-    Ref<Shader> Shader::Create(std::string name, std::initializer_list<ShaderPart> initializers)
+    Ref<Shader> Shader::Create(const std::string& name,const  std::vector<ShaderPart>& initializers)
     {
         switch (Renderer::CurrentAPI())
         {

@@ -10,6 +10,7 @@ namespace DE
         UUID id;
 
         Id() = default;
+        Id(UUID uuid);
         Id(const Id&) = default;
 
         operator uint64_t() const
@@ -24,6 +25,11 @@ namespace DE
 
         Tag() = default;
         Tag(const std::string& tag);
+
+        operator std::string() const
+        {
+            return tag;
+        }
     };
     struct Transformation
     {

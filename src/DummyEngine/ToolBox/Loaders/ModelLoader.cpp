@@ -9,7 +9,7 @@ namespace DE
 
     ModelLoader::LoaderState ModelLoader::m_State;
 
-    Ref<RenderModelData> ModelLoader::LoadModel(const Path& path)
+    Ref<RenderModelData> ModelLoader::Load(const Path& path)
     {
         const aiScene* scene = m_State.m_Importer.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs);
 

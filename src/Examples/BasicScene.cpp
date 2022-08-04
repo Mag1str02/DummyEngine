@@ -105,7 +105,7 @@ public:
     }
     virtual void OnClose() override
     {
-        SceneLoader::SaveScene(r_scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / (r_scene->GetName() + ".yml"));
+        SceneLoader::Save(r_scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / (r_scene->GetName() + ".yml"));
     }
     virtual void Update(double dt) override
     {
@@ -216,11 +216,11 @@ private:
         Ref<RenderModelData> train, backpack, cube, cubes, sponza;
         RenderModel r_train, r_backpack, r_cube, r_cubes, r_sponza;
 
-        train = ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Train" / "train.obj");
-        backpack = ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Backpack" / "backpack.obj");
-        cube = ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Cube" / "cube.obj");
-        cubes = ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Cubes" / "cubes.obj");
-        sponza = ModelLoader::LoadModel(Config::GetPath(DE_CFG_MODEL_PATH) / "Sponza" / "sponza.obj");
+        train = ModelLoader::Load(Config::GetPath(DE_CFG_MODEL_PATH) / "Train" / "train.obj");
+        backpack = ModelLoader::Load(Config::GetPath(DE_CFG_MODEL_PATH) / "Backpack" / "backpack.obj");
+        cube = ModelLoader::Load(Config::GetPath(DE_CFG_MODEL_PATH) / "Cube" / "cube.obj");
+        cubes = ModelLoader::Load(Config::GetPath(DE_CFG_MODEL_PATH) / "Cubes" / "cubes.obj");
+        sponza = ModelLoader::Load(Config::GetPath(DE_CFG_MODEL_PATH) / "Sponza" / "sponza.obj");
 
         Logger::Stage("loading", "Main", "Models Loaded");
 
