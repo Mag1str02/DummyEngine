@@ -161,6 +161,7 @@ namespace DE
         n_Scene["Assets"] = n_Assets;
         n_Scene["Entities"] = n_Entities;
 
+        // TODO: Fix random save order.
         for (auto [uuid, entity_id] : scene->m_EntityByUUID)
         {
             n_Entities.push_back(SaveEntity(scene->GetEntityByUUID(UUID(uuid))));

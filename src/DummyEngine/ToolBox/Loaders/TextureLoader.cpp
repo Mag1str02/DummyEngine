@@ -66,9 +66,18 @@ namespace DE
     }
     Ref<TextureData> TextureLoader::Get(const Path& path)
     {
-        if (m_State.m_TextureDataByPath.find(fs::canonical(path)) != m_State.m_TextureDataByPath.end())
+        Path canonitial;
+        try
         {
-            return m_State.m_TextureDataByPath[fs::canonical(path)];
+            canonitial = fs::canonical(path);
+        } catch (std::filesystem::__cxx11::filesystem_error)
+        {
+            Logger::Error("loading", "TextureLoader","Texture file does not exist: " + path.string());
+            return nullptr;
+        }
+        if (m_State.m_TextureDataByPath.find(canonitial) != m_State.m_TextureDataByPath.end())
+        {
+            return m_State.m_TextureDataByPath[canonitial];
         }
         else
         {

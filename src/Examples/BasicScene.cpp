@@ -58,13 +58,13 @@ public:
 
     void Update(double dt) override
     {
-        scene["flashlight"].GetComponent<SpotLight>().position = scene["player"].GetComponent<FPSCamera>().GetPos();
-        scene["flashlight"].GetComponent<SpotLight>().direction = scene["player"].GetComponent<FPSCamera>().GetDir();
+        scene["flashlight"].GetComponent<LightSource>().position = scene["player"].GetComponent<FPSCamera>().GetPos();
+        scene["flashlight"].GetComponent<LightSource>().direction = scene["player"].GetComponent<FPSCamera>().GetDir();
 
         auto& manipulators = GetComponentArray<LinearManipulator>();
         auto& positions = GetComponentArray<Transformation>();
         auto& scales = GetComponentArray<ScaleManipulator>();
-        auto& point_lights = GetComponentArray<PointLight>();
+        auto& light_sources = GetComponentArray<LightSource>();
 
         for (auto [entity_id, linear_manipulator] : manipulators)
         {
@@ -74,10 +74,15 @@ public:
         {
             positions[entity_id].scale = scale.GetScale();
         }
-        for (auto [entity_id, point_light] : point_lights)
+        for (auto [entity_id, light_source] : light_sources)
         {
-            point_light.position = positions[entity_id].translation;
+            if (positions.HasComponent(entity_id))
+            {
+                light_source.position = positions[entity_id].translation;
+                // std::cout << "Found entity with pos" << std::endl;
+            }
         }
+        // std::cout << "-------------------" << std::endl;
     }
 };
 
@@ -115,7 +120,7 @@ private:
         Logger::Stage("loading", "Main", "INITIALIZETION");
         Input::SetWindow(m_Window->GetWindow());
         Renderer::SetClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        Renderer::Disable(RenderSetting::FaceCulling);
+        // Renderer::Disable(RenderSetting::FaceCulling);
     }
     void RegisterSystems()
     {
@@ -155,7 +160,6 @@ private:
             scene["lamp_white"].AddComponent<Transformation>();
             scene["lamp_magenta"].AddComponent<Transformation>();
             scene["lamp"].AddComponent<Transformation>();
-            scene["flashlight"].AddComponent<Transformation>();
             scene["surface"].AddComponent<Transformation>();
 
             scene["train"].AddComponent<Ref<Shader>>();
@@ -163,12 +167,12 @@ private:
 
             // scene["backpack"].AddComponent<LinearManipulator>();
 
-            scene["sun"].AddComponent<DirectionalLight>();
-            scene["moon"].AddComponent<DirectionalLight>();
-            scene["lamp_white"].AddComponent<PointLight>();
-            scene["lamp_magenta"].AddComponent<PointLight>();
-            scene["flashlight"].AddComponent<SpotLight>();
-            scene["lamp"].AddComponent<SpotLight>();
+            scene["sun"].AddComponent<LightSource>();
+            scene["moon"].AddComponent<LightSource>();
+            scene["lamp_white"].AddComponent<LightSource>();
+            scene["lamp_magenta"].AddComponent<LightSource>();
+            scene["flashlight"].AddComponent<LightSource>();
+            scene["lamp"].AddComponent<LightSource>();
 
             // scene["lamp_white"].AddComponent<LinearManipulator>();
             // scene["lamp_magenta"].AddComponent<LinearManipulator>();
@@ -246,7 +250,6 @@ private:
 
         scene["lamp_white"].AddComponent<Ref<Shader>>(scene["colored_phong"].GetComponent<UniqueShader>().shader);
         scene["lamp_magenta"].AddComponent<Ref<Shader>>(scene["colored_phong"].GetComponent<UniqueShader>().shader);
-
     }
     void SetObjectProperties()
     {
@@ -262,22 +265,24 @@ private:
         scene["surface"].GetComponent<Transformation>().scale = Vec3(500, 0.1, 500);
 
         FPSCamera& camera = scene["player"].GetComponent<FPSCamera>();
-        DirectionalLight& sun = scene["sun"].GetComponent<DirectionalLight>();
-        DirectionalLight& moon = scene["moon"].GetComponent<DirectionalLight>();
-        PointLight& lamp_white = scene["lamp_white"].GetComponent<PointLight>();
-        PointLight& lamp_magenta = scene["lamp_magenta"].GetComponent<PointLight>();
-        SpotLight& flashlight = scene["flashlight"].GetComponent<SpotLight>();
-        SpotLight& lamp = scene["lamp"].GetComponent<SpotLight>();
 
-        // scene["lamp_white"].GetComponent<LinearManipulator>().dir = Vec3(1, 0, 0);
-        // scene["lamp_white"].GetComponent<LinearManipulator>().radius = 50;
-        // scene["lamp_white"].GetComponent<LinearManipulator>().speed = 0.5;
-        scene["lamp_white"].GetComponent<Transformation>().translation = Vec3(0, 20, 0);
+        LightSource& sun = scene["sun"].GetComponent<LightSource>();
+        LightSource& moon = scene["moon"].GetComponent<LightSource>();
+        LightSource& lamp_white = scene["lamp_white"].GetComponent<LightSource>();
+        LightSource& lamp_magenta = scene["lamp_magenta"].GetComponent<LightSource>();
+        LightSource& flashlight = scene["flashlight"].GetComponent<LightSource>();
+        LightSource& lamp = scene["lamp"].GetComponent<LightSource>();
 
-        // scene["lamp_magenta"].GetComponent<LinearManipulator>().dir = Vec3(0, 0, 1);
-        // scene["lamp_magenta"].GetComponent<LinearManipulator>().radius = 50;
-        // scene["lamp_magenta"].GetComponent<LinearManipulator>().speed = 0.5;
-        scene["lamp_magenta"].GetComponent<Transformation>().translation = Vec3(0, 10, 0);
+        sun.type = LightSourceType::Direction;
+        moon.type = LightSourceType::Direction;
+        lamp_white.type = LightSourceType::Point;
+        lamp_magenta.type = LightSourceType::Point;
+        flashlight.type = LightSourceType::Spot;
+        lamp.type = LightSourceType::Spot;
+
+        scene["lamp_white"].GetComponent<Transformation>().translation = Vec3(20, 20, 20);
+        scene["lamp_magenta"].GetComponent<Transformation>().translation = Vec3(-10, 10, -30);
+        scene["lamp"].GetComponent<Transformation>().translation = Vec3(30, 10, 0);
 
         camera.SetPos(Vec3(0.0f, 0.0f, 10.0f));
 

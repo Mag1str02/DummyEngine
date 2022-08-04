@@ -27,9 +27,6 @@ set(ENGINE_SOURCES
     Core/Scene/Components.cpp
     Core/Scene/Scene.cpp
 
-    Core/Objects/LightSources/PointLight.cpp
-    Core/Objects/LightSources/SpotLight.cpp
-    Core/Objects/LightSources/DirectionalLight.cpp
     Core/Objects/LightSources/LightManager.cpp
     Core/Objects/Cameras/FPSCamera.cpp
 

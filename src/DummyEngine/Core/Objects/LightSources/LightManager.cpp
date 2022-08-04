@@ -3,32 +3,29 @@
 
 namespace DE
 {
+    uint32_t LightSourceTypeToId(LightSourceType type)
+    {
+        switch (type)
+        {
+            case LightSourceType::Direction: return 1;
+            case LightSourceType::Point: return 2;
+            case LightSourceType::Spot: return 3;
+            default: return 0;
+        }
+    }
 
-    void LightManager::ActivatePointLight(Ref<Shader> shader, const PointLight& point_light, int id)
+    void LightManager::ActivateLightSource(Ref<Shader> shader, const LightSource& source, int id)
     {
-        shader->SetFloat3("u_PointLights[" + std::to_string(id) + "].light.ambient", point_light.ambient);
-        shader->SetFloat3("u_PointLights[" + std::to_string(id) + "].light.diffuse", point_light.diffuse);
-        shader->SetFloat3("u_PointLights[" + std::to_string(id) + "].light.specular", point_light.specular);
-        shader->SetFloat3("u_PointLights[" + std::to_string(id) + "].position", point_light.position);
-        shader->SetFloat3("u_PointLights[" + std::to_string(id) + "].clq", point_light.clq);
-    }
-    void LightManager::ActivateDirectionalLight(Ref<Shader> shader, const DirectionalLight& directional_light, int id)
-    {
-        shader->SetFloat3("u_DirLights[" + std::to_string(id) + "].light.ambient", directional_light.ambient);
-        shader->SetFloat3("u_DirLights[" + std::to_string(id) + "].light.diffuse", directional_light.diffuse);
-        shader->SetFloat3("u_DirLights[" + std::to_string(id) + "].light.specular", directional_light.specular);
-        shader->SetFloat3("u_DirLights[" + std::to_string(id) + "].direction", directional_light.direction);
-    }
-    void LightManager::ActivateSpotLight(Ref<Shader> shader, const SpotLight& spot_light, int id)
-    {
-        shader->SetFloat3("u_SpotLights[" + std::to_string(id) + "].point_light.light.ambient", spot_light.ambient);
-        shader->SetFloat3("u_SpotLights[" + std::to_string(id) + "].point_light.light.diffuse", spot_light.diffuse);
-        shader->SetFloat3("u_SpotLights[" + std::to_string(id) + "].point_light.light.specular", spot_light.specular);
-        shader->SetFloat3("u_SpotLights[" + std::to_string(id) + "].point_light.position", spot_light.position);
-        shader->SetFloat3("u_SpotLights[" + std::to_string(id) + "].point_light.clq", spot_light.clq);
-        shader->SetFloat3("u_SpotLights[" + std::to_string(id) + "].direction", spot_light.direction);
-        shader->SetFloat("u_SpotLights[" + std::to_string(id) + "].outer_cone_cos", spot_light.outer_cone_cos);
-        shader->SetFloat("u_SpotLights[" + std::to_string(id) + "].inner_cone_cos", spot_light.inner_cone_cos);
+        shader->SetFloat3("u_LightSources[" + std::to_string(id) + "].m_Ambient", source.ambient);
+        shader->SetFloat3("u_LightSources[" + std::to_string(id) + "].m_Diffuse", source.diffuse);
+        shader->SetFloat3("u_LightSources[" + std::to_string(id) + "].m_Specular", source.specular);
+        shader->SetFloat3("u_LightSources[" + std::to_string(id) + "].m_Position", source.position);
+        shader->SetFloat3("u_LightSources[" + std::to_string(id) + "].m_CLQ", source.clq);
+        shader->SetFloat3("u_LightSources[" + std::to_string(id) + "].m_Direction", source.direction);
+        shader->SetFloat3("u_LightSources[" + std::to_string(id) + "].m_ConesAndType",
+                          source.outer_cone_cos,
+                          source.inner_cone_cos,
+                          LightSourceTypeToId(source.type));
     }
 
     LightManager::LightManager() {}
@@ -39,29 +36,17 @@ namespace DE
     void LightManager::Update(double dt)
     {
         auto& shaders = GetComponentArray<UniqueShader>();
-        auto& u_PointLights = GetComponentArray<PointLight>();
-        auto& u_DirLights = GetComponentArray<DirectionalLight>();
-        auto& u_SpotLights = GetComponentArray<SpotLight>();
+        auto& u_LightSources = GetComponentArray<LightSource>();
         for (auto [entity_id, unique_shader] : shaders)
         {
             auto& shader = unique_shader.shader;
             shader->Bind();
-            int cnt_dir_light = 0;
-            int cnt_point_light = 0;
-            int cnt_spot_light = 0;
-            for (auto [entity_id, directional_light] : u_DirLights)
+            int cnt_light_sources = 0;
+            for (auto [entity_id, light_source] : u_LightSources)
             {
-                ActivateDirectionalLight(shader, directional_light, cnt_dir_light++);
+                ActivateLightSource(shader, light_source, cnt_light_sources++);
             }
-            for (auto [entity_id, point_light] : u_PointLights)
-            {
-                ActivatePointLight(shader, point_light, cnt_point_light++);
-            }
-            for (auto [entity_id, spot_light] : u_SpotLights)
-            {
-                ActivateSpotLight(shader, spot_light, cnt_spot_light++);
-            }
-            shader->SetInt3("u_LightAmount", cnt_dir_light, cnt_point_light, cnt_spot_light);
+            shader->SetInt("u_LightAmount", cnt_light_sources);
         }
     }
 }  // namespace DE
