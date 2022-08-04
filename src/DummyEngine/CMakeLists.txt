@@ -28,6 +28,7 @@ set(ENGINE_SOURCES
     Core/Scene/Scene.cpp
 
     Core/Objects/LightSources/LightManager.cpp
+    Core/Objects/LightSources/LightSource.cpp
     Core/Objects/Cameras/FPSCamera.cpp
 
     Core/Rendering/Renderer/VertexArray.cpp

@@ -201,7 +201,6 @@ private:
         scene["colored_phong"].GetComponent<UniqueShader>().shader = colored_phong;
         scene["textured_phong"].GetComponent<UniqueShader>().shader = textured_phong;
 
-        scene["cubes"].AddComponent<Ref<Shader>>(colored_phong);
         scene["train"].AddComponent<Ref<Shader>>(colored_phong);
         scene["surface"].AddComponent<Ref<Shader>>(colored_phong);
         scene["backpack"].AddComponent<Ref<Shader>>(textured_phong);

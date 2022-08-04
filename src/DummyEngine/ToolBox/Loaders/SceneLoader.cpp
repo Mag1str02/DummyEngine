@@ -1,4 +1,5 @@
 #include "Addition/Base.h"
+#include "Core/Objects/LightSources/LightSource.h"
 #include "Core/ECS/Entity.hpp"
 #include "ToolBox/Loaders/SceneLoader.h"
 
@@ -90,6 +91,15 @@ namespace DE
 
         return n_Component;
     }
+    template <> YAML::Node SceneLoader::GetComponentNode(UniqueShader component)
+    {
+        YAML::Node n_Component;
+
+        m_State.m_Shaders.insert(component);
+        n_Component["UniqueShader"] = component.shader->GetName();
+
+        return n_Component;
+    }
     template <> YAML::Node SceneLoader::GetComponentNode(FPSCamera component)
     {
         YAML::Node n_Component;
@@ -100,6 +110,22 @@ namespace DE
         n_Component["FPSCamera"]["FarPlane"] = component.m_FarPlane;
         n_Component["FPSCamera"]["Position"] = NodeVec3(component.m_Position);
         n_Component["FPSCamera"]["Direction"] = NodeVec3(component.m_Direction);
+
+        return n_Component;
+    }
+    template <> YAML::Node SceneLoader::GetComponentNode(LightSource component)
+    {
+        YAML::Node n_Component;
+
+        n_Component["LightSource"]["Type"] = LightSourceTypeToString(component.type);
+        n_Component["LightSource"]["Ambient"] = NodeVec3(component.ambient);
+        n_Component["LightSource"]["Diffuse"] = NodeVec3(component.diffuse);
+        n_Component["LightSource"]["Specular"] = NodeVec3(component.specular);
+        n_Component["LightSource"]["Direction"] = NodeVec3(component.direction);
+        n_Component["LightSource"]["Position"] = NodeVec3(component.position);
+        n_Component["LightSource"]["CLQ"] = NodeVec3(component.clq);
+        n_Component["LightSource"]["InnerCone"] = component.inner_cone_cos;
+        n_Component["LightSource"]["OuterCone"] = component.outer_cone_cos;
 
         return n_Component;
     }
@@ -119,7 +145,10 @@ namespace DE
         TryToSaveComponent<RenderModel>(n_Entity, entity);
         TryToSaveComponent<Transformation>(n_Entity, entity);
         TryToSaveComponent<Ref<Shader>>(n_Entity, entity);
+        TryToSaveComponent<UniqueShader>(n_Entity, entity);
         TryToSaveComponent<FPSCamera>(n_Entity, entity);
+        TryToSaveComponent<LightSource>(n_Entity, entity);
+
         return n_Entity;
     }
     YAML::Node SceneLoader::SaveModels()
@@ -161,10 +190,18 @@ namespace DE
         n_Scene["Assets"] = n_Assets;
         n_Scene["Entities"] = n_Entities;
 
-        // TODO: Fix random save order.
+        std::vector<std::pair<Tag, Entity>> entities;
         for (auto [uuid, entity_id] : scene->m_EntityByUUID)
         {
-            n_Entities.push_back(SaveEntity(scene->GetEntityByUUID(UUID(uuid))));
+            auto entity = scene->GetEntityByUUID(UUID(uuid));
+            entities.push_back({entity.GetComponent<Tag>(), entity});
+        }
+        std::sort(
+            entities.begin(), entities.end(), [](const auto& a, const auto& b) { return a.first.tag < b.first.tag; });
+
+        for (auto [tag, enitity] : entities)
+        {
+            n_Entities.push_back(SaveEntity(enitity));
         }
 
         n_Assets["Models"] = SaveModels();

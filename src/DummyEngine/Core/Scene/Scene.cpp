@@ -68,7 +68,7 @@ namespace DE
 
     Entity Scene::operator[](const std::string& name)
     {
-        return Entity(m_EntityByName[name], this);
+        return Entity(m_EntityByName.at(name), this);
     }
 
     std::string Scene::GetName() const

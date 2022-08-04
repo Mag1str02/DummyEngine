@@ -12,6 +12,9 @@ namespace DE
         Direction
     };
 
+    std::string LightSourceTypeToString(LightSourceType type);
+    LightSourceType StringToLightSourceType(const std::string& type);
+
     struct LightSource
     {
         LightSourceType type;
