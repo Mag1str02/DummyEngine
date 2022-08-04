@@ -15,14 +15,29 @@ namespace DE
     public:
         static void SaveScene(Ref<Scene> scene, Path path);
         static Ref<Scene> LoadScene(Path path);
+
+        template <typename ComponentType> static YAML::Node GetComponentNode(ComponentType component)
+        {
+            YAML::Node n_Component;
+            n_Component["UnknownComponent"] = DemangleName<ComponentType>();
+            return n_Component;
+        }
+
+    private:
+        template <typename ComponentType> static void TryToSaveComponent(YAML::Node& n_Entity, Entity entity);
+        static YAML::Node SaveEntity(Entity entity);
+        static YAML::Node SaveModels();
+        static YAML::Node SaveShaders();
+        static YAML::Node SaveAssets();
+
+        struct LoaderState
+        {
+            std::unordered_set<Path> m_ModelsPath;
+            std::unordered_set<Ref<Shader>> m_Shaders;
+
+            void Clear();
+        };
+        static LoaderState m_State;
     };
-
-    template <typename ComponentType> YAML::Node GetComponentNode(ComponentType component)
-    {
-        YAML::Node n_Component;
-        n_Component["UnknownComponent"] = DemangleName<ComponentType>();
-        return n_Component;
-    }
-
 
 }  // namespace DE

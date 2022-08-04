@@ -20,6 +20,6 @@ namespace DE
             Ref<TextureData> m_CurrentData;
         };
 
-        static LoaderState m_State; 
+        static LoaderState m_State;
     };
 }  // namespace DE

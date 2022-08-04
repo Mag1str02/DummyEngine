@@ -6,7 +6,13 @@
 
 namespace DE
 {
-
+   enum class RenderSetting
+    {
+        None = 0,
+        DepthTest,
+        MultiSampling,
+        FaceCulling
+    };
     class RenderAPI
     {
     public:

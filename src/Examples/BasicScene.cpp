@@ -115,6 +115,7 @@ private:
         Logger::Stage("loading", "Main", "INITIALIZETION");
         Input::SetWindow(m_Window->GetWindow());
         Renderer::SetClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        Renderer::Disable(RenderSetting::FaceCulling);
     }
     void RegisterSystems()
     {
@@ -145,7 +146,7 @@ private:
             scene["player"].AddComponent<FPSCamera>();
 
             scene["backpack"].AddComponent<Transformation>();
-            scene["backpack"].AddComponent<LinearManipulator>();
+            // scene["backpack"].AddComponent<LinearManipulator>();
 
             scene["sponza"].AddComponent<Transformation>();
             scene["sponza"].AddComponent<Ref<Shader>>();
@@ -160,7 +161,7 @@ private:
             scene["train"].AddComponent<Ref<Shader>>();
             scene["backpack"].AddComponent<Ref<Shader>>();
 
-            scene["backpack"].AddComponent<LinearManipulator>();
+            // scene["backpack"].AddComponent<LinearManipulator>();
 
             scene["sun"].AddComponent<DirectionalLight>();
             scene["moon"].AddComponent<DirectionalLight>();
@@ -169,8 +170,8 @@ private:
             scene["flashlight"].AddComponent<SpotLight>();
             scene["lamp"].AddComponent<SpotLight>();
 
-            scene["lamp_white"].AddComponent<LinearManipulator>();
-            scene["lamp_magenta"].AddComponent<LinearManipulator>();
+            // scene["lamp_white"].AddComponent<LinearManipulator>();
+            // scene["lamp_magenta"].AddComponent<LinearManipulator>();
 
             scene["colored_phong"].AddComponent<UniqueShader>();
             scene["textured_phong"].AddComponent<UniqueShader>();
@@ -246,23 +247,6 @@ private:
         scene["lamp_white"].AddComponent<Ref<Shader>>(scene["colored_phong"].GetComponent<UniqueShader>().shader);
         scene["lamp_magenta"].AddComponent<Ref<Shader>>(scene["colored_phong"].GetComponent<UniqueShader>().shader);
 
-        // for (int i = 0; i < 2; ++i)
-        // {
-        //     scene["train" + std::to_string(i)].AddComponent<RenderModel>(scene["train"].GetComponent<RenderModel>());
-        //     scene["train" + std::to_string(i)].GetComponent<Transformation>().translation = Vec3(0, 100, 300 - i *
-        //     12); scene["train" +
-        //     std::to_string(i)].AddComponent<Ref<Shader>>(scene["train"].GetComponent<Ref<Shader>>()); scene["train" +
-        //     std::to_string(i)].AddComponent<LinearManipulator>(); scene["train" +
-        //     std::to_string(i)].GetComponent<LinearManipulator>().current_time = i * 3.14 / 16; scene["train" +
-        //     std::to_string(i)].GetComponent<LinearManipulator>().radius = 15; scene["train" +
-        //     std::to_string(i)].GetComponent<LinearManipulator>().dir =
-        //         Vec3(std::sin(i * 3.14 / 16), std::cos(i * 3.14 / 16), 0);
-        //     scene["train" + std::to_string(i)].GetComponent<LinearManipulator>().speed = std::sin(i * 3.14 / 8) + 1;
-        //     scene["train" + std::to_string(i)].AddComponent<ScaleManipulator>();
-        //     scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().min_scale = -1;
-        //     scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().max_scale = 1;
-        //     scene["train" + std::to_string(i)].GetComponent<ScaleManipulator>().time_offset = i * 3.14 / 16;
-        // }
     }
     void SetObjectProperties()
     {
@@ -272,7 +256,7 @@ private:
         scene["sponza"].GetComponent<Transformation>().scale = Vec3(0.01);
 
         scene["backpack"].GetComponent<Transformation>().translation = Vec3(30, 0, 0);
-        scene["backpack"].GetComponent<LinearManipulator>().radius = 0;
+        // scene["backpack"].GetComponent<LinearManipulator>().radius = 0;
 
         scene["surface"].GetComponent<Transformation>().translation = Vec3(0, -10, 0);
         scene["surface"].GetComponent<Transformation>().scale = Vec3(500, 0.1, 500);
@@ -285,14 +269,14 @@ private:
         SpotLight& flashlight = scene["flashlight"].GetComponent<SpotLight>();
         SpotLight& lamp = scene["lamp"].GetComponent<SpotLight>();
 
-        scene["lamp_white"].GetComponent<LinearManipulator>().dir = Vec3(1, 0, 0);
-        scene["lamp_white"].GetComponent<LinearManipulator>().radius = 50;
-        scene["lamp_white"].GetComponent<LinearManipulator>().speed = 0.5;
+        // scene["lamp_white"].GetComponent<LinearManipulator>().dir = Vec3(1, 0, 0);
+        // scene["lamp_white"].GetComponent<LinearManipulator>().radius = 50;
+        // scene["lamp_white"].GetComponent<LinearManipulator>().speed = 0.5;
         scene["lamp_white"].GetComponent<Transformation>().translation = Vec3(0, 20, 0);
 
-        scene["lamp_magenta"].GetComponent<LinearManipulator>().dir = Vec3(0, 0, 1);
-        scene["lamp_magenta"].GetComponent<LinearManipulator>().radius = 50;
-        scene["lamp_magenta"].GetComponent<LinearManipulator>().speed = 0.5;
+        // scene["lamp_magenta"].GetComponent<LinearManipulator>().dir = Vec3(0, 0, 1);
+        // scene["lamp_magenta"].GetComponent<LinearManipulator>().radius = 50;
+        // scene["lamp_magenta"].GetComponent<LinearManipulator>().speed = 0.5;
         scene["lamp_magenta"].GetComponent<Transformation>().translation = Vec3(0, 10, 0);
 
         camera.SetPos(Vec3(0.0f, 0.0f, 10.0f));

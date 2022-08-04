@@ -11,6 +11,9 @@ namespace DE
         Path path;
     };
 
+    std::string ShaderPartTypeToString(ShaderPartType type);
+    ShaderPartType StringToShaderPartType(const std::string& type);
+
     class Shader
     {
     public:
@@ -34,6 +37,7 @@ namespace DE
         virtual void SetMaterial(const std::string& uniform_name, const Material& mat) const = 0;
 
         virtual const std::string& GetName() const = 0;
+        virtual const std::vector<ShaderPart>& GetParts() const = 0;
 
         static Ref<Shader> Create(std::string name, std::initializer_list<ShaderPart> initializers);
     };

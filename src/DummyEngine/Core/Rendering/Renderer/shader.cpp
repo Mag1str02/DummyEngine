@@ -4,6 +4,23 @@
 
 namespace DE
 {
+    std::string ShaderPartTypeToString(ShaderPartType type)
+    {
+        switch (type)
+        {
+            case ShaderPartType::Vertex: return "Vertex";
+            case ShaderPartType::Fragment: return "Fragment";
+            case ShaderPartType::Geometry: return "Geometry";
+            default: return "None";
+        }
+    }
+    ShaderPartType StringToShaderPartType(const std::string& type)
+    {
+        if (type == "Vertex") return ShaderPartType::Vertex;
+        if (type == "Fragment") return ShaderPartType::Fragment;
+        if (type == "Geometry") return ShaderPartType::Geometry;
+        return ShaderPartType::None;
+    }
 
     Ref<Shader> Shader::Create(std::string name, std::initializer_list<ShaderPart> initializers)
     {

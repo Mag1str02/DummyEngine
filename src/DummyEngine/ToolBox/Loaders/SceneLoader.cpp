@@ -4,6 +4,18 @@
 
 namespace DE
 {
+    SceneLoader::LoaderState SceneLoader::m_State;
+
+    std::string Relative(const Path& path)
+    {
+        return fs::relative(path, Config::GetPath(DE_CFG_EXECUTABLE_PATH)).string();
+    }
+
+    void SceneLoader::LoaderState::Clear()
+    {
+        m_ModelsPath.clear();
+        m_Shaders.clear();
+    }
 
     YAML::Node NodeVec2(Vec2 vec)
     {
@@ -36,19 +48,20 @@ namespace DE
         return res;
     }
 
-    template <> YAML::Node GetComponentNode(Tag component)
+    template <> YAML::Node SceneLoader::GetComponentNode(Tag component)
     {
         YAML::Node n_Component;
         n_Component["Tag"] = component.tag;
         return n_Component;
     }
-    template <> YAML::Node GetComponentNode(Id component)
+    template <> YAML::Node SceneLoader::GetComponentNode(Id component)
     {
+        // TODO: Save UUID in hex format.
         YAML::Node n_Component;
         n_Component["UUID"] = (uint64_t)component;
         return n_Component;
     }
-    template <> YAML::Node GetComponentNode(Transformation component)
+    template <> YAML::Node SceneLoader::GetComponentNode(Transformation component)
     {
         YAML::Node n_Component;
         n_Component["Transformation"]["Translation"] = NodeVec3(component.translation);
@@ -59,22 +72,45 @@ namespace DE
         n_Component["Transformation"]["ScaleOffset"] = NodeVec3(component.scale_offset);
         return n_Component;
     }
-    template <> YAML::Node GetComponentNode(RenderModel component)
+    template <> YAML::Node SceneLoader::GetComponentNode(RenderModel component)
     {
         YAML::Node n_Component;
 
-        n_Component["RenderModel"] = fs::relative(component.path, Config::GetPath(DE_CFG_EXECUTABLE_PATH)).string();
+        m_State.m_ModelsPath.insert(Relative(component.path));
+        n_Component["RenderModel"] = Relative(component.path);
+
+        return n_Component;
+    }
+    template <> YAML::Node SceneLoader::GetComponentNode(Ref<Shader> component)
+    {
+        YAML::Node n_Component;
+
+        m_State.m_Shaders.insert(component);
+        n_Component["Shader"] = component->GetName();
+
+        return n_Component;
+    }
+    template <> YAML::Node SceneLoader::GetComponentNode(FPSCamera component)
+    {
+        YAML::Node n_Component;
+
+        n_Component["FPSCamera"]["FOV"] = component.m_FOV;
+        n_Component["FPSCamera"]["Aspect"] = component.m_Aspect;
+        n_Component["FPSCamera"]["NearPlane"] = component.m_NearPlane;
+        n_Component["FPSCamera"]["FarPlane"] = component.m_FarPlane;
+        n_Component["FPSCamera"]["Position"] = NodeVec3(component.m_Position);
+        n_Component["FPSCamera"]["Direction"] = NodeVec3(component.m_Direction);
 
         return n_Component;
     }
 
-    template <typename ComponentType> void TryToSaveComponent(YAML::Node& n_Entity, Entity entity)
+    template <typename ComponentType> void SceneLoader::TryToSaveComponent(YAML::Node& n_Entity, Entity entity)
     {
         if (entity.HasComponent<ComponentType>())
             n_Entity.push_back(GetComponentNode(entity.GetComponent<ComponentType>()));
     }
 
-    YAML::Node SaveEntity(Entity entity)
+    YAML::Node SceneLoader::SaveEntity(Entity entity)
     {
         YAML::Node n_Entity;
 
@@ -82,24 +118,56 @@ namespace DE
         TryToSaveComponent<Id>(n_Entity, entity);
         TryToSaveComponent<RenderModel>(n_Entity, entity);
         TryToSaveComponent<Transformation>(n_Entity, entity);
+        TryToSaveComponent<Ref<Shader>>(n_Entity, entity);
+        TryToSaveComponent<FPSCamera>(n_Entity, entity);
         return n_Entity;
     }
+    YAML::Node SceneLoader::SaveModels()
+    {
+        YAML::Node n_Models;
+
+        for (const auto& model_path : m_State.m_ModelsPath)
+        {
+            n_Models.push_back(model_path.string());
+        }
+        return n_Models;
+    }
+    YAML::Node SceneLoader::SaveShaders()
+    {
+        YAML::Node n_Shaders;
+
+        for (const auto& shader : m_State.m_Shaders)
+        {
+            for (const auto& part : shader->GetParts())
+            {
+                n_Shaders[shader->GetName()][ShaderPartTypeToString(part.type)] = Relative(part.path);
+            }
+        }
+        return n_Shaders;
+    }
+
     void SceneLoader::SaveScene(Ref<Scene> scene, Path path)
     {
-        YAML::Node n_Root, n_Scene, n_Entities;
+        YAML::Node n_Root, n_Scene, n_Entities, n_Assets;
         std::ofstream output_file;
 
+        m_State.Clear();
         output_file.open(path);
+        // TODO: Switch to throw.
         DE_ASSERT(output_file.is_open(), "Failed to open file to save scene.");
 
         n_Root["Scene"] = n_Scene;
         n_Scene["Name"] = scene->GetName();
+        n_Scene["Assets"] = n_Assets;
         n_Scene["Entities"] = n_Entities;
 
         for (auto [uuid, entity_id] : scene->m_EntityByUUID)
         {
             n_Entities.push_back(SaveEntity(scene->GetEntityByUUID(UUID(uuid))));
         }
+
+        n_Assets["Models"] = SaveModels();
+        n_Assets["Shaders"] = SaveShaders();
 
         output_file << n_Root;
     }

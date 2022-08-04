@@ -14,7 +14,7 @@ namespace DE
 
         void Reset();
     };
-
+ 
     class Renderer
     {
     public:

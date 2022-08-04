@@ -23,12 +23,6 @@ namespace DE
         OpenGL,
         Vulkan
     };
-    enum class RenderSetting
-    {
-        None = 0,
-        DepthTest,
-        MultiSampling
-    };
     enum class ShaderPartType
     {
         None = 0,

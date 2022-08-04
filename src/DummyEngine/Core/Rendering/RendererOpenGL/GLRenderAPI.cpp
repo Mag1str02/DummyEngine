@@ -58,6 +58,7 @@ namespace DE
         {
             case RenderSetting::DepthTest: glEnable(GL_DEPTH_TEST);
             case RenderSetting::MultiSampling: glEnable(GL_MULTISAMPLE);
+            case RenderSetting::FaceCulling: glEnable(GL_CULL_FACE);
         }
     }
     void GLRenderAPI::Disable(RenderSetting setting)
@@ -66,6 +67,7 @@ namespace DE
         {
             case RenderSetting::DepthTest: glDisable(GL_DEPTH_TEST);
             case RenderSetting::MultiSampling: glDisable(GL_MULTISAMPLE);
+            case RenderSetting::FaceCulling: glDisable(GL_CULL_FACE);
         }
     }
 

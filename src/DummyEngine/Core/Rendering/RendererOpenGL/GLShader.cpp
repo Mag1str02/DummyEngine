@@ -17,6 +17,7 @@ namespace DE
     GLShader::GLShader(const std::string& name, std::initializer_list<ShaderPart>& shader_parts)
     {
         m_Name = name;
+        m_ShaderParts = shader_parts;
         m_ShaderId = glCreateProgram();
         for (const auto& part : shader_parts)
         {
@@ -135,6 +136,10 @@ namespace DE
     const std::string& GLShader::GetName() const
     {
         return m_Name;
+    }
+    const std::vector<ShaderPart>& GLShader::GetParts() const
+    {
+        return m_ShaderParts;
     }
 
     std::string GLShader::ReadPartFromFile(const Path& path_to_file)

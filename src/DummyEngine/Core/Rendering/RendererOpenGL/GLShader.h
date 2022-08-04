@@ -40,6 +40,7 @@ namespace DE
         virtual void SetMaterial(const std::string& uniform_name, const Material& mat) const override;
 
         virtual const std::string& GetName() const;
+        virtual const std::vector<ShaderPart>& GetParts() const;
 
     private:
         static std::string ReadPartFromFile(const Path& path_to_file);
@@ -47,6 +48,8 @@ namespace DE
         void AddPart(ShaderPart part);
 
         std::string m_Name;
+        std::vector<ShaderPart> m_ShaderParts;
+
         std::vector<GLuint> m_Parts;
         GLuint m_ShaderId;
     };
