@@ -66,6 +66,10 @@ namespace DE
             return m_Signatures[entity_id][component_id];
         }
 
+        void CopyEntity(EntityId from, EntityId to){
+            m_Signatures[to] = m_Signatures[from];
+        }
+
         void ExtendSignatures()
         {
             ++m_ComponentAmount;

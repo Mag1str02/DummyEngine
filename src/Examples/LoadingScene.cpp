@@ -39,8 +39,7 @@ struct ScaleManipulator
     ScaleManipulator() : min_scale(0), max_scale(2), time_offset(0) {}
     Vec3 GetScale()
     {
-        return Vec3(((max_scale + min_scale) / 2) +
-                    ((max_scale - min_scale) / 2) * (std::sin(time_offset + glfwGetTime())));
+        return Vec3(((max_scale + min_scale) / 2) + ((max_scale - min_scale) / 2) * (std::sin(time_offset + glfwGetTime())));
     }
 };
 
@@ -55,10 +54,8 @@ public:
 
     void Update(double dt) override
     {
-        scene->GetByName("flashlight").GetComponent<LightSource>().position =
-            scene->GetByName("player").GetComponent<FPSCamera>().GetPos();
-        scene->GetByName("flashlight").GetComponent<LightSource>().direction =
-            scene->GetByName("player").GetComponent<FPSCamera>().GetDir();
+        scene->GetByName("flashlight").GetComponent<LightSource>().position = scene->GetByName("player").GetComponent<FPSCamera>().GetPos();
+        scene->GetByName("flashlight").GetComponent<LightSource>().direction = scene->GetByName("player").GetComponent<FPSCamera>().GetDir();
 
         auto& manipulators = GetComponentArray<LinearManipulator>();
         auto& positions = GetComponentArray<Transformation>();
@@ -97,13 +94,16 @@ public:
         Input::SetWindow(m_Window->GetWindow());
         Renderer::SetClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-        scene = CreateRef<Scene>();
-        SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "BasicScene.yml");
+        scene = CreateRef<Scene>("BasicSceneWithLights");
+        SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "BasicSceneWithLights.yml");
 
         scene->RegisterSystem<MovingSystem>();
         scene->RegisterSystem<LightManager>();
     }
-    virtual void OnClose() override {}
+    virtual void OnClose() override
+    {
+        SceneLoader::Save(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "BasicSceneWithLights.yml");
+    }
     virtual void Update(double dt) override
     {
         ProcessInput(dt);
@@ -112,12 +112,6 @@ public:
     }
 
 private:
-    void Initialize()
-    {
-        // Renderer::Disable(RenderSetting::FaceCulling);
-    }
-    void RegisterSystems() {}
-
     void ProcessInput(float dt)
     {
         FPSCamera& camera = scene->GetByName("player").GetComponent<FPSCamera>();

@@ -11,6 +11,7 @@ namespace DE
     protected:
         friend class ComponentManager;
 
+        virtual void CopyEntity(EntityId from, EntityId to) = 0;
         virtual void EntityDestroyed(EntityId entity_id) = 0;
         virtual void ExtendArray() = 0;
 
@@ -192,6 +193,11 @@ namespace DE
         void EntityDestroyed(EntityId entity_id) override
         {
             RemoveComponent(entity_id);
+        }
+
+        void CopyEntity(EntityId from, EntityId to) override
+        {
+            if (HasComponent(from)) InsertComponent(to, (*this)[from]);
         }
     };
 }  // namespace DE

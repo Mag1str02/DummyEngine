@@ -241,7 +241,7 @@ private:
 
         scene["backpack"].AddComponent<RenderModel>(r_backpack);
         scene["train"].AddComponent<RenderModel>(r_train);
-        scene["surface"].AddComponent<RenderModel>(r_cubes);
+        scene["surface"].AddComponent<RenderModel>(r_cube);
         scene["sponza"].AddComponent<RenderModel>(r_sponza);
 
         scene["lamp_white"].AddComponent<RenderModel>(r_cube);

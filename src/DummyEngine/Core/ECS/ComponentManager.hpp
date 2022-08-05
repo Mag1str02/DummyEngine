@@ -26,8 +26,7 @@ namespace DE
             return s_name;
         }
 
-        template <typename ComponentType>
-        void RegisterComponent()
+        template <typename ComponentType> void RegisterComponent()
         {
             const char* component_name = typeid(ComponentType).name();
 
@@ -41,16 +40,28 @@ namespace DE
     public:
         ComponentManager() = default;
 
+        void CopyEntity(EntityId from, EntityId to)
+        {
+            for (auto& [name, component_array] : m_ComponentArrays)
+            {
+                component_array->CopyEntity(from, to);
+            }
+        }
+
         template <typename ComponentType>
         void AddComponent(EntityId entity_id, ComponentType component = ComponentType())
         {
             GetComponentArray<ComponentType>()->InsertComponent(entity_id, component);
         }
-        template <typename ComponentType>
-        void RemoveComponent(EntityId entity_id)
+        template <typename ComponentType> ComponentType& GetComponent(EntityId entity_id)
+        {
+            return (*GetComponentArray<ComponentType>())[entity_id];
+        }
+        template <typename ComponentType> void RemoveComponent(EntityId entity_id)
         {
             GetComponentArray<ComponentType>()->RemoveComponent(entity_id);
         }
+
         void EntityDestroyed(EntityId entity_id)
         {
             for (auto& [name, component_array] : m_ComponentArrays)
@@ -59,13 +70,7 @@ namespace DE
             }
         }
 
-        template <typename ComponentType>
-        ComponentType& GetComponent(EntityId entity_id)
-        {
-            return (*GetComponentArray<ComponentType>())[entity_id];
-        }
-        template <typename ComponentType>
-        ComponentId GetComponentId(ComponentType component = ComponentType())
+        template <typename ComponentType> ComponentId GetComponentId(ComponentType component = ComponentType())
         {
             if (m_ComponentId.find(typeid(ComponentType).name()) != m_ComponentId.end())
             {
@@ -73,9 +78,8 @@ namespace DE
             }
             return -1;
         }
-   
-        template <typename ComponentType>
-        Ref<ComponentArray<ComponentType>> GetComponentArray()
+
+        template <typename ComponentType> Ref<ComponentArray<ComponentType>> GetComponentArray()
         {
             if (m_ComponentArrays.find(typeid(ComponentType).name()) == m_ComponentArrays.end())
             {
@@ -92,5 +96,5 @@ namespace DE
                 component_array->ExtendArray();
             }
         }
-         };
+    };
 }  // namespace DE

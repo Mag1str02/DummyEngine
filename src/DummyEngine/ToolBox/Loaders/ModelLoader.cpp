@@ -16,9 +16,7 @@ namespace DE
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         {
             Logger::Error(
-                "loading",
-                "ModelLoader",
-                std::string("Failed To Load Scene: (" + path.string() + ")\n") + m_State.m_Importer.GetErrorString());
+                "loading", "ModelLoader", std::string("Failed To Load Scene: (" + path.string() + ")\n") + m_State.m_Importer.GetErrorString());
             return nullptr;
         }
 
@@ -37,9 +35,8 @@ namespace DE
         Logger::Info("loading", "ModelLoader", "Model loaded: " + path.string());
         Logger::Info("loading",
                      "ModelLoader",
-                     "Model properties: Nodes (" + std::to_string(m_State.m_NodesAmount) + ") Meshes (" +
-                         std::to_string(m_State.m_MeshesAmount) + ") Vertices (" +
-                         std::to_string(m_State.m_VerticesAmount) + ")");
+                     "Model properties: Nodes (" + std::to_string(m_State.m_NodesAmount) + ") Meshes (" + std::to_string(m_State.m_MeshesAmount) +
+                         ") Vertices (" + std::to_string(m_State.m_VerticesAmount) + ")");
         m_State.m_ModelDataByPath[fs::canonical(path)] = m_State.m_CurrentData;
         m_State.m_CurrentData->path = fs::canonical(path);
         return m_State.m_CurrentData;
@@ -135,8 +132,7 @@ namespace DE
         }
         else if (mat->GetTextureCount(type) > 1)
         {
-            Logger::Warning(
-                "loading", "ModelLoader", "Model has more multiple textures of same type. Loading only first one.");
+            Logger::Warning("loading", "ModelLoader", "Model has more multiple textures of same type. Loading only first one.");
         }
         mat->GetTexture(type, 0, &file_name);
 

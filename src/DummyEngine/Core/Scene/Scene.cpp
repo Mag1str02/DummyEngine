@@ -8,7 +8,7 @@ namespace DE
 
     Scene::Scene(const std::string& name) : m_Name(name) {}
 
-    Entity Scene::CreateEntity(std::string name)
+    Entity Scene::CreateEntity(const std::string& name)
     {
         EntityId entity_id = m_Storage.CreateEntity();
         Entity new_entity(entity_id, this);
@@ -25,7 +25,7 @@ namespace DE
 
         return new_entity;
     }
-    Entity Scene::CreateEntityWithUUID(UUID uuid, std::string name)
+    Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
     {
         EntityId entity_id = m_Storage.CreateEntity();
         Entity new_entity(entity_id, this);
@@ -38,6 +38,23 @@ namespace DE
 
         m_EntityByUUID[uuid] = entity_id;
         m_EntityByName[name] = entity_id;
+
+        return new_entity;
+    }
+    Entity Scene::CloneEntity(const std::string& entity_to_clone, const std::string& new_name)
+    {
+        EntityId entity_id = m_Storage.CopyEntity(m_EntityByName[entity_to_clone]);
+        Entity new_entity(entity_id, this);
+        Id id;
+
+        DE_ASSERT(m_EntityByUUID.find(id) == m_EntityByUUID.end(), "UUID collision occured.");
+        DE_ASSERT(m_EntityByName.find(new_name) == m_EntityByName.end(), "Name collision occured.");
+
+        new_entity.GetComponent<Tag>() = new_name;
+        new_entity.GetComponent<Id>() = id;
+
+        m_EntityByUUID[id] = entity_id;
+        m_EntityByName[new_name] = entity_id;
 
         return new_entity;
     }

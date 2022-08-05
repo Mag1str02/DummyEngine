@@ -12,8 +12,9 @@ namespace DE
     public:
         Scene(const std::string& name = "Scene");
 
-        Entity CreateEntity(std::string name = "Entity");
-        Entity CreateEntityWithUUID(UUID uuid, std::string name = "Entity");
+        Entity CreateEntity(const std::string& name = "Entity");
+        Entity CreateEntityWithUUID(UUID uuid, const std::string& name = "Entity");
+        Entity CloneEntity(const std::string& entity_to_clone, const std::string& new_name);
         Entity GetByUUID(UUID uuid);
         Entity GetByName(const std::string& name);
 

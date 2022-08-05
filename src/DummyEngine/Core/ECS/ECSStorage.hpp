@@ -23,6 +23,19 @@ namespace DE
             }
             return id;
         }
+        EntityId CopyEntity(EntityId from)
+        {
+            auto [id, created] = m_EntityManager.CreateEntity();
+
+            if (created)
+            {
+                m_ComponentManager.ExtendArrays();
+            }
+            m_ComponentManager.CopyEntity(from, id);
+            m_EntityManager.CopyEntity(from, id);
+
+            return id;
+        }
         void DestroyEntity(EntityId id)
         {
             m_EntityManager.DestroyEntity(id);

@@ -5,7 +5,6 @@ Scene:
       - Assets\Models\Train\train.obj
       - Assets\Models\Sponza\sponza.obj
       - Assets\Models\Cube\cube.obj
-      - Assets\Models\Cubes\cubes.obj
       - Assets\Models\Backpack\backpack.obj
     Shaders:
       ColoredPhong:
@@ -15,164 +14,164 @@ Scene:
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
   Entities:
-    - Entity:
-        - Tag: backpack
-        - UUID: 17410702480916915181
-        - RenderModel: Assets\Models\Backpack\backpack.obj
-        - Transformation:
-            Translation: [30, 0, 0]
-            TranslationOffset: [0, 0, 0]
-            Rotation: [0, 0, 0]
-            RotationOffset: [0, 0, 0]
-            Scale: [1, 1, 1]
-            ScaleOffset: [0, 0, 0]
-        - Shader: TexturedPhong
-    - Entity:
-        - Tag: flashlight
-        - UUID: 8550894733510462558
-        - LightSource:
-            Type: Spot
-            Ambient: [0.100000001, 0.100000001, 0.100000001]
-            Diffuse: [0.400000006, 0.400000006, 0.400000006]
-            Specular: [0.400000006, 0.400000006, 0.400000006]
-            Direction: [0, 0, -1]
-            Position: [0, 0, 10]
-            CLQ: [1, 0.00700000022, 0.000199999995]
-            InnerCone: 0.976296008
-            OuterCone: 0.936672211
-    - Entity:
-        - Tag: lamp
-        - UUID: 14756147012328830289
-        - Transformation:
-            Translation: [30, 10, 0]
-            TranslationOffset: [0, 0, 0]
-            Rotation: [0, 0, 0]
-            RotationOffset: [0, 0, 0]
-            Scale: [1, 1, 1]
-            ScaleOffset: [0, 0, 0]
-        - LightSource:
-            Type: Spot
-            Ambient: [0.100000001, 0, 0]
-            Diffuse: [0.600000024, 0, 0]
-            Specular: [0.400000006, 0, 0]
-            Direction: [0, -1, 0]
-            Position: [30, 10, 0]
-            CLQ: [1, 0.0219999999, 0.00190000003]
-            InnerCone: 0.976296008
-            OuterCone: 0.953716934
-    - Entity:
-        - Tag: lamp_magenta
-        - UUID: 8606683527888462180
-        - RenderModel: Assets\Models\Cube\cube.obj
-        - Transformation:
-            Translation: [-10, 10, -30]
-            TranslationOffset: [0, 0, 0]
-            Rotation: [0, 0, 0]
-            RotationOffset: [0, 0, 0]
-            Scale: [1, 1, 1]
-            ScaleOffset: [0, 0, 0]
-        - Shader: ColoredPhong
-        - LightSource:
-            Type: Point
-            Ambient: [0.100000001, 0, 0.100000001]
-            Diffuse: [0.600000024, 0, 0.600000024]
-            Specular: [0.300000012, 0, 0.300000012]
-            Direction: [0, -1, 0]
-            Position: [-10, 10, -30]
-            CLQ: [1, 0.0219999999, 0.00190000003]
-            InnerCone: 0
-            OuterCone: 0
-    - Entity:
-        - Tag: lamp_white
-        - UUID: 13494723523559540912
-        - RenderModel: Assets\Models\Cube\cube.obj
-        - Transformation:
-            Translation: [20, 20, 20]
-            TranslationOffset: [0, 0, 0]
-            Rotation: [0, 0, 0]
-            RotationOffset: [0, 0, 0]
-            Scale: [1, 1, 1]
-            ScaleOffset: [0, 0, 0]
-        - Shader: ColoredPhong
-        - LightSource:
-            Type: Point
-            Ambient: [0.100000001, 0.100000001, 0.100000001]
-            Diffuse: [0.300000012, 0.300000012, 0.300000012]
-            Specular: [0.600000024, 0.600000024, 0.600000024]
-            Direction: [0, -1, 0]
-            Position: [20, 20, 20]
-            CLQ: [1, 0.00700000022, 0.000199999995]
-            InnerCone: 0
-            OuterCone: 0
-    - Entity:
-        - Tag: moon
-        - UUID: 4820281278803401946
-        - LightSource:
-            Type: Direction
-            Ambient: [0.00400000019, 0.0111999996, 0.0199999996]
-            Diffuse: [0.0600000024, 0.168000013, 0.300000012]
-            Specular: [0.120000005, 0.336000025, 0.600000024]
-            Direction: [0, -0.44721359, 0.89442718]
-            Position: [0, 0, 0]
-            CLQ: [1, 0.00700000022, 0.000199999995]
-            InnerCone: 0
-            OuterCone: 0
-    - Entity:
-        - Tag: player
-        - UUID: 14542137937552780816
-        - FPSCamera:
-            FOV: 60
-            Aspect: 1.77777779
-            NearPlane: 1.00000001e-07
-            FarPlane: 2000
-            Position: [0, 0, 10]
-            Direction: [0, 0, -1]
-    - Entity:
-        - Tag: sponza
-        - UUID: 1263645526502859936
-        - RenderModel: Assets\Models\Sponza\sponza.obj
-        - Transformation:
-            Translation: [0, 50, 0]
-            TranslationOffset: [0, 0, 0]
-            Rotation: [0, 0, 0]
-            RotationOffset: [0, 0, 0]
-            Scale: [0.00999999978, 0.00999999978, 0.00999999978]
-            ScaleOffset: [0, 0, 0]
-        - Shader: TexturedPhong
-    - Entity:
-        - Tag: sun
-        - UUID: 12025582019675403711
-        - LightSource:
-            Type: Direction
-            Ambient: [0.0199999996, 0.0146000003, 0.00400000019]
-            Diffuse: [0.600000024, 0.438000023, 0.120000005]
-            Specular: [0.300000012, 0.219000012, 0.0600000024]
-            Direction: [0, 0.44721359, -0.89442718]
-            Position: [0, 0, 0]
-            CLQ: [1, 0.00700000022, 0.000199999995]
-            InnerCone: 0
-            OuterCone: 0
-    - Entity:
-        - Tag: surface
-        - UUID: 18012844793519422472
-        - RenderModel: Assets\Models\Cubes\cubes.obj
-        - Transformation:
-            Translation: [0, -10, 0]
-            TranslationOffset: [0, 0, 0]
-            Rotation: [0, 0, 0]
-            RotationOffset: [0, 0, 0]
-            Scale: [500, 0.100000001, 500]
-            ScaleOffset: [0, 0, 0]
-        - Shader: ColoredPhong
-    - Entity:
-        - Tag: train
-        - UUID: 3507156258109484920
-        - RenderModel: Assets\Models\Train\train.obj
-        - Transformation:
-            Translation: [0, 0, 0]
-            TranslationOffset: [0, 0, 0]
-            Rotation: [0, 0, 0]
-            RotationOffset: [0, 0, 0]
-            Scale: [1, 1, 1]
-            ScaleOffset: [0, 0, 0]
-        - Shader: ColoredPhong
+    Entity_0:
+      Tag: backpack
+      UUID: 8441589563337852969
+      RenderModel: Assets\Models\Backpack\backpack.obj
+      Transformation:
+        Translation: [30, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [0, 0, 0]
+      Shader: TexturedPhong
+    Entity_1:
+      Tag: flashlight
+      UUID: 15365495071668271393
+      LightSource:
+        Type: Spot
+        Ambient: [0.100000001, 0.100000001, 0.100000001]
+        Diffuse: [0.400000006, 0.400000006, 0.400000006]
+        Specular: [0.400000006, 0.400000006, 0.400000006]
+        Direction: [0.996827126, 0.018556837, 0.0774039403]
+        Position: [-5.86210155, 54.0369568, -0.767917991]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0.976296008
+        OuterCone: 0.936672211
+    Entity_2:
+      Tag: lamp
+      UUID: 724905643889964931
+      Transformation:
+        Translation: [30, 10, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [0, 0, 0]
+      LightSource:
+        Type: Spot
+        Ambient: [0.100000001, 0, 0]
+        Diffuse: [0.600000024, 0, 0]
+        Specular: [0.400000006, 0, 0]
+        Direction: [0, -1, 0]
+        Position: [30, 10, 0]
+        CLQ: [1, 0.0219999999, 0.00190000003]
+        InnerCone: 0.976296008
+        OuterCone: 0.953716934
+    Entity_3:
+      Tag: lamp_magenta
+      UUID: 11876510888422678101
+      RenderModel: Assets\Models\Cube\cube.obj
+      Transformation:
+        Translation: [-10, 10, -30]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [0, 0, 0]
+      Shader: ColoredPhong
+      LightSource:
+        Type: Point
+        Ambient: [0.100000001, 0, 0.100000001]
+        Diffuse: [0.600000024, 0, 0.600000024]
+        Specular: [0.300000012, 0, 0.300000012]
+        Direction: [0, -1, 0]
+        Position: [-10, 10, -30]
+        CLQ: [1, 0.0219999999, 0.00190000003]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_4:
+      Tag: lamp_white
+      UUID: 7899115844462092636
+      RenderModel: Assets\Models\Cube\cube.obj
+      Transformation:
+        Translation: [20, 20, 20]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [0, 0, 0]
+      Shader: ColoredPhong
+      LightSource:
+        Type: Point
+        Ambient: [0.100000001, 0.100000001, 0.100000001]
+        Diffuse: [0.300000012, 0.300000012, 0.300000012]
+        Specular: [0.600000024, 0.600000024, 0.600000024]
+        Direction: [0, -1, 0]
+        Position: [20, 20, 20]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_5:
+      Tag: moon
+      UUID: 5640958152337182952
+      LightSource:
+        Type: Direction
+        Ambient: [0.00400000019, 0.0111999996, 0.0199999996]
+        Diffuse: [0.0600000024, 0.168000013, 0.300000012]
+        Specular: [0.120000005, 0.336000025, 0.600000024]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [0, 0, 0]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_6:
+      Tag: player
+      UUID: 9493317563745178383
+      FPSCamera:
+        FOV: 60
+        Aspect: 1.77777779
+        NearPlane: 1.00000001e-07
+        FarPlane: 2000
+        Position: [-5.86210155, 54.0369568, -0.767917991]
+        Direction: [0.996827126, 0.018556837, 0.0774039403]
+    Entity_7:
+      Tag: sponza
+      UUID: 1071669837930409105
+      RenderModel: Assets\Models\Sponza\sponza.obj
+      Transformation:
+        Translation: [0, 50, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [0.00999999978, 0.00999999978, 0.00999999978]
+        ScaleOffset: [0, 0, 0]
+      Shader: TexturedPhong
+    Entity_8:
+      Tag: sun
+      UUID: 15883007617869365983
+      LightSource:
+        Type: Direction
+        Ambient: [0.0199999996, 0.0146000003, 0.00400000019]
+        Diffuse: [0.600000024, 0.438000023, 0.120000005]
+        Specular: [0.300000012, 0.219000012, 0.0600000024]
+        Direction: [0, 0.44721359, -0.89442718]
+        Position: [0, 0, 0]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_9:
+      Tag: surface
+      UUID: 15870897271918354286
+      RenderModel: Assets\Models\Cube\cube.obj
+      Transformation:
+        Translation: [0, -10, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [500, 0.100000001, 500]
+        ScaleOffset: [0, 0, 0]
+      Shader: ColoredPhong
+    Entity_10:
+      Tag: train
+      UUID: 1400727333587774977
+      RenderModel: Assets\Models\Train\train.obj
+      Transformation:
+        Translation: [0, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [0, 0, 0]
+      Shader: ColoredPhong

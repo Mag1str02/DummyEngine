@@ -16,12 +16,12 @@ namespace DE
         static void Save(Ref<Scene> scene, Path path);
         static void Load(Ref<Scene> scene, Path path);
 
-        template <typename ComponentType> static YAML::Node SaveComponent(ComponentType component);
+        template <typename ComponentType> static void SaveComponent(YAML::Node n_Entity, Entity entity);
         template <typename ComponentType> static void LoadComponent(YAML::Node n_Component, Entity& entity);
 
     private:
-        template <typename ComponentType> static void TryToSaveComponent(YAML::Node& n_Entity, Entity entity);
-        static YAML::Node SaveEntity(Entity entity);
+        static void SaveEntity(YAML::Node n_Entity, Entity entity);
+        static YAML::Node SaveEntities(Ref<Scene> scene);
         static YAML::Node SaveModels();
         static YAML::Node SaveShaders();
         static YAML::Node SaveAssets();
@@ -40,7 +40,7 @@ namespace DE
 
             //*~~~Loading~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             std::unordered_map<std::string, Ref<Shader>> m_LoadedShaders;
-            
+
             void Clear();
         };
         static LoaderState m_State;

@@ -1,6 +1,6 @@
 #version 450 core
 
-#define MAX_LIGHT_SOURCES 64
+#define MAX_LIGHT_SOURCES 128
 
 struct Material
 {
