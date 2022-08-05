@@ -26,17 +26,21 @@ namespace DE
         static YAML::Node SaveShaders();
         static YAML::Node SaveAssets();
 
-        static void LoadShaders(YAML::Node n_Shaders);
+        static void LoadShaders(YAML::Node n_Shaders, Ref<Scene> scene);
         static void LoadModels(YAML::Node n_Models);
-        static void LoadAssets(YAML::Node n_Assets);
+        static void LoadAssets(YAML::Node n_Assets, Ref<Scene> scene);
         static void LoadEntity(YAML::Node n_Entity, Ref<Scene> scene);
         static void LoadEntities(YAML::Node n_Entities, Ref<Scene> scene);
 
         struct LoaderState
         {
+            //*~~~Saving~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             std::unordered_set<Path> m_ModelsPath;
             std::unordered_set<Ref<Shader>> m_Shaders;
 
+            //*~~~Loading~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            std::unordered_map<std::string, Ref<Shader>> m_LoadedShaders;
+            
             void Clear();
         };
         static LoaderState m_State;

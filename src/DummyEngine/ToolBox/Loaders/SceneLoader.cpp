@@ -18,6 +18,7 @@ namespace DE
     {
         m_ModelsPath.clear();
         m_Shaders.clear();
+        m_LoadedShaders.clear();
     }
 
     //*~~~Saving~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -107,15 +108,6 @@ namespace DE
 
         return n_Component;
     }
-    template <> YAML::Node SceneLoader::SaveComponent(UniqueShader component)
-    {
-        YAML::Node n_Component;
-
-        m_State.m_Shaders.insert(component);
-        n_Component["UniqueShader"] = component.shader->GetName();
-
-        return n_Component;
-    }
     template <> YAML::Node SceneLoader::SaveComponent(FPSCamera component)
     {
         YAML::Node n_Component;
@@ -155,7 +147,6 @@ namespace DE
         TryToSaveComponent<RenderModel>(n_Entity, entity);
         TryToSaveComponent<Transformation>(n_Entity, entity);
         TryToSaveComponent<Ref<Shader>>(n_Entity, entity);
-        TryToSaveComponent<UniqueShader>(n_Entity, entity);
         TryToSaveComponent<FPSCamera>(n_Entity, entity);
         TryToSaveComponent<LightSource>(n_Entity, entity);
 
@@ -211,7 +202,7 @@ namespace DE
 
         for (auto [tag, enitity] : entities)
         {
-            n_Entities.push_back(SaveEntity(enitity));
+            if (!enitity.HasComponent<UniqueShader>()) n_Entities.push_back(SaveEntity(enitity));
         }
 
         n_Assets["Models"] = SaveModels();
@@ -274,6 +265,16 @@ namespace DE
 
         entity.AddComponent<Transformation>(transformation);
     }
+    template <> void SceneLoader::LoadComponent<RenderModel>(YAML::Node n_Component, Entity& entity)
+    {
+        ModelLoader::Get(Config::GetPath(DE_CFG_EXECUTABLE_PATH) / n_Component.as<std::string>())->Compress();
+        entity.AddComponent<RenderModel>().FillData(
+            ModelLoader::Get(Config::GetPath(DE_CFG_EXECUTABLE_PATH) / n_Component.as<std::string>()));
+    }
+    template <> void SceneLoader::LoadComponent<Ref<Shader>>(YAML::Node n_Component, Entity& entity)
+    {
+        entity.AddComponent<Ref<Shader>>(m_State.m_LoadedShaders[n_Component.as<std::string>()]);
+    }
     template <> void SceneLoader::LoadComponent<FPSCamera>(YAML::Node n_Component, Entity& entity)
     {
         FPSCamera fps_camera;
@@ -304,7 +305,7 @@ namespace DE
         entity.AddComponent<LightSource>(light_source);
     }
 
-    void SceneLoader::LoadShaders(YAML::Node n_Shaders)
+    void SceneLoader::LoadShaders(YAML::Node n_Shaders, Ref<Scene> scene)
     {
         for (const auto& n_Shader : n_Shaders)
         {
@@ -318,6 +319,9 @@ namespace DE
                 parts.push_back(shader_part);
             }
             Ref<Shader> shader = Shader::Create(n_Shader.first.as<std::string>(), parts);
+
+            scene->CreateEntity(n_Shader.first.as<std::string>()).AddComponent<UniqueShader>().shader = shader;
+            m_State.m_LoadedShaders[n_Shader.first.as<std::string>()] = shader;
         }
     }
     void SceneLoader::LoadModels(YAML::Node n_Models)
@@ -327,9 +331,9 @@ namespace DE
             ModelLoader::Load(Config::GetPath(DE_CFG_EXECUTABLE_PATH) / path.as<std::string>());
         }
     }
-    void SceneLoader::LoadAssets(YAML::Node n_Assets)
+    void SceneLoader::LoadAssets(YAML::Node n_Assets, Ref<Scene> scene)
     {
-        LoadShaders(n_Assets["Shaders"]);
+        LoadShaders(n_Assets["Shaders"], scene);
         LoadModels(n_Assets["Models"]);
     }
     void SceneLoader::LoadEntity(YAML::Node n_Entity, Ref<Scene> scene)
@@ -345,6 +349,8 @@ namespace DE
             if (name == "Tag") LoadComponent<Tag>(component_data, entity);
             if (name == "UUID") LoadComponent<Id>(component_data, entity);
             if (name == "Transformation") LoadComponent<Transformation>(component_data, entity);
+            if (name == "RenderModel") LoadComponent<RenderModel>(component_data, entity);
+            if (name == "Shader") LoadComponent<Ref<Shader>>(component_data, entity);
             if (name == "FPSCamera") LoadComponent<FPSCamera>(component_data, entity);
             if (name == "LightSource") LoadComponent<LightSource>(component_data, entity);
         }
@@ -362,12 +368,14 @@ namespace DE
     {
         YAML::Node n_Root, n_Scene, n_Assets, n_Entities;
 
+        m_State.Clear();
+
         n_Root = YAML::LoadFile(path.string());
         n_Scene = n_Root["Scene"];
         n_Assets = n_Scene["Assets"];
         n_Entities = n_Scene["Entities"];
 
-        LoadAssets(n_Assets);
+        LoadAssets(n_Assets, scene);
         LoadEntities(n_Entities, scene);
     }
 }  // namespace DE

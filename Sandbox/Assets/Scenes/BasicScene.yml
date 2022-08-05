@@ -17,7 +17,7 @@ Scene:
   Entities:
     - Entity:
         - Tag: backpack
-        - UUID: 12048841751775908840
+        - UUID: 17410702480916915181
         - RenderModel: Assets\Models\Backpack\backpack.obj
         - Transformation:
             Translation: [30, 0, 0]
@@ -28,25 +28,21 @@ Scene:
             ScaleOffset: [0, 0, 0]
         - Shader: TexturedPhong
     - Entity:
-        - Tag: colored_phong
-        - UUID: 7710401486961970532
-        - UniqueShader: ColoredPhong
-    - Entity:
         - Tag: flashlight
-        - UUID: 7571322107290092099
+        - UUID: 8550894733510462558
         - LightSource:
             Type: Spot
             Ambient: [0.100000001, 0.100000001, 0.100000001]
             Diffuse: [0.400000006, 0.400000006, 0.400000006]
             Specular: [0.400000006, 0.400000006, 0.400000006]
-            Direction: [0.513348103, -0.0844278559, -0.854017437]
-            Position: [8.06810474, 0.532532513, 27.4319725]
+            Direction: [0, 0, -1]
+            Position: [0, 0, 10]
             CLQ: [1, 0.00700000022, 0.000199999995]
             InnerCone: 0.976296008
             OuterCone: 0.936672211
     - Entity:
         - Tag: lamp
-        - UUID: 6079970763725112252
+        - UUID: 14756147012328830289
         - Transformation:
             Translation: [30, 10, 0]
             TranslationOffset: [0, 0, 0]
@@ -66,7 +62,7 @@ Scene:
             OuterCone: 0.953716934
     - Entity:
         - Tag: lamp_magenta
-        - UUID: 15124709719385612504
+        - UUID: 8606683527888462180
         - RenderModel: Assets\Models\Cube\cube.obj
         - Transformation:
             Translation: [-10, 10, -30]
@@ -88,7 +84,7 @@ Scene:
             OuterCone: 0
     - Entity:
         - Tag: lamp_white
-        - UUID: 17980060502427477757
+        - UUID: 13494723523559540912
         - RenderModel: Assets\Models\Cube\cube.obj
         - Transformation:
             Translation: [20, 20, 20]
@@ -110,7 +106,7 @@ Scene:
             OuterCone: 0
     - Entity:
         - Tag: moon
-        - UUID: 8583491145684409019
+        - UUID: 4820281278803401946
         - LightSource:
             Type: Direction
             Ambient: [0.00400000019, 0.0111999996, 0.0199999996]
@@ -123,17 +119,17 @@ Scene:
             OuterCone: 0
     - Entity:
         - Tag: player
-        - UUID: 1097081757186610496
+        - UUID: 14542137937552780816
         - FPSCamera:
             FOV: 60
             Aspect: 1.77777779
             NearPlane: 1.00000001e-07
             FarPlane: 2000
-            Position: [8.06810474, 0.532532513, 27.4319725]
-            Direction: [0.513348103, -0.0844278559, -0.854017437]
+            Position: [0, 0, 10]
+            Direction: [0, 0, -1]
     - Entity:
         - Tag: sponza
-        - UUID: 4824417034592148788
+        - UUID: 1263645526502859936
         - RenderModel: Assets\Models\Sponza\sponza.obj
         - Transformation:
             Translation: [0, 50, 0]
@@ -145,7 +141,7 @@ Scene:
         - Shader: TexturedPhong
     - Entity:
         - Tag: sun
-        - UUID: 13237946973090186952
+        - UUID: 12025582019675403711
         - LightSource:
             Type: Direction
             Ambient: [0.0199999996, 0.0146000003, 0.00400000019]
@@ -158,7 +154,7 @@ Scene:
             OuterCone: 0
     - Entity:
         - Tag: surface
-        - UUID: 15191749876798864171
+        - UUID: 18012844793519422472
         - RenderModel: Assets\Models\Cubes\cubes.obj
         - Transformation:
             Translation: [0, -10, 0]
@@ -169,12 +165,8 @@ Scene:
             ScaleOffset: [0, 0, 0]
         - Shader: ColoredPhong
     - Entity:
-        - Tag: textured_phong
-        - UUID: 109366263229955792
-        - UniqueShader: TexturedPhong
-    - Entity:
         - Tag: train
-        - UUID: 5220693406178605985
+        - UUID: 3507156258109484920
         - RenderModel: Assets\Models\Train\train.obj
         - Transformation:
             Translation: [0, 0, 0]

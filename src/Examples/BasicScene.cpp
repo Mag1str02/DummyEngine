@@ -142,8 +142,8 @@ private:
             auto flashlight = scene.CreateEntity("flashlight");
             auto lamp = scene.CreateEntity("lamp");
             auto surface = scene.CreateEntity("surface");
-            auto colored_phong = scene.CreateEntity("colored_phong");
-            auto textured_phong = scene.CreateEntity("textured_phong");
+            auto colored_phong = scene.CreateEntity("ColoredPhong");
+            auto textured_phong = scene.CreateEntity("TexturedPhong");
             auto backpack = scene.CreateEntity("backpack");
         }
         // Adding componenets
@@ -177,8 +177,8 @@ private:
             // scene["lamp_white"].AddComponent<LinearManipulator>();
             // scene["lamp_magenta"].AddComponent<LinearManipulator>();
 
-            scene["colored_phong"].AddComponent<UniqueShader>();
-            scene["textured_phong"].AddComponent<UniqueShader>();
+            scene["ColoredPhong"].AddComponent<UniqueShader>();
+            scene["TexturedPhong"].AddComponent<UniqueShader>();
         }
     }
     void LoadShaders()
@@ -198,8 +198,8 @@ private:
                             {.type = ShaderPartType::Fragment,
                              .path = Config::GetPath(DE_CFG_SHADER_PATH) / "TexturedPhong" / "TexturedPhong.fs"}});
 
-        scene["colored_phong"].GetComponent<UniqueShader>().shader = colored_phong;
-        scene["textured_phong"].GetComponent<UniqueShader>().shader = textured_phong;
+        scene["ColoredPhong"].GetComponent<UniqueShader>().shader = colored_phong;
+        scene["TexturedPhong"].GetComponent<UniqueShader>().shader = textured_phong;
 
         scene["train"].AddComponent<Ref<Shader>>(colored_phong);
         scene["surface"].AddComponent<Ref<Shader>>(colored_phong);
@@ -247,8 +247,8 @@ private:
         scene["lamp_white"].AddComponent<RenderModel>(r_cube);
         scene["lamp_magenta"].AddComponent<RenderModel>(r_cube);
 
-        scene["lamp_white"].AddComponent<Ref<Shader>>(scene["colored_phong"].GetComponent<UniqueShader>().shader);
-        scene["lamp_magenta"].AddComponent<Ref<Shader>>(scene["colored_phong"].GetComponent<UniqueShader>().shader);
+        scene["lamp_white"].AddComponent<Ref<Shader>>(scene["ColoredPhong"].GetComponent<UniqueShader>().shader);
+        scene["lamp_magenta"].AddComponent<Ref<Shader>>(scene["ColoredPhong"].GetComponent<UniqueShader>().shader);
     }
     void SetObjectProperties()
     {

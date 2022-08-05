@@ -13,6 +13,7 @@ namespace DE
     {
     public:
         static Ref<RenderModelData> Load(const Path& path);
+        static Ref<RenderModelData> Get(const Path& path);
 
     private:
         enum ColorType

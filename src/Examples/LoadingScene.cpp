@@ -11,8 +11,6 @@ const Vec3 COLOR_YELLOW(1.0f, 1.0f, 0.0f);
 
 Ref<Scene> scene;
 
-void FillScene() {}
-
 struct LinearManipulator
 {
     Vec3 dir;

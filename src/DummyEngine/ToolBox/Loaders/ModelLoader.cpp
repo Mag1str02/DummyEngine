@@ -44,6 +44,20 @@ namespace DE
         m_State.m_CurrentData->path = fs::canonical(path);
         return m_State.m_CurrentData;
     }
+    Ref<RenderModelData> ModelLoader::Get(const Path& path)
+    {
+        if (m_State.m_ModelDataByPath.find(fs::canonical(path)) == m_State.m_ModelDataByPath.end())
+        {
+            // std::cout << "Loading Model: " << path << std::endl;
+            return Load(path);
+        }
+        else
+        {
+            // std::cout << "Retriving Model: " << path << std::endl;
+            return m_State.m_ModelDataByPath[fs::canonical(path)];
+        }
+    }
+
     void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene)
     {
         for (size_t i = 0; i < node->mNumMeshes; ++i)
