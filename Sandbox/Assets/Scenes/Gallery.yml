@@ -43,9 +43,6 @@ Scene:
         Compress: false
         FlipUV: false
     Shaders:
-      ColoredPhong:
-        Vertex: Assets\Shaders\ColoredPhong\ColoredPhong.vs
-        Fragment: Assets\Shaders\ColoredPhong\ColoredPhong.fs
       TexturedPhong:
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
@@ -349,7 +346,7 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [1, 1, 1]
         ScaleOffset: [3, 3, 3]
-      Shader: ColoredPhong
+      Shader: TexturedPhong
     Entity_25:
       Tag: Nissan
       UUID: 6382249478065237834
@@ -361,7 +358,7 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [1, 1, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: ColoredPhong
+      Shader: TexturedPhong
     Entity_26:
       Tag: Raiden
       UUID: 6384649478065237834
@@ -397,7 +394,7 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [1, 1, 1]
         ScaleOffset: [1, 1, 1]
-      Shader: ColoredPhong
+      Shader: TexturedPhong
     Entity_29:
       Tag: player
       UUID: 4631319593559015940
@@ -406,16 +403,16 @@ Scene:
         Aspect: 1.77777779
         NearPlane: 1.00000001e-07
         FarPlane: 2000
-        Position: [125.793007, 114.045784, 338.230743]
-        Direction: [-0.0648070425, -0.303088576, -0.950756252]
+        Position: [-203.885468, 60.9068832, 71.2204971]
+        Direction: [0.0528112687, -0.530171752, -0.846244037]
     Entity_30:
       Tag: sun
       UUID: 16279128272272660330
       LightSource:
         Type: Direction
-        Ambient: [0.400000006, 0.400000006, 0.400000006]
-        Diffuse: [0.600000024, 0.600000024, 0.600000024]
-        Specular: [0.300000012, 0.300000012, 0.300000012]
+        Ambient: [0.5, 0.5, 0.5]
+        Diffuse: [1, 1, 1]
+        Specular: [0.5, 0.5, 0.5]
         Direction: [0, -0.44721359, -0.89442718]
         Position: [0, 0, 0]
         CLQ: [0.5, 0.00700000022, 0.000199999995]
@@ -426,9 +423,9 @@ Scene:
       UUID: 16279128272272660331
       LightSource:
         Type: Direction
-        Ambient: [0.400000006, 0.400000006, 0.400000006]
-        Diffuse: [0.600000024, 0.600000024, 0.600000024]
-        Specular: [0.300000012, 0.300000012, 0.300000012]
+        Ambient: [0.5, 0.5, 0.5]
+        Diffuse: [1, 1, 1]
+        Specular: [0.5, 0.5, 0.5]
         Direction: [0, -0.44721359, 0.89442718]
         Position: [0, 0, 0]
         CLQ: [0.5, 0.00700000022, 0.000199999995]
@@ -445,4 +442,4 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [1000, 0.100000001, 100]
         ScaleOffset: [1, 1, 1]
-      Shader: ColoredPhong
+      Shader: TexturedPhong

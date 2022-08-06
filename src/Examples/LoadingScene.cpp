@@ -92,13 +92,7 @@ public:
         Renderer::SetClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
         scene = CreateRef<Scene>("NewScene");
-        try
-        {
-            SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Gallery.yml");
-        } catch (const std::exception& e)
-        {
-            std::cout << "Error while loading scene: " << e.what() << std::endl;
-        }
+        SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Gallery.yml");
 
         scene->RegisterSystem<MovingSystem>();
         scene->RegisterSystem<LightManager>();

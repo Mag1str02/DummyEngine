@@ -109,8 +109,11 @@ namespace DE
         {
             aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
             current_mesh.material.diffuse_color = GetColor(material, ColorType::diffuse);
+            current_mesh.material.ambient_color = GetColor(material, ColorType::ambient);
+            current_mesh.material.specular_color = GetColor(material, ColorType::specular);
             current_mesh.material.diffuse_map = GetTexture(material, aiTextureType_DIFFUSE);
             current_mesh.material.specular_map = GetTexture(material, aiTextureType_SPECULAR);
+            aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &current_mesh.material.shininess);
         }
         ++m_State.m_CurrentMeshId;
     }

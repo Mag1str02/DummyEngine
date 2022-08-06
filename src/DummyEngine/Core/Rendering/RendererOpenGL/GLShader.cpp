@@ -1,5 +1,6 @@
 #include "Core/Rendering/RendererOpenGL/GLShader.h"
 #include "ToolBox/Dev/Logger.h"
+#include "Core/Rendering/Renderer/Renderer.h"
 
 namespace DE
 {
@@ -31,13 +32,10 @@ namespace DE
         if (!success)
         {
             glGetProgramInfoLog(m_ShaderId, 512, NULL, info_log);
-            Logger::Fatal("loading",
-                          "GLShaderProgram",
-                          "Failed to link shader program (" + std::to_string(m_ShaderId) + ")\n" + info_log);
+            Logger::Fatal("loading", "GLShaderProgram", "Failed to link shader program (" + std::to_string(m_ShaderId) + ")\n" + info_log);
             throw std::runtime_error("Failed to compile shader.");
         }
-        Logger::Info(
-            "loading", "GLShaderProgram", "GLShader program (" + std::to_string(m_ShaderId) + ") linked successfully");
+        Logger::Info("loading", "GLShaderProgram", "GLShader program (" + std::to_string(m_ShaderId) + ") linked successfully");
     }
     GLShader::~GLShader()
     {
@@ -119,18 +117,30 @@ namespace DE
     }
     void GLShader::SetMaterial(const std::string& uniform_name, const Material& mat) const
     {
-        SetFloat3(uniform_name + ".ambient_color", mat.ambient_color.x, mat.ambient_color.y, mat.ambient_color.z);
-        SetFloat3(uniform_name + ".diffuse_color", mat.diffuse_color.x, mat.diffuse_color.y, mat.diffuse_color.z);
-        SetFloat3(uniform_name + ".specular_color", mat.specular_color.x, mat.specular_color.y, mat.specular_color.z);
+        SetFloat3(uniform_name + ".m_Ambient", mat.ambient_color);
+        SetFloat3(uniform_name + ".m_Diffuse", mat.diffuse_color);
+        SetFloat3(uniform_name + ".m_Specular", mat.specular_color);
+        SetFloat(uniform_name + ".m_Shininess", mat.shininess);
 
-        SetInt(uniform_name + ".shininess", mat.shininess);
-        SetInt(uniform_name + ".specular_map", 1);
-        SetInt(uniform_name + ".diffuse_map", 2);
-        SetInt(uniform_name + ".normal_map", 3);
-
-        mat.specular_map->Bind(1);
-        mat.diffuse_map->Bind(2);
-        mat.normal_map->Bind(3);
+        Renderer::GetDefaultTexture()->Bind(0);
+        if (mat.specular_map)
+        {
+            SetInt(uniform_name + ".m_SpecularMap", 1);
+            mat.specular_map->Bind(1);
+        }
+        else
+        {
+            SetInt(uniform_name + ".m_SpecularMap", 0);
+        }
+        if (mat.diffuse_map)
+        {
+            SetInt(uniform_name + ".m_DiffuseMap", 2);
+            mat.diffuse_map->Bind(2);
+        }
+        else
+        {
+            SetInt(uniform_name + ".m_DiffuseMap", 0);
+        }
     }
 
     const std::string& GLShader::GetName() const
@@ -183,9 +193,7 @@ namespace DE
         if (!success)
         {
             glGetShaderInfoLog(m_ShaderId, Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN), NULL, infoLog);
-            Logger::Error("loading",
-                          "GLShader",
-                          "Failed to compile shader: (" + part.path.string() + ")\n" + std::string(infoLog));
+            Logger::Error("loading", "GLShader", "Failed to compile shader: (" + part.path.string() + ")\n" + std::string(infoLog));
             return;
         }
         Logger::Info("loading", "GLShader", "GLShader source file successfully compiled: (" + part.path.string() + ")");
