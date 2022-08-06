@@ -42,8 +42,7 @@ struct ScaleManipulator
     ScaleManipulator() : min_scale(0), max_scale(2), time_offset(0) {}
     Vec3 GetScale()
     {
-        return Vec3(((max_scale + min_scale) / 2) +
-                    ((max_scale - min_scale) / 2) * (std::sin(time_offset + glfwGetTime())));
+        return Vec3(((max_scale + min_scale) / 2) + ((max_scale - min_scale) / 2) * (std::sin(time_offset + glfwGetTime())));
     }
 };
 
@@ -132,6 +131,11 @@ private:
     {
         // Creating entities
         {
+            auto Train = scene.CreateEntity("TrainModel");
+            auto Sponza = scene.CreateEntity("SponzaModel");
+            auto Cube = scene.CreateEntity("CubeModel");
+            auto Backpack = scene.CreateEntity("BackpackModel");
+
             auto player = scene.CreateEntity("player");
             auto sponza = scene.CreateEntity("sponza");
             auto train = scene.CreateEntity("train");
@@ -187,16 +191,12 @@ private:
 
         Ref<Shader> colored_phong =
             Shader::Create("ColoredPhong",
-                           {{.type = ShaderPartType::Vertex,
-                             .path = Config::GetPath(DE_CFG_SHADER_PATH) / "ColoredPhong" / "ColoredPhong.vs"},
-                            {.type = ShaderPartType::Fragment,
-                             .path = Config::GetPath(DE_CFG_SHADER_PATH) / "ColoredPhong" / "ColoredPhong.fs"}});
+                           {{.type = ShaderPartType::Vertex, .path = Config::GetPath(DE_CFG_SHADER_PATH) / "ColoredPhong" / "ColoredPhong.vs"},
+                            {.type = ShaderPartType::Fragment, .path = Config::GetPath(DE_CFG_SHADER_PATH) / "ColoredPhong" / "ColoredPhong.fs"}});
         Ref<Shader> textured_phong =
             Shader::Create("TexturedPhong",
-                           {{.type = ShaderPartType::Vertex,
-                             .path = Config::GetPath(DE_CFG_SHADER_PATH) / "TexturedPhong" / "TexturedPhong.vs"},
-                            {.type = ShaderPartType::Fragment,
-                             .path = Config::GetPath(DE_CFG_SHADER_PATH) / "TexturedPhong" / "TexturedPhong.fs"}});
+                           {{.type = ShaderPartType::Vertex, .path = Config::GetPath(DE_CFG_SHADER_PATH) / "TexturedPhong" / "TexturedPhong.vs"},
+                            {.type = ShaderPartType::Fragment, .path = Config::GetPath(DE_CFG_SHADER_PATH) / "TexturedPhong" / "TexturedPhong.fs"}});
 
         scene["ColoredPhong"].GetComponent<UniqueShader>().shader = colored_phong;
         scene["TexturedPhong"].GetComponent<UniqueShader>().shader = textured_phong;
@@ -206,6 +206,9 @@ private:
         scene["backpack"].AddComponent<Ref<Shader>>(textured_phong);
         scene["sponza"].AddComponent<Ref<Shader>>(textured_phong);
 
+        scene["lamp_white"].AddComponent<Ref<Shader>>(colored_phong);
+        scene["lamp_magenta"].AddComponent<Ref<Shader>>(textured_phong);
+
         Logger::Info("loading", "Main", "Shaders loaded.");
     }
 
@@ -213,42 +216,44 @@ private:
     {
         Logger::Stage("loading", "Main", "LOADING MODELS");
 
-        Ref<RenderModelData> train, backpack, cube, cubes, sponza;
-        RenderModel r_train, r_backpack, r_cube, r_cubes, r_sponza;
+        scene["TrainModel"].AddComponent<ModelOwner>();
+        scene["SponzaModel"].AddComponent<ModelOwner>();
+        scene["CubeModel"].AddComponent<ModelOwner>();
+        scene["BackpackModel"].AddComponent<ModelOwner>();
 
-        train = ModelLoader::Load(Config::GetPath(DE_CFG_MODEL_PATH) / "Train" / "train.obj");
-        backpack = ModelLoader::Load(Config::GetPath(DE_CFG_MODEL_PATH) / "Backpack" / "backpack.obj");
-        cube = ModelLoader::Load(Config::GetPath(DE_CFG_MODEL_PATH) / "Cube" / "cube.obj");
-        cubes = ModelLoader::Load(Config::GetPath(DE_CFG_MODEL_PATH) / "Cubes" / "cubes.obj");
-        sponza = ModelLoader::Load(Config::GetPath(DE_CFG_MODEL_PATH) / "Sponza" / "sponza.obj");
+        scene["TrainModel"].GetComponent<ModelOwner>().data =
+            ModelLoader::Load(Config::GetPath(DE_CFG_MODEL_PATH) / "Train" / "train.obj", LoadingProperties());
+        scene["SponzaModel"].GetComponent<ModelOwner>().data =
+            ModelLoader::Load(Config::GetPath(DE_CFG_MODEL_PATH) / "Sponza" / "sponza.obj", LoadingProperties());
+        scene["CubeModel"].GetComponent<ModelOwner>().data =
+            ModelLoader::Load(Config::GetPath(DE_CFG_MODEL_PATH) / "Cube" / "cube.obj", LoadingProperties());
+        scene["BackpackModel"].GetComponent<ModelOwner>().data =
+            ModelLoader::Load(Config::GetPath(DE_CFG_MODEL_PATH) / "Backpack" / "backpack.obj", LoadingProperties());
 
         Logger::Stage("loading", "Main", "Models Loaded");
 
-        train->Compress();
-        backpack->Compress();
-        cubes->Compress();
-        cube->Compress();
+        scene["TrainModel"].GetComponent<ModelOwner>().data->Compress();
+        scene["SponzaModel"].GetComponent<ModelOwner>().data->Compress();
+        scene["CubeModel"].GetComponent<ModelOwner>().data->Compress();
+        scene["BackpackModel"].GetComponent<ModelOwner>().data->Compress();
 
         Logger::Stage("loading", "Main", "Compressed");
 
-        r_sponza.FillData(sponza);
-        r_train.FillData(train);
-        r_backpack.FillData(backpack);
-        r_cube.FillData(cube);
-        r_cubes.FillData(cubes);
+        scene["TrainModel"].GetComponent<ModelOwner>().render_model.FillData(scene["TrainModel"].GetComponent<ModelOwner>().data, "TrainModel");
+        scene["SponzaModel"].GetComponent<ModelOwner>().render_model.FillData(scene["SponzaModel"].GetComponent<ModelOwner>().data, "SponzaModel");
+        scene["CubeModel"].GetComponent<ModelOwner>().render_model.FillData(scene["CubeModel"].GetComponent<ModelOwner>().data, "CubeModel");
+        scene["BackpackModel"].GetComponent<ModelOwner>().render_model.FillData(scene["BackpackModel"].GetComponent<ModelOwner>().data,
+                                                                                "BackpackModel");
 
         Logger::Stage("loading", "Main", "Data Filled");
 
-        scene["backpack"].AddComponent<RenderModel>(r_backpack);
-        scene["train"].AddComponent<RenderModel>(r_train);
-        scene["surface"].AddComponent<RenderModel>(r_cube);
-        scene["sponza"].AddComponent<RenderModel>(r_sponza);
+        scene["backpack"].AddComponent<RenderModel>(scene["BackpackModel"].GetComponent<ModelOwner>().render_model);
+        scene["train"].AddComponent<RenderModel>(scene["TrainModel"].GetComponent<ModelOwner>().render_model);
+        scene["surface"].AddComponent<RenderModel>(scene["CubeModel"].GetComponent<ModelOwner>().render_model);
+        scene["sponza"].AddComponent<RenderModel>(scene["SponzaModel"].GetComponent<ModelOwner>().render_model);
 
-        scene["lamp_white"].AddComponent<RenderModel>(r_cube);
-        scene["lamp_magenta"].AddComponent<RenderModel>(r_cube);
-
-        scene["lamp_white"].AddComponent<Ref<Shader>>(scene["ColoredPhong"].GetComponent<UniqueShader>().shader);
-        scene["lamp_magenta"].AddComponent<Ref<Shader>>(scene["ColoredPhong"].GetComponent<UniqueShader>().shader);
+        scene["lamp_white"].AddComponent<RenderModel>(scene["CubeModel"].GetComponent<ModelOwner>().render_model);
+        scene["lamp_magenta"].AddComponent<RenderModel>(scene["CubeModel"].GetComponent<ModelOwner>().render_model);
     }
     void SetObjectProperties()
     {

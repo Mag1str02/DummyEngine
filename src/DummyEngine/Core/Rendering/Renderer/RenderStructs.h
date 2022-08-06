@@ -32,6 +32,11 @@ namespace DE
 
         RenderMeshData& operator+=(const RenderMeshData& other);
     };
+    struct LoadingProperties
+    {
+        bool flip_uvs;
+        bool compress;
+    };
     struct RenderModelData
     {
         std::vector<RenderMeshData> meshes;
@@ -60,9 +65,15 @@ namespace DE
     struct RenderModel
     {
         std::vector<RenderMesh> meshes;
-        Path path;
+        std::string name;
 
-        void FillData(Ref<RenderModelData> data);
+        void FillData(Ref<RenderModelData> data, const std::string& name);
+    };
+    struct ModelOwner
+    {
+        RenderModel render_model;
+        Ref<RenderModelData> data;
+        LoadingProperties properties;
     };
 
 }  // namespace DE

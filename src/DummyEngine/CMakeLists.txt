@@ -61,7 +61,7 @@ add_library(DummyEngineLib
 )
 
 target_compile_definitions(DummyEngineLib PUBLIC 
- DE_ENABLE_FRAME_TIME_READER=0
+ DE_ENABLE_FRAME_TIME_READER=1
  DE_ENABLE_ASSERTS=1
  )
 

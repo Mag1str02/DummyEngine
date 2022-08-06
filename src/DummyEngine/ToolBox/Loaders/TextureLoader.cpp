@@ -16,7 +16,7 @@ namespace DE
         std::string format_s;
 
         Logger::Stage("loading", "TextureLoader", path.string());
-        stbi_set_flip_vertically_on_load(true);
+        // stbi_set_flip_vertically_on_load(true);
 
         stb_data = stbi_load(path.string().c_str(), &width, &height, &nrChannels, 0);
         m_State.m_CurrentData->width = width;

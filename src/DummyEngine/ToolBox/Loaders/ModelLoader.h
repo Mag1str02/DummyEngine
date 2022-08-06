@@ -12,7 +12,7 @@ namespace DE
     class ModelLoader
     {
     public:
-        static Ref<RenderModelData> Load(const Path& path);
+        static Ref<RenderModelData> Load(const Path& path, LoadingProperties properties);
         static Ref<RenderModelData> Get(const Path& path);
 
     private:

@@ -1,0 +1,86 @@
+# Blender MTL File: 'template.blend'
+# Material Count: 7
+
+newmtl Material__483
+Ns 3.921569
+Ka 0.000000 0.000000 0.000000
+Kd 0.376320 0.376320 0.376320
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2a86c0a0.dds
+map_Ka 2a86c0a0.dds
+map_d 2a86c0a0.dds
+
+newmtl Material__484
+Ns 3.921569
+Ka 0.000000 0.000000 0.000000
+Kd 0.376320 0.376320 0.376320
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2a86c0a0.dds
+map_Ka 2a86c0a0.dds
+map_d 2a86c0a0.dds
+
+newmtl Material__487
+Ns 3.921569
+Ka 0.000000 0.000000 0.000000
+Kd 0.376320 0.376320 0.376320
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2a86c0a0.dds
+map_Ka 2a86c0a0.dds
+map_d 2a86c0a0.dds
+
+newmtl Material__488
+Ns 3.921569
+Ka 0.000000 0.000000 0.000000
+Kd 0.376320 0.376320 0.376320
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2a86c0a0.dds
+map_Ka 2a86c0a0.dds
+map_d 2a86c0a0.dds
+
+newmtl Material__492
+Ns 3.921569
+Ka 0.000000 0.000000 0.000000
+Kd 0.376320 0.376320 0.376320
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2a86c0a0.dds
+map_Ka 2a86c0a0.dds
+map_d 2a86c0a0.dds
+
+newmtl Material__497
+Ns 3.921569
+Ka 0.000000 0.000000 0.000000
+Kd 0.376320 0.376320 0.376320
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2a86c0a0.dds
+map_Ka 2a86c0a0.dds
+map_d 2a86c0a0.dds
+
+newmtl Material__498
+Ns 3.921569
+Ka 0.000000 0.000000 0.000000
+Kd 0.376320 0.376320 0.376320
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2a86c0a0.dds
+map_Ka 2a86c0a0.dds
+map_d 2a86c0a0.dds

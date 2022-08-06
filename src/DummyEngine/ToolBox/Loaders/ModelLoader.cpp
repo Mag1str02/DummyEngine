@@ -9,9 +9,9 @@ namespace DE
 
     ModelLoader::LoaderState ModelLoader::m_State;
 
-    Ref<RenderModelData> ModelLoader::Load(const Path& path)
+    Ref<RenderModelData> ModelLoader::Load(const Path& path, LoadingProperties properties)
     {
-        const aiScene* scene = m_State.m_Importer.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs);
+        const aiScene* scene = m_State.m_Importer.ReadFile(path.string(), aiProcess_Triangulate | (properties.flip_uvs ? aiProcess_FlipUVs : 0));
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         {
@@ -37,8 +37,13 @@ namespace DE
                      "ModelLoader",
                      "Model properties: Nodes (" + std::to_string(m_State.m_NodesAmount) + ") Meshes (" + std::to_string(m_State.m_MeshesAmount) +
                          ") Vertices (" + std::to_string(m_State.m_VerticesAmount) + ")");
+        if (properties.compress)
+        {
+            m_State.m_CurrentData->Compress();
+        }
         m_State.m_ModelDataByPath[fs::canonical(path)] = m_State.m_CurrentData;
         m_State.m_CurrentData->path = fs::canonical(path);
+
         return m_State.m_CurrentData;
     }
     Ref<RenderModelData> ModelLoader::Get(const Path& path)
@@ -46,7 +51,7 @@ namespace DE
         if (m_State.m_ModelDataByPath.find(fs::canonical(path)) == m_State.m_ModelDataByPath.end())
         {
             // std::cout << "Loading Model: " << path << std::endl;
-            return Load(path);
+            return Load(path, LoadingProperties());
         }
         else
         {

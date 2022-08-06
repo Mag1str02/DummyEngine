@@ -63,9 +63,9 @@ namespace DE
         vertex_array->AddVertexBuffer(vertex_buffer);
         vertex_array->SetIndexBuffer(index_buffer);
     }
-    void RenderModel::FillData(Ref<RenderModelData> data)
+    void RenderModel::FillData(Ref<RenderModelData> data, const std::string& name)
     {
-        path = data->path;
+        this->name = name; 
         meshes.resize(data->meshes.size());
         for (size_t i = 0; i < data->meshes.size(); ++i)
         {

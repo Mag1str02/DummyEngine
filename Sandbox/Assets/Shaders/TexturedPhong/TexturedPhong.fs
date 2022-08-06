@@ -74,8 +74,7 @@ vec3 SpotLightImpact(LightSource spot_light, vec3 v_Normal, vec3 view_direction,
     float light_angle_cos = dot(-normalized_light_ray, normalize(spot_light.m_Direction));
     if (spot_light.m_ConesAndType.x < light_angle_cos)
     {
-        angle_coef = (light_angle_cos - spot_light.m_ConesAndType.x) /
-                     (spot_light.m_ConesAndType.y - spot_light.m_ConesAndType.x);
+        angle_coef = (light_angle_cos - spot_light.m_ConesAndType.x) / (spot_light.m_ConesAndType.y - spot_light.m_ConesAndType.x);
     }
     if (spot_light.m_ConesAndType.y < light_angle_cos)
     {
@@ -87,6 +86,8 @@ vec3 SpotLightImpact(LightSource spot_light, vec3 v_Normal, vec3 view_direction,
 
 void main()
 {
+    if (vec4(texture(u_Material.diffuse_map, v_TexCoords)).a < 0.000000001) discard;
+
     vec3 normalized_normal = normalize(v_Normal);
     vec3 view_direction = normalize(u_CameraPos - v_FragPos);
 
@@ -94,12 +95,9 @@ void main()
 
     for (int i = 0; i < u_LightAmount; ++i)
     {
-        if (u_LightSources[i].m_ConesAndType.z == 1)
-            result += DirectionalLightImpact(u_LightSources[i], normalized_normal, view_direction);
-        if (u_LightSources[i].m_ConesAndType.z == 2)
-            result += PointLightImpact(u_LightSources[i], normalized_normal, view_direction, v_FragPos);
-        if (u_LightSources[i].m_ConesAndType.z == 3)
-            result += SpotLightImpact(u_LightSources[i], normalized_normal, view_direction, v_FragPos);
+        if (u_LightSources[i].m_ConesAndType.z == 1) result += DirectionalLightImpact(u_LightSources[i], normalized_normal, view_direction);
+        if (u_LightSources[i].m_ConesAndType.z == 2) result += PointLightImpact(u_LightSources[i], normalized_normal, view_direction, v_FragPos);
+        if (u_LightSources[i].m_ConesAndType.z == 3) result += SpotLightImpact(u_LightSources[i], normalized_normal, view_direction, v_FragPos);
     }
 
     f_FragColor = vec4(result, 1.0);

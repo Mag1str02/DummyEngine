@@ -1,0 +1,74 @@
+# Blender MTL File: 'template.blend'
+# Material Count: 6
+
+newmtl Material__472
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2a3dafe0.png
+map_Ka 2a3dafe0.png
+map_d 2a3dafe0.png
+
+newmtl Material__473
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2a3dafe0.png
+map_Ka 2a3dafe0.png
+map_d 2a3dafe0.png
+
+newmtl Material__474
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2a3dafe0.png
+map_Ka 2a3dafe0.png
+map_d 2a3dafe0.png
+
+newmtl Material__475
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2ab2e720.png
+map_Ka 2ab2e720.png
+map_d 2ab2e720.png
+
+newmtl Material__476
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2ab2e720.png
+map_Ka 2ab2e720.png
+map_d 2ab2e720.png
+
+newmtl Material__477
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2ab2e720.png
+map_Ka 2ab2e720.png
+map_d 2ab2e720.png

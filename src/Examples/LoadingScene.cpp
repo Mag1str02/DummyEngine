@@ -92,17 +92,27 @@ public:
     {
         Logger::Stage("loading", "Main", "INITIALIZETION");
         Input::SetWindow(m_Window->GetWindow());
-        Renderer::SetClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-
-        scene = CreateRef<Scene>("BasicSceneWithLights");
-        SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "BasicSceneWithLights.yml");
-
+        Renderer::SetClearColor(0.52f, 0.8f, 0.92f, 1.0f);
+        try
+        {
+            scene = CreateRef<Scene>("BasicSceneWithLights");
+        } catch (...)
+        {
+            std::cout << "Error while allocating scene." << std::endl;
+        }
+        try
+        {
+            SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "BasicScene.yml");
+        } catch (...)
+        {
+            std::cout << "Error while loading scene." << std::endl;
+        }
         scene->RegisterSystem<MovingSystem>();
         scene->RegisterSystem<LightManager>();
     }
     virtual void OnClose() override
     {
-        SceneLoader::Save(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "BasicSceneWithLights.yml");
+        SceneLoader::Save(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "BasicScene.yml");
     }
     virtual void Update(double dt) override
     {

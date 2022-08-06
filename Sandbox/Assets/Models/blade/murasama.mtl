@@ -1,0 +1,50 @@
+# Blender MTL File: 'template.blend'
+# Material Count: 4
+
+newmtl Material__449
+Ns 3.921569
+Ka 0.000000 0.000000 0.000000
+Kd 0.376320 0.376320 0.376320
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2a7f84a0.png
+map_Ka 2a7f84a0.png
+map_d 2a7f84a0.png
+
+newmtl Material__486
+Ns 3.921569
+Ka 0.000000 0.000000 0.000000
+Kd 0.376320 0.376320 0.376320
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2a7f84a0.png
+map_Ka 2a7f84a0.png
+map_d 2a7f84a0.png
+
+newmtl Material__490
+Ns 3.921569
+Ka 0.000000 0.000000 0.000000
+Kd 0.376320 0.376320 0.376320
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2a7f84a0.png
+map_Ka 2a7f84a0.png
+map_d 2a7f84a0.png
+
+newmtl Material__494
+Ns 3.921569
+Ka 0.000000 0.000000 0.000000
+Kd 0.376320 0.376320 0.376320
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd 2a7f84a0.png
+map_Ka 2a7f84a0.png
+map_d 2a7f84a0.png
