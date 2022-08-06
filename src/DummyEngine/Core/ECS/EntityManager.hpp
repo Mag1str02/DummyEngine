@@ -41,7 +41,6 @@ namespace DE
             ++m_EntitiesAmount;
 
             Logger::Info("ECS", "EntityManager", "Entity created (" + std::to_string(entity_id) + ")");
-            Logger::Info("ECS", "EntityManager", "Entity instance created (" + std::to_string(entity_id) + ")");
 
             return std::make_pair(entity_id, new_entity_created);
         }

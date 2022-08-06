@@ -31,14 +31,13 @@ namespace DE
             const char* component_name = typeid(ComponentType).name();
 
             m_ComponentId[component_name] = m_ComponentId.size();
-            m_ComponentArrays[component_name] =
-                std::make_shared<ComponentArray<ComponentType>>(ComponentArray<ComponentType>(m_EntityAmount));
+            m_ComponentArrays[component_name] = std::make_shared<ComponentArray<ComponentType>>(ComponentArray<ComponentType>(m_EntityAmount));
 
             Logger::Info("ECS", "ComponentManager", "Registered Component (" + NormalTypeName(component_name) + ")");
         }
 
     public:
-        ComponentManager() = default;
+        ComponentManager() : m_EntityAmount(0) {}
 
         void CopyEntity(EntityId from, EntityId to)
         {
@@ -48,8 +47,7 @@ namespace DE
             }
         }
 
-        template <typename ComponentType>
-        void AddComponent(EntityId entity_id, ComponentType component = ComponentType())
+        template <typename ComponentType> void AddComponent(EntityId entity_id, ComponentType component = ComponentType())
         {
             GetComponentArray<ComponentType>()->InsertComponent(entity_id, component);
         }
@@ -85,8 +83,7 @@ namespace DE
             {
                 RegisterComponent<ComponentType>();
             }
-            return std::static_pointer_cast<ComponentArray<ComponentType>>(
-                m_ComponentArrays[typeid(ComponentType).name()]);
+            return std::static_pointer_cast<ComponentArray<ComponentType>>(m_ComponentArrays[typeid(ComponentType).name()]);
         }
         void ExtendArrays()
         {

@@ -25,6 +25,7 @@ namespace DE
     void Window::Init()
     {
         m_WindowHandle = glfwCreateWindow(m_State.width, m_State.height, m_State.name.c_str(), NULL, NULL);
+        Windowed();
         DE_ASSERT(m_WindowHandle != nullptr, "Failed to create GLFW Window:" + m_State.name);
         SetFrameBufferSizeCallback(DefaultFramebufferSizeCallback);
         Logger::Info("loading", "Window", "Window created: " + m_State.name);
@@ -39,7 +40,7 @@ namespace DE
     }
     void Window::Windowed()
     {
-        glfwSetWindowMonitor(m_WindowHandle, nullptr, 100, 100, 1080, 720, 200);
+        glfwSetWindowMonitor(m_WindowHandle, nullptr, 500, 500, 1080, 720, 200);
         m_State.window_mode = WindowMode::windowed;
     }
 
