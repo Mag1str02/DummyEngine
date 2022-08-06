@@ -59,7 +59,7 @@ namespace DE
         {
             std::cout << std::endl;
             FrameStatistics statistics = Renderer::GetStatistics();
-            std::cout << "DrawCalls: " << statistics.m_DrawCallsAmount;
+            std::cout << "DrawCalls: " << statistics.m_DrawCallsAmount << std::endl;
         }
     }
 

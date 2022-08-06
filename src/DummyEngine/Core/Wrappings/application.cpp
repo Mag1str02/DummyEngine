@@ -34,12 +34,11 @@ namespace DE
         Renderer::Init(Config::GetRenderAPI());
         Renderer::Load(m_Window);
         OnLoad();
-        double frame_begin, frame_end, prev_frame_time = 0.001;
+        double frame_begin, frame_end, prev_frame_time = 0.001, fake_time;
         while (!m_Window->ShouldClose())
         {
+            frame_begin = glfwGetTime();
             DE_PROFILE_SCOPE("", {
-                frame_begin = glfwGetTime();
-
                 Renderer::BeginFrame();
 
                 DE_PROFILE_SCOPE("Poll Events", glfwPollEvents());
@@ -47,12 +46,12 @@ namespace DE
                 DE_PROFILE_SCOPE("Buffer Swap", m_Window->SwapBuffers());
 
                 Renderer::EndFrame();
-
-                frame_end = glfwGetTime();
-                prev_frame_time = frame_end - frame_begin;
             });
-
+            
             DE_FTR_PRINT();
+
+            frame_end = glfwGetTime();
+            prev_frame_time = frame_end - frame_begin;
         }
         OnClose();
     }

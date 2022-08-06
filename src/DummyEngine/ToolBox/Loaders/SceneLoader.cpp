@@ -276,7 +276,7 @@ namespace DE
     template <> void SceneLoader::LoadComponent<RenderModel>(YAML::Node n_Component, Entity& entity)
     {
         entity.AddComponent<RenderModel>(m_State.m_Scene->GetByName(n_Component.as<std::string>()).GetComponent<ModelOwner>().render_model);
-        std::cout << "Adding model component: " << n_Component.as<std::string>() << std::endl;
+        // std::cout << "Adding model component: " << n_Component.as<std::string>() << std::endl;
     }
     template <> void SceneLoader::LoadComponent<Ref<Shader>>(YAML::Node n_Component, Entity& entity)
     {

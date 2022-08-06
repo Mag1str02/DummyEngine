@@ -1,0 +1,448 @@
+Scene:
+  Name: NewScene
+  Assets:
+    Models:
+      ArchModel:
+        Path: Assets\Models\Arch\arch.obj
+        Compress: true
+        FlipUV: true
+      BackpackModel:
+        Path: Assets\Models\Backpack\backpack.obj
+        Compress: true
+        FlipUV: false
+      BladeModel:
+        Path: Assets\Models\Blade\murasama.obj
+        Compress: true
+        FlipUV: true
+      CarModel:
+        Path: Assets\Models\Car\Car.obj
+        Compress: false
+        FlipUV: true
+      CubeModel:
+        Path: Assets\Models\Cube\cube.obj
+        Compress: true
+        FlipUV: false
+      LuffyModel:
+        Path: Assets\Models\Luffy\luffy.obj
+        Compress: false
+        FlipUV: false
+      NissanModel:
+        Path: Assets\Models\Nissan\Nissan.obj
+        Compress: false
+        FlipUV: false
+      RaidenModel:
+        Path: Assets\Models\Raiden\Raiden.obj
+        Compress: false
+        FlipUV: true
+      SamModel:
+        Path: Assets\Models\Sam\Sam.obj
+        Compress: false
+        FlipUV: true
+      TreeModel:
+        Path: Assets\Models\Tree\Tree.obj
+        Compress: false
+        FlipUV: false
+    Shaders:
+      ColoredPhong:
+        Vertex: Assets\Shaders\ColoredPhong\ColoredPhong.vs
+        Fragment: Assets\Shaders\ColoredPhong\ColoredPhong.fs
+      TexturedPhong:
+        Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
+        Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
+  Entities:
+    Entity_0:
+      Tag: Arch
+      UUID: 6382649478065237834
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [0, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_1:
+      Tag: Arch_0
+      UUID: 7880999784930792072
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [75, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_2:
+      Tag: Arch_1
+      UUID: 15941687613803207770
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [-75, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_3:
+      Tag: Arch_10
+      UUID: 5213625393851641127
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [450, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_4:
+      Tag: Arch_11
+      UUID: 3035699795383006144
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [-450, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_5:
+      Tag: Arch_12
+      UUID: 14384740072414857809
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [525, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_6:
+      Tag: Arch_13
+      UUID: 12635401302101962863
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [-525, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_7:
+      Tag: Arch_14
+      UUID: 1101106277738172717
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [600, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_8:
+      Tag: Arch_15
+      UUID: 5873323393681448535
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [-600, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_9:
+      Tag: Arch_16
+      UUID: 17302959992435298245
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [675, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_10:
+      Tag: Arch_17
+      UUID: 15890044325275084598
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [-675, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_11:
+      Tag: Arch_18
+      UUID: 15537684908387568608
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [750, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_12:
+      Tag: Arch_19
+      UUID: 16670400817386465635
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [-750, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_13:
+      Tag: Arch_2
+      UUID: 9950114420260690697
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [150, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_14:
+      Tag: Arch_3
+      UUID: 15019554848179761880
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [-150, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_15:
+      Tag: Arch_4
+      UUID: 7984498613159843746
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [225, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_16:
+      Tag: Arch_5
+      UUID: 13170488749888609724
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [-225, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_17:
+      Tag: Arch_6
+      UUID: 7069657717134928603
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [300, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_18:
+      Tag: Arch_7
+      UUID: 2009748520648894057
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [-300, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_19:
+      Tag: Arch_8
+      UUID: 6841065002287908623
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [375, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_20:
+      Tag: Arch_9
+      UUID: 2189146139801416280
+      RenderModel: ArchModel
+      Transformation:
+        Translation: [-375, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [2, 2, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_21:
+      Tag: Backpack
+      UUID: 6382649478065237886
+      RenderModel: BackpackModel
+      Transformation:
+        Translation: [0, 15, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [5, 5, 5]
+        ScaleOffset: [1, 1, 1]
+      Shader: TexturedPhong
+    Entity_22:
+      Tag: Blade
+      UUID: 6382649478065237432
+      RenderModel: BladeModel
+      Transformation:
+        Translation: [75, 15, 0]
+        TranslationOffset: [0, -7, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [-90, 90, 0]
+        Scale: [2, 2, 2]
+        ScaleOffset: [10, 10, 10]
+      Shader: TexturedPhong
+    Entity_23:
+      Tag: Car
+      UUID: 6382649478025237834
+      RenderModel: CarModel
+      Transformation:
+        Translation: [-225, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [-90, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: TexturedPhong
+    Entity_24:
+      Tag: Luffy
+      UUID: 6382649478065237252
+      RenderModel: LuffyModel
+      Transformation:
+        Translation: [-75, 15, 0]
+        TranslationOffset: [0, 0, 10]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [3, 3, 3]
+      Shader: ColoredPhong
+    Entity_25:
+      Tag: Nissan
+      UUID: 6382249478065237834
+      RenderModel: NissanModel
+      Transformation:
+        Translation: [-300, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+      Shader: ColoredPhong
+    Entity_26:
+      Tag: Raiden
+      UUID: 6384649478065237834
+      RenderModel: RaidenModel
+      Transformation:
+        Translation: [225, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [0.100000001, 0.100000001, 0.100000001]
+      Shader: TexturedPhong
+    Entity_27:
+      Tag: Sam
+      UUID: 6382649478065643834
+      RenderModel: SamModel
+      Transformation:
+        Translation: [150, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [0.100000001, 0.100000001, 0.100000001]
+      Shader: TexturedPhong
+    Entity_28:
+      Tag: Tree
+      UUID: 6322649478065237834
+      RenderModel: TreeModel
+      Transformation:
+        Translation: [-150, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [1, 1, 1]
+      Shader: ColoredPhong
+    Entity_29:
+      Tag: player
+      UUID: 4631319593559015940
+      FPSCamera:
+        FOV: 60
+        Aspect: 1.77777779
+        NearPlane: 1.00000001e-07
+        FarPlane: 2000
+        Position: [125.793007, 114.045784, 338.230743]
+        Direction: [-0.0648070425, -0.303088576, -0.950756252]
+    Entity_30:
+      Tag: sun
+      UUID: 16279128272272660330
+      LightSource:
+        Type: Direction
+        Ambient: [0.400000006, 0.400000006, 0.400000006]
+        Diffuse: [0.600000024, 0.600000024, 0.600000024]
+        Specular: [0.300000012, 0.300000012, 0.300000012]
+        Direction: [0, -0.44721359, -0.89442718]
+        Position: [0, 0, 0]
+        CLQ: [0.5, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_31:
+      Tag: sun_0
+      UUID: 16279128272272660331
+      LightSource:
+        Type: Direction
+        Ambient: [0.400000006, 0.400000006, 0.400000006]
+        Diffuse: [0.600000024, 0.600000024, 0.600000024]
+        Specular: [0.300000012, 0.300000012, 0.300000012]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [0, 0, 0]
+        CLQ: [0.5, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_32:
+      Tag: surface
+      UUID: 6382649478065237843
+      RenderModel: CubeModel
+      Transformation:
+        Translation: [0, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1000, 0.100000001, 100]
+        ScaleOffset: [1, 1, 1]
+      Shader: ColoredPhong

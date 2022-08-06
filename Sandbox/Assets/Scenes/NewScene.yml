@@ -1,7 +1,0 @@
-Scene:
-  Name: BasicScene
-  Assets:
-    Models:
-      - Assets\Models\Cube\cube.obj
-    Shaders:
-  Entities:

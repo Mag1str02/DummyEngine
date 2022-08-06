@@ -54,9 +54,6 @@ public:
 
     void Update(double dt) override
     {
-        scene->GetByName("flashlight").GetComponent<LightSource>().position = scene->GetByName("player").GetComponent<FPSCamera>().GetPos();
-        scene->GetByName("flashlight").GetComponent<LightSource>().direction = scene->GetByName("player").GetComponent<FPSCamera>().GetDir();
-
         auto& manipulators = GetComponentArray<LinearManipulator>();
         auto& positions = GetComponentArray<Transformation>();
         auto& scales = GetComponentArray<ScaleManipulator>();
@@ -92,33 +89,29 @@ public:
     {
         Logger::Stage("loading", "Main", "INITIALIZETION");
         Input::SetWindow(m_Window->GetWindow());
-        Renderer::SetClearColor(0.52f, 0.8f, 0.92f, 1.0f);
+        Renderer::SetClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+        scene = CreateRef<Scene>("NewScene");
         try
         {
-            scene = CreateRef<Scene>("BasicSceneWithLights");
-        } catch (...)
+            SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Gallery.yml");
+        } catch (const std::exception& e)
         {
-            std::cout << "Error while allocating scene." << std::endl;
+            std::cout << "Error while loading scene: " << e.what() << std::endl;
         }
-        try
-        {
-            SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "BasicScene.yml");
-        } catch (...)
-        {
-            std::cout << "Error while loading scene." << std::endl;
-        }
+
         scene->RegisterSystem<MovingSystem>();
         scene->RegisterSystem<LightManager>();
-    }
-    virtual void OnClose() override
-    {
-        SceneLoader::Save(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "BasicScene.yml");
     }
     virtual void Update(double dt) override
     {
         ProcessInput(dt);
         scene->OnUpdate(dt);
         scene->Render();
+    }
+    virtual void OnClose() override
+    {
+        SceneLoader::Save(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Gallery.yml");
     }
 
 private:
@@ -178,7 +171,7 @@ private:
 
         if (Input::KeyDown(GLFW_KEY_LEFT_SHIFT))
         {
-            speed = 50.0f;
+            speed = 100.0f;
         }
         if (Input::KeyDown(GLFW_KEY_ESCAPE))
         {
