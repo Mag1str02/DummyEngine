@@ -1,5 +1,9 @@
 #pragma once
 
+#if WIN32
+#define YAML_CPP_STATIC_DEFINE
+#endif
+
 #include <glm/gtc/constants.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>

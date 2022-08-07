@@ -3,8 +3,7 @@ cmake_minimum_required(VERSION 3.0.0)
 set(CMAKE_CXX_STANDARD 20)
 
 project(DummyEngineLib)
-
-SET(YAML_CPP_STATIC_LIBRARY TRUE)
+    
 set(SANDBOX_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../Sandbox)
 set(EXTERNAL_LIBS_DIR libs)
 set(DE_LIB_SOURCE_DIR .) 
@@ -67,6 +66,7 @@ target_compile_definitions(DummyEngineLib PUBLIC
 
 add_subdirectory(libs/glfw)
 add_subdirectory(libs/glad)
+add_subdirectory(libs/yaml)
 
 target_include_directories(DummyEngineLib
     PUBLIC ${EXTERNAL_LIBS_DIR}/glfw/include
@@ -80,15 +80,13 @@ target_include_directories(DummyEngineLib
 
 target_link_directories(DummyEngineLib
     PUBLIC ${EXTERNAL_LIBS_DIR}/assimp/lib
-    PUBLIC ${EXTERNAL_LIBS_DIR}/YAML/src
 )
 
 target_link_libraries(DummyEngineLib
     PUBLIC glad
     PUBLIC glfw
     PUBLIC assimp
-     PUBLIC yaml-cpp
+    PUBLIC yaml-cpp
 )
 
 add_custom_command(TARGET DummyEngineLib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/libs/Assimp/lib/libassimp.dll  ${SANDBOX_DIR})
-add_custom_command(TARGET DummyEngineLib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/libs/YAML/src/libyaml-cpp.dll  ${SANDBOX_DIR})

@@ -10,3 +10,6 @@
 [submodule "src/DummyEngine/Libs/GLAD"]
 	path = src/DummyEngine/Libs/GLAD
 	url = https://github.com/Dav1dde/glad
+[submodule "src/DummyEngine/libs/YAML"]
+	path = src/DummyEngine/libs/YAML
+	url = https://github.com/jbeder/yaml-cpp
