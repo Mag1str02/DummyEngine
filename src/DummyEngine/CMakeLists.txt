@@ -10,6 +10,7 @@ set(DE_LIB_SOURCE_DIR .)
 set(ENGINE_SOURCES  
     Addition/Assert.cpp
     Addition/Config.cpp
+    Addition/Conversions.cpp
     Addition/UUID.cpp
     Addition/Random.cpp
     Addition/STBImplementation.cpp
@@ -31,6 +32,7 @@ set(ENGINE_SOURCES
     Core/Objects/LightSources/LightSource.cpp
     Core/Objects/Cameras/FPSCamera.cpp
 
+    Core/Rendering/Renderer/LocalBuffer.cpp
     Core/Rendering/Renderer/VertexArray.cpp
     Core/Rendering/Renderer/VertexBuffer.cpp
     Core/Rendering/Renderer/Renderer.cpp

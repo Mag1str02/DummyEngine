@@ -47,16 +47,13 @@ namespace DE
                 case BufferElementType::Int2:
                 case BufferElementType::Int3:
                 case BufferElementType::Int4:
-                    glVertexAttribIPointer(m_CurrentAtributeId,
-                                           element.ComponentCount(),
-                                           GL_INT,
-                                           layout.GetStride(),
-                                           (void*)element.offset);
+                    glVertexAttribIPointer(m_CurrentAtributeId, element.ComponentCount(), GL_INT, layout.GetStride(), (void*)element.offset);
             }
             m_CurrentAtributeId++;
         }
         m_VertexBuffers.push_back(vertex_buffer);
     }
+
     void GLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& index_buffer)
     {
         glBindVertexArray(m_ArrayId);

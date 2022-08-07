@@ -47,7 +47,8 @@ namespace DE
         Int,
         Int2,
         Int3,
-        Int4
+        Int4,
+        Mat4
     };
     enum class BufferUsage
     {

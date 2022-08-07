@@ -32,6 +32,7 @@
 #include <random>
 #include <cxxabi.h>
 
+#include "Addition/Conversions.h"
 #include "Addition/Types.h"
 #include "Addition/Config.h"
 #include "Addition/Assert.h"
