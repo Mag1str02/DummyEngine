@@ -10,7 +10,7 @@ newmtl tyre
 	illum 2
 	Ks 1 1 1
 	Ns 9.41176470588235328
-	map_Kd goodyear_tire.tga
+	map_Kd goodyear_tire.png
 newmtl Material.024
 	Ka 0 0 0
 	Kd 0.80000007152557376 0 0.0096094598993659

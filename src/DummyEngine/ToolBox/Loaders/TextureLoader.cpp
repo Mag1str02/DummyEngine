@@ -15,7 +15,6 @@ namespace DE
         unsigned char* new_data;
         std::string format_s;
 
-        Logger::Stage("loading", "TextureLoader", path.string());
         // stbi_set_flip_vertically_on_load(true);
 
         stb_data = stbi_load(path.string().c_str(), &width, &height, &nrChannels, 0);
@@ -24,15 +23,12 @@ namespace DE
 
         if (!stb_data)
         {
-            Logger::Error("loading", "TextureLoader", "Couldn't load texture: (" + path.string() + ")");
+            Logger::Error("loading", "TextureLoader", "Failed to load texture " + RelativeToExecutable(path).string());
             return nullptr;
         }
 
-        new_data = (unsigned char*)malloc(sizeof(unsigned char) * m_State.m_CurrentData->width *
-                                          m_State.m_CurrentData->height * nrChannels);
-        memcpy(new_data,
-               stb_data,
-               sizeof(unsigned char) * m_State.m_CurrentData->width * m_State.m_CurrentData->height * nrChannels);
+        new_data = (unsigned char*)malloc(sizeof(unsigned char) * m_State.m_CurrentData->width * m_State.m_CurrentData->height * nrChannels);
+        memcpy(new_data, stb_data, sizeof(unsigned char) * m_State.m_CurrentData->width * m_State.m_CurrentData->height * nrChannels);
 
         stbi_image_free(stb_data);
         m_State.m_CurrentData->data = CreateRef<unsigned char*>(new_data);
@@ -56,12 +52,9 @@ namespace DE
                 m_State.m_CurrentData->format = TextureFormat::None;
                 break;
         }
-
-        Logger::Info("loading",
-                     "TextureLoader",
-                     "Texture loaded successfully: (Format: " + format_s + ")(Path: " + path.string() + ")");
-
         m_State.m_TextureDataByPath[fs::canonical(path)] = m_State.m_CurrentData;
+
+        Logger::Info("loading", "TextureLoader", "Texture loaded " + RelativeToExecutable(path).string() + " Format (" + format_s + ")");
         return m_State.m_CurrentData;
     }
     Ref<TextureData> TextureLoader::Get(const Path& path)
@@ -72,7 +65,7 @@ namespace DE
             canonitial = fs::canonical(path);
         } catch (std::filesystem::__cxx11::filesystem_error)
         {
-            Logger::Error("loading", "TextureLoader","Texture file does not exist: " + path.string());
+            Logger::Error("loading", "TextureLoader", "Texture file " + RelativeToExecutable(path).string() + " does not exist");
             return nullptr;
         }
         if (m_State.m_TextureDataByPath.find(canonitial) != m_State.m_TextureDataByPath.end())

@@ -28,7 +28,7 @@ namespace DE
         static uint32_t GetI(uint32_t setting);
         static float GetF(uint32_t setting);
         static Path GetPath(uint32_t setting);
-        
+
         static API GetRenderAPI();
 
         static void Init();
@@ -55,4 +55,6 @@ namespace DE
         };
         static Configs m_Configs;
     };
+
+    Path RelativeToExecutable(const Path& path);
 }  // namespace DE

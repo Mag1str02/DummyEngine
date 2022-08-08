@@ -56,4 +56,9 @@ namespace DE
 
         m_Configs.c_RenderAPI = API::OpenGL;
     }
+
+    Path RelativeToExecutable(const Path& path)
+    {
+        return fs::relative(path, Config::GetPath(DE_CFG_EXECUTABLE_PATH));
+    }
 }  // namespace DE

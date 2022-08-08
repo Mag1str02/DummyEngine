@@ -10,10 +10,6 @@ namespace DE
 
     //*~~~Additional~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    std::string Relative(const Path& path)
-    {
-        return fs::relative(path, Config::GetPath(DE_CFG_EXECUTABLE_PATH)).string();
-    }
     void SceneLoader::LoaderState::Clear()
     {
         m_SShaders.clear();
@@ -173,7 +169,7 @@ namespace DE
             YAML::Node n_Model;
             n_Models[(std::string)model.GetComponent<Tag>()] = n_Model;
 
-            n_Model["Path"] = Relative(model.GetComponent<ModelOwner>().data->path.string());
+            n_Model["Path"] = RelativeToExecutable(model.GetComponent<ModelOwner>().data->path.string()).string();
             n_Model["Compress"] = model.GetComponent<ModelOwner>().properties.compress;
             n_Model["FlipUV"] = model.GetComponent<ModelOwner>().properties.flip_uvs;
         }
@@ -188,7 +184,7 @@ namespace DE
             auto shader = entity.GetComponent<UniqueShader>().shader;
             for (const auto& part : shader->GetParts())
             {
-                n_Shaders[shader->GetName()][ShaderPartTypeToString(part.type)] = Relative(part.path);
+                n_Shaders[shader->GetName()][ShaderPartTypeToString(part.type)] = RelativeToExecutable(part.path).string();
             }
         }
         return n_Shaders;

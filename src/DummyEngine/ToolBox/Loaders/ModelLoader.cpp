@@ -15,8 +15,9 @@ namespace DE
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         {
-            Logger::Error(
-                "loading", "ModelLoader", std::string("Failed To Load Scene: (" + path.string() + ")\n") + m_State.m_Importer.GetErrorString());
+            Logger::Error("loading",
+                          "ModelLoader",
+                          "Failed to load model \"" + RelativeToExecutable(path).string() + "\" Error (" + m_State.m_Importer.GetErrorString() + ")");
             return nullptr;
         }
 
@@ -32,11 +33,10 @@ namespace DE
         m_State.m_CurrentData->meshes.resize(m_State.m_MeshesAmount);
         ProcessNode(scene->mRootNode, scene);
 
-        Logger::Info("loading", "ModelLoader", "Model loaded: " + path.string());
         Logger::Info("loading",
                      "ModelLoader",
-                     "Model properties: Nodes (" + std::to_string(m_State.m_NodesAmount) + ") Meshes (" + std::to_string(m_State.m_MeshesAmount) +
-                         ") Vertices (" + std::to_string(m_State.m_VerticesAmount) + ")");
+                     "Model loaded " + RelativeToExecutable(path).string() + " Meshes (" + std::to_string(m_State.m_MeshesAmount) + ") Vertices (" +
+                         std::to_string(m_State.m_VerticesAmount) + ")");
         if (properties.compress)
         {
             m_State.m_CurrentData->Compress();
