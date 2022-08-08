@@ -74,12 +74,17 @@ namespace DE
     }
     const BufferElement& BufferLayout::operator[](uint32_t index) const
     {
+        DE_ASSERT(index >= 0 && index < m_Elements.size(), "Index out of bounce.");
         return m_Elements[index];
     }
 
     uint32_t BufferLayout::GetStride() const
     {
         return m_Stride;
+    }
+    uint32_t BufferLayout::GetDivisor() const
+    {
+        return m_Divisor;
     }
 
     //*~~~LocalBuffer~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,17 +100,14 @@ namespace DE
         }
     }
 
-    const BufferLayout& LocalBuffer::GetLayout() const
-    {
-        return m_Layout;
-    }
-    LocalBufferNode LocalBuffer::operator[](uint32_t index)
+    LocalBufferNode LocalBuffer::at(uint32_t index)
     {
         return LocalBufferNode(&m_Layout, m_Data + index * m_Layout.GetStride());
     }
 
-    void LocalBuffer::SetData(const void* data)
+    void LocalBuffer::SetData(const void* data, uint32_t size)
     {
+        DE_ASSERT(m_Size == size, "Wrong data size!");
         memcpy(m_Data, data, m_Size);
     }
     void LocalBuffer::Allocate(const BufferLayout& layout, uint32_t size)

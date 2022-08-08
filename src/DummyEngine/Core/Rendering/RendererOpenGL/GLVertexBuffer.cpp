@@ -11,17 +11,31 @@ namespace DE
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    GLVertexBuffer::GLVertexBuffer(uint32_t size, BufferUsage usage)
+    // TODO: Think about not creating LocalBuffer if BufferUsage is Static.
+
+    GLVertexBuffer::GLVertexBuffer(const BufferLayout& layout, uint32_t size, BufferUsage usage) :
+        m_Layout(layout), m_Usage(usage), m_Size(size * layout.GetStride())
     {
+        if (m_Usage == BufferUsage::Dynamic)
+        {
+            m_LocalBuffer.Allocate(layout, size);
+        }
         glCreateBuffers(1, &m_BufferId);
         glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
-        glBufferData(GL_ARRAY_BUFFER, size, nullptr, BufferUsafeToGLBufferUsage(usage));
+        glBufferData(GL_ARRAY_BUFFER, layout.GetStride() * size, nullptr, BufferUsafeToGLBufferUsage(usage));
     }
-    GLVertexBuffer::GLVertexBuffer(const void* data, uint32_t size, BufferUsage usage)
+    GLVertexBuffer::GLVertexBuffer(const BufferLayout& layout, uint32_t size, const void* data, BufferUsage usage) :
+        m_Layout(layout), m_Usage(usage), m_Size(size * layout.GetStride())
     {
+        if (m_Usage == BufferUsage::Dynamic)
+        {
+            m_LocalBuffer.Allocate(layout, size);
+            m_LocalBuffer.SetData(data, m_Size);
+        }
+
         glCreateBuffers(1, &m_BufferId);
         glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
-        glBufferData(GL_ARRAY_BUFFER, size, data, BufferUsafeToGLBufferUsage(usage));
+        glBufferData(GL_ARRAY_BUFFER, layout.GetStride() * size, data, BufferUsafeToGLBufferUsage(usage));
     }
     GLVertexBuffer::~GLVertexBuffer()
     {
@@ -32,16 +46,34 @@ namespace DE
     {
         return m_Layout;
     }
-    void GLVertexBuffer::SetLayout(const BufferLayout& layout)
-    {
-        m_Layout = layout;
-    }
 
+    LocalBufferNode GLVertexBuffer::at(uint32_t index)
+    {
+        DE_ASSERT(m_Usage == BufferUsage::Dynamic, "Using at() function on non-dynamic-usage vertex_buffer.");
+        return m_LocalBuffer.at(index);
+    }
     void GLVertexBuffer::SetData(const void* data, uint32_t size)
     {
-        glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+        if (m_Usage == BufferUsage::Dynamic)
+        {
+            m_LocalBuffer.SetData(data, size);
+        }
+        else
+        {
+            DE_ASSERT(m_Size == size, "Invalid data size.");
+
+            glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+        }
     }
+    void GLVertexBuffer::PushData()
+    {
+        DE_ASSERT(m_Usage == BufferUsage::Dynamic, "Using PushData() function on non-dynamic-usage vertex_buffer. Use SetData() instead.");
+
+        glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, m_LocalBuffer.m_Size, m_LocalBuffer.m_Data);
+    }
+
     GLenum GLVertexBuffer::BufferUsafeToGLBufferUsage(BufferUsage usage)
     {
         switch (usage)

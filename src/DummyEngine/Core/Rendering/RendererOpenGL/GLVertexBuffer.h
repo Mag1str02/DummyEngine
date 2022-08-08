@@ -10,7 +10,6 @@ namespace DE
 
     class GLVertexBuffer : public VertexBuffer
     {
-
     public:
         GLVertexBuffer() = delete;
         GLVertexBuffer(const GLVertexBuffer& other) = delete;
@@ -18,24 +17,29 @@ namespace DE
         GLVertexBuffer& operator=(const GLVertexBuffer& other) = delete;
         GLVertexBuffer& operator=(GLVertexBuffer&& other) = delete;
 
-        GLVertexBuffer(uint32_t size, BufferUsage usage = BufferUsage::Static);
-        GLVertexBuffer(const void* data, uint32_t size, BufferUsage usage = BufferUsage::Static);
+        GLVertexBuffer(const BufferLayout& layout, uint32_t size, BufferUsage usage = BufferUsage::Static);
+        GLVertexBuffer(const BufferLayout& layout, uint32_t size, const void* data, BufferUsage usage = BufferUsage::Static);
 
         virtual ~GLVertexBuffer();
 
         virtual void Bind() const override;
         virtual void UnBind() const override;
 
-        virtual const BufferLayout& GetLayout() const override;
-        virtual void SetLayout(const BufferLayout& layout) override;
+        virtual LocalBufferNode at(uint32_t index) override;
 
         virtual void SetData(const void* data, uint32_t size) override;
+        virtual void PushData() override;
+
+        virtual const BufferLayout& GetLayout() const override;
 
     private:
         static GLenum BufferUsafeToGLBufferUsage(BufferUsage usage);
 
+        BufferUsage m_Usage;
+        LocalBuffer m_LocalBuffer;
         BufferLayout m_Layout;
         GLuint m_BufferId;
+        uint32_t m_Size;
     };
 
     class GLIndexBuffer : public IndexBuffer

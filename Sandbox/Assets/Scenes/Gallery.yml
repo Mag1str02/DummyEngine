@@ -16,7 +16,7 @@ Scene:
         FlipUV: true
       CarModel:
         Path: Assets\Models\Car\Car.obj
-        Compress: false
+        Compress: true
         FlipUV: true
       CubeModel:
         Path: Assets\Models\Cube\cube.obj

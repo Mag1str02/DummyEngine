@@ -38,10 +38,15 @@ namespace DE
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
-    void GLRenderAPI::DrawIndexed(const Ref<VertexArray>& vertexArray)
+    void GLRenderAPI::DrawIndexed(const Ref<VertexArray>& vertex_array)
     {
-        vertexArray->Bind();
-        glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, nullptr);
+        vertex_array->Bind();
+        glDrawElements(GL_TRIANGLES, vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, nullptr);
+    }
+    void GLRenderAPI::DrawInstanced(const Ref<VertexArray>& vertex_array, uint32_t instance_count)
+    {
+        vertex_array->Bind();
+        glDrawElementsInstanced(GL_TRIANGLES, vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, nullptr, instance_count);
     }
 
     void GLRenderAPI::SetClearColor(const Vec4& color)

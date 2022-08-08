@@ -32,6 +32,7 @@ namespace DE
         const BufferElement& operator[](uint32_t index) const;
 
         uint32_t GetStride() const;
+        uint32_t GetDivisor() const;
 
     private:
         void CalculateOffsetsAndStride();
@@ -47,7 +48,6 @@ namespace DE
     public:
         template <typename T> T& Get(uint32_t index)
         {
-            DE_ASSERT(m_Pointer != nullptr, "Invalid LocalBufferNode pointer.");
             return *(T*)(m_Pointer + (*m_Layout)[index].offset);
         }
 
@@ -58,20 +58,22 @@ namespace DE
         const BufferLayout* m_Layout;
         uint8_t* m_Pointer;
     };
-
+    
+    class GLVertexBuffer;
     class LocalBuffer
     {
     public:
         LocalBuffer();
         ~LocalBuffer();
 
-        void SetData(const void* data);
+        void SetData(const void* data, uint32_t size);
         void Allocate(const BufferLayout& layout, uint32_t size);
 
-        const BufferLayout& GetLayout() const;
-        LocalBufferNode operator[](uint32_t index);
+        LocalBufferNode at(uint32_t index);
 
     private:
+        friend class GLVertexBuffer;
+
         void Allocate(uint32_t size);
 
         BufferLayout m_Layout;

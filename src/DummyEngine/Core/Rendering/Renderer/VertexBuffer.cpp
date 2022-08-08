@@ -4,11 +4,11 @@
 
 namespace DE
 {
-    Ref<VertexBuffer> VertexBuffer::Create(uint32_t size, BufferUsage usage)
+    Ref<VertexBuffer> VertexBuffer::Create(const BufferLayout& layout, uint32_t size, BufferUsage usage)
     {
         switch (Renderer::CurrentAPI())
         {
-            case API::OpenGL: return CreateRef<GLVertexBuffer>(size, usage);
+            case API::OpenGL: return CreateRef<GLVertexBuffer>(layout, size, usage);
             case API::Vulkan: {
                 DE_ASSERT(false, "Attempt to create VertexBufffer on VulkanAPI which is currently unsupported.");
                 return nullptr;
@@ -23,11 +23,11 @@ namespace DE
 
         return nullptr;
     }
-    Ref<VertexBuffer> VertexBuffer::Create(const void* data, uint32_t size, BufferUsage usage)
+    Ref<VertexBuffer> VertexBuffer::Create(const BufferLayout& layout, uint32_t size, const void* data, BufferUsage usage)
     {
         switch (Renderer::CurrentAPI())
         {
-            case API::OpenGL: return CreateRef<GLVertexBuffer>(data, size, usage);
+            case API::OpenGL: return CreateRef<GLVertexBuffer>(layout, size, data, usage);
             case API::Vulkan: {
                 DE_ASSERT(false, "Attempt to create VertexBufffer on VulkanAPI which is currently unsupported.");
                 return nullptr;

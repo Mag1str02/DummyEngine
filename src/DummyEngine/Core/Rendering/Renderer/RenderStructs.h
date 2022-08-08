@@ -62,12 +62,23 @@ namespace DE
 
         void FillData(RenderMeshData data);
     };
-    struct RenderModel
+    class RenderModel
     {
-        std::vector<RenderMesh> meshes;
-        std::string name;
+    public:
+        RenderModel() {}
 
         void FillData(Ref<RenderModelData> data, const std::string& name);
+        void AddInstanceBuffer(Ref<VertexBuffer> instance_buffer);
+
+        const std::string& GetName() const;
+
+    private:
+        friend class Renderer;
+        
+        std::vector<RenderMesh> m_Meshes;
+        std::vector<Ref<VertexBuffer>> m_InstanceBuffers;
+
+        std::string m_Name;
     };
     struct ModelOwner
     {

@@ -29,27 +29,51 @@ namespace DE
         const auto& layout = vertex_buffer->GetLayout();
         for (const auto& element : layout)
         {
-            glEnableVertexAttribArray(m_CurrentAtributeId);
             switch (element.type)
             {
                 case BufferElementType::Float:
                 case BufferElementType::Float2:
                 case BufferElementType::Float3:
-                case BufferElementType::Float4:
+                case BufferElementType::Float4: {
+                    glEnableVertexAttribArray(m_CurrentAtributeId);
                     glVertexAttribPointer(m_CurrentAtributeId,
                                           element.ComponentCount(),
                                           GL_FLOAT,
                                           element.normalized ? GL_TRUE : GL_FALSE,
                                           layout.GetStride(),
                                           (void*)element.offset);
+                    glVertexAttribDivisor(m_CurrentAtributeId, layout.GetDivisor());
+                    ++m_CurrentAtributeId;
+                    break;
+                }
 
                 case BufferElementType::Int:
                 case BufferElementType::Int2:
                 case BufferElementType::Int3:
-                case BufferElementType::Int4:
+                case BufferElementType::Int4: {
+                    glEnableVertexAttribArray(m_CurrentAtributeId);
                     glVertexAttribIPointer(m_CurrentAtributeId, element.ComponentCount(), GL_INT, layout.GetStride(), (void*)element.offset);
+                    glVertexAttribDivisor(m_CurrentAtributeId, layout.GetDivisor());
+                    ++m_CurrentAtributeId;
+                    break;
+                }
+                case BufferElementType::Mat4: {
+                    uint32_t count = element.ComponentCount();
+                    for (uint8_t i = 0; i < count; ++i)
+                    {
+                        glEnableVertexAttribArray(m_CurrentAtributeId);
+                        glVertexAttribPointer(m_CurrentAtributeId,
+                                              count,
+                                              GL_FLOAT,
+                                              element.normalized ? GL_TRUE : GL_FALSE,
+                                              layout.GetStride(),
+                                              (void*)(element.offset + sizeof(float) * count * i));
+                        glVertexAttribDivisor(m_CurrentAtributeId, layout.GetDivisor());
+                        ++m_CurrentAtributeId;
+                    }
+                    break;
+                }
             }
-            m_CurrentAtributeId++;
         }
         m_VertexBuffers.push_back(vertex_buffer);
     }

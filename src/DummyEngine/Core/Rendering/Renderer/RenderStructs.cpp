@@ -40,16 +40,12 @@ namespace DE
     }
     void RenderMesh::FillData(RenderMeshData data)
     {
+        BufferLayout layout({BufferElementType::Float3, BufferElementType::Float3, BufferElementType::Float2});
+
         vertex_array = VertexArray::Create();
 
-        Ref<VertexBuffer> vertex_buffer =
-            VertexBuffer::Create(&data.vertices[0], data.vertices.size() * sizeof(Vertex3D));
+        Ref<VertexBuffer> vertex_buffer = VertexBuffer::Create(layout, data.vertices.size(), &data.vertices[0]);
         Ref<IndexBuffer> index_buffer = IndexBuffer::Create(&data.indices[0], data.indices.size());
-
-        BufferLayout layout({BufferElement(BufferElementType::Float3),
-                             BufferElement(BufferElementType::Float3),
-                             BufferElement(BufferElementType::Float2)});
-        vertex_buffer->SetLayout(layout);
 
         material.ambient_color = data.material.ambient_color;
         material.specular_color = data.material.specular_color;
@@ -63,14 +59,27 @@ namespace DE
         vertex_array->AddVertexBuffer(vertex_buffer);
         vertex_array->SetIndexBuffer(index_buffer);
     }
+
     void RenderModel::FillData(Ref<RenderModelData> data, const std::string& name)
     {
-        this->name = name; 
-        meshes.resize(data->meshes.size());
+        m_Name = name;
+        m_Meshes.resize(data->meshes.size());
         for (size_t i = 0; i < data->meshes.size(); ++i)
         {
-            meshes[i].FillData(data->meshes[i]);
+            m_Meshes[i].FillData(data->meshes[i]);
+        }
+    }
+    void RenderModel::AddInstanceBuffer(Ref<VertexBuffer> instance_buffer)
+    {
+        m_InstanceBuffers.push_back(instance_buffer);
+        for (auto& mesh : m_Meshes)
+        {
+            mesh.vertex_array->AddVertexBuffer(instance_buffer);
         }
     }
 
+    const std::string& RenderModel::GetName() const
+    {
+        return m_Name;
+    }
 }  // namespace DE

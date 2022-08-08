@@ -73,11 +73,11 @@ namespace DE
     {
         shader->Bind();
         shader->SetMat4("u_Transform", trasform);
-        for (const auto& mesh : model.meshes)
+        for (const auto& mesh : model.m_Meshes)
         {
             shader->SetMaterial("u_Material", mesh.material);
             mesh.vertex_array->Bind();
-            m_RenderAPI->DrawIndexed(mesh.vertex_array);
+            m_RenderAPI->DrawInstanced(mesh.vertex_array, 1);
             ++m_FrameStatistics->m_DrawCallsAmount;
         }
     }
@@ -113,7 +113,7 @@ namespace DE
         return *m_FrameStatistics;
     }
 
-    //TODO: Think to move somewhere else...
+    // TODO: Think to move somewhere else...
     void Renderer::GenDefaultTexture()
     {
         Ref<TextureData> texture_data = CreateRef<TextureData>();

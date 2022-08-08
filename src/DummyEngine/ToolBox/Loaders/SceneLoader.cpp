@@ -80,7 +80,7 @@ namespace DE
     {
         if (entity.HasComponent<RenderModel>())
         {
-            n_Entity["RenderModel"] = entity.GetComponent<RenderModel>().name;
+            n_Entity["RenderModel"] = entity.GetComponent<RenderModel>().GetName();
         }
     }
     template <> void SceneLoader::SaveComponent<Ref<Shader>>(YAML::Node n_Entity, Entity entity)
