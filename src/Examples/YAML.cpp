@@ -2,4 +2,6 @@
 
 using namespace DE;
 
-int main() {}
+int main()
+{
+}

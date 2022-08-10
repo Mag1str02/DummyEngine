@@ -36,6 +36,7 @@
 #include "Addition/Config.h"
 #include "Addition/Assert.h"
 #include "Addition/UUID.h"
+#include "Addition/Random.h"
 
 namespace DE
 {

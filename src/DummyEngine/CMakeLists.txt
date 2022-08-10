@@ -11,6 +11,7 @@ set(ENGINE_SOURCES
     Addition/Assert.cpp
     Addition/Config.cpp
     Addition/UUID.cpp
+    Addition/Random.cpp
     Addition/STBImplementation.cpp
 
     Core/ECS/ComponentArray.hpp
