@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "Addition/Config.h"
 #include "Addition/Assert.h"
 
@@ -48,6 +50,7 @@ namespace DE
     void Config::Init()
     {
         m_Configs.c_ExecutablePath = fs::current_path();
+        std::cout << "Current path: " << m_Configs.c_ExecutablePath.string() << std::endl;
 
         m_Configs.c_AssetPath = m_Configs.c_ExecutablePath / "Assets";
         m_Configs.c_LogPath = m_Configs.c_ExecutablePath / "Logs";

@@ -184,15 +184,15 @@ namespace DE
 
         GLuint shader_part = glCreateShader(ShaderPartTypeToGLShaderPartType(part.type));
         glShaderSource(shader_part, 1, &source_c_str, NULL);
-        glCompileShader(m_ShaderId);
+        glCompileShader(shader_part);
         m_Parts.push_back(shader_part);
 
         int success = 1;
         char infoLog[Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN)];
-        glGetShaderiv(m_ShaderId, GL_COMPILE_STATUS, &success);
+        glGetShaderiv(shader_part, GL_COMPILE_STATUS, &success);
         if (!success)
         {
-            glGetShaderInfoLog(m_ShaderId, Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN), NULL, infoLog);
+            glGetShaderInfoLog(shader_part, Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN), NULL, infoLog);
             Logger::Error("loading", "GLShader", "Failed to compile shader: (" + part.path.string() + ")\n" + std::string(infoLog));
             return;
         }
