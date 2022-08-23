@@ -19,7 +19,7 @@ namespace DE
         GLShader& operator=(Shader&& other) = delete;
         GLShader& operator=(const Shader& other) = delete;
 
-        GLShader(const std::string& name, const std::vector<ShaderPart>& shader_parts);
+        GLShader(const std::vector<ShaderPart>& shader_parts);
         virtual ~GLShader();
 
         virtual void Bind() const override;
@@ -39,16 +39,10 @@ namespace DE
         virtual void SetMat4(const std::string& uniform_name, Mat4 value) const override;
         virtual void SetMaterial(const std::string& uniform_name, const Material& mat) const override;
 
-        virtual const std::string& GetName() const;
-        virtual const std::vector<ShaderPart>& GetParts() const;
-
     private:
         static std::string ReadPartFromFile(const Path& path_to_file);
 
         void AddPart(ShaderPart part);
-
-        std::string m_Name;
-        std::vector<ShaderPart> m_ShaderParts;
 
         std::vector<GLuint> m_Parts;
         GLuint m_ShaderId;

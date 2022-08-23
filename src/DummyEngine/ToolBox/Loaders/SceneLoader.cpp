@@ -3,19 +3,12 @@
 #include "Core/ECS/Entity.hpp"
 #include "ToolBox/Loaders/SceneLoader.h"
 #include "ToolBox/Loaders/ModelLoader.h"
+#include "Core/ResourceManaging/AssetManager.h"
+#include "Core/ResourceManaging/ResourceManager.h"
 
 namespace DE
 {
-    SceneLoader::LoaderState SceneLoader::m_State;
-
-    //*~~~Additional~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    void SceneLoader::LoaderState::Clear()
-    {
-        m_SShaders.clear();
-        m_SModels.clear();
-        m_LShaders.clear();
-    }
+    Ref<Scene> SceneLoader::m_Scene;
 
     //*~~~Saving~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -53,41 +46,41 @@ namespace DE
     template <typename ComponentType> void SceneLoader::SaveComponent(YAML::Node n_Entity, Entity entity)
     {
         // TODO: Different names for different unknown components...
-        if (entity.HasComponent<ComponentType>()) n_Entity["UnknownComponent"] = DemangleName<ComponentType>();
+        DE_ASSERT(false, "Trying to save unknown component.");
     }
-    template <> void SceneLoader::SaveComponent<Tag>(YAML::Node n_Entity, Entity entity)
+    template <> void SceneLoader::SaveComponent<TagComponent>(YAML::Node n_Entity, Entity entity)
     {
-        if (entity.HasComponent<Tag>()) n_Entity["Tag"] = entity.GetComponent<Tag>().tag;
+        if (entity.HasComponent<TagComponent>()) n_Entity["Tag"] = entity.GetComponent<TagComponent>().tag;
     }
-    template <> void SceneLoader::SaveComponent<Id>(YAML::Node n_Entity, Entity entity)
+    template <> void SceneLoader::SaveComponent<IdComponent>(YAML::Node n_Entity, Entity entity)
     {
         // TODO: Save UUID in hex format.
-        if (entity.HasComponent<Id>()) n_Entity["UUID"] = (uint64_t)entity.GetComponent<Id>();
+        if (entity.HasComponent<IdComponent>()) n_Entity["UUID"] = (uint64_t)entity.GetComponent<IdComponent>();
     }
-    template <> void SceneLoader::SaveComponent<Transformation>(YAML::Node n_Entity, Entity entity)
+    template <> void SceneLoader::SaveComponent<TransformComponent>(YAML::Node n_Entity, Entity entity)
     {
-        if (entity.HasComponent<Transformation>())
+        if (entity.HasComponent<TransformComponent>())
         {
-            n_Entity["Transformation"]["Translation"] = NodeVec3(entity.GetComponent<Transformation>().translation);
-            n_Entity["Transformation"]["TranslationOffset"] = NodeVec3(entity.GetComponent<Transformation>().translation_offset);
-            n_Entity["Transformation"]["Rotation"] = NodeVec3(entity.GetComponent<Transformation>().rotation);
-            n_Entity["Transformation"]["RotationOffset"] = NodeVec3(entity.GetComponent<Transformation>().rotation_offet);
-            n_Entity["Transformation"]["Scale"] = NodeVec3(entity.GetComponent<Transformation>().scale);
-            n_Entity["Transformation"]["ScaleOffset"] = NodeVec3(entity.GetComponent<Transformation>().scale_offset);
+            n_Entity["Transformation"]["Translation"] = NodeVec3(entity.GetComponent<TransformComponent>().translation);
+            n_Entity["Transformation"]["TranslationOffset"] = NodeVec3(entity.GetComponent<TransformComponent>().translation_offset);
+            n_Entity["Transformation"]["Rotation"] = NodeVec3(entity.GetComponent<TransformComponent>().rotation);
+            n_Entity["Transformation"]["RotationOffset"] = NodeVec3(entity.GetComponent<TransformComponent>().rotation_offet);
+            n_Entity["Transformation"]["Scale"] = NodeVec3(entity.GetComponent<TransformComponent>().scale);
+            n_Entity["Transformation"]["ScaleOffset"] = NodeVec3(entity.GetComponent<TransformComponent>().scale_offset);
         }
     }
-    template <> void SceneLoader::SaveComponent<RenderModel>(YAML::Node n_Entity, Entity entity)
+    template <> void SceneLoader::SaveComponent<RenderMeshComponent>(YAML::Node n_Entity, Entity entity)
     {
-        if (entity.HasComponent<RenderModel>())
+        if (entity.HasComponent<RenderMeshComponent>())
         {
-            n_Entity["RenderModel"] = entity.GetComponent<RenderModel>().GetName();
+            n_Entity["RenderModel"] = (uint64_t)entity.GetComponent<RenderMeshComponent>().id;
         }
     }
-    template <> void SceneLoader::SaveComponent<Ref<Shader>>(YAML::Node n_Entity, Entity entity)
+    template <> void SceneLoader::SaveComponent<ShaderComponent>(YAML::Node n_Entity, Entity entity)
     {
-        if (entity.HasComponent<Ref<Shader>>())
+        if (entity.HasComponent<ShaderComponent>())
         {
-            n_Entity["Shader"] = entity.GetComponent<Ref<Shader>>()->GetName();
+            n_Entity["Shader"] = (uint64_t)entity.GetComponent<ShaderComponent>().id;
         }
     }
     template <> void SceneLoader::SaveComponent<FPSCamera>(YAML::Node n_Entity, Entity entity)
@@ -120,11 +113,11 @@ namespace DE
 
     void SceneLoader::SaveEntity(YAML::Node n_Entity, Entity entity)
     {
-        SaveComponent<Tag>(n_Entity, entity);
-        SaveComponent<Id>(n_Entity, entity);
-        SaveComponent<RenderModel>(n_Entity, entity);
-        SaveComponent<Transformation>(n_Entity, entity);
-        SaveComponent<Ref<Shader>>(n_Entity, entity);
+        SaveComponent<TagComponent>(n_Entity, entity);
+        SaveComponent<IdComponent>(n_Entity, entity);
+        SaveComponent<TransformComponent>(n_Entity, entity);
+        SaveComponent<RenderMeshComponent>(n_Entity, entity);
+        SaveComponent<ShaderComponent>(n_Entity, entity);
         SaveComponent<FPSCamera>(n_Entity, entity);
         SaveComponent<LightSource>(n_Entity, entity);
     }
@@ -132,12 +125,12 @@ namespace DE
     {
         YAML::Node n_Entities;
 
-        std::vector<std::pair<Tag, Entity>> entities;
+        std::vector<std::pair<TagComponent, Entity>> entities;
 
         for (auto [uuid, entity_id] : scene->m_EntityByUUID)
         {
             auto entity = scene->GetByUUID(UUID(uuid));
-            entities.push_back({entity.GetComponent<Tag>(), entity});
+            entities.push_back({entity.GetComponent<TagComponent>(), entity});
         }
 
         std::sort(entities.begin(), entities.end(), [](const auto& a, const auto& b) { return a.first.tag < b.first.tag; });
@@ -145,46 +138,44 @@ namespace DE
         int cnt = 0;
         for (auto [id, entity] : entities)
         {
-            if (entity.HasComponent<UniqueShader>())
-            {
-                m_State.m_SShaders.push_back(entity);
-            }
-            else if (entity.HasComponent<ModelOwner>())
-            {
-                m_State.m_SModels.push_back(entity);
-            }
-            else
-            {
-                SaveEntity(n_Entities["Entity_" + std::to_string(cnt++)], entity);
-            }
+            SaveEntity(n_Entities["Entity_" + std::to_string(cnt++)], entity);
         }
         return n_Entities;
     }
     YAML::Node SceneLoader::SaveModels()
     {
         YAML::Node n_Models;
+        std::vector<RenderMeshAsset> meshes = AssetManager::GetAllAssets<RenderMeshAsset>();
+        std::sort(meshes.begin(), meshes.end(), [](const RenderMeshAsset& a, const RenderMeshAsset& b) { return a.name < b.name; });
 
-        for (auto model : m_State.m_SModels)
+        for (const auto& model : meshes)
         {
             YAML::Node n_Model;
-            n_Models[(std::string)model.GetComponent<Tag>()] = n_Model;
 
-            n_Model["Path"] = RelativeToExecutable(model.GetComponent<ModelOwner>().data->path.string()).string();
-            n_Model["Compress"] = model.GetComponent<ModelOwner>().properties.compress;
-            n_Model["FlipUV"] = model.GetComponent<ModelOwner>().properties.flip_uvs;
+            n_Models[model.name] = n_Model;
+            n_Model["Path"] = RelativeToExecutable(model.loading_props.path).string();
+            n_Model["Compress"] = model.loading_props.compress;
+            n_Model["FlipUV"] = model.loading_props.flip_uvs;
+            n_Model["UUID"] = (uint64_t)model.id;
         }
+
         return n_Models;
     }
     YAML::Node SceneLoader::SaveShaders()
     {
         YAML::Node n_Shaders;
+        std::vector<ShaderAsset> shaders = AssetManager::GetAllAssets<ShaderAsset>();
+        std::sort(shaders.begin(), shaders.end(), [](const ShaderAsset& a, const ShaderAsset& b) { return a.name < b.name; });
 
-        for (auto entity : m_State.m_SShaders)
+        for (const auto& shader : shaders)
         {
-            auto shader = entity.GetComponent<UniqueShader>().shader;
-            for (const auto& part : shader->GetParts())
+            YAML::Node n_Shader;
+
+            n_Shaders[shader.name] = n_Shader;
+            n_Shader["UUID"] = (uint64_t)shader.id;
+            for (const auto& part : shader.parts)
             {
-                n_Shaders[shader->GetName()][ShaderPartTypeToString(part.type)] = RelativeToExecutable(part.path).string();
+                n_Shader[ShaderPartTypeToString(part.type)] = RelativeToExecutable(part.path).string();
             }
         }
         return n_Shaders;
@@ -195,7 +186,6 @@ namespace DE
         YAML::Node n_Root, n_Scene, n_Entities, n_Assets;
         std::ofstream output_file;
 
-        m_State.Clear();
         output_file.open(path);
         // TODO: Switch to throw.
         DE_ASSERT(output_file.is_open(), "Failed to open file to save scene.");
@@ -248,17 +238,17 @@ namespace DE
     {
         Logger::Warning("Loading", "SceneLoader", "Load function of " + DemangleName<ComponentType>() + " undefined.");
     }
-    template <> void SceneLoader::LoadComponent<Tag>(YAML::Node n_Component, Entity& entity)
+    template <> void SceneLoader::LoadComponent<TagComponent>(YAML::Node n_Component, Entity& entity)
     {
-        entity.AddComponent<Tag>(n_Component.as<std::string>());
+        entity.AddComponent<TagComponent>(n_Component.as<std::string>());
     }
-    template <> void SceneLoader::LoadComponent<Id>(YAML::Node n_Component, Entity& entity)
+    template <> void SceneLoader::LoadComponent<IdComponent>(YAML::Node n_Component, Entity& entity)
     {
-        entity.AddComponent<Id>(Id(UUID(n_Component.as<uint64_t>())));
+        entity.AddComponent<IdComponent>(IdComponent(UUID(n_Component.as<uint64_t>())));
     }
-    template <> void SceneLoader::LoadComponent<Transformation>(YAML::Node n_Component, Entity& entity)
+    template <> void SceneLoader::LoadComponent<TransformComponent>(YAML::Node n_Component, Entity& entity)
     {
-        Transformation transformation;
+        TransformComponent transformation;
 
         transformation.translation = GetVec3(n_Component["Translation"]);
         transformation.translation_offset = GetVec3(n_Component["TranslationOffset"]);
@@ -267,16 +257,27 @@ namespace DE
         transformation.scale = GetVec3(n_Component["Scale"]);
         transformation.scale_offset = GetVec3(n_Component["ScaleOffset"]);
 
-        entity.AddComponent<Transformation>(transformation);
+        entity.AddComponent(transformation);
     }
-    template <> void SceneLoader::LoadComponent<RenderModel>(YAML::Node n_Component, Entity& entity)
+    template <> void SceneLoader::LoadComponent<RenderMeshComponent>(YAML::Node n_Component, Entity& entity)
     {
-        entity.AddComponent<RenderModel>(m_State.m_Scene->GetByName(n_Component.as<std::string>()).GetComponent<ModelOwner>().render_model);
-        // std::cout << "Adding model component: " << n_Component.as<std::string>() << std::endl;
+        UUID id = n_Component.as<uint64_t>();
+        if (!ResourceManager::HasResource<RenderMesh>(id))
+        {
+            ResourceManager::AddResource(AssetManager::GetAsset<RenderMeshAsset>(id));
+        }
+        entity.AddComponent<RenderMeshComponent>({id, ResourceManager::GetResource<RenderMesh>(id)});
+        m_Scene->RequestRenderMesh(id);
     }
-    template <> void SceneLoader::LoadComponent<Ref<Shader>>(YAML::Node n_Component, Entity& entity)
+    template <> void SceneLoader::LoadComponent<ShaderComponent>(YAML::Node n_Component, Entity& entity)
     {
-        entity.AddComponent<Ref<Shader>>(m_State.m_LShaders[n_Component.as<std::string>()]);
+        UUID id = n_Component.as<uint64_t>();
+        if (!ResourceManager::HasResource<Shader>(id))
+        {
+            ResourceManager::AddResource(AssetManager::GetAsset<ShaderAsset>(id));
+        }
+        entity.AddComponent<ShaderComponent>({id, ResourceManager::GetResource<Shader>(id)});
+        m_Scene->RequestShader(id);
     }
     template <> void SceneLoader::LoadComponent<FPSCamera>(YAML::Node n_Component, Entity& entity)
     {
@@ -312,30 +313,36 @@ namespace DE
     {
         for (const auto& n_Shader : n_Shaders)
         {
-            std::vector<ShaderPart> parts;
+            ShaderAsset asset;
+
+            asset.id = n_Shader.second["UUID"].as<uint64_t>();
+            asset.name = n_Shader.first.as<std::string>();
+
             for (const auto& n_Part : n_Shader.second)
             {
-                ShaderPart shader_part;
-                shader_part.type = StringToShaderPartType(n_Part.first.as<std::string>());
-                shader_part.path = fs::canonical(Config::GetPath(DE_CFG_EXECUTABLE_PATH) / n_Part.second.as<std::string>());
-                parts.push_back(shader_part);
+                if (n_Part.first.as<std::string>() != "UUID")
+                {
+                    ShaderPart shader_part;
+                    shader_part.type = StringToShaderPartType(n_Part.first.as<std::string>());
+                    shader_part.path = fs::canonical(Config::GetPath(DE_CFG_EXECUTABLE_PATH) / n_Part.second.as<std::string>());
+                    asset.parts.push_back(shader_part);
+                }
             }
-            Ref<Shader> shader = Shader::Create(n_Shader.first.as<std::string>(), parts);
-
-            m_State.m_Scene->CreateEntity(n_Shader.first.as<std::string>()).AddComponent<UniqueShader>().shader = shader;
-            m_State.m_LShaders[n_Shader.first.as<std::string>()] = shader;
+            AssetManager::AddAsset(asset);
         }
     }
     void SceneLoader::LoadModels(YAML::Node n_Models)
     {
         for (const auto& node : n_Models)
         {
-            Entity entity = m_State.m_Scene->CreateEntity(node.first.as<std::string>());
-            ModelOwner& model = entity.AddComponent<ModelOwner>();
-            model.properties.compress = node.second["Compress"].as<bool>();
-            model.properties.flip_uvs = node.second["FlipUV"].as<bool>();
-            model.data = ModelLoader::Load(Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>(), model.properties);
-            model.render_model.FillData(model.data, node.first.as<std::string>());
+            RenderMeshAsset asset;
+            asset.name = node.first.as<std::string>();
+            asset.id = node.second["UUID"].as<uint64_t>();
+            asset.loading_props.compress = node.second["Compress"].as<bool>();
+            asset.loading_props.flip_uvs = node.second["FlipUV"].as<bool>();
+            asset.loading_props.path = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
+            asset.mesh_data = ModelLoader::Load(asset.loading_props);
+            AssetManager::AddAsset(asset);
         }
     }
     void SceneLoader::LoadAssets(YAML::Node n_Assets)
@@ -345,17 +352,17 @@ namespace DE
     }
     void SceneLoader::LoadEntity(YAML::Node n_Entity)
     {
-        Entity entity = m_State.m_Scene->CreateEmptyEntity();
+        Entity entity = m_Scene->CreateEmptyEntity();
 
-        if (n_Entity["Tag"]) LoadComponent<Tag>(n_Entity["Tag"], entity);
-        if (n_Entity["UUID"]) LoadComponent<Id>(n_Entity["UUID"], entity);
-        if (n_Entity["Transformation"]) LoadComponent<Transformation>(n_Entity["Transformation"], entity);
-        if (n_Entity["RenderModel"]) LoadComponent<RenderModel>(n_Entity["RenderModel"], entity);
-        if (n_Entity["Shader"]) LoadComponent<Ref<Shader>>(n_Entity["Shader"], entity);
+        if (n_Entity["Tag"]) LoadComponent<TagComponent>(n_Entity["Tag"], entity);
+        if (n_Entity["UUID"]) LoadComponent<IdComponent>(n_Entity["UUID"], entity);
+        if (n_Entity["Transformation"]) LoadComponent<TransformComponent>(n_Entity["Transformation"], entity);
+        if (n_Entity["RenderModel"]) LoadComponent<RenderMeshComponent>(n_Entity["RenderModel"], entity);
+        if (n_Entity["Shader"]) LoadComponent<ShaderComponent>(n_Entity["Shader"], entity);
         if (n_Entity["FPSCamera"]) LoadComponent<FPSCamera>(n_Entity["FPSCamera"], entity);
         if (n_Entity["LightSource"]) LoadComponent<LightSource>(n_Entity["LightSource"], entity);
 
-        m_State.m_Scene->UpdateEmptyEntity(entity);
+        m_Scene->UpdateEmptyEntity(entity);
     }
     void SceneLoader::LoadEntities(YAML::Node n_Entities)
     {
@@ -369,8 +376,7 @@ namespace DE
     {
         YAML::Node n_Root, n_Scene, n_Assets, n_Entities;
 
-        m_State.Clear();
-        m_State.m_Scene = scene;
+        m_Scene = scene;
 
         n_Root = YAML::LoadFile(path.string());
         n_Scene = n_Root["Scene"];
@@ -380,6 +386,6 @@ namespace DE
         LoadAssets(n_Assets);
         LoadEntities(n_Entities);
 
-        m_State.m_Scene = nullptr;
+        m_Scene = nullptr;
     }
 }  // namespace DE

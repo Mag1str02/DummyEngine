@@ -1,19 +1,10 @@
 #pragma once
 
 #include "Addition/Base.h"
+#include "Core/ResourceManaging/RawData.h"
 
 namespace DE
 {
-    
-    struct TextureData
-    {
-        //TODO: Actually it is a memory leak... Fix type of data storage...
-        Ref<unsigned char*> data;
-        uint32_t width;
-        uint32_t height;
-        TextureFormat format;
-    };
-
     class Texture
     {
     public:

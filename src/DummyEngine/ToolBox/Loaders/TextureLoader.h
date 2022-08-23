@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Addition/Base.h"
-#include "Core/Rendering/Renderer/RenderStructs.h"
+#include "Core/ResourceManaging/Assets.h"
+#include "Core/ResourceManaging/RawData.h"
 
 namespace DE
 {
@@ -10,7 +11,7 @@ namespace DE
     class TextureLoader
     {
     public:
-        static Ref<TextureData> Load(const Path& path);
+        static Ref<TextureData> Load(const TextureLoadingProps& props);
         static Ref<TextureData> Get(const Path& path);
 
     private:

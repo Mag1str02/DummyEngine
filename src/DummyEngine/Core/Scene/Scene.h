@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/ECS/ECSStorage.hpp"
+#include "Core/Rendering/Renderer/Shader.h"
 #include "Core/Objects/Cameras/FPSCamera.h"
 
 namespace DE
@@ -17,13 +18,12 @@ namespace DE
         Entity CloneEntity(const std::string& entity_to_clone, const std::string& new_name);
         Entity GetByUUID(UUID uuid);
         Entity GetByName(const std::string& name);
+        std::string GetName() const;
 
         void OnUpdate(double dt);
         void Render();
 
         Entity operator[](const std::string& name);
-
-        std::string GetName() const;
 
         template <typename System> void RegisterSystem()
         {
@@ -35,14 +35,25 @@ namespace DE
 
         Entity CreateEmptyEntity();
         void UpdateEmptyEntity(Entity entity);
-
         void OnEntityDestroy(Entity entity);
+
+        void LightPass();
         FPSCamera& GetCamera();
 
+        void RequestShader(UUID id);
+        void RequestRenderMesh(UUID id);
+
+        struct RenderData
+        {
+            std::unordered_map<uint64_t, Ref<Shader>> m_Shaders;
+            std::unordered_map<uint64_t, Ref<RenderMesh>> m_RenderMeshes;
+        };
+
+        std::string m_Name;
         ECSStorage m_Storage;
+        RenderData m_RenderData;
         std::unordered_map<uint64_t, EntityId> m_EntityByUUID;
         std::unordered_map<std::string, EntityId> m_EntityByName;
-        std::string m_Name;
 
         friend class Entity;
     };

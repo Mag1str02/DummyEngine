@@ -21,6 +21,7 @@ namespace DE
         virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const = 0;
         virtual const Ref<IndexBuffer>& GetIndexBuffer() const = 0;
 
+        static Ref<VertexArray> Copy(const VertexArray& other);
         static Ref<VertexArray> Create();
     };
 }  // namespace DE

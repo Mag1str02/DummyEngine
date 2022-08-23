@@ -16,10 +16,12 @@ namespace DE
         static void Save(Ref<Scene> scene, Path path);
         static void Load(Ref<Scene> scene, Path path);
 
+    private:
+        // TODO: Think how user can create custom load and save functions for own components.
+
         template <typename ComponentType> static void SaveComponent(YAML::Node n_Entity, Entity entity);
         template <typename ComponentType> static void LoadComponent(YAML::Node n_Component, Entity& entity);
 
-    private:
         static void SaveEntity(YAML::Node n_Entity, Entity entity);
         static YAML::Node SaveEntities(Ref<Scene> scene);
         static YAML::Node SaveModels();
@@ -32,19 +34,7 @@ namespace DE
         static void LoadEntity(YAML::Node n_Entity);
         static void LoadEntities(YAML::Node n_Entities);
 
-        struct LoaderState
-        {
-            //*~~~Saving~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            std::vector<Entity> m_SShaders;
-            std::vector<Entity> m_SModels;
-
-            //*~~~Loading~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            std::unordered_map<std::string, Ref<Shader>> m_LShaders;
-
-            Ref<Scene> m_Scene;
-            void Clear();
-        };
-        static LoaderState m_State;
+        static Ref<Scene> m_Scene;
     };
 
 }  // namespace DE

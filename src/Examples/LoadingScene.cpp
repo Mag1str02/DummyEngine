@@ -55,7 +55,7 @@ public:
     void Update(double dt) override
     {
         auto& manipulators = GetComponentArray<LinearManipulator>();
-        auto& positions = GetComponentArray<Transformation>();
+        auto& positions = GetComponentArray<TransformComponent>();
         auto& scales = GetComponentArray<ScaleManipulator>();
         auto& light_sources = GetComponentArray<LightSource>();
 
@@ -90,12 +90,10 @@ public:
         Logger::Stage("loading", "Main", "INITIALIZETION");
         Input::SetWindow(m_Window->GetWindow());
         Renderer::SetClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-
+        
         scene = CreateRef<Scene>("NewScene");
         SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Gallery.yml");
-
         scene->RegisterSystem<MovingSystem>();
-        scene->RegisterSystem<LightManager>();
     }
     virtual void Update(double dt) override
     {

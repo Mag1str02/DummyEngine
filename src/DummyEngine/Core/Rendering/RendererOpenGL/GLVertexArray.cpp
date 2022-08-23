@@ -94,5 +94,4 @@ namespace DE
     {
         return m_IndexBuffer;
     }
-
 }  // namespace DE

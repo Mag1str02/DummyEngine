@@ -3,7 +3,7 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 
-#include "Core/Rendering/Renderer/RenderStructs.h"
+#include "Core/ResourceManaging/Assets.h"
 
 namespace DE
 {
@@ -12,8 +12,7 @@ namespace DE
     class ModelLoader
     {
     public:
-        static Ref<RenderModelData> Load(const Path& path, LoadingProperties properties);
-        static Ref<RenderModelData> Get(const Path& path);
+        static Ref<RenderMeshData> Load(const RenderMeshLoadingProps& props);
 
     private:
         enum ColorType
@@ -32,8 +31,7 @@ namespace DE
             size_t m_MeshesAmount;
             Path m_CurrentDirectory;
 
-            Ref<RenderModelData> m_CurrentData;
-            std::unordered_map<Path, Ref<RenderModelData>> m_ModelDataByPath;
+            Ref<RenderMeshData> m_CurrentData;
             Assimp::Importer m_Importer;
         };
 

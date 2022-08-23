@@ -5,13 +5,13 @@
 
 namespace DE
 {
-    struct Id
+    struct IdComponent
     {
         UUID id;
 
-        Id() = default;
-        Id(UUID uuid);
-        Id(const Id&) = default;
+        IdComponent() = default;
+        IdComponent(UUID uuid);
+        IdComponent(const IdComponent&) = default;
 
         operator uint64_t() const
         {
@@ -19,35 +19,36 @@ namespace DE
         }
     };
 
-    struct Tag
+    struct TagComponent
     {
         std::string tag;
 
-        Tag() = default;
-        Tag(const std::string& tag);
+        TagComponent() = default;
+        TagComponent(const std::string& tag);
 
         operator std::string() const
         {
             return tag;
         }
     };
-    struct Transformation
+    struct TransformComponent
     {
         Vec3 scale = Vec3(1.0), scale_offset = Vec3(1.0);
         Vec3 translation = Vec3(0.0), translation_offset = Vec3(0.0);
         Vec3 rotation = Vec3(0.0), rotation_offet = Vec3(0.0);
 
-        Transformation() = default;
+        TransformComponent() = default;
 
         Mat4 GetTransform() const;
     };
-
-    struct UniqueShader
+    struct ShaderComponent
     {
+        UUID id;
         Ref<Shader> shader;
-        operator Ref<Shader>() const
-        {
-            return shader;
-        }
+    };
+    struct RenderMeshComponent
+    {
+        UUID id;
+        Ref<RenderMesh> mesh;
     };
 }  // namespace DE

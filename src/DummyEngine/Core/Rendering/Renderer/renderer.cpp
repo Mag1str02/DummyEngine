@@ -60,20 +60,11 @@ namespace DE
         glDrawElements(GL_TRIANGLES, vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, 0);
         ++m_FrameStatistics->m_DrawCallsAmount;
     }
-    void Renderer::Submit(Ref<Shader> shader, const RenderMesh& mesh, const Mat4& trasform)
-    {
-        shader->Bind();
-        shader->SetMaterial("u_Material", mesh.material);
-        shader->SetMat4("u_Transform", trasform);
-        mesh.vertex_array->Bind();
-        m_RenderAPI->DrawIndexed(mesh.vertex_array);
-        ++m_FrameStatistics->m_DrawCallsAmount;
-    }
-    void Renderer::Submit(Ref<Shader> shader, const RenderModel& model, const Mat4& trasform)
+    void Renderer::Submit(Ref<Shader> shader, Ref<RenderMesh> model, const Mat4& trasform)
     {
         shader->Bind();
         shader->SetMat4("u_Transform", trasform);
-        for (const auto& mesh : model.m_Meshes)
+        for (const auto& mesh : model->meshes)
         {
             shader->SetMaterial("u_Material", mesh.material);
             mesh.vertex_array->Bind();
@@ -116,19 +107,12 @@ namespace DE
     // TODO: Think to move somewhere else...
     void Renderer::GenDefaultTexture()
     {
-        Ref<TextureData> texture_data = CreateRef<TextureData>();
+        uint32_t width = 1;
+        uint32_t height = 1;
+        TextureFormat format = TextureFormat::RGBA;
+        std::vector<uint8_t> data(4, 255);
 
-        texture_data->width = 1;
-        texture_data->height = 1;
-        texture_data->format = TextureFormat::RGBA;
-        texture_data->data = CreateRef<unsigned char*>((unsigned char*)malloc(sizeof(unsigned char) * 4));
-
-        (*texture_data->data)[0] = 255;
-        (*texture_data->data)[1] = 255;
-        (*texture_data->data)[2] = 255;
-        (*texture_data->data)[3] = 255;
-
-        m_DefaultTexture = Texture::Create(*texture_data);
+        m_DefaultTexture = Texture::Create(TextureData(&data[0], width, height, format));
     }
 
 }  // namespace DE

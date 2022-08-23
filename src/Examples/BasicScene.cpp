@@ -61,7 +61,7 @@ public:
         scene["flashlight"].GetComponent<LightSource>().direction = scene["player"].GetComponent<FPSCamera>().GetDir();
 
         auto& manipulators = GetComponentArray<LinearManipulator>();
-        auto& positions = GetComponentArray<Transformation>();
+        auto& positions = GetComponentArray<TransformComponent>();
         auto& scales = GetComponentArray<ScaleManipulator>();
         auto& light_sources = GetComponentArray<LightSource>();
 
@@ -154,17 +154,17 @@ private:
         {
             scene["player"].AddComponent<FPSCamera>();
 
-            scene["backpack"].AddComponent<Transformation>();
+            scene["backpack"].AddComponent<TransformComponent>();
             // scene["backpack"].AddComponent<LinearManipulator>();
 
-            scene["sponza"].AddComponent<Transformation>();
+            scene["sponza"].AddComponent<TransformComponent>();
             scene["sponza"].AddComponent<Ref<Shader>>();
 
-            scene["train"].AddComponent<Transformation>();
-            scene["lamp_white"].AddComponent<Transformation>();
-            scene["lamp_magenta"].AddComponent<Transformation>();
-            scene["lamp"].AddComponent<Transformation>();
-            scene["surface"].AddComponent<Transformation>();
+            scene["train"].AddComponent<TransformComponent>();
+            scene["lamp_white"].AddComponent<TransformComponent>();
+            scene["lamp_magenta"].AddComponent<TransformComponent>();
+            scene["lamp"].AddComponent<TransformComponent>();
+            scene["surface"].AddComponent<TransformComponent>();
 
             scene["train"].AddComponent<Ref<Shader>>();
             scene["backpack"].AddComponent<Ref<Shader>>();
@@ -259,14 +259,14 @@ private:
     {
         Logger::Stage("loading", "Main", "SETTING OBJECTS PROPERTIES");
 
-        scene["sponza"].GetComponent<Transformation>().translation = Vec3(0, 50, 0);
-        scene["sponza"].GetComponent<Transformation>().scale = Vec3(0.01);
+        scene["sponza"].GetComponent<TransformComponent>().translation = Vec3(0, 50, 0);
+        scene["sponza"].GetComponent<TransformComponent>().scale = Vec3(0.01);
 
-        scene["backpack"].GetComponent<Transformation>().translation = Vec3(30, 0, 0);
+        scene["backpack"].GetComponent<TransformComponent>().translation = Vec3(30, 0, 0);
         // scene["backpack"].GetComponent<LinearManipulator>().radius = 0;
 
-        scene["surface"].GetComponent<Transformation>().translation = Vec3(0, -10, 0);
-        scene["surface"].GetComponent<Transformation>().scale = Vec3(500, 0.1, 500);
+        scene["surface"].GetComponent<TransformComponent>().translation = Vec3(0, -10, 0);
+        scene["surface"].GetComponent<TransformComponent>().scale = Vec3(500, 0.1, 500);
 
         FPSCamera& camera = scene["player"].GetComponent<FPSCamera>();
 
@@ -284,9 +284,9 @@ private:
         flashlight.type = LightSourceType::Spot;
         lamp.type = LightSourceType::Spot;
 
-        scene["lamp_white"].GetComponent<Transformation>().translation = Vec3(20, 20, 20);
-        scene["lamp_magenta"].GetComponent<Transformation>().translation = Vec3(-10, 10, -30);
-        scene["lamp"].GetComponent<Transformation>().translation = Vec3(30, 10, 0);
+        scene["lamp_white"].GetComponent<TransformComponent>().translation = Vec3(20, 20, 20);
+        scene["lamp_magenta"].GetComponent<TransformComponent>().translation = Vec3(-10, 10, -30);
+        scene["lamp"].GetComponent<TransformComponent>().translation = Vec3(30, 10, 0);
 
         camera.SetPos(Vec3(0.0f, 0.0f, 10.0f));
 

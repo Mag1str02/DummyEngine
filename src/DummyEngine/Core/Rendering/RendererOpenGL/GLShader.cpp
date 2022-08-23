@@ -15,10 +15,8 @@ namespace DE
         }
     }
 
-    GLShader::GLShader(const std::string& name, const std::vector<ShaderPart>& shader_parts)
+    GLShader::GLShader(const std::vector<ShaderPart>& shader_parts)
     {
-        m_Name = name;
-        m_ShaderParts = shader_parts;
         m_ShaderId = glCreateProgram();
         for (const auto& part : shader_parts)
         {
@@ -141,15 +139,6 @@ namespace DE
         {
             SetInt(uniform_name + ".m_DiffuseMap", 0);
         }
-    }
-
-    const std::string& GLShader::GetName() const
-    {
-        return m_Name;
-    }
-    const std::vector<ShaderPart>& GLShader::GetParts() const
-    {
-        return m_ShaderParts;
     }
 
     std::string GLShader::ReadPartFromFile(const Path& path_to_file)

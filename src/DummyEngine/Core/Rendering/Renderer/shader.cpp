@@ -4,29 +4,11 @@
 
 namespace DE
 {
-    std::string ShaderPartTypeToString(ShaderPartType type)
-    {
-        switch (type)
-        {
-            case ShaderPartType::Vertex: return "Vertex";
-            case ShaderPartType::Fragment: return "Fragment";
-            case ShaderPartType::Geometry: return "Geometry";
-            default: return "None";
-        }
-    }
-    ShaderPartType StringToShaderPartType(const std::string& type)
-    {
-        if (type == "Vertex") return ShaderPartType::Vertex;
-        if (type == "Fragment") return ShaderPartType::Fragment;
-        if (type == "Geometry") return ShaderPartType::Geometry;
-        return ShaderPartType::None;
-    }
-
-    Ref<Shader> Shader::Create(const std::string& name,const  std::vector<ShaderPart>& initializers)
+    Ref<Shader> Shader::Create(const std::vector<ShaderPart>& initializers)
     {
         switch (Renderer::CurrentAPI())
         {
-            case API::OpenGL: return CreateRef<GLShader>(name, initializers);
+            case API::OpenGL: return CreateRef<GLShader>(initializers);
             case API::Vulkan: {
                 DE_ASSERT(false, "Attempt to create Shader on VulkanAPI which is currently unsupported.");
                 return nullptr;

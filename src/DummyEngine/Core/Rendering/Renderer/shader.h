@@ -5,14 +5,6 @@
 
 namespace DE
 {
-    struct ShaderPart
-    {
-        ShaderPartType type;
-        Path path;
-    };
-
-    std::string ShaderPartTypeToString(ShaderPartType type);
-    ShaderPartType StringToShaderPartType(const std::string& type);
 
     class Shader
     {
@@ -35,10 +27,7 @@ namespace DE
         virtual void SetInt4(const std::string& uniform_name, int x, int y, int z, int w) const = 0;
         virtual void SetMat4(const std::string& uniform_name, Mat4 value) const = 0;
         virtual void SetMaterial(const std::string& uniform_name, const Material& mat) const = 0;
-
-        virtual const std::string& GetName() const = 0;
-        virtual const std::vector<ShaderPart>& GetParts() const = 0;
-
-        static Ref<Shader> Create(const std::string& name, const std::vector<ShaderPart>& initializers);
+        
+        static Ref<Shader> Create(const std::vector<ShaderPart>& initializers);
     };
 }  // namespace DE

@@ -6,51 +6,61 @@ Scene:
         Path: Assets\Models\Arch\arch.obj
         Compress: true
         FlipUV: true
+        UUID: 4297990474591951207
       BackpackModel:
         Path: Assets\Models\Backpack\backpack.obj
         Compress: true
         FlipUV: false
+        UUID: 654055540912474740
       BladeModel:
         Path: Assets\Models\Blade\murasama.obj
         Compress: true
         FlipUV: true
+        UUID: 4830874900694261513
       CarModel:
         Path: Assets\Models\Car\Car.obj
         Compress: true
         FlipUV: true
+        UUID: 4289254078394118472
       CubeModel:
         Path: Assets\Models\Cube\cube.obj
         Compress: true
         FlipUV: false
+        UUID: 6557233926725796949
       LuffyModel:
         Path: Assets\Models\Luffy\luffy.obj
         Compress: false
         FlipUV: false
+        UUID: 16146890173748989942
       NissanModel:
         Path: Assets\Models\Nissan\Nissan.obj
         Compress: false
         FlipUV: false
+        UUID: 1407032741301600330
       RaidenModel:
         Path: Assets\Models\Raiden\Raiden.obj
         Compress: false
         FlipUV: true
+        UUID: 17398553512178907239
       SamModel:
         Path: Assets\Models\Sam\Sam.obj
         Compress: false
         FlipUV: true
+        UUID: 11801744926729819249
       TreeModel:
         Path: Assets\Models\Tree\Tree.obj
         Compress: false
         FlipUV: false
+        UUID: 18245352808254477256
     Shaders:
       TexturedPhong:
+        UUID: 3566111628970667214
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
   Entities:
     Entity_0:
       Tag: Arch
       UUID: 6382649478065237834
-      RenderModel: ArchModel
       Transformation:
         Translation: [0, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -58,11 +68,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_1:
       Tag: Arch_0
       UUID: 7880999784930792072
-      RenderModel: ArchModel
       Transformation:
         Translation: [75, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -70,11 +80,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_2:
       Tag: Arch_1
       UUID: 15941687613803207770
-      RenderModel: ArchModel
       Transformation:
         Translation: [-75, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -82,11 +92,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_3:
       Tag: Arch_10
       UUID: 5213625393851641127
-      RenderModel: ArchModel
       Transformation:
         Translation: [450, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -94,11 +104,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_4:
       Tag: Arch_11
       UUID: 3035699795383006144
-      RenderModel: ArchModel
       Transformation:
         Translation: [-450, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -106,11 +116,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_5:
       Tag: Arch_12
       UUID: 14384740072414857809
-      RenderModel: ArchModel
       Transformation:
         Translation: [525, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -118,11 +128,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_6:
       Tag: Arch_13
       UUID: 12635401302101962863
-      RenderModel: ArchModel
       Transformation:
         Translation: [-525, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -130,11 +140,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_7:
       Tag: Arch_14
       UUID: 1101106277738172717
-      RenderModel: ArchModel
       Transformation:
         Translation: [600, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -142,11 +152,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_8:
       Tag: Arch_15
       UUID: 5873323393681448535
-      RenderModel: ArchModel
       Transformation:
         Translation: [-600, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -154,11 +164,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_9:
       Tag: Arch_16
       UUID: 17302959992435298245
-      RenderModel: ArchModel
       Transformation:
         Translation: [675, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -166,11 +176,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_10:
       Tag: Arch_17
       UUID: 15890044325275084598
-      RenderModel: ArchModel
       Transformation:
         Translation: [-675, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -178,11 +188,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_11:
       Tag: Arch_18
       UUID: 15537684908387568608
-      RenderModel: ArchModel
       Transformation:
         Translation: [750, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -190,11 +200,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_12:
       Tag: Arch_19
       UUID: 16670400817386465635
-      RenderModel: ArchModel
       Transformation:
         Translation: [-750, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -202,11 +212,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_13:
       Tag: Arch_2
       UUID: 9950114420260690697
-      RenderModel: ArchModel
       Transformation:
         Translation: [150, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -214,11 +224,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_14:
       Tag: Arch_3
       UUID: 15019554848179761880
-      RenderModel: ArchModel
       Transformation:
         Translation: [-150, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -226,11 +236,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_15:
       Tag: Arch_4
       UUID: 7984498613159843746
-      RenderModel: ArchModel
       Transformation:
         Translation: [225, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -238,11 +248,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_16:
       Tag: Arch_5
       UUID: 13170488749888609724
-      RenderModel: ArchModel
       Transformation:
         Translation: [-225, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -250,11 +260,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_17:
       Tag: Arch_6
       UUID: 7069657717134928603
-      RenderModel: ArchModel
       Transformation:
         Translation: [300, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -262,11 +272,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_18:
       Tag: Arch_7
       UUID: 2009748520648894057
-      RenderModel: ArchModel
       Transformation:
         Translation: [-300, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -274,11 +284,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_19:
       Tag: Arch_8
       UUID: 6841065002287908623
-      RenderModel: ArchModel
       Transformation:
         Translation: [375, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -286,11 +296,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_20:
       Tag: Arch_9
       UUID: 2189146139801416280
-      RenderModel: ArchModel
       Transformation:
         Translation: [-375, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -298,11 +308,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [2, 2, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4297990474591951207
+      Shader: 3566111628970667214
     Entity_21:
       Tag: Backpack
       UUID: 6382649478065237886
-      RenderModel: BackpackModel
       Transformation:
         Translation: [0, 15, 0]
         TranslationOffset: [0, 0, 0]
@@ -310,11 +320,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [5, 5, 5]
         ScaleOffset: [1, 1, 1]
-      Shader: TexturedPhong
+      RenderModel: 654055540912474740
+      Shader: 3566111628970667214
     Entity_22:
       Tag: Blade
       UUID: 6382649478065237432
-      RenderModel: BladeModel
       Transformation:
         Translation: [75, 15, 0]
         TranslationOffset: [0, -7, 0]
@@ -322,11 +332,11 @@ Scene:
         RotationOffset: [-90, 90, 0]
         Scale: [2, 2, 2]
         ScaleOffset: [10, 10, 10]
-      Shader: TexturedPhong
+      RenderModel: 4830874900694261513
+      Shader: 3566111628970667214
     Entity_23:
       Tag: Car
       UUID: 6382649478025237834
-      RenderModel: CarModel
       Transformation:
         Translation: [-225, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -334,11 +344,11 @@ Scene:
         RotationOffset: [-90, 0, 0]
         Scale: [1, 1, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 4289254078394118472
+      Shader: 3566111628970667214
     Entity_24:
       Tag: Luffy
       UUID: 6382649478065237252
-      RenderModel: LuffyModel
       Transformation:
         Translation: [-75, 15, 0]
         TranslationOffset: [0, 0, 10]
@@ -346,11 +356,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [1, 1, 1]
         ScaleOffset: [3, 3, 3]
-      Shader: TexturedPhong
+      RenderModel: 16146890173748989942
+      Shader: 3566111628970667214
     Entity_25:
       Tag: Nissan
       UUID: 6382249478065237834
-      RenderModel: NissanModel
       Transformation:
         Translation: [-300, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -358,11 +368,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [1, 1, 1]
         ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-      Shader: TexturedPhong
+      RenderModel: 1407032741301600330
+      Shader: 3566111628970667214
     Entity_26:
       Tag: Raiden
       UUID: 6384649478065237834
-      RenderModel: RaidenModel
       Transformation:
         Translation: [225, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -370,11 +380,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [1, 1, 1]
         ScaleOffset: [0.100000001, 0.100000001, 0.100000001]
-      Shader: TexturedPhong
+      RenderModel: 17398553512178907239
+      Shader: 3566111628970667214
     Entity_27:
       Tag: Sam
       UUID: 6382649478065643834
-      RenderModel: SamModel
       Transformation:
         Translation: [150, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -382,11 +392,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [1, 1, 1]
         ScaleOffset: [0.100000001, 0.100000001, 0.100000001]
-      Shader: TexturedPhong
+      RenderModel: 11801744926729819249
+      Shader: 3566111628970667214
     Entity_28:
       Tag: Tree
       UUID: 6322649478065237834
-      RenderModel: TreeModel
       Transformation:
         Translation: [-150, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -394,7 +404,8 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [1, 1, 1]
         ScaleOffset: [1, 1, 1]
-      Shader: TexturedPhong
+      RenderModel: 18245352808254477256
+      Shader: 3566111628970667214
     Entity_29:
       Tag: player
       UUID: 4631319593559015940
@@ -403,8 +414,8 @@ Scene:
         Aspect: 1.77777779
         NearPlane: 1.00000001e-07
         FarPlane: 2000
-        Position: [225.351471, 24.505827, 25.5136642]
-        Direction: [0.745863199, -0.13847065, -0.651547492]
+        Position: [-49.7654381, 63.0838165, 235.964447]
+        Direction: [0.40610224, -0.292632699, -0.865706086]
     Entity_30:
       Tag: sun
       UUID: 16279128272272660330
@@ -434,7 +445,6 @@ Scene:
     Entity_32:
       Tag: surface
       UUID: 6382649478065237843
-      RenderModel: CubeModel
       Transformation:
         Translation: [0, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -442,4 +452,5 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [1000, 0.100000001, 100]
         ScaleOffset: [1, 1, 1]
-      Shader: TexturedPhong
+      RenderModel: 6557233926725796949
+      Shader: 3566111628970667214

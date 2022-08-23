@@ -9,25 +9,27 @@ namespace DE
 
     ModelLoader::LoaderState ModelLoader::m_State;
 
-    Ref<RenderModelData> ModelLoader::Load(const Path& path, LoadingProperties properties)
+    Ref<RenderMeshData> ModelLoader::Load(const RenderMeshLoadingProps& properties)
     {
-        const aiScene* scene = m_State.m_Importer.ReadFile(path.string(), aiProcess_Triangulate | (properties.flip_uvs ? aiProcess_FlipUVs : 0));
+        const aiScene* scene =
+            m_State.m_Importer.ReadFile(properties.path.string(), aiProcess_Triangulate | (properties.flip_uvs ? aiProcess_FlipUVs : 0));
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         {
             Logger::Error("loading",
                           "ModelLoader",
-                          "Failed to load model \"" + RelativeToExecutable(path).string() + "\" Error (" + m_State.m_Importer.GetErrorString() + ")");
+                          "Failed to load model \"" + RelativeToExecutable(properties.path).string() + "\" Error (" +
+                              m_State.m_Importer.GetErrorString() + ")");
             return nullptr;
         }
 
-        m_State.m_CurrentData = CreateScope<RenderModelData>();
+        m_State.m_CurrentData = CreateScope<RenderMeshData>();
 
         m_State.m_CurrentMeshId = 0;
         m_State.m_MeshesAmount = 0;
         m_State.m_NodesAmount = 0;
         m_State.m_VerticesAmount = 0;
-        m_State.m_CurrentDirectory = fs::canonical(path / "..");
+        m_State.m_CurrentDirectory = fs::canonical(properties.path / "..");
 
         ReadModelProperties(scene->mRootNode, scene);
         m_State.m_CurrentData->meshes.resize(m_State.m_MeshesAmount);
@@ -35,29 +37,14 @@ namespace DE
 
         Logger::Info("loading",
                      "ModelLoader",
-                     "Model loaded " + RelativeToExecutable(path).string() + " Meshes (" + std::to_string(m_State.m_MeshesAmount) + ") Vertices (" +
-                         std::to_string(m_State.m_VerticesAmount) + ")");
+                     "Model loaded " + RelativeToExecutable(properties.path).string() + " Meshes (" + std::to_string(m_State.m_MeshesAmount) +
+                         ") Vertices (" + std::to_string(m_State.m_VerticesAmount) + ")");
         if (properties.compress)
         {
             m_State.m_CurrentData->Compress();
         }
-        m_State.m_ModelDataByPath[fs::canonical(path)] = m_State.m_CurrentData;
-        m_State.m_CurrentData->path = fs::canonical(path);
 
         return m_State.m_CurrentData;
-    }
-    Ref<RenderModelData> ModelLoader::Get(const Path& path)
-    {
-        if (m_State.m_ModelDataByPath.find(fs::canonical(path)) == m_State.m_ModelDataByPath.end())
-        {
-            // std::cout << "Loading Model: " << path << std::endl;
-            return Load(path, LoadingProperties());
-        }
-        else
-        {
-            // std::cout << "Retriving Model: " << path << std::endl;
-            return m_State.m_ModelDataByPath[fs::canonical(path)];
-        }
     }
 
     void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene)
@@ -74,7 +61,7 @@ namespace DE
     }
     void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene)
     {
-        RenderMeshData& current_mesh = m_State.m_CurrentData->meshes[m_State.m_CurrentMeshId];
+        RenderSubMeshData& current_mesh = m_State.m_CurrentData->meshes[m_State.m_CurrentMeshId];
         for (size_t i = 0; i < mesh->mNumVertices; ++i)
         {
             Vertex3D vertex;

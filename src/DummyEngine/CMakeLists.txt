@@ -28,7 +28,6 @@ set(ENGINE_SOURCES
     Core/Scene/Components.cpp
     Core/Scene/Scene.cpp
 
-    Core/Objects/LightSources/LightManager.cpp
     Core/Objects/LightSources/LightSource.cpp
     Core/Objects/Cameras/FPSCamera.cpp
 
@@ -45,6 +44,10 @@ set(ENGINE_SOURCES
     Core/Rendering/RendererOpenGL/GLShader.cpp
     Core/Rendering/RendererOpenGL/GLTexture.cpp
     Core/Rendering/RendererOpenGL/GLRenderAPI.cpp
+
+    Core/ResourceManaging/AssetManager.cpp
+    Core/ResourceManaging/RawData.cpp
+    Core/ResourceManaging/ResourceManager.cpp
 
     Core/Input/Input.cpp
 
@@ -63,7 +66,7 @@ add_library(DummyEngineLib
 )
 
 target_compile_definitions(DummyEngineLib PUBLIC 
- DE_ENABLE_FRAME_TIME_READER=1
+ DE_ENABLE_FRAME_TIME_READER=0
  DE_ENABLE_ASSERTS=1
  )
 

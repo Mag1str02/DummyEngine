@@ -30,13 +30,6 @@ namespace DE
         Geometry,
         Fragment
     };
-    enum class TextureFormat
-    {
-        None = 0,
-        RED,
-        RGB,
-        RGBA
-    };
     enum class BufferElementType
     {
         None = 0,
@@ -62,6 +55,13 @@ namespace DE
         windowed,
         borderless_windowed,
         fullscreen
+    };
+
+    struct Vertex3D
+    {
+        Vec3 position;
+        Vec3 normal;
+        Vec2 tex_coords;
     };
 
 }  // namespace DE

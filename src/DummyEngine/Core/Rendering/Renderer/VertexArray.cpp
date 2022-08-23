@@ -4,6 +4,15 @@
 
 namespace DE
 {
+
+    Ref<VertexArray> VertexArray::Copy(const VertexArray& other) {
+        Ref<VertexArray> result = VertexArray::Create();
+        for(const auto& v : other.GetVertexBuffers()){
+            result->AddVertexBuffer(v);
+        }
+        result->SetIndexBuffer(other.GetIndexBuffer());
+        return result;
+    }
     Ref<VertexArray> VertexArray::Create()
     {
         switch (Renderer::CurrentAPI())

@@ -27,8 +27,7 @@ namespace DE
 
         static void Clear();
         static void Submit(Ref<Shader> shader, const Ref<VertexArray>& mesh, const Mat4& trasform = Mat4(1.0f));
-        static void Submit(Ref<Shader> shader, const RenderMesh& mesh, const Mat4& trasform = Mat4(1.0f));
-        static void Submit(Ref<Shader> shader, const RenderModel& model, const Mat4& trasform = Mat4(1.0f));
+        static void Submit(Ref<Shader> shader, Ref<RenderMesh> model, const Mat4& trasform = Mat4(1.0f));
 
         static void Enable(RenderSetting setting);
         static void Disable(RenderSetting setting);

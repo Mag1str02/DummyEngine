@@ -16,7 +16,7 @@
 #include "Core/Initializer/Initializer.h"
 #include "Core/Input/Input.h"
 #include "Core/Objects/Cameras/FPSCamera.h"
-#include "Core/Objects/LightSources/LightManager.h"
+#include "Core/Objects/LightSources/LightSource.h"
 
 #include "Core/Rendering/Renderer/LocalBuffer.h"
 #include "Core/Rendering/Renderer/Renderer.h"

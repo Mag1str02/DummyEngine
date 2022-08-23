@@ -43,10 +43,10 @@ namespace DE
         glTextureParameteri(m_TextureId, GL_TEXTURE_WRAP_T, GL_REPEAT);
     }
     GLTexture::GLTexture(const TextureData& data) :
-        m_Width(data.width),
-        m_Height(data.height),
-        m_InternalFormat(TextureFormatToGLTextureInternalFormat(data.format)),
-        m_Format(TextureFormatToGLTextureFormat(data.format))
+        m_Width(data.m_Width),
+        m_Height(data.m_Height),
+        m_InternalFormat(TextureFormatToGLTextureInternalFormat(data.m_Format)),
+        m_Format(TextureFormatToGLTextureFormat(data.m_Format))
     {
         glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureId);
 
@@ -56,10 +56,10 @@ namespace DE
         glTextureParameteri(m_TextureId, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTextureParameteri(m_TextureId, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-        if (data.data != nullptr)
+        if (data.m_Data != nullptr)
         {
             glTextureStorage2D(m_TextureId, 1, m_InternalFormat, m_Width, m_Height);
-            glTextureSubImage2D(m_TextureId, 0, 0, 0, m_Width, m_Height, m_Format, GL_UNSIGNED_BYTE, *data.data);
+            glTextureSubImage2D(m_TextureId, 0, 0, 0, m_Width, m_Height, m_Format, GL_UNSIGNED_BYTE, data.m_Data);
         }
     }
 
