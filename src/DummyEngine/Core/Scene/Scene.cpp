@@ -83,7 +83,7 @@ namespace DE
     {
         auto& camera = GetCamera();
 
-        auto models = m_Storage.GetComponentArray<RenderMeshComponent>();
+        auto meshes = m_Storage.GetComponentArray<RenderMeshComponent>();
         auto shaders = m_Storage.GetComponentArray<ShaderComponent>();
         auto transformations = m_Storage.GetComponentArray<TransformComponent>();
 
@@ -98,10 +98,11 @@ namespace DE
 
         LightPass();
 
-        for (auto [entity_id, model] : models)
+        for (auto& [ids, target] : m_RenderData.m_InstancedMeshes)
         {
-            Renderer::Submit(shaders[entity_id].shader, model.mesh, transformations[entity_id].GetTransform());
-        }
+            target.first->UpdateInstanceBuffer();
+            Renderer::Submit(target.first, target.second);
+        }    
     }
 
     Entity Scene::operator[](const std::string& name)
@@ -170,13 +171,6 @@ namespace DE
         if (m_RenderData.m_Shaders.find(id) == m_RenderData.m_Shaders.end())
         {
             m_RenderData.m_Shaders[id] = ResourceManager::GetResource<Shader>(id);
-        }
-    }
-    void Scene::RequestRenderMesh(UUID id)
-    {
-        if (m_RenderData.m_RenderMeshes.find(id) == m_RenderData.m_RenderMeshes.end())
-        {
-            m_RenderData.m_RenderMeshes[id] = ResourceManager::GetResource<RenderMesh>(id);
         }
     }
 }  // namespace DE

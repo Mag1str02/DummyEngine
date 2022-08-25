@@ -14,6 +14,7 @@ namespace DE
     using Vec3 = glm::vec3;
     using Vec2 = glm::vec2;
     using Path = std::filesystem::path;
+    template <typename A, typename B> using Pair = std::pair<A, B>;
 
     namespace fs = std::filesystem;
 

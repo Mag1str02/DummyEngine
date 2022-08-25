@@ -41,12 +41,11 @@ namespace DE
         FPSCamera& GetCamera();
 
         void RequestShader(UUID id);
-        void RequestRenderMesh(UUID id);
 
         struct RenderData
         {
             std::unordered_map<uint64_t, Ref<Shader>> m_Shaders;
-            std::unordered_map<uint64_t, Ref<RenderMesh>> m_RenderMeshes;
+            std::unordered_map<std::pair<uint64_t, uint64_t>, Pair<Ref<RenderMesh>, Ref<Shader>>, std::pair_hash> m_InstancedMeshes;
         };
 
         std::string m_Name;
@@ -57,4 +56,4 @@ namespace DE
 
         friend class Entity;
     };
-}  // namespace DE
+}  // namespace DE  

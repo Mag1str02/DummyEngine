@@ -11,38 +11,6 @@ const Vec3 COLOR_YELLOW(1.0f, 1.0f, 0.0f);
 
 Ref<Scene> scene;
 
-struct LinearManipulator
-{
-    Vec3 dir;
-    double radius;
-    double current_time;
-    double speed;
-
-    LinearManipulator() :
-        dir(0, 0, 1),
-        radius(10),
-        current_time(0),
-        speed(1){
-
-        };
-    Vec3 Update(double dt)
-    {
-        current_time += dt;
-        return dir * float((std::sin(current_time * speed) - std::sin((current_time - dt) * speed)) * radius);
-    }
-};
-struct ScaleManipulator
-{
-    double min_scale, max_scale;
-    double time_offset;
-
-    ScaleManipulator() : min_scale(0), max_scale(2), time_offset(0) {}
-    Vec3 GetScale()
-    {
-        return Vec3(((max_scale + min_scale) / 2) + ((max_scale - min_scale) / 2) * (std::sin(time_offset + glfwGetTime())));
-    }
-};
-
 class MovingSystem : public System
 {
 public:
@@ -54,19 +22,15 @@ public:
 
     void Update(double dt) override
     {
-        auto& manipulators = GetComponentArray<LinearManipulator>();
         auto& positions = GetComponentArray<TransformComponent>();
-        auto& scales = GetComponentArray<ScaleManipulator>();
+        auto& meshes = GetComponentArray<RenderMeshComponent>();
         auto& light_sources = GetComponentArray<LightSource>();
 
-        for (auto [entity_id, linear_manipulator] : manipulators)
+        for (auto [id, transformation] : positions)
         {
-            positions[entity_id].translation += linear_manipulator.Update(dt);
+            meshes[id].mesh_instance->at<Mat4>(0) = transformation.GetTransform();
         }
-        for (auto [entity_id, scale] : scales)
-        {
-            positions[entity_id].scale = scale.GetScale();
-        }
+
         for (auto [entity_id, light_source] : light_sources)
         {
             if (positions.HasComponent(entity_id))
@@ -90,20 +54,20 @@ public:
         Logger::Stage("loading", "Main", "INITIALIZETION");
         Input::SetWindow(m_Window->GetWindow());
         Renderer::SetClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        
+
         scene = CreateRef<Scene>("NewScene");
         SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Gallery.yml");
         scene->RegisterSystem<MovingSystem>();
     }
     virtual void Update(double dt) override
     {
-        ProcessInput(dt);
-        scene->OnUpdate(dt);
-        scene->Render();
+        DE_PROFILE_SCOPE("Processing Input", ProcessInput(dt));
+        DE_PROFILE_SCOPE("Scene Update",scene->OnUpdate(dt));
+        DE_PROFILE_SCOPE("Scene Render",scene->Render());
     }
     virtual void OnClose() override
     {
-        SceneLoader::Save(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Gallery.yml");
+        // SceneLoader::Save(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Gallery.yml");
     }
 
 private:

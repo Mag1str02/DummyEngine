@@ -11,10 +11,11 @@ namespace DE
     struct FrameStatistics
     {
         uint32_t m_DrawCallsAmount;
+        uint32_t m_DrawnInstances;
 
         void Reset();
     };
- 
+
     class Renderer
     {
     public:
@@ -26,8 +27,8 @@ namespace DE
         static void EndFrame();
 
         static void Clear();
-        static void Submit(Ref<Shader> shader, const Ref<VertexArray>& mesh, const Mat4& trasform = Mat4(1.0f));
-        static void Submit(Ref<Shader> shader, Ref<RenderMesh> model, const Mat4& trasform = Mat4(1.0f));
+        static void Submit(const Ref<VertexArray>& mesh, Ref<Shader> shader, const Mat4& trasform = Mat4(1.0f));
+        static void Submit(Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& trasform = Mat4(1.0f));
 
         static void Enable(RenderSetting setting);
         static void Disable(RenderSetting setting);

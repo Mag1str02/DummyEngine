@@ -11,6 +11,7 @@ namespace DE
     void FrameStatistics::Reset()
     {
         m_DrawCallsAmount = 0;
+        m_DrawnInstances = 0;
     }
 
     void Renderer::Init(API api)
@@ -52,7 +53,7 @@ namespace DE
     {
         m_RenderAPI->Clear();
     }
-    void Renderer::Submit(Ref<Shader> shader, const Ref<VertexArray>& vertex_array, const Mat4& trasform)
+    void Renderer::Submit(const Ref<VertexArray>& vertex_array, Ref<Shader> shader, const Mat4& trasform)
     {
         shader->Bind();
         shader->SetMat4("u_Transform", trasform);
@@ -60,16 +61,33 @@ namespace DE
         glDrawElements(GL_TRIANGLES, vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, 0);
         ++m_FrameStatistics->m_DrawCallsAmount;
     }
-    void Renderer::Submit(Ref<Shader> shader, Ref<RenderMesh> model, const Mat4& trasform)
+    void Renderer::Submit(Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& trasform)
     {
         shader->Bind();
-        shader->SetMat4("u_Transform", trasform);
-        for (const auto& mesh : model->meshes)
+        if (mesh->m_InstanceBuffer)
         {
-            shader->SetMaterial("u_Material", mesh.material);
-            mesh.vertex_array->Bind();
-            m_RenderAPI->DrawInstanced(mesh.vertex_array, 1);
-            ++m_FrameStatistics->m_DrawCallsAmount;
+            shader->SetInt("u_Instanced", 1);
+            for (const auto& sub_mesh : mesh->m_SubMeshes)
+            {
+                shader->SetMaterial("u_Material", sub_mesh.material);
+                sub_mesh.vertex_array->Bind();
+                m_RenderAPI->DrawInstanced(sub_mesh.vertex_array, mesh->m_Instances.size());
+                ++m_FrameStatistics->m_DrawCallsAmount;
+                m_FrameStatistics->m_DrawnInstances += mesh->m_Instances.size();
+            }
+        }
+        else
+        {
+            shader->SetInt("u_Instanced", 0);
+            shader->SetMat4("u_Transform", trasform);
+            for (const auto& sub_mesh : mesh->m_SubMeshes)
+            {
+                shader->SetMaterial("u_Material", sub_mesh.material);
+                sub_mesh.vertex_array->Bind();
+                m_RenderAPI->DrawInstanced(sub_mesh.vertex_array, 1);
+                ++m_FrameStatistics->m_DrawCallsAmount;
+                ++m_FrameStatistics->m_DrawnInstances;
+            }
         }
     }
 
@@ -112,7 +130,8 @@ namespace DE
         TextureFormat format = TextureFormat::RGBA;
         std::vector<uint8_t> data(4, 255);
 
-        m_DefaultTexture = Texture::Create(TextureData(&data[0], width, height, format));
+        TextureData tex_data(&data[0], width, height, format);
+        m_DefaultTexture = Texture::Create(tex_data);
     }
 
 }  // namespace DE

@@ -5,12 +5,14 @@
 namespace DE
 {
 
-    Ref<VertexArray> VertexArray::Copy(const VertexArray& other) {
+    Ref<VertexArray> VertexArray::Copy() const
+    {
         Ref<VertexArray> result = VertexArray::Create();
-        for(const auto& v : other.GetVertexBuffers()){
+        for (const auto& v : GetVertexBuffers())
+        {
             result->AddVertexBuffer(v);
         }
-        result->SetIndexBuffer(other.GetIndexBuffer());
+        result->SetIndexBuffer(GetIndexBuffer());
         return result;
     }
     Ref<VertexArray> VertexArray::Create()

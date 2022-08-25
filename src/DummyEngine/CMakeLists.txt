@@ -31,6 +31,7 @@ set(ENGINE_SOURCES
     Core/Objects/LightSources/LightSource.cpp
     Core/Objects/Cameras/FPSCamera.cpp
 
+    Core/Rendering/Renderer/BufferLayout.cpp
     Core/Rendering/Renderer/LocalBuffer.cpp
     Core/Rendering/Renderer/VertexArray.cpp
     Core/Rendering/Renderer/VertexBuffer.cpp

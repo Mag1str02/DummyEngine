@@ -44,8 +44,7 @@ namespace DE
             SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
             std::cout << "FPS: " << int(1.0 / m_Root->delta_time.count()) << "        " << std::endl;
         }
-        std::cout << tabulation << node->name << std::fixed << std::setprecision(4) << " ("
-                  << node->delta_time.count() * 1000 << "ms)           \n";
+        std::cout << tabulation << node->name << std::fixed << std::setprecision(4) << " (" << node->delta_time.count() * 1000 << "ms)           \n";
         if (!node->children.empty())
         {
             std::cout << tabulation << "{\n";
@@ -60,6 +59,8 @@ namespace DE
             std::cout << std::endl;
             FrameStatistics statistics = Renderer::GetStatistics();
             std::cout << "DrawCalls: " << statistics.m_DrawCallsAmount << std::endl;
+            std::cout << "DrawnInstances: " << statistics.m_DrawnInstances << std::endl;
+            std::cout << "DrawCalls save by instancing: " << statistics.m_DrawnInstances - statistics.m_DrawCallsAmount << std::endl;
         }
     }
 

@@ -266,8 +266,7 @@ namespace DE
         {
             ResourceManager::AddResource(AssetManager::GetAsset<RenderMeshAsset>(id));
         }
-        entity.AddComponent<RenderMeshComponent>({id, ResourceManager::GetResource<RenderMesh>(id)});
-        m_Scene->RequestRenderMesh(id);
+        entity.AddComponent<RenderMeshComponent>({id, nullptr});
     }
     template <> void SceneLoader::LoadComponent<ShaderComponent>(YAML::Node n_Component, Entity& entity)
     {
@@ -277,7 +276,7 @@ namespace DE
             ResourceManager::AddResource(AssetManager::GetAsset<ShaderAsset>(id));
         }
         entity.AddComponent<ShaderComponent>({id, ResourceManager::GetResource<Shader>(id)});
-        m_Scene->RequestShader(id);
+              m_Scene->RequestShader(id);
     }
     template <> void SceneLoader::LoadComponent<FPSCamera>(YAML::Node n_Component, Entity& entity)
     {
@@ -361,6 +360,40 @@ namespace DE
         if (n_Entity["Shader"]) LoadComponent<ShaderComponent>(n_Entity["Shader"], entity);
         if (n_Entity["FPSCamera"]) LoadComponent<FPSCamera>(n_Entity["FPSCamera"], entity);
         if (n_Entity["LightSource"]) LoadComponent<LightSource>(n_Entity["LightSource"], entity);
+
+        if (entity.HasComponent<RenderMeshComponent>() && entity.HasComponent<ShaderComponent>())
+        {
+            auto& map = m_Scene->m_RenderData.m_InstancedMeshes;
+            
+            uint64_t mesh_id = entity.GetComponent<RenderMeshComponent>().id;
+            uint64_t shader_id = entity.GetComponent<ShaderComponent>().id;
+
+            if (!map.contains({mesh_id, shader_id}))
+            {
+                map[{mesh_id, shader_id}] = {ResourceManager::GetResource<RenderMesh>(mesh_id)->Copy(),
+                                             ResourceManager::GetResource<Shader>(shader_id)};
+                map[{mesh_id, shader_id}].first->SetInstanceBuffer({{BufferElementType::Mat4}, 1}, 100);
+
+                // for (auto& sub_mesh : ResourceManager::GetResource<RenderMesh>(mesh_id)->m_SubMeshes)
+                // {
+                //     for (auto& buffer : sub_mesh.vertex_array->GetVertexBuffers())
+                //     {
+                //         std::cout << buffer->GetId() << " ";
+                //     }
+                // }
+                // std::cout << std::endl;
+                // for (auto& sub_mesh : map[{mesh_id, shader_id}].first->m_SubMeshes)
+                // {
+                //     for (auto& buffer : sub_mesh.vertex_array->GetVertexBuffers())
+                //     {
+                //         std::cout << buffer->GetId() << " ";
+                //     }
+                // }
+                // std::cout << std::endl;
+            };
+            entity.GetComponent<RenderMeshComponent>().mesh_instance = CreateRef<RenderMeshInstance>();
+            entity.GetComponent<RenderMeshComponent>().mesh_instance->Bind(map[{mesh_id, shader_id}].first);
+        }
 
         m_Scene->UpdateEmptyEntity(entity);
     }

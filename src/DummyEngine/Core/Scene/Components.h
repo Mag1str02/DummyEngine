@@ -49,6 +49,6 @@ namespace DE
     struct RenderMeshComponent
     {
         UUID id;
-        Ref<RenderMesh> mesh;
+        Ref<RenderMeshInstance> mesh_instance = nullptr;
     };
 }  // namespace DE

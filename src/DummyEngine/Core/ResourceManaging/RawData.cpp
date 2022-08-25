@@ -33,7 +33,7 @@ namespace DE
 
     TextureData::TextureData() : m_Data(nullptr), m_Width(0), m_Height(0), m_Format(TextureFormat::None) {}
 
-    TextureData::TextureData(const uint8_t* data, uint32_t width, uint32_t height, TextureFormat format)
+    TextureData::TextureData(const uint8_t* data, uint32_t width, uint32_t height, TextureFormat format) : m_Data(nullptr)
     {
         SetData(data, width, height, format);
     }
