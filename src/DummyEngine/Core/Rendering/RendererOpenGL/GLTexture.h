@@ -30,6 +30,8 @@ namespace DE
         virtual void Bind(uint32_t slot) const override;
 
     private:
+        friend class GLFrameBuffer;
+        
         uint32_t m_Width;
         uint32_t m_Height;
         GLuint m_TextureId;

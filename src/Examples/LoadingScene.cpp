@@ -58,12 +58,20 @@ public:
         scene = CreateRef<Scene>("NewScene");
         SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Gallery.yml");
         scene->RegisterSystem<MovingSystem>();
+
+        m_FrameBuffer = FrameBuffer::Create({1920, 1080});
+        m_FrameBuffer->AddColorAttachment(TextureFormat::RGBA);
+        m_FrameBuffer->SetDepthAttachment(TextureFormat::DepthStencil);
+
+        m_ScreenShader =
+            Shader::Create({{ShaderPartType::Vertex, Config::GetPath(DE_CFG_ASSET_PATH) / "Shaders" / "FrameBuffer" / "FrameBuffer.vs"},
+                            {ShaderPartType::Fragment, Config::GetPath(DE_CFG_ASSET_PATH) / "Shaders" / "FrameBuffer" / "FrameBuffer.fs"}});
     }
     virtual void Update(double dt) override
     {
         DE_PROFILE_SCOPE("Processing Input", ProcessInput(dt));
-        DE_PROFILE_SCOPE("Scene Update",scene->OnUpdate(dt));
-        DE_PROFILE_SCOPE("Scene Render",scene->Render());
+        DE_PROFILE_SCOPE("Scene Update", scene->OnUpdate(dt));
+        DE_PROFILE_SCOPE("Scene Render", scene->Render());
     }
     virtual void OnClose() override
     {
@@ -159,6 +167,8 @@ private:
         }
     }
 
+    Ref<Shader> m_ScreenShader;
+    Ref<FrameBuffer> m_FrameBuffer;
     bool cursor_mode;
 };
 

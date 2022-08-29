@@ -22,7 +22,7 @@ namespace DE
             case TextureFormat::RED: return GL_R8;
             case TextureFormat::RGB: return GL_RGB8;
             case TextureFormat::RGBA: return GL_RGBA8;
-            case TextureFormat::None: return GL_R8;
+            case TextureFormat::DepthStencil: return GL_DEPTH24_STENCIL8;
         }
         return GL_R8;
     }
@@ -36,6 +36,7 @@ namespace DE
         glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureId);
         glTextureStorage2D(m_TextureId, 1, m_InternalFormat, m_Width, m_Height);
 
+        // TODO: Move tex parameters somewhere else...
         glTextureParameteri(m_TextureId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTextureParameteri(m_TextureId, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 

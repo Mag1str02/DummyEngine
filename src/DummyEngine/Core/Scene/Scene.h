@@ -2,6 +2,7 @@
 
 #include "Core/ECS/ECSStorage.hpp"
 #include "Core/Rendering/Renderer/Shader.h"
+#include "Core/Rendering/Renderer/FrameBuffer.h"
 #include "Core/Objects/Cameras/FPSCamera.h"
 
 namespace DE
@@ -24,7 +25,7 @@ namespace DE
         void Render();
 
         Entity operator[](const std::string& name);
-
+        
         template <typename System> void RegisterSystem()
         {
             m_Storage.RegisterSystem<System>();

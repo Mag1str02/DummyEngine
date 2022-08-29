@@ -111,7 +111,6 @@ namespace DE
     void GLShader::SetMat4(const std::string& uniform_name, Mat4 value) const
     {
         GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
-        DE_ASSERT(pos != -1, "Invalid uniform: " + uniform_name + " " + std::to_string(m_ShaderId));
         glUniformMatrix4fv(pos, 1, GL_FALSE, glm::value_ptr(value));
     }
     void GLShader::SetMaterial(const std::string& uniform_name, const Material& mat) const

@@ -8,7 +8,8 @@
 namespace DE
 {
 
-    Scene::Scene(const std::string& name) : m_Name(name) {}
+    Scene::Scene(const std::string& name) : m_Name(name) {
+    }
 
     Entity Scene::CreateEntity(const std::string& name)
     {

@@ -27,6 +27,7 @@ namespace DE
         static void EndFrame();
 
         static void Clear();
+
         static void Submit(const Ref<VertexArray>& mesh, Ref<Shader> shader, const Mat4& trasform = Mat4(1.0f));
         static void Submit(Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& trasform = Mat4(1.0f));
 
@@ -36,16 +37,19 @@ namespace DE
         static void SetClearColor(float r, float g, float b, float a);
 
         static Ref<Texture> GetDefaultTexture();
+        static Ref<VertexArray> GetFullScreenQuad();
 
         static API CurrentAPI();
         static FrameStatistics GetStatistics();
 
     private:
         static void GenDefaultTexture();
+        static void GenFullScreenQuad();
 
         static Scope<FrameStatistics> m_FrameStatistics;
         static Scope<RenderAPI> m_RenderAPI;
         static Ref<Texture> m_DefaultTexture;
+        static Ref<VertexArray> m_FullScreenQuad;
     };
 
 }  // namespace DE

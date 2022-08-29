@@ -7,6 +7,7 @@ namespace DE
     Scope<FrameStatistics> Renderer::m_FrameStatistics = nullptr;
     Scope<RenderAPI> Renderer::m_RenderAPI = nullptr;
     Ref<Texture> Renderer::m_DefaultTexture = nullptr;
+    Ref<VertexArray> Renderer::m_FullScreenQuad = nullptr;
 
     void FrameStatistics::Reset()
     {
@@ -37,6 +38,7 @@ namespace DE
         m_RenderAPI->Load(window);
         m_RenderAPI->SetDefaultState();
         GenDefaultTexture();
+        GenFullScreenQuad();
     }
     void Renderer::OnWindowResize(uint32_t width, uint32_t height)
     {
@@ -113,6 +115,10 @@ namespace DE
     {
         return m_DefaultTexture;
     }
+    Ref<VertexArray> Renderer::GetFullScreenQuad()
+    {
+        return m_FullScreenQuad;
+    }
     API Renderer::CurrentAPI()
     {
         return m_RenderAPI->GetAPI();
@@ -133,5 +139,33 @@ namespace DE
         TextureData tex_data(&data[0], width, height, format);
         m_DefaultTexture = Texture::Create(tex_data);
     }
+    void Renderer::GenFullScreenQuad()
+    {
+        uint32_t indices[] = {0, 1, 2, 0, 2, 3};
+        float vertices[] = {1.0f,
+                            1.0f,
+                            1.0f,
+                            1.0f,  //
+
+                            -1.0f,
+                            1.0f,
+                            0.0f,
+                            1.0f,  //
+
+                            -1.0f,
+                            -1.0f,
+                            0.0f,
+                            0.0f,  //
+
+                            1.0f,
+                            -1.0f,
+                            1.0f,
+                            0.0f};
+        auto vb = VertexBuffer::Create({BufferElementType::Float2, BufferElementType::Float2}, 4, vertices);
+        auto ib = IndexBuffer::Create(indices, 6);
+        m_FullScreenQuad = VertexArray::Create();
+        m_FullScreenQuad->SetIndexBuffer(ib);
+        m_FullScreenQuad->AddVertexBuffer(vb);
+    }  // namespace DE
 
 }  // namespace DE

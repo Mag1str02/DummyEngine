@@ -8,7 +8,8 @@ namespace DE
         None = 0,
         RED,
         RGB,
-        RGBA
+        RGBA,
+        DepthStencil
     };
     uint32_t PixelSize(TextureFormat format);
 

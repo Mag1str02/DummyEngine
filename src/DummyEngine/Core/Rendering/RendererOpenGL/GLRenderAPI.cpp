@@ -8,13 +8,13 @@ namespace DE
     {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_MULTISAMPLE);
-        glEnable(GL_CULL_FACE);
+        // glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         // glFrontFace(GL_CCW);
         // glDepthMask(GL_TRUE);
         // glDepthFunc(GL_LEQUAL);
-        // glEnable(GL_BLEND);
-        // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     bool GLRenderAPI::Load(const Window* window)
@@ -36,7 +36,7 @@ namespace DE
 
     void GLRenderAPI::Clear()
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     }
     void GLRenderAPI::DrawIndexed(const Ref<VertexArray>& vertex_array)
     {

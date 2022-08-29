@@ -32,6 +32,7 @@ set(ENGINE_SOURCES
     Core/Objects/Cameras/FPSCamera.cpp
 
     Core/Rendering/Renderer/BufferLayout.cpp
+    Core/Rendering/Renderer/FrameBuffer.cpp
     Core/Rendering/Renderer/LocalBuffer.cpp
     Core/Rendering/Renderer/VertexArray.cpp
     Core/Rendering/Renderer/VertexBuffer.cpp
@@ -40,6 +41,7 @@ set(ENGINE_SOURCES
     Core/Rendering/Renderer/Shader.cpp
     Core/Rendering/Renderer/Texture.cpp
 
+    Core/Rendering/RendererOpenGL/GLFrameBuffer.cpp
     Core/Rendering/RendererOpenGL/GLVertexArray.cpp
     Core/Rendering/RendererOpenGL/GLVertexBuffer.cpp
     Core/Rendering/RendererOpenGL/GLShader.cpp
