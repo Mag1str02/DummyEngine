@@ -69,10 +69,12 @@ add_library(DummyEngineLib
 )
 
 target_compile_definitions(DummyEngineLib PUBLIC 
- DE_ENABLE_FRAME_TIME_READER=0
- DE_ENABLE_ASSERTS=1
- )
+    DE_ENABLE_FRAME_TIME_READER=0
+    DE_ENABLE_ASSERTS=1
+)
 
+ 
+add_subdirectory(libs/imgui)
 add_subdirectory(libs/glfw)
 add_subdirectory(libs/glad)
 add_subdirectory(libs/yaml)
@@ -84,6 +86,7 @@ target_include_directories(DummyEngineLib
     PUBLIC ${EXTERNAL_LIBS_DIR}/assimp/include
     PUBLIC ${EXTERNAL_LIBS_DIR}/stb_image   
     PUBLIC ${EXTERNAL_LIBS_DIR}/yaml/include
+    PUBLIC ${EXTERNAL_LIBS_DIR}/imgui
     PUBLIC ${DE_LIB_SOURCE_DIR}
 )
 
@@ -92,6 +95,7 @@ target_link_directories(DummyEngineLib
 )
 
 target_link_libraries(DummyEngineLib
+    PUBLIC ImGui
     PUBLIC glad
     PUBLIC glfw
     PUBLIC assimp

@@ -13,3 +13,6 @@
 [submodule "src/DummyEngine/Libs/YAML"]
 	path = src/DummyEngine/Libs/YAML
 	url = https://github.com/jbeder/yaml-cpp
+[submodule "src/DummyEngine/Libs/IMGUI/ImGui"]
+	path = src/DummyEngine/Libs/IMGUI/ImGui
+	url = https://github.com/ocornut/imgui

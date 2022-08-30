@@ -5,6 +5,10 @@
 
 #include <stb_image.h>
 
+#include <ImGui/imgui.h>
+#include <ImGui/backends/imgui_impl_glfw.h>
+#include <ImGui/backends/imgui_impl_opengl3.h>
+
 #include "Addition/Base.h"
 
 #include "Core/ECS/Entity.hpp"

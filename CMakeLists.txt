@@ -9,11 +9,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/../Sandbox)
 add_subdirectory(src/DummyEngine)
 
 add_executable(BasicScene src/Examples/BasicScene.cpp)
+add_executable(ImguiTest src/Examples/ImGuiTest.cpp)
 add_executable(LoadingScene src/Examples/LoadingScene.cpp)
 add_executable(HelloTriangle src/Examples/HelloTriangle.cpp)
-add_executable(YAMLTest src/Examples/YAML.cpp)
 
 target_link_libraries(BasicScene PUBLIC DummyEngineLib)
+target_link_libraries(ImguiTest PUBLIC DummyEngineLib)
 target_link_libraries(LoadingScene PUBLIC DummyEngineLib)
 target_link_libraries(HelloTriangle PUBLIC DummyEngineLib)
-target_link_libraries(YAMLTest PUBLIC DummyEngineLib)
