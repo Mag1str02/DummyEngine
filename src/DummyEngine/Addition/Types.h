@@ -50,14 +50,7 @@ namespace DE
         Static,
         Dynamic
     };
-    enum class WindowMode
-    {
-        none,
-        windowed,
-        borderless_windowed,
-        fullscreen
-    };
-
+    
     struct Vertex3D
     {
         Vec3 position;

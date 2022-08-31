@@ -17,7 +17,6 @@
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/Components.h"
 
-#include "Core/Initializer/Initializer.h"
 #include "Core/Input/Input.h"
 #include "Core/Objects/Cameras/FPSCamera.h"
 #include "Core/Objects/LightSources/LightSource.h"
@@ -25,8 +24,7 @@
 #include "Core/Rendering/Renderer/LocalBuffer.h"
 #include "Core/Rendering/Renderer/Renderer.h"
 
-#include "Core/Wrappings/Window.h"
-#include "Core/Wrappings/Application.h"
+#include "Core/Application/Application.h"
 #include "ToolBox/Dev/FrameTimeReader.h"
 #include "ToolBox/Dev/Logger.h"
 #include "ToolBox/Loaders/ModelLoader.h"

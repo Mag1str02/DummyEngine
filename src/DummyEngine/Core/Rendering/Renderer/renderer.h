@@ -20,7 +20,6 @@ namespace DE
     {
     public:
         static void Init(API api);
-        static void Load(const Window* window);
         static void OnWindowResize(uint32_t width, uint32_t height);
 
         static void BeginFrame();
@@ -36,6 +35,7 @@ namespace DE
         static void SetClearColor(Vec4 color);
         static void SetClearColor(float r, float g, float b, float a);
 
+        //TMP
         static Ref<Texture> GetDefaultTexture();
         static Ref<VertexArray> GetFullScreenQuad();
 

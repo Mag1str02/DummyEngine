@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Addition/Base.h"
-#include "Core/Wrappings/Window.h"
+#include "Core/Application/Window.h"
 #include "Core/Rendering/Renderer/VertexArray.h"
 
 namespace DE
@@ -19,7 +19,6 @@ namespace DE
         virtual ~RenderAPI() = default;
         virtual void SetDefaultState() = 0;
 
-        virtual bool Load(const Window* window) = 0;
         virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 
         virtual void Clear() = 0;

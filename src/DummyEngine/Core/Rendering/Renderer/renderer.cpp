@@ -1,6 +1,7 @@
 #include "Core/Rendering/Renderer/Renderer.h"
 #include "Core/Rendering/RendererOpenGL/GLRenderAPI.h"
 #include "ToolBox/Loaders/TextureLoader.h"
+#include "ToolBox/Dev/Logger.h"
 
 namespace DE
 {
@@ -32,13 +33,13 @@ namespace DE
                 break;
             }
         }
-    }
-    void Renderer::Load(const Window* window)
-    {
-        m_RenderAPI->Load(window);
+
         m_RenderAPI->SetDefaultState();
+
         GenDefaultTexture();
         GenFullScreenQuad();
+
+        Logger::Info("loading", "Renderer", "Renderer initialized.");
     }
     void Renderer::OnWindowResize(uint32_t width, uint32_t height)
     {
@@ -129,6 +130,7 @@ namespace DE
     }
 
     // TODO: Think to move somewhere else...
+
     void Renderer::GenDefaultTexture()
     {
         uint32_t width = 1;

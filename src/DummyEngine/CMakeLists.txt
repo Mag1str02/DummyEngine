@@ -15,6 +15,10 @@ set(ENGINE_SOURCES
     Addition/Random.cpp
     Addition/STBImplementation.cpp
 
+    Core/Application/Application.cpp
+    # Core/Application/ImGuiLayer.cpp
+    Core/Application/Window.cpp
+
     Core/ECS/ComponentArray.hpp
     Core/ECS/ComponentManager.hpp
     Core/ECS/Entity.hpp
@@ -22,8 +26,6 @@ set(ENGINE_SOURCES
     Core/ECS/System.hpp
     Core/ECS/SystemManager.hpp
     Core/ECS/ECSStorage.hpp
-
-    Core/Initializer/Initializer.cpp
     
     Core/Scene/Components.cpp
     Core/Scene/Scene.cpp
@@ -32,6 +34,7 @@ set(ENGINE_SOURCES
     Core/Objects/Cameras/FPSCamera.cpp
 
     Core/Rendering/Renderer/BufferLayout.cpp
+    Core/Rendering/Renderer/Context.cpp
     Core/Rendering/Renderer/FrameBuffer.cpp
     Core/Rendering/Renderer/LocalBuffer.cpp
     Core/Rendering/Renderer/VertexArray.cpp
@@ -41,6 +44,7 @@ set(ENGINE_SOURCES
     Core/Rendering/Renderer/Shader.cpp
     Core/Rendering/Renderer/Texture.cpp
 
+    Core/Rendering/RendererOpenGL/GLContext.cpp
     Core/Rendering/RendererOpenGL/GLFrameBuffer.cpp
     Core/Rendering/RendererOpenGL/GLVertexArray.cpp
     Core/Rendering/RendererOpenGL/GLVertexBuffer.cpp
@@ -53,9 +57,6 @@ set(ENGINE_SOURCES
     Core/ResourceManaging/ResourceManager.cpp
 
     Core/Input/Input.cpp
-
-    Core/Wrappings/Window.cpp
-    Core/Wrappings/Application.cpp
 
     ToolBox/Dev/Logger.cpp
     ToolBox/Dev/FrameTimeReader.cpp
