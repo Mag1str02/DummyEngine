@@ -16,7 +16,7 @@ set(ENGINE_SOURCES
     Addition/STBImplementation.cpp
 
     Core/Application/Application.cpp
-    # Core/Application/ImGuiLayer.cpp
+    Core/Application/ImGuiLayer.cpp
     Core/Application/Window.cpp
 
     Core/ECS/ComponentArray.hpp

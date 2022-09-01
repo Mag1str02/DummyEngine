@@ -8,16 +8,13 @@
 #include "Core/Application/ImGuiLayer.h"
 #include "Core/Application/Application.h"
 
-
-namespace Hazel
+namespace DE
 {
 
     ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer") {}
 
     void ImGuiLayer::OnAttach()
     {
-        HZ_PROFILE_FUNCTION();
-
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
@@ -27,7 +24,6 @@ namespace Hazel
 
         ImGui::StyleColorsDark();
 
-        // Setup Platform/Renderer bindings
         ImGui_ImplGlfw_InitForOpenGL(Application::Get().m_Window->m_Window, true);
         ImGui_ImplOpenGL3_Init("#version 460");
     }
@@ -39,7 +35,7 @@ namespace Hazel
         ImGui::DestroyContext();
     }
 
-    void ImGuiLayer::Begin()
+    void ImGuiLayer::BeginFrame()
     {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -60,4 +56,4 @@ namespace Hazel
         }
     }
 
-}  // namespace Hazel
+}  // namespace DE
