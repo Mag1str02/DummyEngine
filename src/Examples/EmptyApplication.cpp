@@ -1,11 +1,9 @@
 #include "../DummyEngine/Addition/DummyEngine.h"
 
-using namespace DE;
-
-class MyLayer : public Layer
+class MyLayer : public DE::Layer
 {
 public:
-    MyLayer() : Layer("MyLayer") {}
+    MyLayer() : DE::Layer("MyLayer") {}
 
     virtual void OnImGuiRender() override
     {
@@ -15,11 +13,12 @@ public:
 private:
     bool show_demo_window = true;
 };
-
-int main()
+namespace DE
 {
-    Application application("EmptyApplication");
-    application.PushLayer(new MyLayer());
-    application.Run();
-    return 0;
-}
+    Application* CreateApplication()
+    {
+        Application* app = new Application("MyApplication");
+        app->PushLayer(new MyLayer());
+        return app;
+    }
+}  // namespace DE
