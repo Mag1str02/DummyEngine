@@ -61,7 +61,7 @@ namespace DE
         shader->Bind();
         shader->SetMat4("u_Transform", trasform);
         vertex_array->Bind();
-        glDrawElements(GL_TRIANGLES, vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, 0);
+        m_RenderAPI->DrawIndexed(vertex_array);
         ++m_FrameStatistics->m_DrawCallsAmount;
     }
     void Renderer::Submit(Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& trasform)

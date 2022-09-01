@@ -41,17 +41,17 @@ namespace DE
 
         m_ImGuiLayer = new ImGuiLayer();
         PushLayer(m_ImGuiLayer);
-
     }
     Application::~Application()
     {
         delete m_Window;
-        for(auto layer : m_Layers){
+        for (auto layer : m_Layers)
+        {
             layer->OnDetach();
             delete layer;
         }
         m_Layers.clear();
-        
+
         Logger::Close("ECS");
         Logger::Close("loading");
     }
@@ -62,13 +62,8 @@ namespace DE
         layer->OnAttach();
     }
 
-    void Application::OnLoad() {}
-    void Application::OnUpdate(float dt) {}
-    void Application::OnShutdown() {}
-
     void Application::Run()
     {
-        OnLoad();
         double frame_begin, frame_end, prev_frame_time = 0.001, fake_time;
         while (!m_Window->ShouldClose())
         {
@@ -80,7 +75,6 @@ namespace DE
                 Renderer::BeginFrame();
 
                 DE_PROFILE_SCOPE("Window Update", m_Window->OnUpdate());
-                DE_PROFILE_SCOPE("Application Update Function", OnUpdate(prev_frame_time));
                 DE_PROFILE_SCOPE("Layers Update", {
                     for (auto layer : m_Layers)
                     {
@@ -101,7 +95,6 @@ namespace DE
 
             DE_FTR_PRINT();
         }
-        OnShutdown();
     }
 
     Application& Application::Get()

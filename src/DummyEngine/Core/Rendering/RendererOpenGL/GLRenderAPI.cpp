@@ -1,3 +1,5 @@
+#include <GLAD/glad.h>
+
 #include "Core/Rendering/RendererOpenGL/GLRenderAPI.h"
 #include "ToolBox/Dev/Logger.h"
 

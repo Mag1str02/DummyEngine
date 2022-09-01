@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Addition/Base.h"
-#include "Core/Application/Window.h"
 #include "Core/Rendering/Renderer/VertexArray.h"
 
 namespace DE

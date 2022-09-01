@@ -2,6 +2,7 @@
 
 #include "Core/Application/Window.h"
 #include "Core/Application/ImGuiLayer.h"
+#include "Core/Application/Event.h"
 
 namespace DE
 {
@@ -18,12 +19,10 @@ namespace DE
         Application& operator=(Application&&) = delete;
 
         void PushLayer(Layer* layer);
+        void OnEvent(Event& event);
 
         void Run();
-        virtual void OnLoad();
-        virtual void OnUpdate(float dt);
-        virtual void OnShutdown();
-
+ 
         static Application& Get();
 
     protected:
