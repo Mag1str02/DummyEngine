@@ -17,7 +17,6 @@
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/Components.h"
 
-#include "Core/Input/Input.h"
 #include "Core/Objects/Cameras/FPSCamera.h"
 #include "Core/Objects/LightSources/LightSource.h"
 

@@ -42,6 +42,8 @@ namespace DE
 
         m_ImGuiLayer = new ImGuiLayer();
         PushLayer(m_ImGuiLayer);
+
+        Input::NewFrame();
     }
     Application::~Application()
     {
@@ -85,6 +87,8 @@ namespace DE
 
             DE_PROFILE_SCOPE("", {
                 Renderer::BeginFrame();
+
+                Input::NewFrame();
 
                 DE_PROFILE_SCOPE("Window Update", m_Window->OnUpdate());
                 DE_PROFILE_SCOPE("Layers Update", {

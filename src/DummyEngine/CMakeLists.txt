@@ -19,6 +19,7 @@ set(ENGINE_SOURCES
     Core/Application/EntryPoint.cpp
     Core/Application/ImGuiLayer.cpp
     Core/Application/Window.cpp
+    Core/Application/Input.cpp
 
     Core/ECS/ComponentArray.hpp
     Core/ECS/ComponentManager.hpp
@@ -56,8 +57,6 @@ set(ENGINE_SOURCES
     Core/ResourceManaging/AssetManager.cpp
     Core/ResourceManaging/RawData.cpp
     Core/ResourceManaging/ResourceManager.cpp
-
-    Core/Input/Input.cpp
 
     ToolBox/Dev/Logger.cpp
     ToolBox/Dev/FrameTimeReader.cpp
