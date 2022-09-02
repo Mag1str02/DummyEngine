@@ -13,11 +13,26 @@ namespace DE
         }
     }
 
+    Input::Input()
+    {
+        m_EventDispatcher.AddEventListener<KeyPressedEvent>([this](KeyPressedEvent& event) { m_CurrentFrame.key_states[event.GetKey()] = true; });
+        m_EventDispatcher.AddEventListener<KeyReleasedEvent>([this](KeyReleasedEvent& event) { m_CurrentFrame.key_states[event.GetKey()] = false; });
+
+        m_EventDispatcher.AddEventListener<MouseLockEvent>([this](MouseLockEvent& event) { m_CurrentFrame.mouse_locked = true; });
+        m_EventDispatcher.AddEventListener<MouseUnlockEvent>([this](MouseUnlockEvent& event) { m_CurrentFrame.mouse_locked = false; });
+        m_EventDispatcher.AddEventListener<MouseLockToggleEvent>([this](MouseLockToggleEvent& event) { m_CurrentFrame.mouse_locked = !m_CurrentFrame.mouse_locked; });
+
+        m_EventDispatcher.AddEventListener<MouseMovedCallback>(
+            [this](MouseMovedCallback& event)
+            {
+                m_CurrentFrame.x_pos = event.GetXPos();
+                m_CurrentFrame.y_pos = event.GetYPos();
+            });
+    }
+
     void Input::IOnEvent(Event& event)
     {
-        EventDispatcher dispatcher;
-        dispatcher.AddEventListener<KeyPressedEvent>([this](KeyPressedEvent& event) { m_CurrentFrame.key_states[event.GetKey()] = true; });
-        dispatcher.AddEventListener<KeyReleasedEvent>([this](KeyReleasedEvent& event) { m_CurrentFrame.key_states[event.GetKey()] = false; });
+        m_EventDispatcher.Dispatch(event);
     }
     void Input::INewFrame()
     {
@@ -32,19 +47,24 @@ namespace DE
     {
         return m_Frames[0].y_pos - m_Frames[1].y_pos;
     }
-    bool Input::IKeyReleased(int16_t key_id) const
+
+    bool Input::IMouseLocked() const
+    {
+        return m_Frames[0].mouse_locked;
+    }
+    bool Input::IKeyReleased(uint32_t key_id) const
     {
         return !m_Frames[0].key_states.at(key_id) && m_Frames[1].key_states.at(key_id);
     }
-    bool Input::IKeyPressed(int16_t key_id) const
+    bool Input::IKeyPressed(uint32_t key_id) const
     {
         return m_Frames[0].key_states.at(key_id) && !m_Frames[1].key_states.at(key_id);
     }
-    bool Input::IKeyDown(int16_t key_id) const
+    bool Input::IKeyDown(uint32_t key_id) const
     {
         return m_Frames[0].key_states.at(key_id);
     }
-    bool Input::IKeyUp(int16_t key_id) const
+    bool Input::IKeyUp(uint32_t key_id) const
     {
         return !m_Frames[0].key_states.at(key_id);
     }
@@ -72,19 +92,25 @@ namespace DE
     {
         return Get().ICursorYOffset();
     }
-    bool Input::KeyReleased(int16_t key_id)
+
+    bool Input::MouseLocked()
+    {
+        return Get().IMouseLocked();
+    }
+
+    bool Input::KeyReleased(uint32_t key_id)
     {
         return Get().IKeyReleased(key_id);
     }
-    bool Input::KeyPressed(int16_t key_id)
+    bool Input::KeyPressed(uint32_t key_id)
     {
         return Get().IKeyPressed(key_id);
     }
-    bool Input::KeyDown(int16_t key_id)
+    bool Input::KeyDown(uint32_t key_id)
     {
         return Get().IKeyDown(key_id);
     }
-    bool Input::KeyUp(int16_t key_id)
+    bool Input::KeyUp(uint32_t key_id)
     {
         return Get().IKeyUp(key_id);
     }

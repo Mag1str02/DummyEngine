@@ -11,7 +11,7 @@ namespace DE
     {
     public:
         Application(std::string name);
-        virtual ~Application();
+        ~Application();
 
         Application(const Application&) = delete;
         Application(Application&&) = delete;
@@ -25,16 +25,17 @@ namespace DE
 
         static Application& Get();
 
-    protected:
+    private:
         friend class ImGuiLayer;
 
+        void SetUpCallbacks();
+        void OnWindowResize(WindowResizeEvent& e);
+        void OnWindowClose(WindowCloseEvent& e);
+
         bool m_ShouldClose;
+        EventDispatcher m_EventDispatcher;
         std::vector<Layer*> m_Layers;
         ImGuiLayer* m_ImGuiLayer;
         Window* m_Window;
-
-    private:
-        void OnWindowResize(WindowResizeEvent& e);
-        void OnWindowClose(WindowCloseEvent& e);
     };
 }  // namespace DE

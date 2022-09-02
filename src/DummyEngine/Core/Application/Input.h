@@ -1,5 +1,7 @@
 #pragma once
 
+#include <GLFW/glfw3.h>
+
 #include "Addition/Base.h"
 #include "Core/Application/Event.h"
 
@@ -8,9 +10,10 @@ namespace DE
 
     struct InputFrame
     {
+        bool mouse_locked = false;
         double x_pos;
         double y_pos;
-        std::map<int16_t, bool> key_states;
+        std::array<bool, GLFW_KEY_LAST> key_states;
 
         InputFrame();
     };
@@ -19,6 +22,7 @@ namespace DE
     {
     private:
         InputFrame m_CurrentFrame;
+        EventDispatcher m_EventDispatcher;
         std::deque<InputFrame> m_Frames;
 
         void IOnEvent(Event& e);
@@ -26,12 +30,14 @@ namespace DE
 
         double ICursorXOffset() const;
         double ICursorYOffset() const;
-        bool IKeyReleased(int16_t key_id) const;
-        bool IKeyPressed(int16_t key_id) const;
-        bool IKeyDown(int16_t key_id) const;
-        bool IKeyUp(int16_t key_id) const;
+        bool IMouseLocked() const;
 
-        Input(){}
+        bool IKeyReleased(uint32_t key_id) const;
+        bool IKeyPressed(uint32_t key_id) const;
+        bool IKeyDown(uint32_t key_id) const;
+        bool IKeyUp(uint32_t key_id) const;
+
+        Input();
         static Input& Get();
 
     public:
@@ -40,9 +46,11 @@ namespace DE
 
         static double CursorXOffset();
         static double CursorYOffset();
-        static bool KeyReleased(int16_t key_id);
-        static bool KeyPressed(int16_t key_id);
-        static bool KeyDown(int16_t key_id);
-        static bool KeyUp(int16_t key_id);
+        static bool MouseLocked();
+
+        static bool KeyReleased(uint32_t key_id);
+        static bool KeyPressed(uint32_t key_id);
+        static bool KeyDown(uint32_t key_id);
+        static bool KeyUp(uint32_t key_id);
     };
 }  // namespace DE

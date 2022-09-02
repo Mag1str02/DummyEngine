@@ -12,6 +12,8 @@ namespace DE
 
         WindowResize,
         WindowClose,
+        WindowModeWindowed,
+        WindowModeFullscreen,
 
         KeyPressed,
         KeyReleased,
@@ -20,6 +22,9 @@ namespace DE
         MouseButtonReleased,
         MouseScrolled,
         MouseMoved,
+        MouseLock,
+        MouseUnlock,
+        MouseLockToggle,
 
         Count
     };
@@ -37,20 +42,19 @@ namespace DE
         template <typename ListeningEvent> void AddEventListener(EventCallback<ListeningEvent> callback)
         {
             auto base_callback = [func = std::move(callback)](Event& e) { func(static_cast<ListeningEvent&>(e)); };
-            m_EventCallbacks[(size_t)ListeningEvent::Type()] = std::move(base_callback);
+            m_EventCallbacks[(size_t)ListeningEvent::Type()].push_back(base_callback);
         }
 
         void Dispatch(Event& event)
         {
-            auto& callback = m_EventCallbacks[(size_t)(event.GetType())];
-            if (callback)
+            for (auto& callback : m_EventCallbacks[(size_t)(event.GetType())])
             {
                 callback(event);
             }
         }
 
     private:
-        std::array<EventCallback<Event>, static_cast<size_t>(EventType::Count)> m_EventCallbacks;
+        std::array<std::vector<EventCallback<Event>>, static_cast<size_t>(EventType::Count)> m_EventCallbacks;
     };
 
 #define EVENT_TYPE(type)                       \
@@ -90,6 +94,28 @@ namespace DE
 
         EVENT_TYPE(WindowClose);
     };
+    class WindowModeWindowedEvent : public Event
+    {
+    public:
+        WindowModeWindowedEvent() {}
+
+        EVENT_TYPE(WindowModeWindowed);
+    };
+    class WindowModeFullscreenEvent : public Event
+    {
+    public:
+        WindowModeFullscreenEvent(uint32_t monitor_id) : m_MonitorId(monitor_id) {}
+
+        uint32_t GetMonitorId() const
+        {
+            return m_MonitorId;
+        }
+
+        EVENT_TYPE(WindowModeFullscreen);
+
+    private:
+        uint32_t m_MonitorId;
+    };
 
     class KeyPressedEvent : public Event
     {
@@ -116,7 +142,7 @@ namespace DE
             return m_KeyKode;
         }
 
-        EVENT_TYPE(KeyPressed);
+        EVENT_TYPE(KeyReleased);
 
     private:
         uint32_t m_KeyKode;
@@ -155,42 +181,63 @@ namespace DE
     class MouseScrolledEvent : public Event
     {
     public:
-        MouseScrolledEvent(float x_offset, float y_offset) : m_XOffset(x_offset), m_YOffset(y_offset) {}
+        MouseScrolledEvent(float x_offset, float y_offset) : m_XPos(x_offset), m_YPos(y_offset) {}
 
         float GetXOffset() const
         {
-            return m_XOffset;
+            return m_XPos;
         }
         float GetYOffset() const
         {
-            return m_YOffset;
+            return m_YPos;
         }
 
         EVENT_TYPE(MouseScrolled);
 
     private:
-        float m_XOffset;
-        float m_YOffset;
+        float m_XPos;
+        float m_YPos;
     };
-    class MouseMovedEvent : public Event
+    class MouseMovedCallback : public Event
     {
     public:
-        MouseMovedEvent(float x_offset, float y_offset) : m_XOffset(x_offset), m_YOffset(y_offset) {}
+        MouseMovedCallback(float x_pos, float y_pos) : m_XPos(x_pos), m_YPos(y_pos) {}
 
-        float GetXOffset() const
+        float GetXPos() const
         {
-            return m_XOffset;
+            return m_XPos;
         }
-        float GetYOffset() const
+        float GetYPos() const
         {
-            return m_YOffset;
+            return m_YPos;
         }
 
         EVENT_TYPE(MouseMoved);
 
     private:
-        float m_XOffset;
-        float m_YOffset;
+        float m_XPos;
+        float m_YPos;
+    };
+    class MouseLockEvent : public Event
+    {
+    public:
+        MouseLockEvent() {}
+
+        EVENT_TYPE(MouseLock);
+    };
+    class MouseUnlockEvent : public Event
+    {
+    public:
+        MouseUnlockEvent() {}
+
+        EVENT_TYPE(MouseUnlock);
+    };
+    class MouseLockToggleEvent : public Event
+    {
+    public:
+        MouseLockToggleEvent() {}
+
+        EVENT_TYPE(MouseLockToggle);
     };
 
 }  // namespace DE

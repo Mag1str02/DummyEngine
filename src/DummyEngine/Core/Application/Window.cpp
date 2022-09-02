@@ -39,15 +39,38 @@ namespace DE
 
         Invalidate();
     }
-    void Window::Windowed()
+    void Window::Windowed(uint32_t width, uint32_t height, uint32_t x_pos, uint32_t y_pos)
     {
         m_State.mode = WindowMode::Windowed;
+        m_State.width = width;
+        m_State.height = height;
+        m_State.x_pos = x_pos;
+        m_State.y_pos = y_pos;
 
         Invalidate();
     }
-    bool Window::ShouldClose() const
+
+    void Window::LockMouse()
     {
-        return glfwWindowShouldClose(m_Window);
+        m_State.mouse_locked = true;
+        glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+    void Window::UnlockMouse()
+    {
+        m_State.mouse_locked = false;
+        glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+    void Window::ToggleMouseLock()
+    {
+        if (m_State.mouse_locked)
+        {
+            glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+        else
+        {
+            glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+        m_State.mouse_locked = !m_State.mouse_locked;
     }
 
     void Window::OnUpdate()
@@ -68,11 +91,10 @@ namespace DE
     void Window::Invalidate()
     {
         DE_ASSERT(m_State.mode != WindowMode::None, "Wrong window mode.");
-        DE_ASSERT(m_State.width != 0 && m_State.height != 0,
-                  "Wrong window size(" + std::to_string(m_State.width) + ", " + std::to_string(m_State.height) + ")");
+        DE_ASSERT(m_State.width != 0 && m_State.height != 0, "Wrong window size(" + std::to_string(m_State.width) + ", " + std::to_string(m_State.height) + ")");
         if (m_State.mode == WindowMode::Windowed)
         {
-            glfwSetWindowMonitor(m_Window, nullptr, 100, 100, m_State.width, m_State.height, 200);
+            glfwSetWindowMonitor(m_Window, nullptr, m_State.x_pos, m_State.y_pos, m_State.width, m_State.height, 200);
         }
         if (m_State.mode == WindowMode::FullScreen)
         {
@@ -80,6 +102,8 @@ namespace DE
             const GLFWvidmode* mode = glfwGetVideoMode(monitor);
             m_State.height = mode->height;
             m_State.width = mode->width;
+            m_State.x_pos = 0;
+            m_State.y_pos = 0;
             glfwSetWindowMonitor(m_Window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
         }
     }
@@ -164,7 +188,7 @@ namespace DE
                                  {
                                      WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
 
-                                     MouseMovedEvent event((float)xPos, (float)yPos);
+                                     MouseMovedCallback event((float)xPos, (float)yPos);
                                      state.EventCallback(event);
                                  });
     }

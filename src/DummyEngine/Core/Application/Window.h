@@ -23,7 +23,10 @@ namespace DE
         std::string name = "Window";
         uint32_t width = 1280;
         uint32_t height = 720;
+        uint32_t x_pos = 100;
+        uint32_t y_pos = 100;
         uint32_t monitor_id = 0;
+        bool mouse_locked = false;
 
         EventCallback<Event> EventCallback;
     };
@@ -38,8 +41,11 @@ namespace DE
         void SetEventCallback(EventCallback<Event> callback);
 
         void FullScreen(uint32_t monitor_id);
-        void Windowed();
-        bool ShouldClose() const;
+        void Windowed(uint32_t width = 1280, uint32_t height = 720, uint32_t x_pos = 100, uint32_t y_pos = 100);
+
+        void LockMouse();
+        void UnlockMouse();
+        void ToggleMouseLock();
 
         const WindowState& GetState() const;
 

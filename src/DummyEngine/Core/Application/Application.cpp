@@ -35,15 +35,16 @@ namespace DE
 
         InitGLFW();
 
-        m_Window = new Window(WindowState(WindowMode::Windowed, name, 1280, 720, 0));
+        m_Window = new Window(WindowState(WindowMode::Windowed, name, 1280, 720));
         m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
 
         Renderer::Init(Config::GetRenderAPI());
+        Input::NewFrame();
 
         m_ImGuiLayer = new ImGuiLayer();
         PushLayer(m_ImGuiLayer);
 
-        Input::NewFrame();
+        SetUpCallbacks();
     }
     Application::~Application()
     {
@@ -62,15 +63,12 @@ namespace DE
     void Application::PushLayer(Layer* layer)
     {
         m_Layers.push_back(layer);
+        layer->m_EventCallback = [this](Event& e) { OnEvent(e); };
         layer->OnAttach();
     }
     void Application::OnEvent(Event& event)
     {
-        EventDispatcher dispatcher;
-        dispatcher.AddEventListener<WindowResizeEvent>([this](WindowResizeEvent& event) { OnWindowResize(event); });
-        dispatcher.AddEventListener<WindowCloseEvent>([this](WindowCloseEvent& event) { OnWindowClose(event); });
-        dispatcher.Dispatch(event);
-
+        m_EventDispatcher.Dispatch(event);
         for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); ++it)
         {
             (*it)->OnEvent(event);
@@ -118,6 +116,35 @@ namespace DE
         return *s_ApplicationInstance;
     }
 
+    void Application::SetUpCallbacks()
+    {
+        m_EventDispatcher.AddEventListener<WindowResizeEvent>([this](WindowResizeEvent& event) { OnWindowResize(event); });
+        m_EventDispatcher.AddEventListener<WindowCloseEvent>([this](WindowCloseEvent& event) { OnWindowClose(event); });
+        m_EventDispatcher.AddEventListener<WindowModeFullscreenEvent>([this](WindowModeFullscreenEvent& event) { m_Window->FullScreen(event.GetMonitorId()); });
+        m_EventDispatcher.AddEventListener<WindowModeWindowedEvent>([this](WindowModeWindowedEvent& event) { m_Window->Windowed(); });
+        m_EventDispatcher.AddEventListener<MouseLockEvent>(
+            [this](MouseLockEvent& event)
+            {
+                m_Window->LockMouse();
+                Input::OnEvent(event);
+            });
+        m_EventDispatcher.AddEventListener<MouseUnlockEvent>(
+            [this](MouseUnlockEvent& event)
+            {
+                m_Window->UnlockMouse();
+                Input::OnEvent(event);
+            });
+        m_EventDispatcher.AddEventListener<MouseLockToggleEvent>(
+            [this](MouseLockToggleEvent& event)
+            {
+                m_Window->ToggleMouseLock();
+                Input::OnEvent(event);
+            });
+
+        m_EventDispatcher.AddEventListener<KeyPressedEvent>(Input::OnEvent);
+        m_EventDispatcher.AddEventListener<KeyReleasedEvent>(Input::OnEvent);
+        m_EventDispatcher.AddEventListener<MouseMovedCallback>(Input::OnEvent);
+    }
     void Application::OnWindowResize(WindowResizeEvent& e)
     {
         Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
