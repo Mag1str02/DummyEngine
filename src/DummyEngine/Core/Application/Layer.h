@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Addition/Base.h"
+#include "Core/Application/Event.h"
 
 namespace DE
 {
@@ -14,6 +15,7 @@ namespace DE
         virtual void OnDetach() {}
         virtual void OnUpdate(float dt) {}
         virtual void OnImGuiRender() {}
+        virtual void OnEvent(Event& e) {}
 
         const std::string& GetName() const
         {

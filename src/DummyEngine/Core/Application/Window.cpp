@@ -24,6 +24,8 @@ namespace DE
         m_Context = Context::Create(m_Window);
         m_Context->Load();
 
+        SetupCallbacks();
+
         Invalidate();
     }
     Window::~Window()
@@ -53,6 +55,10 @@ namespace DE
         glfwPollEvents();
         m_Context->SwapBuffers();
     }
+    void Window::SetEventCallback(EventCallback<Event> callback)
+    {
+        m_State.EventCallback = callback;
+    }
 
     const WindowState& Window::GetState() const
     {
@@ -76,5 +82,90 @@ namespace DE
             m_State.width = mode->width;
             glfwSetWindowMonitor(m_Window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
         }
+    }
+    void Window::SetupCallbacks()
+    {
+        glfwSetWindowUserPointer(m_Window, &m_State);
+
+        glfwSetWindowSizeCallback(m_Window,
+                                  [](GLFWwindow* window, int width, int height)
+                                  {
+                                      WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
+                                      state.width = width;
+                                      state.height = height;
+
+                                      WindowResizeEvent event(width, height);
+                                      state.EventCallback(event);
+                                  });
+
+        glfwSetWindowCloseCallback(m_Window,
+                                   [](GLFWwindow* window)
+                                   {
+                                       WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
+                                       WindowCloseEvent event;
+                                       state.EventCallback(event);
+                                   });
+
+        glfwSetKeyCallback(m_Window,
+                           [](GLFWwindow* window, int key, int scancode, int action, int mods)
+                           {
+                               WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
+                               switch (action)
+                               {
+                                   case GLFW_PRESS: {
+                                       KeyPressedEvent event(key);
+                                       state.EventCallback(event);
+                                       break;
+                                   }
+                                   case GLFW_RELEASE: {
+                                       KeyReleasedEvent event(key);
+                                       state.EventCallback(event);
+                                       break;
+                                   }
+                                   case GLFW_REPEAT: {
+                                       KeyPressedEvent event(key);
+                                       state.EventCallback(event);
+                                       break;
+                                   }
+                               }
+                           });
+
+        glfwSetMouseButtonCallback(m_Window,
+                                   [](GLFWwindow* window, int button, int action, int mods)
+                                   {
+                                       WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
+
+                                       switch (action)
+                                       {
+                                           case GLFW_PRESS: {
+                                               MouseButtonPressedEvent event(button);
+                                               state.EventCallback(event);
+                                               break;
+                                           }
+                                           case GLFW_RELEASE: {
+                                               MouseButtonReleasedEvent event(button);
+                                               state.EventCallback(event);
+                                               break;
+                                           }
+                                       }
+                                   });
+
+        glfwSetScrollCallback(m_Window,
+                              [](GLFWwindow* window, double xOffset, double yOffset)
+                              {
+                                  WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
+
+                                  MouseScrolledEvent event((float)xOffset, (float)yOffset);
+                                  state.EventCallback(event);
+                              });
+
+        glfwSetCursorPosCallback(m_Window,
+                                 [](GLFWwindow* window, double xPos, double yPos)
+                                 {
+                                     WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
+
+                                     MouseMovedEvent event((float)xPos, (float)yPos);
+                                     state.EventCallback(event);
+                                 });
     }
 }  // namespace DE

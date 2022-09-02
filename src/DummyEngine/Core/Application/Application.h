@@ -2,7 +2,6 @@
 
 #include "Core/Application/Window.h"
 #include "Core/Application/ImGuiLayer.h"
-#include "Core/Application/Event.h"
 
 namespace DE
 {
@@ -22,14 +21,19 @@ namespace DE
         void OnEvent(Event& event);
 
         void Run();
- 
+
         static Application& Get();
 
     protected:
         friend class ImGuiLayer;
 
+        bool m_ShouldClose;
         std::vector<Layer*> m_Layers;
         ImGuiLayer* m_ImGuiLayer;
         Window* m_Window;
+
+    private:
+        void OnWindowResize(WindowResizeEvent& e);
+        void OnWindowClose(WindowCloseEvent& e);
     };
 }  // namespace DE

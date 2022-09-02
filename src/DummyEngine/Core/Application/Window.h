@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Core/Rendering/Renderer/Context.h"
+#include "Core/Application/Event.h"
 #include "Addition/Base.h"
 
 namespace DE
@@ -23,6 +24,8 @@ namespace DE
         uint32_t width = 1280;
         uint32_t height = 720;
         uint32_t monitor_id = 0;
+
+        EventCallback<Event> EventCallback;
     };
 
     class Window
@@ -32,6 +35,7 @@ namespace DE
         ~Window();
 
         void OnUpdate();
+        void SetEventCallback(EventCallback<Event> callback);
 
         void FullScreen(uint32_t monitor_id);
         void Windowed();
@@ -41,6 +45,8 @@ namespace DE
 
     private:
         friend class ImGuiLayer;
+
+        void SetupCallbacks();
         void Invalidate();
 
         WindowState m_State;

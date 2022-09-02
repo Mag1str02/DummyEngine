@@ -24,7 +24,7 @@ namespace DE
         glfwTerminate();
     }
 
-    Application::Application(std::string name)
+    Application::Application(std::string name) : m_ShouldClose(false)
     {
         DE_ASSERT(s_ApplicationInstance == nullptr, "Creating more than one application at a time.");
         s_ApplicationInstance = this;
@@ -36,6 +36,7 @@ namespace DE
         InitGLFW();
 
         m_Window = new Window(WindowState(WindowMode::Windowed, name, 1280, 720, 0));
+        m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
 
         Renderer::Init(Config::GetRenderAPI());
 
@@ -61,11 +62,22 @@ namespace DE
         m_Layers.push_back(layer);
         layer->OnAttach();
     }
+    void Application::OnEvent(Event& event)
+    {
+        EventDispatcher dispatcher;
+        dispatcher.AddEventListener<WindowResizeEvent>([this](WindowResizeEvent& event) { OnWindowResize(event); });
+        dispatcher.AddEventListener<WindowCloseEvent>([this](WindowCloseEvent& event) { OnWindowClose(event); });
+        dispatcher.Dispatch(event);
 
+        for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); ++it)
+        {
+            (*it)->OnEvent(event);
+        }
+    }
     void Application::Run()
     {
         double frame_begin, frame_end, prev_frame_time = 0.001, fake_time;
-        while (!m_Window->ShouldClose())
+        while (!m_ShouldClose)
         {
             frame_end = glfwGetTime();
             prev_frame_time = frame_end - frame_begin;
@@ -100,6 +112,15 @@ namespace DE
     Application& Application::Get()
     {
         return *s_ApplicationInstance;
+    }
+
+    void Application::OnWindowResize(WindowResizeEvent& e)
+    {
+        Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+    }
+    void Application::OnWindowClose(WindowCloseEvent& e)
+    {
+        m_ShouldClose = true;
     }
 
 }  // namespace DE

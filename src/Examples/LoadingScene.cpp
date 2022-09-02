@@ -41,7 +41,7 @@ public:
     }
 };
 
-class TestApplication : public Application
+class MyLayer : public Layer
 {
 public:
     TestApplication(std::string name) : Application(name)
@@ -171,10 +171,3 @@ private:
     Ref<FrameBuffer> m_FrameBuffer;
     bool cursor_mode;
 };
-
-int main()
-{
-    TestApplication application("Test Application");
-    application.Start();
-    return 0;
-}
