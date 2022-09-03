@@ -74,7 +74,7 @@ target_compile_definitions(DummyEngineLib PUBLIC
     DE_ENABLE_ASSERTS=1
 )
 
- 
+add_subdirectory(libs/assimp)
 add_subdirectory(libs/imgui)
 add_subdirectory(libs/glfw)
 add_subdirectory(libs/glad)
@@ -91,10 +91,6 @@ target_include_directories(DummyEngineLib
     PUBLIC ${DE_LIB_SOURCE_DIR}
 )
 
-target_link_directories(DummyEngineLib
-    PUBLIC ${EXTERNAL_LIBS_DIR}/assimp/lib
-)
-
 target_link_libraries(DummyEngineLib
     PUBLIC ImGui
     PUBLIC glad
@@ -103,4 +99,4 @@ target_link_libraries(DummyEngineLib
     PUBLIC yaml-cpp
 )
 
-add_custom_command(TARGET DummyEngineLib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/libs/Assimp/lib/libassimp.dll  ${SANDBOX_DIR})
+# add_custom_command(TARGET DummyEngineLib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/libs/Assimp/lib/libassimp.dll  ${SANDBOX_DIR})
