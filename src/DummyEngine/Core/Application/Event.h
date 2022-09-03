@@ -10,10 +10,10 @@ namespace DE
     {
         None = 0,
 
+        //*Responding
+
         WindowResize,
         WindowClose,
-        WindowModeWindowed,
-        WindowModeFullscreen,
 
         KeyPressed,
         KeyReleased,
@@ -22,9 +22,15 @@ namespace DE
         MouseButtonReleased,
         MouseScrolled,
         MouseMoved,
-        MouseLock,
-        MouseUnlock,
-        MouseLockToggle,
+
+        //*Triggering
+
+        SetWindowModeWindowed,
+        SetWindowModeFullscreen,
+
+        SetMouseLock,
+        SetMouseUnlock,
+        SetMouseLockToggle,
 
         Count
     };
@@ -57,29 +63,19 @@ namespace DE
         std::array<std::vector<EventCallback<Event>>, static_cast<size_t>(EventType::Count)> m_EventCallbacks;
     };
 
-#define EVENT_TYPE(type)                       \
-    virtual EventType GetType() const override \
-    {                                          \
-        return EventType::type;                \
-    }                                          \
-    static EventType Type()                    \
-    {                                          \
-        return EventType::type;                \
-    }
+#define EVENT_TYPE(type)                                                   \
+    virtual EventType GetType() const override { return EventType::type; } \
+    static EventType Type() { return EventType::type; }
+
+    //*Responding
 
     class WindowResizeEvent : public Event
     {
     public:
         WindowResizeEvent(uint32_t width, uint32_t height) : m_Width(width), m_Height(height) {}
 
-        uint32_t GetWidth() const
-        {
-            return m_Width;
-        }
-        uint32_t GetHeight() const
-        {
-            return m_Height;
-        }
+        uint32_t GetWidth() const { return m_Width; }
+        uint32_t GetHeight() const { return m_Height; }
 
         EVENT_TYPE(WindowResize);
 
@@ -94,38 +90,13 @@ namespace DE
 
         EVENT_TYPE(WindowClose);
     };
-    class WindowModeWindowedEvent : public Event
-    {
-    public:
-        WindowModeWindowedEvent() {}
-
-        EVENT_TYPE(WindowModeWindowed);
-    };
-    class WindowModeFullscreenEvent : public Event
-    {
-    public:
-        WindowModeFullscreenEvent(uint32_t monitor_id) : m_MonitorId(monitor_id) {}
-
-        uint32_t GetMonitorId() const
-        {
-            return m_MonitorId;
-        }
-
-        EVENT_TYPE(WindowModeFullscreen);
-
-    private:
-        uint32_t m_MonitorId;
-    };
 
     class KeyPressedEvent : public Event
     {
     public:
         KeyPressedEvent(uint32_t key) : m_KeyKode(key) {}
 
-        uint32_t GetKey() const
-        {
-            return m_KeyKode;
-        }
+        uint32_t GetKey() const { return m_KeyKode; }
 
         EVENT_TYPE(KeyPressed);
 
@@ -137,10 +108,7 @@ namespace DE
     public:
         KeyReleasedEvent(uint32_t key) : m_KeyKode(key) {}
 
-        uint32_t GetKey() const
-        {
-            return m_KeyKode;
-        }
+        uint32_t GetKey() const { return m_KeyKode; }
 
         EVENT_TYPE(KeyReleased);
 
@@ -153,10 +121,7 @@ namespace DE
     public:
         MouseButtonPressedEvent(uint32_t key) : m_KeyKode(key) {}
 
-        uint32_t GetKey() const
-        {
-            return m_KeyKode;
-        }
+        uint32_t GetKey() const { return m_KeyKode; }
 
         EVENT_TYPE(MouseButtonPressed);
 
@@ -168,10 +133,7 @@ namespace DE
     public:
         MouseButtonReleasedEvent(uint32_t key) : m_KeyKode(key) {}
 
-        uint32_t GetKey() const
-        {
-            return m_KeyKode;
-        }
+        uint32_t GetKey() const { return m_KeyKode; }
 
         EVENT_TYPE(MouseButtonReleased);
 
@@ -183,14 +145,8 @@ namespace DE
     public:
         MouseScrolledEvent(float x_offset, float y_offset) : m_XPos(x_offset), m_YPos(y_offset) {}
 
-        float GetXOffset() const
-        {
-            return m_XPos;
-        }
-        float GetYOffset() const
-        {
-            return m_YPos;
-        }
+        float GetXOffset() const { return m_XPos; }
+        float GetYOffset() const { return m_YPos; }
 
         EVENT_TYPE(MouseScrolled);
 
@@ -203,14 +159,8 @@ namespace DE
     public:
         MouseMovedCallback(float x_pos, float y_pos) : m_XPos(x_pos), m_YPos(y_pos) {}
 
-        float GetXPos() const
-        {
-            return m_XPos;
-        }
-        float GetYPos() const
-        {
-            return m_YPos;
-        }
+        float GetXPos() const { return m_XPos; }
+        float GetYPos() const { return m_YPos; }
 
         EVENT_TYPE(MouseMoved);
 
@@ -218,26 +168,60 @@ namespace DE
         float m_XPos;
         float m_YPos;
     };
-    class MouseLockEvent : public Event
+
+    //*Triggering
+
+    class SetWindowModeWindowedEvent : public Event
     {
     public:
-        MouseLockEvent() {}
+        SetWindowModeWindowedEvent(uint32_t width = 1280, uint32_t height = 720, uint32_t x_pos = 100, uint32_t y_pos = 100) : m_Width(width), m_Height(height), m_XPos(x_pos), m_YPos(y_pos) {}
 
-        EVENT_TYPE(MouseLock);
+        uint32_t GetWidth() const { return m_Width; }
+        uint32_t GetHeight() const { return m_Height; }
+        uint32_t GetXPos() const { return m_XPos; }
+        uint32_t GetYPos() const { return m_YPos; }
+
+        EVENT_TYPE(SetWindowModeWindowed);
+
+    private:
+        uint32_t m_Width;
+        uint32_t m_Height;
+        uint32_t m_XPos;
+        uint32_t m_YPos;
     };
-    class MouseUnlockEvent : public Event
+    class SetWindowModeFullscreenEvent : public Event
     {
     public:
-        MouseUnlockEvent() {}
+        SetWindowModeFullscreenEvent(uint32_t monitor_id) : m_MonitorId(monitor_id) {}
 
-        EVENT_TYPE(MouseUnlock);
+        uint32_t GetMonitorId() const { return m_MonitorId; }
+
+        EVENT_TYPE(SetWindowModeFullscreen);
+
+    private:
+        uint32_t m_MonitorId;
     };
-    class MouseLockToggleEvent : public Event
+
+    class SetMouseLockEvent : public Event
     {
     public:
-        MouseLockToggleEvent() {}
+        SetMouseLockEvent() {}
 
-        EVENT_TYPE(MouseLockToggle);
+        EVENT_TYPE(SetMouseLock);
+    };
+    class SetMouseUnlockEvent : public Event
+    {
+    public:
+        SetMouseUnlockEvent() {}
+
+        EVENT_TYPE(SetMouseUnlock);
+    };
+    class SetMouseLockToggleEvent : public Event
+    {
+    public:
+        SetMouseLockToggleEvent() {}
+
+        EVENT_TYPE(SetMouseLockToggle);
     };
 
 }  // namespace DE

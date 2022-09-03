@@ -238,14 +238,8 @@ namespace DE
     {
         Logger::Warning("Loading", "SceneLoader", "Load function of " + DemangleName<ComponentType>() + " undefined.");
     }
-    template <> void SceneLoader::LoadComponent<TagComponent>(YAML::Node n_Component, Entity& entity)
-    {
-        entity.AddComponent<TagComponent>(n_Component.as<std::string>());
-    }
-    template <> void SceneLoader::LoadComponent<IdComponent>(YAML::Node n_Component, Entity& entity)
-    {
-        entity.AddComponent<IdComponent>(IdComponent(UUID(n_Component.as<uint64_t>())));
-    }
+    template <> void SceneLoader::LoadComponent<TagComponent>(YAML::Node n_Component, Entity& entity) { entity.AddComponent<TagComponent>(n_Component.as<std::string>()); }
+    template <> void SceneLoader::LoadComponent<IdComponent>(YAML::Node n_Component, Entity& entity) { entity.AddComponent<IdComponent>(IdComponent(UUID(n_Component.as<uint64_t>()))); }
     template <> void SceneLoader::LoadComponent<TransformComponent>(YAML::Node n_Component, Entity& entity)
     {
         TransformComponent transformation;
@@ -276,7 +270,7 @@ namespace DE
             ResourceManager::AddResource(AssetManager::GetAsset<ShaderAsset>(id));
         }
         entity.AddComponent<ShaderComponent>({id, ResourceManager::GetResource<Shader>(id)});
-              m_Scene->RequestShader(id);
+        m_Scene->RequestShader(id);
     }
     template <> void SceneLoader::LoadComponent<FPSCamera>(YAML::Node n_Component, Entity& entity)
     {
@@ -364,14 +358,13 @@ namespace DE
         if (entity.HasComponent<RenderMeshComponent>() && entity.HasComponent<ShaderComponent>())
         {
             auto& map = m_Scene->m_RenderData.m_InstancedMeshes;
-            
+
             uint64_t mesh_id = entity.GetComponent<RenderMeshComponent>().id;
             uint64_t shader_id = entity.GetComponent<ShaderComponent>().id;
 
             if (!map.contains({mesh_id, shader_id}))
             {
-                map[{mesh_id, shader_id}] = {ResourceManager::GetResource<RenderMesh>(mesh_id)->Copy(),
-                                             ResourceManager::GetResource<Shader>(shader_id)};
+                map[{mesh_id, shader_id}] = {ResourceManager::GetResource<RenderMesh>(mesh_id)->Copy(), ResourceManager::GetResource<Shader>(shader_id)};
                 map[{mesh_id, shader_id}].first->SetInstanceBuffer({{BufferElementType::Mat4}, 1}, 100);
 
                 // for (auto& sub_mesh : ResourceManager::GetResource<RenderMesh>(mesh_id)->m_SubMeshes)
@@ -405,9 +398,13 @@ namespace DE
         }
     }
 
-    void SceneLoader::Load(Ref<Scene> scene, Path path)
+    void SceneLoader::Load(Ref<Scene>& scene, Path path)
     {
         YAML::Node n_Root, n_Scene, n_Assets, n_Entities;
+        if (!scene)
+        {
+            scene = CreateRef<Scene>("newScene");
+        }
 
         m_Scene = scene;
 

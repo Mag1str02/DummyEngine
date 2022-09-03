@@ -24,6 +24,7 @@ namespace DE
 
         virtual uint32_t Width() const override;
         virtual uint32_t Height() const override;
+        virtual uint32_t RendererId() const override;
 
         virtual void SetData(const void* data, uint32_t size) override;
 

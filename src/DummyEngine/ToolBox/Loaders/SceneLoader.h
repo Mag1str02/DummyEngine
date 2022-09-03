@@ -14,7 +14,7 @@ namespace DE
     {
     public:
         static void Save(Ref<Scene> scene, Path path);
-        static void Load(Ref<Scene> scene, Path path);
+        static void Load(Ref<Scene>& scene, Path path);
 
     private:
         // TODO: Think how user can create custom load and save functions for own components.

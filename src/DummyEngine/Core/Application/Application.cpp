@@ -19,10 +19,7 @@ namespace DE
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         Logger::Info("loading", "Initializer", "GLFW initialized.");
     }
-    void TerminateGLFW()
-    {
-        glfwTerminate();
-    }
+    void TerminateGLFW() { glfwTerminate(); }
 
     Application::Application(std::string name) : m_ShouldClose(false)
     {
@@ -111,31 +108,29 @@ namespace DE
         }
     }
 
-    Application& Application::Get()
-    {
-        return *s_ApplicationInstance;
-    }
+    Application& Application::Get() { return *s_ApplicationInstance; }
 
     void Application::SetUpCallbacks()
     {
         m_EventDispatcher.AddEventListener<WindowResizeEvent>([this](WindowResizeEvent& event) { OnWindowResize(event); });
         m_EventDispatcher.AddEventListener<WindowCloseEvent>([this](WindowCloseEvent& event) { OnWindowClose(event); });
-        m_EventDispatcher.AddEventListener<WindowModeFullscreenEvent>([this](WindowModeFullscreenEvent& event) { m_Window->FullScreen(event.GetMonitorId()); });
-        m_EventDispatcher.AddEventListener<WindowModeWindowedEvent>([this](WindowModeWindowedEvent& event) { m_Window->Windowed(); });
-        m_EventDispatcher.AddEventListener<MouseLockEvent>(
-            [this](MouseLockEvent& event)
+        m_EventDispatcher.AddEventListener<SetWindowModeFullscreenEvent>([this](SetWindowModeFullscreenEvent& event) { m_Window->FullScreen(event.GetMonitorId()); });
+        m_EventDispatcher.AddEventListener<SetWindowModeWindowedEvent>([this](SetWindowModeWindowedEvent& event)
+                                                                       { m_Window->Windowed(event.GetWidth(), event.GetHeight(), event.GetXPos(), event.GetYPos()); });
+        m_EventDispatcher.AddEventListener<SetMouseLockEvent>(
+            [this](SetMouseLockEvent& event)
             {
                 m_Window->LockMouse();
                 Input::OnEvent(event);
             });
-        m_EventDispatcher.AddEventListener<MouseUnlockEvent>(
-            [this](MouseUnlockEvent& event)
+        m_EventDispatcher.AddEventListener<SetMouseUnlockEvent>(
+            [this](SetMouseUnlockEvent& event)
             {
                 m_Window->UnlockMouse();
                 Input::OnEvent(event);
             });
-        m_EventDispatcher.AddEventListener<MouseLockToggleEvent>(
-            [this](MouseLockToggleEvent& event)
+        m_EventDispatcher.AddEventListener<SetMouseLockToggleEvent>(
+            [this](SetMouseLockToggleEvent& event)
             {
                 m_Window->ToggleMouseLock();
                 Input::OnEvent(event);
@@ -145,13 +140,7 @@ namespace DE
         m_EventDispatcher.AddEventListener<KeyReleasedEvent>(Input::OnEvent);
         m_EventDispatcher.AddEventListener<MouseMovedCallback>(Input::OnEvent);
     }
-    void Application::OnWindowResize(WindowResizeEvent& e)
-    {
-        Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
-    }
-    void Application::OnWindowClose(WindowCloseEvent& e)
-    {
-        m_ShouldClose = true;
-    }
+    void Application::OnWindowResize(WindowResizeEvent& e) { Renderer::OnWindowResize(e.GetWidth(), e.GetHeight()); }
+    void Application::OnWindowClose(WindowCloseEvent& e) { m_ShouldClose = true; }
 
 }  // namespace DE

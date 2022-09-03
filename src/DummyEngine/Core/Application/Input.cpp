@@ -18,9 +18,9 @@ namespace DE
         m_EventDispatcher.AddEventListener<KeyPressedEvent>([this](KeyPressedEvent& event) { m_CurrentFrame.key_states[event.GetKey()] = true; });
         m_EventDispatcher.AddEventListener<KeyReleasedEvent>([this](KeyReleasedEvent& event) { m_CurrentFrame.key_states[event.GetKey()] = false; });
 
-        m_EventDispatcher.AddEventListener<MouseLockEvent>([this](MouseLockEvent& event) { m_CurrentFrame.mouse_locked = true; });
-        m_EventDispatcher.AddEventListener<MouseUnlockEvent>([this](MouseUnlockEvent& event) { m_CurrentFrame.mouse_locked = false; });
-        m_EventDispatcher.AddEventListener<MouseLockToggleEvent>([this](MouseLockToggleEvent& event) { m_CurrentFrame.mouse_locked = !m_CurrentFrame.mouse_locked; });
+        m_EventDispatcher.AddEventListener<SetMouseLockEvent>([this](SetMouseLockEvent& event) { m_CurrentFrame.mouse_locked = true; });
+        m_EventDispatcher.AddEventListener<SetMouseUnlockEvent>([this](SetMouseUnlockEvent& event) { m_CurrentFrame.mouse_locked = false; });
+        m_EventDispatcher.AddEventListener<SetMouseLockToggleEvent>([this](SetMouseLockToggleEvent& event) { m_CurrentFrame.mouse_locked = !m_CurrentFrame.mouse_locked; });
 
         m_EventDispatcher.AddEventListener<MouseMovedCallback>(
             [this](MouseMovedCallback& event)

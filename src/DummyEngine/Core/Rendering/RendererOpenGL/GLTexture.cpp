@@ -28,10 +28,7 @@ namespace DE
     }
 
     GLTexture::GLTexture(uint32_t width, uint32_t height, TextureFormat format) :
-        m_Width(width),
-        m_Height(height),
-        m_InternalFormat(TextureFormatToGLTextureInternalFormat(format)),
-        m_Format(TextureFormatToGLTextureFormat(format))
+        m_Width(width), m_Height(height), m_InternalFormat(TextureFormatToGLTextureInternalFormat(format)), m_Format(TextureFormatToGLTextureFormat(format))
     {
         glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureId);
         glTextureStorage2D(m_TextureId, 1, m_InternalFormat, m_Width, m_Height);
@@ -44,10 +41,7 @@ namespace DE
         glTextureParameteri(m_TextureId, GL_TEXTURE_WRAP_T, GL_REPEAT);
     }
     GLTexture::GLTexture(const TextureData& data) :
-        m_Width(data.m_Width),
-        m_Height(data.m_Height),
-        m_InternalFormat(TextureFormatToGLTextureInternalFormat(data.m_Format)),
-        m_Format(TextureFormatToGLTextureFormat(data.m_Format))
+        m_Width(data.m_Width), m_Height(data.m_Height), m_InternalFormat(TextureFormatToGLTextureInternalFormat(data.m_Format)), m_Format(TextureFormatToGLTextureFormat(data.m_Format))
     {
         glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureId);
 
@@ -64,19 +58,11 @@ namespace DE
         }
     }
 
-    GLTexture::~GLTexture()
-    {
-        glDeleteTextures(1, &m_TextureId);
-    }
+    GLTexture::~GLTexture() { glDeleteTextures(1, &m_TextureId); }
 
-    uint32_t GLTexture::Width() const
-    {
-        return m_Width;
-    }
-    uint32_t GLTexture::Height() const
-    {
-        return m_Height;
-    }
+    uint32_t GLTexture::Width() const { return m_Width; }
+    uint32_t GLTexture::Height() const { return m_Height; }
+    uint32_t GLTexture::RendererId() const { return m_TextureId; }
 
     void GLTexture::SetData(const void* data, uint32_t size)
     {

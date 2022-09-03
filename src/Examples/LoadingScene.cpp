@@ -94,7 +94,7 @@ private:
 
         if (Input::KeyReleased(GLFW_KEY_TAB))
         {
-            MouseLockToggleEvent event;
+            SetMouseLockToggleEvent event;
             BroadcastEvent(event);
         }
 
@@ -102,7 +102,7 @@ private:
         {
             if (!windowed)
             {
-                WindowModeWindowedEvent event;
+                SetWindowModeWindowedEvent event;
                 BroadcastEvent(event);
             }
             else
@@ -113,7 +113,7 @@ private:
                     monitor_id = 1;
                 }
 
-                WindowModeFullscreenEvent event(monitor_id);
+                SetWindowModeFullscreenEvent event(monitor_id);
                 BroadcastEvent(event);
             }
             windowed = !windowed;

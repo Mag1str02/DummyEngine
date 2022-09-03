@@ -7,6 +7,7 @@ project(Examples)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/../Sandbox)
 
 add_subdirectory(src/DummyEngine)
+add_subdirectory(src/DummyEditor)
 
 add_executable(BasicScene src/Examples/BasicScene.cpp)
 add_executable(EmptyApplication src/Examples/EmptyApplication.cpp)

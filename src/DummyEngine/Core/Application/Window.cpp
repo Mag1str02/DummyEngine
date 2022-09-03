@@ -28,10 +28,7 @@ namespace DE
 
         Invalidate();
     }
-    Window::~Window()
-    {
-        glfwDestroyWindow(m_Window);
-    }
+    Window::~Window() { glfwDestroyWindow(m_Window); }
 
     void Window::FullScreen(uint32_t id)
     {
@@ -78,15 +75,9 @@ namespace DE
         glfwPollEvents();
         m_Context->SwapBuffers();
     }
-    void Window::SetEventCallback(EventCallback<Event> callback)
-    {
-        m_State.EventCallback = callback;
-    }
+    void Window::SetEventCallback(EventCallback<Event> callback) { m_State.EventCallback = callback; }
 
-    const WindowState& Window::GetState() const
-    {
-        return m_State;
-    }
+    const WindowState& Window::GetState() const { return m_State; }
 
     void Window::Invalidate()
     {
