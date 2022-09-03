@@ -1,35 +1,76 @@
 Scene:
-  Name: BasicScene
+  Name: NewScene
   Assets:
     Models:
+      ArchModel:
+        Path: Assets\Models\Arch\arch.obj
+        Compress: true
+        FlipUV: true
+        UUID: 4297990474591951207
       BackpackModel:
         Path: Assets\Models\Backpack\backpack.obj
-        Compress: false
+        Compress: true
         FlipUV: false
+        UUID: 654055540912474740
+      BladeModel:
+        Path: Assets\Models\Blade\murasama.obj
+        Compress: true
+        FlipUV: true
+        UUID: 4830874900694261513
+      CarModel:
+        Path: Assets\Models\Car\Car.obj
+        Compress: true
+        FlipUV: true
+        UUID: 4289254078394118472
       CubeModel:
         Path: Assets\Models\Cube\cube.obj
+        Compress: true
+        FlipUV: false
+        UUID: 6557233926725796949
+      LuffyModel:
+        Path: Assets\Models\Luffy\luffy.obj
         Compress: false
         FlipUV: false
+        UUID: 16146890173748989942
+      NissanModel:
+        Path: Assets\Models\Nissan\Nissan.obj
+        Compress: false
+        FlipUV: false
+        UUID: 1407032741301600330
+      RaidenModel:
+        Path: Assets\Models\Raiden\Raiden.obj
+        Compress: false
+        FlipUV: true
+        UUID: 17398553512178907239
+      SamModel:
+        Path: Assets\Models\Sam\Sam.obj
+        Compress: false
+        FlipUV: true
+        UUID: 11801744926729819249
       SponzaModel:
         Path: Assets\Models\Sponza\sponza.obj
         Compress: false
-        FlipUV: false
+        FlipUV: true
+        UUID: 18245820808254477624
       TrainModel:
         Path: Assets\Models\Train\train.obj
         Compress: false
         FlipUV: false
+        UUID: 18245820808254477256
+      TreeModel:
+        Path: Assets\Models\Tree\Tree.obj
+        Compress: false
+        FlipUV: false
+        UUID: 18245352808254477256
     Shaders:
-      ColoredPhong:
-        Vertex: Assets\Shaders\ColoredPhong\ColoredPhong.vs
-        Fragment: Assets\Shaders\ColoredPhong\ColoredPhong.fs
       TexturedPhong:
+        UUID: 3566111628970667214
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
   Entities:
     Entity_0:
-      Tag: backpack
+      Tag: Backpack
       UUID: 13283607152039627564
-      RenderModel: BackpackModel
       Transformation:
         Translation: [30, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -37,9 +78,10 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [1, 1, 1]
         ScaleOffset: [1, 1, 1]
-      Shader: TexturedPhong
+      RenderModel: 654055540912474740
+      Shader: 3566111628970667214
     Entity_1:
-      Tag: flashlight
+      Tag: Flashlight
       UUID: 2142267720657822871
       LightSource:
         Type: Spot
@@ -52,7 +94,7 @@ Scene:
         InnerCone: 0.976296008
         OuterCone: 0.936672211
     Entity_2:
-      Tag: lamp
+      Tag: Lamp
       UUID: 12087606009831782647
       Transformation:
         Translation: [30, 10, 0]
@@ -74,7 +116,6 @@ Scene:
     Entity_3:
       Tag: lamp_magenta
       UUID: 7834405913725978860
-      RenderModel: CubeModel
       Transformation:
         Translation: [-10, 10, -30]
         TranslationOffset: [0, 0, 0]
@@ -82,7 +123,8 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [1, 1, 1]
         ScaleOffset: [1, 1, 1]
-      Shader: TexturedPhong
+      RenderModel: 6557233926725796949
+      Shader: 3566111628970667214
       LightSource:
         Type: Point
         Ambient: [0.100000001, 0, 0.100000001]
@@ -96,7 +138,6 @@ Scene:
     Entity_4:
       Tag: lamp_white
       UUID: 5169756284600285649
-      RenderModel: CubeModel
       Transformation:
         Translation: [20, 20, 20]
         TranslationOffset: [0, 0, 0]
@@ -104,7 +145,8 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [1, 1, 1]
         ScaleOffset: [1, 1, 1]
-      Shader: ColoredPhong
+      RenderModel: 6557233926725796949
+      Shader: 3566111628970667214
       LightSource:
         Type: Point
         Ambient: [0.100000001, 0.100000001, 0.100000001]
@@ -133,7 +175,7 @@ Scene:
       UUID: 7828116465773805528
       FPSCamera:
         FOV: 60
-        Aspect: 1.77777779
+        Aspect: 1.48198199
         NearPlane: 1.00000001e-07
         FarPlane: 2000
         Position: [-42.9337196, 14.1925278, 3.87901473]
@@ -141,7 +183,6 @@ Scene:
     Entity_7:
       Tag: sponza
       UUID: 15605333383906278036
-      RenderModel: SponzaModel
       Transformation:
         Translation: [0, 50, 0]
         TranslationOffset: [0, 0, 0]
@@ -149,7 +190,8 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [0.00999999978, 0.00999999978, 0.00999999978]
         ScaleOffset: [1, 1, 1]
-      Shader: TexturedPhong
+      RenderModel: 18245820808254477624
+      Shader: 3566111628970667214
     Entity_8:
       Tag: sun
       UUID: 7178762644546976826
@@ -166,7 +208,6 @@ Scene:
     Entity_9:
       Tag: surface
       UUID: 16299243349270162803
-      RenderModel: CubeModel
       Transformation:
         Translation: [0, -10, 0]
         TranslationOffset: [0, 0, 0]
@@ -174,11 +215,11 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [500, 0.100000001, 500]
         ScaleOffset: [1, 1, 1]
-      Shader: ColoredPhong
+      RenderModel: 6557233926725796949
+      Shader: 3566111628970667214
     Entity_10:
       Tag: train
       UUID: 16108251966519883078
-      RenderModel: TrainModel
       Transformation:
         Translation: [0, 0, 0]
         TranslationOffset: [0, 0, 0]
@@ -186,4 +227,5 @@ Scene:
         RotationOffset: [0, 0, 0]
         Scale: [1, 1, 1]
         ScaleOffset: [1, 1, 1]
-      Shader: ColoredPhong
+      RenderModel: 18245820808254477256
+      Shader: 3566111628970667214

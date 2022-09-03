@@ -27,6 +27,7 @@ namespace DE
 
     private:
         friend class ImGuiLayer;
+        friend class FileDialogs;
 
         void SetUpCallbacks();
         void OnWindowResize(WindowResizeEvent& e);

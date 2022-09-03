@@ -38,20 +38,15 @@
 #include "Addition/Assert.h"
 #include "Addition/UUID.h"
 #include "Addition/Random.h"
+#include "Addition/FileDialogs.h"
 
 namespace DE
 {
     template <typename T> using Scope = std::unique_ptr<T>;
-    template <typename T, typename... Args> constexpr Scope<T> CreateScope(Args&&... args)
-    {
-        return std::make_unique<T>(std::forward<Args>(args)...);
-    }
+    template <typename T, typename... Args> constexpr Scope<T> CreateScope(Args&&... args) { return std::make_unique<T>(std::forward<Args>(args)...); }
 
     template <typename T> using Ref = std::shared_ptr<T>;
-    template <typename T, typename... Args> constexpr Ref<T> CreateRef(Args&&... args)
-    {
-        return std::make_shared<T>(std::forward<Args>(args)...);
-    }
+    template <typename T, typename... Args> constexpr Ref<T> CreateRef(Args&&... args) { return std::make_shared<T>(std::forward<Args>(args)...); }
 
     namespace fs = std::filesystem;
 
@@ -72,10 +67,7 @@ namespace std
 {
     template <> struct hash<std::filesystem::path>
     {
-        std::size_t operator()(const std::filesystem::path& path) const
-        {
-            return hash_value(path);
-        }
+        std::size_t operator()(const std::filesystem::path& path) const { return hash_value(path); }
     };
     struct pair_hash
     {

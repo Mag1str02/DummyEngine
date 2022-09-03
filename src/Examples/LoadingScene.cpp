@@ -24,9 +24,9 @@ public:
         auto& meshes = GetComponentArray<RenderMeshComponent>();
         auto& light_sources = GetComponentArray<LightSource>();
 
-        for (auto [id, transformation] : positions)
+        for (auto [id, mesh] : meshes)
         {
-            meshes[id].mesh_instance->at<Mat4>(0) = transformation.GetTransform();
+            mesh.mesh_instance->at<Mat4>(0) = positions[id].GetTransform();
         }
 
         for (auto [entity_id, light_source] : light_sources)
@@ -61,7 +61,7 @@ public:
         Renderer::SetClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
         scene = CreateRef<Scene>("NewScene");
-        SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Gallery.yml");
+        SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "BasicScene.yml");
         scene->RegisterSystem<MovingSystem>();
 
         m_FrameBuffer = FrameBuffer::Create({1920, 1080});

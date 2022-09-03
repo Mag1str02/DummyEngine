@@ -91,7 +91,6 @@ namespace DE
         {
             m_Properties.width = width;
             m_Properties.height = height;
-            std::cout << "Frame buffer resize: " << width << "x" << height << std::endl;
             Rebuild();
         }
     }

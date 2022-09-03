@@ -14,9 +14,9 @@ namespace DE
             auto& meshes = GetComponentArray<RenderMeshComponent>();
             auto& light_sources = GetComponentArray<LightSource>();
 
-            for (auto [id, transformation] : positions)
+            for (auto [id, mesh] : meshes)
             {
-                meshes[id].mesh_instance->at<Mat4>(0) = transformation.GetTransform();
+                mesh.mesh_instance->at<Mat4>(0) = positions[id].GetTransform();
             }
 
             for (auto [entity_id, light_source] : light_sources)
@@ -39,6 +39,8 @@ namespace DE
     }
     void EditorLayer::OnUpdate(float dt)
     {
+        ProcessControlls();
+
         m_SceneData.frame_buffer->Resize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
         Renderer::OnWindowResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
         m_SceneData.frame_buffer->Bind();
@@ -58,51 +60,96 @@ namespace DE
         ImGui::ShowDemoWindow();
     }
 
+    //*~~~EditorGUI~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     void EditorLayer::ShowDockingSpace()
     {
         static bool p_open = true;
-
-        static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowViewport(viewport->ID);
         ImGui::SetNextWindowPos(viewport->WorkPos);
         ImGui::SetNextWindowSize(viewport->WorkSize);
 
-        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
-        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 1.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
-        ImGui::Begin("DockSpace", &p_open, window_flags);
+        ImGui::Begin("DockSpace",
+                     &p_open,
+                     ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus |
+                         ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking);
         ImGui::PopStyleVar(3);
 
-        ImGuiIO& io = ImGui::GetIO();
-
         ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
+        ShowDockingSpaceTabBar();
 
+        ImGui::End();
+    }
+    void EditorLayer::ShowDockingSpaceTabBar()
+    {
         if (ImGui::BeginMenuBar())
         {
             if (ImGui::BeginMenu("File"))
             {
                 if (ImGui::MenuItem("Open Scene"))
                 {
-                    OpenScene(Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Gallery.yml");
+                    OpenSceneDialog();
+                }
+                if (ImGui::MenuItem("Save Scene"))
+                {
+                    SaveSceneDialog();
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Exit"))
+                {
+                    WindowCloseEvent event;
+                    BroadcastEvent(event);
                 }
                 ImGui::EndMenu();
             }
             ImGui::EndMenuBar();
         }
+    }
 
-        ImGui::End();
+    //*~~~EditorFunctionality~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    void EditorLayer::OpenSceneDialog()
+    {
+        Path path = FileDialogs::OpenFile("Dummy Engine Scene (*.yml)\0*.yml\0\0");
+        if (path != Path())
+        {
+            OpenScene(path);
+        }
+    }
+    void EditorLayer::SaveSceneDialog()
+    {
+        Path path = FileDialogs::SaveFile("Dummy Engine Scene (*.yml)\0*.yml\0\0");
+        if (path != Path())
+        {
+            SaveScene(path);
+        }
     }
     void EditorLayer::OpenScene(const Path& scene_path)
     {
         SceneLoader::Load(m_SceneData.scene, scene_path);
         m_SceneData.scene->RegisterSystem<MovingSystem>();
+    }
+    void EditorLayer::SaveScene(const Path& path) { SceneLoader::Save(m_SceneData.scene, path); }
+
+    void EditorLayer::ProcessControlls()
+    {
+        if (Input::KeyDown(GLFW_KEY_LEFT_CONTROL))
+        {
+            if (Input::KeyReleased(GLFW_KEY_O))
+            {
+                OpenSceneDialog();
+            }
+            if (Input::KeyReleased(GLFW_KEY_S))
+            {
+                SaveSceneDialog();
+            }
+        }
     }
 }  // namespace DE

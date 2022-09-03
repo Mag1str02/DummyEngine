@@ -181,7 +181,7 @@ namespace DE
         return n_Shaders;
     }
 
-    void SceneLoader::Save(Ref<Scene> scene, Path path)
+    void SceneLoader::Save(Ref<Scene> scene, const Path& path)
     {
         YAML::Node n_Root, n_Scene, n_Entities, n_Assets;
         std::ofstream output_file;
@@ -398,13 +398,10 @@ namespace DE
         }
     }
 
-    void SceneLoader::Load(Ref<Scene>& scene, Path path)
+    void SceneLoader::Load(Ref<Scene>& scene, const Path& path)
     {
         YAML::Node n_Root, n_Scene, n_Assets, n_Entities;
-        if (!scene)
-        {
-            scene = CreateRef<Scene>("newScene");
-        }
+        scene = CreateRef<Scene>("NewScene");
 
         m_Scene = scene;
 

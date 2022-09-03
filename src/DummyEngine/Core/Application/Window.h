@@ -51,6 +51,7 @@ namespace DE
 
     private:
         friend class ImGuiLayer;
+        friend class FileDialogs;
 
         void SetupCallbacks();
         void Invalidate();

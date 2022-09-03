@@ -21,9 +21,19 @@ namespace DE
         virtual void OnImGuiRender() override;
 
     private:
+        //*~~~EditorGUI~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
         void ShowDockingSpace();
-        
+        void ShowDockingSpaceTabBar();
+
+        //*~~~EditorFunctionality~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        void OpenSceneDialog();
+        void SaveSceneDialog();
         void OpenScene(const Path& path);
+        void SaveScene(const Path& path);
+
+        void ProcessControlls();
 
         ViewportPanel m_Viewport;
         SceneData m_SceneData;

@@ -10,29 +10,13 @@ namespace DE
         m_Data.m_Textures.clear();
     }
 
-    template <> void AssetManager::AddAsset<TextureAsset>(const TextureAsset& asset)
-    {
-        DE_ASSERT(m_Data.m_Textures.find(asset.id) == m_Data.m_Textures.end(),
-                  "Texture asset with UUID: " + std::to_string(asset.id) + " already exists.");
-        m_Data.m_Textures[asset.id] = asset;
-    }
-    template <> void AssetManager::AddAsset<RenderMeshAsset>(const RenderMeshAsset& asset)
-    {
-        DE_ASSERT(m_Data.m_RenderMeshes.find(asset.id) == m_Data.m_RenderMeshes.end(),
-                  "RenderMesh asset with UUID: " + std::to_string(asset.id) + " already exists.");
-        m_Data.m_RenderMeshes[asset.id] = asset;
-    }
-    template <> void AssetManager::AddAsset<ShaderAsset>(const ShaderAsset& asset)
-    {
-        DE_ASSERT(m_Data.m_Shaders.find(asset.id) == m_Data.m_Shaders.end(),
-                  "RenderMesh asset with UUID: " + std::to_string(asset.id) + " already exists.");
-        m_Data.m_Shaders[asset.id] = asset;
-    }
+    template <> void AssetManager::AddAsset<TextureAsset>(const TextureAsset& asset) { m_Data.m_Textures[asset.id] = asset; }
+    template <> void AssetManager::AddAsset<RenderMeshAsset>(const RenderMeshAsset& asset) { m_Data.m_RenderMeshes[asset.id] = asset; }
+    template <> void AssetManager::AddAsset<ShaderAsset>(const ShaderAsset& asset) { m_Data.m_Shaders[asset.id] = asset; }
 
     template <> const RenderMeshAsset& AssetManager::GetAsset<RenderMeshAsset>(UUID id)
     {
-        DE_ASSERT(m_Data.m_RenderMeshes.find(id) != m_Data.m_RenderMeshes.end(),
-                  "RenderMesh asset with UUID: " + std::to_string(id) + " does not exists.");
+        DE_ASSERT(m_Data.m_RenderMeshes.find(id) != m_Data.m_RenderMeshes.end(), "RenderMesh asset with UUID: " + std::to_string(id) + " does not exists.");
         return m_Data.m_RenderMeshes[id];
     }
     template <> const TextureAsset& AssetManager::GetAsset<TextureAsset>(UUID id)

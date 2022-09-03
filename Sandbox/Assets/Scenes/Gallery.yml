@@ -411,7 +411,7 @@ Scene:
       UUID: 4631319593559015940
       FPSCamera:
         FOV: 60
-        Aspect: 1.77777779
+        Aspect: 1.48198199
         NearPlane: 1.00000001e-07
         FarPlane: 2000
         Position: [35.1113892, 22.0023117, 161.571594]
