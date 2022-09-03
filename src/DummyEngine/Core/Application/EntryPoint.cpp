@@ -2,8 +2,9 @@
 
 namespace DE
 {
-    extern Application* CreateApplication();
+    Application* CreateApplication();
 }
+
 int main()
 {
     auto app = DE::CreateApplication();
