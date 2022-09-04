@@ -57,6 +57,7 @@ namespace DE
     {
         ShowDockingSpace();
         m_Viewport.OnImGuiRender(m_SceneData.frame_buffer);
+        m_Profiler.OnImGuiRender();
         ImGui::ShowDemoWindow();
     }
 

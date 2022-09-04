@@ -7,11 +7,11 @@ namespace DE
 
     Profiler::Profiler() : m_PrevFrameTimeLapseAmount(0) {}
 
-    void Profiler::BeginFrame() {
-        Profiler::Get().IBeginFrame();
-    }
     void Profiler::IBeginFrame()
     {
+        if(!m_Frames.empty()){
+            IPopTimeLapse();
+        }
         m_Frames.push(ProfilerFrame(m_PrevFrameTimeLapseAmount));
         m_PrevFrameTimeLapseAmount = 0;
 
@@ -21,10 +21,10 @@ namespace DE
             m_Frames.pop();
         }
 
-        PushTimeLapse("Frame");
+        IPushTimeLapse("Frame");
     }
 
-    void Profiler::PushTimeLapse(const std::string& name)
+    void Profiler::IPushTimeLapse(const std::string& name)
     {
         ++m_PrevFrameTimeLapseAmount;
         uint32_t index = m_Frames.back().m_TimeLapses.size();
@@ -36,7 +36,7 @@ namespace DE
         }
         m_TimeLapseStack.push(index);
     }
-    void Profiler::PopTimeLapse()
+    void Profiler::IPopTimeLapse()
     {
         DE_ASSERT(!m_TimeLapseStack.empty(), "Attempt to pop empty timeapse stack.");
 
@@ -50,7 +50,10 @@ namespace DE
         return profiler;
     }
 
-    ProfilerScopeObject::ProfilerScopeObject(const std::string& name) { Profiler::Get().PushTimeLapse(name); }
-    ProfilerScopeObject::~ProfilerScopeObject() { Profiler::Get().PopTimeLapse(); }
+    void Profiler::BeginFrame() { Get().IBeginFrame(); }
+    const ProfilerFrame& Profiler::GetOldestFrame() { return Get().m_Frames.front(); }
+
+    ProfilerScopeObject::ProfilerScopeObject(const std::string& name) { Profiler::Get().IPushTimeLapse(name); }
+    ProfilerScopeObject::~ProfilerScopeObject() { Profiler::Get().IPopTimeLapse(); }
 
 }  // namespace DE

@@ -2,6 +2,7 @@
 
 #include "DummyEngineInclude.h"
 #include "Panels/ViewportPanel.h"
+#include "Panels/ProfilerPanel.h"
 
 namespace DE
 {
@@ -36,6 +37,7 @@ namespace DE
         void ProcessControlls();
 
         ViewportPanel m_Viewport;
+        ProfilerPanel m_Profiler;
         SceneData m_SceneData;
     };
 }  // namespace DE

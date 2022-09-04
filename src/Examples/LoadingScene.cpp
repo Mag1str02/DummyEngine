@@ -13,10 +13,7 @@ class MovingSystem : public System
 {
 public:
     MovingSystem() {}
-    virtual std::string GetName() const override
-    {
-        return "MovingSystem";
-    }
+    virtual std::string GetName() const override { return "MovingSystem"; }
 
     void Update(double dt) override
     {
@@ -73,18 +70,15 @@ public:
     }
     virtual void OnUpdate(float dt) override
     {
-        DE_PROFILE_SCOPE("Processing Input", ProcessInput(dt));
-        DE_PROFILE_SCOPE("Scene Update", scene->OnUpdate(dt));
-        DE_PROFILE_SCOPE("Scene Render", scene->Render());
+        ProcessInput(dt);
+        scene->OnUpdate(dt);
+        scene->Render();
     }
     virtual void OnDetach() override
     {
         // SceneLoader::Save(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Gallery.yml");
     }
-    virtual void OnEvent(Event& event) override
-    {
-        m_EventDispatcher.Dispatch(event);
-    }
+    virtual void OnEvent(Event& event) override { m_EventDispatcher.Dispatch(event); }
 
 private:
     void ProcessInput(float dt)

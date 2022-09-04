@@ -10,6 +10,7 @@ set(EDITOR_SOURCES
     Editor.cpp
     EditorLayer.cpp
     Panels/ViewportPanel.cpp
+    Panels/ProfilerPanel.cpp
 )
 
 add_executable(DummyEditor 

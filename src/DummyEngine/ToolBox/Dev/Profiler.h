@@ -15,6 +15,9 @@ namespace DE
         std::vector<uint32_t> m_Childs;
         std::string m_Name;
 
+        float Duration() const { return (m_End - m_Start).count() * 0.001 * 0.001; }
+        std::string StrDuration() const { return std::to_string((m_End - m_Start).count() * 0.001 * 0.001) + "ms"; }
+
         TimeLapse(const std::string& name) : m_Name(name) {}
     };
     struct ProfilerFrame
@@ -35,8 +38,8 @@ namespace DE
         std::stack<uint32_t> m_TimeLapseStack;
         uint32_t m_PrevFrameTimeLapseAmount;
 
-        void PushTimeLapse(const std::string& name);
-        void PopTimeLapse();
+        void IPushTimeLapse(const std::string& name);
+        void IPopTimeLapse();
 
         static Profiler& Get();
 
@@ -44,6 +47,7 @@ namespace DE
         friend class ProfilerScopeObject;
 
         static void BeginFrame();
+        static const ProfilerFrame& GetOldestFrame();
     };
 
     class ProfilerScopeObject
@@ -58,7 +62,7 @@ namespace DE
 #define DE_PROFILER_BEGIN_FRAME() Profiler::BeginFrame()
 #else
 #define DE_PROFILE_SCOPE(name)
-#define DE_PROFILER_BEGIN_FRAME() 
+#define DE_PROFILER_BEGIN_FRAME()
 #endif
 
 }  // namespace DE
