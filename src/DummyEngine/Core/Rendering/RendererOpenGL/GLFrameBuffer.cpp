@@ -24,6 +24,8 @@ namespace DE
 
     void GLFrameBuffer::Rebuild()
     {
+        DE_PROFILE_SCOPE("FrameBuffer Rebuild");
+
         if (m_BufferId)
         {
             glDeleteFramebuffers(1, &m_BufferId);
@@ -60,7 +62,8 @@ namespace DE
 
     void GLFrameBuffer::Bind()
     {
-        DE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Binding incomplite FrameBuffer.");
+        DE_PROFILE_SCOPE("FrameBuffer Bind");
+
         glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
     }
     void GLFrameBuffer::UnBind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
@@ -87,6 +90,8 @@ namespace DE
     }
     void GLFrameBuffer::Resize(uint32_t width, uint32_t height)
     {
+        DE_PROFILE_SCOPE("FrameBuffer Resize");
+
         if ((m_Properties.width != width || m_Properties.height != height) && 0 < width && 0 < height)
         {
             m_Properties.width = width;

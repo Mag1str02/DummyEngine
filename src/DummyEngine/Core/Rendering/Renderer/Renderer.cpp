@@ -43,19 +43,20 @@ namespace DE
     }
     void Renderer::OnWindowResize(uint32_t width, uint32_t height)
     {
+        DE_PROFILE_SCOPE("On Window Resize");
+        
         m_RenderAPI->SetViewport(0, 0, width, height);
     }
 
     void Renderer::BeginFrame()
     {
+        DE_PROFILE_SCOPE("Renderer BeginFrame");
+
         m_FrameStatistics->Reset();
     }
-    void Renderer::EndFrame() {}
+    void Renderer::EndFrame() { DE_PROFILE_SCOPE("Renderer EndFrame"); }
 
-    void Renderer::Clear()
-    {
-        m_RenderAPI->Clear();
-    }
+    void Renderer::Clear() { m_RenderAPI->Clear(); }
     void Renderer::Submit(const Ref<VertexArray>& vertex_array, Ref<Shader> shader, const Mat4& trasform)
     {
         shader->Bind();
@@ -94,40 +95,16 @@ namespace DE
         }
     }
 
-    void Renderer::Enable(RenderSetting setting)
-    {
-        m_RenderAPI->Enable(setting);
-    }
-    void Renderer::Disable(RenderSetting setting)
-    {
-        m_RenderAPI->Disable(setting);
-    }
+    void Renderer::Enable(RenderSetting setting) { m_RenderAPI->Enable(setting); }
+    void Renderer::Disable(RenderSetting setting) { m_RenderAPI->Disable(setting); }
 
-    void Renderer::SetClearColor(Vec4 color)
-    {
-        m_RenderAPI->SetClearColor(color);
-    }
-    void Renderer::SetClearColor(float r, float g, float b, float a)
-    {
-        m_RenderAPI->SetClearColor(Vec4(r, g, b, a));
-    }
+    void Renderer::SetClearColor(Vec4 color) { m_RenderAPI->SetClearColor(color); }
+    void Renderer::SetClearColor(float r, float g, float b, float a) { m_RenderAPI->SetClearColor(Vec4(r, g, b, a)); }
 
-    Ref<Texture> Renderer::GetDefaultTexture()
-    {
-        return m_DefaultTexture;
-    }
-    Ref<VertexArray> Renderer::GetFullScreenQuad()
-    {
-        return m_FullScreenQuad;
-    }
-    API Renderer::CurrentAPI()
-    {
-        return m_RenderAPI->GetAPI();
-    }
-    FrameStatistics Renderer::GetStatistics()
-    {
-        return *m_FrameStatistics;
-    }
+    Ref<Texture> Renderer::GetDefaultTexture() { return m_DefaultTexture; }
+    Ref<VertexArray> Renderer::GetFullScreenQuad() { return m_FullScreenQuad; }
+    API Renderer::CurrentAPI() { return m_RenderAPI->GetAPI(); }
+    FrameStatistics Renderer::GetStatistics() { return *m_FrameStatistics; }
 
     // TODO: Think to move somewhere else...
 

@@ -28,46 +28,20 @@ namespace DE
                 m_CurrentFrame.x_pos = event.GetXPos();
                 m_CurrentFrame.y_pos = event.GetYPos();
             });
+        INewFrame();
     }
 
-    void Input::IOnEvent(Event& event)
-    {
-        m_EventDispatcher.Dispatch(event);
-    }
-    void Input::INewFrame()
-    {
-        m_Frames.push_front(m_CurrentFrame);
-    }
+    void Input::IOnEvent(Event& event) { m_EventDispatcher.Dispatch(event); }
+    void Input::INewFrame() { m_Frames.push_front(m_CurrentFrame); }
 
-    double Input::ICursorXOffset() const
-    {
-        return m_Frames[0].x_pos - m_Frames[1].x_pos;
-    }
-    double Input::ICursorYOffset() const
-    {
-        return m_Frames[0].y_pos - m_Frames[1].y_pos;
-    }
+    double Input::ICursorXOffset() const { return m_Frames[0].x_pos - m_Frames[1].x_pos; }
+    double Input::ICursorYOffset() const { return m_Frames[0].y_pos - m_Frames[1].y_pos; }
 
-    bool Input::IMouseLocked() const
-    {
-        return m_Frames[0].mouse_locked;
-    }
-    bool Input::IKeyReleased(uint32_t key_id) const
-    {
-        return !m_Frames[0].key_states.at(key_id) && m_Frames[1].key_states.at(key_id);
-    }
-    bool Input::IKeyPressed(uint32_t key_id) const
-    {
-        return m_Frames[0].key_states.at(key_id) && !m_Frames[1].key_states.at(key_id);
-    }
-    bool Input::IKeyDown(uint32_t key_id) const
-    {
-        return m_Frames[0].key_states.at(key_id);
-    }
-    bool Input::IKeyUp(uint32_t key_id) const
-    {
-        return !m_Frames[0].key_states.at(key_id);
-    }
+    bool Input::IMouseLocked() const { return m_Frames[0].mouse_locked; }
+    bool Input::IKeyReleased(uint32_t key_id) const { return !m_Frames[0].key_states.at(key_id) && m_Frames[1].key_states.at(key_id); }
+    bool Input::IKeyPressed(uint32_t key_id) const { return m_Frames[0].key_states.at(key_id) && !m_Frames[1].key_states.at(key_id); }
+    bool Input::IKeyDown(uint32_t key_id) const { return m_Frames[0].key_states.at(key_id); }
+    bool Input::IKeyUp(uint32_t key_id) const { return !m_Frames[0].key_states.at(key_id); }
 
     Input& Input::Get()
     {
@@ -75,44 +49,22 @@ namespace DE
         return input;
     }
 
-    void Input::OnEvent(Event& event)
-    {
-        Get().IOnEvent(event);
-    }
+    void Input::OnEvent(Event& event) { Get().IOnEvent(event); }
     void Input::NewFrame()
     {
+        DE_PROFILE_SCOPE("Imput Frame Begin");
+
         Get().INewFrame();
     }
 
-    double Input::CursorXOffset()
-    {
-        return Get().ICursorXOffset();
-    }
-    double Input::CursorYOffset()
-    {
-        return Get().ICursorYOffset();
-    }
+    double Input::CursorXOffset() { return Get().ICursorXOffset(); }
+    double Input::CursorYOffset() { return Get().ICursorYOffset(); }
 
-    bool Input::MouseLocked()
-    {
-        return Get().IMouseLocked();
-    }
+    bool Input::MouseLocked() { return Get().IMouseLocked(); }
 
-    bool Input::KeyReleased(uint32_t key_id)
-    {
-        return Get().IKeyReleased(key_id);
-    }
-    bool Input::KeyPressed(uint32_t key_id)
-    {
-        return Get().IKeyPressed(key_id);
-    }
-    bool Input::KeyDown(uint32_t key_id)
-    {
-        return Get().IKeyDown(key_id);
-    }
-    bool Input::KeyUp(uint32_t key_id)
-    {
-        return Get().IKeyUp(key_id);
-    }
+    bool Input::KeyReleased(uint32_t key_id) { return Get().IKeyReleased(key_id); }
+    bool Input::KeyPressed(uint32_t key_id) { return Get().IKeyPressed(key_id); }
+    bool Input::KeyDown(uint32_t key_id) { return Get().IKeyDown(key_id); }
+    bool Input::KeyUp(uint32_t key_id) { return Get().IKeyUp(key_id); }
 
 }  // namespace DE

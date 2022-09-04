@@ -6,6 +6,8 @@ namespace DE
 
     void ViewportPanel::OnImGuiRender(const Ref<FrameBuffer> buffer)
     {
+        DE_PROFILE_SCOPE("ViewportPanel OnImGuiRender");
+
         static bool open = true;
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));

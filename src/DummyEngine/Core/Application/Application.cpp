@@ -1,6 +1,5 @@
 #include "Core/Application/Application.h"
-
-#include  "CorE/Rendering/Renderer/Renderer.h"
+#include "Core/Rendering/Renderer/Renderer.h"
 
 namespace DE
 {
@@ -21,6 +20,8 @@ namespace DE
 
     Application::Application(std::string name) : m_ShouldClose(false)
     {
+        DE_PROFILER_BEGIN_FRAME();
+        
         DE_ASSERT(s_ApplicationInstance == nullptr, "Creating more than one application at a time.");
         s_ApplicationInstance = this;
 
@@ -34,7 +35,6 @@ namespace DE
         m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
 
         Renderer::Init(Config::GetRenderAPI());
-        Input::NewFrame();
 
         m_ImGuiLayer = new ImGuiLayer();
         PushLayer(m_ImGuiLayer);
@@ -84,12 +84,16 @@ namespace DE
             Input::NewFrame();
             m_Window->OnUpdate();
             {
+                DE_PROFILE_SCOPE("Layers OnUpdate");
+
                 for (auto layer : m_Layers)
                 {
                     layer->OnUpdate(prev_frame_time);
                 }
             }
             {
+                DE_PROFILE_SCOPE("Layers OnImGuiRender");
+
                 m_ImGuiLayer->BeginFrame();
                 for (auto layer : m_Layers)
                 {

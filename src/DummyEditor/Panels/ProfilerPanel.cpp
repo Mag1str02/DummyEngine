@@ -6,6 +6,8 @@ namespace DE
 
     void ProfilerPanel::OnImGuiRender()
     {
+        DE_PROFILE_SCOPE("ProfilerPanel OnImGuiRender");
+
         ImGui::Begin("Profiler");
         RenderTimeLapse(Profiler::GetOldestFrame().m_TimeLapses, 0);
         ImGui::End();

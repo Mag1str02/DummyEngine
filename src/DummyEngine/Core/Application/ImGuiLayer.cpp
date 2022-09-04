@@ -37,6 +37,8 @@ namespace DE
 
     void ImGuiLayer::BeginFrame()
     {
+        DE_PROFILE_SCOPE("ImGuiLayer BeginFrame");
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -44,6 +46,8 @@ namespace DE
 
     void ImGuiLayer::EndFrame()
     {
+        DE_PROFILE_SCOPE("ImGuiLayer EndFrame");
+
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

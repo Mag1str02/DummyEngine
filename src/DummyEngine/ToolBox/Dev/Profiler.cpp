@@ -9,7 +9,8 @@ namespace DE
 
     void Profiler::IBeginFrame()
     {
-        if(!m_Frames.empty()){
+        if (!m_Frames.empty())
+        {
             IPopTimeLapse();
         }
         m_Frames.push(ProfilerFrame(m_PrevFrameTimeLapseAmount));

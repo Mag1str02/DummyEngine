@@ -69,7 +69,9 @@ namespace DE
     }
 
     void Window::OnUpdate()
-    {
+    {   
+        DE_PROFILE_SCOPE("Window OnUpdate");
+
         glfwPollEvents();
         m_Context->SwapBuffers();
     }

@@ -39,11 +39,18 @@ namespace DE
     }
     void EditorLayer::OnUpdate(float dt)
     {
+        DE_PROFILE_SCOPE("EditorLayer OnUpdate");
+
         ProcessControlls();
 
-        m_SceneData.frame_buffer->Resize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
-        Renderer::OnWindowResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
-        m_SceneData.frame_buffer->Bind();
+        {
+            DE_PROFILE_SCOPE("OnViewPortResize");
+
+            m_SceneData.frame_buffer->Resize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
+            Renderer::OnWindowResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
+            m_SceneData.frame_buffer->Bind();
+        }
+
         if (m_SceneData.scene)
         {
             m_SceneData.scene->GetByName("player").GetComponent<FPSCamera>().SetAspect((double)m_Viewport.GetWidth() / m_Viewport.GetHeight());
@@ -55,16 +62,24 @@ namespace DE
     }
     void EditorLayer::OnImGuiRender()
     {
+        DE_PROFILE_SCOPE("EditorLayer OnImGuiRender");
+
         ShowDockingSpace();
         m_Viewport.OnImGuiRender(m_SceneData.frame_buffer);
         m_Profiler.OnImGuiRender();
-        ImGui::ShowDemoWindow();
+        {
+            DE_PROFILE_SCOPE("Demo Window");
+
+            // ImGui::ShowDemoWindow();
+        }
     }
 
     //*~~~EditorGUI~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     void EditorLayer::ShowDockingSpace()
     {
+        DE_PROFILE_SCOPE("DockSpace");
+
         static bool p_open = true;
 
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -141,6 +156,8 @@ namespace DE
 
     void EditorLayer::ProcessControlls()
     {
+        DE_PROFILE_SCOPE("ProcessControlls");
+
         if (Input::KeyDown(GLFW_KEY_LEFT_CONTROL))
         {
             if (Input::KeyReleased(GLFW_KEY_O))

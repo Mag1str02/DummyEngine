@@ -8,8 +8,7 @@
 namespace DE
 {
 
-    Scene::Scene(const std::string& name) : m_Name(name) {
-    }
+    Scene::Scene(const std::string& name) : m_Name(name) {}
 
     Entity Scene::CreateEntity(const std::string& name)
     {
@@ -71,17 +70,18 @@ namespace DE
         DE_ASSERT(m_EntityByName.find(name) != m_EntityByName.end(), "Entity with name " + name + " not found.");
         return Entity(m_EntityByName.at(name), this);
     }
-    std::string Scene::GetName() const
-    {
-        return m_Name;
-    }
+    std::string Scene::GetName() const { return m_Name; }
 
     void Scene::OnUpdate(double dt)
     {
+        DE_PROFILE_SCOPE("Scene OnUpdate");
+
         m_Storage.UpdateSystems(dt);
     }
     void Scene::Render()
     {
+        DE_PROFILE_SCOPE("Scene Render");
+
         auto& camera = GetCamera();
 
         auto meshes = m_Storage.GetComponentArray<RenderMeshComponent>();
@@ -103,7 +103,7 @@ namespace DE
         {
             target.first->UpdateInstanceBuffer();
             Renderer::Submit(target.first, target.second);
-        }    
+        }
     }
 
     Entity Scene::operator[](const std::string& name)
@@ -151,10 +151,8 @@ namespace DE
                 shader->SetFloat3("u_LightSources[" + std::to_string(cnt_light_sources) + "].m_Position", light_source.position);
                 shader->SetFloat3("u_LightSources[" + std::to_string(cnt_light_sources) + "].m_CLQ", light_source.clq);
                 shader->SetFloat3("u_LightSources[" + std::to_string(cnt_light_sources) + "].m_Direction", light_source.direction);
-                shader->SetFloat3("u_LightSources[" + std::to_string(cnt_light_sources) + "].m_ConesAndType",
-                                  light_source.outer_cone_cos,
-                                  light_source.inner_cone_cos,
-                                  LightSourceTypeToId(light_source.type));
+                shader->SetFloat3(
+                    "u_LightSources[" + std::to_string(cnt_light_sources) + "].m_ConesAndType", light_source.outer_cone_cos, light_source.inner_cone_cos, LightSourceTypeToId(light_source.type));
                 cnt_light_sources++;
             }
             shader->SetInt("u_LightAmount", cnt_light_sources);
@@ -162,8 +160,7 @@ namespace DE
     }
     FPSCamera& Scene::GetCamera()
     {
-        DE_ASSERT(m_Storage.GetComponentArray<FPSCamera>().begin() != m_Storage.GetComponentArray<FPSCamera>().end(),
-                  "No available camera in scene.");
+        DE_ASSERT(m_Storage.GetComponentArray<FPSCamera>().begin() != m_Storage.GetComponentArray<FPSCamera>().end(), "No available camera in scene.");
         return (*m_Storage.GetComponentArray<FPSCamera>().begin()).second;
     }
 
