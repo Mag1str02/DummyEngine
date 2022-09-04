@@ -61,7 +61,7 @@ public:
         Renderer::SetClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
         scene = CreateRef<Scene>("NewScene");
-        SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "BasicScene.yml");
+        SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Gallery.yml");
         scene->RegisterSystem<MovingSystem>();
 
         m_FrameBuffer = FrameBuffer::Create({1920, 1080});

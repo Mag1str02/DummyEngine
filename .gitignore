@@ -7,5 +7,4 @@ build/
 Sandbox/Logs/**
 Sandbox/**.dll
 Sandbox/*.yml
-Sandbox/*.ini
 

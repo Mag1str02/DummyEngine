@@ -24,7 +24,7 @@
 #include "Core/Rendering/Renderer/Renderer.h"
 
 #include "Core/Application/Application.h"
-#include "ToolBox/Dev/FrameTimeReader.h"
+#include "ToolBox/Dev/Profiler.h"
 #include "ToolBox/Dev/Logger.h"
 #include "ToolBox/Loaders/ModelLoader.h"
 #include "ToolBox/Loaders/SceneLoader.h"

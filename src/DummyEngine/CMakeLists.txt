@@ -15,6 +15,7 @@ set(ENGINE_SOURCES
     Addition/UUID.cpp
     Addition/Random.cpp
     Addition/STBImplementation.cpp
+    Addition/Timer.cpp
 
     Core/Application/Application.cpp
     Core/Application/EntryPoint.cpp
@@ -60,7 +61,7 @@ set(ENGINE_SOURCES
     Core/ResourceManaging/ResourceManager.cpp
 
     ToolBox/Dev/Logger.cpp
-    ToolBox/Dev/FrameTimeReader.cpp
+    ToolBox/Dev/Profiler.cpp
     ToolBox/Loaders/ModelLoader.cpp
     ToolBox/Loaders/TextureLoader.cpp 
     ToolBox/Loaders/SceneLoader.cpp
@@ -71,7 +72,7 @@ add_library(DummyEngineLib
 )
 
 target_compile_definitions(DummyEngineLib PUBLIC 
-    DE_ENABLE_FRAME_TIME_READER=0
+    DE_PROFILER_ENABLED=1
     DE_ENABLE_ASSERTS=1
 )
 

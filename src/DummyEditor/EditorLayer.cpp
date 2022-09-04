@@ -47,8 +47,8 @@ namespace DE
         if (m_SceneData.scene)
         {
             m_SceneData.scene->GetByName("player").GetComponent<FPSCamera>().SetAspect((double)m_Viewport.GetWidth() / m_Viewport.GetHeight());
-            DE_PROFILE_SCOPE("Scene Update", m_SceneData.scene->OnUpdate(dt));
-            DE_PROFILE_SCOPE("Scene Render", m_SceneData.scene->Render());
+            m_SceneData.scene->OnUpdate(dt);
+            m_SceneData.scene->Render();
         }
 
         m_SceneData.frame_buffer->UnBind();

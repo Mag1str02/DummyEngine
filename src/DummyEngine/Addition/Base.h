@@ -29,6 +29,7 @@
 #include <windows.h>
 #include <cstdint>
 #include <queue>
+#include <stack>
 #include <random>
 #include <cxxabi.h>
 
@@ -39,6 +40,9 @@
 #include "Addition/UUID.h"
 #include "Addition/Random.h"
 #include "Addition/FileDialogs.h"
+
+#include "ToolBox/Dev/Logger.h"
+#include "ToolBox/Dev/Profiler.h"
 
 namespace DE
 {

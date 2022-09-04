@@ -1,6 +1,4 @@
 #include "Core/Application/Window.h"
-#include "ToolBox/Dev/FrameTimeReader.h"
-#include "ToolBox/Dev/Logger.h"
 #include "Core/ECS/SystemManager.hpp"
 #include "Core/Rendering/Renderer/Renderer.h"
 

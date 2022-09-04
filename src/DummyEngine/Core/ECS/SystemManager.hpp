@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ToolBox/Dev/FrameTimeReader.h"
 #include "Core/ECS/System.hpp"
 
 namespace DE
@@ -16,14 +15,14 @@ namespace DE
         SystemManager() {}
         void Update(double dt)
         {
+            DE_PROFILE_SCOPE("System Update");
             for (SystemId i = 0; i < m_SystemArray.size(); ++i)
             {
-                DE_PROFILE_SCOPE(m_SystemArray[i]->GetName(), m_SystemArray[i]->Update(dt););
+                m_SystemArray[i]->Update(dt);
             }
         }
 
-        template <typename SystemType>
-        Ref<System> RegisterSystem()
+        template <typename SystemType> Ref<System> RegisterSystem()
         {
             if (m_SystemId.find(typeid(SystemType).name()) == m_SystemId.end())
             {

@@ -1,8 +1,6 @@
 #include "Core/Application/Application.h"
 
-#include "Core/Rendering/Renderer/Renderer.h"
-#include "ToolBox/Dev/FrameTimeReader.h"
-#include "ToolBox/Dev/Logger.h"
+#include  "CorE/Rendering/Renderer/Renderer.h"
 
 namespace DE
 {
@@ -57,13 +55,13 @@ namespace DE
         Logger::Close("loading");
     }
 
-    void Application::PushLayer(Layer* layer)
+    void Application::PushLayer(Layer * layer)
     {
         m_Layers.push_back(layer);
         layer->m_EventCallback = [this](Event& e) { OnEvent(e); };
         layer->OnAttach();
     }
-    void Application::OnEvent(Event& event)
+    void Application::OnEvent(Event & event)
     {
         m_EventDispatcher.Dispatch(event);
         for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); ++it)
@@ -80,31 +78,27 @@ namespace DE
             prev_frame_time = frame_end - frame_begin;
             frame_begin = glfwGetTime();
 
-            DE_PROFILE_SCOPE("", {
-                Renderer::BeginFrame();
+            DE_PROFILER_BEGIN_FRAME();
 
-                Input::NewFrame();
+            Renderer::BeginFrame();
+            Input::NewFrame();
+            m_Window->OnUpdate();
+            {
+                for (auto layer : m_Layers)
+                {
+                    layer->OnUpdate(prev_frame_time);
+                }
+            }
+            {
+                m_ImGuiLayer->BeginFrame();
+                for (auto layer : m_Layers)
+                {
+                    layer->OnImGuiRender();
+                }
+                m_ImGuiLayer->EndFrame();
+            }
 
-                DE_PROFILE_SCOPE("Window Update", m_Window->OnUpdate());
-                DE_PROFILE_SCOPE("Layers Update", {
-                    for (auto layer : m_Layers)
-                    {
-                        layer->OnUpdate(prev_frame_time);
-                    }
-                });
-                DE_PROFILE_SCOPE("Layers ImGui Render", {
-                    m_ImGuiLayer->BeginFrame();
-                    for (auto layer : m_Layers)
-                    {
-                        layer->OnImGuiRender();
-                    }
-                    m_ImGuiLayer->EndFrame();
-                });
-
-                Renderer::EndFrame();
-            });
-
-            DE_FTR_PRINT();
+            Renderer::EndFrame();
         }
     }
 
@@ -140,7 +134,7 @@ namespace DE
         m_EventDispatcher.AddEventListener<KeyReleasedEvent>(Input::OnEvent);
         m_EventDispatcher.AddEventListener<MouseMovedCallback>(Input::OnEvent);
     }
-    void Application::OnWindowResize(WindowResizeEvent& e) { Renderer::OnWindowResize(e.GetWidth(), e.GetHeight()); }
-    void Application::OnWindowClose(WindowCloseEvent& e) { m_ShouldClose = true; }
+    void Application::OnWindowResize(WindowResizeEvent & e) { Renderer::OnWindowResize(e.GetWidth(), e.GetHeight()); }
+    void Application::OnWindowClose(WindowCloseEvent & e) { m_ShouldClose = true; }
 
-}  // namespace DE
+}  // namespace namespaceRDE
