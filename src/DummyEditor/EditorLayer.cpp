@@ -6,7 +6,10 @@ namespace DE
     {
     public:
         MovingSystem() {}
-        virtual std::string GetName() const override { return "MovingSystem"; }
+        virtual std::string GetName() const override
+        {
+            return "MovingSystem";
+        }
 
         void Update(double dt) override
         {
@@ -67,10 +70,11 @@ namespace DE
         ShowDockingSpace();
         m_Viewport.OnImGuiRender(m_SceneData.frame_buffer);
         m_Profiler.OnImGuiRender();
+        m_SceneHierarchy.OnImGuiRender();
         {
             DE_PROFILE_SCOPE("Demo Window");
 
-            // ImGui::ShowDemoWindow();
+            ImGui::ShowDemoWindow();
         }
     }
 
@@ -93,8 +97,9 @@ namespace DE
 
         ImGui::Begin("DockSpace",
                      &p_open,
-                     ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus |
-                         ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking);
+                     ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |
+                         ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar |
+                         ImGuiWindowFlags_NoDocking);
         ImGui::PopStyleVar(3);
 
         ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
@@ -151,8 +156,12 @@ namespace DE
     {
         SceneLoader::Load(m_SceneData.scene, scene_path);
         m_SceneData.scene->RegisterSystem<MovingSystem>();
+        m_SceneHierarchy.SetActiveScene(m_SceneData.scene);
     }
-    void EditorLayer::SaveScene(const Path& path) { SceneLoader::Save(m_SceneData.scene, path); }
+    void EditorLayer::SaveScene(const Path& path)
+    {
+        SceneLoader::Save(m_SceneData.scene, path);
+    }
 
     void EditorLayer::ProcessControlls()
     {

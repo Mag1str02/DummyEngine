@@ -70,7 +70,22 @@ namespace DE
         DE_ASSERT(m_EntityByName.find(name) != m_EntityByName.end(), "Entity with name " + name + " not found.");
         return Entity(m_EntityByName.at(name), this);
     }
-    std::string Scene::GetName() const { return m_Name; }
+    std::string Scene::GetName() const
+    {
+        return m_Name;
+    }
+    std::vector<Entity> Scene::GetAllEntities()
+    {
+        std::vector<Entity> res;
+        res.reserve(m_EntityByName.size());
+        for (auto& [uuid, entity_id] : m_EntityByUUID)
+        {
+            res.push_back(Entity(entity_id, this));
+        }
+        std::sort(
+            res.begin(), res.end(), [](Entity& a, Entity& b) { return a.GetComponent<TagComponent>().tag < b.GetComponent<TagComponent>().tag; });
+        return res;
+    }
 
     void Scene::OnUpdate(double dt)
     {
@@ -151,8 +166,10 @@ namespace DE
                 shader->SetFloat3("u_LightSources[" + std::to_string(cnt_light_sources) + "].m_Position", light_source.position);
                 shader->SetFloat3("u_LightSources[" + std::to_string(cnt_light_sources) + "].m_CLQ", light_source.clq);
                 shader->SetFloat3("u_LightSources[" + std::to_string(cnt_light_sources) + "].m_Direction", light_source.direction);
-                shader->SetFloat3(
-                    "u_LightSources[" + std::to_string(cnt_light_sources) + "].m_ConesAndType", light_source.outer_cone_cos, light_source.inner_cone_cos, LightSourceTypeToId(light_source.type));
+                shader->SetFloat3("u_LightSources[" + std::to_string(cnt_light_sources) + "].m_ConesAndType",
+                                  light_source.outer_cone_cos,
+                                  light_source.inner_cone_cos,
+                                  LightSourceTypeToId(light_source.type));
                 cnt_light_sources++;
             }
             shader->SetInt("u_LightAmount", cnt_light_sources);
@@ -160,7 +177,8 @@ namespace DE
     }
     FPSCamera& Scene::GetCamera()
     {
-        DE_ASSERT(m_Storage.GetComponentArray<FPSCamera>().begin() != m_Storage.GetComponentArray<FPSCamera>().end(), "No available camera in scene.");
+        DE_ASSERT(m_Storage.GetComponentArray<FPSCamera>().begin() != m_Storage.GetComponentArray<FPSCamera>().end(),
+                  "No available camera in scene.");
         return (*m_Storage.GetComponentArray<FPSCamera>().begin()).second;
     }
 

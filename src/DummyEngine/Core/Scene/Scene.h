@@ -20,12 +20,13 @@ namespace DE
         Entity GetByUUID(UUID uuid);
         Entity GetByName(const std::string& name);
         std::string GetName() const;
+        std::vector<Entity> GetAllEntities();
 
         void OnUpdate(double dt);
         void Render();
 
         Entity operator[](const std::string& name);
-        
+
         template <typename System> void RegisterSystem()
         {
             m_Storage.RegisterSystem<System>();
@@ -57,4 +58,4 @@ namespace DE
 
         friend class Entity;
     };
-}  // namespace DE  
+}  // namespace DE
