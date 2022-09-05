@@ -1,8 +1,10 @@
+#pragma once
+
 #include "Core/Application/Application.h"
 
 namespace DE
 {
-    Application* CreateApplication();
+    extern Application* CreateApplication();
 }
 
 int main()

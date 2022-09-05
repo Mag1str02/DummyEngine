@@ -1,4 +1,5 @@
 #include "EditorLayer.h"
+#include "Core/Application/EntryPoint.h"
 
 namespace DE
 {

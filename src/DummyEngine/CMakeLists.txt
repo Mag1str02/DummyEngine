@@ -18,7 +18,6 @@ set(ENGINE_SOURCES
     Addition/Timer.cpp
 
     Core/Application/Application.cpp
-    Core/Application/EntryPoint.cpp
     Core/Application/ImGuiLayer.cpp
     Core/Application/Window.cpp
     Core/Application/Input.cpp

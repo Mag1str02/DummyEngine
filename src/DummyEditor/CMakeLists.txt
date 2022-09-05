@@ -19,5 +19,9 @@ add_executable(DummyEditor
 )
 
 target_link_libraries(DummyEditor PUBLIC DummyEngineLib)
-target_include_directories(DummyEditor PUBLIC .)
+target_include_directories(DummyEditor PUBLIC 
+    .
+    ../DummyEngine
+)
+
 
