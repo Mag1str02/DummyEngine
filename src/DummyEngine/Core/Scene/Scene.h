@@ -17,8 +17,10 @@ namespace DE
         Entity CreateEntity(const std::string& name = "Entity");
         Entity CreateEntityWithUUID(UUID uuid, const std::string& name = "Entity");
         Entity CloneEntity(const std::string& entity_to_clone, const std::string& new_name);
+
         Entity GetByUUID(UUID uuid);
         Entity GetByName(const std::string& name);
+        FPSCamera& GetCamera();
         std::string GetName() const;
         std::vector<Entity> GetAllEntities();
 
@@ -41,7 +43,6 @@ namespace DE
         void OnEntityDestroy(Entity entity);
 
         void LightPass();
-        FPSCamera& GetCamera();
 
         void RequestShader(UUID id);
 

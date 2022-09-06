@@ -10,8 +10,12 @@ namespace DE
 {
     struct SceneData
     {
-        Ref<Scene> scene;
-        Ref<FrameBuffer> frame_buffer;
+        Ref<Scene> m_Scene;
+        Ref<FrameBuffer> m_FrameBuffer;
+    };
+    enum class InputState{
+        NonSpecified = 0,
+        ViewPort
     };
 
     struct EditorState
@@ -20,6 +24,8 @@ namespace DE
         bool m_ProfilerEnabled = true;
         bool m_InspectorEnabled = true;
         bool m_SceneHierarchyEnabled = true;
+        
+        InputState m_InputState;
     };
 
     class EditorLayer : public DE::Layer
@@ -44,7 +50,7 @@ namespace DE
         void OpenScene(const Path& path);
         void SaveScene(const Path& path);
 
-        void ProcessControlls();
+        void ProcessControlls(float dt);
 
         ViewportPanel m_Viewport;
         SceneHierarchyPanel m_SceneHierarchy;
@@ -53,6 +59,7 @@ namespace DE
         ImGuiPanelStack m_Panels;
 
         EditorState m_State;
+
         SceneData m_SceneData;
     };
 }  // namespace DE

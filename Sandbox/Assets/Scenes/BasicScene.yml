@@ -117,11 +117,11 @@ Scene:
       Tag: lamp_magenta
       UUID: 7834405913725978860
       Transformation:
-        Translation: [-10, 10, -30]
+        Translation: [-20, -4, -26]
         TranslationOffset: [0, 0, 0]
         Rotation: [0, 0, 0]
         RotationOffset: [0, 0, 0]
-        Scale: [1, 1, 1]
+        Scale: [0.100000001, 0.100000001, 0.100000001]
         ScaleOffset: [1, 1, 1]
       RenderModel: 6557233926725796949
       Shader: 3566111628970667214
@@ -131,7 +131,7 @@ Scene:
         Diffuse: [0.600000024, 0, 0.600000024]
         Specular: [0.300000012, 0, 0.300000012]
         Direction: [0, -1, 0]
-        Position: [-10, 10, -30]
+        Position: [-20, -4, -26]
         CLQ: [1, 0.0219999999, 0.00190000003]
         InnerCone: 0
         OuterCone: 0
@@ -175,16 +175,16 @@ Scene:
       UUID: 7828116465773805528
       FPSCamera:
         FOV: 60
-        Aspect: 1.48198199
+        Aspect: 1.52576554
         NearPlane: 1.00000001e-07
         FarPlane: 2000
-        Position: [-42.9337196, 14.1925278, 3.87901473]
-        Direction: [0.997051656, -0.0274850335, -0.0716429278]
+        Position: [-11.841341, -2.52735758, -25.5527859]
+        Direction: [-0.97593981, -0.217476413, 0.0156714693]
     Entity_7:
       Tag: sponza
       UUID: 15605333383906278036
       Transformation:
-        Translation: [0, 50, 0]
+        Translation: [-16, -5, -25]
         TranslationOffset: [0, 0, 0]
         Rotation: [0, 0, 0]
         RotationOffset: [0, 0, 0]

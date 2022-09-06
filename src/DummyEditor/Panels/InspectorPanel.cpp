@@ -6,6 +6,8 @@ namespace DE
     {
         DE_PROFILE_SCOPE("InspectorPanel View");
 
+        float sensitivity = 0.1;
+
         if (m_Entity.Valid())
         {
             if (m_Entity.HasComponent<TagComponent>())
@@ -29,9 +31,9 @@ namespace DE
                 if (ImGui::CollapsingHeader("Transformation"))
                 {
                     auto& transform = m_Entity.GetComponent<TransformComponent>();
-                    ImGui::DragFloat3("Traslation", &(transform.translation.x), 1, 0, 0);
-                    ImGui::DragFloat3("Scale", &(transform.scale.x), 1, 0, 0);
-                    ImGui::DragFloat3("Rotation", &(transform.rotation.x), 1, 0, 0);
+                    ImGui::DragFloat3("Traslation", &(transform.translation.x), sensitivity, 0, 0);
+                    ImGui::DragFloat3("Scale", &(transform.scale.x), sensitivity, 0, 0);
+                    ImGui::DragFloat3("Rotation", &(transform.rotation.x), sensitivity, 0, 0);
                 }
             }
             if (m_Entity.HasComponent<RenderMeshComponent>())

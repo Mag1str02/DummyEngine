@@ -33,10 +33,10 @@ namespace DE
 
     void EditorLayer::OnAttach()
     {
-        m_SceneData.frame_buffer = FrameBuffer::Create({1920, 1080});
-        m_SceneData.frame_buffer->AddColorAttachment(TextureFormat::RGBA);
-        m_SceneData.frame_buffer->SetDepthAttachment(TextureFormat::DepthStencil);
-        m_Viewport.SetFrameBuffer(m_SceneData.frame_buffer);
+        m_SceneData.m_FrameBuffer = FrameBuffer::Create({1920, 1080});
+        m_SceneData.m_FrameBuffer->AddColorAttachment(TextureFormat::RGBA);
+        m_SceneData.m_FrameBuffer->SetDepthAttachment(TextureFormat::DepthStencil);
+        m_Viewport.SetFrameBuffer(m_SceneData.m_FrameBuffer);
 
         m_Panels.PushPanel(&m_Viewport);
         m_Panels.PushPanel(&m_SceneHierarchy);
@@ -52,30 +52,30 @@ namespace DE
     {
         DE_PROFILE_SCOPE("EditorLayer OnUpdate");
 
-        ProcessControlls();
+        ProcessControlls(dt);
 
         {
             DE_PROFILE_SCOPE("OnViewPortResize");
 
-            m_SceneData.frame_buffer->Resize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
+            m_SceneData.m_FrameBuffer->Resize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
             Renderer::OnWindowResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
-            m_SceneData.frame_buffer->Bind();
+            m_SceneData.m_FrameBuffer->Bind();
         }
 
-        if (m_SceneData.scene)
+        if (m_SceneData.m_Scene)
         {
-            m_SceneData.scene->OnViewPortResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
-            m_SceneData.scene->OnUpdate(dt);
-            m_SceneData.scene->Render();
+            m_SceneData.m_Scene->OnViewPortResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
+            m_SceneData.m_Scene->OnUpdate(dt);
+            m_SceneData.m_Scene->Render();
         }
 
-        m_SceneData.frame_buffer->UnBind();
+        m_SceneData.m_FrameBuffer->UnBind();
     }
     void EditorLayer::OnImGuiRender()
     {
         DE_PROFILE_SCOPE("EditorLayer OnImGuiRender");
 
-        if (m_SceneData.scene)
+        if (m_SceneData.m_Scene)
         {
             m_Inspector.SetCurrentEntity(m_SceneHierarchy.GetActiveEntity());
         }
@@ -175,25 +175,80 @@ namespace DE
     }
     void EditorLayer::OpenScene(const Path& scene_path)
     {
-        SceneLoader::Load(m_SceneData.scene, scene_path);
-        m_SceneData.scene->RegisterSystem<MovingSystem>();
-        m_SceneHierarchy.SetActiveScene(m_SceneData.scene);
+        SceneLoader::Load(m_SceneData.m_Scene, scene_path);
+        m_SceneData.m_Scene->RegisterSystem<MovingSystem>();
+        m_SceneHierarchy.SetActiveScene(m_SceneData.m_Scene);
     }
-    void EditorLayer::SaveScene(const Path& path) { SceneLoader::Save(m_SceneData.scene, path); }
+    void EditorLayer::SaveScene(const Path& path) { SceneLoader::Save(m_SceneData.m_Scene, path); }
 
-    void EditorLayer::ProcessControlls()
+    void EditorLayer::ProcessControlls(float dt)
     {
         DE_PROFILE_SCOPE("ProcessControlls");
 
         if (Input::KeyDown(GLFW_KEY_LEFT_CONTROL))
         {
-            if (Input::KeyReleased(GLFW_KEY_O))
+            if (Input::KeyReleased(GLFW_KEY_GRAVE_ACCENT) && m_SceneData.m_Scene != nullptr)
             {
-                OpenSceneDialog();
+                m_State.m_InputState = (m_State.m_InputState == InputState::ViewPort ? InputState::NonSpecified : InputState::ViewPort);
+                SetMouseLockToggleEvent event;
+                BroadcastEvent(event);
             }
-            if (Input::KeyReleased(GLFW_KEY_S))
+            if (m_State.m_InputState != InputState::ViewPort)
             {
-                SaveSceneDialog();
+                if (Input::KeyReleased(GLFW_KEY_O))
+                {
+                    OpenSceneDialog();
+                }
+                if (Input::KeyReleased(GLFW_KEY_S))
+                {
+                    SaveSceneDialog();
+                }
+            }
+        }
+        switch (m_State.m_InputState)
+        {
+            case InputState::ViewPort: {
+                auto& camera = m_SceneData.m_Scene->GetCamera();
+                float speed = 15;
+                float sensitivity = 0.07;
+
+                camera.RotateY(Input::CursorXOffset() * sensitivity);
+                camera.RotateX(Input::CursorYOffset() * sensitivity / 16 * 9);
+
+                if (Input::KeyDown(GLFW_KEY_LEFT_SHIFT))
+                {
+                    speed = 100.0f;
+                }
+                if (Input::KeyDown(GLFW_KEY_ESCAPE))
+                {
+                    WindowCloseEvent event;
+                    BroadcastEvent(event);
+                }
+                if (Input::KeyDown(GLFW_KEY_S))
+                {
+                    camera.MoveInLocal(Vec3(0.0f, 0.0f, -1.0f) * speed * dt);
+                }
+                if (Input::KeyDown(GLFW_KEY_W))
+                {
+                    camera.MoveInLocal(Vec3(0.0f, 0.0f, 1.0f) * speed * dt);
+                }
+                if (Input::KeyDown(GLFW_KEY_D))
+                {
+                    camera.MoveInLocal(Vec3(1.0f, 0.0f, 0.0f) * speed * dt);
+                }
+                if (Input::KeyDown(GLFW_KEY_A))
+                {
+                    camera.MoveInLocal(Vec3(-1.0f, 0.0f, 0.0f) * speed * dt);
+                }
+                if (Input::KeyDown(GLFW_KEY_SPACE))
+                {
+                    camera.MoveInWorld(Vec3(0.0f, 1.0f, 0.0f) * speed * dt);
+                }
+                if (Input::KeyDown(GLFW_KEY_C))
+                {
+                    camera.MoveInWorld(Vec3(0.0f, -1.0f, 0.0f) * speed * dt);
+                }
+                break;
             }
         }
     }
