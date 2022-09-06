@@ -10,7 +10,7 @@ namespace DE
         SceneHierarchyPanel() {}
 
         void SetActiveScene(Ref<Scene> scene);
-        void OnImGuiRender();
+        void OnImGuiRender(bool& enabled);
         
         Entity GetActiveEntity();
 

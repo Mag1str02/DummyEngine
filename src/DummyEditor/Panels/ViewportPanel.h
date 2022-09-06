@@ -7,7 +7,7 @@ namespace DE
     public:
         ViewportPanel();
 
-        void OnImGuiRender();
+        void OnImGuiRender(bool& enabled);
         void SetFrameBuffer(Ref<FrameBuffer> buffer);
 
         uint32_t GetWidth() const { return m_ViewportSize.x; }

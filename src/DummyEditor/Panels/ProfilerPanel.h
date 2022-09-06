@@ -8,7 +8,7 @@ namespace DE
     {
     public:
         ProfilerPanel();
-        void OnImGuiRender();
+        void OnImGuiRender(bool& enabled);
 
     private:
         void RenderTimeLapse(const std::vector<TimeLapse>& time_lapses, uint32_t index);

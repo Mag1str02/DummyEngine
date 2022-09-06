@@ -2,64 +2,67 @@
 
 namespace DE
 {
-    void InspectorPanel::OnImGuiRender()
+    void InspectorPanel::OnImGuiRender(bool& enabled)
     {
-        ImGui::Begin("Inspector");
-        if (m_Entity.Valid())
+        if (enabled)
         {
-            if (m_Entity.HasComponent<TagComponent>())
+            ImGui::Begin("Inspector", &enabled);
+            if (m_Entity.Valid())
             {
-                auto& component = m_Entity.GetComponent<TagComponent>();
-                if (ImGui::CollapsingHeader("Tag"))
+                if (m_Entity.HasComponent<TagComponent>())
                 {
-                    ImGui::InputText("", &component.tag);
+                    auto& component = m_Entity.GetComponent<TagComponent>();
+                    if (ImGui::CollapsingHeader("Tag"))
+                    {
+                        ImGui::InputText("", &component.tag);
+                    }
                 }
-            }
-            if (m_Entity.HasComponent<IdComponent>())
-            {
-                auto& component = m_Entity.GetComponent<IdComponent>();
-                if (ImGui::CollapsingHeader("UUID"))
+                if (m_Entity.HasComponent<IdComponent>())
                 {
-                    ImGui::Text(component.Hex().c_str());
+                    auto& component = m_Entity.GetComponent<IdComponent>();
+                    if (ImGui::CollapsingHeader("UUID"))
+                    {
+                        ImGui::Text(component.Hex().c_str());
+                    }
                 }
-            }
-            if (m_Entity.HasComponent<TransformComponent>())
-            {
-                if (ImGui::CollapsingHeader("Transformation"))
+                if (m_Entity.HasComponent<TransformComponent>())
                 {
-                    auto& transform = m_Entity.GetComponent<TransformComponent>();
-                    ImGui::DragFloat3("Traslation", &(transform.translation.x), 1, 0, 0);
-                    ImGui::DragFloat3("Scale", &(transform.scale.x), 1, 0, 0);
-                    ImGui::DragFloat3("Rotation", &(transform.rotation.x), 1, 0, 0);
+                    if (ImGui::CollapsingHeader("Transformation"))
+                    {
+                        auto& transform = m_Entity.GetComponent<TransformComponent>();
+                        ImGui::DragFloat3("Traslation", &(transform.translation.x), 1, 0, 0);
+                        ImGui::DragFloat3("Scale", &(transform.scale.x), 1, 0, 0);
+                        ImGui::DragFloat3("Rotation", &(transform.rotation.x), 1, 0, 0);
+                    }
                 }
-            }
-            if (m_Entity.HasComponent<RenderMeshComponent>())
-            {
-                if (ImGui::CollapsingHeader("Render Mesh"))
+                if (m_Entity.HasComponent<RenderMeshComponent>())
                 {
-                    auto& render_mesh = m_Entity.GetComponent<RenderMeshComponent>();
-                    ImGui::Text(("Mesh UUID: " + render_mesh.id.Hex()).c_str());
+                    if (ImGui::CollapsingHeader("Render Mesh"))
+                    {
+                        auto& render_mesh = m_Entity.GetComponent<RenderMeshComponent>();
+                        ImGui::Text(("Mesh UUID: " + render_mesh.id.Hex()).c_str());
+                    }
                 }
-            }
-            if (m_Entity.HasComponent<FPSCamera>())
-            {
-                if (ImGui::CollapsingHeader("FPSCamera"))
-                {}
-            }
-            if (m_Entity.HasComponent<LightSource>())
-            {
-                if (ImGui::CollapsingHeader("Light Soruce"))
+                if (m_Entity.HasComponent<FPSCamera>())
                 {
-                    auto& source = m_Entity.GetComponent<LightSource>();
+                    if (ImGui::CollapsingHeader("FPSCamera"))
+                    {}
+                }
+                if (m_Entity.HasComponent<LightSource>())
+                {
+                    if (ImGui::CollapsingHeader("Light Soruce"))
+                    {
+                        auto& source = m_Entity.GetComponent<LightSource>();
 
-                    ImGui::ColorEdit3("Ambient", &(source.ambient.x));
-                    ImGui::ColorEdit3("Diffuse", &(source.diffuse.x));
-                    ImGui::ColorEdit3("Specular", &(source.specular.x));
-                    ImGui::SliderFloat3("CLQ", &(source.clq.x), 0, 1);
+                        ImGui::ColorEdit3("Ambient", &(source.ambient.x));
+                        ImGui::ColorEdit3("Diffuse", &(source.diffuse.x));
+                        ImGui::ColorEdit3("Specular", &(source.specular.x));
+                        ImGui::SliderFloat3("CLQ", &(source.clq.x), 0, 1);
+                    }
                 }
             }
+            ImGui::End();
         }
-        ImGui::End();
     }
     void InspectorPanel::SetCurrentEntity(Entity entity) { m_Entity = entity; }
 

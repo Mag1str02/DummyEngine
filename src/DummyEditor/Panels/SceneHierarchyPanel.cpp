@@ -4,28 +4,32 @@ namespace DE
 {
 
     void SceneHierarchyPanel::SetActiveScene(Ref<Scene> scene) { m_Scene = scene; }
-    void SceneHierarchyPanel::OnImGuiRender()
+    void SceneHierarchyPanel::OnImGuiRender(bool& enabled)
     {
-        ImGui::Begin("Scene Hierarchy");
-        if (m_Scene)
+        if (enabled)
         {
-            std::vector<Entity> entities = m_Scene->GetAllEntities();
-            for (auto& entity : entities)
+            ImGui::Begin("Scene Hierarchy", &enabled);
+            if (m_Scene)
             {
-                bool selected = false;
-                if(m_SelectedEntity.Valid()){
-                    selected = m_SelectedEntity.GetComponent<IdComponent>() == entity.GetComponent<IdComponent>();
-                }
-                if (ImGui::Selectable(entity.GetComponent<TagComponent>().tag.c_str(), selected, ImGuiSelectableFlags_AllowDoubleClick))
+                std::vector<Entity> entities = m_Scene->GetAllEntities();
+                for (auto& entity : entities)
                 {
-                    if (ImGui::IsMouseDoubleClicked(0))
+                    bool selected = false;
+                    if (m_SelectedEntity.Valid())
                     {
-                        m_SelectedEntity = entity;
+                        selected = m_SelectedEntity.GetComponent<IdComponent>() == entity.GetComponent<IdComponent>();
+                    }
+                    if (ImGui::Selectable(entity.GetComponent<TagComponent>().tag.c_str(), selected, ImGuiSelectableFlags_AllowDoubleClick))
+                    {
+                        if (ImGui::IsMouseDoubleClicked(0))
+                        {
+                            m_SelectedEntity = entity;
+                        }
                     }
                 }
             }
+            ImGui::End();
         }
-        ImGui::End();
     }
 
     Entity SceneHierarchyPanel::GetActiveEntity() { return m_SelectedEntity; }

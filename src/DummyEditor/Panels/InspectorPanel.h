@@ -7,10 +7,11 @@ namespace DE
     class InspectorPanel
     {
     public:
-        InspectorPanel(){}
+        InspectorPanel() {}
 
-        void OnImGuiRender();
+        void OnImGuiRender(bool& enabled);
         void SetCurrentEntity(Entity entity);
+
     private:
         Entity m_Entity;
     };

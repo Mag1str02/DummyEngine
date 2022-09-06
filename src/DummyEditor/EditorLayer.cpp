@@ -71,14 +71,15 @@ namespace DE
         }
 
         ShowDockingSpace();
-        m_Viewport.OnImGuiRender();
-        m_Profiler.OnImGuiRender();
-        m_SceneHierarchy.OnImGuiRender();
-        m_Inspector.OnImGuiRender();
+
+        m_Viewport.OnImGuiRender(m_State.m_ViewportEnabled);
+        m_Profiler.OnImGuiRender(m_State.m_ProfilerEnabled);
+        m_SceneHierarchy.OnImGuiRender(m_State.m_SceneHierarchyEnabled);
+        m_Inspector.OnImGuiRender(m_State.m_InspectorEnabled);
         {
             DE_PROFILE_SCOPE("Demo Window");
 
-            ImGui::ShowDemoWindow();
+            // ImGui::ShowDemoWindow();
         }
     }
 
@@ -133,6 +134,16 @@ namespace DE
                 }
                 ImGui::EndMenu();
             }
+            if (ImGui::BeginMenu("View"))
+            {
+                ImGui::MenuItem("Viewport", NULL, &m_State.m_ViewportEnabled);
+                ImGui::MenuItem("Scene Hierarchy", NULL, &m_State.m_SceneHierarchyEnabled);
+                ImGui::MenuItem("Inspector", NULL, &m_State.m_InspectorEnabled);
+                ImGui::MenuItem("Profiler", NULL, &m_State.m_ProfilerEnabled);
+                ImGui::MenuItem("Demo Window", NULL, &m_State.m_DemoWindowEnabled);
+                ImGui::EndMenu();
+            }
+
             ImGui::EndMenuBar();
         }
     }
