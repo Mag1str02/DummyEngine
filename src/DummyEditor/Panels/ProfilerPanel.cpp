@@ -2,17 +2,11 @@
 
 namespace DE
 {
-    ProfilerPanel::ProfilerPanel() {}
-
-    void ProfilerPanel::OnImGuiRender(bool& enabled)
+    void ProfilerPanel::View()
     {
         DE_PROFILE_SCOPE("ProfilerPanel OnImGuiRender");
-        if (enabled)
-        {
-            ImGui::Begin("Profiler", &enabled);
-            RenderTimeLapse(Profiler::GetOldestFrame().m_TimeLapses, 0);
-            ImGui::End();
-        }
+
+        RenderTimeLapse(Profiler::GetOldestFrame().m_TimeLapses, 0);
     }
 
     void ProfilerPanel::RenderTimeLapse(const std::vector<TimeLapse>& time_lapses, uint32_t index)

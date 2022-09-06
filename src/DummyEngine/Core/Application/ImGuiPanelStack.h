@@ -8,7 +8,7 @@ namespace DE
     class ImGuiPanelStack
     {
     public:
-        ImGuiPanelStack();
+        ImGuiPanelStack() = default;
 
         void PushPanel(ImGuiPanel* panel);
         void OnImGuiRender();

@@ -37,6 +37,16 @@ namespace DE
         m_SceneData.frame_buffer->AddColorAttachment(TextureFormat::RGBA);
         m_SceneData.frame_buffer->SetDepthAttachment(TextureFormat::DepthStencil);
         m_Viewport.SetFrameBuffer(m_SceneData.frame_buffer);
+
+        m_Panels.PushPanel(&m_Viewport);
+        m_Panels.PushPanel(&m_SceneHierarchy);
+        m_Panels.PushPanel(&m_Inspector);
+        m_Panels.PushPanel(&m_Profiler);
+
+        m_Viewport.SetController(m_State.m_ViewportEnabled);
+        m_SceneHierarchy.SetController(m_State.m_SceneHierarchyEnabled);
+        m_Inspector.SetController(m_State.m_InspectorEnabled);
+        m_Profiler.SetController(m_State.m_ProfilerEnabled);
     }
     void EditorLayer::OnUpdate(float dt)
     {
@@ -72,10 +82,8 @@ namespace DE
 
         ShowDockingSpace();
 
-        m_Viewport.OnImGuiRender(m_State.m_ViewportEnabled);
-        m_Profiler.OnImGuiRender(m_State.m_ProfilerEnabled);
-        m_SceneHierarchy.OnImGuiRender(m_State.m_SceneHierarchyEnabled);
-        m_Inspector.OnImGuiRender(m_State.m_InspectorEnabled);
+        m_Panels.OnImGuiRender();
+
         {
             DE_PROFILE_SCOPE("Demo Window");
 
@@ -140,7 +148,6 @@ namespace DE
                 ImGui::MenuItem("Scene Hierarchy", NULL, &m_State.m_SceneHierarchyEnabled);
                 ImGui::MenuItem("Inspector", NULL, &m_State.m_InspectorEnabled);
                 ImGui::MenuItem("Profiler", NULL, &m_State.m_ProfilerEnabled);
-                ImGui::MenuItem("Demo Window", NULL, &m_State.m_DemoWindowEnabled);
                 ImGui::EndMenu();
             }
 

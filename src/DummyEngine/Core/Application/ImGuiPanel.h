@@ -10,6 +10,8 @@ namespace DE
         ImGuiPanel(const std::string& name) : m_Name(name) {}
         virtual ~ImGuiPanel(){};
         virtual void View() = 0;
+        virtual void PushStyle(){}
+        virtual void PopStyle(){}
 
         void OnImGuiRender();
         void SetController(bool& enabled) { m_Enabled = &enabled; }

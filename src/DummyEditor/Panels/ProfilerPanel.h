@@ -4,11 +4,11 @@
 
 namespace DE
 {
-    class ProfilerPanel
+    class ProfilerPanel : public ImGuiPanel
     {
     public:
-        ProfilerPanel();
-        void OnImGuiRender(bool& enabled);
+        ProfilerPanel() : ImGuiPanel("Profiler"){}
+        virtual void View() override;
 
     private:
         void RenderTimeLapse(const std::vector<TimeLapse>& time_lapses, uint32_t index);

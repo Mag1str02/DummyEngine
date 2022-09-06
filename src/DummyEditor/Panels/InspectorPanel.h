@@ -4,12 +4,12 @@
 
 namespace DE
 {
-    class InspectorPanel
+    class InspectorPanel : public ImGuiPanel
     {
     public:
-        InspectorPanel() {}
-
-        void OnImGuiRender(bool& enabled);
+        InspectorPanel() : ImGuiPanel("Inspector") {}
+        virtual void View() override;
+        
         void SetCurrentEntity(Entity entity);
 
     private:

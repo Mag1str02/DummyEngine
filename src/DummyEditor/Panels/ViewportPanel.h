@@ -2,14 +2,15 @@
 
 namespace DE
 {
-    class ViewportPanel
+    class ViewportPanel : public ImGuiPanel
     {
     public:
-        ViewportPanel();
+        ViewportPanel() : ImGuiPanel("Viewport") {}
+        virtual void View() override;
+        virtual void PushStyle() override { ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)); }
+        virtual void PopStyle() override { ImGui::PopStyleVar(); }
 
-        void OnImGuiRender(bool& enabled);
         void SetFrameBuffer(Ref<FrameBuffer> buffer);
-
         uint32_t GetWidth() const { return m_ViewportSize.x; }
         uint32_t GetHeight() const { return m_ViewportSize.y; }
 

@@ -4,14 +4,13 @@
 
 namespace DE
 {
-    class SceneHierarchyPanel
+    class SceneHierarchyPanel : public ImGuiPanel
     {
     public:
-        SceneHierarchyPanel() {}
+        SceneHierarchyPanel() : ImGuiPanel("Scene Hierarchy") {}
+        virtual void View() override;
 
         void SetActiveScene(Ref<Scene> scene);
-        void OnImGuiRender(bool& enabled);
-        
         Entity GetActiveEntity();
 
     private:

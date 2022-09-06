@@ -19,7 +19,6 @@ namespace DE
         bool m_ViewportEnabled = true;
         bool m_ProfilerEnabled = true;
         bool m_InspectorEnabled = true;
-        bool m_DemoWindowEnabled = true;
         bool m_SceneHierarchyEnabled = true;
     };
 
@@ -51,6 +50,8 @@ namespace DE
         SceneHierarchyPanel m_SceneHierarchy;
         InspectorPanel m_Inspector;
         ProfilerPanel m_Profiler;
+        ImGuiPanelStack m_Panels;
+
         EditorState m_State;
         SceneData m_SceneData;
     };
