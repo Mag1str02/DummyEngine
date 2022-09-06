@@ -4,7 +4,7 @@ namespace DE
 {
     ViewportPanel::ViewportPanel() : m_ViewportSize(ImVec2(1, 1)) {}
 
-    void ViewportPanel::OnImGuiRender(const Ref<FrameBuffer> buffer)
+    void ViewportPanel::OnImGuiRender()
     {
         DE_PROFILE_SCOPE("ViewportPanel OnImGuiRender");
 
@@ -14,7 +14,8 @@ namespace DE
         ImGui::Begin("Viewport");
         ImGui::PopStyleVar();
         m_ViewportSize = ImGui::GetContentRegionAvail();
-        ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(0)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
+        ImGui::Image(reinterpret_cast<void*>(m_FrameBuffer->GetColorAttachment(0)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
         ImGui::End();
     }
+    void ViewportPanel::SetFrameBuffer(Ref<FrameBuffer> buffer) { m_FrameBuffer = buffer; }
 }  // namespace DE

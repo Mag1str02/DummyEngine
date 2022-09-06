@@ -23,6 +23,7 @@ namespace DE
         std::vector<Entity> GetAllEntities();
 
         void OnUpdate(double dt);
+        void OnViewPortResize(uint32_t x, uint32_t y);
         void Render();
 
         Entity operator[](const std::string& name);

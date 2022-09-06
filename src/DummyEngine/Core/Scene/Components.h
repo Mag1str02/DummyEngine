@@ -13,9 +13,12 @@ namespace DE
         IdComponent(UUID uuid);
         IdComponent(const IdComponent&) = default;
 
-        operator uint64_t() const
+        operator uint64_t() const { return id; }
+        std::string Hex() const
         {
-            return id;
+            std::stringstream stream;
+            stream << std::setfill('0') << std::setw(16) << std::hex << id;
+            return stream.str();
         }
     };
 
@@ -26,10 +29,7 @@ namespace DE
         TagComponent() = default;
         TagComponent(const std::string& tag);
 
-        operator std::string() const
-        {
-            return tag;
-        }
+        operator std::string() const { return tag; }
     };
     struct TransformComponent
     {

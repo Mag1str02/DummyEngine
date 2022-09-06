@@ -11,8 +11,11 @@ namespace DE
 
         void SetActiveScene(Ref<Scene> scene);
         void OnImGuiRender();
+        
+        Entity GetActiveEntity();
 
     private:
         Ref<Scene> m_Scene;
+        Entity m_SelectedEntity;
     };
 }  // namespace DE

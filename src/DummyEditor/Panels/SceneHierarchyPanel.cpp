@@ -12,32 +12,21 @@ namespace DE
             std::vector<Entity> entities = m_Scene->GetAllEntities();
             for (auto& entity : entities)
             {
-                if (ImGui::TreeNode(entity.GetComponent<TagComponent>().tag.c_str()))
+                bool selected = false;
+                if(m_SelectedEntity.Valid()){
+                    selected = m_SelectedEntity.GetComponent<IdComponent>() == entity.GetComponent<IdComponent>();
+                }
+                if (ImGui::Selectable(entity.GetComponent<TagComponent>().tag.c_str(), selected, ImGuiSelectableFlags_AllowDoubleClick))
                 {
-                    if (entity.HasComponent<IdComponent>())
+                    if (ImGui::IsMouseDoubleClicked(0))
                     {
-                        ImGui::Text(("UUID: " + std::to_string(entity.GetComponent<IdComponent>())).c_str());
+                        m_SelectedEntity = entity;
                     }
-                    if (entity.HasComponent<TransformComponent>())
-                    {
-                        ImGui::Text("Transform");
-                    }
-                    if (entity.HasComponent<ShaderComponent>())
-                    {
-                        ImGui::Text("Shader");
-                    }
-                    if (entity.HasComponent<RenderMeshComponent>())
-                    {
-                        ImGui::Text("Render Mesh");
-                    }
-                    if (entity.HasComponent<LightSource>())
-                    {
-                        ImGui::Text("Light Source");
-                    }
-                    ImGui::TreePop();
                 }
             }
         }
         ImGui::End();
     }
+
+    Entity SceneHierarchyPanel::GetActiveEntity() { return m_SelectedEntity; }
 }  // namespace DE

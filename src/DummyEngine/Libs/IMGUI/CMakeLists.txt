@@ -9,6 +9,7 @@ set(IMGUI_INCLUDES
 	imgui/imgui.h
 	imgui/backends/imgui_impl_glfw.h
 	imgui/backends/imgui_impl_opengl3.h
+	imgui/misc/cpp/imgui_stdlib.h
 )
 
 set(IMGUI_SOURCES
@@ -19,6 +20,7 @@ set(IMGUI_SOURCES
 	imgui/imgui_tables.cpp
 	imgui/imgui_widgets.cpp
 	imgui/imgui_draw.cpp
+	imgui/misc/cpp/imgui_stdlib.cpp
 )
 
 add_library(ImGui
