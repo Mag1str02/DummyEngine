@@ -25,19 +25,38 @@ namespace DE
             }
             if (m_Entity.HasComponent<TransformComponent>())
             {
-                ImGui::CollapsingHeader("Transformation");
+                if (ImGui::CollapsingHeader("Transformation"))
+                {
+                    auto& transform = m_Entity.GetComponent<TransformComponent>();
+                    ImGui::DragFloat3("Traslation", &(transform.translation.x), 1, 0, 0);
+                    ImGui::DragFloat3("Scale", &(transform.scale.x), 1, 0, 0);
+                    ImGui::DragFloat3("Rotation", &(transform.rotation.x), 1, 0, 0);
+                }
             }
             if (m_Entity.HasComponent<RenderMeshComponent>())
             {
-                ImGui::CollapsingHeader("Render Mesh");
+                if (ImGui::CollapsingHeader("Render Mesh"))
+                {
+                    auto& render_mesh = m_Entity.GetComponent<RenderMeshComponent>();
+                    ImGui::Text(("Mesh UUID: " + render_mesh.id.Hex()).c_str());
+                }
             }
             if (m_Entity.HasComponent<FPSCamera>())
             {
-                ImGui::CollapsingHeader("FPSCamera");
+                if (ImGui::CollapsingHeader("FPSCamera"))
+                {}
             }
             if (m_Entity.HasComponent<LightSource>())
             {
-                ImGui::CollapsingHeader("Light Soruce");
+                if (ImGui::CollapsingHeader("Light Soruce"))
+                {
+                    auto& source = m_Entity.GetComponent<LightSource>();
+
+                    ImGui::ColorEdit3("Ambient", &(source.ambient.x));
+                    ImGui::ColorEdit3("Diffuse", &(source.diffuse.x));
+                    ImGui::ColorEdit3("Specular", &(source.specular.x));
+                    ImGui::SliderFloat3("CLQ", &(source.clq.x), 0, 1);
+                }
             }
         }
         ImGui::End();

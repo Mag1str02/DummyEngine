@@ -21,6 +21,12 @@ namespace DE
             stream << std::setfill('0') << std::setw(16) << std::hex << m_UUID;
             return stream.str();
         }
+        std::string Hex() const
+        {
+            std::stringstream stream;
+            stream << std::setfill('0') << std::setw(16) << std::hex << m_UUID;
+            return stream.str();
+        }
         bool operator==(const UUID& other) const
         {
             return (m_UUID == other.m_UUID);

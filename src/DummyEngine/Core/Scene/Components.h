@@ -14,12 +14,7 @@ namespace DE
         IdComponent(const IdComponent&) = default;
 
         operator uint64_t() const { return id; }
-        std::string Hex() const
-        {
-            std::stringstream stream;
-            stream << std::setfill('0') << std::setw(16) << std::hex << id;
-            return stream.str();
-        }
+        std::string Hex() const { return id.Hex(); }
     };
 
     struct TagComponent

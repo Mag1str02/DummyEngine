@@ -5,10 +5,11 @@
 namespace DE
 {
     class SceneLoader;
-    
+
     class FPSCamera
     {
     private:
+        friend class InspectorPanel;
         friend class SceneLoader;
 
         float m_FOV = Config::GetF(DE_CFG_DEFAULT_CAMERA_FOV);
