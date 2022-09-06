@@ -63,6 +63,6 @@ namespace DE
             }
         }
     }
-    void InspectorPanel::SetCurrentEntity(Entity entity) { m_Entity = entity; }
+    void InspectorPanel::SetActiveEntity(Entity entity) { m_Entity = entity; }
 
 }  // namespace DE

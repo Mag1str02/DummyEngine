@@ -10,7 +10,7 @@ namespace DE
         InspectorPanel() : ImGuiPanel("Inspector") {}
         virtual void View() override;
         
-        void SetCurrentEntity(Entity entity);
+        void SetActiveEntity(Entity entity);
 
     private:
         Entity m_Entity;

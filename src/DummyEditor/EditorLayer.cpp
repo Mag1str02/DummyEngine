@@ -77,7 +77,7 @@ namespace DE
 
         if (m_SceneData.m_Scene)
         {
-            m_Inspector.SetCurrentEntity(m_SceneHierarchy.GetActiveEntity());
+            m_Inspector.SetActiveEntity(m_SceneHierarchy.GetActiveEntity());
         }
 
         ShowDockingSpace();
@@ -178,6 +178,8 @@ namespace DE
         SceneLoader::Load(m_SceneData.m_Scene, scene_path);
         m_SceneData.m_Scene->RegisterSystem<MovingSystem>();
         m_SceneHierarchy.SetActiveScene(m_SceneData.m_Scene);
+        m_SceneHierarchy.UnSelect();
+        m_Inspector.SetActiveEntity(m_SceneHierarchy.GetActiveEntity());
     }
     void EditorLayer::SaveScene(const Path& path) { SceneLoader::Save(m_SceneData.m_Scene, path); }
 
