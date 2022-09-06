@@ -79,7 +79,7 @@ namespace DE
         {
             DE_PROFILE_SCOPE("Demo Window");
 
-            // ImGui::ShowDemoWindow();
+            ImGui::ShowDemoWindow();
         }
     }
 

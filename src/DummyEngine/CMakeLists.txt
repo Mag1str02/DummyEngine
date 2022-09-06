@@ -19,6 +19,8 @@ set(ENGINE_SOURCES
 
     Core/Application/Application.cpp
     Core/Application/ImGuiLayer.cpp
+    Core/Application/ImGuiPanel.cpp
+    Core/Application/ImGuiPanelStack.cpp
     Core/Application/Window.cpp
     Core/Application/Input.cpp
 
