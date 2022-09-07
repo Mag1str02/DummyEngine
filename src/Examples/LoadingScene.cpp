@@ -1,4 +1,5 @@
 #include "../DummyEngine/Addition/DummyEngine.h"
+#include "../DummyEngine/Core/Application/EntryPoint.h"
 
 using namespace DE;
 
