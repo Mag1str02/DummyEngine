@@ -20,7 +20,6 @@ namespace DE
     {
         uint32_t x_step = data->Width() / 4;
         uint32_t y_step = data->Height() / 3;
-        std::cout << side << std::endl;
 
         switch (side)
         {

@@ -258,7 +258,7 @@ namespace DE
         UUID id = n_Component.as<uint64_t>();
         if (!ResourceManager::HasResource<RenderMesh>(id))
         {
-            ResourceManager::AddResource(AssetManager::GetAsset<RenderMeshAsset>(id));
+            ResourceManager::AddResource<RenderMesh>(AssetManager::GetAsset<RenderMeshAsset>(id));
         }
         entity.AddComponent<RenderMeshComponent>({id, nullptr});
     }
@@ -267,7 +267,7 @@ namespace DE
         UUID id = n_Component.as<uint64_t>();
         if (!ResourceManager::HasResource<Shader>(id))
         {
-            ResourceManager::AddResource(AssetManager::GetAsset<ShaderAsset>(id));
+            ResourceManager::AddResource<Shader>(AssetManager::GetAsset<ShaderAsset>(id));
         }
         entity.AddComponent<ShaderComponent>({id, ResourceManager::GetResource<Shader>(id)});
         m_Scene->RequestShader(id);

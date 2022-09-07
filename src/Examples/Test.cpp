@@ -10,6 +10,6 @@ int main()
     for (size_t i = 0; i < 6; ++i)
     {
         std::cout << CubeSide(i) << std::endl;
-        TextureLoader::Save(sky_box / ("Sky" + std::to_string(i) + ".png"), TextureEditor::GetSkyBoxSide(cross, CubeSide(i)));
+        // TextureLoader::Save(sky_box / ("Sky" + std::to_string(i) + ".png"), TextureEditor::GetSkyBoxSide(cross, CubeSide(i)));
     }
 }

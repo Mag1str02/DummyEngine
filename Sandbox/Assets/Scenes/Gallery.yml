@@ -1,6 +1,10 @@
 Scene:
   Name: NewScene
   Assets:
+    Textures:
+      Sky:
+        Path: Assets\Textures\Skyboxes\Sky.png
+        FlipUV: false
     Models:
       ArchModel:
         Path: Assets\Models\Arch\arch.obj
