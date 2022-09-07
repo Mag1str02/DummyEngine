@@ -8,6 +8,7 @@ set(SANDBOX_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../Sandbox)
 set(EXTERNAL_LIBS_DIR libs)
 set(DE_LIB_SOURCE_DIR .) 
 set(ENGINE_SOURCES  
+    Addition/GLDebug.cpp
     Addition/Assert.cpp
     Addition/Config.cpp
     Addition/Conversions.cpp

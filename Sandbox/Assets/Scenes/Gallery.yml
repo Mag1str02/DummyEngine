@@ -1,10 +1,6 @@
 Scene:
   Name: NewScene
   Assets:
-    Textures:
-      Sky:
-        Path: Assets\Textures\Skyboxes\Sky.png
-        FlipUV: false
     Models:
       ArchModel:
         Path: Assets\Models\Arch\arch.obj
@@ -57,10 +53,19 @@ Scene:
         FlipUV: false
         UUID: 18245352808254477256
     Shaders:
+      SkyBox:
+        UUID: 3566111620382667214
+        Vertex: Assets\Shaders\SkyBox\SkyBox.vs
+        Fragment: Assets\Shaders\SkyBox\SkyBox.fs
       TexturedPhong:
         UUID: 3566111628970667214
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
+    Textures:
+      Sky:
+        Path: Assets\Textures\Skyboxes\Space.png
+        FlipUV: false
+        UUID: 4297990474523151207
   Entities:
     Entity_0:
       Tag: Arch
@@ -415,11 +420,11 @@ Scene:
       UUID: 4631319593559015940
       FPSCamera:
         FOV: 60
-        Aspect: 1.48198199
-        NearPlane: 1.00000001e-07
-        FarPlane: 2000
-        Position: [35.1113892, 22.0023117, 161.571594]
-        Direction: [0.3674182, -0.156725585, -0.916755676]
+        Aspect: 1.48767734
+        NearPlane: 0.100000001
+        FarPlane: 2000000
+        Position: [-317.10556, 215.705078, 242.831665]
+        Direction: [-0.202365413, -0.622125685, -0.756312013]
     Entity_30:
       Tag: sun
       UUID: 16279128272272660330
@@ -450,11 +455,23 @@ Scene:
       Tag: surface
       UUID: 6382649478065237843
       Transformation:
-        Translation: [0, 0, 0]
+        Translation: [0, -10, 0]
         TranslationOffset: [0, 0, 0]
         Rotation: [0, 0, 0]
         RotationOffset: [0, 0, 0]
-        Scale: [1000, 0.100000001, 100]
+        Scale: [1000, 10, 100]
         ScaleOffset: [1, 1, 1]
       RenderModel: 6557233926725796949
-      Shader: 3566111628970667214
+      Shader: 3566111628970667214 
+    Entity_32:
+      Tag: skybox
+      UUID: 6382649478065202943
+      Transformation:
+        Translation: [0, 0 , 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [1, 1, 1]
+      Shader: 3566111620382667214
+      SkyBox: 4297990474523151207

@@ -17,7 +17,7 @@ namespace DE
 
         m_State.m_CurrentData = CreateRef<TextureData>();
 
-        stbi_set_flip_vertically_on_load(props.flip ? true : false);
+        stbi_set_flip_vertically_on_load(props.flip_uvs ? true : false);
 
         stb_data = stbi_load(props.path.string().c_str(), &width, &height, &nrChannels, 0);
 

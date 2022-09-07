@@ -9,8 +9,7 @@ namespace DE
         glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &m_MapId);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_MapId);
 
-        // TODO: move somewhere else...
-
+        // TODO: move somewhere else...s
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -26,11 +25,10 @@ namespace DE
                          side->Width(),
                          side->Height(),
                          0,
-                         TextureFormatToGLTextureInternalFormat(side->Format()),
+                         TextureFormatToGLTextureFormat(side->Format()),
                          GL_UNSIGNED_BYTE,
                          side->Data());
         }
-        glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
     }
     GLCubeMap::~GLCubeMap() { glDeleteTextures(1, &m_MapId); }
 

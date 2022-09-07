@@ -40,6 +40,7 @@
 #include "Addition/UUID.h"
 #include "Addition/Random.h"
 #include "Addition/FileDialogs.h"
+#include "Addition/GLDebug.h"
 
 #include "ToolBox/Dev/Logger.h"
 #include "ToolBox/Dev/Profiler.h"
@@ -56,16 +57,17 @@ namespace DE
 
     template <typename T> std::string DemangleName()
     {
-        std::string res;
-        int status;
-        char* realname;
+        std::string           res;
+        int                   status;
+        char*                 realname;
         const std::type_info& ti = typeid(T);
 
         realname = abi::__cxa_demangle(ti.name(), 0, 0, &status);
-        res = realname;
+        res      = realname;
         free(realname);
         return res;
     }
+
 }  // namespace DE
 namespace std
 {

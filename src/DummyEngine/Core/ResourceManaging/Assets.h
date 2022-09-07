@@ -8,7 +8,7 @@ namespace DE
     struct TextureLoadingProps
     {
         Path path;
-        bool flip;
+        bool flip_uvs;
     };
     struct RenderMeshLoadingProps
     {

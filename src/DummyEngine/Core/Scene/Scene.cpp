@@ -12,8 +12,8 @@ namespace DE
 
     Entity Scene::CreateEntity(const std::string& name)
     {
-        EntityId entity_id = m_Storage.CreateEntity();
-        Entity new_entity(entity_id, this);
+        EntityId    entity_id = m_Storage.CreateEntity();
+        Entity      new_entity(entity_id, this);
         IdComponent id;
 
         DE_ASSERT(m_EntityByUUID.find(id) == m_EntityByUUID.end(), "UUID collision occured.");
@@ -22,7 +22,7 @@ namespace DE
         new_entity.AddComponent(TagComponent(name));
         new_entity.AddComponent(id);
 
-        m_EntityByUUID[id] = entity_id;
+        m_EntityByUUID[id]   = entity_id;
         m_EntityByName[name] = entity_id;
 
         return new_entity;
@@ -30,7 +30,7 @@ namespace DE
     Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
     {
         EntityId entity_id = m_Storage.CreateEntity();
-        Entity new_entity(entity_id, this);
+        Entity   new_entity(entity_id, this);
 
         DE_ASSERT(m_EntityByUUID.find(uuid) == m_EntityByUUID.end(), "UUID collision occured.");
         DE_ASSERT(m_EntityByName.find(name) == m_EntityByName.end(), "Name collision occured.");
@@ -45,17 +45,17 @@ namespace DE
     }
     Entity Scene::CloneEntity(const std::string& entity_to_clone, const std::string& new_name)
     {
-        EntityId entity_id = m_Storage.CopyEntity(m_EntityByName[entity_to_clone]);
-        Entity new_entity(entity_id, this);
+        EntityId    entity_id = m_Storage.CopyEntity(m_EntityByName[entity_to_clone]);
+        Entity      new_entity(entity_id, this);
         IdComponent id;
 
         DE_ASSERT(m_EntityByUUID.find(id) == m_EntityByUUID.end(), "UUID collision occured.");
         DE_ASSERT(m_EntityByName.find(new_name) == m_EntityByName.end(), "Name collision occured.");
 
         new_entity.GetComponent<TagComponent>() = new_name;
-        new_entity.GetComponent<IdComponent>() = id;
+        new_entity.GetComponent<IdComponent>()  = id;
 
-        m_EntityByUUID[id] = entity_id;
+        m_EntityByUUID[id]       = entity_id;
         m_EntityByName[new_name] = entity_id;
 
         return new_entity;
@@ -70,7 +70,7 @@ namespace DE
         DE_ASSERT(m_EntityByName.find(name) != m_EntityByName.end(), "Entity with name " + name + " not found.");
         return Entity(m_EntityByName.at(name), this);
     }
-    std::string Scene::GetName() const { return m_Name; }
+    std::string         Scene::GetName() const { return m_Name; }
     std::vector<Entity> Scene::GetAllEntities()
     {
         std::vector<Entity> res;
@@ -92,8 +92,8 @@ namespace DE
 
     void Scene::OnViewPortResize(uint32_t x, uint32_t y)
     {
-        double aspect = double(x) / double(y);
-        auto& cameras = m_Storage.GetComponentArray<FPSCamera>();
+        double aspect  = double(x) / double(y);
+        auto&  cameras = m_Storage.GetComponentArray<FPSCamera>();
         for (auto [id, camera] : cameras)
         {
             camera.SetAspect(aspect);
@@ -105,9 +105,10 @@ namespace DE
 
         auto& camera = GetCamera();
 
-        auto meshes = m_Storage.GetComponentArray<RenderMeshComponent>();
-        auto shaders = m_Storage.GetComponentArray<ShaderComponent>();
+        auto meshes          = m_Storage.GetComponentArray<RenderMeshComponent>();
+        auto shaders         = m_Storage.GetComponentArray<ShaderComponent>();
         auto transformations = m_Storage.GetComponentArray<TransformComponent>();
+        auto skyboxes        = m_Storage.GetComponentArray<SkyBox>();
 
         Renderer::Clear();
 
@@ -118,6 +119,12 @@ namespace DE
             shader->SetFloat3("u_CameraPos", camera.GetPos());
         }
 
+        for (auto [id, skybox] : skyboxes)
+        {
+            transformations[id].translation = GetByName("player").GetComponent<FPSCamera>().GetPos();
+            Renderer::Submit(skybox.map, shaders[id].shader, transformations[id].GetTransform());
+        }
+
         LightPass();
 
         for (auto& [ids, target] : m_RenderData.m_InstancedMeshes)
@@ -125,6 +132,7 @@ namespace DE
             target.first->UpdateInstanceBuffer();
             Renderer::Submit(target.first, target.second);
         }
+        glCheckError();
     }
 
     Entity Scene::operator[](const std::string& name)
@@ -136,19 +144,19 @@ namespace DE
     Entity Scene::CreateEmptyEntity()
     {
         EntityId entity_id = m_Storage.CreateEntity();
-        Entity new_entity(entity_id, this);
+        Entity   new_entity(entity_id, this);
 
         return new_entity;
     }
     void Scene::UpdateEmptyEntity(Entity entity)
     {
-        IdComponent id = entity.GetComponent<IdComponent>();
+        IdComponent  id  = entity.GetComponent<IdComponent>();
         TagComponent tag = entity.GetComponent<TagComponent>();
 
         DE_ASSERT(m_EntityByUUID.find(id) == m_EntityByUUID.end(), "UUID collision occured.");
         DE_ASSERT(m_EntityByName.find(tag) == m_EntityByName.end(), "Name collision occured.");
 
-        m_EntityByUUID[id] = entity.m_Id;
+        m_EntityByUUID[id]  = entity.m_Id;
         m_EntityByName[tag] = entity.m_Id;
     }
     void Scene::OnEntityDestroy(Entity entity)

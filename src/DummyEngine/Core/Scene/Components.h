@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Addition/Base.h"
+#include "Core/Rendering/Renderer/CubeMap.h"
 #include "Core/Rendering/Renderer/Shader.h"
 
 namespace DE
@@ -45,5 +46,10 @@ namespace DE
     {
         UUID id;
         Ref<RenderMeshInstance> mesh_instance = nullptr;
+    };
+    struct SkyBox
+    {
+        UUID id;
+        Ref<CubeMap> map = nullptr;
     };
 }  // namespace DE

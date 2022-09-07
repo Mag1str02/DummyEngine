@@ -3,6 +3,7 @@
 #include "Core/ECS/Entity.hpp"
 #include "ToolBox/Loaders/SceneLoader.h"
 #include "ToolBox/Loaders/ModelLoader.h"
+#include "ToolBox/Loaders/TextureLoader.h"
 #include "Core/ResourceManaging/AssetManager.h"
 #include "Core/ResourceManaging/ResourceManager.h"
 
@@ -110,6 +111,13 @@ namespace DE
             n_Entity["LightSource"]["OuterCone"] = entity.GetComponent<LightSource>().outer_cone_cos;
         }
     }
+    template <> void SceneLoader::SaveComponent<SkyBox>(YAML::Node n_Entity, Entity entity)
+    {
+        if (entity.HasComponent<SkyBox>())
+        {
+            n_Entity["SkyBox"] = (uint64_t)entity.GetComponent<SkyBox>().id;
+        }
+    }
 
     void SceneLoader::SaveEntity(YAML::Node n_Entity, Entity entity)
     {
@@ -120,6 +128,7 @@ namespace DE
         SaveComponent<ShaderComponent>(n_Entity, entity);
         SaveComponent<FPSCamera>(n_Entity, entity);
         SaveComponent<LightSource>(n_Entity, entity);
+        SaveComponent<SkyBox>(n_Entity, entity);
     }
     YAML::Node SceneLoader::SaveEntities(Ref<Scene> scene)
     {
@@ -141,6 +150,24 @@ namespace DE
             SaveEntity(n_Entities["Entity_" + std::to_string(cnt++)], entity);
         }
         return n_Entities;
+    }
+    YAML::Node SceneLoader::SaveTextures()
+    {
+        YAML::Node n_Textures;
+        std::vector<TextureAsset> textures = AssetManager::GetAllAssets<TextureAsset>();
+        std::sort(textures.begin(), textures.end(), [](const TextureAsset& a, const TextureAsset& b) { return a.name < b.name; });
+
+        for (const auto& texture : textures)
+        {
+            YAML::Node n_Texture;
+
+            n_Textures[texture.name] = n_Texture;
+            n_Texture["Path"] = RelativeToExecutable(texture.loading_props.path).string();
+            n_Texture["FlipUV"] = texture.loading_props.flip_uvs;
+            n_Texture["UUID"] = (uint64_t)texture.id;
+        }
+
+        return n_Textures;
     }
     YAML::Node SceneLoader::SaveModels()
     {
@@ -197,6 +224,7 @@ namespace DE
 
         n_Assets["Models"] = SaveModels();
         n_Assets["Shaders"] = SaveShaders();
+        n_Assets["Textures"] = SaveTextures();
 
         output_file << n_Root;
     }
@@ -301,6 +329,18 @@ namespace DE
 
         entity.AddComponent<LightSource>(light_source);
     }
+    template <> void SceneLoader::LoadComponent<SkyBox>(YAML::Node n_Component, Entity& entity)
+    {
+        SkyBox box;
+        box.id = n_Component.as<uint64_t>();
+        if (!ResourceManager::HasResource<CubeMap>(box.id))
+        {
+            ResourceManager::AddResource<CubeMap>(AssetManager::GetAsset<TextureAsset>(box.id));
+        }
+        box.map = ResourceManager::GetResource<CubeMap>(box.id);
+
+        entity.AddComponent<SkyBox>(box);
+    }
 
     void SceneLoader::LoadShaders(YAML::Node n_Shaders)
     {
@@ -321,6 +361,24 @@ namespace DE
                     asset.parts.push_back(shader_part);
                 }
             }
+
+            AssetManager::AddAsset(asset);
+        }
+    }
+    void SceneLoader::LoadTextures(YAML::Node n_Textures)
+    {
+        for (const auto& n_Texture : n_Textures)
+        {
+            TextureAsset asset;
+
+            asset.id = n_Texture.second["UUID"].as<uint64_t>();
+            asset.name = n_Texture.first.as<std::string>();
+
+            asset.loading_props.flip_uvs = n_Texture.second["FlipUV"].as<bool>();
+            asset.loading_props.path = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / n_Texture.second["Path"].as<std::string>();
+
+            asset.texture_data = TextureLoader::Load(asset.loading_props);
+
             AssetManager::AddAsset(asset);
         }
     }
@@ -342,6 +400,7 @@ namespace DE
     {
         LoadShaders(n_Assets["Shaders"]);
         LoadModels(n_Assets["Models"]);
+        LoadTextures(n_Assets["Textures"]);
     }
     void SceneLoader::LoadEntity(YAML::Node n_Entity)
     {
@@ -354,6 +413,7 @@ namespace DE
         if (n_Entity["Shader"]) LoadComponent<ShaderComponent>(n_Entity["Shader"], entity);
         if (n_Entity["FPSCamera"]) LoadComponent<FPSCamera>(n_Entity["FPSCamera"], entity);
         if (n_Entity["LightSource"]) LoadComponent<LightSource>(n_Entity["LightSource"], entity);
+        if (n_Entity["SkyBox"]) LoadComponent<SkyBox>(n_Entity["SkyBox"], entity);
 
         if (entity.HasComponent<RenderMeshComponent>() && entity.HasComponent<ShaderComponent>())
         {
