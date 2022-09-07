@@ -12,12 +12,10 @@ namespace DE
     {
     public:
         static Ref<TextureData> Load(const TextureLoadingProps& props);
-        static Ref<TextureData> Get(const Path& path);
 
     private:
         struct LoaderState
         {
-            std::unordered_map<fs::path, Ref<TextureData>> m_TextureDataByPath;
             Ref<TextureData> m_CurrentData;
         };
 

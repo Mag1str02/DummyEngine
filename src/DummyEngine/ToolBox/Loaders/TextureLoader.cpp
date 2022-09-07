@@ -49,29 +49,7 @@ namespace DE
         m_State.m_CurrentData->SetData(stb_data, width, height, format);
         stbi_image_free(stb_data);
 
-        m_State.m_TextureDataByPath[fs::canonical(props.path)] = m_State.m_CurrentData;
-
         Logger::Info("loading", "TextureLoader", "Texture loaded " + RelativeToExecutable(props.path).string() + " Format (" + format_s + ")");
         return m_State.m_CurrentData;
-    }
-    Ref<TextureData> TextureLoader::Get(const Path& path)
-    {
-        Path canonitial;
-        try
-        {
-            canonitial = fs::canonical(path);
-        } catch (std::filesystem::__cxx11::filesystem_error)
-        {
-            Logger::Error("loading", "TextureLoader", "Texture file " + RelativeToExecutable(path).string() + " does not exist");
-            return nullptr;
-        }
-        if (m_State.m_TextureDataByPath.find(canonitial) != m_State.m_TextureDataByPath.end())
-        {
-            return m_State.m_TextureDataByPath[canonitial];
-        }
-        else
-        {
-            return Load({path, false});
-        }
     }
 }  // namespace DE

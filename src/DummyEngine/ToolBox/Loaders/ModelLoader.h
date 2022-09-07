@@ -32,6 +32,7 @@ namespace DE
             Path m_CurrentDirectory;
 
             Ref<RenderMeshData> m_CurrentData;
+            std::unordered_map<Path, Ref<TextureData>> m_ModelTextures;
             Assimp::Importer m_Importer;
         };
 

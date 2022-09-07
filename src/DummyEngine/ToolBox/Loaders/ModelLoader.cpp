@@ -11,15 +11,11 @@ namespace DE
 
     Ref<RenderMeshData> ModelLoader::Load(const RenderMeshLoadingProps& properties)
     {
-        const aiScene* scene =
-            m_State.m_Importer.ReadFile(properties.path.string(), aiProcess_Triangulate | (properties.flip_uvs ? aiProcess_FlipUVs : 0));
+        const aiScene* scene = m_State.m_Importer.ReadFile(properties.path.string(), aiProcess_Triangulate | (properties.flip_uvs ? aiProcess_FlipUVs : 0));
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         {
-            Logger::Error("loading",
-                          "ModelLoader",
-                          "Failed to load model \"" + RelativeToExecutable(properties.path).string() + "\" Error (" +
-                              m_State.m_Importer.GetErrorString() + ")");
+            Logger::Error("loading", "ModelLoader", "Failed to load model \"" + RelativeToExecutable(properties.path).string() + "\" Error (" + m_State.m_Importer.GetErrorString() + ")");
             return nullptr;
         }
 
@@ -35,10 +31,10 @@ namespace DE
         m_State.m_CurrentData->meshes.resize(m_State.m_MeshesAmount);
         ProcessNode(scene->mRootNode, scene);
 
-        Logger::Info("loading",
-                     "ModelLoader",
-                     "Model loaded " + RelativeToExecutable(properties.path).string() + " Meshes (" + std::to_string(m_State.m_MeshesAmount) +
-                         ") Vertices (" + std::to_string(m_State.m_VerticesAmount) + ")");
+        Logger::Info(
+            "loading",
+            "ModelLoader",
+            "Model loaded " + RelativeToExecutable(properties.path).string() + " Meshes (" + std::to_string(m_State.m_MeshesAmount) + ") Vertices (" + std::to_string(m_State.m_VerticesAmount) + ")");
         if (properties.compress)
         {
             m_State.m_CurrentData->Compress();
@@ -131,7 +127,11 @@ namespace DE
         }
         mat->GetTexture(type, 0, &file_name);
 
-        return TextureLoader::Get(m_State.m_CurrentDirectory / file_name.C_Str());
+        if (!m_State.m_ModelTextures.contains(m_State.m_CurrentDirectory / file_name.C_Str()))
+        {
+            m_State.m_ModelTextures[m_State.m_CurrentDirectory / file_name.C_Str()] = TextureLoader::Load({m_State.m_CurrentDirectory / file_name.C_Str(), false});
+        }
+        return m_State.m_ModelTextures[m_State.m_CurrentDirectory / file_name.C_Str()];
     }
     void ModelLoader::ReadModelProperties(aiNode* node, const aiScene* scene)
     {
