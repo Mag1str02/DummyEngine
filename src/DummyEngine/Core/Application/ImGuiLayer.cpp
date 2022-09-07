@@ -58,6 +58,7 @@ namespace DE
             GLFWwindow* backup_current_context = glfwGetCurrentContext();
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();
+            glfwSwapInterval(0);
             glfwMakeContextCurrent(backup_current_context);
         }
     }

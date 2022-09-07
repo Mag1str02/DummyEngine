@@ -16,6 +16,7 @@ namespace DE
     Window::Window(const WindowState& state) : m_State(state)
     {
         m_Window = glfwCreateWindow(1280, 720, m_State.name.c_str(), NULL, NULL);
+        glfwSwapInterval(0);
         DE_ASSERT(m_Window != nullptr, "Failed to create GLFW Window:" + m_State.name);
         Logger::Info("loading", "Window", "Window created: " + m_State.name);
 
@@ -85,7 +86,7 @@ namespace DE
         DE_ASSERT(m_State.width != 0 && m_State.height != 0, "Wrong window size(" + std::to_string(m_State.width) + ", " + std::to_string(m_State.height) + ")");
         if (m_State.mode == WindowMode::Windowed)
         {
-            glfwSetWindowMonitor(m_Window, nullptr, m_State.x_pos, m_State.y_pos, m_State.width, m_State.height, 200);
+            glfwSetWindowMonitor(m_Window, nullptr, m_State.x_pos, m_State.y_pos, m_State.width, m_State.height, 1000);
         }
         if (m_State.mode == WindowMode::FullScreen)
         {
