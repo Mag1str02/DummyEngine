@@ -66,6 +66,7 @@ set(ENGINE_SOURCES
     ToolBox/Loaders/ModelLoader.cpp
     ToolBox/Loaders/TextureLoader.cpp 
     ToolBox/Loaders/SceneLoader.cpp
+    ToolBox/Manipulators/TextureEditor.cpp
 )
 
 add_library(DummyEngineLib

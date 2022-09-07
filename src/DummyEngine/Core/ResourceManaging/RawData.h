@@ -31,9 +31,14 @@ namespace DE
 
         void SetData(const uint8_t* data, uint32_t width, uint32_t height, TextureFormat format);
 
-    private:
-        friend class GLTexture;
+        uint32_t Width() const { return m_Width; }
+        uint32_t Height() const { return m_Height; }
+        TextureFormat Format() const { return m_Format; }
+        uint32_t Channels() const { return PixelSize(m_Format); }
+        uint8_t* Data() { return m_Data; }
+        const uint8_t* Data() const { return m_Data; }
 
+    private:
         uint8_t* m_Data;
         uint32_t m_Width;
         uint32_t m_Height;

@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include <stb_image.h>
+#include <stb_image_write.h>
 
 #include <ImGui/imgui.h>
 #include <ImGui/backends/imgui_impl_glfw.h>
