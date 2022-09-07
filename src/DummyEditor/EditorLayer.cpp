@@ -10,8 +10,8 @@ namespace DE
 
         void Update(double dt) override
         {
-            auto& positions = GetComponentArray<TransformComponent>();
-            auto& meshes = GetComponentArray<RenderMeshComponent>();
+            auto& positions     = GetComponentArray<TransformComponent>();
+            auto& meshes        = GetComponentArray<RenderMeshComponent>();
             auto& light_sources = GetComponentArray<LightSource>();
 
             for (auto [id, mesh] : meshes)
@@ -210,8 +210,8 @@ namespace DE
         switch (m_State.m_InputState)
         {
             case InputState::ViewPort: {
-                auto& camera = m_SceneData.m_Scene->GetCamera();
-                float speed = 15;
+                auto& camera      = m_SceneData.m_Scene->GetCamera();
+                float speed       = 15;
                 float sensitivity = 0.07;
 
                 camera.RotateY(Input::CursorXOffset() * sensitivity);
@@ -220,11 +220,6 @@ namespace DE
                 if (Input::KeyDown(GLFW_KEY_LEFT_SHIFT))
                 {
                     speed = 100.0f;
-                }
-                if (Input::KeyDown(GLFW_KEY_ESCAPE))
-                {
-                    WindowCloseEvent event;
-                    BroadcastEvent(event);
                 }
                 if (Input::KeyDown(GLFW_KEY_S))
                 {

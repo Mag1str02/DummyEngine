@@ -31,9 +31,21 @@ namespace DE
                 if (ImGui::CollapsingHeader("Transformation"))
                 {
                     auto& transform = m_Entity.GetComponent<TransformComponent>();
-                    ImGui::DragFloat3("Traslation", &(transform.translation.x), sensitivity, 0, 0);
-                    ImGui::DragFloat3("Scale", &(transform.scale.x), sensitivity, 0, 0);
-                    ImGui::DragFloat3("Rotation", &(transform.rotation.x), sensitivity, 0, 0);
+
+                    ImGui::Text("Translation");
+                    ImGui::SameLine(100);
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::DragFloat3("##Translation", &(transform.translation.x), sensitivity, 0, 0);
+
+                    ImGui::Text("Scale");
+                    ImGui::SameLine(100);
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::DragFloat3("##Scale", &(transform.scale.x), sensitivity, 0, 0);
+
+                    ImGui::Text("Rotation");
+                    ImGui::SameLine(100);
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::DragFloat3("##Rotation", &(transform.rotation.x), sensitivity, 0, 0);
                 }
             }
             if (m_Entity.HasComponent<RenderMeshComponent>())
@@ -47,18 +59,49 @@ namespace DE
             if (m_Entity.HasComponent<FPSCamera>())
             {
                 if (ImGui::CollapsingHeader("FPSCamera"))
-                {}
+                {
+                    auto& camera = m_Entity.GetComponent<FPSCamera>();
+
+                    ImGui::Text("Near Plane");
+                    ImGui::SameLine(100);
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::DragFloat("##Near Plane", &(camera.m_NearPlane), sensitivity, 0, 0);
+
+                    ImGui::Text("Far Plane");
+                    ImGui::SameLine(100);
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::DragFloat("##Far Plane", &(camera.m_FarPlane), sensitivity, 0, 0);
+
+                    ImGui::Text("FOV");
+                    ImGui::SameLine(100);
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::DragFloat("##FOV", &(camera.m_FOV), sensitivity, 0, 360);
+                }
             }
             if (m_Entity.HasComponent<LightSource>())
             {
                 if (ImGui::CollapsingHeader("Light Soruce"))
                 {
                     auto& source = m_Entity.GetComponent<LightSource>();
+                    ImGui::Text("Ambient");
+                    ImGui::SameLine(100);
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::ColorEdit3("##Ambient", &(source.ambient.x));
 
-                    ImGui::ColorEdit3("Ambient", &(source.ambient.x));
-                    ImGui::ColorEdit3("Diffuse", &(source.diffuse.x));
-                    ImGui::ColorEdit3("Specular", &(source.specular.x));
-                    ImGui::SliderFloat3("CLQ", &(source.clq.x), 0, 1);
+                    ImGui::Text("Diffuse");
+                    ImGui::SameLine(100);
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::ColorEdit3("##Diffuse", &(source.diffuse.x));
+
+                    ImGui::Text("Specular");
+                    ImGui::SameLine(100);
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::ColorEdit3("##Specular", &(source.specular.x));
+
+                    ImGui::Text("CLQ");
+                    ImGui::SameLine(100);
+                    ImGui::SetNextItemWidth(-24);
+                    ImGui::DragFloat3("##CLQ", &(source.clq.x), 0, 1);
                 }
             }
         }

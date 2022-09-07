@@ -338,7 +338,7 @@ Scene:
       Tag: Car
       UUID: 6382649478025237834
       Transformation:
-        Translation: [-225, 0, 0]
+        Translation: [-225, 1, 0]
         TranslationOffset: [0, 0, 0]
         Rotation: [0, 0, 0]
         RotationOffset: [-90, 0, 0]
@@ -362,7 +362,7 @@ Scene:
       Tag: Nissan
       UUID: 6382249478065237834
       Transformation:
-        Translation: [-300, 0, 0]
+        Translation: [-300, 1, 0]
         TranslationOffset: [0, 0, 0]
         Rotation: [0, 0, 0]
         RotationOffset: [0, 0, 0]
@@ -374,7 +374,7 @@ Scene:
       Tag: Raiden
       UUID: 6384649478065237834
       Transformation:
-        Translation: [225, 0, 0]
+        Translation: [225, 1, 0]
         TranslationOffset: [0, 0, 0]
         Rotation: [0, 0, 0]
         RotationOffset: [0, 0, 0]
@@ -386,7 +386,7 @@ Scene:
       Tag: Sam
       UUID: 6382649478065643834
       Transformation:
-        Translation: [150, 0, 0]
+        Translation: [150, 1, 0]
         TranslationOffset: [0, 0, 0]
         Rotation: [0, 0, 0]
         RotationOffset: [0, 0, 0]
@@ -410,12 +410,12 @@ Scene:
       Tag: player
       UUID: 4631319593559015940
       FPSCamera:
-        FOV: 60
-        Aspect: 1.48198199
-        NearPlane: 1.00000001e-07
-        FarPlane: 2000
-        Position: [35.1113892, 22.0023117, 161.571594]
-        Direction: [0.3674182, -0.156725585, -0.916755676]
+        FOV: 90
+        Aspect: 1.48020911
+        NearPlane: 0.100000001
+        FarPlane: 10000
+        Position: [0.225582704, 55.8314323, 142.313217]
+        Direction: [0.0102259805, -0.364586383, -0.931113482]
     Entity_30:
       Tag: sun
       UUID: 16279128272272660330
@@ -450,7 +450,7 @@ Scene:
         TranslationOffset: [0, 0, 0]
         Rotation: [0, 0, 0]
         RotationOffset: [0, 0, 0]
-        Scale: [1000, 0.100000001, 100]
+        Scale: [1000, 1, 100]
         ScaleOffset: [1, 1, 1]
       RenderModel: 6557233926725796949
       Shader: 3566111628970667214
