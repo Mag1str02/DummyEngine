@@ -21,8 +21,8 @@ namespace DE
     FPSCamera::FPSCamera(Vec3 camera_position, Vec3 camera_direction) : FPSCamera(camera_position)
     {
         m_Direction = glm::normalize(camera_direction);
-        m_Right     = glm::normalize(glm::cross(m_Direction, m_WorldUp));
-        m_Up        = glm::normalize(glm::cross(m_Right, m_Direction));
+        m_Right         = glm::normalize(glm::cross(m_Direction, m_WorldUp));
+        m_Up               = glm::normalize(glm::cross(m_Right, m_Direction));
         UpdateViewMatrix();
         UpdateProjectionMatrix();
     }
@@ -45,9 +45,9 @@ namespace DE
     {
         angle *= -1;
         float critical_angle = 89.0f;
-        float h_angle        = glm::angle(m_Direction, m_WorldUp) * 180 / M_PI;
-        h_angle              = -90.0f + (180 - h_angle);
-        float new_h_angle    = angle + h_angle;
+        float h_angle               = glm::angle(m_Direction, m_WorldUp) * 180 / M_PI;
+        h_angle                           = -90.0f + (180 - h_angle);
+        float new_h_angle       = angle + h_angle;
         if (new_h_angle > critical_angle) new_h_angle = critical_angle;
         if (new_h_angle < -critical_angle) new_h_angle = -critical_angle;
         SetDir(glm::rotate(m_Direction, glm::radians(new_h_angle - h_angle), m_Right));

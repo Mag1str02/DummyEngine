@@ -19,6 +19,7 @@ namespace DE
 #define DE_CFG_LOG_PATH 3
 #define DE_CFG_MODEL_PATH 4
 #define DE_CFG_SHADER_PATH 5
+#define DE_CFG_TEXTURE_PATH 6
 
 #define DE_CFG_RENDER_API 1
 
@@ -50,6 +51,7 @@ namespace DE
             Path c_ModelPath;
             Path c_AssetPath;
             Path c_LogPath;
+            Path c_TexturePath;
 
             API c_RenderAPI;
         };

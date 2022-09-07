@@ -12,6 +12,7 @@ namespace DE
     {
     public:
         static Ref<TextureData> Load(const TextureLoadingProps& props);
+        static void Save(const Path& path, const Ref<TextureData> data);
 
     private:
         struct LoaderState

@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include <stb_image.h>
+#include <stb_image_write.h>
 
 #include <ImGui/imgui.h>
 #include <ImGui/backends/imgui_impl_glfw.h>
@@ -30,4 +31,6 @@
 #include "ToolBox/Dev/Profiler.h"
 #include "ToolBox/Dev/Logger.h"
 #include "ToolBox/Loaders/ModelLoader.h"
+#include "ToolBox/Loaders/TextureLoader.h"
 #include "ToolBox/Loaders/SceneLoader.h"
+#include "ToolBox/Editors/TextureEditor.h"

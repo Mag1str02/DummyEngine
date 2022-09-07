@@ -8,6 +8,7 @@ set(SANDBOX_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../Sandbox)
 set(EXTERNAL_LIBS_DIR libs)
 set(DE_LIB_SOURCE_DIR .) 
 set(ENGINE_SOURCES  
+    Addition/GLDebug.cpp
     Addition/Assert.cpp
     Addition/Config.cpp
     Addition/Conversions.cpp
@@ -40,6 +41,7 @@ set(ENGINE_SOURCES
 
     Core/Rendering/Renderer/BufferLayout.cpp
     Core/Rendering/Renderer/Context.cpp
+    Core/Rendering/Renderer/CubeMap.cpp
     Core/Rendering/Renderer/FrameBuffer.cpp
     Core/Rendering/Renderer/LocalBuffer.cpp
     Core/Rendering/Renderer/VertexArray.cpp
@@ -50,7 +52,9 @@ set(ENGINE_SOURCES
     Core/Rendering/Renderer/Texture.cpp
 
     Core/Rendering/RendererOpenGL/GLContext.cpp
+    Core/Rendering/RendererOpenGL/GLCubeMap.cpp
     Core/Rendering/RendererOpenGL/GLFrameBuffer.cpp
+    Core/Rendering/RendererOpenGL/GLUtils.cpp
     Core/Rendering/RendererOpenGL/GLVertexArray.cpp
     Core/Rendering/RendererOpenGL/GLVertexBuffer.cpp
     Core/Rendering/RendererOpenGL/GLShader.cpp
@@ -66,6 +70,7 @@ set(ENGINE_SOURCES
     ToolBox/Loaders/ModelLoader.cpp
     ToolBox/Loaders/TextureLoader.cpp 
     ToolBox/Loaders/SceneLoader.cpp
+    ToolBox/Editors/TextureEditor.cpp
 )
 
 add_library(DummyEngineLib

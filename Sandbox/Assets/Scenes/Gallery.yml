@@ -53,10 +53,19 @@ Scene:
         FlipUV: false
         UUID: 18245352808254477256
     Shaders:
+      SkyBox:
+        UUID: 3566111620382667214
+        Vertex: Assets\Shaders\SkyBox\SkyBox.vs
+        Fragment: Assets\Shaders\SkyBox\SkyBox.fs
       TexturedPhong:
         UUID: 3566111628970667214
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
+    Textures:
+      Sky:
+        Path: Assets\Textures\Skyboxes\Space.png
+        FlipUV: false
+        UUID: 4297990474523151207
   Entities:
     Entity_0:
       Tag: Arch
@@ -411,12 +420,24 @@ Scene:
       UUID: 4631319593559015940
       FPSCamera:
         FOV: 90
-        Aspect: 1.48020911
+        Aspect: 1.40403283
         NearPlane: 0.100000001
         FarPlane: 10000
-        Position: [0.225582704, 55.8314323, 142.313217]
-        Direction: [0.0102259805, -0.364586383, -0.931113482]
+        Position: [-11.2693052, 413.337708, 281.353455]
+        Direction: [-0.00817424804, -0.794176638, -0.607632041]
     Entity_30:
+      Tag: skybox
+      UUID: 6382649478065202943
+      Transformation:
+        Translation: [0, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [1, 1, 1]
+      Shader: 3566111620382667214
+      SkyBox: 4297990474523151207
+    Entity_31:
       Tag: sun
       UUID: 16279128272272660330
       LightSource:
@@ -429,20 +450,20 @@ Scene:
         CLQ: [0.5, 0.00700000022, 0.000199999995]
         InnerCone: 0
         OuterCone: 0
-    Entity_31:
+    Entity_32:
       Tag: sun_0
       UUID: 16279128272272660331
       LightSource:
         Type: Direction
-        Ambient: [0.5, 0.5, 0.5]
-        Diffuse: [1, 1, 1]
-        Specular: [0.5, 0.5, 0.5]
+        Ambient: [0.00951558072, 0, 0.323529422]
+        Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+        Specular: [0.113042593, 0.0496203378, 0.289215684]
         Direction: [0, -0.44721359, 0.89442718]
         Position: [0, 0, 0]
         CLQ: [0.5, 0.00700000022, 0.000199999995]
         InnerCone: 0
         OuterCone: 0
-    Entity_32:
+    Entity_33:
       Tag: surface
       UUID: 6382649478065237843
       Transformation:

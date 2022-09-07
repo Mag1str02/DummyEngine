@@ -1,19 +1,22 @@
 #include "Core/Rendering/Renderer/Renderer.h"
 #include "Core/Rendering/RendererOpenGL/GLRenderAPI.h"
+#include "Core/ResourceManaging/ResourceManager.h"
 #include "ToolBox/Loaders/TextureLoader.h"
 #include "ToolBox/Dev/Logger.h"
+#include <GLAD/glad.h>
 
 namespace DE
 {
     Scope<FrameStatistics> Renderer::m_FrameStatistics = nullptr;
-    Scope<RenderAPI> Renderer::m_RenderAPI = nullptr;
-    Ref<Texture> Renderer::m_DefaultTexture = nullptr;
-    Ref<VertexArray> Renderer::m_FullScreenQuad = nullptr;
+    Scope<RenderAPI>       Renderer::m_RenderAPI       = nullptr;
+    Ref<Texture>           Renderer::m_DefaultTexture  = nullptr;
+    Ref<VertexArray>       Renderer::m_FullScreenQuad  = nullptr;
+    Ref<VertexArray>       Renderer::m_Cube            = nullptr;
 
     void FrameStatistics::Reset()
     {
         m_DrawCallsAmount = 0;
-        m_DrawnInstances = 0;
+        m_DrawnInstances  = 0;
     }
 
     void Renderer::Init(API api)
@@ -38,13 +41,14 @@ namespace DE
 
         GenDefaultTexture();
         GenFullScreenQuad();
+        GenCube();
 
         Logger::Info("loading", "Renderer", "Renderer initialized.");
     }
     void Renderer::OnWindowResize(uint32_t width, uint32_t height)
     {
         DE_PROFILE_SCOPE("On Window Resize");
-        
+
         m_RenderAPI->SetViewport(0, 0, width, height);
     }
 
@@ -64,6 +68,7 @@ namespace DE
         vertex_array->Bind();
         m_RenderAPI->DrawIndexed(vertex_array);
         ++m_FrameStatistics->m_DrawCallsAmount;
+        ++m_FrameStatistics->m_DrawnInstances;
     }
     void Renderer::Submit(Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& trasform)
     {
@@ -94,6 +99,17 @@ namespace DE
             }
         }
     }
+    void Renderer::Submit(Ref<CubeMap> cube_map, Ref<Shader> shader, const Mat4& trasform)
+    {
+        glDepthMask(GL_FALSE);
+        cube_map->Bind();
+        shader->Bind();
+        shader->SetMat4("u_Transform", trasform);
+        m_RenderAPI->DrawIndexed(GetCube());
+        ++m_FrameStatistics->m_DrawCallsAmount;
+        ++m_FrameStatistics->m_DrawnInstances;
+        glDepthMask(GL_TRUE);
+    }
 
     void Renderer::Enable(RenderSetting setting) { m_RenderAPI->Enable(setting); }
     void Renderer::Disable(RenderSetting setting) { m_RenderAPI->Disable(setting); }
@@ -101,18 +117,19 @@ namespace DE
     void Renderer::SetClearColor(Vec4 color) { m_RenderAPI->SetClearColor(color); }
     void Renderer::SetClearColor(float r, float g, float b, float a) { m_RenderAPI->SetClearColor(Vec4(r, g, b, a)); }
 
-    Ref<Texture> Renderer::GetDefaultTexture() { return m_DefaultTexture; }
+    Ref<Texture>     Renderer::GetDefaultTexture() { return m_DefaultTexture; }
     Ref<VertexArray> Renderer::GetFullScreenQuad() { return m_FullScreenQuad; }
-    API Renderer::CurrentAPI() { return m_RenderAPI->GetAPI(); }
-    FrameStatistics Renderer::GetStatistics() { return *m_FrameStatistics; }
+    Ref<VertexArray> Renderer::GetCube() { return m_Cube; }
+    API              Renderer::CurrentAPI() { return m_RenderAPI->GetAPI(); }
+    FrameStatistics  Renderer::GetStatistics() { return *m_FrameStatistics; }
 
     // TODO: Think to move somewhere else...
 
     void Renderer::GenDefaultTexture()
     {
-        uint32_t width = 1;
-        uint32_t height = 1;
-        TextureFormat format = TextureFormat::RGBA;
+        uint32_t             width  = 1;
+        uint32_t             height = 1;
+        TextureFormat        format = TextureFormat::RGBA;
         std::vector<uint8_t> data(4, 255);
 
         TextureData tex_data(&data[0], width, height, format);
@@ -120,31 +137,82 @@ namespace DE
     }
     void Renderer::GenFullScreenQuad()
     {
-        uint32_t indices[] = {0, 1, 2, 0, 2, 3};
-        float vertices[] = {1.0f,
-                            1.0f,
-                            1.0f,
-                            1.0f,  //
+        uint32_t indices[] = {
+            0,
+            1,
+            2,  //
+            0,
+            2,
+            3,  //
+        };
+        float vertices[] = {
+            1.0f,
+            1.0f,
+            1.0f,
+            1.0f,  //
 
-                            -1.0f,
-                            1.0f,
-                            0.0f,
-                            1.0f,  //
+            -1.0f,
+            1.0f,
+            0.0f,
+            1.0f,  //
 
-                            -1.0f,
-                            -1.0f,
-                            0.0f,
-                            0.0f,  //
+            -1.0f,
+            -1.0f,
+            0.0f,
+            0.0f,  //
 
-                            1.0f,
-                            -1.0f,
-                            1.0f,
-                            0.0f};
+            1.0f,
+            -1.0f,
+            1.0f,
+            0.0f,  //
+        };
+
         auto vb = VertexBuffer::Create({BufferElementType::Float2, BufferElementType::Float2}, 4, vertices);
         auto ib = IndexBuffer::Create(indices, 6);
+
         m_FullScreenQuad = VertexArray::Create();
         m_FullScreenQuad->SetIndexBuffer(ib);
         m_FullScreenQuad->AddVertexBuffer(vb);
-    }  // namespace DE
+    }
+    void Renderer::GenCube()
+    {
+        uint32_t indices[] = {
+            0, 1, 2,  //
+            2, 3, 0,  //
 
+            1, 5, 6,  //
+            6, 2, 1,  //
+
+            7, 6, 5,  //
+            5, 4, 7,  //
+
+            4, 0, 3,  //
+            3, 7, 4,  //
+
+            4, 5, 1,  //
+            1, 0, 4,  //
+
+            3, 2, 6,  //
+            6, 7, 3   //
+        };
+        float vertices[] = {
+
+            -1.0, -1.0, 1.0,  //
+            1.0,  -1.0, 1.0,  //
+            1.0,  1.0,  1.0,  //
+            -1.0, 1.0,  1.0,  //
+
+            -1.0, -1.0, -1.0,  //
+            1.0,  -1.0, -1.0,  //
+            1.0,  1.0,  -1.0,  //
+            -1.0, 1.0,  -1.0,  //
+        };
+
+        auto ib = IndexBuffer::Create(indices, 36);
+        auto vb = VertexBuffer::Create({{BufferElementType::Float3}, 0}, 8, vertices);
+
+        m_Cube = VertexArray::Create();
+        m_Cube->SetIndexBuffer(ib);
+        m_Cube->AddVertexBuffer(vb);
+    }
 }  // namespace DE

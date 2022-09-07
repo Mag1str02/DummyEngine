@@ -11,18 +11,21 @@ out vec2 v_TexCoords;
 
 uniform mat4 u_ViewProjection;
 uniform mat4 u_Transform;
-uniform int u_Instanced;
+uniform int  u_Instanced;
 
 void main()
 {
     mat4 Transform;
-    if(u_Instanced == 1){
+    if (u_Instanced == 1)
+    {
         Transform = i_Transform;
-    }else{
+    }
+    else
+    {
         Transform = u_Transform;
     }
     gl_Position = u_ViewProjection * Transform * vec4(i_Pos, 1.0);
-    v_FragPos = vec3(Transform * vec4(i_Pos, 1.0));
-    v_Normal = mat3(transpose(inverse(Transform))) * i_Normal;
+    v_FragPos   = vec3(Transform * vec4(i_Pos, 1.0));
+    v_Normal    = mat3(transpose(inverse(Transform))) * i_Normal;
     v_TexCoords = i_TexCoords;
 }
