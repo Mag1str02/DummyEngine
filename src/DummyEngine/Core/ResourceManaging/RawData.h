@@ -11,6 +11,15 @@ namespace DE
         RGBA,
         DepthStencil
     };
+    enum CubeSide
+    {
+        Right = 0,
+        Left = 1,
+        Top = 2,
+        Bottom = 3,
+        Back = 4,
+        Front = 5,
+    };
     uint32_t PixelSize(TextureFormat format);
 
     struct ShaderPart

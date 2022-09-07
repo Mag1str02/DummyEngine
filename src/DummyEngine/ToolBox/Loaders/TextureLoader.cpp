@@ -1,4 +1,5 @@
 #include <stb_image.h>
+#include <stb_image_write.h>
 
 #include "ToolBox/Loaders/TextureLoader.h"
 #include "ToolBox/Dev/Logger.h"
@@ -51,5 +52,15 @@ namespace DE
 
         Logger::Info("loading", "TextureLoader", "Texture loaded " + RelativeToExecutable(props.path).string() + " Format (" + format_s + ")");
         return m_State.m_CurrentData;
+    }
+    void TextureLoader::Save(const Path& path, const Ref<TextureData> data)
+    {
+        switch (data->Format())
+        {
+            case TextureFormat::RGBA: {
+                stbi_write_png(path.string().c_str(), data->Width(), data->Height(), data->Channels(), data->Data(), data->Width() * data->Channels());
+                break;
+            }
+        }
     }
 }  // namespace DE

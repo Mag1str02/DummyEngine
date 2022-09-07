@@ -31,4 +31,6 @@
 #include "ToolBox/Dev/Profiler.h"
 #include "ToolBox/Dev/Logger.h"
 #include "ToolBox/Loaders/ModelLoader.h"
+#include "ToolBox/Loaders/TextureLoader.h"
 #include "ToolBox/Loaders/SceneLoader.h"
+#include "ToolBox/Editors/TextureEditor.h"
