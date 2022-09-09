@@ -19,15 +19,9 @@ namespace DE
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
-    void GLRenderAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
-    {
-        glViewport(x, y, width, height);
-    }
+    void GLRenderAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) { glViewport(x, y, width, height); }
 
-    void GLRenderAPI::Clear()
-    {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    }
+    void GLRenderAPI::Clear() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); }
     void GLRenderAPI::DrawIndexed(const Ref<VertexArray>& vertex_array)
     {
         vertex_array->Bind();
@@ -39,14 +33,8 @@ namespace DE
         glDrawElementsInstanced(GL_TRIANGLES, vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, nullptr, instance_count);
     }
 
-    void GLRenderAPI::SetClearColor(const Vec4& color)
-    {
-        glClearColor(color.x, color.y, color.z, color.w);
-    }
-    void GLRenderAPI::SetLineWidth(float width)
-    {
-        glLineWidth(width);
-    }
+    void GLRenderAPI::SetClearColor(const Vec4& color) { glClearColor(color.x, color.y, color.z, color.w); }
+    void GLRenderAPI::SetLineWidth(float width) { glLineWidth(width); }
     void GLRenderAPI::Enable(RenderSetting setting)
     {
         switch (setting)
@@ -54,6 +42,7 @@ namespace DE
             case RenderSetting::DepthTest: glEnable(GL_DEPTH_TEST);
             case RenderSetting::MultiSampling: glEnable(GL_MULTISAMPLE);
             case RenderSetting::FaceCulling: glEnable(GL_CULL_FACE);
+            case RenderSetting::DepthMask: glDepthMask(GL_TRUE);
         }
     }
     void GLRenderAPI::Disable(RenderSetting setting)
@@ -63,11 +52,9 @@ namespace DE
             case RenderSetting::DepthTest: glDisable(GL_DEPTH_TEST);
             case RenderSetting::MultiSampling: glDisable(GL_MULTISAMPLE);
             case RenderSetting::FaceCulling: glDisable(GL_CULL_FACE);
+            case RenderSetting::DepthMask: glDepthMask(GL_FALSE);
         }
     }
 
-    API GLRenderAPI::GetAPI()
-    {
-        return API::OpenGL;
-    }
+    API GLRenderAPI::GetAPI() { return API::OpenGL; }
 }  // namespace DE

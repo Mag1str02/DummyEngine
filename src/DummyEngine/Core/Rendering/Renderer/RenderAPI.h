@@ -10,7 +10,8 @@ namespace DE
         None = 0,
         DepthTest,
         MultiSampling,
-        FaceCulling
+        FaceCulling,
+        DepthMask
     };
     class RenderAPI
     {

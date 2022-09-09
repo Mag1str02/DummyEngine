@@ -16,6 +16,24 @@ namespace DE
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
+        if (data->Width() % 4 != 0 || data->Height() % 3 != 0 || data->Width() / 4 != data->Height() / 3)
+        {
+            std::string error;
+            if (data->Width() % 4 != 0)
+            {
+                error += "(Width % 4 != 0)";
+            }
+            if (data->Height() % 3 != 0)
+            {
+                error += "(Height % 3 != 0)";
+            }
+            if (data->Width() / 4 != data->Height() / 3)
+            {
+                error += "(Width / 4 != Height / 3)";
+            }
+            Logger::Warning("loading", "GLCubeMap","Attempt to create cubemap with wrong texture size:" + error);
+        }
+
         for (size_t i = 0; i < 6; ++i)
         {
             auto side = TextureEditor::GetSkyBoxSide(data, CubeSide(i));
