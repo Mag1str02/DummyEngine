@@ -2,6 +2,16 @@
 
 namespace DE
 {
+    void ClampRoundValue(Vec3& vec, float min, float max)
+    {
+        if (vec.x < min) vec.x = max;
+        if (vec.x > max) vec.x = min;
+        if (vec.y < min) vec.y = max;
+        if (vec.y > max) vec.y = min;
+        if (vec.z < min) vec.z = max;
+        if (vec.z > max) vec.z = min;
+    }
+
     void InspectorPanel::View()
     {
         DE_PROFILE_SCOPE("InspectorPanel View");
@@ -15,6 +25,9 @@ namespace DE
                 auto& component = m_Entity.GetComponent<TagComponent>();
                 if (ImGui::CollapsingHeader("Tag"))
                 {
+                    ImGui::Text("Tag");
+                    ImGui::SameLine(100);
+                    ImGui::SetNextItemWidth(-1);
                     ImGui::InputText("", &component.tag);
                 }
             }
@@ -46,6 +59,8 @@ namespace DE
                     ImGui::SameLine(100);
                     ImGui::SetNextItemWidth(-1);
                     ImGui::DragFloat3("##Rotation", &(transform.rotation.x), sensitivity, 0, 0);
+
+                    ClampRoundValue(transform.rotation, 0, 360);
                 }
             }
             if (m_Entity.HasComponent<RenderMeshComponent>())
@@ -61,6 +76,11 @@ namespace DE
                 if (ImGui::CollapsingHeader("FPSCamera"))
                 {
                     auto& camera = m_Entity.GetComponent<FPSCamera>();
+
+                    ImGui::Text("Position");
+                    ImGui::SameLine(100);
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::DragFloat3("##Position", &(camera.m_Position.x), sensitivity, 0, 0);
 
                     ImGui::Text("Near Plane");
                     ImGui::SameLine(100);
@@ -83,6 +103,14 @@ namespace DE
                 if (ImGui::CollapsingHeader("Light Soruce"))
                 {
                     auto& source = m_Entity.GetComponent<LightSource>();
+                    const char* light_types[] = {"Directional", "Point", "Spot"};
+
+                    ImGui::Text("Type");
+                    ImGui::SameLine(100);
+                    ImGui::SetNextItemWidth(-24);
+                    ImGui::Combo("##Light Type", (int*)&source.type, light_types, IM_ARRAYSIZE(light_types));
+                    ImGui::Separator();
+
                     ImGui::Text("Ambient");
                     ImGui::SameLine(100);
                     ImGui::SetNextItemWidth(-1);
@@ -98,10 +126,39 @@ namespace DE
                     ImGui::SetNextItemWidth(-1);
                     ImGui::ColorEdit3("##Specular", &(source.specular.x));
 
-                    ImGui::Text("CLQ");
-                    ImGui::SameLine(100);
-                    ImGui::SetNextItemWidth(-24);
-                    ImGui::DragFloat3("##CLQ", &(source.clq.x), 0, 1);
+                    if (source.type == LightSourceType::Point || source.type == LightSourceType::Spot)
+                    {
+                        ImGui::Text("CLQ");
+                        ImGui::SameLine(100);
+                        ImGui::SetNextItemWidth(-24);
+                        ImGui::DragFloat3("##CLQ", &(source.clq.x), sensitivity, 0, 1);
+                    }
+                    if (source.type == LightSourceType::Spot || source.type == LightSourceType::Direction)
+                    {
+                        ImGui::Text("Direction");
+                        ImGui::SameLine(100);
+                        ImGui::SetNextItemWidth(-24);
+                        ImGui::DragFloat3("##Direction", &(source.direction.x), sensitivity, 0, 1);
+                    }
+                    if (source.type == LightSourceType::Spot || source.type == LightSourceType::Point)
+                    {
+                        ImGui::Text("Position");
+                        ImGui::SameLine(100);
+                        ImGui::SetNextItemWidth(-24);
+                        ImGui::DragFloat3("##Position", &(source.position.x), sensitivity, 0, 1);
+                    }
+                    if (source.type == LightSourceType::Spot)
+                    {
+                        ImGui::Text("Inner Cone");
+                        ImGui::SameLine(100);
+                        ImGui::SetNextItemWidth(-24);
+                        ImGui::DragFloat("##InnerCone", &(source.inner_cone_cos), sensitivity, 0, 1);
+
+                        ImGui::Text("Outer Cone");
+                        ImGui::SameLine(100);
+                        ImGui::SetNextItemWidth(-24);
+                        ImGui::DragFloat("##OuterCone", &(source.outer_cone_cos), sensitivity, 0, 1);
+                    }
                 }
             }
         }

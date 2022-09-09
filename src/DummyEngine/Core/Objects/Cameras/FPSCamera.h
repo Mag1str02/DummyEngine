@@ -34,9 +34,9 @@ namespace DE
         FPSCamera(Vec3 camera_position);
         FPSCamera(Vec3 camera_position, Vec3 camera_direction);
 
-        Mat4 GetViewMatrix() const;
-        Mat4 GetProjectionMatrix() const;
-        Mat4 GetViewProjection() const;
+        Mat4 GetViewMatrix();
+        Mat4 GetProjectionMatrix();
+        Mat4 GetViewProjection();
         Vec3 GetPos() const;
         Vec3 GetDir() const;
         float GetFov() const;

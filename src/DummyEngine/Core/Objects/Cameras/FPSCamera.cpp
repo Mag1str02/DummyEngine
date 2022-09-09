@@ -21,8 +21,8 @@ namespace DE
     FPSCamera::FPSCamera(Vec3 camera_position, Vec3 camera_direction) : FPSCamera(camera_position)
     {
         m_Direction = glm::normalize(camera_direction);
-        m_Right         = glm::normalize(glm::cross(m_Direction, m_WorldUp));
-        m_Up               = glm::normalize(glm::cross(m_Right, m_Direction));
+        m_Right = glm::normalize(glm::cross(m_Direction, m_WorldUp));
+        m_Up = glm::normalize(glm::cross(m_Right, m_Direction));
         UpdateViewMatrix();
         UpdateProjectionMatrix();
     }
@@ -45,20 +45,35 @@ namespace DE
     {
         angle *= -1;
         float critical_angle = 89.0f;
-        float h_angle               = glm::angle(m_Direction, m_WorldUp) * 180 / M_PI;
-        h_angle                           = -90.0f + (180 - h_angle);
-        float new_h_angle       = angle + h_angle;
+        float h_angle = glm::angle(m_Direction, m_WorldUp) * 180 / M_PI;
+        h_angle = -90.0f + (180 - h_angle);
+        float new_h_angle = angle + h_angle;
         if (new_h_angle > critical_angle) new_h_angle = critical_angle;
         if (new_h_angle < -critical_angle) new_h_angle = -critical_angle;
         SetDir(glm::rotate(m_Direction, glm::radians(new_h_angle - h_angle), m_Right));
     }
 
-    Mat4 FPSCamera::GetProjectionMatrix() const { return m_ProjectionMatrix; }
-    Mat4 FPSCamera::GetViewMatrix() const { return m_ViewMatrix; }
+    Mat4 FPSCamera::GetProjectionMatrix()
+    {
+        UpdateProjectionMatrix();
+        return m_ProjectionMatrix;
+    }
 
-    Mat4  FPSCamera::GetViewProjection() const { return m_ProjectionMatrix * m_ViewMatrix; }
-    Vec3  FPSCamera::GetPos() const { return m_Position; }
-    Vec3  FPSCamera::GetDir() const { return m_Direction; }
+    Mat4 FPSCamera::GetViewMatrix()
+    {
+        UpdateViewMatrix();
+        return m_ViewMatrix;
+    }
+
+    Mat4 FPSCamera::GetViewProjection()
+    {
+        UpdateViewMatrix();
+        UpdateProjectionMatrix();
+
+        return m_ProjectionMatrix * m_ViewMatrix;
+    }
+    Vec3 FPSCamera::GetPos() const { return m_Position; }
+    Vec3 FPSCamera::GetDir() const { return m_Direction; }
     float FPSCamera::GetFov() const { return m_FOV; }
     float FPSCamera::GetAspect() const { return m_Aspect; }
     float FPSCamera::GetNearPlane() const { return m_NearPlane; }
@@ -72,8 +87,8 @@ namespace DE
     void FPSCamera::SetDir(Vec3 camera_direction)
     {
         m_Direction = glm::normalize(camera_direction);
-        m_Right     = glm::normalize(glm::cross(m_Direction, m_WorldUp));
-        m_Up        = glm::normalize(glm::cross(m_Right, m_Direction));
+        m_Right = glm::normalize(glm::cross(m_Direction, m_WorldUp));
+        m_Up = glm::normalize(glm::cross(m_Right, m_Direction));
         UpdateViewMatrix();
     }
     void FPSCamera::SetPos(Vec3 pos)
@@ -112,14 +127,14 @@ namespace DE
 
     void FPSCamera::UpdateProjectionMatrix()
     {
-        Mat4 projection    = Mat4(1.0f);
-        projection         = glm::perspective(glm::radians(m_FOV), m_Aspect, m_NearPlane, m_FarPlane);
+        Mat4 projection = Mat4(1.0f);
+        projection = glm::perspective(glm::radians(m_FOV), m_Aspect, m_NearPlane, m_FarPlane);
         m_ProjectionMatrix = projection;
     }
     void FPSCamera::UpdateViewMatrix()
     {
-        Mat4 view  = Mat4(1.0f);
-        Mat4 buff  = Mat4(1.0f);
+        Mat4 view = Mat4(1.0f);
+        Mat4 buff = Mat4(1.0f);
         buff[0][0] = m_Right.x;
         buff[1][0] = m_Right.y;
         buff[2][0] = m_Right.z;
@@ -130,8 +145,8 @@ namespace DE
         buff[1][2] = -m_Direction.y;
         buff[2][2] = -m_Direction.z;
 
-        view         = view * buff;
-        view         = glm::translate(view, -m_Position);
+        view = view * buff;
+        view = glm::translate(view, -m_Position);
         m_ViewMatrix = view;
     }
 }  // namespace DE

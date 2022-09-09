@@ -15,12 +15,11 @@ namespace DE
     }
     LightSourceType StringToLightSourceType(const std::string& type)
     {
-        if (type == "Direction") return LightSourceType::Direction;
         if (type == "Point") return LightSourceType::Point;
         if (type == "Spot") return LightSourceType::Spot;
-        return LightSourceType::None;
+        return LightSourceType::Direction;
     }
-    
+
     uint32_t LightSourceTypeToId(LightSourceType type)
     {
         switch (type)

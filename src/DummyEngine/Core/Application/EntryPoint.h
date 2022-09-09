@@ -12,4 +12,5 @@ int main()
     auto app = DE::CreateApplication();
     app->Run();
     delete app;
+    return 0;
 }

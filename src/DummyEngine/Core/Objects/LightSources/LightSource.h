@@ -6,10 +6,9 @@ namespace DE
 {
     enum class LightSourceType
     {
-        None = 0,
-        Point,
-        Spot,
-        Direction
+        Direction = 0,
+        Point = 1,
+        Spot = 2,
     };
 
     std::string LightSourceTypeToString(LightSourceType type);
