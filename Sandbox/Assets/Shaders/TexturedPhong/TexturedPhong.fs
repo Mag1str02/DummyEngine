@@ -4,10 +4,10 @@
 
 struct Material
 {
-    vec3 m_Ambient;
-    vec3 m_Diffuse;
-    vec3 m_Specular;
-    float m_Shininess;
+    vec3      m_Ambient;
+    vec3      m_Diffuse;
+    vec3      m_Specular;
+    float     m_Shininess;
     sampler2D m_DiffuseMap;
     sampler2D m_SpecularMap;
 };
@@ -23,15 +23,19 @@ struct LightSource
     vec3 m_ConesAndType;
 };
 
-in vec3 v_FragPos;
-in vec3 v_Normal;
-in vec2 v_TexCoords;
+in VS_OUT
+{
+    vec3 Normal;
+    vec3 FragPos;
+    vec2 TexCoords;
+}
+vs_in;
 
 out vec4 f_FragColor;
 
-uniform vec3 u_CameraPos;
-uniform int u_LightAmount;
-uniform Material u_Material;
+uniform vec3        u_CameraPos;
+uniform int         u_LightAmount;
+uniform Material    u_Material;
 uniform LightSource u_LightSources[MAX_LIGHT_SOURCES];
 
 vec3 DirectionalLightImpact(LightSource direction_light, vec3 v_Normal, vec3 view_direction)
@@ -39,30 +43,30 @@ vec3 DirectionalLightImpact(LightSource direction_light, vec3 v_Normal, vec3 vie
     vec3 normalized_light_ray = normalize(-direction_light.m_Direction);
 
     float bounce_angle_cos = max(dot(v_Normal, normalized_light_ray), 0.0);
-    vec3 reflected_ray = reflect(-normalized_light_ray, v_Normal);
-    float spec = pow(max(dot(view_direction, reflected_ray), 0.0), u_Material.m_Shininess);
+    vec3  reflected_ray    = reflect(-normalized_light_ray, v_Normal);
+    float spec             = pow(max(dot(view_direction, reflected_ray), 0.0), u_Material.m_Shininess);
 
-    vec3 ambient = direction_light.m_Ambient * vec3(texture(u_Material.m_DiffuseMap, v_TexCoords)) * u_Material.m_Ambient;
-    vec3 diffuse = bounce_angle_cos * direction_light.m_Diffuse * vec3(texture(u_Material.m_DiffuseMap, v_TexCoords)) * u_Material.m_Diffuse;
-    vec3 specular = spec * direction_light.m_Specular * vec3(texture(u_Material.m_SpecularMap, v_TexCoords))* u_Material.m_Specular;
+    vec3 ambient  = direction_light.m_Ambient * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)) * u_Material.m_Ambient;
+    vec3 diffuse  = bounce_angle_cos * direction_light.m_Diffuse * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)) * u_Material.m_Diffuse;
+    vec3 specular = spec * direction_light.m_Specular * vec3(texture(u_Material.m_SpecularMap, vs_in.TexCoords)) * u_Material.m_Specular;
 
     return ambient + diffuse + specular;
 }
 vec3 PointLightImpact(LightSource point_light, vec3 v_Normal, vec3 view_direction, vec3 v_FragPos)
 {
-    vec3 light_ray = point_light.m_Position - v_FragPos;
+    vec3 light_ray            = point_light.m_Position - v_FragPos;
     vec3 normalized_light_ray = normalize(light_ray);
-    vec3 reflected_ray = reflect(-normalized_light_ray, v_Normal);
+    vec3 reflected_ray        = reflect(-normalized_light_ray, v_Normal);
 
-    float dist = length(light_ray);
+    float dist             = length(light_ray);
     float bounce_angle_cos = max(dot(v_Normal, normalized_light_ray), 0.0);
-    float spec = pow(max(dot(view_direction, reflected_ray), 0.0), 32);
+    float spec             = pow(max(dot(view_direction, reflected_ray), 0.0), 32);
 
     float attenuation = 1.0 / (point_light.m_CLQ.x + point_light.m_CLQ.y * dist + point_light.m_CLQ.z * (dist * dist));
 
-    vec3 ambient = point_light.m_Ambient * vec3(texture(u_Material.m_DiffuseMap, v_TexCoords));
-    vec3 diffuse = bounce_angle_cos * point_light.m_Diffuse * vec3(texture(u_Material.m_DiffuseMap, v_TexCoords));
-    vec3 specular = spec * point_light.m_Specular * vec3(texture(u_Material.m_SpecularMap, v_TexCoords));
+    vec3 ambient  = point_light.m_Ambient * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords));
+    vec3 diffuse  = bounce_angle_cos * point_light.m_Diffuse * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords));
+    vec3 specular = spec * point_light.m_Specular * vec3(texture(u_Material.m_SpecularMap, vs_in.TexCoords));
 
     return (ambient + diffuse + specular) * attenuation;
 }
@@ -70,10 +74,10 @@ vec3 SpotLightImpact(LightSource spot_light, vec3 v_Normal, vec3 view_direction,
 {
     vec3 point_light_result = PointLightImpact(spot_light, v_Normal, view_direction, v_FragPos);
 
-    vec3 light_ray = spot_light.m_Position - v_FragPos;
+    vec3 light_ray            = spot_light.m_Position - v_FragPos;
     vec3 normalized_light_ray = normalize(light_ray);
 
-    float angle_coef = 0.0;
+    float angle_coef      = 0.0;
     float light_angle_cos = dot(-normalized_light_ray, normalize(spot_light.m_Direction));
     if (spot_light.m_ConesAndType.x < light_angle_cos)
     {
@@ -89,18 +93,18 @@ vec3 SpotLightImpact(LightSource spot_light, vec3 v_Normal, vec3 view_direction,
 
 void main()
 {
-    if (vec4(texture(u_Material.m_DiffuseMap, v_TexCoords)).a < 0.000000001) discard;
+    if (vec4(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)).a < 0.000000001) discard;
 
-    vec3 normalized_normal = normalize(v_Normal);
-    vec3 view_direction = normalize(u_CameraPos - v_FragPos);
+    vec3 normalized_normal = normalize(vs_in.Normal);
+    vec3 view_direction    = normalize(u_CameraPos - vs_in.FragPos);
 
     vec3 result = vec3(0.0);
 
     for (int i = 0; i < u_LightAmount; ++i)
     {
         if (u_LightSources[i].m_ConesAndType.z == 1) result += DirectionalLightImpact(u_LightSources[i], normalized_normal, view_direction);
-        if (u_LightSources[i].m_ConesAndType.z == 2) result += PointLightImpact(u_LightSources[i], normalized_normal, view_direction, v_FragPos);
-        if (u_LightSources[i].m_ConesAndType.z == 3) result += SpotLightImpact(u_LightSources[i], normalized_normal, view_direction, v_FragPos);
+        if (u_LightSources[i].m_ConesAndType.z == 2) result += PointLightImpact(u_LightSources[i], normalized_normal, view_direction, vs_in.FragPos);
+        if (u_LightSources[i].m_ConesAndType.z == 3) result += SpotLightImpact(u_LightSources[i], normalized_normal, view_direction, vs_in.FragPos);
     }
 
     f_FragColor = vec4(result, 1.0);
