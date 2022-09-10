@@ -104,7 +104,6 @@ namespace DE
     }
     void Renderer::Submit(Ref<CubeMap> cube_map, Ref<Shader> shader, const Mat4& trasform)
     {
-        m_RenderAPI->Disable(RenderSetting::DepthMask);
         cube_map->Bind();
         shader->Bind();
         shader->SetMat4("u_Transform", trasform);

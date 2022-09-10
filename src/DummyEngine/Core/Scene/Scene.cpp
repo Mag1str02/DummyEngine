@@ -119,18 +119,18 @@ namespace DE
             shader->SetFloat3("u_CameraPos", camera.GetPos());
         }
 
-        for (auto [id, skybox] : skyboxes)
-        {
-            transformations[id].translation = GetByName("player").GetComponent<FPSCamera>().GetPos();
-            Renderer::Submit(skybox.map, shaders[id].shader, transformations[id].GetTransform());
-        }
-
         LightPass();
 
         for (auto& [ids, target] : m_RenderData.m_InstancedMeshes)
         {
             target.first->UpdateInstanceBuffer();
             Renderer::Submit(target.first, target.second);
+        }
+        
+        for (auto [id, skybox] : skyboxes)
+        {
+            transformations[id].translation = GetByName("player").GetComponent<FPSCamera>().GetPos();
+            Renderer::Submit(skybox.map, shaders[id].shader, transformations[id].GetTransform());
         }
         glCheckError();
     }

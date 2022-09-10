@@ -47,6 +47,7 @@ namespace DE
                          GL_UNSIGNED_BYTE,
                          side->Data());
         }
+        glCheckError();
     }
     GLCubeMap::~GLCubeMap() { glDeleteTextures(1, &m_MapId); }
 

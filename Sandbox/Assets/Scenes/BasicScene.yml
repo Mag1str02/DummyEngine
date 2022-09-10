@@ -63,10 +63,19 @@ Scene:
         FlipUV: false
         UUID: 18245352808254477256
     Shaders:
+      SkyBox:
+        UUID: 3566111620382667214
+        Vertex: Assets\Shaders\SkyBox\SkyBox.vs
+        Fragment: Assets\Shaders\SkyBox\SkyBox.fs
       TexturedPhong:
         UUID: 3566111628970667214
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
+    Textures:
+      Sky:
+        Path: Assets\Textures\Skyboxes\Sky.png
+        FlipUV: false
+        UUID: 4297990474523151207
   Entities:
     Entity_0:
       Tag: Backpack
@@ -174,12 +183,12 @@ Scene:
       Tag: player
       UUID: 7828116465773805528
       FPSCamera:
-        FOV: 60
-        Aspect: 1.52576554
-        NearPlane: 1.00000001e-07
+        FOV: 90
+        Aspect: 0.683741629
+        NearPlane: 0.100000001
         FarPlane: 2000
-        Position: [-11.841341, -2.52735758, -25.5527859]
-        Direction: [-0.97593981, -0.217476413, 0.0156714693]
+        Position: [-21.4853725, -3.17233133, -25.2702007]
+        Direction: [0.999048352, 0.00548521522, -0.043270085]
     Entity_7:
       Tag: sponza
       UUID: 15605333383906278036

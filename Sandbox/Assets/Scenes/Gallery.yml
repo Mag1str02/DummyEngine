@@ -63,7 +63,7 @@ Scene:
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
     Textures:
       Sky:
-        Path: Assets\Textures\Skyboxes\Space.png
+        Path: Assets\Textures\Skyboxes\Sky.png
         FlipUV: false
         UUID: 4297990474523151207
   Entities:
@@ -420,18 +420,18 @@ Scene:
       UUID: 4631319593559015940
       FPSCamera:
         FOV: 90
-        Aspect: 1.40403283
+        Aspect: 1.40179241
         NearPlane: 0.100000001
         FarPlane: 10000
-        Position: [-11.2693052, 413.337708, 281.353455]
-        Direction: [-0.00817424804, -0.794176638, -0.607632041]
+        Position: [261.935272, 69.9233551, 96.3586884]
+        Direction: [-0.948489666, -0.00325601944, -0.316791326]
     Entity_30:
       Tag: skybox
       UUID: 6382649478065202943
       Transformation:
         Translation: [0, 0, 0]
         TranslationOffset: [0, 0, 0]
-        Rotation: [0, 0, 0]
+        Rotation: [-180, 0, 0]
         RotationOffset: [0, 0, 0]
         Scale: [1, 1, 1]
         ScaleOffset: [1, 1, 1]
