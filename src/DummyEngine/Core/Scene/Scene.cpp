@@ -8,7 +8,18 @@
 namespace DE
 {
 
-    Scene::Scene(const std::string& name) : m_Name(name) {}
+    Scene::Scene(const std::string& name) : m_Name(name)
+    {
+        m_RenderData.m_Lights = UniformBuffer::Create({BufferElementType::Float3,
+                                                       BufferElementType::Float3,
+                                                       BufferElementType::Float3,
+                                                       BufferElementType::Float3,
+                                                       BufferElementType::Float3,
+                                                       BufferElementType::Float3,
+                                                       BufferElementType::Float3},
+                                                      1000);
+        m_RenderData.m_Lights->Bind(0);
+    }
 
     Entity Scene::CreateEntity(const std::string& name)
     {
@@ -117,6 +128,8 @@ namespace DE
             shader->Bind();
             shader->SetMat4("u_ViewProjection", camera.GetViewProjection());
             shader->SetFloat3("u_CameraPos", camera.GetPos());
+            shader->SetUnifromBlock("ub_Lights", 0);
+            glCheckError();
         }
 
         LightPass();
@@ -126,7 +139,7 @@ namespace DE
             target.first->UpdateInstanceBuffer();
             Renderer::Submit(target.first, target.second);
         }
-        
+
         for (auto [id, skybox] : skyboxes)
         {
             transformations[id].translation = GetByName("player").GetComponent<FPSCamera>().GetPos();
@@ -167,25 +180,29 @@ namespace DE
 
     void Scene::LightPass()
     {
+        DE_PROFILE_SCOPE("LightPass");
+
         auto& u_LightSources = m_Storage.GetComponentArray<LightSource>();
+        auto  buffer         = m_RenderData.m_Lights;
+
+        int cnt_light_sources = 0;
+        for (auto [entity_id, light_source] : u_LightSources)
+        {
+            buffer->at(cnt_light_sources).Get<Vec3>(0) = light_source.ambient;
+            buffer->at(cnt_light_sources).Get<Vec3>(1) = light_source.diffuse;
+            buffer->at(cnt_light_sources).Get<Vec3>(2) = light_source.specular;
+            buffer->at(cnt_light_sources).Get<Vec3>(3) = light_source.direction;
+            buffer->at(cnt_light_sources).Get<Vec3>(4) = light_source.position;
+            buffer->at(cnt_light_sources).Get<Vec3>(5) = light_source.clq;
+            buffer->at(cnt_light_sources).Get<Vec3>(6) = Vec3(light_source.outer_cone_cos, light_source.inner_cone_cos, LightSourceTypeToId(light_source.type));
+            cnt_light_sources++;
+        }
+        buffer->PushData();
         for (auto [id, shader] : m_RenderData.m_Shaders)
         {
-            shader->Bind();
-            int cnt_light_sources = 0;
-            for (auto [entity_id, light_source] : u_LightSources)
-            {
-                shader->SetFloat3("u_LightSources[" + std::to_string(cnt_light_sources) + "].m_Ambient", light_source.ambient);
-                shader->SetFloat3("u_LightSources[" + std::to_string(cnt_light_sources) + "].m_Diffuse", light_source.diffuse);
-                shader->SetFloat3("u_LightSources[" + std::to_string(cnt_light_sources) + "].m_Specular", light_source.specular);
-                shader->SetFloat3("u_LightSources[" + std::to_string(cnt_light_sources) + "].m_Position", light_source.position);
-                shader->SetFloat3("u_LightSources[" + std::to_string(cnt_light_sources) + "].m_CLQ", light_source.clq);
-                shader->SetFloat3("u_LightSources[" + std::to_string(cnt_light_sources) + "].m_Direction", light_source.direction);
-                shader->SetFloat3(
-                    "u_LightSources[" + std::to_string(cnt_light_sources) + "].m_ConesAndType", light_source.outer_cone_cos, light_source.inner_cone_cos, LightSourceTypeToId(light_source.type));
-                cnt_light_sources++;
-            }
             shader->SetInt("u_LightAmount", cnt_light_sources);
         }
+        glCheckError();
     }
     FPSCamera& Scene::GetCamera()
     {

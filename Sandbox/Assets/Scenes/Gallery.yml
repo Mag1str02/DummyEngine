@@ -63,7 +63,7 @@ Scene:
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
     Textures:
       Sky:
-        Path: Assets\Textures\Skyboxes\Sky.png
+        Path: Assets\Textures\Skyboxes\Space.png
         FlipUV: false
         UUID: 4297990474523151207
   Entities:
@@ -420,11 +420,11 @@ Scene:
       UUID: 4631319593559015940
       FPSCamera:
         FOV: 90
-        Aspect: 1.40179241
+        Aspect: 1.67258883
         NearPlane: 0.100000001
         FarPlane: 10000
-        Position: [261.935272, 69.9233551, 96.3586884]
-        Direction: [-0.948489666, -0.00325601944, -0.316791326]
+        Position: [-75.0812531, 47.2530136, 153.099945]
+        Direction: [-0.0830432624, -0.485557109, -0.870251715]
     Entity_30:
       Tag: skybox
       UUID: 6382649478065202943
@@ -454,16 +454,172 @@ Scene:
       Tag: sun_0
       UUID: 16279128272272660331
       LightSource:
-        Type: Direction
+        Type: Point
         Ambient: [0.00951558072, 0, 0.323529422]
         Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
         Specular: [0.113042593, 0.0496203378, 0.289215684]
         Direction: [0, -0.44721359, 0.89442718]
-        Position: [0, 0, 0]
-        CLQ: [0.5, 0.00700000022, 0.000199999995]
+        Position: [0, 0, 50]
+        CLQ: [1, 0.00700000022, 0.000199999995]
         InnerCone: 0
         OuterCone: 0
     Entity_33:
+      Tag: sun_1
+      UUID: 16279128272272660012
+      LightSource:
+        Type: Point
+        Ambient: [0.00951558072, 0, 0.323529422]
+        Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+        Specular: [0.113042593, 0.0496203378, 0.289215684]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [75, 0, 50]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_34:
+      Tag: sun_10
+      UUID: 16279128272272660003
+      LightSource:
+        Type: Point
+        Ambient: [0.00951558072, 0, 0.323529422]
+        Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+        Specular: [0.113042593, 0.0496203378, 0.289215684]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [750, 0, 50]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_35:
+      Tag: sun_11
+      UUID: 16279128272272660002
+      LightSource:
+        Type: Point
+        Ambient: [0.00951558072, 0, 0.323529422]
+        Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+        Specular: [0.113042593, 0.0496203378, 0.289215684]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [-75, 0, 50]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_36:
+      Tag: sun_12
+      UUID: 16279128272272660001
+      LightSource:
+        Type: Point
+        Ambient: [0.00951558072, 0, 0.323529422]
+        Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+        Specular: [0.113042593, 0.0496203378, 0.289215684]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [-150, 0, 50]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_37:
+      Tag: sun_2
+      UUID: 1627912827227266011
+      LightSource:
+        Type: Point
+        Ambient: [0.00951558072, 0, 0.323529422]
+        Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+        Specular: [0.113042593, 0.0496203378, 0.289215684]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [150, 0, 50]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_38:
+      Tag: sun_3
+      UUID: 16279128272272660010
+      LightSource:
+        Type: Point
+        Ambient: [0.00951558072, 0, 0.323529422]
+        Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+        Specular: [0.113042593, 0.0496203378, 0.289215684]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [225, 0, 50]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_39:
+      Tag: sun_4
+      UUID: 16279128272272660009
+      LightSource:
+        Type: Point
+        Ambient: [0.00951558072, 0, 0.323529422]
+        Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+        Specular: [0.113042593, 0.0496203378, 0.289215684]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [300, 0, 50]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_40:
+      Tag: sun_5
+      UUID: 16279128272272660008
+      LightSource:
+        Type: Point
+        Ambient: [0.00951558072, 0, 0.323529422]
+        Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+        Specular: [0.113042593, 0.0496203378, 0.289215684]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [375, 0, 50]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_41:
+      Tag: sun_6
+      UUID: 16279128272272660007
+      LightSource:
+        Type: Point
+        Ambient: [0.00951558072, 0, 0.323529422]
+        Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+        Specular: [0.113042593, 0.0496203378, 0.289215684]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [450, 0, 50]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_42:
+      Tag: sun_7
+      UUID: 16279128272272660006
+      LightSource:
+        Type: Point
+        Ambient: [0.00951558072, 0, 0.323529422]
+        Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+        Specular: [0.113042593, 0.0496203378, 0.289215684]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [525, 0, 50]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_43:
+      Tag: sun_8
+      UUID: 16279128272272660005
+      LightSource:
+        Type: Point
+        Ambient: [0.00951558072, 0, 0.323529422]
+        Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+        Specular: [0.113042593, 0.0496203378, 0.289215684]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [600, 0, 50]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_44:
+      Tag: sun_9
+      UUID: 16279128272272660004
+      LightSource:
+        Type: Point
+        Ambient: [0.00951558072, 0, 0.323529422]
+        Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+        Specular: [0.113042593, 0.0496203378, 0.289215684]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [675, 0, 50]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_45:
       Tag: surface
       UUID: 6382649478065237843
       Transformation:

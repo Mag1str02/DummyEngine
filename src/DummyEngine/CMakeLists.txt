@@ -50,6 +50,7 @@ set(ENGINE_SOURCES
     Core/Rendering/Renderer/RenderStructs.cpp
     Core/Rendering/Renderer/Shader.cpp
     Core/Rendering/Renderer/Texture.cpp
+    Core/Rendering/Renderer/UniformBuffer.cpp
 
     Core/Rendering/RendererOpenGL/GLContext.cpp
     Core/Rendering/RendererOpenGL/GLCubeMap.cpp
@@ -59,6 +60,7 @@ set(ENGINE_SOURCES
     Core/Rendering/RendererOpenGL/GLVertexBuffer.cpp
     Core/Rendering/RendererOpenGL/GLShader.cpp
     Core/Rendering/RendererOpenGL/GLTexture.cpp
+    Core/Rendering/RendererOpenGL/GLUniformBuffer.cpp
     Core/Rendering/RendererOpenGL/GLRenderAPI.cpp
 
     Core/ResourceManaging/AssetManager.cpp

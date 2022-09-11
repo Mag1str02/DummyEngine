@@ -21,6 +21,7 @@ namespace DE
         void Allocate(uint32_t size);
 
         friend class GLVertexBuffer;
+        friend class GLUniformBuffer;
         friend class LocalBufferNode;
 
         BufferLayout m_Layout;

@@ -36,7 +36,11 @@ out vec4 f_FragColor;
 uniform vec3        u_CameraPos;
 uniform int         u_LightAmount;
 uniform Material    u_Material;
-uniform LightSource u_LightSources[MAX_LIGHT_SOURCES];
+
+layout (std140) uniform ub_Lights
+{
+    LightSource lights[100];
+}; 
 
 vec3 DirectionalLightImpact(LightSource direction_light, vec3 v_Normal, vec3 view_direction)
 {
@@ -102,9 +106,9 @@ void main()
 
     for (int i = 0; i < u_LightAmount; ++i)
     {
-        if (u_LightSources[i].m_ConesAndType.z == 1) result += DirectionalLightImpact(u_LightSources[i], normalized_normal, view_direction);
-        if (u_LightSources[i].m_ConesAndType.z == 2) result += PointLightImpact(u_LightSources[i], normalized_normal, view_direction, vs_in.FragPos);
-        if (u_LightSources[i].m_ConesAndType.z == 3) result += SpotLightImpact(u_LightSources[i], normalized_normal, view_direction, vs_in.FragPos);
+        if (lights[i].m_ConesAndType.z == 1) result += DirectionalLightImpact(lights[i], normalized_normal, view_direction);
+        if (lights[i].m_ConesAndType.z == 2) result += PointLightImpact(lights[i], normalized_normal, view_direction, vs_in.FragPos);
+        if (lights[i].m_ConesAndType.z == 3) result += SpotLightImpact(lights[i], normalized_normal, view_direction, vs_in.FragPos);
     }
 
     f_FragColor = vec4(result, 1.0);

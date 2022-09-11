@@ -24,7 +24,7 @@ namespace DE
         }
         glLinkProgram(m_ShaderId);
 
-        int success;
+        int  success;
         char info_log[Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN)];
         glGetProgramiv(m_ShaderId, GL_LINK_STATUS, &success);
         if (!success)
@@ -44,14 +44,8 @@ namespace DE
         }
     }
 
-    void GLShader::Bind() const
-    {
-        glUseProgram(m_ShaderId);
-    }
-    void GLShader::UnBind() const
-    {
-        glUseProgram(0);
-    }
+    void GLShader::Bind() const { glUseProgram(m_ShaderId); }
+    void GLShader::UnBind() const { glUseProgram(0); }
 
     void GLShader::SetFloat(const std::string& uniform_name, float x) const
     {
@@ -113,6 +107,12 @@ namespace DE
         GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
         glUniformMatrix4fv(pos, 1, GL_FALSE, glm::value_ptr(value));
     }
+    void GLShader::SetUnifromBlock(const std::string& uniform_name, uint32_t id) const
+    {
+        GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
+        // DE_ASSERT(pos >= 0, "Wrong UB.");
+        glUniformBlockBinding(m_ShaderId, pos, id);
+    }
     void GLShader::SetMaterial(const std::string& uniform_name, const Material& mat) const
     {
         SetFloat3(uniform_name + ".m_Ambient", mat.ambient_color);
@@ -168,7 +168,7 @@ namespace DE
     }
     void GLShader::AddPart(ShaderPart part)
     {
-        std::string source = ReadPartFromFile(part.path);
+        std::string source       = ReadPartFromFile(part.path);
         const char* source_c_str = source.c_str();
 
         GLuint shader_part = glCreateShader(ShaderPartTypeToGLShaderPartType(part.type));
@@ -176,7 +176,7 @@ namespace DE
         glCompileShader(shader_part);
         m_Parts.push_back(shader_part);
 
-        int success = 1;
+        int  success = 1;
         char infoLog[Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN)];
         glGetShaderiv(shader_part, GL_COMPILE_STATUS, &success);
         if (!success)

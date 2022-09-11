@@ -13,9 +13,9 @@ namespace DE
     class GLShader : public Shader
     {
     public:
-        GLShader() = delete;
+        GLShader()                    = delete;
         GLShader(const Shader& other) = delete;
-        GLShader(Shader&& other) = delete;
+        GLShader(Shader&& other)      = delete;
         GLShader& operator=(Shader&& other) = delete;
         GLShader& operator=(const Shader& other) = delete;
 
@@ -38,6 +38,7 @@ namespace DE
         virtual void SetInt4(const std::string& uniform_name, int x, int y, int z, int w) const override;
         virtual void SetMat4(const std::string& uniform_name, Mat4 value) const override;
         virtual void SetMaterial(const std::string& uniform_name, const Material& mat) const override;
+        virtual void SetUnifromBlock(const std::string& uniform_name, uint32_t id) const override;
 
     private:
         static std::string ReadPartFromFile(const Path& path_to_file);
@@ -45,6 +46,6 @@ namespace DE
         void AddPart(ShaderPart part);
 
         std::vector<GLuint> m_Parts;
-        GLuint m_ShaderId;
+        GLuint              m_ShaderId;
     };
 }  // namespace DE

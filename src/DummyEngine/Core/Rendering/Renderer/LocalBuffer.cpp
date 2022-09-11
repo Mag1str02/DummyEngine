@@ -3,7 +3,7 @@
 namespace DE
 {
     //*~~~LocalBufferNode~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
+
     LocalBufferNode::LocalBufferNode(LocalBuffer* buffer, uint8_t* pointer) : m_Buffer(buffer), m_Pointer(pointer) {}
     LocalBufferNode& LocalBufferNode::operator=(const LocalBufferNode& other)
     {
@@ -13,7 +13,6 @@ namespace DE
     }
 
     //*~~~LocalBuffer~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
 
     LocalBuffer::LocalBuffer() : m_Data(nullptr), m_Size(0) {}
     LocalBuffer::~LocalBuffer()
@@ -23,11 +22,8 @@ namespace DE
             delete[] m_Data;
         }
     }
-    LocalBufferNode LocalBuffer::at(uint32_t index)
-    {
-        return LocalBufferNode(this, m_Data + index * m_Layout.GetStride());
-    }
-    void LocalBuffer::SetData(const void* data, uint32_t size)
+    LocalBufferNode LocalBuffer::at(uint32_t index) { return LocalBufferNode(this, m_Data + index * m_Layout.GetStride()); }
+    void            LocalBuffer::SetData(const void* data, uint32_t size)
     {
         DE_ASSERT(m_Size == size, "Wrong data size!");
         memcpy(m_Data, data, m_Size);

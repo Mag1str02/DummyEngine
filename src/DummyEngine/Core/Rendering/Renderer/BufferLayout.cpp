@@ -41,49 +41,84 @@ namespace DE
 
     //*~~~BufferLayout~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    BufferLayout::BufferLayout(std::initializer_list<BufferElement> elements, uint32_t divisor) : m_Elements(elements), m_Divisor(divisor)
+    BufferLayout::BufferLayout(std::initializer_list<BufferElement> elements, uint32_t divisor) : m_Elements(elements), m_Type(BufferLayoutType::Vertex), m_Divisor(divisor) {}
+
+    void BufferLayout::SetLayoutType(BufferLayoutType type)
     {
+        m_Type = type;
         CalculateOffsetsAndStride();
     }
     void BufferLayout::CalculateOffsetsAndStride()
     {
-        uint32_t offset = 0;
-        for (auto& element : m_Elements)
+        switch (m_Type)
         {
-            element.offset = offset;
-            offset += element.size;
+            case BufferLayoutType::Vertex: {
+                uint32_t offset = 0;
+                for (auto& element : m_Elements)
+                {
+                    element.offset = offset;
+                    offset += element.size;
+                }
+                m_Stride = offset;
+                break;
+            }
+            case BufferLayoutType::Uniform: {
+                uint32_t offset = 0;
+                for (auto& element : m_Elements)
+                {
+                    switch (element.type)
+                    {
+                        case BufferElementType::Float:
+                        case BufferElementType::Int: {
+                            element.offset = offset;
+                            offset += element.size;
+                            break;
+                        }
+                        case BufferElementType::Float2:
+                        case BufferElementType::Int2: {
+                            if (offset % 8 != 0)
+                            {
+                                offset += 4;
+                            }
+                            element.offset = offset;
+                            offset += element.size;
+                            break;
+                        }
+                        case BufferElementType::Float3:
+                        case BufferElementType::Int3:
+                        case BufferElementType::Float4:
+                        case BufferElementType::Int4:
+                        case BufferElementType::Mat4: {
+                            if (offset % 16 != 0)
+                            {
+                                offset += 16 - offset % 16;
+                            }
+                            element.offset = offset;
+                            offset += element.size;
+                            break;
+                        }
+                    }
+                }
+                if (offset % 16 != 0)
+                {
+                    offset += 16 - offset % 16;
+                }
+                m_Stride = offset;
+                break;
+            }
         }
-        m_Stride = offset;
     }
 
-    std::vector<BufferElement>::iterator BufferLayout::begin()
-    {
-        return m_Elements.begin();
-    }
-    std::vector<BufferElement>::iterator BufferLayout::end()
-    {
-        return m_Elements.end();
-    }
-    std::vector<BufferElement>::const_iterator BufferLayout::begin() const
-    {
-        return m_Elements.begin();
-    }
-    std::vector<BufferElement>::const_iterator BufferLayout::end() const
-    {
-        return m_Elements.end();
-    }
+    std::vector<BufferElement>::iterator       BufferLayout::begin() { return m_Elements.begin(); }
+    std::vector<BufferElement>::iterator       BufferLayout::end() { return m_Elements.end(); }
+    std::vector<BufferElement>::const_iterator BufferLayout::begin() const { return m_Elements.begin(); }
+    std::vector<BufferElement>::const_iterator BufferLayout::end() const { return m_Elements.end(); }
     const BufferElement& BufferLayout::operator[](uint32_t index) const
     {
         DE_ASSERT(index >= 0 && index < m_Elements.size(), "Index out of bounce.");
         return m_Elements[index];
     }
 
-    uint32_t BufferLayout::GetStride() const
-    {
-        return m_Stride;
-    }
-    uint32_t BufferLayout::GetDivisor() const
-    {
-        return m_Divisor;
-    }
+    uint32_t BufferLayout::GetStride() const { return m_Stride; }
+    uint32_t BufferLayout::GetDivisor() const { return m_Divisor; }
 }  // namespace DE

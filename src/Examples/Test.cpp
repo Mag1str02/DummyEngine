@@ -4,12 +4,12 @@ using namespace DE;
 
 int main()
 {
-    Config::Init();
-    Path sky_box = Config::GetPath(DE_CFG_TEXTURE_PATH) / "Skyboxes" / "Sky";
-    auto cross = TextureLoader::Load({sky_box / "Sky.png", false});
-    for (size_t i = 0; i < 6; ++i)
+    BufferLayout layout({BufferElementType::Float2, BufferElementType::Float2, BufferElementType::Float2, BufferElementType::Mat4}, 0);
+    layout.SetLayoutType(BufferLayoutType::Vertex);
+
+    for (auto& element : layout)
     {
-        std::cout << CubeSide(i) << std::endl;
-        // TextureLoader::Save(sky_box / ("Sky" + std::to_string(i) + ".png"), TextureEditor::GetSkyBoxSide(cross, CubeSide(i)));
+        std::cout << element.offset << " " << std::endl;
     }
+    std::cout << layout.GetStride() << " " << std::endl;
 }
