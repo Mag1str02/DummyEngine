@@ -364,6 +364,8 @@ namespace DE
             }
 
             AssetManager::AddAsset(asset);
+            ResourceManager::AddResource<Shader>(asset);
+            m_Scene->m_RenderData->RequestShader(asset.id);
         }
     }
     void SceneLoader::LoadTextures(YAML::Node n_Textures)

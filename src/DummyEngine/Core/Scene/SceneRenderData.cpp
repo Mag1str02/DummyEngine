@@ -45,7 +45,6 @@ namespace DE
             // shader->SetUnifromBlock("ub_Lights", LIGHT_UNIFORM_BUFFER);
             glCheckError();
         }
-
         UpdateLights();
 
         for (auto& [ids, target] : m_InstancedMeshes)
@@ -82,6 +81,7 @@ namespace DE
         m_Lights->PushData();
         for (auto [id, shader] : m_Shaders)
         {
+            shader->Bind();
             shader->SetInt("u_LightAmount", cnt_light_sources);
         }
         glCheckError();

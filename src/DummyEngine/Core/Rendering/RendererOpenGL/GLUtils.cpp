@@ -1,4 +1,5 @@
 #include "Core/Rendering/RendererOpenGL/GLUtils.h"
+#include "Core/Rendering/Renderer/RenderAPI.h"
 
 namespace DE
 {
@@ -23,5 +24,16 @@ namespace DE
             case TextureFormat::DepthStencil: return GL_DEPTH24_STENCIL8;
         }
         return GL_R8;
+    }
+
+    GLenum RenderPrimitiveToGL(RenderPrimitive primitive)
+    {
+        switch (primitive)
+        {
+            case RenderPrimitive::None: return 0;
+            case RenderPrimitive::Triangle: return GL_TRIANGLES;
+            case RenderPrimitive::Point: return GL_POINTS;
+        }
+        return GL_TRIANGLES;
     }
 }  // namespace DE

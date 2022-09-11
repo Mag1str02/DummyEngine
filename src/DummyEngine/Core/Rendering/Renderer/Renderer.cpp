@@ -8,15 +8,15 @@
 namespace DE
 {
     Scope<FrameStatistics> Renderer::m_FrameStatistics = nullptr;
-    Scope<RenderAPI> Renderer::m_RenderAPI = nullptr;
-    Ref<Texture> Renderer::m_DefaultTexture = nullptr;
-    Ref<VertexArray> Renderer::m_FullScreenQuad = nullptr;
-    Ref<VertexArray> Renderer::m_Cube = nullptr;
+    Scope<RenderAPI>       Renderer::m_RenderAPI       = nullptr;
+    Ref<Texture>           Renderer::m_DefaultTexture  = nullptr;
+    Ref<VertexArray>       Renderer::m_FullScreenQuad  = nullptr;
+    Ref<VertexArray>       Renderer::m_Cube            = nullptr;
 
     void FrameStatistics::Reset()
     {
         m_DrawCallsAmount = 0;
-        m_DrawnInstances = 0;
+        m_DrawnInstances  = 0;
     }
 
     void Renderer::Init(API api)
@@ -108,7 +108,6 @@ namespace DE
         shader->Bind();
         shader->SetMat4("u_Transform", trasform);
         m_RenderAPI->DrawIndexed(GetCube());
-        m_RenderAPI->Enable(RenderSetting::DepthMask);
 
         ++m_FrameStatistics->m_DrawCallsAmount;
         ++m_FrameStatistics->m_DrawnInstances;
@@ -120,19 +119,22 @@ namespace DE
     void Renderer::SetClearColor(Vec4 color) { m_RenderAPI->SetClearColor(color); }
     void Renderer::SetClearColor(float r, float g, float b, float a) { m_RenderAPI->SetClearColor(Vec4(r, g, b, a)); }
 
-    Ref<Texture> Renderer::GetDefaultTexture() { return m_DefaultTexture; }
+    Ref<Texture>     Renderer::GetDefaultTexture() { return m_DefaultTexture; }
     Ref<VertexArray> Renderer::GetFullScreenQuad() { return m_FullScreenQuad; }
     Ref<VertexArray> Renderer::GetCube() { return m_Cube; }
-    API Renderer::CurrentAPI() { return m_RenderAPI->GetAPI(); }
-    FrameStatistics Renderer::GetStatistics() { return *m_FrameStatistics; }
+    API              Renderer::CurrentAPI() { return m_RenderAPI->GetAPI(); }
+    FrameStatistics  Renderer::GetStatistics() { return *m_FrameStatistics; }
+    RenderAPI&       Renderer::GetRenderAPI() {
+        return *m_RenderAPI;
+    }
 
     // TODO: Think to move somewhere else...
 
     void Renderer::GenDefaultTexture()
     {
-        uint32_t width = 1;
-        uint32_t height = 1;
-        TextureFormat format = TextureFormat::RGBA;
+        uint32_t             width  = 1;
+        uint32_t             height = 1;
+        TextureFormat        format = TextureFormat::RGBA;
         std::vector<uint8_t> data(4, 255);
 
         TextureData tex_data(&data[0], width, height, format);

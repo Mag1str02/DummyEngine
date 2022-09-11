@@ -29,6 +29,9 @@
 #include "Core/Application/Application.h"
 #include "Core/Application/ImGuiPanelStack.h"
 
+#include "Core/ResourceManaging/ResourceManager.h"
+#include "Core/ResourceManaging/AssetManager.h"
+
 #include "ToolBox/Dev/Profiler.h"
 #include "ToolBox/Dev/Logger.h"
 #include "ToolBox/Loaders/ModelLoader.h"
