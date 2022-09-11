@@ -6,6 +6,7 @@
 #include "ToolBox/Loaders/TextureLoader.h"
 #include "Core/ResourceManaging/AssetManager.h"
 #include "Core/ResourceManaging/ResourceManager.h"
+#include "Core/Scene/SceneRenderData.h"
 
 namespace DE
 {
@@ -62,12 +63,12 @@ namespace DE
     {
         if (entity.HasComponent<TransformComponent>())
         {
-            n_Entity["Transformation"]["Translation"] = NodeVec3(entity.GetComponent<TransformComponent>().translation);
+            n_Entity["Transformation"]["Translation"]       = NodeVec3(entity.GetComponent<TransformComponent>().translation);
             n_Entity["Transformation"]["TranslationOffset"] = NodeVec3(entity.GetComponent<TransformComponent>().translation_offset);
-            n_Entity["Transformation"]["Rotation"] = NodeVec3(entity.GetComponent<TransformComponent>().rotation);
-            n_Entity["Transformation"]["RotationOffset"] = NodeVec3(entity.GetComponent<TransformComponent>().rotation_offet);
-            n_Entity["Transformation"]["Scale"] = NodeVec3(entity.GetComponent<TransformComponent>().scale);
-            n_Entity["Transformation"]["ScaleOffset"] = NodeVec3(entity.GetComponent<TransformComponent>().scale_offset);
+            n_Entity["Transformation"]["Rotation"]          = NodeVec3(entity.GetComponent<TransformComponent>().rotation);
+            n_Entity["Transformation"]["RotationOffset"]    = NodeVec3(entity.GetComponent<TransformComponent>().rotation_offet);
+            n_Entity["Transformation"]["Scale"]             = NodeVec3(entity.GetComponent<TransformComponent>().scale);
+            n_Entity["Transformation"]["ScaleOffset"]       = NodeVec3(entity.GetComponent<TransformComponent>().scale_offset);
         }
     }
     template <> void SceneLoader::SaveComponent<RenderMeshComponent>(YAML::Node n_Entity, Entity entity)
@@ -88,11 +89,11 @@ namespace DE
     {
         if (entity.HasComponent<FPSCamera>())
         {
-            n_Entity["FPSCamera"]["FOV"] = entity.GetComponent<FPSCamera>().m_FOV;
-            n_Entity["FPSCamera"]["Aspect"] = entity.GetComponent<FPSCamera>().m_Aspect;
+            n_Entity["FPSCamera"]["FOV"]       = entity.GetComponent<FPSCamera>().m_FOV;
+            n_Entity["FPSCamera"]["Aspect"]    = entity.GetComponent<FPSCamera>().m_Aspect;
             n_Entity["FPSCamera"]["NearPlane"] = entity.GetComponent<FPSCamera>().m_NearPlane;
-            n_Entity["FPSCamera"]["FarPlane"] = entity.GetComponent<FPSCamera>().m_FarPlane;
-            n_Entity["FPSCamera"]["Position"] = NodeVec3(entity.GetComponent<FPSCamera>().m_Position);
+            n_Entity["FPSCamera"]["FarPlane"]  = entity.GetComponent<FPSCamera>().m_FarPlane;
+            n_Entity["FPSCamera"]["Position"]  = NodeVec3(entity.GetComponent<FPSCamera>().m_Position);
             n_Entity["FPSCamera"]["Direction"] = NodeVec3(entity.GetComponent<FPSCamera>().m_Direction);
         }
     }
@@ -100,13 +101,13 @@ namespace DE
     {
         if (entity.HasComponent<LightSource>())
         {
-            n_Entity["LightSource"]["Type"] = LightSourceTypeToString(entity.GetComponent<LightSource>().type);
-            n_Entity["LightSource"]["Ambient"] = NodeVec3(entity.GetComponent<LightSource>().ambient);
-            n_Entity["LightSource"]["Diffuse"] = NodeVec3(entity.GetComponent<LightSource>().diffuse);
-            n_Entity["LightSource"]["Specular"] = NodeVec3(entity.GetComponent<LightSource>().specular);
+            n_Entity["LightSource"]["Type"]      = LightSourceTypeToString(entity.GetComponent<LightSource>().type);
+            n_Entity["LightSource"]["Ambient"]   = NodeVec3(entity.GetComponent<LightSource>().ambient);
+            n_Entity["LightSource"]["Diffuse"]   = NodeVec3(entity.GetComponent<LightSource>().diffuse);
+            n_Entity["LightSource"]["Specular"]  = NodeVec3(entity.GetComponent<LightSource>().specular);
             n_Entity["LightSource"]["Direction"] = NodeVec3(entity.GetComponent<LightSource>().direction);
-            n_Entity["LightSource"]["Position"] = NodeVec3(entity.GetComponent<LightSource>().position);
-            n_Entity["LightSource"]["CLQ"] = NodeVec3(entity.GetComponent<LightSource>().clq);
+            n_Entity["LightSource"]["Position"]  = NodeVec3(entity.GetComponent<LightSource>().position);
+            n_Entity["LightSource"]["CLQ"]       = NodeVec3(entity.GetComponent<LightSource>().clq);
             n_Entity["LightSource"]["InnerCone"] = entity.GetComponent<LightSource>().inner_cone_cos;
             n_Entity["LightSource"]["OuterCone"] = entity.GetComponent<LightSource>().outer_cone_cos;
         }
@@ -153,7 +154,7 @@ namespace DE
     }
     YAML::Node SceneLoader::SaveTextures()
     {
-        YAML::Node n_Textures;
+        YAML::Node                n_Textures;
         std::vector<TextureAsset> textures = AssetManager::GetAllAssets<TextureAsset>();
         std::sort(textures.begin(), textures.end(), [](const TextureAsset& a, const TextureAsset& b) { return a.name < b.name; });
 
@@ -162,16 +163,16 @@ namespace DE
             YAML::Node n_Texture;
 
             n_Textures[texture.name] = n_Texture;
-            n_Texture["Path"] = RelativeToExecutable(texture.loading_props.path).string();
-            n_Texture["FlipUV"] = texture.loading_props.flip_uvs;
-            n_Texture["UUID"] = (uint64_t)texture.id;
+            n_Texture["Path"]        = RelativeToExecutable(texture.loading_props.path).string();
+            n_Texture["FlipUV"]      = texture.loading_props.flip_uvs;
+            n_Texture["UUID"]        = (uint64_t)texture.id;
         }
 
         return n_Textures;
     }
     YAML::Node SceneLoader::SaveModels()
     {
-        YAML::Node n_Models;
+        YAML::Node                   n_Models;
         std::vector<RenderMeshAsset> meshes = AssetManager::GetAllAssets<RenderMeshAsset>();
         std::sort(meshes.begin(), meshes.end(), [](const RenderMeshAsset& a, const RenderMeshAsset& b) { return a.name < b.name; });
 
@@ -180,17 +181,17 @@ namespace DE
             YAML::Node n_Model;
 
             n_Models[model.name] = n_Model;
-            n_Model["Path"] = RelativeToExecutable(model.loading_props.path).string();
-            n_Model["Compress"] = model.loading_props.compress;
-            n_Model["FlipUV"] = model.loading_props.flip_uvs;
-            n_Model["UUID"] = (uint64_t)model.id;
+            n_Model["Path"]      = RelativeToExecutable(model.loading_props.path).string();
+            n_Model["Compress"]  = model.loading_props.compress;
+            n_Model["FlipUV"]    = model.loading_props.flip_uvs;
+            n_Model["UUID"]      = (uint64_t)model.id;
         }
 
         return n_Models;
     }
     YAML::Node SceneLoader::SaveShaders()
     {
-        YAML::Node n_Shaders;
+        YAML::Node               n_Shaders;
         std::vector<ShaderAsset> shaders = AssetManager::GetAllAssets<ShaderAsset>();
         std::sort(shaders.begin(), shaders.end(), [](const ShaderAsset& a, const ShaderAsset& b) { return a.name < b.name; });
 
@@ -199,7 +200,7 @@ namespace DE
             YAML::Node n_Shader;
 
             n_Shaders[shader.name] = n_Shader;
-            n_Shader["UUID"] = (uint64_t)shader.id;
+            n_Shader["UUID"]       = (uint64_t)shader.id;
             for (const auto& part : shader.parts)
             {
                 n_Shader[ShaderPartTypeToString(part.type)] = RelativeToExecutable(part.path).string();
@@ -210,20 +211,20 @@ namespace DE
 
     void SceneLoader::Save(Ref<Scene> scene, const Path& path)
     {
-        YAML::Node n_Root, n_Scene, n_Entities, n_Assets;
+        YAML::Node    n_Root, n_Scene, n_Entities, n_Assets;
         std::ofstream output_file;
 
         output_file.open(path);
         // TODO: Switch to throw.
         DE_ASSERT(output_file.is_open(), "Failed to open file to save scene.");
 
-        n_Root["Scene"] = n_Scene;
-        n_Scene["Name"] = scene->GetName();
-        n_Scene["Assets"] = n_Assets;
+        n_Root["Scene"]     = n_Scene;
+        n_Scene["Name"]     = scene->GetName();
+        n_Scene["Assets"]   = n_Assets;
         n_Scene["Entities"] = SaveEntities(scene);
 
-        n_Assets["Models"] = SaveModels();
-        n_Assets["Shaders"] = SaveShaders();
+        n_Assets["Models"]   = SaveModels();
+        n_Assets["Shaders"]  = SaveShaders();
         n_Assets["Textures"] = SaveTextures();
 
         output_file << n_Root;
@@ -272,12 +273,12 @@ namespace DE
     {
         TransformComponent transformation;
 
-        transformation.translation = GetVec3(n_Component["Translation"]);
+        transformation.translation        = GetVec3(n_Component["Translation"]);
         transformation.translation_offset = GetVec3(n_Component["TranslationOffset"]);
-        transformation.rotation = GetVec3(n_Component["Rotation"]);
-        transformation.rotation_offet = GetVec3(n_Component["RotationOffset"]);
-        transformation.scale = GetVec3(n_Component["Scale"]);
-        transformation.scale_offset = GetVec3(n_Component["ScaleOffset"]);
+        transformation.rotation           = GetVec3(n_Component["Rotation"]);
+        transformation.rotation_offet     = GetVec3(n_Component["RotationOffset"]);
+        transformation.scale              = GetVec3(n_Component["Scale"]);
+        transformation.scale_offset       = GetVec3(n_Component["ScaleOffset"]);
 
         entity.AddComponent(transformation);
     }
@@ -298,7 +299,7 @@ namespace DE
             ResourceManager::AddResource<Shader>(AssetManager::GetAsset<ShaderAsset>(id));
         }
         entity.AddComponent<ShaderComponent>({id, ResourceManager::GetResource<Shader>(id)});
-        m_Scene->RequestShader(id);
+        m_Scene->m_RenderData->RequestShader(id);
     }
     template <> void SceneLoader::LoadComponent<FPSCamera>(YAML::Node n_Component, Entity& entity)
     {
@@ -317,13 +318,13 @@ namespace DE
     {
         LightSource light_source;
 
-        light_source.type = StringToLightSourceType(n_Component["Type"].as<std::string>());
-        light_source.ambient = GetVec3(n_Component["Ambient"]);
-        light_source.diffuse = GetVec3(n_Component["Diffuse"]);
-        light_source.specular = GetVec3(n_Component["Specular"]);
-        light_source.direction = GetVec3(n_Component["Direction"]);
-        light_source.position = GetVec3(n_Component["Position"]);
-        light_source.clq = GetVec3(n_Component["CLQ"]);
+        light_source.type           = StringToLightSourceType(n_Component["Type"].as<std::string>());
+        light_source.ambient        = GetVec3(n_Component["Ambient"]);
+        light_source.diffuse        = GetVec3(n_Component["Diffuse"]);
+        light_source.specular       = GetVec3(n_Component["Specular"]);
+        light_source.direction      = GetVec3(n_Component["Direction"]);
+        light_source.position       = GetVec3(n_Component["Position"]);
+        light_source.clq            = GetVec3(n_Component["CLQ"]);
         light_source.inner_cone_cos = n_Component["InnerCone"].as<float>();
         light_source.outer_cone_cos = n_Component["OuterCone"].as<float>();
 
@@ -348,7 +349,7 @@ namespace DE
         {
             ShaderAsset asset;
 
-            asset.id = n_Shader.second["UUID"].as<uint64_t>();
+            asset.id   = n_Shader.second["UUID"].as<uint64_t>();
             asset.name = n_Shader.first.as<std::string>();
 
             for (const auto& n_Part : n_Shader.second)
@@ -371,11 +372,11 @@ namespace DE
         {
             TextureAsset asset;
 
-            asset.id = n_Texture.second["UUID"].as<uint64_t>();
+            asset.id   = n_Texture.second["UUID"].as<uint64_t>();
             asset.name = n_Texture.first.as<std::string>();
 
             asset.loading_props.flip_uvs = n_Texture.second["FlipUV"].as<bool>();
-            asset.loading_props.path = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / n_Texture.second["Path"].as<std::string>();
+            asset.loading_props.path     = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / n_Texture.second["Path"].as<std::string>();
 
             asset.texture_data = TextureLoader::Load(asset.loading_props);
 
@@ -387,12 +388,12 @@ namespace DE
         for (const auto& node : n_Models)
         {
             RenderMeshAsset asset;
-            asset.name = node.first.as<std::string>();
-            asset.id = node.second["UUID"].as<uint64_t>();
+            asset.name                   = node.first.as<std::string>();
+            asset.id                     = node.second["UUID"].as<uint64_t>();
             asset.loading_props.compress = node.second["Compress"].as<bool>();
             asset.loading_props.flip_uvs = node.second["FlipUV"].as<bool>();
-            asset.loading_props.path = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
-            asset.mesh_data = ModelLoader::Load(asset.loading_props);
+            asset.loading_props.path     = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
+            asset.mesh_data              = ModelLoader::Load(asset.loading_props);
             AssetManager::AddAsset(asset);
         }
     }
@@ -417,35 +418,10 @@ namespace DE
 
         if (entity.HasComponent<RenderMeshComponent>() && entity.HasComponent<ShaderComponent>())
         {
-            auto& map = m_Scene->m_RenderData.m_InstancedMeshes;
-
-            uint64_t mesh_id = entity.GetComponent<RenderMeshComponent>().id;
+            uint64_t mesh_id   = entity.GetComponent<RenderMeshComponent>().id;
             uint64_t shader_id = entity.GetComponent<ShaderComponent>().id;
 
-            if (!map.contains({mesh_id, shader_id}))
-            {
-                map[{mesh_id, shader_id}] = {ResourceManager::GetResource<RenderMesh>(mesh_id)->Copy(), ResourceManager::GetResource<Shader>(shader_id)};
-                map[{mesh_id, shader_id}].first->SetInstanceBuffer({{BufferElementType::Mat4}, 1}, 100);
-
-                // for (auto& sub_mesh : ResourceManager::GetResource<RenderMesh>(mesh_id)->m_SubMeshes)
-                // {
-                //     for (auto& buffer : sub_mesh.vertex_array->GetVertexBuffers())
-                //     {
-                //         std::cout << buffer->GetId() << " ";
-                //     }
-                // }
-                // std::cout << std::endl;
-                // for (auto& sub_mesh : map[{mesh_id, shader_id}].first->m_SubMeshes)
-                // {
-                //     for (auto& buffer : sub_mesh.vertex_array->GetVertexBuffers())
-                //     {
-                //         std::cout << buffer->GetId() << " ";
-                //     }
-                // }
-                // std::cout << std::endl;
-            };
-            entity.GetComponent<RenderMeshComponent>().mesh_instance = CreateRef<RenderMeshInstance>();
-            entity.GetComponent<RenderMeshComponent>().mesh_instance->Bind(map[{mesh_id, shader_id}].first);
+            entity.GetComponent<RenderMeshComponent>().mesh_instance = m_Scene->m_RenderData->GetRenderMeshInstance(mesh_id, shader_id);
         }
 
         m_Scene->UpdateEmptyEntity(entity);
@@ -465,9 +441,9 @@ namespace DE
 
         m_Scene = scene;
 
-        n_Root = YAML::LoadFile(path.string());
-        n_Scene = n_Root["Scene"];
-        n_Assets = n_Scene["Assets"];
+        n_Root     = YAML::LoadFile(path.string());
+        n_Scene    = n_Root["Scene"];
+        n_Assets   = n_Scene["Assets"];
         n_Entities = n_Scene["Entities"];
 
         LoadAssets(n_Assets);

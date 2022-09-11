@@ -1,14 +1,12 @@
 #pragma once
 
 #include "Core/ECS/ECSStorage.hpp"
-#include "Core/Rendering/Renderer/Shader.h"
-#include "Core/Rendering/Renderer/FrameBuffer.h"
 #include "Core/Objects/Cameras/FPSCamera.h"
-#include "Core/Rendering/Renderer/UniformBuffer.h"
 
 namespace DE
 {
     class Entity;
+    class SceneRenderData;
 
     class Scene
     {
@@ -29,34 +27,21 @@ namespace DE
         void OnViewPortResize(uint32_t x, uint32_t y);
         void Render();
 
-        Entity operator[](const std::string& name);
-
         template <typename System> void RegisterSystem() { m_Storage.RegisterSystem<System>(); }
 
     private:
         friend class SceneLoader;
+        friend class SceneRenderData;
+        friend class Entity;
 
         Entity CreateEmptyEntity();
         void   UpdateEmptyEntity(Entity entity);
         void   OnEntityDestroy(Entity entity);
 
-        void LightPass();
-
-        void RequestShader(UUID id);
-
-        struct RenderData
-        {
-            std::unordered_map<uint64_t, Ref<Shader>>                                                             m_Shaders;
-            std::unordered_map<std::pair<uint64_t, uint64_t>, Pair<Ref<RenderMesh>, Ref<Shader>>, std::pair_hash> m_InstancedMeshes;
-            Ref<UniformBuffer>                                                                                    m_Lights;
-        };
-
         std::string                               m_Name;
         ECSStorage                                m_Storage;
-        RenderData                                m_RenderData;
+        Ref<SceneRenderData>                      m_RenderData;
         std::unordered_map<uint64_t, EntityId>    m_EntityByUUID;
         std::unordered_map<std::string, EntityId> m_EntityByName;
-
-        friend class Entity;
     };
 }  // namespace DE

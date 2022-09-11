@@ -22,6 +22,7 @@
 #include "Core/Objects/Cameras/FPSCamera.h"
 #include "Core/Objects/LightSources/LightSource.h"
 
+#include "Core/Rendering/Renderer/FrameBuffer.h"
 #include "Core/Rendering/Renderer/LocalBuffer.h"
 #include "Core/Rendering/Renderer/Renderer.h"
 

@@ -63,10 +63,6 @@ Scene:
         FlipUV: false
         UUID: 18245352808254477256
     Shaders:
-      SkyBox:
-        UUID: 3566111620382667214
-        Vertex: Assets\Shaders\SkyBox\SkyBox.vs
-        Fragment: Assets\Shaders\SkyBox\SkyBox.fs
       TexturedPhong:
         UUID: 3566111628970667214
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs

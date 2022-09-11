@@ -3,23 +3,12 @@
 #include "Core/Scene/Components.h"
 #include "Core/Rendering/Renderer/Renderer.h"
 #include "Core/ResourceManaging/ResourceManager.h"
-#include "Core/Objects/LightSources/LightSource.h"
+#include "Core/Scene/SceneRenderData.h"
 
 namespace DE
 {
 
-    Scene::Scene(const std::string& name) : m_Name(name)
-    {
-        m_RenderData.m_Lights = UniformBuffer::Create({BufferElementType::Float3,
-                                                       BufferElementType::Float3,
-                                                       BufferElementType::Float3,
-                                                       BufferElementType::Float3,
-                                                       BufferElementType::Float3,
-                                                       BufferElementType::Float3,
-                                                       BufferElementType::Float3},
-                                                      1000);
-        m_RenderData.m_Lights->Bind(0);
-    }
+    Scene::Scene(const std::string& name) : m_Name(name), m_RenderData(CreateRef<SceneRenderData>(this)) {}
 
     Entity Scene::CreateEntity(const std::string& name)
     {
@@ -110,49 +99,7 @@ namespace DE
             camera.SetAspect(aspect);
         }
     }
-    void Scene::Render()
-    {
-        DE_PROFILE_SCOPE("Scene Render");
-
-        auto& camera = GetCamera();
-
-        auto meshes          = m_Storage.GetComponentArray<RenderMeshComponent>();
-        auto shaders         = m_Storage.GetComponentArray<ShaderComponent>();
-        auto transformations = m_Storage.GetComponentArray<TransformComponent>();
-        auto skyboxes        = m_Storage.GetComponentArray<SkyBox>();
-
-        Renderer::Clear();
-
-        for (auto [id, shader] : m_RenderData.m_Shaders)
-        {
-            shader->Bind();
-            shader->SetMat4("u_ViewProjection", camera.GetViewProjection());
-            shader->SetFloat3("u_CameraPos", camera.GetPos());
-            shader->SetUnifromBlock("ub_Lights", 0);
-            glCheckError();
-        }
-
-        LightPass();
-
-        for (auto& [ids, target] : m_RenderData.m_InstancedMeshes)
-        {
-            target.first->UpdateInstanceBuffer();
-            Renderer::Submit(target.first, target.second);
-        }
-
-        for (auto [id, skybox] : skyboxes)
-        {
-            transformations[id].translation = GetByName("player").GetComponent<FPSCamera>().GetPos();
-            Renderer::Submit(skybox.map, shaders[id].shader, transformations[id].GetTransform());
-        }
-        glCheckError();
-    }
-
-    Entity Scene::operator[](const std::string& name)
-    {
-        DE_ASSERT(m_EntityByName.find(name) != m_EntityByName.end(), "Entity with name " + name + " not found.");
-        return Entity(m_EntityByName.at(name), this);
-    }
+    void Scene::Render() { m_RenderData->Render(); }
 
     Entity Scene::CreateEmptyEntity()
     {
@@ -178,43 +125,9 @@ namespace DE
         m_EntityByName.erase(entity.GetComponent<TagComponent>());
     }
 
-    void Scene::LightPass()
-    {
-        DE_PROFILE_SCOPE("LightPass");
-
-        auto& u_LightSources = m_Storage.GetComponentArray<LightSource>();
-        auto  buffer         = m_RenderData.m_Lights;
-
-        int cnt_light_sources = 0;
-        for (auto [entity_id, light_source] : u_LightSources)
-        {
-            buffer->at(cnt_light_sources).Get<Vec3>(0) = light_source.ambient;
-            buffer->at(cnt_light_sources).Get<Vec3>(1) = light_source.diffuse;
-            buffer->at(cnt_light_sources).Get<Vec3>(2) = light_source.specular;
-            buffer->at(cnt_light_sources).Get<Vec3>(3) = light_source.direction;
-            buffer->at(cnt_light_sources).Get<Vec3>(4) = light_source.position;
-            buffer->at(cnt_light_sources).Get<Vec3>(5) = light_source.clq;
-            buffer->at(cnt_light_sources).Get<Vec3>(6) = Vec3(light_source.outer_cone_cos, light_source.inner_cone_cos, LightSourceTypeToId(light_source.type));
-            cnt_light_sources++;
-        }
-        buffer->PushData();
-        for (auto [id, shader] : m_RenderData.m_Shaders)
-        {
-            shader->SetInt("u_LightAmount", cnt_light_sources);
-        }
-        glCheckError();
-    }
     FPSCamera& Scene::GetCamera()
     {
         DE_ASSERT(m_Storage.GetComponentArray<FPSCamera>().begin() != m_Storage.GetComponentArray<FPSCamera>().end(), "No available camera in scene.");
         return (*m_Storage.GetComponentArray<FPSCamera>().begin()).second;
-    }
-
-    void Scene::RequestShader(UUID id)
-    {
-        if (m_RenderData.m_Shaders.find(id) == m_RenderData.m_Shaders.end())
-        {
-            m_RenderData.m_Shaders[id] = ResourceManager::GetResource<Shader>(id);
-        }
     }
 }  // namespace DE

@@ -110,7 +110,7 @@ namespace DE
     void GLShader::SetUnifromBlock(const std::string& uniform_name, uint32_t id) const
     {
         GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
-        // DE_ASSERT(pos >= 0, "Wrong UB.");
+        DE_ASSERT(pos >= 0, "Wrong UB.");
         glUniformBlockBinding(m_ShaderId, pos, id);
     }
     void GLShader::SetMaterial(const std::string& uniform_name, const Material& mat) const
