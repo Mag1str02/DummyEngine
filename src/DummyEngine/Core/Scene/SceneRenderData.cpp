@@ -82,6 +82,7 @@ namespace DE
         for (auto [id, shader] : m_Shaders)
         {
             shader->Bind();
+            shader->Bind();
             shader->SetInt("u_LightAmount", cnt_light_sources);
         }
         glCheckError();

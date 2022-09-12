@@ -1,0 +1,55 @@
+Scene:
+  Name: NewScene
+  Assets:
+    Models:
+      CubeModel:
+        Path: Assets\Models\Cube\cube.obj
+        Compress: true
+        FlipUV: false
+        UUID: 6557233926725796949
+    Shaders:
+      TexturedPhong:
+        UUID: 3566111628970667214
+        Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
+        Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
+      Grass:
+        UUID: 3566111628970928214
+        Vertex: Assets\Shaders\Grass\Grass.vs
+        Geometry: Assets\Shaders\Grass\Grass.gs
+        Fragment: Assets\Shaders\Grass\Grass.fs
+  Entities:
+    Entity_0:
+      Tag: player
+      UUID: 4631319593559015940
+      FPSCamera:
+        FOV: 90
+        Aspect: 1.58498347
+        NearPlane: 0.100000001
+        FarPlane: 10000
+        Position: [-104.9132, 7.73858261, 102.810196]
+        Direction: [0.429269165, -0.364408255, -0.826398551]
+    Entity_1:
+      Tag: sun
+      UUID: 16279128272272660330
+      LightSource:
+        Type: Direction
+        Ambient: [1, 1, 1]
+        Diffuse: [1, 1, 1]
+        Specular: [1, 1, 1]
+        Direction: [0.300000012, -0.699999988, 0]
+        Position: [0, 0, 0]
+        CLQ: [0.5, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    Entity_2:
+      Tag: surface
+      UUID: 6382649478065237843
+      Transformation:
+        Translation: [0, -100, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [100, 1, 100]
+        ScaleOffset: [1, 1, 1]
+      RenderModel: 6557233926725796949
+      Shader: 3566111628970667214 

@@ -1,6 +1,7 @@
 #include <GLAD/glad.h>
 
 #include "Core/Rendering/RendererOpenGL/GLRenderAPI.h"
+#include "Core/Rendering/RendererOpenGL/GLUtils.h"
 #include "ToolBox/Dev/Logger.h"
 
 namespace DE
@@ -11,7 +12,7 @@ namespace DE
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_MULTISAMPLE);
         // glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
+        // glCullFace(GL_BACK);
         // glFrontFace(GL_CCW);
         // glDepthMask(GL_TRUE);
         // glDepthFunc(GL_LEQUAL);
@@ -22,15 +23,21 @@ namespace DE
     void GLRenderAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) { glViewport(x, y, width, height); }
 
     void GLRenderAPI::Clear() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); }
-    void GLRenderAPI::DrawIndexed(const Ref<VertexArray>& vertex_array)
+
+    void GLRenderAPI::DrawArrays(const Ref<VertexArray>& vertex_array, RenderPrimitive primitive)
     {
         vertex_array->Bind();
-        glDrawElements(GL_TRIANGLES, vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, nullptr);
+        glDrawArrays(RenderPrimitiveToGL(primitive), 0, vertex_array->GetVertexBuffers()[0]->Size());
     }
-    void GLRenderAPI::DrawInstanced(const Ref<VertexArray>& vertex_array, uint32_t instance_count)
+    void GLRenderAPI::DrawIndexed(const Ref<VertexArray>& vertex_array, RenderPrimitive primitive)
     {
         vertex_array->Bind();
-        glDrawElementsInstanced(GL_TRIANGLES, vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, nullptr, instance_count);
+        glDrawElements(RenderPrimitiveToGL(primitive), vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, nullptr);
+    }
+    void GLRenderAPI::DrawInstanced(const Ref<VertexArray>& vertex_array, uint32_t instance_count, RenderPrimitive primitive)
+    {
+        vertex_array->Bind();
+        glDrawElementsInstanced(RenderPrimitiveToGL(primitive), vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, nullptr, instance_count);
     }
 
     void GLRenderAPI::SetClearColor(const Vec4& color) { glClearColor(color.x, color.y, color.z, color.w); }

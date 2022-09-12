@@ -75,6 +75,7 @@ namespace DE
             default: return GL_STATIC_DRAW;
         }
     }
+    uint32_t GLVertexBuffer::Size() const { return m_Size / m_Layout.GetStride(); }
 
     //*----------------------------------------------------------------------------------
 

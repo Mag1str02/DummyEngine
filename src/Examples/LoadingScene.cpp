@@ -18,8 +18,8 @@ public:
 
     void Update(double dt) override
     {
-        auto& positions = GetComponentArray<TransformComponent>();
-        auto& meshes = GetComponentArray<RenderMeshComponent>();
+        auto& positions     = GetComponentArray<TransformComponent>();
+        auto& meshes        = GetComponentArray<RenderMeshComponent>();
         auto& light_sources = GetComponentArray<LightSource>();
 
         for (auto [id, mesh] : meshes)
@@ -59,21 +59,20 @@ public:
         Renderer::SetClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
         scene = CreateRef<Scene>("NewScene");
-        SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Gallery.yml");
+        SceneLoader::Load(scene, Config::GetPath(DE_CFG_ASSET_PATH) / "Scenes" / "Grass.yml");
         scene->RegisterSystem<MovingSystem>();
 
-        m_FrameBuffer = FrameBuffer::Create({1920, 1080});
-        m_FrameBuffer->AddColorAttachment(TextureFormat::RGBA);
-        m_FrameBuffer->SetDepthAttachment(TextureFormat::DepthStencil);
-
-        m_ScreenShader = Shader::Create({{ShaderPartType::Vertex, Config::GetPath(DE_CFG_ASSET_PATH) / "Shaders" / "FrameBuffer" / "FrameBuffer.vs"},
-                                         {ShaderPartType::Fragment, Config::GetPath(DE_CFG_ASSET_PATH) / "Shaders" / "FrameBuffer" / "FrameBuffer.fs"}});
+        GenGrass();
     }
     virtual void OnUpdate(float dt) override
     {
         ProcessInput(dt);
         scene->OnUpdate(dt);
         scene->Render();
+        ResourceManager::GetResource<Shader>(3566111628970928214)->Bind();
+        ResourceManager::GetResource<Shader>(3566111628970928214)->SetFloat("u_Time", glfwGetTime());
+        Renderer::GetRenderAPI().DrawArrays(grass, RenderPrimitive::Point);
+        glCheckError();
     }
     virtual void OnDetach() override
     {
@@ -85,7 +84,7 @@ private:
     void ProcessInput(float dt)
     {
         float sensitivity = 0.07;
-        float speed = 15;
+        float speed       = 15;
 
         if (Input::KeyReleased(GLFW_KEY_TAB))
         {
@@ -158,11 +157,31 @@ private:
         }
     }
 
-    Ref<Shader> m_ScreenShader;
-    Ref<FrameBuffer> m_FrameBuffer;
-    EventDispatcher m_EventDispatcher;
-    Ref<Scene> scene;
-    bool windowed = true;
+    void GenGrass()
+    {
+        uint32_t x_amount    = 500;
+        uint32_t y_amount    = 500;
+        auto     interpolate = [](float min, float max, int index, int max_index) { return min + (max - min) * (float(index) / (max_index - 1)); };
+
+        std::vector<Vec3> data(x_amount * y_amount * 3);
+        for (size_t i = 0; i < x_amount * y_amount; ++i)
+        {
+            int x           = i % x_amount;
+            int y           = i / y_amount - 1;
+            data[3 * i]     = Vec3(interpolate(-100, 100, x, x_amount), -99, interpolate(-100, 100, y, y_amount));
+            data[3 * i + 1] = Vec3(0, 1, 0);
+            data[3 * i + 2] = glm::rotate(Vec3(1.0, 0, 0), Random::Float(0, M_PI * 2), Vec3(0, 1, 0));
+        }
+
+        grass   = VertexArray::Create();
+        auto bf = VertexBuffer::Create({BufferElementType::Float3, BufferElementType::Float3, BufferElementType::Float3}, y_amount * x_amount, &data[0]);
+        grass->AddVertexBuffer(bf);
+    }
+
+    EventDispatcher  m_EventDispatcher;
+    Ref<Scene>       scene;
+    bool             windowed = true;
+    Ref<VertexArray> grass;
 };
 
 namespace DE

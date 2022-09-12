@@ -26,7 +26,7 @@ namespace DE
     }
     template <> const ShaderAsset& AssetManager::GetAsset<ShaderAsset>(UUID id)
     {
-        DE_ASSERT(m_Data.m_Shaders.find(id) != m_Data.m_Shaders.end(), "RenderMesh asset with UUID: " + std::to_string(id) + " does not exists.");
+        DE_ASSERT(m_Data.m_Shaders.find(id) != m_Data.m_Shaders.end(), "Shader asset with UUID: " + std::to_string(id) + " does not exists.");
         return m_Data.m_Shaders[id];
     }
 

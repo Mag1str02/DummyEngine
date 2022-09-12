@@ -31,6 +31,7 @@ namespace DE
         virtual void PushData() override;
 
         virtual const BufferLayout& GetLayout() const override;
+        virtual uint32_t Size() const override;
 
     private:
         static GLenum BufferUsafeToGLBufferUsage(BufferUsage usage);

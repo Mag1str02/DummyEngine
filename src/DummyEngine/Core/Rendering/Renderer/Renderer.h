@@ -44,6 +44,7 @@ namespace DE
 
         static API             CurrentAPI();
         static FrameStatistics GetStatistics();
+        static RenderAPI& GetRenderAPI();
 
     private:
         static void GenDefaultTexture();
