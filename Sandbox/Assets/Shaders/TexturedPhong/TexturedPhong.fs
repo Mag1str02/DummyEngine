@@ -37,7 +37,7 @@ uniform vec3     u_CameraPos;
 uniform int      u_LightAmount;
 uniform Material u_Material;
 
-layout(std140, binding = 1) uniform ub_Lights { LightSource lights[100]; };
+layout(std140) uniform ub_Lights { LightSource lights[100]; };
 
 vec3 DirectionalLightImpact(LightSource direction_light, vec3 v_Normal, vec3 view_direction)
 {

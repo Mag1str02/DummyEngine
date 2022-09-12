@@ -7,10 +7,10 @@
 
 namespace DE
 {
-    const uint32_t MAX_LIGHTS_IN_SCENE      = 1000;
+    const uint32_t MAX_LIGHTS_IN_SCENE = 1000;
     const uint32_t MAX_INSTANCES_PER_BUFFER = 1000;
 
-    const uint32_t LIGHT_UNIFORM_BUFFER = 1;
+    const uint32_t LIGHT_UNIFORM_BUFFER = 2;
 
     SceneRenderData::SceneRenderData(Scene* scene) : m_Scene(scene)
     {
@@ -30,10 +30,10 @@ namespace DE
 
         auto& camera = m_Scene->GetCamera();
 
-        auto meshes          = m_Scene->m_Storage.GetComponentArray<RenderMeshComponent>();
-        auto shaders         = m_Scene->m_Storage.GetComponentArray<ShaderComponent>();
+        auto meshes = m_Scene->m_Storage.GetComponentArray<RenderMeshComponent>();
+        auto shaders = m_Scene->m_Storage.GetComponentArray<ShaderComponent>();
         auto transformations = m_Scene->m_Storage.GetComponentArray<TransformComponent>();
-        auto skyboxes        = m_Scene->m_Storage.GetComponentArray<SkyBox>();
+        auto skyboxes = m_Scene->m_Storage.GetComponentArray<SkyBox>();
 
         Renderer::Clear();
 
@@ -42,7 +42,6 @@ namespace DE
             shader->Bind();
             shader->SetMat4("u_ViewProjection", camera.GetViewProjection());
             shader->SetFloat3("u_CameraPos", camera.GetPos());
-            // shader->SetUnifromBlock("ub_Lights", LIGHT_UNIFORM_BUFFER);
             glCheckError();
         }
 
@@ -91,6 +90,7 @@ namespace DE
         if (!m_Shaders.contains(shader_id))
         {
             m_Shaders[shader_id] = ResourceManager::GetResource<Shader>(shader_id);
+            m_Shaders[shader_id]->SetUnifromBlock("ub_Lights", LIGHT_UNIFORM_BUFFER);
         }
     }
 
