@@ -17,10 +17,10 @@ namespace DE
         Entity CreateEntityWithUUID(UUID uuid, const std::string& name = "Entity");
         Entity CloneEntity(const std::string& entity_to_clone, const std::string& new_name);
 
-        Entity              GetByUUID(UUID uuid);
-        Entity              GetByName(const std::string& name);
-        FPSCamera&          GetCamera();
-        std::string         GetName() const;
+        Entity GetByUUID(UUID uuid);
+        Entity GetByName(const std::string& name);
+        Entity GetCamera();
+        std::string GetName() const;
         std::vector<Entity> GetAllEntities();
 
         void OnUpdate(double dt);
@@ -35,13 +35,15 @@ namespace DE
         friend class Entity;
 
         Entity CreateEmptyEntity();
-        void   UpdateEmptyEntity(Entity entity);
-        void   OnEntityDestroy(Entity entity);
+        void UpdateEmptyEntity(Entity entity);
+        void OnEntityDestroy(Entity entity);
 
-        std::string                               m_Name;
-        ECSStorage                                m_Storage;
-        Ref<SceneRenderData>                      m_RenderData;
-        std::unordered_map<uint64_t, EntityId>    m_EntityByUUID;
+        template <typename Component> void OnComponentAdd(Entity entity);
+
+        std::string m_Name;
+        ECSStorage m_Storage;
+        Ref<SceneRenderData> m_RenderData;
+        std::unordered_map<uint64_t, EntityId> m_EntityByUUID;
         std::unordered_map<std::string, EntityId> m_EntityByName;
     };
 }  // namespace DE

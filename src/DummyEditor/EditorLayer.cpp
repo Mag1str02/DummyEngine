@@ -210,7 +210,7 @@ namespace DE
         switch (m_State.m_InputState)
         {
             case InputState::ViewPort: {
-                auto& camera      = m_SceneData.m_Scene->GetCamera();
+                auto& camera      = m_SceneData.m_Scene->GetCamera().GetComponent<FPSCamera>();
                 float speed       = 15;
                 float sensitivity = 0.07;
 

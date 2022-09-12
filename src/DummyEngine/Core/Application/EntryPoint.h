@@ -12,5 +12,6 @@ int main()
     auto app = DE::CreateApplication();
     app->Run();
     delete app;
+    std::cout << "Didn't crash!" << std::endl;
     return 0;
 }

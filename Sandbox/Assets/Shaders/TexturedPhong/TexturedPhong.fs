@@ -27,13 +27,13 @@ in VS_OUT
 {
     vec3 Normal;
     vec3 FragPos;
+    vec3 CameraPos;
     vec2 TexCoords;
 }
 vs_in;
 
 out vec4 f_FragColor;
 
-uniform vec3     u_CameraPos;
 uniform int      u_LightAmount;
 uniform Material u_Material;
 
@@ -97,7 +97,7 @@ void main()
     if (vec4(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)).a < 0.000000001) discard;
 
     vec3 normalized_normal = normalize(vs_in.Normal);
-    vec3 view_direction    = normalize(u_CameraPos - vs_in.FragPos);
+    vec3 view_direction    = normalize(vs_in.CameraPos - vs_in.FragPos);
 
     vec3 result = vec3(0.0);
 

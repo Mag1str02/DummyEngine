@@ -26,7 +26,10 @@ namespace DE
         template <typename ComponentType> ComponentType& AddComponent(ComponentType component = ComponentType())
         {
             DE_ASSERT(m_Scene != nullptr, "Entity either was not initialized properly, or was destroyed before using AddComponent command.");
-            return m_Scene->m_Storage.AddComponent(m_Id, component);
+
+            auto& return_component = m_Scene->m_Storage.AddComponent(m_Id, component);
+            m_Scene->OnComponentAdd<ComponentType>(*this);
+            return return_component;
         }
         template <typename ComponentType> void RemoveComponent()
         {
@@ -45,10 +48,21 @@ namespace DE
             return m_Scene->m_Storage.HasComponent<ComponentType>(m_Id);
         }
 
+        bool operator==(const Entity& other) const { return m_Id == other.m_Id && m_Scene == other.m_Scene; }
+
     private:
         friend class Scene;
+        friend class SceneRenderData;
+        friend struct std::hash<Entity>;
 
         EntityId m_Id;
         Scene* m_Scene;
     };
 }  // namespace DE
+namespace std
+{
+    template <> struct hash<DE::Entity>
+    {
+        std::size_t operator()(const DE::Entity& entity) const { return hash<int64_t>()(entity.m_Id); }
+    };
+}  // namespace std

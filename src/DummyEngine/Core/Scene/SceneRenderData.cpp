@@ -8,12 +8,15 @@
 namespace DE
 {
     const uint32_t MAX_LIGHTS_IN_SCENE = 1000;
+    const uint32_t MAX_VP_AMOUNT = 32;
     const uint32_t MAX_INSTANCES_PER_BUFFER = 1000;
 
-    const uint32_t LIGHT_UNIFORM_BUFFER = 2;
+    const uint32_t VP_UB_ID = 1;
+    const uint32_t LIGHT_UB_ID = 2;
 
     SceneRenderData::SceneRenderData(Scene* scene) : m_Scene(scene)
     {
+        m_VP = UniformBuffer::Create({BufferElementType::Mat4, BufferElementType::Mat4}, MAX_VP_AMOUNT);
         m_Lights = UniformBuffer::Create({BufferElementType::Float3,
                                           BufferElementType::Float3,
                                           BufferElementType::Float3,
@@ -22,13 +25,14 @@ namespace DE
                                           BufferElementType::Float3,
                                           BufferElementType::Float3},
                                          MAX_LIGHTS_IN_SCENE);
-        m_Lights->Bind(LIGHT_UNIFORM_BUFFER);
+        m_VP->Bind(VP_UB_ID);
+        m_Lights->Bind(LIGHT_UB_ID);
     }
     void SceneRenderData::Render()
     {
         DE_PROFILE_SCOPE("Scene Render");
 
-        auto& camera = m_Scene->GetCamera();
+        auto camera = m_Scene->GetCamera();
 
         auto meshes = m_Scene->m_Storage.GetComponentArray<RenderMeshComponent>();
         auto shaders = m_Scene->m_Storage.GetComponentArray<ShaderComponent>();
@@ -37,15 +41,10 @@ namespace DE
 
         Renderer::Clear();
 
-        for (auto [id, shader] : m_Shaders)
-        {
-            shader->Bind();
-            shader->SetMat4("u_ViewProjection", camera.GetViewProjection());
-            shader->SetFloat3("u_CameraPos", camera.GetPos());
-            glCheckError();
-        }
-
+        UpdateVP();
         UpdateLights();
+
+        SetVPEntity(camera);
 
         for (auto& [ids, target] : m_InstancedMeshes)
         {
@@ -60,6 +59,7 @@ namespace DE
         }
         glCheckError();
     }
+
     void SceneRenderData::UpdateLights()
     {
         DE_PROFILE_SCOPE("UpdateLights");
@@ -81,16 +81,55 @@ namespace DE
         m_Lights->PushData();
         for (auto [id, shader] : m_Shaders)
         {
+            shader->Bind();
             shader->SetInt("u_LightAmount", cnt_light_sources);
         }
         glCheckError();
     }
+    void SceneRenderData::UpdateVP()
+    {
+        DE_PROFILE_SCOPE("UpdateVP");
+
+        for (auto [entity_id, id] : m_EntityToVPIndex)
+        {
+            Entity entity(entity_id, m_Scene);
+            if (entity.HasComponent<FPSCamera>())
+            {
+                auto& camera = entity.GetComponent<FPSCamera>();
+                m_VP->at(id).Get<Mat4>(0) = camera.GetViewMatrix();
+                m_VP->at(id).Get<Mat4>(1) = camera.GetProjectionMatrix();
+            }
+        }
+        m_VP->PushData();
+        glCheckError();
+    }
+
+    void SceneRenderData::SetVPEntity(const Entity& entity)
+    {
+        DE_ASSERT(m_EntityToVPIndex.contains(entity.m_Id), "Wrong VP entity.");
+        for (auto [id, shader] : m_Shaders)
+        {
+            shader->Bind();
+            shader->SetInt("u_VP", m_EntityToVPIndex[entity.m_Id]);
+            glCheckError();
+        }
+    }
+
     void SceneRenderData::RequestShader(UUID shader_id)
     {
         if (!m_Shaders.contains(shader_id))
         {
             m_Shaders[shader_id] = ResourceManager::GetResource<Shader>(shader_id);
-            m_Shaders[shader_id]->SetUnifromBlock("ub_Lights", LIGHT_UNIFORM_BUFFER);
+            m_Shaders[shader_id]->SetUnifromBlock("ub_Lights", LIGHT_UB_ID);
+            m_Shaders[shader_id]->SetUnifromBlock("ub_VP", VP_UB_ID);
+        }
+    }
+    void SceneRenderData::AddVPEntity(const Entity& entity)
+    {
+        if (!m_EntityToVPIndex.contains(entity.m_Id))
+        {
+            uint32_t index = m_EntityToVPIndex.size();
+            m_EntityToVPIndex[entity.m_Id] = index;
         }
     }
 
