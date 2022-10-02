@@ -145,7 +145,7 @@ namespace DE
                         ImGui::Text("Position");
                         ImGui::SameLine(100);
                         ImGui::SetNextItemWidth(-24);
-                        ImGui::DragFloat3("##Position", &(source.position.x), sensitivity, 0, 1);
+                        ImGui::DragFloat3("##Position", &(source.position.x), sensitivity);
                     }
                     if (source.type == LightSourceType::Spot)
                     {

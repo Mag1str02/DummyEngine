@@ -38,7 +38,7 @@ namespace DE
         void UpdateEmptyEntity(Entity entity);
         void OnEntityDestroy(Entity entity);
 
-        template <typename Component> void OnComponentAdd(Entity entity);
+        template <typename Component> void OnComponentAttach(Entity entity);
 
         std::string m_Name;
         ECSStorage m_Storage;

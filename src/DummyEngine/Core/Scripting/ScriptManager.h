@@ -12,6 +12,9 @@ namespace DE
         static bool LoadScript(UUID id, const fs::path& path);
         static void UnloadScript(UUID id);
 
+        static int         Compile(const Path& path_to_source);
+        static std::string GenCompileCommand(const Path& path_to_source);
+
         struct ScriptManagerState
         {
             std::unordered_map<UUID, ScriptBase> m_Scripts;

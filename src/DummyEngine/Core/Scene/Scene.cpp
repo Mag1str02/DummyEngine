@@ -5,6 +5,7 @@
 #include "Core/Rendering/Renderer/Renderer.h"
 #include "Core/ResourceManaging/ResourceManager.h"
 #include "Core/Scene/SceneRenderData.h"
+#include "Core/Scripting/ScriptInstance.hpp"
 
 namespace DE
 {
@@ -13,8 +14,8 @@ namespace DE
 
     Entity Scene::CreateEntity(const std::string& name)
     {
-        EntityId entity_id = m_Storage.CreateEntity();
-        Entity new_entity(entity_id, this);
+        EntityId    entity_id = m_Storage.CreateEntity();
+        Entity      new_entity(entity_id, this);
         IdComponent id;
 
         DE_ASSERT(m_EntityByUUID.find(id) == m_EntityByUUID.end(), "UUID collision occured.");
@@ -23,7 +24,7 @@ namespace DE
         new_entity.AddComponent(TagComponent(name));
         new_entity.AddComponent(id);
 
-        m_EntityByUUID[id] = entity_id;
+        m_EntityByUUID[id]   = entity_id;
         m_EntityByName[name] = entity_id;
 
         return new_entity;
@@ -31,7 +32,7 @@ namespace DE
     Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
     {
         EntityId entity_id = m_Storage.CreateEntity();
-        Entity new_entity(entity_id, this);
+        Entity   new_entity(entity_id, this);
 
         DE_ASSERT(m_EntityByUUID.find(uuid) == m_EntityByUUID.end(), "UUID collision occured.");
         DE_ASSERT(m_EntityByName.find(name) == m_EntityByName.end(), "Name collision occured.");
@@ -46,17 +47,17 @@ namespace DE
     }
     Entity Scene::CloneEntity(const std::string& entity_to_clone, const std::string& new_name)
     {
-        EntityId entity_id = m_Storage.CopyEntity(m_EntityByName[entity_to_clone]);
-        Entity new_entity(entity_id, this);
+        EntityId    entity_id = m_Storage.CopyEntity(m_EntityByName[entity_to_clone]);
+        Entity      new_entity(entity_id, this);
         IdComponent id;
 
         DE_ASSERT(m_EntityByUUID.find(id) == m_EntityByUUID.end(), "UUID collision occured.");
         DE_ASSERT(m_EntityByName.find(new_name) == m_EntityByName.end(), "Name collision occured.");
 
         new_entity.GetComponent<TagComponent>() = new_name;
-        new_entity.GetComponent<IdComponent>() = id;
+        new_entity.GetComponent<IdComponent>()  = id;
 
-        m_EntityByUUID[id] = entity_id;
+        m_EntityByUUID[id]       = entity_id;
         m_EntityByName[new_name] = entity_id;
 
         return new_entity;
@@ -71,7 +72,7 @@ namespace DE
         DE_ASSERT(m_EntityByName.find(name) != m_EntityByName.end(), "Entity with name " + name + " not found.");
         return Entity(m_EntityByName.at(name), this);
     }
-    std::string Scene::GetName() const { return m_Name; }
+    std::string         Scene::GetName() const { return m_Name; }
     std::vector<Entity> Scene::GetAllEntities()
     {
         std::vector<Entity> res;
@@ -80,7 +81,8 @@ namespace DE
         {
             res.push_back(Entity(entity_id, this));
         }
-        std::sort(res.begin(), res.end(), [](Entity& a, Entity& b) { return a.GetComponent<TagComponent>().tag < b.GetComponent<TagComponent>().tag; });
+        std::sort(
+            res.begin(), res.end(), [](Entity& a, Entity& b) { return a.GetComponent<TagComponent>().tag < b.GetComponent<TagComponent>().tag; });
         return res;
     }
 
@@ -93,8 +95,8 @@ namespace DE
 
     void Scene::OnViewPortResize(uint32_t x, uint32_t y)
     {
-        double aspect = double(x) / double(y);
-        auto& cameras = m_Storage.GetComponentArray<FPSCamera>();
+        double aspect  = double(x) / double(y);
+        auto&  cameras = m_Storage.GetComponentArray<FPSCamera>();
         for (auto [id, camera] : cameras)
         {
             camera.SetAspect(aspect);
@@ -105,19 +107,19 @@ namespace DE
     Entity Scene::CreateEmptyEntity()
     {
         EntityId entity_id = m_Storage.CreateEntity();
-        Entity new_entity(entity_id, this);
+        Entity   new_entity(entity_id, this);
 
         return new_entity;
     }
     void Scene::UpdateEmptyEntity(Entity entity)
     {
-        IdComponent id = entity.GetComponent<IdComponent>();
+        IdComponent  id  = entity.GetComponent<IdComponent>();
         TagComponent tag = entity.GetComponent<TagComponent>();
 
         DE_ASSERT(m_EntityByUUID.find(id) == m_EntityByUUID.end(), "UUID collision occured.");
         DE_ASSERT(m_EntityByName.find(tag) == m_EntityByName.end(), "Name collision occured.");
 
-        m_EntityByUUID[id] = entity.m_Id;
+        m_EntityByUUID[id]  = entity.m_Id;
         m_EntityByName[tag] = entity.m_Id;
     }
     void Scene::OnEntityDestroy(Entity entity)
@@ -128,18 +130,23 @@ namespace DE
 
     Entity Scene::GetCamera()
     {
-        DE_ASSERT(m_Storage.GetComponentArray<FPSCamera>().begin() != m_Storage.GetComponentArray<FPSCamera>().end(), "No available camera in scene.");
+        DE_ASSERT(m_Storage.GetComponentArray<FPSCamera>().begin() != m_Storage.GetComponentArray<FPSCamera>().end(),
+                  "No available camera in scene.");
         return Entity((*m_Storage.GetComponentArray<FPSCamera>().begin()).first, this);
     }
 
-    template <typename Component> void OnComponentAdd(Entity entity) { static_assert(sizeof(Component) != 0); }
-    template <> void Scene::OnComponentAdd<FPSCamera>(Entity entity) { m_RenderData->AddVPEntity(entity); }
-    template <> void Scene::OnComponentAdd<TagComponent>(Entity entity) {}
-    template <> void Scene::OnComponentAdd<IdComponent>(Entity entity) {}
-    template <> void Scene::OnComponentAdd<TransformComponent>(Entity entity) {}
-    template <> void Scene::OnComponentAdd<ShaderComponent>(Entity entity) {}
-    template <> void Scene::OnComponentAdd<RenderMeshComponent>(Entity entity) {}
-    template <> void Scene::OnComponentAdd<LightSource>(Entity entity) {}
-    template <> void Scene::OnComponentAdd<SkyBox>(Entity entity) {}
+    template <typename Component> void OnComponentAttach(Entity entity) { static_assert(sizeof(Component) != 0); }
+    template <> void                   Scene::OnComponentAttach<FPSCamera>(Entity entity) { m_RenderData->AddVPEntity(entity); }
+    template <> void                   Scene::OnComponentAttach<TagComponent>(Entity entity) {}
+    template <> void                   Scene::OnComponentAttach<IdComponent>(Entity entity) {}
+    template <> void                   Scene::OnComponentAttach<TransformComponent>(Entity entity) {}
+    template <> void                   Scene::OnComponentAttach<ShaderComponent>(Entity entity) {}
+    template <> void                   Scene::OnComponentAttach<RenderMeshComponent>(Entity entity) {}
+    template <> void                   Scene::OnComponentAttach<LightSource>(Entity entity) {}
+    template <> void                   Scene::OnComponentAttach<SkyBox>(Entity entity) {}
+    template <> void                   Scene::OnComponentAttach<ScriptComponent>(Entity entity)
+    {
+        entity.GetComponent<ScriptComponent>().instance->AttachToEntity(this, entity);
+    }
 
 }  // namespace DE
