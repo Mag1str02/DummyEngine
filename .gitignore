@@ -5,6 +5,7 @@
 build/
 
 Sandbox/Logs/**
+Sandbox/Cache/**
 Sandbox/**.dll
 Sandbox/*.yml
 

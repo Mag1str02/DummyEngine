@@ -2,6 +2,8 @@
 
 #if WIN32
 #define YAML_CPP_STATIC_DEFINE
+#define DE_SCRIPT_API extern "C" __declspec(dllexport) __stdcall
+#include <windows.h>
 #endif
 
 #include <glm/gtc/constants.hpp>
@@ -26,7 +28,6 @@
 #include <set>
 #include <fstream>
 #include <chrono>
-#include <windows.h>
 #include <cstdint>
 #include <queue>
 #include <stack>

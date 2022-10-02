@@ -68,6 +68,11 @@ set(ENGINE_SOURCES
     Core/ResourceManaging/RawData.cpp
     Core/ResourceManaging/ResourceManager.cpp
 
+
+    Core/Scripting/Compiler.cpp    
+    Core/Scripting/ScriptBase.cpp
+    Core/Scripting/ScriptManager.cpp
+
     ToolBox/Dev/Logger.cpp
     ToolBox/Dev/Profiler.cpp
     ToolBox/Loaders/ModelLoader.cpp
