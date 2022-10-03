@@ -14,8 +14,6 @@
 #include <glm/gtx/vector_angle.hpp>
 #include <glm/glm.hpp>
 
-#include <YAML-CPP/yaml.h>
-
 #include <memory>
 #include <iostream>
 #include <iomanip>

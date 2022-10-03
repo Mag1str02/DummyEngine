@@ -90,6 +90,7 @@ namespace DE
     {
         DE_PROFILE_SCOPE("Scene OnUpdate");
 
+        UpdateScripts(dt);
         m_Storage.UpdateSystems(dt);
     }
 
@@ -100,6 +101,15 @@ namespace DE
         for (auto [id, camera] : cameras)
         {
             camera.SetAspect(aspect);
+        }
+    }
+    void Scene::UpdateScripts(double dt)
+    {
+        DE_PROFILE_SCOPE("Scene UpdateScripts");
+        auto& scripts = m_Storage.GetComponentArray<ScriptComponent>();
+        for (auto [id, script] : scripts)
+        {
+            script.instance->OnUpdate(dt);
         }
     }
     void Scene::Render() { m_RenderData->Render(); }

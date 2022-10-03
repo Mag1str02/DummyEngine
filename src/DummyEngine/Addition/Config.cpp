@@ -42,7 +42,7 @@ namespace DE
             case DE_CFG_TEXTURE_PATH: return m_Configs.c_TexturePath;
             case DE_CFG_SCRIPT_PATH: return m_Configs.c_ScriptPath;
             case DE_CFG_CACHE_PATH: return m_Configs.c_CachePath;
-            case DE_CFG_SCRIPT_CACHE_PATH: return m_Configs.c_CachePath;
+            case DE_CFG_SCRIPT_CACHE_PATH: return m_Configs.c_ScriptCachePath;
             default: DE_ASSERT(false, "Wrong config requested.");
         }
         return Path(".");

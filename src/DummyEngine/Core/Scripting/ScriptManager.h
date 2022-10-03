@@ -1,23 +1,38 @@
 #include "Addition/Base.h"
-#include "Core/Scripting/ScriptBase.h"
+#include "Core/ResourceManaging/Assets.h"
+#include "Core/Scripting/ScriptInstance.hpp"
 
 namespace DE
 {
+    using CreateScriptInstanceFunc = Ref<ScriptInstance> (*)();
+    class ScriptFile
+    {
+    public:
+        ScriptFile();
+        ScriptFile(const ScriptAsset& asset);
+        ScriptFile(ScriptFile&& other);
+        ScriptFile& operator=(ScriptFile&& other);
+        ~ScriptFile();
+
+        bool Valid() const;
+        Ref<ScriptInstance> CreateScriptInstance() const;
+
+    private:
+        HMODULE                  m_DLLHandle;
+        CreateScriptInstanceFunc m_CreateScriptInstance;
+    };
+
     class ScriptManager
     {
     public:
-        static bool UploadScript(UUID id, const fs::path& path);
+        static void                UploadScript(const ScriptAsset& asset);
+        static bool                HasScript(UUID id);
+        static Ref<ScriptInstance> CreateScriptInstance(UUID id);
 
     private:
-        static bool LoadScript(UUID id, const fs::path& path);
-        static void UnloadScript(UUID id);
-
-        static int         Compile(const Path& path_to_source);
-        static std::string GenCompileCommand(const Path& path_to_source);
-
         struct ScriptManagerState
         {
-            std::unordered_map<UUID, ScriptBase> m_Scripts;
+            std::unordered_map<UUID, ScriptFile> m_Scripts;
         };
         static ScriptManagerState m_State;
     };

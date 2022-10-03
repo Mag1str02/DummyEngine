@@ -66,6 +66,10 @@ Scene:
         Path: Assets\Textures\Skyboxes\Space.png
         FlipUV: false
         UUID: 4297990474523151207
+    Scripts:
+      CameraController:
+        UUID: 4297990402923151207
+        Path: Assets\Scripts\CameraController.cpp
   Entities:
     Entity_0:
       Tag: Arch
@@ -425,6 +429,7 @@ Scene:
         FarPlane: 10000
         Position: [-75.0812531, 47.2530136, 153.099945]
         Direction: [-0.0830432624, -0.485557109, -0.870251715]
+      Script: 4297990402923151207
     Entity_30:
       Tag: skybox
       UUID: 6382649478065202943
