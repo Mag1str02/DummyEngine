@@ -22,24 +22,26 @@ public:
         auto& position = GetComponent<TransformComponent>().translation;
         if (persent <= 0.25f)
         {
-            position = Vec3(left_back.x, height, left_back.y) + 4.0f * (persent - 0.0f) * Vec3(right_front.x - left_back.x, 0, 0);
+            position = Vec3(left_back.x, height, left_back.y) + Smouth(4.0f * (persent - 0.0f)) * Vec3(right_front.x - left_back.x, 0, 0);
         }
         else if (persent <= 0.5f)
         {
-            position = Vec3(right_front.x, height, left_back.y) + 4.0f * (persent - 0.25f) * Vec3(0, 0, right_front.y - left_back.y);
+            position = Vec3(right_front.x, height, left_back.y) + Smouth(4.0f * (persent - 0.25f)) * Vec3(0, 0, right_front.y - left_back.y);
         }
         else if (persent <= 0.75f)
         {
-            position = Vec3(right_front.x, height, right_front.y) + 4.0f * (persent - 0.5f) * Vec3(left_back.x - right_front.x, 0, 0);
+            position = Vec3(right_front.x, height, right_front.y) + Smouth(4.0f * (persent - 0.5f)) * Vec3(left_back.x - right_front.x, 0, 0);
         }
         else if (persent <= 1.0f)
         {
-            position = Vec3(left_back.x, height, right_front.y) + 4.0f * (persent - 0.75f) * Vec3(0, 0, left_back.y - right_front.y);
+            position = Vec3(left_back.x, height, right_front.y) + Smouth(4.0f * (persent - 0.75f)) * Vec3(0, 0, left_back.y - right_front.y);
         }
     }
     virtual void OnDetach() override {}
 
 private:
+    float Smouth(float delta) const { return (std::sin((delta * 2 - 1) * 3.1415926 / 2) + 1) / 2; }
+
     float cycle_time;
     float current_time;
     float height;

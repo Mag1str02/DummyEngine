@@ -28,40 +28,10 @@ Scene:
         UUID: 4297990029523151207
   Entities:
     Entity_0:
-      Tag: lamp_magenta
-      UUID: 7834405913725978860
-      Transformation:
-        Translation: [22, 3, 6.57226181]
-        TranslationOffset: [0, 0, 0]
-        Rotation: [0, 0, 0]
-        RotationOffset: [0, 0, 0]
-        Scale: [0.100000001, 0.100000001, 0.100000001]
-        ScaleOffset: [1, 1, 1]
-      RenderModel: 6557233926725796949
-      Shader: 3566111628970667214
-      LightSource:
-        Type: Point
-        Ambient: [0.100000001, 0, 0.100000001]
-        Diffuse: [0.600000024, 0, 0.600000024]
-        Specular: [0.300000012, 0, 0.300000012]
-        Direction: [0, -1, 0]
-        Position: [22, 3, 6.57226181]
-        CLQ: [1, 0.0219999999, 0.00190000003]
-        InnerCone: 0
-        OuterCone: 0
-      Script:
-        UUID: 4297990029523151207
-        Fields:
-          left_back: [22, 9]
-          offset: 0
-          cycle_time: 16
-          right_front: [-25, -9]
-          height: 3
-    Entity_1:
-      Tag: lamp_white
+      Tag: lamp_blue
       UUID: 5169756284600285649
       Transformation:
-        Translation: [-25, 3, -6.57226181]
+        Translation: [-25, 3, 3.12393618]
         TranslationOffset: [0, 0, 0]
         Rotation: [0, 0, 0]
         RotationOffset: [0, 0, 0]
@@ -71,11 +41,11 @@ Scene:
       Shader: 3566111628970667214
       LightSource:
         Type: Point
-        Ambient: [0.100000001, 0.100000001, 0.100000001]
-        Diffuse: [0.300000012, 0.300000012, 0.300000012]
-        Specular: [0.600000024, 0.600000024, 0.600000024]
+        Ambient: [0, 0, 0]
+        Diffuse: [0, 0, 1]
+        Specular: [0, 0, 1]
         Direction: [0, -1, 0]
-        Position: [-25, 3, -6.57226181]
+        Position: [-25, 3, 3.12393618]
         CLQ: [1, 0.00700000022, 0.000199999995]
         InnerCone: 0
         OuterCone: 0
@@ -87,19 +57,66 @@ Scene:
           cycle_time: 16
           right_front: [-25, -9]
           height: 3
-    Entity_2:
-      Tag: moon
-      UUID: 16971652933436356002
+    Entity_1:
+      Tag: lamp_green
+      UUID: 7834402933725978860
+      Transformation:
+        Translation: [-15.4217148, 3, -1]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [0.100000001, 0.100000001, 0.100000001]
+        ScaleOffset: [1, 1, 1]
+      RenderModel: 6557233926725796949
+      Shader: 3566111628970667214
       LightSource:
-        Type: Direction
-        Ambient: [0.00400000019, 0.0111999996, 0.0199999996]
-        Diffuse: [0.0600000024, 0.168000013, 0.300000012]
-        Specular: [0.120000005, 0.336000025, 0.600000024]
-        Direction: [0, -0.44721359, 0.89442718]
-        Position: [0, 0, 0]
-        CLQ: [1, 0.00700000022, 0.000199999995]
+        Type: Point
+        Ambient: [0, 0, 0]
+        Diffuse: [0, 1, 0]
+        Specular: [0, 1, 0]
+        Direction: [0, -1, 0]
+        Position: [-15.4217148, 3, -1]
+        CLQ: [1, 0.0219999999, 0.00190000003]
         InnerCone: 0
         OuterCone: 0
+      Script:
+        UUID: 4297990029523151207
+        Fields:
+          left_back: [18, -1]
+          offset: 4
+          cycle_time: 8
+          right_front: [-20, -1]
+          height: 3
+    Entity_2:
+      Tag: lamp_red
+      UUID: 7834405913725978860
+      Transformation:
+        Translation: [22, 3, -3.1239109]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [0.100000001, 0.100000001, 0.100000001]
+        ScaleOffset: [1, 1, 1]
+      RenderModel: 6557233926725796949
+      Shader: 3566111628970667214
+      LightSource:
+        Type: Point
+        Ambient: [0, 0, 0]
+        Diffuse: [1, 0, 0]
+        Specular: [1, 0, 0]
+        Direction: [0, -1, 0]
+        Position: [22, 3, -3.1239109]
+        CLQ: [1, 0.0219999999, 0.00190000003]
+        InnerCone: 0
+        OuterCone: 0
+      Script:
+        UUID: 4297990029523151207
+        Fields:
+          left_back: [22, 9]
+          offset: 0
+          cycle_time: 16
+          right_front: [-25, -9]
+          height: 3
     Entity_3:
       Tag: sponza
       UUID: 15605333383906278036
@@ -113,19 +130,6 @@ Scene:
       RenderModel: 18245820808254477624
       Shader: 3566111628970667214
     Entity_4:
-      Tag: sun
-      UUID: 7178762644546976826
-      LightSource:
-        Type: Direction
-        Ambient: [0.0199999996, 0.0146000003, 0.00400000019]
-        Diffuse: [0.600000024, 0.438000023, 0.120000005]
-        Specular: [0.300000012, 0.219000012, 0.0600000024]
-        Direction: [0, 0.44721359, -0.89442718]
-        Position: [0, 0, 0]
-        CLQ: [1, 0.00700000022, 0.000199999995]
-        InnerCone: 0
-        OuterCone: 0
-    Entity_5:
       Tag: surface
       UUID: 16299243349270162803
       Transformation:
