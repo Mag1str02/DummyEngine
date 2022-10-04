@@ -11,7 +11,6 @@ namespace DE
         Float,
         Double,
         Bool,
-        Char,
         String,
         I32,
         I64,
@@ -22,14 +21,15 @@ namespace DE
         Vec4,
     };
 
-    template <typename T> ScriptFieldType TypeToScriptFieldType(const T& value) { return ScriptFieldType::None; }
+    template <typename T> ScriptFieldType TypeToScriptFieldType(const T& value);
 
     class ScriptField
     {
     public:
-        ScriptField(const std::string& name, void* ptr, ScriptFieldType type) : m_Name(name), m_Data(ptr) {}
+        ScriptField(const std::string& name, void* ptr, ScriptFieldType type) : m_Name(name), m_Data(ptr), m_Type(type) {}
 
-        template <typename T> T& Get() { return *(T*)m_Data; }
+        void*                    Get() { return m_Data; }
+        template <typename T> T* Get() { return (T*)m_Data; }
         const std::string&       GetName() const { return m_Name; }
         ScriptFieldType          GetType() const { return m_Type; }
 
@@ -61,11 +61,7 @@ namespace DE
     protected:
         template <typename T> T& GetComponent() { return m_Entity.GetComponent<T>(); }
         Entity                   GetEntityByName(const std::string& name) const { return m_Scene->GetByName(name); };
-        void                     AddField(const ScriptField& field)
-        {
-            m_Fields.push_back(field);
-            std::cout << "Added field " << field.GetName() << std::endl;
-        }
+        void                     AddField(const ScriptField& field) { m_Fields.push_back(field); }
 
     private:
         friend class Scene;
