@@ -38,7 +38,7 @@ namespace DE
                 auto& fields = m_Entity.GetComponent<ScriptComponent>().instance->GetFields();
                 if (ImGui::CollapsingHeader("Script"))
                 {
-                    for (auto& field : fields)
+                    for (auto& [name, field] : fields)
                     {
                         if (field.GetType() != ScriptFieldType::None)
                         {

@@ -23,16 +23,19 @@ namespace DE
 
         void RequestShader(UUID shader_id);
         void AddVPEntity(const Entity& entity);
+        void SetCamera(const Entity& camera);
 
         Ref<RenderMeshInstance> GetRenderMeshInstance(UUID mesh_id, UUID shader_ids);
+
     private:
         void CreateInstancedMesh(UUID mesh_id, UUID shader_id);
 
-        std::unordered_map<uint64_t, Ref<Shader>> m_Shaders;
+        std::unordered_map<uint64_t, Ref<Shader>>                                                     m_Shaders;
         std::unordered_map<std::pair<UUID, UUID>, Pair<Ref<RenderMesh>, Ref<Shader>>, std::pair_hash> m_InstancedMeshes;
-        std::unordered_map<EntityId, uint32_t> m_EntityToVPIndex;
-        Ref<UniformBuffer> m_Lights;
-        Ref<UniformBuffer> m_VP;
-        Scene* m_Scene;
+        std::unordered_map<EntityId, uint32_t>                                                        m_EntityToVPIndex;
+        Ref<UniformBuffer>                                                                            m_Lights;
+        Ref<UniformBuffer>                                                                            m_VP;
+        Scene*                                                                                        m_Scene;
+        Entity                                                                                        m_Camera;
     };
 }  // namespace DE

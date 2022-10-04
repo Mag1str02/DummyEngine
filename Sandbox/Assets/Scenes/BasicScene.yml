@@ -175,16 +175,6 @@ Scene:
         CLQ: [1, 0.00700000022, 0.000199999995]
         InnerCone: 0
         OuterCone: 0
-    Entity_6:
-      Tag: player
-      UUID: 7828116465773805528
-      FPSCamera:
-        FOV: 90
-        Aspect: 0.683741629
-        NearPlane: 0.100000001
-        FarPlane: 2000
-        Position: [-21.4853725, -3.17233133, -25.2702007]
-        Direction: [0.999048352, 0.00548521522, -0.043270085]
     Entity_7:
       Tag: sponza
       UUID: 15605333383906278036

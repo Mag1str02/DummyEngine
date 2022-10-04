@@ -1,9 +1,8 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
-
 #include "Addition/Base.h"
 #include "Core/Application/Event.h"
+#include "Core/Application/KeyCodes.h"
 
 namespace DE
 {
@@ -13,7 +12,7 @@ namespace DE
         bool mouse_locked = false;
         double x_pos;
         double y_pos;
-        std::array<bool, GLFW_KEY_LAST> key_states;
+        std::array<bool, KEY_LAST> key_states;
 
         InputFrame();
     };

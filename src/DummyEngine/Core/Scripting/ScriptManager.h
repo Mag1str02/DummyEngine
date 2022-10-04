@@ -18,6 +18,8 @@ namespace DE
         Ref<ScriptInstance> CreateScriptInstance() const;
 
     private:
+        bool DLLAlreadyExists(const std::string& path_to_dll) const;
+
         HMODULE                  m_DLLHandle;
         CreateScriptInstanceFunc m_CreateScriptInstance;
     };

@@ -12,6 +12,21 @@ namespace DE
 
     Scene::Scene(const std::string& name) : m_Name(name), m_RenderData(CreateRef<SceneRenderData>(this)) {}
 
+    Entity Scene::CreateHiddenEntity(const std::string& name)
+    {
+        EntityId    entity_id = m_Storage.CreateEntity();
+        Entity      new_entity(entity_id, this);
+        IdComponent id;
+
+        DE_ASSERT(m_EntityByUUID.find(id) == m_EntityByUUID.end(), "UUID collision occured.");
+
+        new_entity.AddComponent(TagComponent(name));
+        new_entity.AddComponent(id);
+
+        m_EntityByUUID[id]   = entity_id;
+
+        return new_entity;
+    }
     Entity Scene::CreateEntity(const std::string& name)
     {
         EntityId    entity_id = m_Storage.CreateEntity();
@@ -77,7 +92,7 @@ namespace DE
     {
         std::vector<Entity> res;
         res.reserve(m_EntityByName.size());
-        for (auto& [uuid, entity_id] : m_EntityByUUID)
+        for (auto& [uuid, entity_id] : m_EntityByName)
         {
             res.push_back(Entity(entity_id, this));
         }
@@ -112,7 +127,11 @@ namespace DE
             script.instance->OnUpdate(dt);
         }
     }
-    void Scene::Render() { m_RenderData->Render(); }
+    void Scene::Render()
+    {
+        m_RenderData->SetCamera(GetCamera());
+        m_RenderData->Render();
+    }
 
     Entity Scene::CreateEmptyEntity()
     {

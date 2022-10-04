@@ -136,18 +136,10 @@ namespace DE
     {
         YAML::Node n_Entities;
 
-        std::vector<std::pair<TagComponent, Entity>> entities;
-
-        for (auto [uuid, entity_id] : scene->m_EntityByUUID)
-        {
-            auto entity = scene->GetByUUID(UUID(uuid));
-            entities.push_back({entity.GetComponent<TagComponent>(), entity});
-        }
-
-        std::sort(entities.begin(), entities.end(), [](const auto& a, const auto& b) { return a.first.tag < b.first.tag; });
+        std::vector<Entity> entities = scene->GetAllEntities();
 
         int cnt = 0;
-        for (auto [id, entity] : entities)
+        for (auto entity : entities)
         {
             SaveEntity(n_Entities["Entity_" + std::to_string(cnt++)], entity);
         }

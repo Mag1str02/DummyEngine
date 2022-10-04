@@ -26,6 +26,7 @@ namespace DE
     class ScriptField
     {
     public:
+        ScriptField() {}
         ScriptField(const std::string& name, void* ptr, ScriptFieldType type) : m_Name(name), m_Data(ptr), m_Type(type) {}
 
         void*                    Get() { return m_Data; }
@@ -56,12 +57,13 @@ namespace DE
         ScriptInstance& operator=(const ScriptInstance&) = delete;
         ScriptInstance& operator=(ScriptInstance&&) = delete;
 
-        std::vector<ScriptField>& GetFields() { return m_Fields; }
+        std::unordered_map<std::string, ScriptField>& GetFields() { return m_Fields; }
+        ScriptField                                   GetField(const std::string& field_name) { return m_Fields[field_name]; }
 
     protected:
         template <typename T> T& GetComponent() { return m_Entity.GetComponent<T>(); }
         Entity                   GetEntityByName(const std::string& name) const { return m_Scene->GetByName(name); };
-        void                     AddField(const ScriptField& field) { m_Fields.push_back(field); }
+        void                     AddField(const ScriptField& field) { m_Fields[field.GetName()] = field; }
 
     private:
         friend class Scene;
@@ -71,9 +73,9 @@ namespace DE
             m_Scene  = scene;
             m_Entity = entity;
         }
-        std::vector<ScriptField> m_Fields;
-        Scene*                   m_Scene;
-        Entity                   m_Entity;
+        std::unordered_map<std::string, ScriptField> m_Fields;
+        Scene*                                       m_Scene;
+        Entity                                       m_Entity;
     };
 }  // namespace DE
 

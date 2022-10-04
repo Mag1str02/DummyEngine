@@ -17,11 +17,11 @@ namespace DE
         float m_NearPlane = Config::GetF(DE_CFG_DEFAULT_CAMERA_NEAR_PLANE);
         float m_FarPlane  = Config::GetF(DE_CFG_DEFAULT_CAMERA_FAR_PLANE);
 
-        Vec3 m_WorldUp   = Vec3(0.0f, 1.0f, 0.0f);
-        Vec3 m_Position  = Vec3(0.0f, 0.0f, 0.0f);
-        Vec3 m_Direction = Vec3(0.0f, 0.0f, -1.0f);
-        Vec3 m_Right     = glm::normalize(glm::cross(m_Position, m_WorldUp));
-        Vec3 m_Up        = glm::normalize(glm::cross(m_Direction, m_Right));
+        Vec3 m_WorldUp  = Vec3(0.0f, 1.0f, 0.0f);
+        Vec3 m_Position = Vec3(0.0f, 0.0f, 0.0f);
+        Vec3 m_Direction;
+        Vec3 m_Right;
+        Vec3 m_Up;
 
     public:
         FPSCamera();

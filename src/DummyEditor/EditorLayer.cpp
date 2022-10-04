@@ -110,8 +110,9 @@ namespace DE
 
         ImGui::Begin("DockSpace",
                      &p_open,
-                     ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus |
-                         ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking);
+                     ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |
+                         ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar |
+                         ImGuiWindowFlags_NoDocking);
         ImGui::PopStyleVar(3);
 
         ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
@@ -176,6 +177,14 @@ namespace DE
     void EditorLayer::OpenScene(const Path& scene_path)
     {
         SceneLoader::Load(m_SceneData.m_Scene, scene_path);
+
+        m_EditorCamera = m_SceneData.m_Scene->CreateHiddenEntity("Editor Camera");
+        UUID script_id;
+        AssetManager::AddAsset<ScriptAsset>({script_id, Config::GetPath(DE_CFG_SCRIPT_PATH) / "DummyEditor" / "EditorCameraController.cpp"});
+        ScriptManager::UploadScript(AssetManager::GetAsset<ScriptAsset>(script_id));
+        m_EditorCamera.AddComponent<FPSCamera>();
+        m_EditorCamera.AddComponent<ScriptComponent>({script_id, ScriptManager::CreateScriptInstance(script_id)});
+
         m_SceneData.m_Scene->RegisterSystem<MovingSystem>();
         m_SceneHierarchy.SetActiveScene(m_SceneData.m_Scene);
         m_SceneHierarchy.UnSelect();
@@ -207,45 +216,16 @@ namespace DE
                 }
             }
         }
-        switch (m_State.m_InputState)
+        if (m_EditorCamera.Valid())
         {
-            case InputState::ViewPort: {
-                auto& camera      = m_SceneData.m_Scene->GetCamera().GetComponent<FPSCamera>();
-                float speed       = 15;
-                float sensitivity = 0.07;
-
-                camera.RotateY(Input::CursorXOffset() * sensitivity);
-                camera.RotateX(Input::CursorYOffset() * sensitivity / 16 * 9);
-
-                if (Input::KeyDown(GLFW_KEY_LEFT_SHIFT))
-                {
-                    speed = 100.0f;
-                }
-                if (Input::KeyDown(GLFW_KEY_S))
-                {
-                    camera.MoveInLocal(Vec3(0.0f, 0.0f, -1.0f) * speed * dt);
-                }
-                if (Input::KeyDown(GLFW_KEY_W))
-                {
-                    camera.MoveInLocal(Vec3(0.0f, 0.0f, 1.0f) * speed * dt);
-                }
-                if (Input::KeyDown(GLFW_KEY_D))
-                {
-                    camera.MoveInLocal(Vec3(1.0f, 0.0f, 0.0f) * speed * dt);
-                }
-                if (Input::KeyDown(GLFW_KEY_A))
-                {
-                    camera.MoveInLocal(Vec3(-1.0f, 0.0f, 0.0f) * speed * dt);
-                }
-                if (Input::KeyDown(GLFW_KEY_SPACE))
-                {
-                    camera.MoveInWorld(Vec3(0.0f, 1.0f, 0.0f) * speed * dt);
-                }
-                if (Input::KeyDown(GLFW_KEY_C))
-                {
-                    camera.MoveInWorld(Vec3(0.0f, -1.0f, 0.0f) * speed * dt);
-                }
-                break;
+            bool& active = *(m_EditorCamera.GetComponent<ScriptComponent>().instance->GetField("active").Get<bool>());
+            if (m_State.m_InputState == InputState::ViewPort)
+            {
+                active = true;
+            }
+            else
+            {
+                active = false;
             }
         }
     }

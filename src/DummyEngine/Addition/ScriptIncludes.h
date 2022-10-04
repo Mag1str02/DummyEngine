@@ -16,6 +16,7 @@
 #include "Core/Rendering/Renderer/Renderer.h"
 
 #include "Core/Scripting/ScriptInstance.h"
+#include "Core/Application/Input.h"
 
 #include "ToolBox/Dev/Profiler.h"
 #include "ToolBox/Dev/Logger.h"
