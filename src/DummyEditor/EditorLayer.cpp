@@ -180,7 +180,7 @@ namespace DE
 
         m_EditorCamera = m_SceneData.m_Scene->CreateHiddenEntity("Editor Camera");
         UUID script_id;
-        AssetManager::AddAsset<ScriptAsset>({script_id, Config::GetPath(DE_CFG_SCRIPT_PATH) / "DummyEditor" / "EditorCameraController.cpp"});
+        AssetManager::AddAsset<ScriptAsset>({script_id, "", Config::GetPath(DE_CFG_SCRIPT_PATH) / "DummyEditor" / "EditorCameraController.cpp"});
         ScriptManager::UploadScript(AssetManager::GetAsset<ScriptAsset>(script_id));
         m_EditorCamera.AddComponent<FPSCamera>();
         m_EditorCamera.AddComponent<ScriptComponent>({script_id, ScriptManager::CreateScriptInstance(script_id)});
@@ -218,7 +218,7 @@ namespace DE
         }
         if (m_EditorCamera.Valid())
         {
-            bool& active = *(m_EditorCamera.GetComponent<ScriptComponent>().instance->GetField("active").Get<bool>());
+            bool& active = m_EditorCamera.GetComponent<ScriptComponent>().instance->GetField("active").Get<bool>();
             if (m_State.m_InputState == InputState::ViewPort)
             {
                 active = true;

@@ -27,6 +27,7 @@ namespace DE
         static void       SaveEntity(YAML::Node n_Entity, Entity entity);
         static YAML::Node SaveEntities(Ref<Scene> scene);
         static YAML::Node SaveModels();
+        static YAML::Node SaveScripts();
         static YAML::Node SaveTextures();
         static YAML::Node SaveShaders();
         static YAML::Node SaveAssets();

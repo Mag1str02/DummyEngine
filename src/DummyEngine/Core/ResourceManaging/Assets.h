@@ -38,7 +38,8 @@ namespace DE
     };
     struct ScriptAsset
     {
-        UUID id;
-        Path path;
+        UUID        id;
+        std::string name;
+        Path        path;
     };
 }  // namespace DE

@@ -30,7 +30,7 @@ namespace DE
         ScriptField(const std::string& name, void* ptr, ScriptFieldType type) : m_Name(name), m_Data(ptr), m_Type(type) {}
 
         void*                    Get() { return m_Data; }
-        template <typename T> T* Get() { return (T*)m_Data; }
+        template <typename T> T& Get() { return *(T*)m_Data; }
         const std::string&       GetName() const { return m_Name; }
         ScriptFieldType          GetType() const { return m_Type; }
 

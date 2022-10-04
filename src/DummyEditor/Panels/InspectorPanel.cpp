@@ -57,11 +57,11 @@ namespace DE
                             case ScriptFieldType::UI64:
                                 ImGui::DragScalar(("##" + field.GetName()).c_str(), ScriptFieldTypeToImGuiType(field.GetType()), field.Get());
                                 break;
-                            case ScriptFieldType::Bool: ImGui::Checkbox(("##" + field.GetName()).c_str(), field.Get<bool>()); break;
-                            case ScriptFieldType::String: ImGui::InputText(("##" + field.GetName()).c_str(), field.Get<std::string>()); break;
-                            case ScriptFieldType::Vec2: ImGui::DragFloat2(("##" + field.GetName()).c_str(), field.Get<float>()); break;
-                            case ScriptFieldType::Vec3: ImGui::DragFloat3(("##" + field.GetName()).c_str(), field.Get<float>()); break;
-                            case ScriptFieldType::Vec4: ImGui::DragFloat4(("##" + field.GetName()).c_str(), field.Get<float>()); break;
+                            case ScriptFieldType::Bool: ImGui::Checkbox(("##" + field.GetName()).c_str(), &field.Get<bool>()); break;
+                            case ScriptFieldType::String: ImGui::InputText(("##" + field.GetName()).c_str(), &field.Get<std::string>()); break;
+                            case ScriptFieldType::Vec2: ImGui::DragFloat2(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
+                            case ScriptFieldType::Vec3: ImGui::DragFloat3(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
+                            case ScriptFieldType::Vec4: ImGui::DragFloat4(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
                         }
                     }
                 }
