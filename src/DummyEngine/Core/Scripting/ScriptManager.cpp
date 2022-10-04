@@ -75,4 +75,5 @@ namespace DE
         DE_ASSERT(HasScript(id), "Creating instace of unknown script.");
         return m_State.m_Scripts[id].CreateScriptInstance();
     }
+    void ScriptManager::Clear() { m_State.m_Scripts.clear(); }
 }  // namespace DE

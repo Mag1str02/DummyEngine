@@ -419,6 +419,7 @@ namespace DE
     }
     void SceneLoader::LoadScripts(YAML::Node n_Scripts)
     {
+        ScriptManager::Clear();
         for (const auto& node : n_Scripts)
         {
             ScriptAsset asset;

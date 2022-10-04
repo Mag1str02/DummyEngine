@@ -5,7 +5,7 @@
 #include "Core/Rendering/Renderer/Renderer.h"
 #include "Core/ResourceManaging/ResourceManager.h"
 #include "Core/Scene/SceneRenderData.h"
-#include "Core/Scripting/ScriptInstance.hpp"
+#include "Core/Scripting/ScriptInstance.h"
 
 namespace DE
 {

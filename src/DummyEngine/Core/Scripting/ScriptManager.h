@@ -1,6 +1,6 @@
 #include "Addition/Base.h"
 #include "Core/ResourceManaging/Assets.h"
-#include "Core/Scripting/ScriptInstance.hpp"
+#include "Core/Scripting/ScriptInstance.h"
 
 namespace DE
 {
@@ -28,6 +28,7 @@ namespace DE
         static void                UploadScript(const ScriptAsset& asset);
         static bool                HasScript(UUID id);
         static Ref<ScriptInstance> CreateScriptInstance(UUID id);
+        static void Clear();
 
     private:
         struct ScriptManagerState

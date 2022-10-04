@@ -69,7 +69,7 @@ set(ENGINE_SOURCES
     Core/ResourceManaging/ResourceManager.cpp
   
     Core/Scripting/Compiler.cpp
-    Core/Scripting/ScriptInstance.hpp
+    Core/Scripting/ScriptInstance.cpp
     Core/Scripting/ScriptManager.cpp
 
     ToolBox/Dev/Logger.cpp

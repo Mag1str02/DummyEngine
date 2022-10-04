@@ -21,7 +21,7 @@
 #include "Core/ResourceManaging/ResourceManager.h"
 #include "Core/ResourceManaging/AssetManager.h"
 
-#include "Core/Scripting/ScriptInstance.hpp"
+#include "Core/Scripting/ScriptInstance.h"
 
 #include "ToolBox/Dev/Profiler.h"
 #include "ToolBox/Dev/Logger.h"
