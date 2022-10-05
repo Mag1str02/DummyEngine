@@ -24,9 +24,10 @@ namespace DE
         std::string         GetName() const;
         std::vector<Entity> GetAllEntities();
 
-        void OnUpdate(double dt);
-        void OnViewPortResize(uint32_t x, uint32_t y);
-        void Render();
+        void                    OnUpdate(double dt);
+        void                    OnViewPortResize(uint32_t x, uint32_t y);
+        void                    Render();
+        Ref<SceneHierarchyNode> GetHierarchy() { return m_HierarchyRoot; }
 
         template <typename System> void RegisterSystem() { m_Storage.RegisterSystem<System>(); }
 

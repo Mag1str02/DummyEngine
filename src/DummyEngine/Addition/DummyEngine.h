@@ -17,6 +17,7 @@
 #include "Core/ECS/SystemManager.hpp"
 
 #include "Core/Scene/Scene.h"
+#include "Core/Scene/SceneHierarchy.h"
 #include "Core/Scene/Components.h"
 
 #include "Core/Objects/Cameras/FPSCamera.h"

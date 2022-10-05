@@ -9,30 +9,28 @@ namespace DE
     class SceneHierarchyNode
     {
     public:
-        SceneHierarchyNode(const std::string& name = "", Entity entity = Entity()) : m_Entity(entity), m_Name(name), m_Parent(nullptr) {}
+        SceneHierarchyNode(const std::string& name = "", Entity entity = Entity());
 
-        void AttachChild(Ref<SceneHierarchyNode> child)
-        {
-            m_Childs.push_back(child);
-            child->m_Parent = this;
-        }
-        void DetachChild(Ref<SceneHierarchyNode> child)
-        {
-            child->m_Parent = nullptr;
-            std::erase(m_Childs, child);
-        }
-        SceneHierarchyNode* GetParent() const { return m_Parent; }
+        void AttachChild(Ref<SceneHierarchyNode> child);
+        void DetachChild(Ref<SceneHierarchyNode> child);
 
-        const std::string& GetName() const { return m_Name; }
-        void               SetName(const std::string& name) { m_Name = name; }
-        void               SetEntity(const Entity& entity) { m_Entity = entity; }
-        bool               IsEntity() const { return m_Entity.Valid(); }
+        SceneHierarchyNode* GetParent() const;
+        const std::string&  GetName() const;
+        Entity              GetEntity() const;
+        void                SetName(const std::string& name);
+        void                SetEntity(const Entity& entity);
+        bool                IsEntity() const;
+        bool&               Selected();
+
+        std::vector<Ref<SceneHierarchyNode>>::iterator begin();
+        std::vector<Ref<SceneHierarchyNode>>::iterator end();
 
     private:
         std::vector<Ref<SceneHierarchyNode>> m_Childs;
         Entity                               m_Entity;
         std::string                          m_Name;
         SceneHierarchyNode*                  m_Parent;
+        bool                                 m_Selected;
     };
 
 }  // namespace DE
