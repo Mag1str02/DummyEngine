@@ -1,0 +1,225 @@
+Scene:
+  Name: NewScene
+  Assets:
+    Models:
+      ArchModel:
+        Path: Assets\Models\Arch\arch.obj
+        Compress: true
+        FlipUV: true
+        UUID: 4297990474591951207
+      BackpackModel:
+        Path: Assets\Models\Backpack\backpack.obj
+        Compress: true
+        FlipUV: false
+        UUID: 654055540912474740
+      BladeModel:
+        Path: Assets\Models\Blade\murasama.obj
+        Compress: true
+        FlipUV: true
+        UUID: 4830874900694261513
+      CarModel:
+        Path: Assets\Models\Car\Car.obj
+        Compress: true
+        FlipUV: true
+        UUID: 4289254078394118472
+      CubeModel:
+        Path: Assets\Models\Cube\cube.obj
+        Compress: true
+        FlipUV: false
+        UUID: 6557233926725796949
+      LuffyModel:
+        Path: Assets\Models\Luffy\luffy.obj
+        Compress: false
+        FlipUV: false
+        UUID: 16146890173748989942
+      NissanModel:
+        Path: Assets\Models\Nissan\Nissan.obj
+        Compress: false
+        FlipUV: false
+        UUID: 1407032741301600330
+      RaidenModel:
+        Path: Assets\Models\Raiden\Raiden.obj
+        Compress: false
+        FlipUV: true
+        UUID: 17398553512178907239
+      SamModel:
+        Path: Assets\Models\Sam\Sam.obj
+        Compress: false
+        FlipUV: true
+        UUID: 11801744926729819249
+      SponzaModel:
+        Path: Assets\Models\Sponza\sponza.obj
+        Compress: false
+        FlipUV: true
+        UUID: 18245820808254477624
+      TrainModel:
+        Path: Assets\Models\Train\train.obj
+        Compress: false
+        FlipUV: false
+        UUID: 18245820808254477256
+      TreeModel:
+        Path: Assets\Models\Tree\Tree.obj
+        Compress: false
+        FlipUV: false
+        UUID: 18245352808254477256
+    Shaders:
+      TexturedPhong:
+        UUID: 3566111628970667214
+        Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
+        Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
+    Textures:
+      Sky:
+        Path: Assets\Textures\Skyboxes\Sky.png
+        FlipUV: false
+        UUID: 4297990474523151207
+  Entities:
+    - Tag: Backpack
+      UUID: 13283607152039627564
+      Transformation:
+        Translation: [30, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [1, 1, 1]
+      RenderModel: 654055540912474740
+      Shader: 3566111628970667214
+    - Tag: Flashlight
+      UUID: 2142267720657822871
+      LightSource:
+        Type: Spot
+        Ambient: [0.100000001, 0.100000001, 0.100000001]
+        Diffuse: [0.400000006, 0.400000006, 0.400000006]
+        Specular: [0.400000006, 0.400000006, 0.400000006]
+        Direction: [0.997051656, -0.0274850335, -0.0716429278]
+        Position: [-42.9337196, 14.1925278, 3.87901473]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0.976296008
+        OuterCone: 0.936672211
+    - Tag: Lamp
+      UUID: 12087606009831782647
+      Transformation:
+        Translation: [30, 10, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [1, 1, 1]
+      LightSource:
+        Type: Spot
+        Ambient: [0.100000001, 0, 0]
+        Diffuse: [0.600000024, 0, 0]
+        Specular: [0.400000006, 0, 0]
+        Direction: [0, -1, 0]
+        Position: [30, 10, 0]
+        CLQ: [1, 0.0219999999, 0.00190000003]
+        InnerCone: 0.976296008
+        OuterCone: 0.953716934
+    - Tag: lamp_magenta
+      UUID: 7834405913725978860
+      Transformation:
+        Translation: [-20, -4, -26]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [0.100000001, 0.100000001, 0.100000001]
+        ScaleOffset: [1, 1, 1]
+      RenderModel: 6557233926725796949
+      Shader: 3566111628970667214
+      LightSource:
+        Type: Point
+        Ambient: [0.100000001, 0, 0.100000001]
+        Diffuse: [0.600000024, 0, 0.600000024]
+        Specular: [0.300000012, 0, 0.300000012]
+        Direction: [0, -1, 0]
+        Position: [-20, -4, -26]
+        CLQ: [1, 0.0219999999, 0.00190000003]
+        InnerCone: 0
+        OuterCone: 0
+    - Tag: lamp_white
+      UUID: 5169756284600285649
+      Transformation:
+        Translation: [20, 20, 20]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [1, 1, 1]
+      RenderModel: 6557233926725796949
+      Shader: 3566111628970667214
+      LightSource:
+        Type: Point
+        Ambient: [0.100000001, 0.100000001, 0.100000001]
+        Diffuse: [0.300000012, 0.300000012, 0.300000012]
+        Specular: [0.600000024, 0.600000024, 0.600000024]
+        Direction: [0, -1, 0]
+        Position: [20, 20, 20]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    - Tag: moon
+      UUID: 16971652933436356002
+      LightSource:
+        Type: Direction
+        Ambient: [0.00400000019, 0.0111999996, 0.0199999996]
+        Diffuse: [0.0600000024, 0.168000013, 0.300000012]
+        Specular: [0.120000005, 0.336000025, 0.600000024]
+        Direction: [0, -0.44721359, 0.89442718]
+        Position: [0, 0, 0]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    - Tag: player
+      UUID: 7828116465773805528
+      FPSCamera:
+        FOV: 90
+        Aspect: 0.939882696
+        NearPlane: 0.100000001
+        FarPlane: 2000
+        Position: [-21.4853725, -3.17233133, -25.2702007]
+        Direction: [0.999048352, 0.00548521522, -0.043270085]
+    - Tag: sponza
+      UUID: 15605333383906278036
+      Transformation:
+        Translation: [-16, -5, -25]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [0.00999999978, 0.00999999978, 0.00999999978]
+        ScaleOffset: [1, 1, 1]
+      RenderModel: 18245820808254477624
+      Shader: 3566111628970667214
+    - Tag: sun
+      UUID: 7178762644546976826
+      LightSource:
+        Type: Direction
+        Ambient: [0.0199999996, 0.0146000003, 0.00400000019]
+        Diffuse: [0.600000024, 0.438000023, 0.120000005]
+        Specular: [0.300000012, 0.219000012, 0.0600000024]
+        Direction: [0, 0.44721359, -0.89442718]
+        Position: [0, 0, 0]
+        CLQ: [1, 0.00700000022, 0.000199999995]
+        InnerCone: 0
+        OuterCone: 0
+    - Tag: surface
+      UUID: 16299243349270162803
+      Transformation:
+        Translation: [0, -10, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [500, 0.100000001, 500]
+        ScaleOffset: [1, 1, 1]
+      RenderModel: 6557233926725796949
+      Shader: 3566111628970667214
+    - Tag: train
+      UUID: 16108251966519883078
+      Transformation:
+        Translation: [0, 0, 0]
+        TranslationOffset: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        RotationOffset: [0, 0, 0]
+        Scale: [1, 1, 1]
+        ScaleOffset: [1, 1, 1]
+      RenderModel: 18245820808254477256
+      Shader: 3566111628970667214

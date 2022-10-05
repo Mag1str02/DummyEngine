@@ -35,6 +35,7 @@ set(ENGINE_SOURCES
     
     Core/Scene/Components.cpp
     Core/Scene/Scene.cpp
+    Core/Scene/SceneHierarchy.cpp
     Core/Scene/SceneRenderData.cpp
 
     Core/Objects/LightSources/LightSource.cpp

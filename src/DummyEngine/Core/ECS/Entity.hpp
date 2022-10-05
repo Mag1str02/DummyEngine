@@ -12,7 +12,7 @@ namespace DE
         Entity() : m_Id(-1), m_Scene(nullptr) {}
         Entity(EntityId id, Scene* scene) : m_Id(id), m_Scene(scene) {}
 
-        bool Valid() { return m_Scene != nullptr && m_Id != -1; }
+        bool Valid() const { return m_Scene != nullptr && m_Id != -1; }
         void Destroy()
         {
             if (Valid())
@@ -56,7 +56,7 @@ namespace DE
         friend struct std::hash<Entity>;
 
         EntityId m_Id;
-        Scene* m_Scene;
+        Scene*   m_Scene;
     };
 }  // namespace DE
 namespace std

@@ -5,11 +5,12 @@
 #include "Core/Rendering/Renderer/Renderer.h"
 #include "Core/ResourceManaging/ResourceManager.h"
 #include "Core/Scene/SceneRenderData.h"
+#include "Core/Scene/SceneHierarchy.h"
 
 namespace DE
 {
 
-    Scene::Scene(const std::string& name) : m_Name(name), m_RenderData(CreateRef<SceneRenderData>(this)) {}
+    Scene::Scene(const std::string& name) : m_Name(name), m_RenderData(CreateRef<SceneRenderData>(this)), m_HierarchyRoot(CreateRef<SceneHierarchyNode>()) {}
 
     Entity Scene::CreateEntity(const std::string& name)
     {
