@@ -16,8 +16,12 @@ namespace DE
 
     private:
         void ShowNode(Ref<SceneHierarchyNode> node);
+        void DragTarget(Ref<SceneHierarchyNode> node);
+        void DropTarget(Ref<SceneHierarchyNode> node);
 
         Ref<Scene>              m_Scene;
         Ref<SceneHierarchyNode> m_SelectedNode;
+        SceneHierarchyNode*     m_From;
+        Ref<SceneHierarchyNode> m_To;
     };
 }  // namespace DE

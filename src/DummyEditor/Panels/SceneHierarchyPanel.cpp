@@ -9,9 +9,38 @@ namespace DE
 
         if (m_Scene)
         {
-            for (auto child : *m_Scene->GetHierarchy())
+            m_From = nullptr;
+            m_To   = nullptr;
+
+            auto res  = m_Scene->GetHierarchy();
+            bool open = ImGui::TreeNode("Scene");
+            DropTarget(res);
+            if (open)
             {
-                ShowNode(child);
+                for (auto child : *res)
+                {
+                    ShowNode(child);
+                }
+                ImGui::TreePop();
+            }
+            if (m_From && m_To)
+            {
+                if (m_To->IsEntity() && m_From->IsEntity())
+                {
+                    auto parent = m_To->GetParent();
+                    auto node   = CreateRef<SceneHierarchyNode>("Folder");
+
+                    auto ref = m_From->Detach();
+                    m_To->Detach();
+                    node->AttachChild(m_To);
+                    node->AttachChild(ref);
+                    parent->AttachChild(node);
+                }
+                if (!m_To->IsEntity() && !m_To->IsAnsestor(m_From))
+                {
+                    auto ref = m_From->Detach();
+                    m_To->AttachChild(ref);
+                }
             }
         }
     }
@@ -28,27 +57,58 @@ namespace DE
 
     void SceneHierarchyPanel::ShowNode(Ref<SceneHierarchyNode> node)
     {
+        bool open;
         if (!node->IsEntity())
         {
-            if (ImGui::TreeNode(node->GetName().c_str()))
+            open = ImGui::TreeNode(node->GetName().c_str());
+            DropTarget(node);
+            DragTarget(node);
+            if (open)
             {
                 for (auto child : *node)
                 {
                     ShowNode(child);
                 }
+
                 ImGui::TreePop();
             }
         }
         else
         {
             auto entity = node->GetEntity();
-            if (ImGui::Selectable(entity.GetComponent<TagComponent>().tag.c_str(), &node->Selected(), ImGuiSelectableFlags_AllowDoubleClick))
+            open = ImGui::Selectable(entity.GetComponent<TagComponent>().tag.c_str(), &node->Selected(), ImGuiSelectableFlags_AllowDoubleClick);
+            if (open)
             {
                 if (ImGui::IsMouseDoubleClicked(0))
                 {
                     m_SelectedNode = node;
                 }
             }
+            DropTarget(node);
+            DragTarget(node);
+        }
+    }
+
+    void SceneHierarchyPanel::DragTarget(Ref<SceneHierarchyNode> node)
+    {
+        if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoHoldToOpenOthers))
+        {
+            size_t ptr = (size_t) & (*node);
+            ImGui::SetDragDropPayload("DND_HIERARCHY_NODE", &ptr, sizeof(size_t), ImGuiCond_Once);
+            ImGui::Text("Moveing: %s", node->GetName().c_str());
+            ImGui::EndDragDropSource();
+        }
+    }
+    void SceneHierarchyPanel::DropTarget(Ref<SceneHierarchyNode> node)
+    {
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_HIERARCHY_NODE"))
+            {
+                m_From = (SceneHierarchyNode*)(*(size_t*)payload->Data);
+                m_To   = node;
+            }
+            ImGui::EndDragDropTarget();
         }
     }
 }  // namespace DE
