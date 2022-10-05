@@ -12,14 +12,20 @@ namespace DE
     void ProfilerPanel::RenderTimeLapse(const std::vector<TimeLapse>& time_lapses, uint32_t index)
     {
         std::string node_name = (time_lapses[index].m_Name);
-        if (ImGui::TreeNode(node_name.c_str()))
+        if (time_lapses[index].m_Childs.empty())
         {
-            ImGui::Text(time_lapses[index].StrDuration().c_str());
-            for (auto child : time_lapses[index].m_Childs)
+            ImGui::BulletText("%s: %s", node_name.c_str(), time_lapses[index].StrDuration().c_str());
+        }
+        else
+        {
+            if (ImGui::TreeNode(this + index, "%s: %s", node_name.c_str(), time_lapses[index].StrDuration().c_str()))
             {
-                RenderTimeLapse(time_lapses, child);
+                for (auto child : time_lapses[index].m_Childs)
+                {
+                    RenderTimeLapse(time_lapses, child);
+                }
+                ImGui::TreePop();
             }
-            ImGui::TreePop();
         }
     }
 }  // namespace DE
