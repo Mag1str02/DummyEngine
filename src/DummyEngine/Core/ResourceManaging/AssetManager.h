@@ -20,6 +20,7 @@ namespace DE
             std::unordered_map<uint64_t, RenderMeshAsset> m_RenderMeshes;
             std::unordered_map<uint64_t, TextureAsset> m_Textures;
             std::unordered_map<uint64_t, ShaderAsset> m_Shaders;
+            std::unordered_map<uint64_t, ScriptAsset> m_Scripts;
         };
         static AssetManagerData m_Data;
     };

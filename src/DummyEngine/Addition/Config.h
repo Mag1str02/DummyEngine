@@ -20,6 +20,10 @@ namespace DE
 #define DE_CFG_MODEL_PATH 4
 #define DE_CFG_SHADER_PATH 5
 #define DE_CFG_TEXTURE_PATH 6
+#define DE_CFG_SCRIPT_PATH 7
+
+#define DE_CFG_CACHE_PATH 8
+#define DE_CFG_SCRIPT_CACHE_PATH 9
 
 #define DE_CFG_RENDER_API 1
 
@@ -41,10 +45,10 @@ namespace DE
             uint32_t c_MaxInputFrameAmount = 100;
             uint32_t c_MaxMessageTypeLength = 7;
 
-            float c_DefaultCameraFOV = 60.0f;
+            float c_DefaultCameraFOV = 90.0f;
             float c_DefaultCameraAspect = 16.0f / 9.0f;
-            float c_DefaultCameraNearPlane = 0.0000001f;
-            float c_DefaultCameraFarPlane = 2000.0f;
+            float c_DefaultCameraNearPlane = 0.1f;
+            float c_DefaultCameraFarPlane = 2'000'000.0f;
 
             Path c_ExecutablePath;
             Path c_ShaderPath;
@@ -52,6 +56,9 @@ namespace DE
             Path c_AssetPath;
             Path c_LogPath;
             Path c_TexturePath;
+            Path c_CachePath;
+            Path c_ScriptPath;
+            Path c_ScriptCachePath;
 
             API c_RenderAPI;
         };

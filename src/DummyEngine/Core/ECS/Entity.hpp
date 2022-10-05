@@ -28,7 +28,7 @@ namespace DE
             DE_ASSERT(m_Scene != nullptr, "Entity either was not initialized properly, or was destroyed before using AddComponent command.");
 
             auto& return_component = m_Scene->m_Storage.AddComponent(m_Id, component);
-            m_Scene->OnComponentAdd<ComponentType>(*this);
+            m_Scene->OnComponentAttach<ComponentType>(*this);
             return return_component;
         }
         template <typename ComponentType> void RemoveComponent()

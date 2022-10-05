@@ -7,6 +7,7 @@
 #include "Core/ResourceManaging/AssetManager.h"
 #include "Core/ResourceManaging/ResourceManager.h"
 #include "Core/Scene/SceneRenderData.h"
+#include "Core/Scripting/ScriptManager.h"
 #include "Core/Scene/SceneHierarchy.h"
 
 namespace DE
@@ -44,6 +45,25 @@ namespace DE
         res.push_back(vec.w);
 
         return res;
+    }
+
+    YAML::Node NodeScriptField(ScriptField& field)
+    {
+        switch (field.GetType())
+        {
+            case ScriptFieldType::Float: return YAML::Node(field.Get<float>());
+            case ScriptFieldType::Double: return YAML::Node(field.Get<double>());
+            case ScriptFieldType::Bool: return YAML::Node(field.Get<bool>());
+            case ScriptFieldType::String: return YAML::Node(field.Get<std::string>());
+            case ScriptFieldType::I32: return YAML::Node(field.Get<int32_t>());
+            case ScriptFieldType::I64: return YAML::Node(field.Get<int64_t>());
+            case ScriptFieldType::UI32: return YAML::Node(field.Get<uint32_t>());
+            case ScriptFieldType::UI64: return YAML::Node(field.Get<uint64_t>());
+            case ScriptFieldType::Vec2: return NodeVec2(field.Get<Vec2>());
+            case ScriptFieldType::Vec3: return NodeVec3(field.Get<Vec3>());
+            case ScriptFieldType::Vec4: return NodeVec4(field.Get<Vec4>());
+        }
+        return YAML::Node();
     }
 
     template <typename ComponentType> void SceneLoader::SaveComponent(YAML::Node& n_Entity, Entity entity)
@@ -120,6 +140,18 @@ namespace DE
             n_Entity["SkyBox"] = (uint64_t)entity.GetComponent<SkyBox>().id;
         }
     }
+    template <> void SceneLoader::SaveComponent<ScriptComponent>(YAML::Node& n_Entity, Entity entity)
+    {
+        if (entity.HasComponent<ScriptComponent>())
+        {
+            auto& script_instance      = entity.GetComponent<ScriptComponent>();
+            n_Entity["Script"]["UUID"] = (uint64_t)script_instance.id;
+            for (auto& [name, field] : script_instance.instance->GetFields())
+            {
+                n_Entity["Script"]["Fields"][name] = NodeScriptField(field);
+            }
+        }
+    }
 
     void SceneLoader::SaveEntity(YAML::Node& n_Entity, Entity entity)
     {
@@ -131,6 +163,7 @@ namespace DE
         SaveComponent<FPSCamera>(n_Entity, entity);
         SaveComponent<LightSource>(n_Entity, entity);
         SaveComponent<SkyBox>(n_Entity, entity);
+        SaveComponent<ScriptComponent>(n_Entity, entity);
     }
     YAML::Node SceneLoader::SaveTextures()
     {
@@ -168,6 +201,27 @@ namespace DE
         }
 
         return n_Models;
+    }
+    YAML::Node SceneLoader::SaveScripts()
+    {
+        YAML::Node               n_Scripts;
+        std::vector<ScriptAsset> scripts = AssetManager::GetAllAssets<ScriptAsset>();
+        std::sort(scripts.begin(), scripts.end(), [](const ScriptAsset& a, const ScriptAsset& b) { return a.path < b.path; });
+
+        for (const auto& script : scripts)
+        {
+            if (script.name == "")
+            {
+                continue;
+            }
+            YAML::Node n_Script;
+
+            n_Scripts[script.name] = n_Script;
+            n_Script["Path"]       = RelativeToExecutable(script.path).string();
+            n_Script["UUID"]       = (uint64_t)script.id;
+        }
+
+        return n_Scripts;
     }
     YAML::Node SceneLoader::SaveShaders()
     {
@@ -225,6 +279,7 @@ namespace DE
         n_Assets["Models"]   = SaveModels();
         n_Assets["Shaders"]  = SaveShaders();
         n_Assets["Textures"] = SaveTextures();
+        n_Assets["Scripts"] = SaveScripts();
         for (auto child : *scene->GetHierarchy())
         {
             n_Scene["Hierarchy"].push_back(SaveNode(child));
@@ -264,6 +319,23 @@ namespace DE
         res.w = node[3].as<float>();
 
         return res;
+    }
+    void GetField(YAML::Node node, ScriptField& field)
+    {
+        switch (field.GetType())
+        {
+            case ScriptFieldType::Float: field.Get<float>() = node.as<float>(); break;
+            case ScriptFieldType::Double: field.Get<double>() = node.as<double>(); break;
+            case ScriptFieldType::Bool: field.Get<bool>() = node.as<bool>(); break;
+            case ScriptFieldType::String: field.Get<std::string>() = node.as<std::string>(); break;
+            case ScriptFieldType::I32: field.Get<int32_t>() = node.as<int32_t>(); break;
+            case ScriptFieldType::I64: field.Get<int64_t>() = node.as<int64_t>(); break;
+            case ScriptFieldType::UI32: field.Get<uint32_t>() = node.as<uint32_t>(); break;
+            case ScriptFieldType::UI64: field.Get<uint64_t>() = node.as<uint64_t>(); break;
+            case ScriptFieldType::Vec2: field.Get<Vec2>() = GetVec2(node); break;
+            case ScriptFieldType::Vec3: field.Get<Vec3>() = GetVec3(node); break;
+            case ScriptFieldType::Vec4: field.Get<Vec4>() = GetVec4(node); break;
+        }
     }
 
     template <typename ComponentType> void SceneLoader::LoadComponent(YAML::Node n_Component, Entity& entity)
@@ -351,6 +423,24 @@ namespace DE
 
         entity.AddComponent<SkyBox>(box);
     }
+    template <> void SceneLoader::LoadComponent<ScriptComponent>(YAML::Node n_Component, Entity& entity)
+    {
+        ScriptComponent script;
+        script.id = n_Component["UUID"].as<uint64_t>();
+        if (!ScriptManager::HasScript(script.id))
+        {
+            ScriptManager::UploadScript(AssetManager::GetAsset<ScriptAsset>(script.id));
+        }
+        script.instance       = ScriptManager::CreateScriptInstance(script.id);
+        auto& script_instance = entity.AddComponent<ScriptComponent>(script);
+        for (auto& [name, field] : script_instance.instance->GetFields())
+        {
+            if (n_Component["Fields"][name])
+            {
+                GetField(n_Component["Fields"][name], field);
+            }
+        }
+    }
 
     void SceneLoader::LoadShaders(YAML::Node n_Shaders)
     {
@@ -408,11 +498,26 @@ namespace DE
             AssetManager::AddAsset(asset);
         }
     }
+    void SceneLoader::LoadScripts(YAML::Node n_Scripts)
+    {
+        ScriptManager::Clear();
+        for (const auto& node : n_Scripts)
+        {
+            ScriptAsset asset;
+
+            asset.id   = node.second["UUID"].as<uint64_t>();
+            asset.name = node.first.as<std::string>();
+            asset.path = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
+
+            AssetManager::AddAsset(asset);
+        }
+    }
     void SceneLoader::LoadAssets(YAML::Node n_Assets)
     {
         LoadShaders(n_Assets["Shaders"]);
         LoadModels(n_Assets["Models"]);
         LoadTextures(n_Assets["Textures"]);
+        LoadScripts(n_Assets["Scripts"]);
     }
     Entity SceneLoader::LoadEntity(YAML::Node n_Entity)
     {
@@ -426,6 +531,7 @@ namespace DE
         if (n_Entity["FPSCamera"]) LoadComponent<FPSCamera>(n_Entity["FPSCamera"], entity);
         if (n_Entity["LightSource"]) LoadComponent<LightSource>(n_Entity["LightSource"], entity);
         if (n_Entity["SkyBox"]) LoadComponent<SkyBox>(n_Entity["SkyBox"], entity);
+        if (n_Entity["Script"]) LoadComponent<ScriptComponent>(n_Entity["Script"], entity);
 
         if (entity.HasComponent<RenderMeshComponent>() && entity.HasComponent<ShaderComponent>())
         {

@@ -17,9 +17,12 @@ namespace DE
             DropTarget(res);
             if (open)
             {
+                int32_t id = 0;
                 for (auto child : *res)
                 {
+                    ImGui::PushID(id++);
                     ShowNode(child);
+                    ImGui::PopID();
                 }
                 ImGui::TreePop();
             }
@@ -65,9 +68,12 @@ namespace DE
             DragTarget(node);
             if (open)
             {
+                int32_t id = 0;
                 for (auto child : *node)
                 {
+                    ImGui::PushID(id++);
                     ShowNode(child);
+                    ImGui::PopID();
                 }
 
                 ImGui::TreePop();

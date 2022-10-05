@@ -14,7 +14,7 @@ namespace DE
         IdComponent(UUID uuid);
         IdComponent(const IdComponent&) = default;
 
-        operator uint64_t() const { return id; }
+                    operator uint64_t() const { return id; }
         std::string Hex() const { return id.Hex(); }
     };
 
@@ -40,16 +40,28 @@ namespace DE
     struct ShaderComponent
     {
         UUID id;
+
         Ref<Shader> shader;
     };
     struct RenderMeshComponent
     {
         UUID id;
+
         Ref<RenderMeshInstance> mesh_instance = nullptr;
     };
     struct SkyBox
     {
         UUID id;
+
         Ref<CubeMap> map = nullptr;
+    };
+
+    class ScriptInstance;
+
+    struct ScriptComponent
+    {
+        UUID id;
+
+        Ref<ScriptInstance> instance = nullptr;
     };
 }  // namespace DE

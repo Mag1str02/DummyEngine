@@ -7,16 +7,16 @@
 
 namespace DE
 {
-    const uint32_t MAX_LIGHTS_IN_SCENE = 1000;
-    const uint32_t MAX_VP_AMOUNT = 32;
+    const uint32_t MAX_LIGHTS_IN_SCENE      = 1000;
+    const uint32_t MAX_VP_AMOUNT            = 32;
     const uint32_t MAX_INSTANCES_PER_BUFFER = 1000;
 
-    const uint32_t VP_UB_ID = 1;
+    const uint32_t VP_UB_ID    = 1;
     const uint32_t LIGHT_UB_ID = 2;
 
     SceneRenderData::SceneRenderData(Scene* scene) : m_Scene(scene)
     {
-        m_VP = UniformBuffer::Create({BufferElementType::Mat4, BufferElementType::Mat4}, MAX_VP_AMOUNT);
+        m_VP     = UniformBuffer::Create({BufferElementType::Mat4, BufferElementType::Mat4}, MAX_VP_AMOUNT);
         m_Lights = UniformBuffer::Create({BufferElementType::Float3,
                                           BufferElementType::Float3,
                                           BufferElementType::Float3,
@@ -34,10 +34,10 @@ namespace DE
 
         auto camera = m_Scene->GetCamera();
 
-        auto meshes = m_Scene->m_Storage.GetComponentArray<RenderMeshComponent>();
-        auto shaders = m_Scene->m_Storage.GetComponentArray<ShaderComponent>();
+        auto meshes          = m_Scene->m_Storage.GetComponentArray<RenderMeshComponent>();
+        auto shaders         = m_Scene->m_Storage.GetComponentArray<ShaderComponent>();
         auto transformations = m_Scene->m_Storage.GetComponentArray<TransformComponent>();
-        auto skyboxes = m_Scene->m_Storage.GetComponentArray<SkyBox>();
+        auto skyboxes        = m_Scene->m_Storage.GetComponentArray<SkyBox>();
 
         Renderer::Clear();
 
@@ -54,7 +54,7 @@ namespace DE
 
         for (auto [id, skybox] : skyboxes)
         {
-            transformations[id].translation = m_Scene->GetByName("player").GetComponent<FPSCamera>().GetPos();
+            transformations[id].translation = m_Camera.GetComponent<FPSCamera>().GetPos();
             Renderer::Submit(skybox.map, shaders[id].shader, transformations[id].GetTransform());
         }
         glCheckError();
@@ -75,7 +75,8 @@ namespace DE
             m_Lights->at(cnt_light_sources).Get<Vec3>(3) = light_source.direction;
             m_Lights->at(cnt_light_sources).Get<Vec3>(4) = light_source.position;
             m_Lights->at(cnt_light_sources).Get<Vec3>(5) = light_source.clq;
-            m_Lights->at(cnt_light_sources).Get<Vec3>(6) = Vec3(light_source.outer_cone_cos, light_source.inner_cone_cos, LightSourceTypeToId(light_source.type));
+            m_Lights->at(cnt_light_sources).Get<Vec3>(6) =
+                Vec3(light_source.outer_cone_cos, light_source.inner_cone_cos, LightSourceTypeToId(light_source.type));
             cnt_light_sources++;
         }
         m_Lights->PushData();
@@ -96,7 +97,7 @@ namespace DE
             Entity entity(entity_id, m_Scene);
             if (entity.HasComponent<FPSCamera>())
             {
-                auto& camera = entity.GetComponent<FPSCamera>();
+                auto& camera              = entity.GetComponent<FPSCamera>();
                 m_VP->at(id).Get<Mat4>(0) = camera.GetViewMatrix();
                 m_VP->at(id).Get<Mat4>(1) = camera.GetProjectionMatrix();
             }
@@ -129,10 +130,11 @@ namespace DE
     {
         if (!m_EntityToVPIndex.contains(entity.m_Id))
         {
-            uint32_t index = m_EntityToVPIndex.size();
+            uint32_t index                 = m_EntityToVPIndex.size();
             m_EntityToVPIndex[entity.m_Id] = index;
         }
     }
+    void SceneRenderData::SetCamera(const Entity& camera) { m_Camera = camera; }
 
     Ref<RenderMeshInstance> SceneRenderData::GetRenderMeshInstance(UUID mesh_id, UUID shader_id)
     {
@@ -147,7 +149,8 @@ namespace DE
 
     void SceneRenderData::CreateInstancedMesh(UUID mesh_id, UUID shader_id)
     {
-        m_InstancedMeshes[{mesh_id, shader_id}] = {ResourceManager::GetResource<RenderMesh>(mesh_id)->Copy(), ResourceManager::GetResource<Shader>(shader_id)};
+        m_InstancedMeshes[{mesh_id, shader_id}] = {ResourceManager::GetResource<RenderMesh>(mesh_id)->Copy(),
+                                                   ResourceManager::GetResource<Shader>(shader_id)};
         m_InstancedMeshes[{mesh_id, shader_id}].first->SetInstanceBuffer({{BufferElementType::Mat4}, 1}, MAX_INSTANCES_PER_BUFFER);
         RequestShader(shader_id);
     }

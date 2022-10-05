@@ -12,6 +12,19 @@ namespace DE
         if (vec.z > max) vec.z = min;
     }
 
+    ImGuiDataType_ ScriptFieldTypeToImGuiType(ScriptFieldType type)
+    {
+        switch (type)
+        {
+            case ScriptFieldType::Double: return ImGuiDataType_Double;
+            case ScriptFieldType::Float: return ImGuiDataType_Float;
+            case ScriptFieldType::I32: return ImGuiDataType_S32;
+            case ScriptFieldType::UI32: return ImGuiDataType_U32;
+            case ScriptFieldType::I64: return ImGuiDataType_S64;
+            case ScriptFieldType::UI64: return ImGuiDataType_U64;
+        }
+        return ImGuiDataType_COUNT;
+    }
     void InspectorPanel::View()
     {
         DE_PROFILE_SCOPE("InspectorPanel View");
@@ -20,6 +33,39 @@ namespace DE
 
         if (m_Entity.Valid())
         {
+            if (m_Entity.HasComponent<ScriptComponent>())
+            {
+                auto& fields = m_Entity.GetComponent<ScriptComponent>().instance->GetFields();
+                if (ImGui::CollapsingHeader("Script"))
+                {
+                    for (auto& [name, field] : fields)
+                    {
+                        if (field.GetType() != ScriptFieldType::None)
+                        {
+                            ImGui::Text(field.GetName().c_str());
+                            ImGui::SameLine(100);
+                            ImGui::SetNextItemWidth(-1);
+                        }
+
+                        switch (field.GetType())
+                        {
+                            case ScriptFieldType::Double:
+                            case ScriptFieldType::Float:
+                            case ScriptFieldType::I32:
+                            case ScriptFieldType::UI32:
+                            case ScriptFieldType::I64:
+                            case ScriptFieldType::UI64:
+                                ImGui::DragScalar(("##" + field.GetName()).c_str(), ScriptFieldTypeToImGuiType(field.GetType()), field.Get());
+                                break;
+                            case ScriptFieldType::Bool: ImGui::Checkbox(("##" + field.GetName()).c_str(), &field.Get<bool>()); break;
+                            case ScriptFieldType::String: ImGui::InputText(("##" + field.GetName()).c_str(), &field.Get<std::string>()); break;
+                            case ScriptFieldType::Vec2: ImGui::DragFloat2(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
+                            case ScriptFieldType::Vec3: ImGui::DragFloat3(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
+                            case ScriptFieldType::Vec4: ImGui::DragFloat4(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
+                        }
+                    }
+                }
+            }
             if (m_Entity.HasComponent<TagComponent>())
             {
                 auto& component = m_Entity.GetComponent<TagComponent>();
@@ -102,7 +148,7 @@ namespace DE
             {
                 if (ImGui::CollapsingHeader("Light Soruce"))
                 {
-                    auto& source = m_Entity.GetComponent<LightSource>();
+                    auto&       source        = m_Entity.GetComponent<LightSource>();
                     const char* light_types[] = {"Directional", "Point", "Spot"};
 
                     ImGui::Text("Type");
@@ -145,7 +191,7 @@ namespace DE
                         ImGui::Text("Position");
                         ImGui::SameLine(100);
                         ImGui::SetNextItemWidth(-24);
-                        ImGui::DragFloat3("##Position", &(source.position.x), sensitivity, 0, 1);
+                        ImGui::DragFloat3("##Position", &(source.position.x), sensitivity);
                     }
                     if (source.type == LightSourceType::Spot)
                     {

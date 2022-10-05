@@ -40,21 +40,27 @@ namespace DE
             case DE_CFG_MODEL_PATH: return m_Configs.c_ModelPath;
             case DE_CFG_SHADER_PATH: return m_Configs.c_ShaderPath;
             case DE_CFG_TEXTURE_PATH: return m_Configs.c_TexturePath;
+            case DE_CFG_SCRIPT_PATH: return m_Configs.c_ScriptPath;
+            case DE_CFG_CACHE_PATH: return m_Configs.c_CachePath;
+            case DE_CFG_SCRIPT_CACHE_PATH: return m_Configs.c_ScriptCachePath;
             default: DE_ASSERT(false, "Wrong config requested.");
         }
         return Path(".");
     }
-    API  Config::GetRenderAPI() { return m_Configs.c_RenderAPI; }
+    API Config::GetRenderAPI() { return m_Configs.c_RenderAPI; }
     void Config::Init()
     {
         m_Configs.c_ExecutablePath = fs::current_path();
         std::cout << "Current path: " << m_Configs.c_ExecutablePath.string() << std::endl;
 
-        m_Configs.c_AssetPath   = m_Configs.c_ExecutablePath / "Assets";
-        m_Configs.c_LogPath     = m_Configs.c_ExecutablePath / "Logs";
-        m_Configs.c_ModelPath   = m_Configs.c_AssetPath / "Models";
-        m_Configs.c_ShaderPath  = m_Configs.c_AssetPath / "Shaders";
+        m_Configs.c_AssetPath = m_Configs.c_ExecutablePath / "Assets";
+        m_Configs.c_LogPath = m_Configs.c_ExecutablePath / "Logs";
+        m_Configs.c_ModelPath = m_Configs.c_AssetPath / "Models";
+        m_Configs.c_ShaderPath = m_Configs.c_AssetPath / "Shaders";
         m_Configs.c_TexturePath = m_Configs.c_AssetPath / "Textures";
+        m_Configs.c_ScriptPath = m_Configs.c_AssetPath / "Scripts";
+        m_Configs.c_CachePath = m_Configs.c_ExecutablePath / "Cache";
+        m_Configs.c_ScriptCachePath = m_Configs.c_CachePath / "Scripts";
 
         m_Configs.c_RenderAPI = API::OpenGL;
     }

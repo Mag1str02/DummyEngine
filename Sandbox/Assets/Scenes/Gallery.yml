@@ -68,364 +68,6 @@ Scene:
         UUID: 4297990474523151207
   Hierarchy:
     - Entity:
-        Tag: Arch
-        UUID: 6382649478065237834
-        Transformation:
-          Translation: [0, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_0
-        UUID: 7880999784930792072
-        Transformation:
-          Translation: [75, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_1
-        UUID: 15941687613803207770
-        Transformation:
-          Translation: [-75, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_10
-        UUID: 5213625393851641127
-        Transformation:
-          Translation: [450, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_11
-        UUID: 3035699795383006144
-        Transformation:
-          Translation: [-450, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_12
-        UUID: 14384740072414857809
-        Transformation:
-          Translation: [525, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_13
-        UUID: 12635401302101962863
-        Transformation:
-          Translation: [-525, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_14
-        UUID: 1101106277738172717
-        Transformation:
-          Translation: [600, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_15
-        UUID: 5873323393681448535
-        Transformation:
-          Translation: [-600, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_16
-        UUID: 17302959992435298245
-        Transformation:
-          Translation: [675, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_17
-        UUID: 15890044325275084598
-        Transformation:
-          Translation: [-675, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_18
-        UUID: 15537684908387568608
-        Transformation:
-          Translation: [750, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_19
-        UUID: 16670400817386465635
-        Transformation:
-          Translation: [-750, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_2
-        UUID: 9950114420260690697
-        Transformation:
-          Translation: [150, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_3
-        UUID: 15019554848179761880
-        Transformation:
-          Translation: [-150, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_4
-        UUID: 7984498613159843746
-        Transformation:
-          Translation: [225, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_5
-        UUID: 13170488749888609724
-        Transformation:
-          Translation: [-225, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_6
-        UUID: 7069657717134928603
-        Transformation:
-          Translation: [300, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_7
-        UUID: 2009748520648894057
-        Transformation:
-          Translation: [-300, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_8
-        UUID: 6841065002287908623
-        Transformation:
-          Translation: [375, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Arch_9
-        UUID: 2189146139801416280
-        Transformation:
-          Translation: [-375, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [2, 2, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4297990474591951207
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Backpack
-        UUID: 6382649478065237886
-        Transformation:
-          Translation: [0, 15, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [5, 5, 5]
-          ScaleOffset: [1, 1, 1]
-        RenderModel: 654055540912474740
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Blade
-        UUID: 6382649478065237432
-        Transformation:
-          Translation: [75, 15, 0]
-          TranslationOffset: [0, -7, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [-90, 90, 0]
-          Scale: [2, 2, 2]
-          ScaleOffset: [10, 10, 10]
-        RenderModel: 4830874900694261513
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Car
-        UUID: 6382649478025237834
-        Transformation:
-          Translation: [-225, 1, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [-90, 0, 0]
-          Scale: [1, 1, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 4289254078394118472
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Luffy
-        UUID: 6382649478065237252
-        Transformation:
-          Translation: [-75, 15, 0]
-          TranslationOffset: [0, 0, 10]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [1, 1, 1]
-          ScaleOffset: [3, 3, 3]
-        RenderModel: 16146890173748989942
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Nissan
-        UUID: 6382249478065237834
-        Transformation:
-          Translation: [-300, 1, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [1, 1, 1]
-          ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-        RenderModel: 1407032741301600330
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Raiden
-        UUID: 6384649478065237834
-        Transformation:
-          Translation: [225, 1, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [1, 1, 1]
-          ScaleOffset: [0.100000001, 0.100000001, 0.100000001]
-        RenderModel: 17398553512178907239
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Sam
-        UUID: 6382649478065643834
-        Transformation:
-          Translation: [150, 1, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [1, 1, 1]
-          ScaleOffset: [0.100000001, 0.100000001, 0.100000001]
-        RenderModel: 11801744926729819249
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: Tree
-        UUID: 6322649478065237834
-        Transformation:
-          Translation: [-150, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [1, 1, 1]
-          ScaleOffset: [1, 1, 1]
-        RenderModel: 18245352808254477256
-        Shader: 3566111628970667214
-    - Entity:
-        Tag: player
-        UUID: 4631319593559015940
-        FPSCamera:
-          FOV: 90
-          Aspect: 1.67258883
-          NearPlane: 0.100000001
-          FarPlane: 10000
-          Position: [-75.0812531, 47.2530136, 153.099945]
-          Direction: [-0.0830432624, -0.485557109, -0.870251715]
-    - Entity:
         Tag: skybox
         UUID: 6382649478065202943
         Transformation:
@@ -437,197 +79,554 @@ Scene:
           ScaleOffset: [1, 1, 1]
         Shader: 3566111620382667214
         SkyBox: 4297990474523151207
-    - Entity:
-        Tag: sun
-        UUID: 16279128272272660330
-        LightSource:
-          Type: Direction
-          Ambient: [0.5, 0.5, 0.5]
-          Diffuse: [1, 1, 1]
-          Specular: [0.5, 0.5, 0.5]
-          Direction: [0, -0.44721359, -0.89442718]
-          Position: [0, 0, 0]
-          CLQ: [0.5, 0.00700000022, 0.000199999995]
-          InnerCone: 0
-          OuterCone: 0
-    - Entity:
-        Tag: sun_0
-        UUID: 16279128272272660331
-        LightSource:
-          Type: Point
-          Ambient: [0.00951558072, 0, 0.323529422]
-          Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-          Specular: [0.113042593, 0.0496203378, 0.289215684]
-          Direction: [0, -0.44721359, 0.89442718]
-          Position: [0, 0, 50]
-          CLQ: [1, 0.00700000022, 0.000199999995]
-          InnerCone: 0
-          OuterCone: 0
-    - Entity:
-        Tag: sun_1
-        UUID: 16279128272272660012
-        LightSource:
-          Type: Point
-          Ambient: [0.00951558072, 0, 0.323529422]
-          Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-          Specular: [0.113042593, 0.0496203378, 0.289215684]
-          Direction: [0, -0.44721359, 0.89442718]
-          Position: [75, 0, 50]
-          CLQ: [1, 0.00700000022, 0.000199999995]
-          InnerCone: 0
-          OuterCone: 0
-    - Entity:
-        Tag: sun_10
-        UUID: 16279128272272660003
-        LightSource:
-          Type: Point
-          Ambient: [0.00951558072, 0, 0.323529422]
-          Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-          Specular: [0.113042593, 0.0496203378, 0.289215684]
-          Direction: [0, -0.44721359, 0.89442718]
-          Position: [750, 0, 50]
-          CLQ: [1, 0.00700000022, 0.000199999995]
-          InnerCone: 0
-          OuterCone: 0
-    - Entity:
-        Tag: sun_11
-        UUID: 16279128272272660002
-        LightSource:
-          Type: Point
-          Ambient: [0.00951558072, 0, 0.323529422]
-          Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-          Specular: [0.113042593, 0.0496203378, 0.289215684]
-          Direction: [0, -0.44721359, 0.89442718]
-          Position: [-75, 0, 50]
-          CLQ: [1, 0.00700000022, 0.000199999995]
-          InnerCone: 0
-          OuterCone: 0
-    - Entity:
-        Tag: sun_12
-        UUID: 16279128272272660001
-        LightSource:
-          Type: Point
-          Ambient: [0.00951558072, 0, 0.323529422]
-          Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-          Specular: [0.113042593, 0.0496203378, 0.289215684]
-          Direction: [0, -0.44721359, 0.89442718]
-          Position: [-150, 0, 50]
-          CLQ: [1, 0.00700000022, 0.000199999995]
-          InnerCone: 0
-          OuterCone: 0
-    - Entity:
-        Tag: sun_2
-        UUID: 1627912827227266011
-        LightSource:
-          Type: Point
-          Ambient: [0.00951558072, 0, 0.323529422]
-          Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-          Specular: [0.113042593, 0.0496203378, 0.289215684]
-          Direction: [0, -0.44721359, 0.89442718]
-          Position: [150, 0, 50]
-          CLQ: [1, 0.00700000022, 0.000199999995]
-          InnerCone: 0
-          OuterCone: 0
-    - Entity:
-        Tag: sun_3
-        UUID: 16279128272272660010
-        LightSource:
-          Type: Point
-          Ambient: [0.00951558072, 0, 0.323529422]
-          Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-          Specular: [0.113042593, 0.0496203378, 0.289215684]
-          Direction: [0, -0.44721359, 0.89442718]
-          Position: [225, 0, 50]
-          CLQ: [1, 0.00700000022, 0.000199999995]
-          InnerCone: 0
-          OuterCone: 0
-    - Entity:
-        Tag: sun_4
-        UUID: 16279128272272660009
-        LightSource:
-          Type: Point
-          Ambient: [0.00951558072, 0, 0.323529422]
-          Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-          Specular: [0.113042593, 0.0496203378, 0.289215684]
-          Direction: [0, -0.44721359, 0.89442718]
-          Position: [300, 0, 50]
-          CLQ: [1, 0.00700000022, 0.000199999995]
-          InnerCone: 0
-          OuterCone: 0
-    - Entity:
-        Tag: sun_5
-        UUID: 16279128272272660008
-        LightSource:
-          Type: Point
-          Ambient: [0.00951558072, 0, 0.323529422]
-          Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-          Specular: [0.113042593, 0.0496203378, 0.289215684]
-          Direction: [0, -0.44721359, 0.89442718]
-          Position: [375, 0, 50]
-          CLQ: [1, 0.00700000022, 0.000199999995]
-          InnerCone: 0
-          OuterCone: 0
-    - Entity:
-        Tag: sun_6
-        UUID: 16279128272272660007
-        LightSource:
-          Type: Point
-          Ambient: [0.00951558072, 0, 0.323529422]
-          Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-          Specular: [0.113042593, 0.0496203378, 0.289215684]
-          Direction: [0, -0.44721359, 0.89442718]
-          Position: [450, 0, 50]
-          CLQ: [1, 0.00700000022, 0.000199999995]
-          InnerCone: 0
-          OuterCone: 0
-    - Entity:
-        Tag: sun_7
-        UUID: 16279128272272660006
-        LightSource:
-          Type: Point
-          Ambient: [0.00951558072, 0, 0.323529422]
-          Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-          Specular: [0.113042593, 0.0496203378, 0.289215684]
-          Direction: [0, -0.44721359, 0.89442718]
-          Position: [525, 0, 50]
-          CLQ: [1, 0.00700000022, 0.000199999995]
-          InnerCone: 0
-          OuterCone: 0
-    - Entity:
-        Tag: sun_8
-        UUID: 16279128272272660005
-        LightSource:
-          Type: Point
-          Ambient: [0.00951558072, 0, 0.323529422]
-          Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-          Specular: [0.113042593, 0.0496203378, 0.289215684]
-          Direction: [0, -0.44721359, 0.89442718]
-          Position: [600, 0, 50]
-          CLQ: [1, 0.00700000022, 0.000199999995]
-          InnerCone: 0
-          OuterCone: 0
-    - Entity:
-        Tag: sun_9
-        UUID: 16279128272272660004
-        LightSource:
-          Type: Point
-          Ambient: [0.00951558072, 0, 0.323529422]
-          Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-          Specular: [0.113042593, 0.0496203378, 0.289215684]
-          Direction: [0, -0.44721359, 0.89442718]
-          Position: [675, 0, 50]
-          CLQ: [1, 0.00700000022, 0.000199999995]
-          InnerCone: 0
-          OuterCone: 0
-    - Entity:
-        Tag: surface
-        UUID: 6382649478065237843
-        Transformation:
-          Translation: [0, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [0, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [1000, 1, 100]
-          ScaleOffset: [1, 1, 1]
-        RenderModel: 6557233926725796949
-        Shader: 3566111628970667214
+    - Node:
+        Name: Arches
+        Childs:
+          - Entity:
+              Tag: Arch_8
+              UUID: 6841065002287908623
+              Transformation:
+                Translation: [375, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_9
+              UUID: 2189146139801416280
+              Transformation:
+                Translation: [-375, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_7
+              UUID: 2009748520648894057
+              Transformation:
+                Translation: [-300, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_6
+              UUID: 7069657717134928603
+              Transformation:
+                Translation: [300, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_5
+              UUID: 13170488749888609724
+              Transformation:
+                Translation: [-225, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_4
+              UUID: 7984498613159843746
+              Transformation:
+                Translation: [225, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_2
+              UUID: 9950114420260690697
+              Transformation:
+                Translation: [150, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_3
+              UUID: 15019554848179761880
+              Transformation:
+                Translation: [-150, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_19
+              UUID: 16670400817386465635
+              Transformation:
+                Translation: [-750, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_18
+              UUID: 15537684908387568608
+              Transformation:
+                Translation: [750, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_17
+              UUID: 15890044325275084598
+              Transformation:
+                Translation: [-675, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_16
+              UUID: 17302959992435298245
+              Transformation:
+                Translation: [675, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_15
+              UUID: 5873323393681448535
+              Transformation:
+                Translation: [-600, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_14
+              UUID: 1101106277738172717
+              Transformation:
+                Translation: [600, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_13
+              UUID: 12635401302101962863
+              Transformation:
+                Translation: [-525, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_12
+              UUID: 14384740072414857809
+              Transformation:
+                Translation: [525, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_11
+              UUID: 3035699795383006144
+              Transformation:
+                Translation: [-450, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_10
+              UUID: 5213625393851641127
+              Transformation:
+                Translation: [450, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_1
+              UUID: 15941687613803207770
+              Transformation:
+                Translation: [-75, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch_0
+              UUID: 7880999784930792072
+              Transformation:
+                Translation: [75, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Arch
+              UUID: 6382649478065237834
+              Transformation:
+                Translation: [0, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [2, 2, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4297990474591951207
+              Shader: 3566111628970667214
+    - Node:
+        Name: Lights
+        Childs:
+          - Entity:
+              Tag: sun_9
+              UUID: 16279128272272660004
+              LightSource:
+                Type: Point
+                Ambient: [0.00951558072, 0, 0.323529422]
+                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+                Specular: [0.113042593, 0.0496203378, 0.289215684]
+                Direction: [0, -0.44721359, 0.89442718]
+                Position: [675, 0, 50]
+                CLQ: [1, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: sun_8
+              UUID: 16279128272272660005
+              LightSource:
+                Type: Point
+                Ambient: [0.00951558072, 0, 0.323529422]
+                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+                Specular: [0.113042593, 0.0496203378, 0.289215684]
+                Direction: [0, -0.44721359, 0.89442718]
+                Position: [600, 0, 50]
+                CLQ: [1, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: sun_7
+              UUID: 16279128272272660006
+              LightSource:
+                Type: Point
+                Ambient: [0.00951558072, 0, 0.323529422]
+                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+                Specular: [0.113042593, 0.0496203378, 0.289215684]
+                Direction: [0, -0.44721359, 0.89442718]
+                Position: [525, 0, 50]
+                CLQ: [1, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: sun_5
+              UUID: 16279128272272660008
+              LightSource:
+                Type: Point
+                Ambient: [0.00951558072, 0, 0.323529422]
+                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+                Specular: [0.113042593, 0.0496203378, 0.289215684]
+                Direction: [0, -0.44721359, 0.89442718]
+                Position: [375, 0, 50]
+                CLQ: [1, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: sun_6
+              UUID: 16279128272272660007
+              LightSource:
+                Type: Point
+                Ambient: [0.00951558072, 0, 0.323529422]
+                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+                Specular: [0.113042593, 0.0496203378, 0.289215684]
+                Direction: [0, -0.44721359, 0.89442718]
+                Position: [450, 0, 50]
+                CLQ: [1, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: sun_4
+              UUID: 16279128272272660009
+              LightSource:
+                Type: Point
+                Ambient: [0.00951558072, 0, 0.323529422]
+                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+                Specular: [0.113042593, 0.0496203378, 0.289215684]
+                Direction: [0, -0.44721359, 0.89442718]
+                Position: [300, 0, 50]
+                CLQ: [1, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: sun_3
+              UUID: 16279128272272660010
+              LightSource:
+                Type: Point
+                Ambient: [0.00951558072, 0, 0.323529422]
+                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+                Specular: [0.113042593, 0.0496203378, 0.289215684]
+                Direction: [0, -0.44721359, 0.89442718]
+                Position: [225, 0, 50]
+                CLQ: [1, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: sun_2
+              UUID: 1627912827227266011
+              LightSource:
+                Type: Point
+                Ambient: [0.00951558072, 0, 0.323529422]
+                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+                Specular: [0.113042593, 0.0496203378, 0.289215684]
+                Direction: [0, -0.44721359, 0.89442718]
+                Position: [150, 0, 50]
+                CLQ: [1, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: sun_12
+              UUID: 16279128272272660001
+              LightSource:
+                Type: Point
+                Ambient: [0.00951558072, 0, 0.323529422]
+                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+                Specular: [0.113042593, 0.0496203378, 0.289215684]
+                Direction: [0, -0.44721359, 0.89442718]
+                Position: [-150, 0, 50]
+                CLQ: [1, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: sun_11
+              UUID: 16279128272272660002
+              LightSource:
+                Type: Point
+                Ambient: [0.00951558072, 0, 0.323529422]
+                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+                Specular: [0.113042593, 0.0496203378, 0.289215684]
+                Direction: [0, -0.44721359, 0.89442718]
+                Position: [-75, 0, 50]
+                CLQ: [1, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: sun_1
+              UUID: 16279128272272660012
+              LightSource:
+                Type: Point
+                Ambient: [0.00951558072, 0, 0.323529422]
+                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+                Specular: [0.113042593, 0.0496203378, 0.289215684]
+                Direction: [0, -0.44721359, 0.89442718]
+                Position: [75, 0, 50]
+                CLQ: [1, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: sun_10
+              UUID: 16279128272272660003
+              LightSource:
+                Type: Point
+                Ambient: [0.00951558072, 0, 0.323529422]
+                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+                Specular: [0.113042593, 0.0496203378, 0.289215684]
+                Direction: [0, -0.44721359, 0.89442718]
+                Position: [750, 0, 50]
+                CLQ: [1, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: sun_0
+              UUID: 16279128272272660331
+              LightSource:
+                Type: Point
+                Ambient: [0.00951558072, 0, 0.323529422]
+                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
+                Specular: [0.113042593, 0.0496203378, 0.289215684]
+                Direction: [0, -0.44721359, 0.89442718]
+                Position: [0, 0, 50]
+                CLQ: [1, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: sun
+              UUID: 16279128272272660330
+              LightSource:
+                Type: Direction
+                Ambient: [0.5, 0.5, 0.5]
+                Diffuse: [1, 1, 1]
+                Specular: [0.5, 0.5, 0.5]
+                Direction: [0, -0.44721359, -0.89442718]
+                Position: [0, 0, 0]
+                CLQ: [0.5, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+    - Node:
+        Name: Objects
+        Childs:
+          - Entity:
+              Tag: Sam
+              UUID: 6382649478065643834
+              Transformation:
+                Translation: [150, 1, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [0.100000001, 0.100000001, 0.100000001]
+              RenderModel: 11801744926729819249
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Tree
+              UUID: 6322649478065237834
+              Transformation:
+                Translation: [-150, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              RenderModel: 18245352808254477256
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Raiden
+              UUID: 6384649478065237834
+              Transformation:
+                Translation: [225, 1, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [0.100000001, 0.100000001, 0.100000001]
+              RenderModel: 17398553512178907239
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Nissan
+              UUID: 6382249478065237834
+              Transformation:
+                Translation: [-300, 1, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 1407032741301600330
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Luffy
+              UUID: 6382649478065237252
+              Transformation:
+                Translation: [-75, 15, 0]
+                TranslationOffset: [0, 0, 10]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [3, 3, 3]
+              RenderModel: 16146890173748989942
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Car
+              UUID: 6382649478025237834
+              Transformation:
+                Translation: [-225, 1, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [-90, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 4289254078394118472
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Blade
+              UUID: 6382649478065237432
+              Transformation:
+                Translation: [75, 15, 0]
+                TranslationOffset: [0, -7, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [-90, 90, 0]
+                Scale: [2, 2, 2]
+                ScaleOffset: [10, 10, 10]
+              RenderModel: 4830874900694261513
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: Backpack
+              UUID: 6382649478065237886
+              Transformation:
+                Translation: [0, 15, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [5, 5, 5]
+                ScaleOffset: [1, 1, 1]
+              RenderModel: 654055540912474740
+              Shader: 3566111628970667214
+          - Entity:
+              Tag: surface
+              UUID: 6382649478065237843
+              Transformation:
+                Translation: [0, 0, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [1000, 1, 100]
+                ScaleOffset: [1, 1, 1]
+              RenderModel: 6557233926725796949
+              Shader: 3566111628970667214
