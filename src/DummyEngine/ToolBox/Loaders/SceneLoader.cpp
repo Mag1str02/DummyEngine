@@ -121,10 +121,8 @@ namespace DE
         }
     }
 
-    void SceneLoader::SaveEntity(YAML::Node& n_Entities, Entity entity)
+    void SceneLoader::SaveEntity(YAML::Node& n_Entity, Entity entity)
     {
-        YAML::Node n_Entity;
-
         SaveComponent<TagComponent>(n_Entity, entity);
         SaveComponent<IdComponent>(n_Entity, entity);
         SaveComponent<TransformComponent>(n_Entity, entity);
@@ -133,29 +131,6 @@ namespace DE
         SaveComponent<FPSCamera>(n_Entity, entity);
         SaveComponent<LightSource>(n_Entity, entity);
         SaveComponent<SkyBox>(n_Entity, entity);
-
-        n_Entities.push_back(n_Entity);
-    }
-    YAML::Node SceneLoader::SaveEntities(Ref<Scene> scene)
-    {
-        YAML::Node n_Entities;
-
-        std::vector<std::pair<TagComponent, Entity>> entities;
-
-        for (auto [uuid, entity_id] : scene->m_EntityByUUID)
-        {
-            auto entity = scene->GetByUUID(UUID(uuid));
-            entities.push_back({entity.GetComponent<TagComponent>(), entity});
-        }
-
-        std::sort(entities.begin(), entities.end(), [](const auto& a, const auto& b) { return a.first.tag < b.first.tag; });
-
-        int cnt = 0;
-        for (auto [id, entity] : entities)
-        {
-            SaveEntity(n_Entities, entity);
-        }
-        return n_Entities;
     }
     YAML::Node SceneLoader::SaveTextures()
     {
@@ -213,24 +188,47 @@ namespace DE
         }
         return n_Shaders;
     }
+    YAML::Node SceneLoader::SaveNode(Ref<SceneHierarchyNode> node)
+    {
+        YAML::Node res;
+        if (node->IsEntity())
+        {
+            YAML::Node entity = res["Entity"];
+            SaveEntity(entity, node->GetEntity());
+        }
+        else
+        {
+            res["Node"]["Name"] = node->GetName();
+
+            auto childs = res["Node"]["Childs"];
+            for (auto child : *node)
+            {
+                childs.push_back(SaveNode(child));
+            }
+        }
+        return res;
+    }
 
     void SceneLoader::Save(Ref<Scene> scene, const Path& path)
     {
-        YAML::Node    n_Root, n_Scene, n_Entities, n_Assets;
+        YAML::Node    n_Root, n_Scene, n_Assets;
         std::ofstream output_file;
 
         output_file.open(path);
         // TODO: Switch to throw.
         DE_ASSERT(output_file.is_open(), "Failed to open file to save scene.");
 
-        n_Root["Scene"]     = n_Scene;
-        n_Scene["Name"]     = scene->GetName();
-        n_Scene["Assets"]   = n_Assets;
-        n_Scene["Entities"] = SaveEntities(scene);
+        n_Root["Scene"]   = n_Scene;
+        n_Scene["Name"]   = scene->GetName();
+        n_Scene["Assets"] = n_Assets;
 
         n_Assets["Models"]   = SaveModels();
         n_Assets["Shaders"]  = SaveShaders();
         n_Assets["Textures"] = SaveTextures();
+        for (auto child : *scene->GetHierarchy())
+        {
+            n_Scene["Hierarchy"].push_back(SaveNode(child));
+        }
 
         output_file << n_Root;
     }

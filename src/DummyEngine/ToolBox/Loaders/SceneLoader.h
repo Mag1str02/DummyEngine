@@ -23,11 +23,11 @@ namespace DE
         template <typename ComponentType> static void LoadComponent(YAML::Node n_Component, Entity& entity);
 
         static void       SaveEntity(YAML::Node& n_Entities, Entity entity);
-        static YAML::Node SaveEntities(Ref<Scene> scene);
         static YAML::Node SaveModels();
         static YAML::Node SaveTextures();
         static YAML::Node SaveShaders();
         static YAML::Node SaveAssets();
+        static YAML::Node SaveNode(Ref<SceneHierarchyNode> node);
 
         static void   LoadShaders(YAML::Node n_Shaders);
         static void   LoadTextures(YAML::Node n_Textures);
