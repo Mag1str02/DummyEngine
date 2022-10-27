@@ -80,7 +80,7 @@ set(ENGINE_SOURCES
     ToolBox/Editors/TextureEditor.cpp
 )
 
-add_library(DummyEngineLib
+add_library(DummyEngineLib SHARED
    ${ENGINE_SOURCES}
 )
 
