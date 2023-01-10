@@ -2,6 +2,7 @@
 **/tempCodeRunnerFile.cpp
 
 .vscode/
+.cache/
 build/
 
 Sandbox/Logs/**

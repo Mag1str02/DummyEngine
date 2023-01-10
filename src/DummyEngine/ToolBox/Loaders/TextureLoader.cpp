@@ -11,9 +11,9 @@ namespace DE
     Ref<TextureData> TextureLoader::Load(const TextureLoadingProps& props)
     {
         unsigned char* stb_data;
-        int width, height, nrChannels;
-        TextureFormat format;
-        std::string format_s;
+        int            width, height, nrChannels;
+        TextureFormat  format;
+        std::string    format_s;
 
         m_State.m_CurrentData = CreateRef<TextureData>();
 
@@ -31,19 +31,19 @@ namespace DE
         {
             case 1:
                 format_s = "RED";
-                format = TextureFormat::RED;
+                format   = TextureFormat::RED;
                 break;
             case 3:
                 format_s = "RGB";
-                format = TextureFormat::RGB;
+                format   = TextureFormat::RGB;
                 break;
             case 4:
                 format_s = "RGBA";
-                format = TextureFormat::RGBA;
+                format   = TextureFormat::RGBA;
                 break;
             default:
                 format_s = "NONE";
-                format = TextureFormat::None;
+                format   = TextureFormat::None;
                 break;
         }
 
@@ -58,9 +58,11 @@ namespace DE
         switch (data->Format())
         {
             case TextureFormat::RGBA: {
-                stbi_write_png(path.string().c_str(), data->Width(), data->Height(), data->Channels(), data->Data(), data->Width() * data->Channels());
+                stbi_write_png(
+                    path.string().c_str(), data->Width(), data->Height(), data->Channels(), data->Data(), data->Width() * data->Channels());
                 break;
             }
+            default: break;
         }
     }
 }  // namespace DE

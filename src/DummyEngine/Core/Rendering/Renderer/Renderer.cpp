@@ -3,7 +3,7 @@
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
 #include "DummyEngine/ToolBox/Dev/Logger.h"
-#include <GLAD/glad.h>
+#include <glad/glad.h>
 
 namespace DE
 {

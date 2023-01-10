@@ -10,16 +10,16 @@ namespace DE
             case TextureFormat::RED: return true;
             case TextureFormat::RGB: return true;
             case TextureFormat::RGBA: return true;
+            default: return false;
         }
-        return false;
     }
     bool IsDepthFormat(TextureFormat format)
     {
         switch (format)
         {
             case TextureFormat::DepthStencil: return true;
+            default: return false;
         }
-        return false;
     }
 
     void GLFrameBuffer::Rebuild()

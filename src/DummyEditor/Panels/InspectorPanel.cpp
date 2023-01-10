@@ -22,8 +22,8 @@ namespace DE
             case ScriptFieldType::UI32: return ImGuiDataType_U32;
             case ScriptFieldType::I64: return ImGuiDataType_S64;
             case ScriptFieldType::UI64: return ImGuiDataType_U64;
+            default: return ImGuiDataType_COUNT;
         }
-        return ImGuiDataType_COUNT;
     }
     void InspectorPanel::View()
     {
@@ -42,7 +42,7 @@ namespace DE
                     {
                         if (field.GetType() != ScriptFieldType::None)
                         {
-                            ImGui::Text(field.GetName().c_str());
+                            ImGui::Text("%s", field.GetName().c_str());
                             ImGui::SameLine(100);
                             ImGui::SetNextItemWidth(-1);
                         }
@@ -62,6 +62,7 @@ namespace DE
                             case ScriptFieldType::Vec2: ImGui::DragFloat2(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
                             case ScriptFieldType::Vec3: ImGui::DragFloat3(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
                             case ScriptFieldType::Vec4: ImGui::DragFloat4(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
+                            default: break;
                         }
                     }
                 }
@@ -82,7 +83,7 @@ namespace DE
                 auto& component = m_Entity.GetComponent<IdComponent>();
                 if (ImGui::CollapsingHeader("UUID"))
                 {
-                    ImGui::Text(component.Hex().c_str());
+                    ImGui::Text("%s", component.Hex().c_str());
                 }
             }
             if (m_Entity.HasComponent<TransformComponent>())
@@ -114,7 +115,7 @@ namespace DE
                 if (ImGui::CollapsingHeader("Render Mesh"))
                 {
                     auto& render_mesh = m_Entity.GetComponent<RenderMeshComponent>();
-                    ImGui::Text(("Mesh UUID: " + render_mesh.id.Hex()).c_str());
+                    ImGui::Text("%s", ("Mesh UUID: " + render_mesh.id.Hex()).c_str());
                 }
             }
             if (m_Entity.HasComponent<FPSCamera>())

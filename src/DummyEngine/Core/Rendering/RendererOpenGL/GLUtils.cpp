@@ -11,8 +11,8 @@ namespace DE
             case TextureFormat::RGB: return GL_RGB;
             case TextureFormat::RGBA: return GL_RGBA;
             case TextureFormat::None: return GL_RED;
+            default: return GL_RED;
         }
-        return GL_RED;
     }
     GLenum TextureFormatToGLTextureInternalFormat(TextureFormat format)
     {
@@ -22,18 +22,17 @@ namespace DE
             case TextureFormat::RGB: return GL_RGB8;
             case TextureFormat::RGBA: return GL_RGBA8;
             case TextureFormat::DepthStencil: return GL_DEPTH24_STENCIL8;
+            default: return GL_R8;
         }
-        return GL_R8;
     }
 
     GLenum RenderPrimitiveToGL(RenderPrimitive primitive)
     {
         switch (primitive)
         {
-            case RenderPrimitive::None: return 0;
             case RenderPrimitive::Triangle: return GL_TRIANGLES;
             case RenderPrimitive::Point: return GL_POINTS;
+            default: return GL_TRIANGLES;
         }
-        return GL_TRIANGLES;
     }
 }  // namespace DE

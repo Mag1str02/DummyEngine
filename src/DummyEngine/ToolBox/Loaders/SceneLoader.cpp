@@ -62,8 +62,8 @@ namespace DE
             case ScriptFieldType::Vec2: return NodeVec2(field.Get<Vec2>());
             case ScriptFieldType::Vec3: return NodeVec3(field.Get<Vec3>());
             case ScriptFieldType::Vec4: return NodeVec4(field.Get<Vec4>());
+            default: return YAML::Node();
         }
-        return YAML::Node();
     }
 
     template <typename ComponentType> void SceneLoader::SaveComponent(YAML::Node& n_Entity, Entity entity)
@@ -279,7 +279,7 @@ namespace DE
         n_Assets["Models"]   = SaveModels();
         n_Assets["Shaders"]  = SaveShaders();
         n_Assets["Textures"] = SaveTextures();
-        n_Assets["Scripts"] = SaveScripts();
+        n_Assets["Scripts"]  = SaveScripts();
         for (auto child : *scene->GetHierarchy())
         {
             n_Scene["Hierarchy"].push_back(SaveNode(child));
@@ -335,6 +335,7 @@ namespace DE
             case ScriptFieldType::Vec2: field.Get<Vec2>() = GetVec2(node); break;
             case ScriptFieldType::Vec3: field.Get<Vec3>() = GetVec3(node); break;
             case ScriptFieldType::Vec4: field.Get<Vec4>() = GetVec4(node); break;
+            default: break;
         }
     }
 

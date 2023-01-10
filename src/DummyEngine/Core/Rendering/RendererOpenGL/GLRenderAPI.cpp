@@ -1,4 +1,4 @@
-#include <GLAD/glad.h>
+#include <glad/glad.h>
 
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLRenderAPI.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLUtils.h"
@@ -50,6 +50,7 @@ namespace DE
             case RenderSetting::MultiSampling: glEnable(GL_MULTISAMPLE);
             case RenderSetting::FaceCulling: glEnable(GL_CULL_FACE);
             case RenderSetting::DepthMask: glDepthMask(GL_TRUE);
+            default: break;
         }
     }
     void GLRenderAPI::Disable(RenderSetting setting)
@@ -60,6 +61,7 @@ namespace DE
             case RenderSetting::MultiSampling: glDisable(GL_MULTISAMPLE);
             case RenderSetting::FaceCulling: glDisable(GL_CULL_FACE);
             case RenderSetting::DepthMask: glDepthMask(GL_FALSE);
+            default: break;
         }
     }
 

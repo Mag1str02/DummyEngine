@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GLAD/glad.h>
+#include <glad/glad.h>
 
 #include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
 

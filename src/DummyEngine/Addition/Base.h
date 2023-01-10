@@ -25,6 +25,7 @@
 #include <filesystem>
 #include <set>
 #include <fstream>
+#include <functional>
 #include <chrono>
 #include <cstdint>
 #include <queue>
@@ -70,10 +71,6 @@ namespace DE
 }  // namespace DE
 namespace std
 {
-    template <> struct hash<std::filesystem::path>
-    {
-        std::size_t operator()(const std::filesystem::path& path) const { return hash_value(path); }
-    };
     struct pair_hash
     {
         template <class T1, class T2> std::size_t operator()(const std::pair<T1, T2>& p) const

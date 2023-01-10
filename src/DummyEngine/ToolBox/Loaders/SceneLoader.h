@@ -4,7 +4,7 @@
 #include "DummyEngine/Core/Scene/Components.h"
 #include "DummyEngine/Core/Scene/Scene.h"
 
-#include <YAML-CPP/yaml.h>
+#include <yaml-cpp/yaml.h>
 
 namespace DE
 {

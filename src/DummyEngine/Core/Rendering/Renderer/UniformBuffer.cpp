@@ -1,5 +1,5 @@
 #include "DummyEngine/Core/Rendering/Renderer/UniformBuffer.h"
-#include "DummyEngine/Core/Rendering/RendererOpenGl/GLUniformBuffer.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLUniformBuffer.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
 namespace DE

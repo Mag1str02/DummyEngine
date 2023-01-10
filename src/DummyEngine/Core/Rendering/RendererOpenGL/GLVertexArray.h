@@ -1,5 +1,5 @@
 #pragma once
-#include <GLAD/glad.h>
+#include <glad/glad.h>
 
 #include "DummyEngine/Addition/Base.h"
 #include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"

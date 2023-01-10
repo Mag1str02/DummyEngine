@@ -73,6 +73,7 @@ namespace DE
                     }
                     break;
                 }
+                default: break;
             }
         }
         m_VertexBuffers.push_back(vertex_buffer);

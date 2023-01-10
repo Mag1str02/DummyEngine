@@ -97,6 +97,7 @@ namespace DE
                             offset += element.size;
                             break;
                         }
+                        default: break;
                     }
                 }
                 if (offset % 16 != 0)
@@ -106,6 +107,7 @@ namespace DE
                 m_Stride = offset;
                 break;
             }
+            default: break;
         }
     }
 

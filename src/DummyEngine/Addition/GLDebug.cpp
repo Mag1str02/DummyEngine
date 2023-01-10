@@ -1,7 +1,7 @@
 #include "DummyEngine/Addition/GLDebug.h"
 
 #include <iostream>
-#include <GLAD/glad.h>
+#include <glad/glad.h>
 
 namespace DE
 {
