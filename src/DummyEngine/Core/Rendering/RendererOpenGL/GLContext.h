@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Rendering/Renderer/Context.h"
+#include "DummyEngine/Core/Rendering/Renderer/Context.h"
 
 struct GLFWwindow;
 

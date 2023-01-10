@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Addition/Base.h"
-#include "Core/Application/Event.h"
+#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Core/Application/Event.h"
 
 namespace DE
 {

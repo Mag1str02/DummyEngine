@@ -2,8 +2,8 @@
 
 #include <GLAD/glad.h>
 
-#include "Addition/Base.h"
-#include "Core/Rendering/Renderer/FrameBuffer.h"
+#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
 
 namespace DE
 {

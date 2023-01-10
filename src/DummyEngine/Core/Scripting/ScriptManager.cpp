@@ -1,5 +1,5 @@
-#include "Core/Scripting/ScriptManager.h"
-#include "Core/Scripting/Compiler.h"
+#include "DummyEngine/Core/Scripting/ScriptManager.h"
+#include "DummyEngine/Core/Scripting/Compiler.h"
 
 namespace DE
 {

@@ -1,4 +1,4 @@
-#include "Core/Rendering/RendererOpenGL/GLVertexArray.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLVertexArray.h"
 
 namespace DE
 {

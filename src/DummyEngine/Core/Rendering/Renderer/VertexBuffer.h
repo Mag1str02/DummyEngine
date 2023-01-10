@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Addition/Base.h"
-#include "Core/Rendering/Renderer/LocalBuffer.h"
+#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Core/Rendering/Renderer/LocalBuffer.h"
 
 namespace DE
 {

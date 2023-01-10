@@ -1,4 +1,4 @@
-#include "Core/Rendering/RendererOpenGL/GLContext.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLContext.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

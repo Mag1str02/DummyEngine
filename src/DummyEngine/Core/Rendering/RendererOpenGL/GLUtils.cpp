@@ -1,5 +1,5 @@
-#include "Core/Rendering/RendererOpenGL/GLUtils.h"
-#include "Core/Rendering/Renderer/RenderAPI.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLUtils.h"
+#include "DummyEngine/Core/Rendering/Renderer/RenderAPI.h"
 
 namespace DE
 {

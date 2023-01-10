@@ -1,5 +1,5 @@
-#include "Core/Scene/SceneHierarchy.h"
-#include "Core/Scene/Components.h"
+#include "DummyEngine/Core/Scene/SceneHierarchy.h"
+#include "DummyEngine/Core/Scene/Components.h"
 
 namespace DE
 {

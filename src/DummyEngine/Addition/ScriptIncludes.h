@@ -1,23 +1,23 @@
 #pragma once
 
-#include "Addition/Base.h"
+#include "DummyEngine/Addition/Base.h"
 
-#include "Core/ECS/Entity.hpp"
-#include "Core/ECS/SystemManager.hpp"
+#include "DummyEngine/Core/ECS/Entity.hpp"
+#include "DummyEngine/Core/ECS/SystemManager.hpp"
 
-#include "Core/Scene/Scene.h"
-#include "Core/Scene/Components.h"
+#include "DummyEngine/Core/Scene/Scene.h"
+#include "DummyEngine/Core/Scene/Components.h"
 
-#include "Core/Objects/Cameras/FPSCamera.h"
-#include "Core/Objects/LightSources/LightSource.h"
+#include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
+#include "DummyEngine/Core/Objects/LightSources/LightSource.h"
 
-#include "Core/Rendering/Renderer/FrameBuffer.h"
-#include "Core/Rendering/Renderer/LocalBuffer.h"
-#include "Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
+#include "DummyEngine/Core/Rendering/Renderer/LocalBuffer.h"
+#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
-#include "Core/Scripting/ScriptInstance.h"
-#include "Core/Application/Input.h"
+#include "DummyEngine/Core/Scripting/ScriptInstance.h"
+#include "DummyEngine/Core/Application/Input.h"
 
-#include "ToolBox/Dev/Profiler.h"
-#include "ToolBox/Dev/Logger.h"
-#include "ToolBox/Editors/TextureEditor.h"
+#include "DummyEngine/ToolBox/Dev/Profiler.h"
+#include "DummyEngine/ToolBox/Dev/Logger.h"
+#include "DummyEngine/ToolBox/Editors/TextureEditor.h"

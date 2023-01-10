@@ -1,8 +1,8 @@
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <windows.h>
 
-#include "Addition/FileDialogs.h"
-#include "Core/Application/Application.h"
+#include "DummyEngine/Addition/FileDialogs.h"
+#include "DummyEngine/Core/Application/Application.h"
 
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>

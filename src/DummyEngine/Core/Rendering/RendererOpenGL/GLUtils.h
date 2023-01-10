@@ -1,7 +1,7 @@
 #pragma once
 
 #include <GLAD/glad.h>
-#include "Core/ResourceManaging/RawData.h"
+#include "DummyEngine/Core/ResourceManaging/RawData.h"
 
 namespace DE
 {

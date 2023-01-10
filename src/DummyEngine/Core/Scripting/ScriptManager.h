@@ -1,6 +1,6 @@
-#include "Addition/Base.h"
-#include "Core/ResourceManaging/Assets.h"
-#include "Core/Scripting/ScriptInstance.h"
+#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Core/ResourceManaging/Assets.h"
+#include "DummyEngine/Core/Scripting/ScriptInstance.h"
 
 namespace DE
 {

@@ -1,8 +1,8 @@
 #include <assimp/postprocess.h>
 
-#include "ToolBox/Loaders/ModelLoader.h"
-#include "ToolBox/Dev/Logger.h"
-#include "ToolBox/Loaders/TextureLoader.h"
+#include "DummyEngine/ToolBox/Loaders/ModelLoader.h"
+#include "DummyEngine/ToolBox/Dev/Logger.h"
+#include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
 
 namespace DE
 {

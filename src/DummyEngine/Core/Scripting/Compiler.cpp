@@ -1,4 +1,4 @@
-#include "Core/Scripting/Compiler.h"
+#include "DummyEngine/Core/Scripting/Compiler.h"
 
 namespace DE
 {

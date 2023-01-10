@@ -1,4 +1,4 @@
-#include "Core/Scripting/ScriptInstance.h"
+#include "DummyEngine/Core/Scripting/ScriptInstance.h"
 
 namespace DE
 {

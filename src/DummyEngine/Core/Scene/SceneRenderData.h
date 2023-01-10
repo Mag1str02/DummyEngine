@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Addition/Base.h"
-#include "Core/Scene/Scene.h"
-#include "Core/ECS/Entity.hpp"
-#include "Core/ECS/ECSStorage.hpp"
-#include "Core/Rendering/Renderer/Shader.h"
-#include "Core/Rendering/Renderer/FrameBuffer.h"
-#include "Core/Rendering/Renderer/UniformBuffer.h"
+#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Core/Scene/Scene.h"
+#include "DummyEngine/Core/ECS/Entity.hpp"
+#include "DummyEngine/Core/ECS/ECSStorage.hpp"
+#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
+#include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
+#include "DummyEngine/Core/Rendering/Renderer/UniformBuffer.h"
 
 namespace DE
 {

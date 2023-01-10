@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Addition/Base.h"
-#include "Core/ResourceManaging/Assets.h"
-#include "Core/ResourceManaging/RawData.h"
+#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Core/ResourceManaging/Assets.h"
+#include "DummyEngine/Core/ResourceManaging/RawData.h"
 
 namespace DE
 {

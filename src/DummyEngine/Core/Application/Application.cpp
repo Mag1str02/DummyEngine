@@ -1,5 +1,5 @@
-#include "Core/Application/Application.h"
-#include "Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Core/Application/Application.h"
+#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
 namespace DE
 {

@@ -1,4 +1,4 @@
-#include "Core/Objects/LightSources/LightSource.h"
+#include "DummyEngine/Core/Objects/LightSources/LightSource.h"
 
 namespace DE
 {

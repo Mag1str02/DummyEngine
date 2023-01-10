@@ -2,7 +2,7 @@
 
 #include <GLAD/glad.h>
 
-#include "Core/Rendering/Renderer/CubeMap.h"
+#include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
 
 namespace DE
 {

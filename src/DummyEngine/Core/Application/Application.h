@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Core/Application/Window.h"
-#include "Core/Application/Input.h"
-#include "Core/Application/ImGuiLayer.h"
+#include "DummyEngine/Core/Application/Window.h"
+#include "DummyEngine/Core/Application/Input.h"
+#include "DummyEngine/Core/Application/ImGuiLayer.h"
 
 namespace DE
 {

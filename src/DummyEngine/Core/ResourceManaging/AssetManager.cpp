@@ -1,4 +1,4 @@
-#include "Core/ResourceManaging/AssetManager.h"
+#include "DummyEngine/Core/ResourceManaging/AssetManager.h"
 
 namespace DE
 {

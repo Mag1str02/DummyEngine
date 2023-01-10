@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Addition/Base.h"
-#include "Core/ECS/Entity.hpp"
+#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Core/ECS/Entity.hpp"
 
 namespace DE
 {

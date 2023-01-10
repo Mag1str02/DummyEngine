@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Addition/Base.h"
-#include "Core/ResourceManaging/Assets.h"
-#include "Core/Rendering/Renderer/Shader.h"
-#include "Core/Rendering/Renderer/CubeMap.h"
+#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Core/ResourceManaging/Assets.h"
+#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
+#include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
 
 namespace DE
 {

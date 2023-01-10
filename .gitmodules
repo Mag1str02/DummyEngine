@@ -7,14 +7,11 @@
 [submodule "src/DummyEngine/Libs/STB_IMAGE"]
 	path = src/DummyEngine/Libs/STB_IMAGE
 	url = https://github.com/nothings/stb
-[submodule "src/DummyEngine/Libs/GLAD"]
-	path = src/DummyEngine/Libs/GLAD
-	url = https://github.com/Dav1dde/glad
 [submodule "src/DummyEngine/Libs/YAML"]
 	path = src/DummyEngine/Libs/YAML
 	url = https://github.com/jbeder/yaml-cpp
 [submodule "src/DummyEngine/Libs/IMGUI/ImGui"]
-	path = src/DummyEngine/Libs/IMGUI/ImGui
+	path = src/DummyEngine/Libs/ImGui
 	url = https://github.com/ocornut/imgui
 [submodule "src/DummyEngine/Libs/ASSIMP"]
 	path = src/DummyEngine/Libs/ASSIMP

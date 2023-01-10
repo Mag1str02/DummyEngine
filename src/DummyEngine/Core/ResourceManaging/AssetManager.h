@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Addition/Base.h"
-#include "Core/ResourceManaging/Assets.h"
+#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Core/ResourceManaging/Assets.h"
 
 namespace DE
 {

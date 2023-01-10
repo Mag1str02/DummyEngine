@@ -1,5 +1,5 @@
-#include "Core/Rendering/RendererOpenGL/GLFrameBuffer.h"
-#include "Core/Rendering/RendererOpenGL/GLTexture.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLFrameBuffer.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLTexture.h"
 
 namespace DE
 {

@@ -1,4 +1,4 @@
-#include "ToolBox/Editors/TextureEditor.h"
+#include "DummyEngine/ToolBox/Editors/TextureEditor.h"
 
 namespace DE
 {

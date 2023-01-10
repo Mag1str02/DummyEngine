@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Addition/Base.h"
-#include "Core/Rendering/Renderer/BufferLayout.h"
-#include "Core/Rendering/Renderer/LocalBuffer.h"
+#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Core/Rendering/Renderer/BufferLayout.h"
+#include "DummyEngine/Core/Rendering/Renderer/LocalBuffer.h"
 
 namespace DE
 {

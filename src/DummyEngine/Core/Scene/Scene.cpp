@@ -1,12 +1,12 @@
-#include "Core/Scene/Scene.h"
-#include "Core/ECS/Entity.hpp"
-#include "Core/Scene/Components.h"
-#include "Core/Objects/LightSources/LightSource.h"
-#include "Core/Rendering/Renderer/Renderer.h"
-#include "Core/ResourceManaging/ResourceManager.h"
-#include "Core/Scene/SceneRenderData.h"
-#include "Core/Scene/SceneHierarchy.h"
-#include "Core/Scripting/ScriptInstance.h"
+#include "DummyEngine/Core/Scene/Scene.h"
+#include "DummyEngine/Core/ECS/Entity.hpp"
+#include "DummyEngine/Core/Scene/Components.h"
+#include "DummyEngine/Core/Objects/LightSources/LightSource.h"
+#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
+#include "DummyEngine/Core/Scene/SceneRenderData.h"
+#include "DummyEngine/Core/Scene/SceneHierarchy.h"
+#include "DummyEngine/Core/Scripting/ScriptInstance.h"
 
 namespace DE
 {

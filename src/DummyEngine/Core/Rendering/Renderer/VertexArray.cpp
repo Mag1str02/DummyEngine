@@ -1,6 +1,6 @@
-#include "Core/Rendering/Renderer/VertexArray.h"
-#include "Core/Rendering/Renderer/Renderer.h"
-#include "Core/Rendering/RendererOpenGL/GLVertexArray.h"
+#include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
+#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLVertexArray.h"
 
 namespace DE
 {

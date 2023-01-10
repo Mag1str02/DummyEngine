@@ -32,17 +32,17 @@
 #include <random>
 #include <cxxabi.h>
 
-#include "Addition/Conversions.h"
-#include "Addition/Types.h"
-#include "Addition/Config.h"
-#include "Addition/Assert.h"
-#include "Addition/UUID.h"
-#include "Addition/Random.h"
-#include "Addition/FileDialogs.h"
-#include "Addition/GLDebug.h"
+#include "DummyEngine/Addition/Conversions.h"
+#include "DummyEngine/Addition/Types.h"
+#include "DummyEngine/Addition/Config.h"
+#include "DummyEngine/Addition/Assert.h"
+#include "DummyEngine/Addition/UUID.h"
+#include "DummyEngine/Addition/Random.h"
+#include "DummyEngine/Addition/FileDialogs.h"
+#include "DummyEngine/Addition/GLDebug.h"
 
-#include "ToolBox/Dev/Logger.h"
-#include "ToolBox/Dev/Profiler.h"
+#include "DummyEngine/ToolBox/Dev/Logger.h"
+#include "DummyEngine/ToolBox/Dev/Profiler.h"
 
 namespace DE
 {

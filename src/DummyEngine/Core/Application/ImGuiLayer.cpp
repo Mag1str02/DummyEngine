@@ -5,8 +5,8 @@
 #include <ImGui/backends/imgui_impl_glfw.h>
 #include <ImGui/backends/imgui_impl_opengl3.h>
 
-#include "Core/Application/ImGuiLayer.h"
-#include "Core/Application/Application.h"
+#include "DummyEngine/Core/Application/ImGuiLayer.h"
+#include "DummyEngine/Core/Application/Application.h"
 
 namespace DE
 {

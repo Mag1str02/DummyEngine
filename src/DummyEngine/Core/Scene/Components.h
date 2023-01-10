@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Addition/Base.h"
-#include "Core/Rendering/Renderer/CubeMap.h"
-#include "Core/Rendering/Renderer/Shader.h"
+#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
+#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 
 namespace DE
 {

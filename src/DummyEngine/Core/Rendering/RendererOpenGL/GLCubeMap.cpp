@@ -1,6 +1,6 @@
-#include "Core/Rendering/RendererOpenGL/GLCubeMap.h"
-#include "Core/Rendering/RendererOpenGL/GLUtils.h"
-#include "ToolBox/Editors/TextureEditor.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLCubeMap.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLUtils.h"
+#include "DummyEngine/ToolBox/Editors/TextureEditor.h"
 
 namespace DE
 {

@@ -3,7 +3,7 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 
-#include "Core/ResourceManaging/Assets.h"
+#include "DummyEngine/Core/ResourceManaging/Assets.h"
 
 namespace DE
 {

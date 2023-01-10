@@ -1,6 +1,6 @@
-#include "Core/Rendering/Renderer/CubeMap.h"
-#include "Core/Rendering/Renderer/Renderer.h"
-#include "Core/Rendering/RendererOpenGL/GLCubeMap.h"
+#include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
+#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLCubeMap.h"
 
 namespace DE
 {

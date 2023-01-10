@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Addition/Base.h"
-#include "Core/Scene/Components.h"
-#include "Core/Scene/Scene.h"
+#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Core/Scene/Components.h"
+#include "DummyEngine/Core/Scene/Scene.h"
 
 #include <YAML-CPP/yaml.h>
 

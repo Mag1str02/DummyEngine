@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/ECS/ECSStorage.hpp"
-#include "Core/Objects/Cameras/FPSCamera.h"
+#include "DummyEngine/Core/ECS/ECSStorage.hpp"
+#include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
 
 namespace DE
 {

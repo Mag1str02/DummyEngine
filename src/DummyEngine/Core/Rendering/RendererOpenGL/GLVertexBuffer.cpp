@@ -1,4 +1,4 @@
-#include "Core/Rendering/RendererOpenGL/GLVertexBuffer.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLVertexBuffer.h"
 
 namespace DE
 {

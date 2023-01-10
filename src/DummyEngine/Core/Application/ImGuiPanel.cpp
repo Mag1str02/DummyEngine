@@ -1,6 +1,6 @@
 #include <ImGui/imgui.h>
 
-#include "Core/Application/ImGuiPanel.h"
+#include "DummyEngine/Core/Application/ImGuiPanel.h"
 
 namespace DE
 {

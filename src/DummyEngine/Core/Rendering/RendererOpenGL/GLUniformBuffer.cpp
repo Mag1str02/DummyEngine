@@ -1,4 +1,4 @@
-#include "Core/Rendering/RendererOpenGL/GLUniformBuffer.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLUniformBuffer.h"
 
 namespace DE
 {

@@ -1,8 +1,8 @@
-#include "Core/Rendering/Renderer/Renderer.h"
-#include "Core/Rendering/RendererOpenGL/GLRenderAPI.h"
-#include "Core/ResourceManaging/ResourceManager.h"
-#include "ToolBox/Loaders/TextureLoader.h"
-#include "ToolBox/Dev/Logger.h"
+#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLRenderAPI.h"
+#include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
+#include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
+#include "DummyEngine/ToolBox/Dev/Logger.h"
 #include <GLAD/glad.h>
 
 namespace DE

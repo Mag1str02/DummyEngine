@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Addition/Base.h"
+#include "DummyEngine/Addition/Base.h"
 
-#include "Core/ECS/ComponentManager.hpp"
-#include "Core/ECS/EntityManager.hpp"
-#include "Core/ECS/SystemManager.hpp"
+#include "DummyEngine/Core/ECS/ComponentManager.hpp"
+#include "DummyEngine/Core/ECS/EntityManager.hpp"
+#include "DummyEngine/Core/ECS/SystemManager.hpp"
 
 namespace DE
 {

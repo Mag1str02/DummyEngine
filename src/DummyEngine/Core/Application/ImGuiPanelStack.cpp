@@ -1,4 +1,4 @@
-#include "Core/Application/ImGuiPanelStack.h"
+#include "DummyEngine/Core/Application/ImGuiPanelStack.h"
 
 namespace DE
 {

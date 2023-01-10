@@ -1,6 +1,6 @@
-#include "Core/Rendering/Renderer/FrameBuffer.h"
-#include "Core/Rendering/Renderer/Renderer.h"
-#include "Core/Rendering/RendererOpenGL/GLFrameBuffer.h"
+#include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
+#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLFrameBuffer.h"
 
 namespace DE
 {

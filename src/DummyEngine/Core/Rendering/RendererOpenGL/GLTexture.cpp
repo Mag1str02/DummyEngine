@@ -1,6 +1,6 @@
-#include "Core/Rendering/RendererOpenGL/GLTexture.h"
-#include "Core/Rendering/RendererOpenGL/GLUtils.h"
-#include "ToolBox/Dev/Logger.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLTexture.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLUtils.h"
+#include "DummyEngine/ToolBox/Dev/Logger.h"
 
 namespace DE
 {

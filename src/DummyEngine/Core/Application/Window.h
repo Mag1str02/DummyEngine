@@ -3,9 +3,9 @@
 #include <GLAD/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Core/Rendering/Renderer/Context.h"
-#include "Core/Application/Event.h"
-#include "Addition/Base.h"
+#include "DummyEngine/Core/Rendering/Renderer/Context.h"
+#include "DummyEngine/Core/Application/Event.h"
+#include "DummyEngine/Addition/Base.h"
 
 namespace DE
 {

@@ -1,6 +1,6 @@
-#include "Core/Rendering/Renderer/Context.h"
-#include "Core/Rendering/Renderer/Renderer.h"
-#include "Core/Rendering/RendererOpenGL/GLContext.h"
+#include "DummyEngine/Core/Rendering/Renderer/Context.h"
+#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLContext.h"
 
 namespace DE
 {

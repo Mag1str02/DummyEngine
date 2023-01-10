@@ -2,7 +2,7 @@
 
 #include <GLAD/glad.h>
 
-#include "Core/Rendering/Renderer/UniformBuffer.h"
+#include "DummyEngine/Core/Rendering/Renderer/UniformBuffer.h"
 
 namespace DE
 {

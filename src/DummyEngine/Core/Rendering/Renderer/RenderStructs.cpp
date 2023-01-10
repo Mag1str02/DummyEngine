@@ -1,5 +1,5 @@
-#include "Core/Rendering/Renderer/RenderStructs.h"
-#include "Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
+#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
 namespace DE
 {
