@@ -1,7 +1,7 @@
 #pragma once
 #include <glad/glad.h>
 
-#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
 
 namespace DE

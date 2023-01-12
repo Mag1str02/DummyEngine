@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "DummyEngine/Addition/Types.h"
+#include "DummyEngine/Utils/Types.h"
 
 namespace DE
 {

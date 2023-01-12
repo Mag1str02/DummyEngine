@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "DummyEngine/Addition/Config.h"
-#include "DummyEngine/Addition/Assert.h"
+#include "DummyEngine/Utils/Config.h"
+#include "DummyEngine/Utils/Assert.h"
 
 namespace DE
 {

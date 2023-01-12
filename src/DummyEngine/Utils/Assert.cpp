@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "DummyEngine/Addition/Assert.h"
+#include "DummyEngine/Utils/Assert.h"
 
 namespace DE
 {

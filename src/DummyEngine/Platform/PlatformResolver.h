@@ -1,9 +1,10 @@
+#pragma once
 
 #ifdef _WIN32
 	#ifdef _WIN64
 		#define DE_PLATFORM_WINDOWS
 	#else
-		#error "x86 not supported."
+		#error "Win32 not supported."
 	#endif
 #elif defined(__APPLE__) || defined(__MACH__)
 	#error "Apple not supported."

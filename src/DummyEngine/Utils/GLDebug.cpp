@@ -1,4 +1,4 @@
-#include "DummyEngine/Addition/GLDebug.h"
+#include "DummyEngine/Utils/GLDebug.h"
 
 #include <iostream>
 #include <glad/glad.h>

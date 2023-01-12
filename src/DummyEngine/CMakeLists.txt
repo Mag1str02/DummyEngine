@@ -3,14 +3,13 @@ set(EXTERNAL_LIBS_DIR libs)
 set(DE_LIB_SOURCE_DIR .) 
 
 set(ENGINE_SOURCES  
-    Addition/GLDebug.cpp
-    Addition/Assert.cpp
-    Addition/Config.cpp
-    Addition/Conversions.cpp
-    Addition/FileDialogs.cpp
-    Addition/UUID.cpp
-    Addition/Random.cpp
-    Addition/Timer.cpp
+    Utils/GLDebug.cpp
+    Utils/Assert.cpp
+    Utils/Config.cpp
+    Utils/Conversions.cpp
+    Utils/UUID.cpp
+    Utils/Random.cpp
+    Utils/Timer.cpp
 
     Core/Application/Application.cpp
     Core/Application/ImGuiLayer.cpp
@@ -73,6 +72,8 @@ set(ENGINE_SOURCES
     ToolBox/Loaders/TextureLoader.cpp 
     ToolBox/Loaders/SceneLoader.cpp
     ToolBox/Editors/TextureEditor.cpp
+
+    Platform/PlatformSpecific.cpp
 )
 
 add_subdirectory(Libs)

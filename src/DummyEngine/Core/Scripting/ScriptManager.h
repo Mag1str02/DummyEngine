@@ -1,4 +1,4 @@
-#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/ResourceManaging/Assets.h"
 #include "DummyEngine/Core/Scripting/ScriptInstance.h"
 
@@ -16,7 +16,7 @@ namespace DE
 
         bool Valid() const;
         Ref<ScriptInstance> CreateScriptInstance() const;
-
+ 
     private:
         bool DLLAlreadyExists(const std::string& path_to_dll) const;
 

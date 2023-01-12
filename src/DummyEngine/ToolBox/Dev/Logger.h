@@ -7,7 +7,7 @@
 #include <set>
 #include <fstream>
 
-#include "DummyEngine/Addition/Types.h"
+#include "DummyEngine/Utils/Types.h"
 
 namespace DE
 {

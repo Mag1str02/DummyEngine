@@ -1,13 +1,13 @@
 #pragma once
 
-#include "DummyEngine/Addition/Types.h"
+#include "DummyEngine/Utils/Types.h"
 
 namespace DE
 {
     class FileDialogs
     {
     public:
-        static Path OpenFile(const char* filter);
+        static Path OpenFile(const std::string& description, const std::string& filter);
         static Path SaveFile(const char* filter);
     };
 

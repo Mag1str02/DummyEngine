@@ -33,17 +33,18 @@
 #include <random>
 #include <cxxabi.h>
 
-#include "DummyEngine/Addition/Conversions.h"
-#include "DummyEngine/Addition/Types.h"
-#include "DummyEngine/Addition/Config.h"
-#include "DummyEngine/Addition/Assert.h"
-#include "DummyEngine/Addition/UUID.h"
-#include "DummyEngine/Addition/Random.h"
-#include "DummyEngine/Addition/FileDialogs.h"
-#include "DummyEngine/Addition/GLDebug.h"
+#include "DummyEngine/Utils/Conversions.h"
+#include "DummyEngine/Utils/Types.h"
+#include "DummyEngine/Utils/Config.h"
+#include "DummyEngine/Utils/Assert.h"
+#include "DummyEngine/Utils/UUID.h"
+#include "DummyEngine/Utils/Random.h"
+#include "DummyEngine/Utils/FileDialogs.h"
+#include "DummyEngine/Utils/GLDebug.h"
 
 #include "DummyEngine/ToolBox/Dev/Logger.h"
 #include "DummyEngine/ToolBox/Dev/Profiler.h"
+#include "DummyEngine/Platform/PlatformResolver.h"
 
 namespace DE
 {

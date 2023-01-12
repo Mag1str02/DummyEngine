@@ -1,36 +1,36 @@
 cmake_minimum_required(VERSION 3.0.0)
 set(CMAKE_CXX_STANDARD 20)
 
-add_subdirectory(assimp)
-add_subdirectory(glfw)
-add_subdirectory(glad)
-add_subdirectory(yaml)
+add_subdirectory(ASSIMP)
+add_subdirectory(GLFW)
+add_subdirectory(GLAD)
+add_subdirectory(YAML)
 
 
 
 set(IMGUI_INCLUDES
-	imgui/imgui.h
-	imgui/backends/imgui_impl_glfw.h
-	imgui/backends/imgui_impl_opengl3.h
-	imgui/misc/cpp/imgui_stdlib.h
+	ImGui/imgui.h
+	ImGui/backends/imgui_impl_glfw.h
+	ImGui/backends/imgui_impl_opengl3.h
+	ImGui/misc/cpp/imgui_stdlib.h
 )
 set(IMGUI_SOURCES
-	imgui/imgui.cpp
-	imgui/backends/imgui_impl_glfw.cpp
-	imgui/backends/imgui_impl_opengl3.cpp
-	imgui/imgui_demo.cpp
-	imgui/imgui_tables.cpp
-	imgui/imgui_widgets.cpp
-	imgui/imgui_draw.cpp
-	imgui/misc/cpp/imgui_stdlib.cpp
+	ImGui/imgui.cpp
+	ImGui/backends/imgui_impl_glfw.cpp
+	ImGui/backends/imgui_impl_opengl3.cpp
+	ImGui/imgui_demo.cpp
+	ImGui/imgui_tables.cpp
+	ImGui/imgui_widgets.cpp
+	ImGui/imgui_draw.cpp
+	ImGui/misc/cpp/imgui_stdlib.cpp
 )
 add_library(imgui
    ${IMGUI_SOURCES}
    ${IMGUI_INCLUDES}
 )
 target_include_directories(imgui
-    PUBLIC imgui
-    PUBLIC imgui/backends
+    PUBLIC ImGui
+    PUBLIC ImGui/backends
 )
 target_link_libraries(imgui PUBLIC glad glfw)
 
@@ -38,12 +38,12 @@ target_link_libraries(imgui PUBLIC glad glfw)
 
 add_library(Dependencies STBImplementation.cpp)
 target_include_directories(Dependencies
-    PUBLIC glfw/include
-    PUBLIC glad/include
-    PUBLIC glm
-    PUBLIC assimp/include
-    PUBLIC stb_image   
-    PUBLIC yaml/include
+    PUBLIC GLFW/include
+    PUBLIC GLAD/include
+    PUBLIC GLM
+    PUBLIC ASSIMP/include
+    PUBLIC STB_IMAGE
+    PUBLIC YAML/include
     PUBLIC .
 )
 target_link_libraries(Dependencies

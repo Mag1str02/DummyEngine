@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DummyEngine/Addition/Base.h"
+#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/ResourceManaging/Assets.h"
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 #include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
