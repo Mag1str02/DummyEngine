@@ -2,14 +2,13 @@
 
 namespace DE
 {
-    class CompilerImpl;
-
     class Compiler
     {
     public:
-        static int Compile(const Path& source, const Path& destination, const std::string filename_without_extension);
+        static int Compile(const Path& path_to_source);
 
     private:
-        static Scope<CompilerImpl> m_Impl;
+        static std::string GenCompileCommand(const Path& path_to_source);
+        static Path        PathToDLL(const Path& path_to_source);
     };
 }  // namespace DE

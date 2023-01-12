@@ -160,7 +160,7 @@ namespace DE
 
     void EditorLayer::OpenSceneDialog()
     {
-        Path path = FileDialogs::OpenFile("Dummy Engine Scene (*.yml)\0*.yml\0\0");
+        Path path = FileSystem::OpenFileDialog("Dummy Engine Scene (*.yml)", "*.yml");
         if (path != Path())
         {
             OpenScene(path);
@@ -168,7 +168,7 @@ namespace DE
     }
     void EditorLayer::SaveSceneDialog()
     {
-        Path path = FileDialogs::SaveFile("Dummy Engine Scene (*.yml)\0*.yml\0\0");
+        Path path = FileSystem::SaveFileDialog("Dummy Engine Scene (*.yml)", "*.yml");
         if (path != Path())
         {
             SaveScene(path);
