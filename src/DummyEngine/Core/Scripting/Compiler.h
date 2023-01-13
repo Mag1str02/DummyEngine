@@ -2,13 +2,20 @@
 
 namespace DE
 {
-    class Compiler
+    class CompilerImpl;
+
+    class Compiler : public Singleton<Compiler>
     {
     public:
-        static int Compile(const Path& path_to_source);
+        static void StartUp();
+        static void ShutDown();
+
+        static bool Compile(const Path& source, const Path& destination);
+        static bool Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name);
+        static bool AddIncludeDir(const Path& source);
+        static void DeleteIncludeDir(const Path& source);
 
     private:
-        static std::string GenCompileCommand(const Path& path_to_source);
-        static Path        PathToDLL(const Path& path_to_source);
+        static Scope<CompilerImpl> m_Impl;
     };
 }  // namespace DE

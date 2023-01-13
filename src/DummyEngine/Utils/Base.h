@@ -41,6 +41,7 @@
 #include "DummyEngine/Utils/Random.h"
 #include "DummyEngine/Utils/FileSystem.h"
 #include "DummyEngine/Utils/GLDebug.h"
+#include "DummyEngine/Utils/Singleton.h"
 
 #include "DummyEngine/ToolBox/Dev/Logger.h"
 #include "DummyEngine/ToolBox/Dev/Profiler.h"

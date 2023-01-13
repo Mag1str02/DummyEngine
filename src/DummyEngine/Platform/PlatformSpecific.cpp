@@ -2,6 +2,7 @@
 
 #ifdef DE_PLATFORM_WINDOWS
 #include "DummyEngine/Platform/Windows/Utils/FileSystem.cpp"
+#include "DummyEngine/Platform/Windows/Core/Scripting/Compiler.cpp"
 #endif
 
 #ifdef DE_PLATFORM_LINUX
