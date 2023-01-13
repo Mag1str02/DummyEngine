@@ -16,3 +16,6 @@
 [submodule "src/DummyEngine/Libs/ASSIMP"]
 	path = src/DummyEngine/Libs/ASSIMP
 	url = https://github.com/assimp/assimp
+[submodule "src/DummyEngine/Libs/GLAD"]
+	path = src/DummyEngine/Libs/GLAD
+	url = https://github.com/Mag1str02/GLAD
