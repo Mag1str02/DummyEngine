@@ -19,7 +19,7 @@ namespace DE
 
         std::replace(source_file.begin(), source_file.end(), '\\', '/');
         std::replace(dll_file.begin(), dll_file.end(), '\\', '/');
-        return "g++ --shared " + source_file + " -I ../src/DummyEngine -I ../src/DummyEngine/Libs/GLM -L . -l DummyEngineLib -o " + dll_file + ".dll";
+        return "g++ --shared " + source_file + " -I ../src -I ../src/DummyEngine/Libs/GLM -L . -l DummyEngineLib -o " + dll_file + ".dll";
     }
     Path Compiler::PathToDLL(const Path& path_to_source)
     {
