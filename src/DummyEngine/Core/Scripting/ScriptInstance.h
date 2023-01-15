@@ -80,5 +80,5 @@ namespace DE
 }  // namespace DE
 
 // clang-format off
-#define SCRIPT_INSTANCE_CREATE_FUNCTION(Type) DE_SCRIPT_API Ref<ScriptInstance> CreateInstance(){return CreateRef<Type>();}
+#define SCRIPT_INSTANCE_CREATE_FUNCTION(Type) DE_SCRIPT_API Ref<ScriptInstance> CreateInstance##Type(){return CreateRef<Type>();}
 // clang-format on

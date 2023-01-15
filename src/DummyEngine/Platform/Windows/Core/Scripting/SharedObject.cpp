@@ -7,7 +7,13 @@ namespace DE
     {
     public:
         SharedObjectImpl() {}
-        ~SharedObjectImpl() {}
+        ~SharedObjectImpl()
+        {
+            if (m_Handle)
+            {
+                FreeLibrary(m_Handle);
+            }
+        }
 
         SharedObjectImpl(const SharedObjectImpl&)            = delete;
         SharedObjectImpl(SharedObjectImpl&&)                 = delete;
@@ -53,6 +59,7 @@ namespace DE
     };
 
     SharedObject::SharedObject() { m_Impl = CreateScope<SharedObjectImpl>(); }
+    SharedObject::~SharedObject() {}
     bool               SharedObject::Load(const Path& directory, const std::string& name) { return m_Impl->Load(directory, name); }
     VoidFPtr           SharedObject::GetFunction(const std::string& function_name) const { return m_Impl->GetFunction(function_name); }
     const Path&        SharedObject::GetDirectory() const { return m_Impl->GetDirectory(); }

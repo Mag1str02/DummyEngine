@@ -5,7 +5,7 @@ namespace DE
 {
     class CompilerImpl;
 
-    class Compiler : public Singleton<Compiler>
+    class Compiler
     {
     public:
         static void StartUp();
@@ -13,10 +13,10 @@ namespace DE
 
         static bool Compile(const Path& source, const Path& destination);
         static bool Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name);
-        static bool AddIncludeDir(const Path& source);
+        static void AddIncludeDir(const Path& source);
         static void DeleteIncludeDir(const Path& source);
-        static void AddLinkLibrary(Ref<SharedObject> source);
-        static void DeleteLinkLibrary(Ref<SharedObject> source);
+        static void AddLinkLibrary(const Path& source);
+        static void DeleteLinkLibrary(const Path& source);
 
     private:
         static Scope<CompilerImpl> m_Impl;

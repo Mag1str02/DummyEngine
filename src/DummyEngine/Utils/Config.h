@@ -5,6 +5,8 @@
 namespace DE
 {
 
+    // TODO: REMOVE ALL DEFINES, USE JUST PUBLIC FIELDS
+
 #define DE_CFG_MAX_COMPILE_ERROR_LEN 1
 #define DE_CFG_MAX_INPUT_FRAME_AMOUNT 2
 #define DE_CFG_MAX_MESSAGE_TYPE_LENGTH 3
@@ -31,8 +33,8 @@ namespace DE
     {
     public:
         static uint32_t GetI(uint32_t setting);
-        static float GetF(uint32_t setting);
-        static Path GetPath(uint32_t setting);
+        static float    GetF(uint32_t setting);
+        static Path     GetPath(uint32_t setting);
 
         static API GetRenderAPI();
 
@@ -42,13 +44,13 @@ namespace DE
         struct Configs
         {
             uint32_t c_MaxShaderCompileErrorLen = 512;
-            uint32_t c_MaxInputFrameAmount = 100;
-            uint32_t c_MaxMessageTypeLength = 7;
+            uint32_t c_MaxInputFrameAmount      = 100;
+            uint32_t c_MaxMessageTypeLength     = 7;
 
-            float c_DefaultCameraFOV = 90.0f;
-            float c_DefaultCameraAspect = 16.0f / 9.0f;
+            float c_DefaultCameraFOV       = 90.0f;
+            float c_DefaultCameraAspect    = 16.0f / 9.0f;
             float c_DefaultCameraNearPlane = 0.1f;
-            float c_DefaultCameraFarPlane = 2'000'000.0f;
+            float c_DefaultCameraFarPlane  = 2'000'000.0f;
 
             Path c_ExecutablePath;
             Path c_ShaderPath;

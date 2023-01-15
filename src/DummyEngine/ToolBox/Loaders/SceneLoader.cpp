@@ -427,12 +427,8 @@ namespace DE
     template <> void SceneLoader::LoadComponent<ScriptComponent>(YAML::Node n_Component, Entity& entity)
     {
         ScriptComponent script;
-        script.id = n_Component["UUID"].as<uint64_t>();
-        if (!ScriptManager::HasScript(script.id))
-        {
-            ScriptManager::UploadScript(AssetManager::GetAsset<ScriptAsset>(script.id));
-        }
-        script.instance       = ScriptManager::CreateScriptInstance(script.id);
+        script.id             = n_Component["UUID"].as<uint64_t>();
+        script.instance       = ScriptManager::Get().CreateScriptInstance(script.id);
         auto& script_instance = entity.AddComponent<ScriptComponent>(script);
         for (auto& [name, field] : script_instance.instance->GetFields())
         {
@@ -501,7 +497,6 @@ namespace DE
     }
     void SceneLoader::LoadScripts(YAML::Node n_Scripts)
     {
-        ScriptManager::Clear();
         for (const auto& node : n_Scripts)
         {
             ScriptAsset asset;
@@ -509,9 +504,10 @@ namespace DE
             asset.id   = node.second["UUID"].as<uint64_t>();
             asset.name = node.first.as<std::string>();
             asset.path = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
-
             AssetManager::AddAsset(asset);
+            ScriptManager::Get().AddScript(asset);
         }
+        ScriptManager::Get().ReloadSripts();
     }
     void SceneLoader::LoadAssets(YAML::Node n_Assets)
     {

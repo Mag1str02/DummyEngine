@@ -11,6 +11,7 @@ namespace DE
     {
     public:
         SharedObject();
+        ~SharedObject();
         bool               Load(const Path& directory, const std::string& name);
         VoidFPtr           GetFunction(const std::string& function_name) const;
         const Path&        GetDirectory() const;

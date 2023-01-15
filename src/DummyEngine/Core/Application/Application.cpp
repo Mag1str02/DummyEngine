@@ -1,5 +1,6 @@
 #include "DummyEngine/Core/Application/Application.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Core/Scripting/Compiler.h"
 
 namespace DE
 {
@@ -30,6 +31,8 @@ namespace DE
         Logger::Open(Config::GetPath(DE_CFG_LOG_PATH) / "ECS.txt", "ECS");
 
         InitGLFW();
+
+        Compiler::StartUp();
 
         m_Window = new Window(WindowState{.mode = WindowMode::Windowed, .name = name, .width = 1280, .height = 720});
         m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });

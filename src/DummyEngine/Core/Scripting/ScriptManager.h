@@ -1,42 +1,40 @@
 #include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/ResourceManaging/Assets.h"
 #include "DummyEngine/Core/Scripting/ScriptInstance.h"
+#include "DummyEngine/Core/Scripting/SharedObject.h"
 
 namespace DE
 {
     using CreateScriptInstanceFunc = Ref<ScriptInstance> (*)();
-    class ScriptFile
-    {
-    public:
-        ScriptFile();
-        ScriptFile(const ScriptAsset& asset);
-        ScriptFile(ScriptFile&& other);
-        ScriptFile& operator=(ScriptFile&& other);
-        ~ScriptFile();
-
-        bool Valid() const;
-        Ref<ScriptInstance> CreateScriptInstance() const;
- 
-    private:
-        bool DLLAlreadyExists(const std::string& path_to_dll) const;
-
-        HMODULE                  m_DLLHandle;
-        CreateScriptInstanceFunc m_CreateScriptInstance;
-    };
-
     class ScriptManager
     {
     public:
-        static void                UploadScript(const ScriptAsset& asset);
-        static bool                HasScript(UUID id);
-        static Ref<ScriptInstance> CreateScriptInstance(UUID id);
-        static void Clear();
+        bool AddScript(const ScriptAsset& asset);
+        void DeleteScript(UUID id);
+        void Modify(UUID id);
+        bool ReloadSripts();
+        bool Valid(UUID id);
+        void Clear();
+
+        Ref<ScriptInstance>   CreateScriptInstance(UUID id);
+        static ScriptManager& Get();
 
     private:
-        struct ScriptManagerState
+        static ScriptManager* manager;
+        ScriptManager();
+        ~ScriptManager();
+
+        bool SourcesExist() const;
+        bool UnModifiedObjectsExist() const;
+        bool UpdateFuncTable();
+
+        struct ScriptInfo
         {
-            std::unordered_map<UUID, ScriptFile> m_Scripts;
+            bool modified = true;
+            Path path;
         };
-        static ScriptManagerState m_State;
+        Scope<SharedObject>                                m_ScriptLibrary;
+        std::unordered_map<UUID, ScriptInfo>               m_ScriptStates;
+        std::unordered_map<UUID, CreateScriptInstanceFunc> m_CreateFuncs;
     };
 }  // namespace DE
