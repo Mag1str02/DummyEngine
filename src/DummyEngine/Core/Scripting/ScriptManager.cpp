@@ -1,6 +1,7 @@
 #include "DummyEngine/Core/Scripting/ScriptManager.h"
 #include "DummyEngine/Core/Scripting/Compiler.h"
 
+
 namespace DE
 {
     ScriptManager::ScriptManagerState ScriptManager::m_State;

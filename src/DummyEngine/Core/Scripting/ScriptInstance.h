@@ -40,7 +40,7 @@ namespace DE
         void*           m_Data;
     };
 
-#define ADD_FIELD(value) AddField(ScriptField(std::string(#value), &value, TypeToScriptFieldType(value)))
+#define ADD_FIELD(field) AddField(ScriptField(std::string(#field), &field, TypeToScriptFieldType(field)))
 
     class ScriptInstance
     {
@@ -48,14 +48,14 @@ namespace DE
         ScriptInstance() : m_Scene(nullptr) {}
         virtual ~ScriptInstance() {}
 
-        virtual void OnAttach() {}
+        virtual void OnCreate() {}
         virtual void OnUpdate(float dt) {}
-        virtual void OnDetach() {}
+        virtual void OnDestroy() {}
 
-        ScriptInstance(const ScriptInstance&) = delete;
-        ScriptInstance(ScriptInstance&&)      = delete;
+        ScriptInstance(const ScriptInstance&)            = delete;
+        ScriptInstance(ScriptInstance&&)                 = delete;
         ScriptInstance& operator=(const ScriptInstance&) = delete;
-        ScriptInstance& operator=(ScriptInstance&&) = delete;
+        ScriptInstance& operator=(ScriptInstance&&)      = delete;
 
         std::unordered_map<std::string, ScriptField>& GetFields() { return m_Fields; }
         ScriptField                                   GetField(const std::string& field_name) { return m_Fields[field_name]; }

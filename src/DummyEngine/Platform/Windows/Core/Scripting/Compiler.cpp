@@ -45,6 +45,7 @@ namespace DE
             std::string link_command;
             link_command.append(GetCompiler());
             link_command.append(" -shared");
+            link_command.append(AddLinkArgs());
             link_command.append(AddSourcesArguments(sources));
             link_command.append(AddPathDLL(destination, library_name));
             FixSlash(link_command);
@@ -62,22 +63,17 @@ namespace DE
             return true;
         }
         void DeleteIncludeDir(const Path& dir) { m_IncludeDirs.erase(dir); }
+        void AddLinkLibrary(Ref<SharedObject> source) { m_Libraries.insert(source); }
+        void DeleteLinkLibrary(Ref<SharedObject> source) { m_Libraries.erase(source); }
 
     private:
-        std::string AddSourcesArguments(const std::vector<Path>& sources)
+        std::string GetCompiler()
         {
-            std::string res;
-            for (const auto& source : sources)
-            {
-                res.append(" ");
-                res.append(source.string());
-            }
-            return res;
+            // TODO: Get compiler from config.
+            return "g++";
         }
-        std::string AddPathDLL(const Path& destination, const std::string& library_name)
-        {
-            return " -o " + destination.string() + "/" + library_name + ".dll";
-        }
+        void FixSlash(std::string& command) { std::replace(command.begin(), command.end(), '\\', '/'); }
+
         std::string AddIncludeDirArguments()
         {
             std::string res;
@@ -88,19 +84,41 @@ namespace DE
             }
             return res;
         }
-        std::string GetCompiler()
-        {
-            // TODO: Get compiler from config.
-            return "g++";
-        }
         std::string AddSourceArgument(const Path& source) { return " " + source.string(); }
         std::string AddDestinationArgument(const Path& source, const Path& destination)
         {
             return " -o " + destination.string() + "/" + source.filename().string() + ".o";
         }
-        void FixSlash(std::string& command) { std::replace(command.begin(), command.end(), '\\', '/'); }
 
-        std::unordered_set<Path> m_IncludeDirs;
+        std::string AddSourcesArguments(const std::vector<Path>& sources)
+        {
+            std::string res;
+            for (const auto& source : sources)
+            {
+                res.append(" ");
+                res.append(source.string());
+            }
+            return res;
+        }
+        std::string AddLinkArgs()
+        {
+            std::string res;
+            for (auto lib : m_Libraries)
+            {
+                res.append(" -L ");
+                res.append(lib->GetDirectory().string());
+                res.append(" -l ");
+                res.append(lib->GetName());
+            }
+            return res;
+        }
+        std::string AddPathDLL(const Path& destination, const std::string& library_name)
+        {
+            return " -o " + destination.string() + "/" + library_name + ".dll";
+        }
+
+        std::unordered_set<Path>                  m_IncludeDirs;
+        std::unordered_set<Ref<SharedObject>> m_Libraries;
     };
 
     Scope<CompilerImpl> Compiler::m_Impl;
@@ -110,13 +128,11 @@ namespace DE
         DE_ASSERT(!m_Impl, "Compiler already started.");
         m_Impl = CreateScope<CompilerImpl>();
     }
-    void Compiler::ShutDown() {}
+    void Compiler::ShutDown() { m_Impl = nullptr; }
 
     bool Compiler::Compile(const Path& source, const Path& destination) { return m_Impl->Compile(source, destination); }
     bool Compiler::AddIncludeDir(const Path& dir) { return m_Impl->AddIncludeDir(dir); }
     void Compiler::DeleteIncludeDir(const Path& dir) { m_Impl->DeleteIncludeDir(dir); }
-
+    void Compiler::AddLinkLibrary(Ref<SharedObject> library) { m_Impl->AddLinkLibrary(library); }
+    void Compiler::DeleteLinkLibrary(Ref<SharedObject> library) { m_Impl->DeleteLinkLibrary(library); }
 };  // namespace DE
-
-//* g++ --shared Assets/Scripts/DummyEditor/EditorCameraController.cpp -I ../src -I ../src/DummyEngine/Libs/GLM -L . -l DummyEngineLib -o
-// E:/IT_Space/Programs/C++/OpenGL/DummyEngine/Sandbox/Cache/Scripts/DummyEditor/EditorCameraController.dll

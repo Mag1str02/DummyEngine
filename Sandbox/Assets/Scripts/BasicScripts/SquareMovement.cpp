@@ -14,7 +14,7 @@ public:
         ADD_FIELD(cycle_time);
     }
 
-    virtual void OnAttach() override {}
+    virtual void OnCreate() override {}
     virtual void OnUpdate(float dt) override
     {
         current_time += dt;
@@ -37,7 +37,7 @@ public:
             position = Vec3(left_back.x, height, right_front.y) + Smouth(4.0f * (persent - 0.75f)) * Vec3(0, 0, left_back.y - right_front.y);
         }
     }
-    virtual void OnDetach() override {}
+    virtual void OnDestroy() override {}
 
 private:
     float Smouth(float delta) const { return (std::sin((delta * 2 - 1) * 3.1415926 / 2) + 1) / 2; }

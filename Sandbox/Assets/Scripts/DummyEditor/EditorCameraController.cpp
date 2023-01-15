@@ -9,7 +9,7 @@ public:
         ADD_FIELD(active);
     }
 
-    virtual void OnAttach() override {}
+    virtual void OnCreate() override {}
     virtual void OnUpdate(float dt) override
     {
         if (active)
@@ -51,7 +51,7 @@ public:
             }
         }
     }
-    virtual void OnDetach() override {}
+    virtual void OnDestroy() override {}
 
 private:
     bool active = false;
