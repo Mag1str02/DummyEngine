@@ -76,7 +76,7 @@ namespace DE
         glfwPollEvents();
         m_Context->SwapBuffers();
     }
-    void Window::SetEventCallback(EventCallback<Event> callback) { m_State.EventCallback = callback; }
+    void Window::SetEventCallback(EventCallback<Event> callback) { m_State.event_callback = callback; }
 
     const WindowState& Window::GetState() const { return m_State; }
 
@@ -111,7 +111,7 @@ namespace DE
                                       state.height = height;
 
                                       WindowResizeEvent event(width, height);
-                                      state.EventCallback(event);
+                                      state.event_callback(event);
                                   });
 
         glfwSetWindowCloseCallback(m_Window,
@@ -119,7 +119,7 @@ namespace DE
                                    {
                                        WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
                                        WindowCloseEvent event;
-                                       state.EventCallback(event);
+                                       state.event_callback(event);
                                    });
 
         glfwSetKeyCallback(m_Window,
@@ -130,17 +130,17 @@ namespace DE
                                {
                                    case GLFW_PRESS: {
                                        KeyPressedEvent event(key);
-                                       state.EventCallback(event);
+                                       state.event_callback(event);
                                        break;
                                    }
                                    case GLFW_RELEASE: {
                                        KeyReleasedEvent event(key);
-                                       state.EventCallback(event);
+                                       state.event_callback(event);
                                        break;
                                    }
                                    case GLFW_REPEAT: {
                                        KeyPressedEvent event(key);
-                                       state.EventCallback(event);
+                                       state.event_callback(event);
                                        break;
                                    }
                                }
@@ -155,12 +155,12 @@ namespace DE
                                        {
                                            case GLFW_PRESS: {
                                                MouseButtonPressedEvent event(button);
-                                               state.EventCallback(event);
+                                               state.event_callback(event);
                                                break;
                                            }
                                            case GLFW_RELEASE: {
                                                MouseButtonReleasedEvent event(button);
-                                               state.EventCallback(event);
+                                               state.event_callback(event);
                                                break;
                                            }
                                        }
@@ -172,7 +172,7 @@ namespace DE
                                   WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
 
                                   MouseScrolledEvent event((float)xOffset, (float)yOffset);
-                                  state.EventCallback(event);
+                                  state.event_callback(event);
                               });
 
         glfwSetCursorPosCallback(m_Window,
@@ -181,7 +181,7 @@ namespace DE
                                      WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
 
                                      MouseMovedCallback event((float)xPos, (float)yPos);
-                                     state.EventCallback(event);
+                                     state.event_callback(event);
                                  });
     }
 }  // namespace DE

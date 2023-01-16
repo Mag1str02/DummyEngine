@@ -5,8 +5,10 @@
 .cache/
 build/
 
+Sandbox/DummyEditor
 Sandbox/Logs/**
 Sandbox/Cache/**
 Sandbox/**.dll
+Sandbox/**.so**
 Sandbox/*.yml
 

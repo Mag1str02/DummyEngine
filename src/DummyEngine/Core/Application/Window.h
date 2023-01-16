@@ -28,7 +28,7 @@ namespace DE
         uint32_t monitor_id = 0;
         bool mouse_locked = false;
 
-        EventCallback<Event> EventCallback;
+        EventCallback<Event> event_callback;
     };
 
     class Window
