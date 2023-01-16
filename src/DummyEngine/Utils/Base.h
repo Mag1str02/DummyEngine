@@ -32,6 +32,7 @@
 #include <random>
 #include <cxxabi.h>
 
+#include "DummyEngine/Utils/CompilerDefines.h"
 #include "DummyEngine/Utils/Conversions.h"
 #include "DummyEngine/Utils/Types.h"
 #include "DummyEngine/Utils/Config.h"
@@ -75,10 +76,12 @@ namespace DE
 }  // namespace DE
 namespace std
 {
+#ifndef DE_COMPILER_PATH_HASH
     template <> struct hash<::DE::Path>
     {
         std::size_t operator()(const ::DE::Path& path) const { return hash_value(path); }
     };
+#endif
     struct pair_hash
     {
         template <class T1, class T2> std::size_t operator()(const std::pair<T1, T2>& p) const
