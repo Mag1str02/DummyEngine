@@ -49,7 +49,10 @@
 namespace DE
 {
     template <typename T> using Scope = std::unique_ptr<T>;
-    template <typename T, typename... Args> constexpr Scope<T> CreateScope(Args&&... args) { return std::make_unique<T>(std::forward<Args>(args)...); }
+    template <typename T, typename... Args> constexpr Scope<T> CreateScope(Args&&... args)
+    {
+        return std::make_unique<T>(std::forward<Args>(args)...);
+    }
 
     template <typename T> using Ref = std::shared_ptr<T>;
     template <typename T, typename... Args> constexpr Ref<T> CreateRef(Args&&... args) { return std::make_shared<T>(std::forward<Args>(args)...); }
@@ -72,6 +75,10 @@ namespace DE
 }  // namespace DE
 namespace std
 {
+    template <> struct hash<::DE::Path>
+    {
+        std::size_t operator()(const ::DE::Path& path) const { return hash_value(path); }
+    };
     struct pair_hash
     {
         template <class T1, class T2> std::size_t operator()(const std::pair<T1, T2>& p) const
