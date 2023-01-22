@@ -120,7 +120,7 @@ namespace DE
 
     Scope<CompilerImpl> Compiler::m_Impl;
 
-    void Compiler::StartUp()
+    void Compiler::Initialize()
     {
         DE_ASSERT(!m_Impl, "Compiler already started.");
         m_Impl = CreateScope<CompilerImpl>();
@@ -128,7 +128,7 @@ namespace DE
         AddIncludeDir("../src/DummyEngine/Libs/GLM");
         AddLinkLibrary("DummyEngineLib");
     }
-    void Compiler::ShutDown() { m_Impl = nullptr; }
+    void Compiler::Terminate() { m_Impl = nullptr; }
 
     bool Compiler::Compile(const Path& source, const Path& destination) { return m_Impl->Compile(source, destination); }
     bool Compiler::Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name)

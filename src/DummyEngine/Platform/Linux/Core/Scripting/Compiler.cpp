@@ -120,7 +120,7 @@ namespace DE
 
     Scope<CompilerImpl> Compiler::m_Impl;
 
-    void Compiler::StartUp()
+    void Compiler::Initialize()
     {
         DE_ASSERT(!m_Impl, "Compiler already started.");
         m_Impl = CreateScope<CompilerImpl>();

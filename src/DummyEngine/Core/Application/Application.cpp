@@ -4,47 +4,38 @@
 
 namespace DE
 {
-    static Application* s_ApplicationInstance = nullptr;
+    SINGLETON_BASE(Application);
 
-    void InitGLFW()
+    Unit Application::Initialize()
     {
-        if (!glfwInit())
-        {
-            DE_ASSERT(false, "Failed to initialize GLFW.");
-        }
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        Logger::Info("loading", "Initializer", "GLFW initialized.");
+        DE_ASSERT(!s_Instance, "Double application initialization");
+        s_Instance = new Application();
+        DE_ASSERT(s_Instance, "Failed to allocate memory for application");
+
+        s_Instance->IInitialize();
+        return Unit();
     }
-    void TerminateGLFW() { glfwTerminate(); }
-
-    Application::Application(std::string name) : m_ShouldClose(false)
+    Unit Application::IInitialize()
     {
-        DE_PROFILER_BEGIN_FRAME();
-
-        DE_ASSERT(s_ApplicationInstance == nullptr, "Creating more than one application at a time.");
-        s_ApplicationInstance = this;
-
-        Config::Init();
-        Logger::Open(Config::GetPath(DE_CFG_LOG_PATH) / "loading.txt", "loading");
-        Logger::Open(Config::GetPath(DE_CFG_LOG_PATH) / "ECS.txt", "ECS");
-
-        InitGLFW();
-
-        Compiler::StartUp();
-
-        m_Window = new Window(WindowState{.mode = WindowMode::Windowed, .name = name, .width = 1280, .height = 720});
+        // TODO: Customizeble name
+        m_Window = new Window(WindowState{.mode = WindowMode::Windowed, .name = "DummyEngine", .width = 1280, .height = 720});
+        DE_ASSERT(m_Window, "Failed to allocate Windows");
         m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
 
-        Renderer::Init(Config::GetRenderAPI());
-
         m_ImGuiLayer = new ImGuiLayer();
+        DE_ASSERT(m_ImGuiLayer, "Failed to allocate ImGuiLayer");
         PushLayer(m_ImGuiLayer);
 
         SetUpCallbacks();
+        return Unit();
     }
-    Application::~Application()
+    Unit Application::Terminate()
+    {
+        s_Instance->ITerminate();
+        delete s_Instance;
+        return Unit();
+    }
+    Unit Application::ITerminate()
     {
         delete m_Window;
         for (auto layer : m_Layers)
@@ -53,26 +44,26 @@ namespace DE
             delete layer;
         }
         m_Layers.clear();
-
-        Logger::Close("ECS");
-        Logger::Close("loading");
+        return Unit();
     }
 
-    void Application::PushLayer(Layer* layer)
+    S_METHOD_IMPL(Application, Unit, PushLayer, (Layer * layer), (layer))
     {
         m_Layers.push_back(layer);
         layer->m_EventCallback = [this](Event& e) { OnEvent(e); };
         layer->OnAttach();
+        return Unit();
     }
-    void Application::OnEvent(Event& event)
+    S_METHOD_IMPL(Application, Unit, OnEvent, (Event & event), (event))
     {
         m_EventDispatcher.Dispatch(event);
         for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); ++it)
         {
             (*it)->OnEvent(event);
         }
+        return Unit();
     }
-    void Application::Run()
+    S_METHOD_IMPL(Application, Unit, Run, (), ())
     {
         double frame_begin, frame_end, prev_frame_time = 0.001, fake_time;
         while (!m_ShouldClose)
@@ -107,9 +98,8 @@ namespace DE
 
             Renderer::EndFrame();
         }
+        return Unit();
     }
-
-    Application& Application::Get() { return *s_ApplicationInstance; }
 
     void Application::SetUpCallbacks()
     {

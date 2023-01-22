@@ -19,10 +19,10 @@ namespace DE
         m_DrawnInstances  = 0;
     }
 
-    void Renderer::Init(API api)
+    void Renderer::Initialize()
     {
         m_FrameStatistics = CreateScope<FrameStatistics>();
-        switch (api)
+        switch (Config::GetRenderAPI())
         {
             case API::OpenGL: m_RenderAPI = CreateScope<GLRenderAPI>(); break;
             case API::Vulkan: {
@@ -45,6 +45,8 @@ namespace DE
 
         Logger::Info("loading", "Renderer", "Renderer initialized.");
     }
+    void Renderer::Terminate() {}
+
     void Renderer::OnWindowResize(uint32_t width, uint32_t height)
     {
         DE_PROFILE_SCOPE("On Window Resize");
@@ -124,9 +126,7 @@ namespace DE
     Ref<VertexArray> Renderer::GetCube() { return m_Cube; }
     API              Renderer::CurrentAPI() { return m_RenderAPI->GetAPI(); }
     FrameStatistics  Renderer::GetStatistics() { return *m_FrameStatistics; }
-    RenderAPI&       Renderer::GetRenderAPI() {
-        return *m_RenderAPI;
-    }
+    RenderAPI&       Renderer::GetRenderAPI() { return *m_RenderAPI; }
 
     // TODO: Think to move somewhere else...
 

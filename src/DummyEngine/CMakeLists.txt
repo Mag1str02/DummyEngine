@@ -17,6 +17,7 @@ set(ENGINE_SOURCES
     Core/Application/ImGuiPanelStack.cpp
     Core/Application/Window.cpp
     Core/Application/Input.cpp
+    Core/Application/Initializer.cpp
 
     Core/ECS/ComponentArray.hpp
     Core/ECS/ComponentManager.hpp
@@ -82,6 +83,7 @@ add_library(DummyEngineLib SHARED
 target_compile_definitions(DummyEngineLib PUBLIC 
     DE_PROFILER_ENABLED=1
     DE_ENABLE_ASSERTS=1
+    DE_ENABLE_LOGGING=1
 )
 
 get_target_property(DependenciesInclude Dependencies INCLUDE_DIRECTORIES)

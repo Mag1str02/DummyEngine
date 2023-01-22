@@ -1,49 +1,52 @@
 #pragma once
 
 #include <string>
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <iomanip>
 #include <set>
 #include <fstream>
 
 #include "DummyEngine/Utils/Types.h"
+#include "DummyEngine/Utils/Singleton.h"
 
 namespace DE
 {
-    namespace fs = std::filesystem;
-
-    class Logger
+    class Logger : public Singleton<Logger>
     {
-    private:
-        std::set<std::string> m_Files;
-        std::map<std::string, std::ofstream> m_Fstreams;
-
-        Logger();
-        ~Logger();
-
-        void IPrintTime(std::ostream& out);
-        void IPrintValue(std::ostream& out, const int& value);
-
-        void IOpen(const Path& path_to_file, const std::string& log_name);
-        void IClose(const std::string& log_name);
-        void IWrite(const std::string& log_name, const std::string& author, const std::string& massage, const std::string& message_type);
-        void IError(const std::string& log_name, const std::string& author, const std::string& massage);
-        void IInfo(const std::string& log_name, const std::string& author, const std::string& massage);
-        void IStage(const std::string& log_name, const std::string& author, const std::string& massage);
-        void IWarning(const std::string& log_name, const std::string& author, const std::string& massage);
-        void IFatal(const std::string& log_name, const std::string& author, const std::string& massage);
-
+        SINGLETON(Logger)
     public:
-        static Logger& Get();
+        S_METHOD_DEF(Logger, Unit, Initialize, ());
+        S_METHOD_DEF(Logger, Unit, Terminate, ());
 
-        static void Open(const Path& path_to_file, const std::string& log_name);
-        static void Close(const std::string& log_name);
-        static void Write(const std::string& log_name, const std::string& author, const std::string& massage, const std::string& message_type);
-        static void Error(const std::string& log_name, const std::string& author, const std::string& massage);
-        static void Info(const std::string& log_name, const std::string& author, const std::string& massage);
-        static void Stage(const std::string& log_name, const std::string& author, const std::string& massage);
-        static void Warning(const std::string& log_name, const std::string& author, const std::string& massage);
-        static void Fatal(const std::string& log_name, const std::string& author, const std::string& massage);
+        S_METHOD_DEF(Logger, bool, Open, (const std::string& log_name));
+        S_METHOD_DEF(Logger, Unit, Close, (const std::string& log_name));
+
+        S_METHOD_DEF(Logger, Unit, Error, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
+        S_METHOD_DEF(Logger, Unit, Info, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
+        S_METHOD_DEF(Logger, Unit, Warning, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
+        S_METHOD_DEF(Logger, Unit, Stage, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
+        S_METHOD_DEF(Logger, Unit, Fatal, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
+
+    private:
+        Logger()  = default;
+        ~Logger() = default;
+
+        std::unordered_map<std::string, std::ofstream> m_Streams;
+        std::ofstream                                  m_All;
     };
 }  // namespace DE
+
+#if DE_ENABLE_LOGGING == 1
+#define LOG_ERROR(...) Logger::Error(__VA_ARGS__)
+#define LOG_INFO(...) Logger::Info(__VA_ARGS__)
+#define LOG_WARNING(...) Logger::Warning(__VA_ARGS__)
+#define LOG_STAGE(...) Logger::Stage(__VA_ARGS__)
+#define LOG_FATAL(...) Logger::Fatal(__VA_ARGS__)
+#else
+#define LOG_ERROR(...)
+#define LOG_INFO(...)
+#define LOG_WARNING(...)
+#define LOG_STAGE(...)
+#define LOG_FATAL(...)
+#endif

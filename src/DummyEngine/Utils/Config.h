@@ -5,11 +5,8 @@
 namespace DE
 {
 
-    // TODO: REMOVE ALL DEFINES, USE JUST PUBLIC FIELDS
-
 #define DE_CFG_MAX_COMPILE_ERROR_LEN 1
 #define DE_CFG_MAX_INPUT_FRAME_AMOUNT 2
-#define DE_CFG_MAX_MESSAGE_TYPE_LENGTH 3
 
 #define DE_CFG_DEFAULT_CAMERA_FOV 1
 #define DE_CFG_DEFAULT_CAMERA_ASPECT 2
@@ -29,6 +26,8 @@ namespace DE
 
 #define DE_CFG_RENDER_API 1
 
+    // TODO: Singleton
+
     class Config
     {
     public:
@@ -38,7 +37,8 @@ namespace DE
 
         static API GetRenderAPI();
 
-        static void Init();
+        static void Initialize();
+        static void Terminate();
 
     private:
         struct Configs

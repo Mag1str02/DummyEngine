@@ -7,36 +7,32 @@
 namespace DE
 {
 
-    class Application
+    class Application : public Singleton<Application>
     {
+        SINGLETON(Application)
     public:
-        Application(std::string name);
-        ~Application();
+        S_METHOD_DEF(Application, Unit, Initialize, ());
+        S_METHOD_DEF(Application, Unit, Terminate, ());
 
-        Application(const Application&) = delete;
-        Application(Application&&) = delete;
-        Application& operator=(const Application&) = delete;
-        Application& operator=(Application&&) = delete;
-
-        void PushLayer(Layer* layer);
-        void OnEvent(Event& event);
-
-        void Run();
-
-        static Application& Get();
+        S_METHOD_DEF(Application, Unit, PushLayer, (Layer * layer));
+        S_METHOD_DEF(Application, Unit, OnEvent, (Event & event));
+        S_METHOD_DEF(Application, Unit, Run, ());
 
     private:
         friend class ImGuiLayer;
         friend class FileSystem;
 
+        Application()  = default;
+        ~Application() = default;
+
         void SetUpCallbacks();
         void OnWindowResize(WindowResizeEvent& e);
         void OnWindowClose(WindowCloseEvent& e);
 
-        bool m_ShouldClose;
-        EventDispatcher m_EventDispatcher;
+        bool                m_ShouldClose;
+        EventDispatcher     m_EventDispatcher;
         std::vector<Layer*> m_Layers;
-        ImGuiLayer* m_ImGuiLayer;
-        Window* m_Window;
+        ImGuiLayer*         m_ImGuiLayer;
+        Window*             m_Window;
     };
 }  // namespace DE

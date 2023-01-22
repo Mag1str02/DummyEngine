@@ -5,11 +5,13 @@ namespace DE
 {
     class CompilerImpl;
 
+    // TODO: Proper singleton
+
     class Compiler
     {
     public:
-        static void StartUp();
-        static void ShutDown();
+        static void Initialize();
+        static void Terminate();
 
         static bool Compile(const Path& source, const Path& destination);
         static bool Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name);

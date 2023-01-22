@@ -1,5 +1,7 @@
 #pragma once
 
+// TODO: enum clas Key... kill me)
+
 namespace DE
 {
 #define KEY_UNKNOWN -1

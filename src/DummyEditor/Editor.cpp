@@ -3,10 +3,5 @@
 
 namespace DE
 {
-    Application* CreateApplication()
-    {
-        Application* app = new Application("DummyEditor");
-        app->PushLayer(new EditorLayer());
-        return app;
-    }
+    void SetupApplication() { Application::PushLayer(new EditorLayer()); }
 }  // namespace DE

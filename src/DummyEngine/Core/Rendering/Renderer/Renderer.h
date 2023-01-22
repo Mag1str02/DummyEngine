@@ -9,6 +9,8 @@
 
 namespace DE
 {
+    // TODO: Proper singleton
+
     struct FrameStatistics
     {
         uint32_t m_DrawCallsAmount;
@@ -20,7 +22,9 @@ namespace DE
     class Renderer
     {
     public:
-        static void Init(API api);
+        static void Initialize();
+        static void Terminate();
+
         static void OnWindowResize(uint32_t width, uint32_t height);
 
         static void BeginFrame();
@@ -44,7 +48,7 @@ namespace DE
 
         static API             CurrentAPI();
         static FrameStatistics GetStatistics();
-        static RenderAPI& GetRenderAPI();
+        static RenderAPI&      GetRenderAPI();
 
     private:
         static void GenDefaultTexture();

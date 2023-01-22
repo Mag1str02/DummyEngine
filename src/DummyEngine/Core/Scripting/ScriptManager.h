@@ -6,23 +6,27 @@
 namespace DE
 {
     using CreateScriptInstanceFunc = Ref<ScriptInstance> (*)();
-    class ScriptManager
-    {
-    public:
-        bool AddScript(const ScriptAsset& asset);
-        void DeleteScript(UUID id);
-        void Modify(UUID id);
-        bool ReloadSripts();
-        bool Valid(UUID id);
-        void Clear();
 
-        Ref<ScriptInstance>   CreateScriptInstance(UUID id);
-        static ScriptManager& Get();
+    class ScriptManager : public Singleton<ScriptManager>
+    {
+        SINGLETON(ScriptManager)
+    public:
+        S_METHOD_DEF(ScriptManager, Unit, Initialize, ());
+        S_METHOD_DEF(ScriptManager, Unit, Terminate, ());
+
+        S_METHOD_DEF(ScriptManager, bool, ReloadSripts, ());
+        S_METHOD_DEF(ScriptManager, bool, Valid, (UUID id));
+        S_METHOD_DEF(ScriptManager, bool, AddScript, (const ScriptAsset& asset));
+
+        S_METHOD_DEF(ScriptManager, Unit, DeleteScript, (UUID id));
+        S_METHOD_DEF(ScriptManager, Unit, Modify, (UUID id));
+        S_METHOD_DEF(ScriptManager, Unit, Clear, ());
+
+        S_METHOD_DEF(ScriptManager, Ref<ScriptInstance>, CreateScriptInstance, (UUID id));
 
     private:
-        static ScriptManager* manager;
-        ScriptManager();
-        ~ScriptManager();
+        ScriptManager()  = default;
+        ~ScriptManager() = default;
 
         bool SourcesExist() const;
         bool UnModifiedObjectsExist() const;

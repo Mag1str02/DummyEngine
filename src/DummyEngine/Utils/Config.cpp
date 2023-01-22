@@ -13,7 +13,6 @@ namespace DE
         {
             case DE_CFG_MAX_COMPILE_ERROR_LEN: return m_Configs.c_MaxShaderCompileErrorLen;
             case DE_CFG_MAX_INPUT_FRAME_AMOUNT: return m_Configs.c_MaxInputFrameAmount;
-            case DE_CFG_MAX_MESSAGE_TYPE_LENGTH: return m_Configs.c_MaxMessageTypeLength;
             default: DE_ASSERT(false, "Wrong config requested.");
         }
         return 0;
@@ -47,23 +46,24 @@ namespace DE
         }
         return Path(".");
     }
-    API Config::GetRenderAPI() { return m_Configs.c_RenderAPI; }
-    void Config::Init()
+    API  Config::GetRenderAPI() { return m_Configs.c_RenderAPI; }
+    void Config::Initialize()
     {
         m_Configs.c_ExecutablePath = fs::current_path();
-        std::cout << "Current path: " << m_Configs.c_ExecutablePath.string() << std::endl;
+        std::cout << "Executable path: " << m_Configs.c_ExecutablePath.string() << std::endl;
 
-        m_Configs.c_AssetPath = m_Configs.c_ExecutablePath / "Assets";
-        m_Configs.c_LogPath = m_Configs.c_ExecutablePath / "Logs";
-        m_Configs.c_ModelPath = m_Configs.c_AssetPath / "Models";
-        m_Configs.c_ShaderPath = m_Configs.c_AssetPath / "Shaders";
-        m_Configs.c_TexturePath = m_Configs.c_AssetPath / "Textures";
-        m_Configs.c_ScriptPath = m_Configs.c_AssetPath / "Scripts";
-        m_Configs.c_CachePath = m_Configs.c_ExecutablePath / "Cache";
+        m_Configs.c_AssetPath       = m_Configs.c_ExecutablePath / "Assets";
+        m_Configs.c_LogPath         = m_Configs.c_ExecutablePath / "Logs";
+        m_Configs.c_ModelPath       = m_Configs.c_AssetPath / "Models";
+        m_Configs.c_ShaderPath      = m_Configs.c_AssetPath / "Shaders";
+        m_Configs.c_TexturePath     = m_Configs.c_AssetPath / "Textures";
+        m_Configs.c_ScriptPath      = m_Configs.c_AssetPath / "Scripts";
+        m_Configs.c_CachePath       = m_Configs.c_ExecutablePath / "Cache";
         m_Configs.c_ScriptCachePath = m_Configs.c_CachePath / "Scripts";
 
         m_Configs.c_RenderAPI = API::OpenGL;
     }
+    void Config::Terminate() {}
 
     Path RelativeToExecutable(const Path& path) { return fs::relative(path, Config::GetPath(DE_CFG_EXECUTABLE_PATH)); }
 }  // namespace DE
