@@ -1,6 +1,5 @@
 #include "DummyEngine/Core/Scripting/ScriptManager.h"
 #include "DummyEngine/Core/Scripting/Compiler.h"
-#include <thread>
 
 namespace DE
 {
@@ -31,6 +30,28 @@ namespace DE
         return Unit();
     }
     Unit ScriptManager::ITerminate() { return Unit(); }
+
+    S_METHOD_IMPL(ScriptManager, Unit, DeleteScript, (UUID id), (id))
+    {
+        m_ScriptStates.erase(id);
+        m_CreateFuncs.erase(id);
+        return Unit();
+    }
+    S_METHOD_IMPL(ScriptManager, Unit, Modify, (UUID id), (id))
+    {
+        if (m_ScriptStates.contains(id))
+        {
+            m_ScriptStates[id].modified = true;
+        }
+        return Unit();
+    }
+    S_METHOD_IMPL(ScriptManager, Unit, Clear, (), ())
+    {
+        m_CreateFuncs.clear();
+        m_ScriptStates.clear();
+        m_ScriptLibrary = nullptr;
+        return Unit();
+    }
 
     S_METHOD_IMPL(ScriptManager, bool, ReloadSripts, (), ())
     {
@@ -84,28 +105,6 @@ namespace DE
         m_CreateFuncs[asset.id]           = nullptr;
 
         return true;
-    }
-
-    S_METHOD_IMPL(ScriptManager, Unit, DeleteScript, (UUID id), (id))
-    {
-        m_ScriptStates.erase(id);
-        m_CreateFuncs.erase(id);
-        return Unit();
-    }
-    S_METHOD_IMPL(ScriptManager, Unit, Modify, (UUID id), (id))
-    {
-        if (m_ScriptStates.contains(id))
-        {
-            m_ScriptStates[id].modified = true;
-        }
-        return Unit();
-    }
-    S_METHOD_IMPL(ScriptManager, Unit, Clear, (), ())
-    {
-        m_CreateFuncs.clear();
-        m_ScriptStates.clear();
-        m_ScriptLibrary = nullptr;
-        return Unit();
     }
 
     S_METHOD_IMPL(ScriptManager, Ref<ScriptInstance>, CreateScriptInstance, (UUID id), (id))

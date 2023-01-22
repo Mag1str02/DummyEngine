@@ -11,12 +11,12 @@ namespace DE
     {
         SINGLETON(Application)
     public:
-        S_METHOD_DEF(Application, Unit, Initialize, ());
-        S_METHOD_DEF(Application, Unit, Terminate, ());
+        S_METHOD_DEF(Unit, Initialize, ());
+        S_METHOD_DEF(Unit, Terminate, ());
 
-        S_METHOD_DEF(Application, Unit, PushLayer, (Layer * layer));
-        S_METHOD_DEF(Application, Unit, OnEvent, (Event & event));
-        S_METHOD_DEF(Application, Unit, Run, ());
+        S_METHOD_DEF(Unit, PushLayer, (Layer * layer));
+        S_METHOD_DEF(Unit, OnEvent, (Event & event));
+        S_METHOD_DEF(Unit, Run, ());
 
     private:
         friend class ImGuiLayer;

@@ -198,9 +198,9 @@ namespace DE
     {
         DE_PROFILE_SCOPE("ProcessControlls");
 
-        if (Input::KeyDown(GLFW_KEY_LEFT_CONTROL))
+        if (Input::KeyDown(Key::LeftControl))
         {
-            if (Input::KeyReleased(GLFW_KEY_GRAVE_ACCENT) && m_SceneData.m_Scene != nullptr)
+            if (Input::KeyReleased(Key::GraveAccent) && m_SceneData.m_Scene != nullptr)
             {
                 m_State.m_InputState = (m_State.m_InputState == InputState::ViewPort ? InputState::NonSpecified : InputState::ViewPort);
                 SetMouseLockToggleEvent event;
@@ -208,11 +208,11 @@ namespace DE
             }
             if (m_State.m_InputState != InputState::ViewPort)
             {
-                if (Input::KeyReleased(GLFW_KEY_O))
+                if (Input::KeyReleased(Key::O))
                 {
                     OpenSceneDialog();
                 }
-                if (Input::KeyReleased(GLFW_KEY_S))
+                if (Input::KeyReleased(Key::S))
                 {
                     SaveSceneDialog();
                 }

@@ -11,18 +11,18 @@ namespace DE
     {
         SINGLETON(ScriptManager)
     public:
-        S_METHOD_DEF(ScriptManager, Unit, Initialize, ());
-        S_METHOD_DEF(ScriptManager, Unit, Terminate, ());
+        S_METHOD_DEF(Unit, Initialize, ());
+        S_METHOD_DEF(Unit, Terminate, ());
 
-        S_METHOD_DEF(ScriptManager, bool, ReloadSripts, ());
-        S_METHOD_DEF(ScriptManager, bool, Valid, (UUID id));
-        S_METHOD_DEF(ScriptManager, bool, AddScript, (const ScriptAsset& asset));
+        S_METHOD_DEF(Unit, DeleteScript, (UUID id));
+        S_METHOD_DEF(Unit, Modify, (UUID id));
+        S_METHOD_DEF(Unit, Clear, ());
 
-        S_METHOD_DEF(ScriptManager, Unit, DeleteScript, (UUID id));
-        S_METHOD_DEF(ScriptManager, Unit, Modify, (UUID id));
-        S_METHOD_DEF(ScriptManager, Unit, Clear, ());
+        S_METHOD_DEF(bool, ReloadSripts, ());
+        S_METHOD_DEF(bool, Valid, (UUID id));
+        S_METHOD_DEF(bool, AddScript, (const ScriptAsset& asset));
 
-        S_METHOD_DEF(ScriptManager, Ref<ScriptInstance>, CreateScriptInstance, (UUID id));
+        S_METHOD_DEF(Ref<ScriptInstance>, CreateScriptInstance, (UUID id));
 
     private:
         ScriptManager()  = default;

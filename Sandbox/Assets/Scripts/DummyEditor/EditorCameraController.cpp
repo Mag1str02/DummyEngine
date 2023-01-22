@@ -5,9 +5,7 @@ using namespace DE;
 class EditorCameraController : public ScriptInstance
 {
 public:
-    EditorCameraController() {
-        ADD_FIELD(active);
-    }
+    EditorCameraController() { ADD_FIELD(active); }
 
     virtual void OnCreate() override {}
     virtual void OnUpdate(float dt) override
@@ -21,31 +19,31 @@ public:
             camera.RotateY(Input::CursorXOffset() * sensitivity);
             camera.RotateX(Input::CursorYOffset() * sensitivity / 16 * 9);
 
-            if (Input::KeyDown(KEY_LEFT_SHIFT))
+            if (Input::KeyDown(Key::LeftShift))
             {
                 speed = 100.0f;
             }
-            if (Input::KeyDown(KEY_S))
+            if (Input::KeyDown(Key::S))
             {
                 camera.MoveInLocal(Vec3(0.0f, 0.0f, -1.0f) * speed * dt);
             }
-            if (Input::KeyDown(KEY_W))
+            if (Input::KeyDown(Key::W))
             {
                 camera.MoveInLocal(Vec3(0.0f, 0.0f, 1.0f) * speed * dt);
             }
-            if (Input::KeyDown(KEY_D))
+            if (Input::KeyDown(Key::D))
             {
                 camera.MoveInLocal(Vec3(1.0f, 0.0f, 0.0f) * speed * dt);
             }
-            if (Input::KeyDown(KEY_A))
+            if (Input::KeyDown(Key::A))
             {
                 camera.MoveInLocal(Vec3(-1.0f, 0.0f, 0.0f) * speed * dt);
             }
-            if (Input::KeyDown(KEY_SPACE))
+            if (Input::KeyDown(Key::Space))
             {
                 camera.MoveInWorld(Vec3(0.0f, 1.0f, 0.0f) * speed * dt);
             }
-            if (Input::KeyDown(KEY_C))
+            if (Input::KeyDown(Key::C))
             {
                 camera.MoveInWorld(Vec3(0.0f, -1.0f, 0.0f) * speed * dt);
             }

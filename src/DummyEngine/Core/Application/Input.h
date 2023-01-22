@@ -21,20 +21,20 @@ namespace DE
     {
         SINGLETON(Input)
     public:
-        S_METHOD_DEF(Input, Unit, Initialize, ());
-        S_METHOD_DEF(Input, Unit, Terminate, ());
+        S_METHOD_DEF(Unit, Initialize, ());
+        S_METHOD_DEF(Unit, Terminate, ());
 
-        S_METHOD_DEF(Input, Unit, OnEvent, (Event & e));
-        S_METHOD_DEF(Input, Unit, NewFrame, ());
+        S_METHOD_DEF(Unit, OnEvent, (Event & e));
+        S_METHOD_DEF(Unit, NewFrame, ());
 
-        S_METHOD_DEF(Input, double, CursorXOffset, ());
-        S_METHOD_DEF(Input, double, CursorYOffset, ());
+        S_METHOD_DEF(double, CursorXOffset, ());
+        S_METHOD_DEF(double, CursorYOffset, ());
 
-        S_METHOD_DEF(Input, bool, MouseLocked, ());
-        S_METHOD_DEF(Input, bool, KeyReleased, (uint32_t key_id));
-        S_METHOD_DEF(Input, bool, KeyPressed, (uint32_t key_id));
-        S_METHOD_DEF(Input, bool, KeyDown, (uint32_t key_id));
-        S_METHOD_DEF(Input, bool, KeyUp, (uint32_t key_id));
+        S_METHOD_DEF(bool, MouseLocked, ());
+        S_METHOD_DEF(bool, KeyReleased, (Key key));
+        S_METHOD_DEF(bool, KeyPressed, (Key key));
+        S_METHOD_DEF(bool, KeyDown, (Key key));
+        S_METHOD_DEF(bool, KeyUp, (Key key));
 
     private:
         Input()  = default;

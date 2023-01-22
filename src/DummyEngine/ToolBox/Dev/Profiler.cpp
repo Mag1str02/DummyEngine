@@ -5,9 +5,28 @@ namespace DE
 {
     ProfilerFrame::ProfilerFrame(uint32_t predicted_lapse_amount) { m_TimeLapses.reserve(predicted_lapse_amount); }
 
-    Profiler::Profiler() : m_PrevFrameTimeLapseAmount(0) {}
+    SINGLETON_BASE(Profiler);
 
-    void Profiler::IBeginFrame()
+    Unit Profiler::Initialize()
+    {
+        DE_ASSERT(!s_Instance, "Double Profiler initialization");
+        s_Instance = new Profiler();
+        DE_ASSERT(s_Instance, "Failed to allocate memory for Profiler");
+
+        s_Instance->IInitialize();
+        return Unit();
+    }
+    Unit Profiler::IInitialize() { return Unit(); }
+    Unit Profiler::Terminate()
+    {
+        s_Instance->ITerminate();
+        delete s_Instance;
+        return Unit();
+    }
+    Unit Profiler::ITerminate() { return Unit(); }
+
+    S_METHOD_IMPL(Profiler, const ProfilerFrame&, GetOldestFrame, (), ()) { return Get().m_Frames.front(); }
+    S_METHOD_IMPL(Profiler, Unit, BeginFrame, (), ())
     {
         if (!m_Frames.empty())
         {
@@ -23,9 +42,9 @@ namespace DE
         }
 
         IPushTimeLapse("Frame");
+        return Unit();
     }
-
-    void Profiler::IPushTimeLapse(const std::string& name)
+    S_METHOD_IMPL(Profiler, Unit, PushTimeLapse, (const std::string& name), (name))
     {
         ++m_PrevFrameTimeLapseAmount;
         uint32_t index = m_Frames.back().m_TimeLapses.size();
@@ -36,25 +55,18 @@ namespace DE
             m_Frames.back().m_TimeLapses[m_TimeLapseStack.top()].m_Childs.push_back(index);
         }
         m_TimeLapseStack.push(index);
+        return Unit();
     }
-    void Profiler::IPopTimeLapse()
+    S_METHOD_IMPL(Profiler, Unit, PopTimeLapse, (), ())
     {
-        DE_ASSERT(!m_TimeLapseStack.empty(), "Attempt to pop empty timeapse stack.");
+        DE_ASSERT(!m_TimeLapseStack.empty(), "Attempt to pop empty timelapse stack.");
 
         m_Frames.back().m_TimeLapses[m_TimeLapseStack.top()].m_End = std::chrono::high_resolution_clock::now();
         m_TimeLapseStack.pop();
+        return Unit();
     }
 
-    Profiler& Profiler::Get()
-    {
-        static Profiler profiler;
-        return profiler;
-    }
-
-    void Profiler::BeginFrame() { Get().IBeginFrame(); }
-    const ProfilerFrame& Profiler::GetOldestFrame() { return Get().m_Frames.front(); }
-
-    ProfilerScopeObject::ProfilerScopeObject(const std::string& name) { Profiler::Get().IPushTimeLapse(name); }
-    ProfilerScopeObject::~ProfilerScopeObject() { Profiler::Get().IPopTimeLapse(); }
+    ProfilerScopeObject::ProfilerScopeObject(const std::string& name) { Profiler::PushTimeLapse(name); }
+    ProfilerScopeObject::~ProfilerScopeObject() { Profiler::PopTimeLapse(); }
 
 }  // namespace DE

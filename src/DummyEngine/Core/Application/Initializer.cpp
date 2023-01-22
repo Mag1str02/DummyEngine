@@ -26,6 +26,7 @@ namespace DE
 
     void Initializer::PreInitialize()
     {
+        Profiler::Initialize();
         Config::Initialize();
         Logger::Initialize();
         LOG_INFO("Logger and config initialized", "Initializer");
@@ -80,5 +81,6 @@ namespace DE
         LOG_STAGE("PostTerminating", "Initializer");
         Logger::Terminate();
         Config::Terminate();
+        Profiler::Terminate();
     }
 }  // namespace DE

@@ -9,14 +9,14 @@ struct Unit
 #define THIRD(...) ERASE##__VA_ARGS__
 #define ERASEFIRST
 
-#define S_METHOD(type, return_type, name, signature, variables)    \
+#define S_METHOD(return_type, name, signature, variables)          \
     static DEL_BRACKETS(return_type) name(DEL_BRACKETS(signature)) \
     {                                                              \
-        return type::Get().I##name(DEL_BRACKETS(variables));       \
+        return Get().I##name(DEL_BRACKETS(variables));             \
     }                                                              \
     DEL_BRACKETS(return_type) I##name(DEL_BRACKETS(signature))
 
-#define S_METHOD_DEF(type, return_type, name, signature)            \
+#define S_METHOD_DEF(return_type, name, signature)                  \
     static DEL_BRACKETS(return_type) name(DEL_BRACKETS(signature)); \
     DEL_BRACKETS(return_type) I##name(DEL_BRACKETS(signature));
 
@@ -37,14 +37,19 @@ public:                                    \
     type& operator=(const type&) = delete; \
     type& operator=(type&&)      = delete;
 
-#define SINGLETON_BASE(type) template <> type* Singleton<type>::s_Instance = nullptr
+#define SINGLETON_BASE(type)                                 \
+    template <> type* Singleton<type>::s_Instance = nullptr; \
+    template <> type& Singleton<type>::Get()                 \
+    {                                                        \
+        return *s_Instance;                                  \
+    }
 
 namespace DE
 {
     template <typename T> class Singleton
     {
     public:
-        static T& Get() { return *s_Instance; }
+        static T& Get();
 
         Singleton(const Singleton&)           = delete;
         Singleton& operator=(const Singleton) = delete;

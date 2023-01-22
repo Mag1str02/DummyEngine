@@ -6,6 +6,7 @@
 #include <stack>
 #include <chrono>
 #include <iostream>
+#include "DummyEngine/Utils/Singleton.h"
 
 namespace DE
 {
@@ -13,10 +14,10 @@ namespace DE
     {
         std::chrono::time_point<std::chrono::high_resolution_clock> m_Start;
         std::chrono::time_point<std::chrono::high_resolution_clock> m_End;
-        std::vector<uint32_t> m_Childs;
-        std::string m_Name;
+        std::vector<uint32_t>                                       m_Childs;
+        std::string                                                 m_Name;
 
-        float Duration() const { return (m_End - m_Start).count() * 0.001 * 0.001; }
+        float       Duration() const { return (m_End - m_Start).count() * 0.001 * 0.001; }
         std::string StrDuration() const { return std::to_string((m_End - m_Start).count() * 0.001 * 0.001) + "ms"; }
 
         TimeLapse(const std::string& name) : m_Name(name) {}
@@ -28,27 +29,26 @@ namespace DE
         ProfilerFrame(uint32_t predicted_lapse_amount);
     };
 
-    class Profiler
+    class Profiler : public Singleton<Profiler>
     {
-    private:
-        Profiler();
+        SINGLETON(Profiler)
+    public:
+        S_METHOD_DEF(Unit, Initialize, ());
+        S_METHOD_DEF(Unit, Terminate, ());
 
-        void IBeginFrame();
+        S_METHOD_DEF(const ProfilerFrame&, GetOldestFrame, ());
+        S_METHOD_DEF(Unit, BeginFrame, ());
+        S_METHOD_DEF(Unit, PushTimeLapse, (const std::string& name));
+        S_METHOD_DEF(Unit, PopTimeLapse, ());
+
+    private:
+        friend class ProfilerScopeObject;
+        Profiler()  = default;
+        ~Profiler() = default;
 
         std::queue<ProfilerFrame> m_Frames;
-        std::stack<uint32_t> m_TimeLapseStack;
-        uint32_t m_PrevFrameTimeLapseAmount;
-
-        void IPushTimeLapse(const std::string& name);
-        void IPopTimeLapse();
-
-        static Profiler& Get();
-
-    public:
-        friend class ProfilerScopeObject;
-
-        static void BeginFrame();
-        static const ProfilerFrame& GetOldestFrame();
+        std::stack<uint32_t>      m_TimeLapseStack;
+        uint32_t                  m_PrevFrameTimeLapseAmount = 0;
     };
 
     class ProfilerScopeObject

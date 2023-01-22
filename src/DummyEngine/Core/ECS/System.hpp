@@ -12,22 +12,18 @@ namespace DE
         ComponentManager* m_ComponentManager;
 
     protected:
-        template <typename ComponentType>
-        ComponentArray<ComponentType>& GetComponentArray()
+        template <typename ComponentType> ComponentArray<ComponentType>& GetComponentArray()
         {
             return *(m_ComponentManager->GetComponentArray<ComponentType>());
         }
 
     public:
         virtual std::string GetName() const = 0;
-        virtual ~System() = default;
-        virtual void Update(double dt) = 0;
+        virtual ~System()                   = default;
+        virtual void Update(double dt)      = 0;
 
-        //TODO: Try to hide binding mechanism in private scope.
-        void Bind(ComponentManager* component_manager)
-        {
-            m_ComponentManager = component_manager;
-        }
+        // TODO: Try to hide binding mechanism in private scope.
+        void Bind(ComponentManager* component_manager) { m_ComponentManager = component_manager; }
     };
 
 }  // namespace DE

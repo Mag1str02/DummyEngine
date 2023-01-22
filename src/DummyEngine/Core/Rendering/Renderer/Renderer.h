@@ -9,8 +9,6 @@
 
 namespace DE
 {
-    // TODO: Proper singleton
-
     struct FrameStatistics
     {
         uint32_t m_DrawCallsAmount;
@@ -51,6 +49,8 @@ namespace DE
         static RenderAPI&      GetRenderAPI();
 
     private:
+        // TODO: Delete this
+
         static void GenDefaultTexture();
         static void GenFullScreenQuad();
         static void GenCube();

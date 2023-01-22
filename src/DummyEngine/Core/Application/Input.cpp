@@ -3,7 +3,7 @@
 
 namespace DE
 {
-    InputFrame::InputFrame() { key_states.resize(KEY_LAST); }
+    InputFrame::InputFrame() { key_states.resize((size_t)Key::Last); }
 
     SINGLETON_BASE(Input);
 
@@ -60,15 +60,15 @@ namespace DE
     S_METHOD_IMPL(Input, double, CursorYOffset, (), ()) { return m_Frames[0].y_pos - m_Frames[1].y_pos; }
 
     S_METHOD_IMPL(Input, bool, MouseLocked, (), ()) { return m_Frames[0].mouse_locked; }
-    S_METHOD_IMPL(Input, bool, KeyReleased, (uint32_t key_id), (key_id))
+    S_METHOD_IMPL(Input, bool, KeyReleased, (Key key), (key))
     {
-        return !m_Frames[0].key_states.at(key_id) && m_Frames[1].key_states.at(key_id);
+        return !m_Frames[0].key_states.at((size_t)key) && m_Frames[1].key_states.at((size_t)key);
     }
-    S_METHOD_IMPL(Input, bool, KeyPressed, (uint32_t key_id), (key_id))
+    S_METHOD_IMPL(Input, bool, KeyPressed, (Key key), (key))
     {
-        return m_Frames[0].key_states.at(key_id) && !m_Frames[1].key_states.at(key_id);
+        return m_Frames[0].key_states.at((size_t)key) && !m_Frames[1].key_states.at((size_t)key);
     }
-    S_METHOD_IMPL(Input, bool, KeyDown, (uint32_t key_id), (key_id)) { return m_Frames[0].key_states.at(key_id); }
-    S_METHOD_IMPL(Input, bool, KeyUp, (uint32_t key_id), (key_id)) { return !m_Frames[0].key_states.at(key_id); }
+    S_METHOD_IMPL(Input, bool, KeyDown, (Key key), (key)) { return m_Frames[0].key_states.at((size_t)key); }
+    S_METHOD_IMPL(Input, bool, KeyUp, (Key key), (key)) { return !m_Frames[0].key_states.at((size_t)key); }
 
 }  // namespace DE

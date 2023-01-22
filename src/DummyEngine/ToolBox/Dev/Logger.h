@@ -16,17 +16,17 @@ namespace DE
     {
         SINGLETON(Logger)
     public:
-        S_METHOD_DEF(Logger, Unit, Initialize, ());
-        S_METHOD_DEF(Logger, Unit, Terminate, ());
+        S_METHOD_DEF(Unit, Initialize, ());
+        S_METHOD_DEF(Unit, Terminate, ());
 
-        S_METHOD_DEF(Logger, bool, Open, (const std::string& log_name));
-        S_METHOD_DEF(Logger, Unit, Close, (const std::string& log_name));
+        S_METHOD_DEF(bool, Open, (const std::string& log_name));
+        S_METHOD_DEF(Unit, Close, (const std::string& log_name));
 
-        S_METHOD_DEF(Logger, Unit, Error, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
-        S_METHOD_DEF(Logger, Unit, Info, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
-        S_METHOD_DEF(Logger, Unit, Warning, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
-        S_METHOD_DEF(Logger, Unit, Stage, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
-        S_METHOD_DEF(Logger, Unit, Fatal, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
+        S_METHOD_DEF(Unit, Error, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
+        S_METHOD_DEF(Unit, Info, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
+        S_METHOD_DEF(Unit, Warning, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
+        S_METHOD_DEF(Unit, Stage, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
+        S_METHOD_DEF(Unit, Fatal, (const std::string& str, const std::string& author = "Anonymous", const std::string& log = ""));
 
     private:
         Logger()  = default;

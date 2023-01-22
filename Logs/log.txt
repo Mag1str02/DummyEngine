@@ -1,9 +1,0 @@
-[2023.01.22 | 19.01.22]  [Info] Initializer: Logger and config initialized
-[2023.01.22 | 19.01.22] [Stage] Initializer: Initializing dependencies
-[2023.01.22 | 19.01.22]  [Info] Initializer: Initialized GLFW
-[2023.01.22 | 19.01.22] [Stage] Initializer: Initializing Engine
-[2023.01.22 | 19.01.22]  [Info] Window: loading
-[2023.01.22 | 19.01.22]  [Info] Renderer: loading
-[2023.01.22 | 19.01.24] [Stage] Initializer: Terminating Engine
-[2023.01.22 | 19.01.24] [Stage] Initializer: Terminating dependencies
-[2023.01.22 | 19.01.24] [Stage] Initializer: PostTerminating
