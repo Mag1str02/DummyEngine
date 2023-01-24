@@ -5,33 +5,7 @@
 #define DE_SCRIPT_API extern "C" __declspec(dllexport)
 #endif
 
-#include <glm/gtc/constants.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/rotate_vector.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/vector_angle.hpp>
-#include <glm/glm.hpp>
-
-#include <memory>
-#include <iostream>
-#include <iomanip>
-#include <map>
-#include <string>
-#include <unordered_set>
-#include <unordered_map>
-#include <vector>
-#include <filesystem>
-#include <set>
-#include <fstream>
-#include <functional>
-#include <chrono>
-#include <cstdint>
-#include <queue>
-#include <stack>
-#include <random>
-#include <cxxabi.h>
-
+#include "DummyEngine/Utils/GLMIncludes.h"
 #include "DummyEngine/Utils/CompilerDefines.h"
 #include "DummyEngine/Utils/Conversions.h"
 #include "DummyEngine/Utils/Types.h"
@@ -42,7 +16,7 @@
 #include "DummyEngine/Utils/FileSystem.h"
 #include "DummyEngine/Utils/GLDebug.h"
 #include "DummyEngine/Utils/Singleton.h"
-
+#include "DummyEngine/Utils/StringOperations.h"
 #include "DummyEngine/ToolBox/Dev/Logger.h"
 #include "DummyEngine/ToolBox/Dev/Profiler.h"
 #include "DummyEngine/Platform/PlatformResolver.h"

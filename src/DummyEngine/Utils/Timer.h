@@ -1,6 +1,5 @@
 #pragma once
-
-#include <chrono>
+#include "DummyEngine/Utils/STDIncludes.h"
 
 namespace DE
 {

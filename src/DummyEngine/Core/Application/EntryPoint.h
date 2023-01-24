@@ -21,11 +21,11 @@ int main()
         DE::Initializer::Terminate();
     } catch (const std::exception& e)
     {
-        DE::Logger::Fatal(std::string("Unhandled exeption occured: ") + e.what(), "EntryPoint");
+        DE::Logger::Log(DE::LogMessageType::Fatal, StrCat("Unhandled exeption occured: ", e.what()), "EntryPoint");
         return -1;
     } catch (...)
     {
-        DE::Logger::Fatal(std::string("Unknown error occured"), "EntryPoint");
+        DE::Logger::Log(DE::LogMessageType::Fatal, "Unknown error occured", "EntryPoint");
         return -1;
     }
     return 0;

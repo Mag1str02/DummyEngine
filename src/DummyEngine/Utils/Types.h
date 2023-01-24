@@ -1,7 +1,6 @@
 #pragma once
-
-#include <glm/glm.hpp>
-#include <filesystem>
+#include "DummyEngine/Utils/GLMIncludes.h"
+#include "DummyEngine/Utils/STDIncludes.h"
 
 namespace DE
 {

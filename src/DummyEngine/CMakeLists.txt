@@ -10,6 +10,7 @@ set(ENGINE_SOURCES
     Utils/UUID.cpp
     Utils/Random.cpp
     Utils/Timer.cpp
+    Utils/StringOperations.cpp
 
     Core/Application/Application.cpp
     Core/Application/ImGuiLayer.cpp

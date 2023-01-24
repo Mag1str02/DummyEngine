@@ -17,6 +17,7 @@ namespace DE
 
     GLShader::GLShader(const std::vector<ShaderPart>& shader_parts)
     {
+        LOG_INFO("Loading shader.", "GLShader");
         m_ShaderId = glCreateProgram();
         for (const auto& part : shader_parts)
         {
@@ -30,10 +31,11 @@ namespace DE
         if (!success)
         {
             glGetProgramInfoLog(m_ShaderId, 512, NULL, info_log);
-            Logger::Fatal("loading", "GLShaderProgram", "Failed to link shader program (" + std::to_string(m_ShaderId) + ")\n" + info_log);
+            LOG_FATAL(StrCat("Failed to link shader program (", std::to_string(m_ShaderId), ")\n", reinterpret_cast<const char*>(&info_log)),
+                      "GLShader");
             throw std::runtime_error("Failed to compile shader.");
         }
-        Logger::Info("loading", "GLShaderProgram", "GLShader program (" + std::to_string(m_ShaderId) + ") linked successfully");
+        LOG_INFO(StrCat("GLShader program (", std::to_string(m_ShaderId), ") linked successfully"), "GLShader");
     }
     GLShader::~GLShader()
     {
@@ -149,7 +151,7 @@ namespace DE
         std::ifstream fin(path_to_file);
         if (!fin.is_open())
         {
-            Logger::Error("loading", "GLShader", "Can't open shader source file: (" + path_to_file.string() + ")");
+            LOG_ERROR(StrCat("Can't open shader source file: (", path_to_file.string(), ")"), "GLShader");
             return source_string;
         }
         try
@@ -160,10 +162,10 @@ namespace DE
             }
         } catch (...)
         {
-            Logger::Error("loading", "GLShader", "Failed to read shader source file: (" + path_to_file.string() + ")");
+            LOG_ERROR(StrCat("Failed to read shader source file: (", path_to_file.string(), ")"), "GLShader");
             return source_string;
         }
-        Logger::Info("loading", "GLShader", "GLShader source file readed: (" + path_to_file.string() + ")");
+        LOG_INFO(StrCat("GLShader source file readed: (", path_to_file.string(), ")"), "GLShader");
         return source_string;
     }
     void GLShader::AddPart(ShaderPart part)
@@ -182,10 +184,10 @@ namespace DE
         if (!success)
         {
             glGetShaderInfoLog(shader_part, Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN), NULL, infoLog);
-            Logger::Error("loading", "GLShader", "Failed to compile shader: (" + part.path.string() + ")\n" + std::string(infoLog));
+            LOG_ERROR(StrCat("Failed to compile shader: (", part.path.string(), ")\n", reinterpret_cast<const char*>(&infoLog)), "GLShader");
             return;
         }
-        Logger::Info("loading", "GLShader", "GLShader source file successfully compiled: (" + part.path.string() + ")");
+        LOG_INFO(StrCat("GLShader source file successfully compiled: (", part.path.string(), ")"), "GLShader");
 
         glAttachShader(m_ShaderId, shader_part);
     }

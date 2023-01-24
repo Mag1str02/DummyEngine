@@ -1,4 +1,5 @@
 #pragma once
+
 namespace DE
 {
     void glCheckError_(const char* file, int line);

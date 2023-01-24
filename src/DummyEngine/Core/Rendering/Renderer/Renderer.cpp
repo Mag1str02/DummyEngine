@@ -21,17 +21,18 @@ namespace DE
 
     void Renderer::Initialize()
     {
+        LOG_INFO("Initializing Renderer...", "Renderer");
         m_FrameStatistics = CreateScope<FrameStatistics>();
         switch (Config::GetRenderAPI())
         {
             case API::OpenGL: m_RenderAPI = CreateScope<GLRenderAPI>(); break;
             case API::Vulkan: {
-                DE_ASSERT(false, "Attempt to init Renderer with VulkanAPI which is currently unsupported.");
+                DE_ASSERT(false, "Attempt to init Renderer with VulkanAPI which is currently unsupported");
                 m_RenderAPI = nullptr;
                 break;
             }
             case API::None: {
-                DE_ASSERT(false, "Attempt to init Renderer without RenderingAPI.");
+                DE_ASSERT(false, "Attempt to init Renderer without RenderingAPI");
                 m_RenderAPI = nullptr;
                 break;
             }
@@ -43,7 +44,7 @@ namespace DE
         GenFullScreenQuad();
         GenCube();
 
-        Logger::Info("loading", "Renderer", "Renderer initialized.");
+        LOG_INFO("Renderer initialized.", "Renderer");
     }
     void Renderer::Terminate() {}
 

@@ -1,5 +1,4 @@
 #include "DummyEngine/Utils/Random.h"
-#include <ctime>
 
 namespace DE
 {
@@ -11,8 +10,5 @@ namespace DE
         float tmp = ((float)s_Generator() / (float)std::numeric_limits<uint32_t>::max());
         return tmp * range_end + (1 - tmp) * range_begin;
     }
-    int32_t Random::Int(int32_t range_begin, int32_t range_end)
-    {
-        return Float(range_begin, range_end);
-    }
+    int32_t Random::Int(int32_t range_begin, int32_t range_end) { return Float(range_begin, range_end); }
 }  // namespace DE

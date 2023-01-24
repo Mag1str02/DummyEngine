@@ -7,7 +7,7 @@ namespace DE
 
     GLFWmonitor* GetMonitor(uint32_t id)
     {
-        int monitors_amount;
+        int           monitors_amount;
         GLFWmonitor** monitors = glfwGetMonitors(&monitors_amount);
         DE_ASSERT(0 <= id && id < monitors_amount, "Wrong monitor id.");
         return monitors[id];
@@ -17,8 +17,8 @@ namespace DE
     {
         m_Window = glfwCreateWindow(1280, 720, m_State.name.c_str(), NULL, NULL);
         glfwSwapInterval(0);
-        DE_ASSERT(m_Window != nullptr, "Failed to create GLFW Window:" + m_State.name);
-        Logger::Info("loading", "Window", "Window created: " + m_State.name);
+        DE_ASSERT(m_Window != nullptr, StrCat("Failed to create GLFW Window: ", m_State.name));
+        LOG_INFO(StrCat("Window created: ", m_State.name), "Window");
 
         m_Context = Context::Create(m_Window);
         m_Context->Load();
@@ -37,11 +37,11 @@ namespace DE
     }
     void Window::Windowed(uint32_t width, uint32_t height, uint32_t x_pos, uint32_t y_pos)
     {
-        m_State.mode = WindowMode::Windowed;
-        m_State.width = width;
+        m_State.mode   = WindowMode::Windowed;
+        m_State.width  = width;
         m_State.height = height;
-        m_State.x_pos = x_pos;
-        m_State.y_pos = y_pos;
+        m_State.x_pos  = x_pos;
+        m_State.y_pos  = y_pos;
 
         Invalidate();
     }
@@ -70,7 +70,7 @@ namespace DE
     }
 
     void Window::OnUpdate()
-    {   
+    {
         DE_PROFILE_SCOPE("Window OnUpdate");
 
         glfwPollEvents();
@@ -83,19 +83,20 @@ namespace DE
     void Window::Invalidate()
     {
         DE_ASSERT(m_State.mode != WindowMode::None, "Wrong window mode.");
-        DE_ASSERT(m_State.width != 0 && m_State.height != 0, "Wrong window size(" + std::to_string(m_State.width) + ", " + std::to_string(m_State.height) + ")");
+        DE_ASSERT(m_State.width != 0 && m_State.height != 0,
+                  "Wrong window size(" + std::to_string(m_State.width) + ", " + std::to_string(m_State.height) + ")");
         if (m_State.mode == WindowMode::Windowed)
         {
             glfwSetWindowMonitor(m_Window, nullptr, m_State.x_pos, m_State.y_pos, m_State.width, m_State.height, 1000);
         }
         if (m_State.mode == WindowMode::FullScreen)
         {
-            GLFWmonitor* monitor = GetMonitor(m_State.monitor_id);
-            const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-            m_State.height = mode->height;
-            m_State.width = mode->width;
-            m_State.x_pos = 0;
-            m_State.y_pos = 0;
+            GLFWmonitor*       monitor = GetMonitor(m_State.monitor_id);
+            const GLFWvidmode* mode    = glfwGetVideoMode(monitor);
+            m_State.height             = mode->height;
+            m_State.width              = mode->width;
+            m_State.x_pos              = 0;
+            m_State.y_pos              = 0;
             glfwSetWindowMonitor(m_Window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
         }
     }
@@ -107,8 +108,8 @@ namespace DE
                                   [](GLFWwindow* window, int width, int height)
                                   {
                                       WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
-                                      state.width = width;
-                                      state.height = height;
+                                      state.width        = width;
+                                      state.height       = height;
 
                                       WindowResizeEvent event(width, height);
                                       state.event_callback(event);
@@ -117,7 +118,7 @@ namespace DE
         glfwSetWindowCloseCallback(m_Window,
                                    [](GLFWwindow* window)
                                    {
-                                       WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
+                                       WindowState&     state = *(WindowState*)glfwGetWindowUserPointer(window);
                                        WindowCloseEvent event;
                                        state.event_callback(event);
                                    });

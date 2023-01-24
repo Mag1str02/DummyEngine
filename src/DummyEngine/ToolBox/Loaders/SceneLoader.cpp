@@ -341,7 +341,7 @@ namespace DE
 
     template <typename ComponentType> void SceneLoader::LoadComponent(YAML::Node n_Component, Entity& entity)
     {
-        Logger::Warning("Loading", "SceneLoader", "Load function of " + DemangleName<ComponentType>() + " undefined.");
+        LOG_WARNING(StrCat("Load function of ", DemangleName<ComponentType>(), " undefined."), "SceneLoader");
     }
     template <> void SceneLoader::LoadComponent<TagComponent>(YAML::Node n_Component, Entity& entity)
     {

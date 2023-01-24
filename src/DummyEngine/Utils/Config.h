@@ -1,5 +1,4 @@
 #pragma once
-
 #include "DummyEngine/Utils/Types.h"
 
 namespace DE

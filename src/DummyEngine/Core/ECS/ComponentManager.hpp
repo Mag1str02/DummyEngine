@@ -33,7 +33,7 @@ namespace DE
             m_ComponentId[component_name] = m_ComponentId.size();
             m_ComponentArrays[component_name] = std::make_shared<ComponentArray<ComponentType>>(ComponentArray<ComponentType>(m_EntityAmount));
 
-            Logger::Info("ECS", "ComponentManager", "Registered Component (" + NormalTypeName(component_name) + ")");
+            // Logger::Info("ECS", "ComponentManager", "Registered Component (" + NormalTypeName(component_name) + ")");
         }
 
     public:
