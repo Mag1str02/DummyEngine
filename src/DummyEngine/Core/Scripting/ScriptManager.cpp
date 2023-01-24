@@ -20,7 +20,7 @@ namespace DE
     }
     Unit ScriptManager::IInitialize()
     {
-        m_ScriptLibrary = CreateScope<SharedObject>();
+        m_ScriptLibrary = CreateRef<SharedObject>();
         return Unit();
     }
     Unit ScriptManager::Terminate()
@@ -154,6 +154,9 @@ namespace DE
                 return false;
             }
             res[id] = create_func;
+            ScriptClass s_class(state.path.stem().string());
+            s_class.Load(m_ScriptLibrary);
+            LOG_INFO(StrCat("Class ", state.path.stem().string(), " ", (s_class.Valid() ? "Valid" : "Invalid")), "ScriptManager");
         }
         m_CreateFuncs = std::move(res);
         return true;

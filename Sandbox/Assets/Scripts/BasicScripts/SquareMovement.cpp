@@ -2,6 +2,8 @@
 
 using namespace DE;
 
+class SquareMovement;
+
 class SquareMovement : public ScriptInstance
 {
 public:
@@ -50,4 +52,5 @@ private:
     Vec2  right_front;
 };
 
-SCRIPT_INSTANCE_CREATE_FUNCTION(SquareMovement);
+SCRIPT_BASE(SquareMovement)
+SCRIPT_INSTANCE_CREATE_FUNCTION(SquareMovement)

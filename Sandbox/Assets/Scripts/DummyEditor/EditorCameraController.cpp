@@ -55,4 +55,6 @@ private:
     bool active = false;
 };
 
-SCRIPT_INSTANCE_CREATE_FUNCTION(EditorCameraController);
+SCRIPT_BASE(EditorCameraController)
+
+SCRIPT_INSTANCE_CREATE_FUNCTION(EditorCameraController)

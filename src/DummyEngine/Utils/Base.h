@@ -2,8 +2,8 @@
 
 #if WIN32
 #define YAML_CPP_STATIC_DEFINE
-#define DE_SCRIPT_API extern "C" __declspec(dllexport)
 #endif
+#define DE_SCRIPT_API extern "C" __declspec(dllexport)
 
 #include "DummyEngine/Utils/GLMIncludes.h"
 #include "DummyEngine/Utils/CompilerDefines.h"

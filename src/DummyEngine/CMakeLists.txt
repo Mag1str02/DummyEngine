@@ -66,6 +66,7 @@ set(ENGINE_SOURCES
   
     Core/Scripting/ScriptInstance.cpp
     Core/Scripting/ScriptManager.cpp
+    Core/Scripting/ScriptClass.cpp
 
     ToolBox/Dev/Logger.cpp
     ToolBox/Dev/Profiler.cpp

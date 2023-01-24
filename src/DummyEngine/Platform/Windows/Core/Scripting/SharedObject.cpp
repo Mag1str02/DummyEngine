@@ -22,6 +22,10 @@ namespace DE
 
         bool Load(const Path& directory, const std::string& name)
         {
+            if (m_Handle)
+            {
+                return false;
+            }
             Path path_to_dll = directory / (name + ".dll");
             if (!fs::exists(path_to_dll))
             {
@@ -32,10 +36,7 @@ namespace DE
             {
                 return false;
             }
-            if (m_Handle)
-            {
-                FreeLibrary(m_Handle);
-            }
+
             m_Handle    = new_handle;
             m_Directory = directory;
             m_Name      = name;

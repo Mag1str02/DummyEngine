@@ -2,9 +2,12 @@
 #include "DummyEngine/Core/ResourceManaging/Assets.h"
 #include "DummyEngine/Core/Scripting/ScriptInstance.h"
 #include "DummyEngine/Core/Scripting/SharedObject.h"
+#include "DummyEngine/Core/Scripting/ScriptClass.h"
 
 namespace DE
 {
+   
+
     using CreateScriptInstanceFunc = Ref<ScriptInstance> (*)();
 
     class ScriptManager : public Singleton<ScriptManager>
@@ -37,7 +40,7 @@ namespace DE
             bool modified = true;
             Path path;
         };
-        Scope<SharedObject>                                m_ScriptLibrary;
+        Ref<SharedObject>                                m_ScriptLibrary;
         std::unordered_map<UUID, ScriptInfo>               m_ScriptStates;
         std::unordered_map<UUID, CreateScriptInstanceFunc> m_CreateFuncs;
     };

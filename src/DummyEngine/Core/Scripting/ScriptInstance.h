@@ -65,7 +65,6 @@ namespace DE
         Entity                   GetEntityByName(const std::string& name) const { return m_Scene->GetByName(name); };
         void                     AddField(const ScriptField& field) { m_Fields[field.GetName()] = field; }
 
-    private:
         friend class Scene;
 
         void AttachToEntity(Scene* scene, Entity entity)
@@ -79,6 +78,38 @@ namespace DE
     };
 }  // namespace DE
 
-// clang-format off
-#define SCRIPT_INSTANCE_CREATE_FUNCTION(Type) DE_SCRIPT_API Ref<ScriptInstance> CreateInstance##Type(){return CreateRef<Type>();}
-// clang-format on
+#define SCRIPT_BASE(type)                                  \
+    DE_SCRIPT_API void type##Construct(void* adr)          \
+    {                                                      \
+        new (adr) type();                                  \
+    }                                                      \
+    DE_SCRIPT_API void type##Destruct(void* adr)           \
+    {                                                      \
+        reinterpret_cast<type*>(adr)->~type();             \
+    }                                                      \
+    DE_SCRIPT_API void type##OnCreate(void* adr)           \
+    {                                                      \
+        reinterpret_cast<type*>(adr)->OnCreate();          \
+    }                                                      \
+    DE_SCRIPT_API void type##OnUpdate(void* adr, float dt) \
+    {                                                      \
+        reinterpret_cast<type*>(adr)->OnUpdate(dt);        \
+    }                                                      \
+    DE_SCRIPT_API void type##OnDestroy(void* adr)          \
+    {                                                      \
+        reinterpret_cast<type*>(adr)->OnDestroy();         \
+    }                                                      \
+    DE_SCRIPT_API uint32_t type##AlignOf()                 \
+    {                                                      \
+        return alignof(type);                              \
+    }                                                      \
+    DE_SCRIPT_API uint32_t type##SizeOf()                  \
+    {                                                      \
+        return sizeof(type);                               \
+    }
+
+#define SCRIPT_INSTANCE_CREATE_FUNCTION(Type)                \
+    DE_SCRIPT_API Ref<ScriptInstance> CreateInstance##Type() \
+    {                                                        \
+        return CreateRef<Type>();                            \
+    }
