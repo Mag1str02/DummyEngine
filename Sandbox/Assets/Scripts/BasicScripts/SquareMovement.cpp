@@ -4,7 +4,7 @@ using namespace DE;
 
 class SquareMovement;
 
-class SquareMovement : public ScriptInstance
+class SquareMovement : public Script
 {
 public:
     SquareMovement() : current_time(0.0f), cycle_time(1.0f), height(0.0), left_back({0.0, 0.0}), right_front({0.0, 0.0})

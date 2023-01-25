@@ -6,7 +6,7 @@
 #include "DummyEngine/Core/Scripting/Compiler.h"
 #include "DummyEngine/Core/Application/Application.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
-#include "DummyEngine/Core/Scripting/ScriptManager.h"
+#include "DummyEngine/Core/Scripting/ScriptEngine.h"
 
 namespace DE
 {
@@ -53,7 +53,7 @@ namespace DE
 
         LOG_STAGE("Initializing Engine", "Initializer");
         Compiler::Initialize();
-        ScriptManager::Initialize();
+        ScriptEngine::Initialize();
         Input::Initialize();
         Application::Initialize();
         Renderer::Initialize();
@@ -65,7 +65,7 @@ namespace DE
         Renderer::Terminate();
         Application::Terminate();
         Input::Terminate();
-        ScriptManager::Terminate();
+        ScriptEngine::Terminate();
         Compiler::Terminate();
     }
     void Initializer::DepTerminate()

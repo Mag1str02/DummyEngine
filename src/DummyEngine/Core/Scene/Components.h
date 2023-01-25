@@ -56,12 +56,12 @@ namespace DE
         Ref<CubeMap> map = nullptr;
     };
 
-    class ScriptInstance;
+    class Script;
 
     struct ScriptComponent
     {
         UUID id;
 
-        Ref<ScriptInstance> instance = nullptr;
+        Ref<Script> instance = nullptr;
     };
 }  // namespace DE

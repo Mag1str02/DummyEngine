@@ -40,22 +40,20 @@ namespace DE
         void*           m_Data;
     };
 
-#define ADD_FIELD(field) AddField(ScriptField(std::string(#field), &field, TypeToScriptFieldType(field)))
-
-    class ScriptInstance
+    class Script
     {
     public:
-        ScriptInstance() : m_Scene(nullptr) {}
-        virtual ~ScriptInstance() {}
+        Script() : m_Scene(nullptr) {}
+        virtual ~Script() {}
 
         virtual void OnCreate() {}
         virtual void OnUpdate(float dt) {}
         virtual void OnDestroy() {}
 
-        ScriptInstance(const ScriptInstance&)            = delete;
-        ScriptInstance(ScriptInstance&&)                 = delete;
-        ScriptInstance& operator=(const ScriptInstance&) = delete;
-        ScriptInstance& operator=(ScriptInstance&&)      = delete;
+        Script(const Script&)            = delete;
+        Script(Script&&)                 = delete;
+        Script& operator=(const Script&) = delete;
+        Script& operator=(Script&&)      = delete;
 
         std::unordered_map<std::string, ScriptField>& GetFields() { return m_Fields; }
         ScriptField                                   GetField(const std::string& field_name) { return m_Fields[field_name]; }
@@ -77,6 +75,8 @@ namespace DE
         Entity                                       m_Entity;
     };
 }  // namespace DE
+
+#define ADD_FIELD(field) AddField(ScriptField(std::string(#field), &field, TypeToScriptFieldType(field)))
 
 #define SCRIPT_BASE(type)                                  \
     DE_SCRIPT_API void type##Construct(void* adr)          \
@@ -108,8 +108,8 @@ namespace DE
         return sizeof(type);                               \
     }
 
-#define SCRIPT_INSTANCE_CREATE_FUNCTION(Type)                \
-    DE_SCRIPT_API Ref<ScriptInstance> CreateInstance##Type() \
-    {                                                        \
-        return CreateRef<Type>();                            \
+#define SCRIPT_INSTANCE_CREATE_FUNCTION(Type)        \
+    DE_SCRIPT_API Ref<Script> CreateInstance##Type() \
+    {                                                \
+        return CreateRef<Type>();                    \
     }

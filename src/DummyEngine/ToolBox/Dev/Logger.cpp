@@ -91,6 +91,7 @@ namespace DE
         {
             stream.stream.close();
         }
+        m_Streams.clear();
         return Unit();
     }
 
@@ -123,6 +124,10 @@ namespace DE
     {
         if (!m_Streams.contains(to))
         {
+            if (type == LogMessageType::Fatal)
+            {
+                ITerminate();
+            }
             return Unit();
         }
         LogStream& log = m_Streams[to];
@@ -132,6 +137,10 @@ namespace DE
             log.records.pop_front();
         }
         log.stream << log.records.back().ToString();
+        if (type == LogMessageType::Fatal)
+        {
+            ITerminate();
+        }
         return Unit();
     }
     S_METHOD_IMPL(Logger, const std::deque<LogRecord>&, GetLog, (const std::string& log), (log))

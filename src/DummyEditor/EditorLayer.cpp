@@ -176,16 +176,16 @@ namespace DE
     }
     void EditorLayer::OpenScene(const Path& scene_path)
     {
-        ScriptManager::Get().Clear();
+        ScriptEngine::Get().Clear();
         UUID script_id = UUID();
         AssetManager::AddAsset<ScriptAsset>({script_id, "", Config::GetPath(DE_CFG_SCRIPT_PATH) / "DummyEditor" / "EditorCameraController.cpp"});
-        ScriptManager::Get().AddScript(AssetManager::GetAsset<ScriptAsset>(script_id));
+        ScriptEngine::Get().AddScript(AssetManager::GetAsset<ScriptAsset>(script_id));
 
         SceneLoader::Load(m_SceneData.m_Scene, scene_path);
 
         m_EditorCamera = m_SceneData.m_Scene->CreateHiddenEntity("Editor Camera");
         m_EditorCamera.AddComponent<FPSCamera>();
-        m_EditorCamera.AddComponent<ScriptComponent>({script_id, ScriptManager::Get().CreateScriptInstance(script_id)});
+        m_EditorCamera.AddComponent<ScriptComponent>({script_id, ScriptEngine::Get().CreateScript(script_id)});
 
         m_SceneData.m_Scene->RegisterSystem<MovingSystem>();
         m_SceneHierarchy.SetActiveScene(m_SceneData.m_Scene);

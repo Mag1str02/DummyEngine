@@ -19,7 +19,6 @@
 #include "DummyEngine/Utils/StringOperations.h"
 #include "DummyEngine/ToolBox/Dev/Logger.h"
 #include "DummyEngine/ToolBox/Dev/Profiler.h"
-#include "DummyEngine/Platform/PlatformResolver.h"
 
 namespace DE
 {

@@ -64,8 +64,8 @@ set(ENGINE_SOURCES
     Core/ResourceManaging/RawData.cpp
     Core/ResourceManaging/ResourceManager.cpp
   
-    Core/Scripting/ScriptInstance.cpp
-    Core/Scripting/ScriptManager.cpp
+    Core/Scripting/Script.cpp
+    Core/Scripting/ScriptEngine.cpp
     Core/Scripting/ScriptClass.cpp
 
     ToolBox/Dev/Logger.cpp
@@ -74,14 +74,30 @@ set(ENGINE_SOURCES
     ToolBox/Loaders/TextureLoader.cpp 
     ToolBox/Loaders/SceneLoader.cpp
     ToolBox/Editors/TextureEditor.cpp
-
-    Platform/PlatformSpecific.cpp
 )
+
+if(${CMAKE_PLATFORM} STREQUAL "WINDOWS")
+    set(PLATFORM_SOURCES
+        Platform/Windows/Core/Scripting/Compiler.cpp
+        Platform/Windows/Utils/FileSystem.cpp
+        Platform/Windows/Core/Scripting/SharedObject.cpp
+    )
+endif()
+if(${CMAKE_PLATFORM} STREQUAL "LINUX")
+    set(PLATFORM_SOURCES
+    )
+endif()
+if(${CMAKE_PLATFORM} STREQUAL "MACOS")
+    set(PLATFORM_SOURCES
+    )
+endif()
 
 add_subdirectory(Libs)
 add_library(DummyEngineLib SHARED
    ${ENGINE_SOURCES}
 )
+target_sources(DummyEngineLib PRIVATE ${PLATFORM_SOURCES})
+
 target_compile_definitions(DummyEngineLib PUBLIC 
     DE_PROFILER_ENABLED=1
     DE_ENABLE_ASSERTS=1

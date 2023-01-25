@@ -15,7 +15,7 @@
 #include "DummyEngine/Core/Rendering/Renderer/LocalBuffer.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
-#include "DummyEngine/Core/Scripting/ScriptInstance.h"
+#include "DummyEngine/Core/Scripting/Script.h"
 #include "DummyEngine/Core/Application/Input.h"
 
 #include "DummyEngine/ToolBox/Dev/Profiler.h"

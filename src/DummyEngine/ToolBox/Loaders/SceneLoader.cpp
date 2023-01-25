@@ -7,7 +7,7 @@
 #include "DummyEngine/Core/ResourceManaging/AssetManager.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/Scene/SceneRenderData.h"
-#include "DummyEngine/Core/Scripting/ScriptManager.h"
+#include "DummyEngine/Core/Scripting/ScriptEngine.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"
 
 namespace DE
@@ -428,7 +428,7 @@ namespace DE
     {
         ScriptComponent script;
         script.id             = n_Component["UUID"].as<uint64_t>();
-        script.instance       = ScriptManager::Get().CreateScriptInstance(script.id);
+        script.instance       = ScriptEngine::Get().CreateScript(script.id);
         auto& script_instance = entity.AddComponent<ScriptComponent>(script);
         for (auto& [name, field] : script_instance.instance->GetFields())
         {
@@ -505,9 +505,9 @@ namespace DE
             asset.name = node.first.as<std::string>();
             asset.path = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
             AssetManager::AddAsset(asset);
-            ScriptManager::Get().AddScript(asset);
+            ScriptEngine::Get().AddScript(asset);
         }
-        ScriptManager::Get().ReloadSripts();
+        ScriptEngine::Get().ReloadSripts();
     }
     void SceneLoader::LoadAssets(YAML::Node n_Assets)
     {

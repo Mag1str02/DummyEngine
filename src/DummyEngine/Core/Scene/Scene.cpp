@@ -6,7 +6,7 @@
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/Scene/SceneRenderData.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"
-#include "DummyEngine/Core/Scripting/ScriptInstance.h"
+#include "DummyEngine/Core/Scripting/Script.h"
 
 namespace DE
 {

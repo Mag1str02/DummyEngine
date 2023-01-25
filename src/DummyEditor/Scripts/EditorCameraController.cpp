@@ -2,7 +2,7 @@
 
 using namespace DE;
 
-class EditorCameraController : public ScriptInstance
+class EditorCameraController : public Script
 {
 public:
     EditorCameraController() { ADD_FIELD(active); }

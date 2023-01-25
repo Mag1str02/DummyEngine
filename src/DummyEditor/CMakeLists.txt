@@ -18,7 +18,15 @@ set(EDITOR_SOURCES
 add_executable(DummyEditor 
     ${EDITOR_SOURCES}    
 )
+add_library(DummyEditorScripts SHARED 
+    Scripts/EditorCameraController.cpp
+)
+add_dependencies(DummyEditor DummyEditorScripts)
 
+target_link_libraries(DummyEditorScripts PUBLIC DummyEngineLib)
+target_include_directories(DummyEditorScripts PUBLIC 
+    ../.
+)
 target_link_libraries(DummyEditor PUBLIC DummyEngineLib)
 target_include_directories(DummyEditor PUBLIC 
     .

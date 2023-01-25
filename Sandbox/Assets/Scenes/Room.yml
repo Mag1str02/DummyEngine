@@ -1,0 +1,186 @@
+Scene:
+  Name: NewScene
+  Assets:
+    Models:
+      CubeModel:
+        Path: Assets\Models\Cube\cube.obj
+        Compress: true
+        FlipUV: false
+        UUID: 6557233926725796949
+    Shaders:
+      TexturedPhong:
+        UUID: 3566111628970667214
+        Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
+        Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
+    Textures:
+      Sky:
+        Path: Assets\Textures\Skyboxes\Sky.png
+        FlipUV: false
+        UUID: 4297990474523151207
+    Scripts:
+      SquareMovement:
+        Path: Assets\Scripts\BasicScripts\SquareMovement.cpp
+        UUID: 4297990029523151207
+  Hierarchy:
+    - Entity:
+        Tag: Empty_1
+        UUID: 1629924334753701623
+        Transformation:
+          Translation: [0, 0, 0]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [500, 0.00999999978, 500]
+          ScaleOffset: [1, 1, 1]
+        RenderModel: 6557233926725796949
+        Shader: 3566111628970667214
+    - Entity:
+        Tag: WallLarge2
+        UUID: 1629924334024701623
+        Transformation:
+          Translation: [-2.86999989, 2.4000001, 4.88999987]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [0.00100000005, 2.4000001, 4.88999987]
+          ScaleOffset: [1, 1, 1]
+        RenderModel: 6557233926725796949
+        Shader: 3566111628970667214
+    - Entity:
+        Tag: WallLarge1
+        UUID: 16299134334753701623
+        Transformation:
+          Translation: [2.86999989, 2.4000001, 4.88999987]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [0.00100000005, 2.4000001, 4.88999987]
+          ScaleOffset: [1, 1, 1]
+        RenderModel: 6557233926725796949
+        Shader: 3566111628970667214
+    - Entity:
+        Tag: WallSmall2
+        UUID: 1622054334753701623
+        Transformation:
+          Translation: [0, 2.4000001, 9.77999973]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [2.86999989, 2.4000001, 0.00100000005]
+          ScaleOffset: [1, 1, 1]
+        RenderModel: 6557233926725796949
+        Shader: 3566111628970667214
+    - Entity:
+        Tag: WallSmall1
+        UUID: 1629924334753701442
+        Transformation:
+          Translation: [0, 2.4000001, 0]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [2.86999989, 2.4000001, 0.00100000005]
+          ScaleOffset: [1, 1, 1]
+        RenderModel: 6557233926725796949
+        Shader: 3566111628970667214
+    - Entity:
+        Tag: Dor
+        UUID: 1629994334753701442
+        Transformation:
+          Translation: [-0.409999996, 2, 0]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [0.930000007, 2, 0.200000003]
+          ScaleOffset: [1, 1, 1]
+        RenderModel: 6557233926725796949
+        Shader: 3566111628970667214
+    - Entity:
+        Tag: Table
+        UUID: 16242424334753701442
+        Transformation:
+          Translation: [-2, 0.75, 4.9000001]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [0.800000012, 0.75, 1.79999995]
+          ScaleOffset: [1, 1, 1]
+        RenderModel: 6557233926725796949
+        Shader: 3566111628970667214
+    - Entity:
+        Tag: Sofa
+        UUID: 1629924334753302442
+        Transformation:
+          Translation: [-0.5, 0.400000006, 8.19999981]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 90, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [1.50999999, 0.400000006, 2.27999997]
+          ScaleOffset: [1, 1, 1]
+        RenderModel: 6557233926725796949
+        Shader: 3566111628970667214
+    - Entity:
+        Tag: Lamp2
+        UUID: 7834405913725978860
+        Transformation:
+          Translation: [-15.8579998, 6.69999981, 17.8999996]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [0.100000001, 0.100000001, 0.100000001]
+          ScaleOffset: [1, 1, 1]
+        RenderModel: 6557233926725796949
+        Shader: 3566111628970667214
+        LightSource:
+          Type: Point
+          Ambient: [0, 0, 0]
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Direction: [0, -1, 0]
+          Position: [-15.8579998, 6.69999981, 17.8999996]
+          CLQ: [1, 0.0219999999, 0.00190000003]
+          InnerCone: 0
+          OuterCone: 0
+    - Entity:
+        Tag: Lamp1
+        UUID: 7834405913725978824
+        Transformation:
+          Translation: [10.342, 6.69999981, -2.5999999]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [0.100000001, 0.100000001, 0.100000001]
+          ScaleOffset: [1, 1, 1]
+        RenderModel: 6557233926725796949
+        Shader: 3566111628970667214
+        LightSource:
+          Type: Point
+          Ambient: [0, 0, 0]
+          Diffuse: [1, 1, 1]
+          Specular: [1, 1, 1]
+          Direction: [0, -1, 0]
+          Position: [10.342, 6.69999981, -2.5999999]
+          CLQ: [1, 0.0219999999, 0.00190000003]
+          InnerCone: 0
+          OuterCone: 0
+    - Entity:
+        Tag: Sun
+        UUID: 7834405913725978852
+        Transformation:
+          Translation: [-36.5579987, 6.69999981, -2.5999999]
+          TranslationOffset: [0, 0, 0]
+          Rotation: [0, 0, 0]
+          RotationOffset: [0, 0, 0]
+          Scale: [0.100000001, 0.100000001, 0.100000001]
+          ScaleOffset: [1, 1, 1]
+        RenderModel: 6557233926725796949
+        Shader: 3566111628970667214
+        LightSource:
+          Type: Direction
+          Ambient: [0, 0, 0]
+          Diffuse: [0.47734046, 0.559732378, 0.710784316]
+          Specular: [1, 1, 1]
+          Direction: [0, -1, 0]
+          Position: [-36.5579987, 6.69999981, -2.5999999]
+          CLQ: [1, 0.0219999999, 0.00190000003]
+          InnerCone: 0
+          OuterCone: 0

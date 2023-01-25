@@ -22,7 +22,7 @@
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/ResourceManaging/AssetManager.h"
 
-#include "DummyEngine/Core/Scripting/ScriptManager.h"
+#include "DummyEngine/Core/Scripting/ScriptEngine.h"
 
 #include "DummyEngine/ToolBox/Dev/Profiler.h"
 #include "DummyEngine/ToolBox/Dev/Logger.h"
