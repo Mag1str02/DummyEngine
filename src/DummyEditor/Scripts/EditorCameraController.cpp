@@ -56,5 +56,3 @@ private:
 };
 
 SCRIPT_BASE(EditorCameraController)
-
-SCRIPT_INSTANCE_CREATE_FUNCTION(EditorCameraController)

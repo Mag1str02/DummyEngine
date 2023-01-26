@@ -106,10 +106,8 @@ namespace DE
     DE_SCRIPT_API uint32_t type##SizeOf()                  \
     {                                                      \
         return sizeof(type);                               \
-    }
-
-#define SCRIPT_INSTANCE_CREATE_FUNCTION(Type)        \
-    DE_SCRIPT_API Ref<Script> CreateInstance##Type() \
-    {                                                \
-        return CreateRef<Type>();                    \
+    }                                                      \
+    DE_SCRIPT_API Ref<Script> type##CreateInstance()       \
+    {                                                      \
+        return CreateRef<type>();                          \
     }

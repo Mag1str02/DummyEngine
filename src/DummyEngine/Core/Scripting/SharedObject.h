@@ -12,7 +12,10 @@ namespace DE
     public:
         SharedObject();
         ~SharedObject();
-        bool               Load(const Path& directory, const std::string& name);
+        bool Load(const Path& directory, const std::string& name);
+        void Invalidate();
+
+        bool               Valid() const;
         VoidFPtr           GetFunction(const std::string& function_name) const;
         const Path&        GetDirectory() const;
         const std::string& GetName() const;

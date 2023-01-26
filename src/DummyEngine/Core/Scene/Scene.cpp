@@ -116,7 +116,7 @@ namespace DE
         auto& scripts = m_Storage.GetComponentArray<ScriptComponent>();
         for (auto [id, script] : scripts)
         {
-            script.instance->OnUpdate(dt);
+            script.Get().Get()->OnUpdate(dt);
         }
     }
     void Scene::Render()
@@ -167,7 +167,7 @@ namespace DE
     template <> void                   Scene::OnComponentAttach<SkyBox>(Entity entity) {}
     template <> void                   Scene::OnComponentAttach<ScriptComponent>(Entity entity)
     {
-        entity.GetComponent<ScriptComponent>().instance->AttachToEntity(this, entity);
+        entity.GetComponent<ScriptComponent>().Get().Get()->AttachToEntity(this, entity);
     }
 
 }  // namespace DE

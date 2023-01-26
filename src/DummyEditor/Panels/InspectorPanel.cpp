@@ -1,4 +1,4 @@
-#include "Panels/InspectorPanel.h"
+#include "DummyEditor/Panels/InspectorPanel.h"
 
 namespace DE
 {

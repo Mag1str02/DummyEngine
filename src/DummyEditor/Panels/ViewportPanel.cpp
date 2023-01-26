@@ -1,4 +1,4 @@
-#include "Panels/ViewportPanel.h"
+#include "DummyEditor/Panels/ViewportPanel.h"
 
 namespace DE
 {

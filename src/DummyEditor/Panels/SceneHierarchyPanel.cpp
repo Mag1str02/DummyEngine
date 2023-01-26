@@ -1,4 +1,4 @@
-#include "Panels/SceneHierarchyPanel.h"
+#include "DummyEditor/Panels/SceneHierarchyPanel.h"
 
 namespace DE
 {

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "DummyEngineInclude.h"
-#include "Panels/ViewportPanel.h"
-#include "Panels/ProfilerPanel.h"
-#include "Panels/SceneHierarchyPanel.h"
-#include "Panels/InspectorPanel.h"
+#include "DummyEditor/DummyEngineInclude.h"
+#include "DummyEditor/Panels/ViewportPanel.h"
+#include "DummyEditor/Panels/ProfilerPanel.h"
+#include "DummyEditor/Panels/SceneHierarchyPanel.h"
+#include "DummyEditor/Panels/InspectorPanel.h"
 
 namespace DE
 {

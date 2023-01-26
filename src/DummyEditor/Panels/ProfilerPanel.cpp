@@ -1,4 +1,4 @@
-#include "Panels/ProfilerPanel.h"
+#include "DummyEditor/Panels/ProfilerPanel.h"
 
 namespace DE
 {

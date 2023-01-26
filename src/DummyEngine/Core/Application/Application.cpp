@@ -1,6 +1,5 @@
 #include "DummyEngine/Core/Application/Application.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
-#include "DummyEngine/Core/Scripting/Compiler.h"
 
 namespace DE
 {

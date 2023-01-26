@@ -145,8 +145,8 @@ namespace DE
         if (entity.HasComponent<ScriptComponent>())
         {
             auto& script_instance      = entity.GetComponent<ScriptComponent>();
-            n_Entity["Script"]["UUID"] = (uint64_t)script_instance.id;
-            for (auto& [name, field] : script_instance.instance->GetFields())
+            n_Entity["Script"]["UUID"] = (uint64_t)script_instance.Get().ID();
+            for (auto& [name, field] : script_instance.Get().Get()->GetFields())
             {
                 n_Entity["Script"]["Fields"][name] = NodeScriptField(field);
             }
@@ -426,11 +426,9 @@ namespace DE
     }
     template <> void SceneLoader::LoadComponent<ScriptComponent>(YAML::Node n_Component, Entity& entity)
     {
-        ScriptComponent script;
-        script.id             = n_Component["UUID"].as<uint64_t>();
-        script.instance       = ScriptEngine::Get().CreateScript(script.id);
-        auto& script_instance = entity.AddComponent<ScriptComponent>(script);
-        for (auto& [name, field] : script_instance.instance->GetFields())
+        ScriptComponent script = ScriptEngine::CreateScript(n_Component["UUID"].as<uint64_t>());
+        entity.AddComponent<ScriptComponent>(script);
+        for (auto& [name, field] : script.Get().Get()->GetFields())
         {
             if (n_Component["Fields"][name])
             {
@@ -505,9 +503,8 @@ namespace DE
             asset.name = node.first.as<std::string>();
             asset.path = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
             AssetManager::AddAsset(asset);
-            ScriptEngine::Get().AddScript(asset);
+            ScriptEngine::AddScript(asset);
         }
-        ScriptEngine::Get().ReloadSripts();
     }
     void SceneLoader::LoadAssets(YAML::Node n_Assets)
     {

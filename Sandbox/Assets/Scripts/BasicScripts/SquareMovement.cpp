@@ -53,4 +53,3 @@ private:
 };
 
 SCRIPT_BASE(SquareMovement)
-SCRIPT_INSTANCE_CREATE_FUNCTION(SquareMovement)

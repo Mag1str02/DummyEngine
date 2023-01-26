@@ -3,6 +3,7 @@
 #include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
+#include "DummyEngine/Core/Scripting/ScriptEngine.h"
 
 namespace DE
 {
@@ -56,12 +57,5 @@ namespace DE
         Ref<CubeMap> map = nullptr;
     };
 
-    class Script;
-
-    struct ScriptComponent
-    {
-        UUID id;
-
-        Ref<Script> instance = nullptr;
-    };
+    using ScriptComponent = Handle<ScriptInstance>;
 }  // namespace DE

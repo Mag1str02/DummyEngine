@@ -3,7 +3,6 @@
 
 #include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Application/Initializer.h"
-#include "DummyEngine/Core/Scripting/Compiler.h"
 #include "DummyEngine/Core/Application/Application.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
@@ -52,7 +51,6 @@ namespace DE
         DE_PROFILER_BEGIN_FRAME();
 
         LOG_STAGE("Initializing Engine", "Initializer");
-        Compiler::Initialize();
         ScriptEngine::Initialize();
         Input::Initialize();
         Application::Initialize();
@@ -66,7 +64,6 @@ namespace DE
         Application::Terminate();
         Input::Terminate();
         ScriptEngine::Terminate();
-        Compiler::Terminate();
     }
     void Initializer::DepTerminate()
     {
