@@ -5,7 +5,7 @@ namespace DE
 {
     enum Constants
     {
-        MaxMessageTypeLength = 7,
+        MaxMessageTypeLength = 10,
         MaxAuthorLength      = 20,
     };
 }  // namespace DE

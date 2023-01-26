@@ -4,44 +4,36 @@
 #include "DummyEngine/Core/Scripting/SharedObject.h"
 #include "DummyEngine/Core/Scripting/ScriptClass.h"
 
+#include "DummyEditor/Scripting/EditorScripts.h"
+
 namespace DE
 {
     using CreateScriptFunc = Ref<Script> (*)();
 
-    class ScriptEngine : public Singleton<ScriptEngine>
+    class ScriptManager : public Singleton<ScriptManager>
     {
-        SINGLETON(ScriptEngine)
+        SINGLETON(ScriptManager)
     public:
         S_METHOD_DEF(Unit, Initialize, ());
         S_METHOD_DEF(Unit, Terminate, ());
 
-        S_METHOD_DEF(bool, AddScript, (const ScriptAsset& asset));
-        S_METHOD_DEF(Unit, DeleteScript, (UUID id));
-
-        S_METHOD_DEF(Unit, Modify, (UUID id));
-
-        S_METHOD_DEF(Unit, Clear, ());
-
-        S_METHOD_DEF(bool, ReloadSripts, ());
-        S_METHOD_DEF(bool, Valid, (UUID id));
-
-        S_METHOD_DEF(Ref<Script>, CreateScript, (UUID id));
+        S_METHOD_DEF(Unit, PrepareScripts, (const Path& scene_path));
+        S_METHOD_DEF(Unit, ReloadSripts, ());
 
     private:
-        ScriptEngine()  = default;
-        ~ScriptEngine() = default;
+        ScriptManager()  = default;
+        ~ScriptManager() = default;
 
-        bool SourcesExist() const;
-        bool UnModifiedObjectsExist() const;
-        bool UpdateFuncTable();
+        void LoadEditorLibrary();
+        void LoadEditorScripts();
 
-        struct ScriptInfo
-        {
-            bool modified = true;
-            Path path;
-        };
-        Ref<SharedObject>                                  m_ScriptLibrary;
-        std::unordered_map<UUID, ScriptInfo>               m_ScriptStates;
-        std::unordered_map<UUID, CreateScriptFunc> m_CreateFuncs;
+        void        LoadLibrary(const std::string& name);
+        bool        NeedToCompile(const Path& path);
+        std::string AvailableName();
+
+        const std::string kName1 = "ScriptLibrary1";
+        const std::string kName2 = "ScriptLibrary2";
+        std::vector<Path> m_Scripts;
+        std::string       m_LibraryName = kName1;
     };
 }  // namespace DE

@@ -137,6 +137,7 @@ namespace DE
             log.records.pop_front();
         }
         log.stream << log.records.back().ToString();
+        log.stream.flush();
         if (type == LogMessageType::Fatal)
         {
             ITerminate();

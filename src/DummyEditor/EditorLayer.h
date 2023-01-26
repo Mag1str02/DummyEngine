@@ -37,6 +37,7 @@ namespace DE
         virtual void OnAttach() override;
         virtual void OnUpdate(float dt) override;
         virtual void OnImGuiRender() override;
+        virtual void OnDetach() override;
 
     private:
         //*~~~EditorGUI~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

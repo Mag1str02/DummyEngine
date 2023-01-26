@@ -1,4 +1,4 @@
-#include "DummyEngine/Core/Scripting/Compiler.h"
+#include "DummyEditor/Scripting/Compiler.h"
 
 namespace DE
 {
@@ -7,8 +7,10 @@ namespace DE
     public:
         bool Compile(const Path& source, const Path& destination)
         {
+            LOG_INFO(StrCat("Compiling: ", source.string()), "Compiler");
             if (!fs::exists(source) || destination.filename().empty())
             {
+                LOG_WARNING(StrCat("Skipping: ", source.string()), "Compiler");
                 return false;
             }
 
@@ -26,19 +28,23 @@ namespace DE
 
             int res = system(compile_command.c_str());
 
+            LOG_INFO(StrCat("Compiled: ", source.string()), "Compiler");
             return res == 0;
         }
         bool Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name)
         {
+            LOG_INFO(StrCat("Linking: ", library_name), "Compiler");
             for (const auto& source : sources)
             {
                 if (!fs::exists(source))
                 {
+                    LOG_ERROR(StrCat("Source missing: ", source.string()), "Compiler");
                     return false;
                 }
             }
             if (!fs::is_directory(destination))
             {
+                LOG_ERROR(StrCat("Wrong destination: ", destination.string()), "Compiler");
                 return false;
             }
             FileSystem::CreateDirectory(destination);
@@ -53,6 +59,7 @@ namespace DE
 
             int res = system(link_command.c_str());
 
+            LOG_INFO(StrCat("Linked: ", library_name), "Compiler");
             return res == 0;
         }
         void AddIncludeDir(const Path& dir) { m_IncludeDirs.insert(dir); }

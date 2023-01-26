@@ -78,36 +78,37 @@ namespace DE
 
 #define ADD_FIELD(field) AddField(ScriptField(std::string(#field), &field, TypeToScriptFieldType(field)))
 
-#define SCRIPT_BASE(type)                                  \
-    DE_SCRIPT_API void type##Construct(void* adr)          \
-    {                                                      \
-        new (adr) type();                                  \
-    }                                                      \
-    DE_SCRIPT_API void type##Destruct(void* adr)           \
-    {                                                      \
-        reinterpret_cast<type*>(adr)->~type();             \
-    }                                                      \
-    DE_SCRIPT_API void type##OnCreate(void* adr)           \
-    {                                                      \
-        reinterpret_cast<type*>(adr)->OnCreate();          \
-    }                                                      \
-    DE_SCRIPT_API void type##OnUpdate(void* adr, float dt) \
-    {                                                      \
-        reinterpret_cast<type*>(adr)->OnUpdate(dt);        \
-    }                                                      \
-    DE_SCRIPT_API void type##OnDestroy(void* adr)          \
-    {                                                      \
-        reinterpret_cast<type*>(adr)->OnDestroy();         \
-    }                                                      \
-    DE_SCRIPT_API uint32_t type##AlignOf()                 \
-    {                                                      \
-        return alignof(type);                              \
-    }                                                      \
-    DE_SCRIPT_API uint32_t type##SizeOf()                  \
-    {                                                      \
-        return sizeof(type);                               \
-    }                                                      \
-    DE_SCRIPT_API Ref<Script> type##CreateInstance()       \
-    {                                                      \
-        return CreateRef<type>();                          \
+#define SCRIPT_BASE(type)                                           \
+    DE_SCRIPT_API void type##Construct(void* adr)                   \
+    {                                                               \
+        new (adr) type();                                           \
+    }                                                               \
+    DE_SCRIPT_API void type##Destruct(void* adr)                    \
+    {                                                               \
+        reinterpret_cast<type*>(adr)->~type();                      \
+    }                                                               \
+    DE_SCRIPT_API void type##OnCreate(void* adr)                    \
+    {                                                               \
+        reinterpret_cast<type*>(adr)->OnCreate();                   \
+    }                                                               \
+    DE_SCRIPT_API void type##OnUpdate(void* adr, float dt)          \
+    {                                                               \
+        reinterpret_cast<type*>(adr)->OnUpdate(dt);                 \
+    }                                                               \
+    DE_SCRIPT_API void type##OnDestroy(void* adr)                   \
+    {                                                               \
+        reinterpret_cast<type*>(adr)->OnDestroy();                  \
+    }                                                               \
+    DE_SCRIPT_API uint32_t type##AlignOf()                          \
+    {                                                               \
+        return alignof(type);                                       \
+    }                                                               \
+    DE_SCRIPT_API uint32_t type##SizeOf()                           \
+    {                                                               \
+        return sizeof(type);                                        \
+    }                                                               \
+    DE_SCRIPT_API Ref<Script> type##CreateInstance()                \
+    {                                                               \
+        LOG_INFO(StrCat("Creating instance of: ", #type), #type); \
+        return CreateRef<type>();                                   \
     }

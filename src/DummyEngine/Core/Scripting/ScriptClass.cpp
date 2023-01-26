@@ -5,6 +5,10 @@ namespace DE
     ScriptClass::ScriptClass(const std::string& name) : m_Name(name) {}
     bool ScriptClass::Load(Ref<SharedObject> library)
     {
+        if (!library->Valid())
+        {
+            return false;
+        }
         m_Library = library;
 
         constructor     = reinterpret_cast<FConstructor>(library->GetFunction(m_Name + "Construct"));

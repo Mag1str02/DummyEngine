@@ -145,8 +145,8 @@ namespace DE
         if (entity.HasComponent<ScriptComponent>())
         {
             auto& script_instance      = entity.GetComponent<ScriptComponent>();
-            n_Entity["Script"]["UUID"] = (uint64_t)script_instance.Get().ID();
-            for (auto& [name, field] : script_instance.Get().Get()->GetFields())
+            n_Entity["Script"]["UUID"] = (uint64_t)script_instance->ID();
+            for (auto& [name, field] : (*script_instance)->GetFields())
             {
                 n_Entity["Script"]["Fields"][name] = NodeScriptField(field);
             }
@@ -428,7 +428,7 @@ namespace DE
     {
         ScriptComponent script = ScriptEngine::CreateScript(n_Component["UUID"].as<uint64_t>());
         entity.AddComponent<ScriptComponent>(script);
-        for (auto& [name, field] : script.Get().Get()->GetFields())
+        for (auto& [name, field] : (*script)->GetFields())
         {
             if (n_Component["Fields"][name])
             {
@@ -573,5 +573,27 @@ namespace DE
         LoadHierarchyNode(n_Root, scene->m_HierarchyRoot);
 
         m_Scene = nullptr;
+    }
+
+    std::vector<ScriptAsset> SceneLoader::GetScriptAssets(const Path& path)
+    {
+        LOG_INFO("Getting script assets...", "SceneLoader");
+
+        std::vector<ScriptAsset> result;
+        YAML::Node               n_Root, n_Scripts;
+
+        n_Root    = YAML::LoadFile(path.string());
+        n_Scripts = n_Root["Scene"]["Assets"]["Scripts"];
+
+        for (const auto& node : n_Scripts)
+        {
+            ScriptAsset asset;
+            asset.id   = node.second["UUID"].as<uint64_t>();
+            asset.name = node.first.as<std::string>();
+            asset.path = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
+            result.push_back(asset);
+        }
+
+        return result;
     }
 }  // namespace DE

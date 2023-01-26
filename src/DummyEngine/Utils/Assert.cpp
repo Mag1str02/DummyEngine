@@ -1,5 +1,6 @@
 #include "DummyEngine/Utils/STDIncludes.h"
 #include "DummyEngine/Utils/Assert.h"
+#include "DummyEngine/ToolBox/Dev/Logger.h"
 
 namespace DE
 {
@@ -7,9 +8,12 @@ namespace DE
     {
         if (!expr)
         {
-            std::cerr << "Assert failed:\t" << msg << "\n"
-                      << "Expected:\t" << expr_str << "\n"
-                      << "Source:\t\t" << file << ", line " << line << "\n";
+            std::stringstream ss;
+            ss << "Assert failed:\t" << msg << "\n"
+               << "Expected:\t" << expr_str << "\n"
+               << "Source:\t\t" << file << ", line " << line << "\n";
+            LOG_FATAL(ss.str(), "Assertion");
+            std::cerr << ss.str() << std::endl;
             abort();
         }
     }

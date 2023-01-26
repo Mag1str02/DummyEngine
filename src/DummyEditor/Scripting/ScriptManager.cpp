@@ -1,5 +1,9 @@
+#include "DummyEditor/Scripting/ScriptManager.h"
+#include "DummyEditor/Scripting/Compiler.h"
+#include "DummyEditor/Scripting/EditorScripts.h"
+
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
-#include "DummyEngine/Core/Scripting/Compiler.h"
+#include "DummyEngine/ToolBox/Loaders/SceneLoader.h"
 
 namespace DE
 {
@@ -8,158 +12,132 @@ namespace DE
         return Config::GetPath(DE_CFG_SCRIPT_CACHE_PATH) / (fs::relative(path, Config::GetPath(DE_CFG_SCRIPT_PATH)).string() + ".o");
     }
 
-    SINGLETON_BASE(ScriptEngine);
+    SINGLETON_BASE(ScriptManager);
 
-    Unit ScriptEngine::Initialize()
+    Unit ScriptManager::Initialize()
     {
-        DE_ASSERT(!s_Instance, "Double ScriptEngine initialization");
-        s_Instance = new ScriptEngine();
-        DE_ASSERT(s_Instance, "Failed to allocate memory for ScriptEngine");
+        DE_ASSERT(!s_Instance, "Double ScriptManager initialization");
+        s_Instance = new ScriptManager();
+        DE_ASSERT(s_Instance, "Failed to allocate memory for ScriptManager");
         s_Instance->IInitialize();
+        LOG_INFO("ScriptManager initialized", "ScriptManager");
+
         return Unit();
     }
-    Unit ScriptEngine::IInitialize()
+    Unit ScriptManager::IInitialize()
     {
-        m_ScriptLibrary = CreateRef<SharedObject>();
+        LoadEditorLibrary();
         return Unit();
     }
-    Unit ScriptEngine::Terminate()
+    Unit ScriptManager::Terminate()
     {
         s_Instance->ITerminate();
         delete s_Instance;
         return Unit();
     }
-    Unit ScriptEngine::ITerminate() { return Unit(); }
+    Unit ScriptManager::ITerminate() { return Unit(); }
 
-    S_METHOD_IMPL(ScriptEngine, Unit, DeleteScript, (UUID id), (id))
+    S_METHOD_IMPL(ScriptManager, Unit, PrepareScripts, (const Path& scene_path), (scene_path))
     {
-        m_ScriptStates.erase(id);
-        m_CreateFuncs.erase(id);
+        LOG_INFO("Preparing scripts...", "ScriptManager");
+        ScriptEngine::ClearScripts();
+        auto assets = SceneLoader::GetScriptAssets(scene_path);
+        for (const auto& script : assets)
+        {
+            m_Scripts.push_back(script.path);
+        }
+        ReloadSripts();
+        LoadEditorScripts();
+
+        LOG_INFO("Scripts prepared", "ScriptManager");
         return Unit();
     }
-    S_METHOD_IMPL(ScriptEngine, Unit, Modify, (UUID id), (id))
+    S_METHOD_IMPL(ScriptManager, Unit, ReloadSripts, (), ())
     {
-        if (m_ScriptStates.contains(id))
-        {
-            m_ScriptStates[id].modified = true;
-        }
-        return Unit();
-    }
-    S_METHOD_IMPL(ScriptEngine, Unit, Clear, (), ())
-    {
-        m_CreateFuncs.clear();
-        m_ScriptStates.clear();
-        m_ScriptLibrary = nullptr;
-        return Unit();
-    }
+        LOG_INFO("Reloading scripts...", "ScriptManager");
 
-    S_METHOD_IMPL(ScriptEngine, bool, ReloadSripts, (), ())
-    {
-        if (m_ScriptStates.empty())
-        {
-            return false;
-        }
-        std::vector<Path> objects_list;
-        if (!SourcesExist() || !UnModifiedObjectsExist())
-        {
-            return false;
-        }
+        std::vector<uint32_t> recompile_ids;
+        bool                  need_recompile = false;
 
-        for (const auto& [id, state] : m_ScriptStates)
+        //*Find scripts to recompile
         {
-            objects_list.push_back(PathToCompiledScript(state.path));
-            if (state.modified)
+            for (size_t i = 0; i < m_Scripts.size(); ++i)
             {
-                if (!Compiler::Compile(state.path, objects_list.back()))
+                DE_ASSERT(fs::exists(m_Scripts[i]), StrCat("Failed to find script in library: ", m_Scripts[i].string()));
+                if (NeedToCompile(m_Scripts[i]))
                 {
-                    return false;
+                    recompile_ids.push_back(i);
+                    need_recompile = true;
                 }
             }
-        }
-        std::string library_name = "ScriptsLibrary";
-        m_ScriptLibrary          = CreateScope<SharedObject>();
-        if (!Compiler::Link(objects_list, Config::GetPath(DE_CFG_SCRIPT_CACHE_PATH), library_name))
-        {
-            return false;
-        }
-        if (!m_ScriptLibrary->Load(Config::GetPath(DE_CFG_SCRIPT_CACHE_PATH), library_name))
-        {
-            return false;
-        }
-        bool res = UpdateFuncTable();
-        return res;
-    }
-    S_METHOD_IMPL(ScriptEngine, bool, Valid, (UUID id), (id)) { return m_CreateFuncs.contains(id); }
-    S_METHOD_IMPL(ScriptEngine, bool, AddScript, (const ScriptAsset& asset), (asset))
-    {
-        if (!FileSystem::IsSubPath(asset.path, Config::GetPath(DE_CFG_SCRIPT_PATH)))
-        {
-            return false;
-        }
-        if (m_ScriptStates.contains(asset.id))
-        {
-            return false;
-        }
-        m_ScriptStates[asset.id].modified = true;
-        m_ScriptStates[asset.id].path     = asset.path;
-        m_CreateFuncs[asset.id]           = nullptr;
-
-        return true;
-    }
-
-    S_METHOD_IMPL(ScriptEngine, Ref<Script>, CreateScript, (UUID id), (id))
-    {
-        if (!m_CreateFuncs.contains(id))
-        {
-            return nullptr;
-        }
-        return m_CreateFuncs[id]();
-    }
-
-    bool ScriptEngine::SourcesExist() const
-    {
-        for (const auto& [id, state] : m_ScriptStates)
-        {
-            if (!fs::exists(state.path))
+            if (!need_recompile && (ScriptEngine::LibraryLoaded(kName1) || ScriptEngine::LibraryLoaded(kName2)))
             {
-                return false;
+                return Unit();
             }
         }
-        return true;
-    }
-    bool ScriptEngine::UnModifiedObjectsExist() const
-    {
-        for (const auto& [id, state] : m_ScriptStates)
+        LOG_INFO("Reloading scripts...", "ScriptManager");
+
+        //*Compile sources
         {
-            if (state.modified)
+            for (auto id : recompile_ids)
             {
-                continue;
-            }
-            if (!fs::exists(PathToCompiledScript(state.path)))
-            {
-                return false;
+                bool compilation_success = Compiler::Compile(m_Scripts[id], PathToCompiledScript(m_Scripts[id]));
+                DE_ASSERT(compilation_success, StrCat("Failed to compile: ", m_Scripts[id].string()));
             }
         }
-        return true;
-    }
-    bool ScriptEngine::UpdateFuncTable()
-    {
-        std::unordered_map<UUID, CreateScriptFunc> res;
-        for (const auto& [id, state] : m_ScriptStates)
+        LOG_INFO("Reloading scripts...", "ScriptManager");
+
+        //*Swap library
         {
-            CreateScriptFunc create_func =
-                (CreateScriptFunc)m_ScriptLibrary->GetFunction("CreateInstance" + state.path.stem().string());
-            if (!create_func)
+            std::vector<Path> compiled_sources;
+            for (const auto& path : m_Scripts)
             {
-                return false;
+                compiled_sources.push_back(PathToCompiledScript(path));
             }
-            res[id] = create_func;
-            ScriptClass s_class(state.path.stem().string());
-            s_class.Load(m_ScriptLibrary);
-            LOG_INFO(StrCat("Class ", state.path.stem().string(), " ", (s_class.Valid() ? "Valid" : "Invalid")), "ScriptEngine");
+            std::string new_name     = AvailableName();
+            bool        link_success = Compiler::Link(compiled_sources, Config::GetPath(DE_CFG_SCRIPT_CACHE_PATH), new_name);
+            DE_ASSERT(link_success, "Failed to link library.");
+
+            LoadLibrary(new_name);
         }
-        m_CreateFuncs = std::move(res);
-        return true;
+        LOG_INFO("Reloading scripts...", "ScriptManager");
+
+        return Unit();
     }
 
+    void ScriptManager::LoadEditorLibrary()
+    {
+        Ref<SharedObject> library               = CreateRef<SharedObject>();
+        bool              editor_library_loaded = library->Load(Config::GetPath(DE_CFG_EXECUTABLE_PATH), DE_EDITOR_LIBRARY_NAME);
+        DE_ASSERT(editor_library_loaded, "Failed to load editor library.");
+        ScriptEngine::AddLibrary(library);
+    }
+    void ScriptManager::LoadEditorScripts()
+    {
+        for (const auto& asset : g_EditorScriptAssets)
+        {
+            ScriptEngine::AddScript(asset);
+        }
+    }
+
+    void ScriptManager::LoadLibrary(const std::string& name)
+    {
+        Ref<SharedObject> library      = CreateRef<SharedObject>();
+        bool              load_success = library->Load(Config::GetPath(DE_CFG_SCRIPT_CACHE_PATH), name);
+        DE_ASSERT(load_success, "Failed to load library.");
+
+        ScriptEngine::DeleteLibrary(m_LibraryName);
+        ScriptEngine::AddLibrary(library);
+        m_LibraryName = name;
+    }
+    bool ScriptManager::NeedToCompile(const Path& path)
+    {
+        Path object = PathToCompiledScript(path);
+        if (!fs::exists(object))
+        {
+            return true;
+        }
+        return fs::last_write_time(path) > fs::last_write_time(object);
+    }
+    std::string ScriptManager::AvailableName() { return (m_LibraryName == kName1 ? kName2 : kName1); }
 }  // namespace DE

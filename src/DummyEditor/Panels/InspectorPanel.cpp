@@ -35,34 +35,39 @@ namespace DE
         {
             if (m_Entity.HasComponent<ScriptComponent>())
             {
-                auto& fields = m_Entity.GetComponent<ScriptComponent>().instance->GetFields();
+                auto component = m_Entity.GetComponent<ScriptComponent>();
                 if (ImGui::CollapsingHeader("Script"))
                 {
-                    for (auto& [name, field] : fields)
+                    ImGui::Text("UUID: %s", component->ID().Hex().c_str());
+                    if (component->Valid())
                     {
-                        if (field.GetType() != ScriptFieldType::None)
+                        auto& fields = component->GetFields();
+                        for (auto& [name, field] : fields)
                         {
-                            ImGui::Text("%s", field.GetName().c_str());
-                            ImGui::SameLine(100);
-                            ImGui::SetNextItemWidth(-1);
-                        }
+                            if (field.GetType() != ScriptFieldType::None)
+                            {
+                                ImGui::Text("%s", field.GetName().c_str());
+                                ImGui::SameLine(100);
+                                ImGui::SetNextItemWidth(-1);
+                            }
 
-                        switch (field.GetType())
-                        {
-                            case ScriptFieldType::Double:
-                            case ScriptFieldType::Float:
-                            case ScriptFieldType::I32:
-                            case ScriptFieldType::UI32:
-                            case ScriptFieldType::I64:
-                            case ScriptFieldType::UI64:
-                                ImGui::DragScalar(("##" + field.GetName()).c_str(), ScriptFieldTypeToImGuiType(field.GetType()), field.Get());
-                                break;
-                            case ScriptFieldType::Bool: ImGui::Checkbox(("##" + field.GetName()).c_str(), &field.Get<bool>()); break;
-                            case ScriptFieldType::String: ImGui::InputText(("##" + field.GetName()).c_str(), &field.Get<std::string>()); break;
-                            case ScriptFieldType::Vec2: ImGui::DragFloat2(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
-                            case ScriptFieldType::Vec3: ImGui::DragFloat3(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
-                            case ScriptFieldType::Vec4: ImGui::DragFloat4(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
-                            default: break;
+                            switch (field.GetType())
+                            {
+                                case ScriptFieldType::Double:
+                                case ScriptFieldType::Float:
+                                case ScriptFieldType::I32:
+                                case ScriptFieldType::UI32:
+                                case ScriptFieldType::I64:
+                                case ScriptFieldType::UI64:
+                                    ImGui::DragScalar(("##" + field.GetName()).c_str(), ScriptFieldTypeToImGuiType(field.GetType()), field.Get());
+                                    break;
+                                case ScriptFieldType::Bool: ImGui::Checkbox(("##" + field.GetName()).c_str(), &field.Get<bool>()); break;
+                                case ScriptFieldType::String: ImGui::InputText(("##" + field.GetName()).c_str(), &field.Get<std::string>()); break;
+                                case ScriptFieldType::Vec2: ImGui::DragFloat2(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
+                                case ScriptFieldType::Vec3: ImGui::DragFloat3(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
+                                case ScriptFieldType::Vec4: ImGui::DragFloat4(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
+                                default: break;
+                            }
                         }
                     }
                 }

@@ -24,16 +24,19 @@ namespace DE
         {
             if (m_Handle && m_Valid)
             {
+                LOG_WARNING(StrCat("Library: ", name, " already loaded. Skipping..."), "SharedObject");
                 return false;
             }
             Path path_to_dll = directory / (name + ".dll");
             if (!fs::exists(path_to_dll))
             {
+                LOG_WARNING(StrCat("Library: ", (directory / (name + ".dll")).string(), " does not exist"), "SharedObject");
                 return false;
             }
             HMODULE new_handle = LoadLibrary(path_to_dll.string().c_str());
             if (!new_handle)
             {
+                LOG_WARNING(StrCat("Failed to load library: ", (directory / (name + ".dll")).string()), "SharedObject");
                 return false;
             }
             if (m_Handle)
@@ -45,6 +48,7 @@ namespace DE
             m_Directory = directory;
             m_Name      = name;
             m_Valid     = true;
+            LOG_INFO(StrCat("Loaded library: ", (directory / (name + ".dll")).string()), "SharedObject");
             return true;
         }
         void Invalidate() { m_Valid = false; }

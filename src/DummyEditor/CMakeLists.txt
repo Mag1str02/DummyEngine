@@ -13,6 +13,9 @@ add_library(DummyEditorScripts SHARED
     Scripts/EditorCameraController.cpp
 )
 add_dependencies(DummyEditor DummyEditorScripts)
+target_compile_definitions(DummyEditor PUBLIC 
+    DE_EDITOR_LIBRARY_NAME="libDummyEditorScripts"
+)
 
 target_link_libraries(DummyEditorScripts PUBLIC DummyEngineLib)
 target_include_directories(DummyEditorScripts PUBLIC 

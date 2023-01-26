@@ -1,4 +1,6 @@
 #include "DummyEditor/EditorLayer.h"
+#include "DummyEditor/Scripting/ScriptManager.h"
+#include "DummyEditor/Scripting/Compiler.h"
 
 namespace DE
 {
@@ -33,6 +35,9 @@ namespace DE
 
     void EditorLayer::OnAttach()
     {
+        Compiler::Initialize();
+        ScriptManager::Initialize();
+
         m_SceneData.m_FrameBuffer = FrameBuffer::Create({1920, 1080});
         m_SceneData.m_FrameBuffer->AddColorAttachment(TextureFormat::RGBA);
         m_SceneData.m_FrameBuffer->SetDepthAttachment(TextureFormat::DepthStencil);
@@ -89,6 +94,12 @@ namespace DE
 
             ImGui::ShowDemoWindow();
         }
+    }
+
+    void EditorLayer::OnDetach()
+    {
+        ScriptManager::Terminate();
+        Compiler::Terminate();
     }
 
     //*~~~EditorGUI~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -176,16 +187,12 @@ namespace DE
     }
     void EditorLayer::OpenScene(const Path& scene_path)
     {
-        ScriptEngine::Get().Clear();
-        UUID script_id = UUID();
-        AssetManager::AddAsset<ScriptAsset>({script_id, "", Config::GetPath(DE_CFG_SCRIPT_PATH) / "DummyEditor" / "EditorCameraController.cpp"});
-        ScriptEngine::Get().AddScript(AssetManager::GetAsset<ScriptAsset>(script_id));
-
+        ScriptManager::PrepareScripts(scene_path);
         SceneLoader::Load(m_SceneData.m_Scene, scene_path);
 
         m_EditorCamera = m_SceneData.m_Scene->CreateHiddenEntity("Editor Camera");
         m_EditorCamera.AddComponent<FPSCamera>();
-        m_EditorCamera.AddComponent<ScriptComponent>({script_id, ScriptEngine::Get().CreateScript(script_id)});
+        m_EditorCamera.AddComponent<ScriptComponent>(ScriptEngine::CreateScript(g_EditorScriptNameToId["EditorCameraController"]));
 
         m_SceneData.m_Scene->RegisterSystem<MovingSystem>();
         m_SceneHierarchy.SetActiveScene(m_SceneData.m_Scene);
@@ -220,7 +227,7 @@ namespace DE
         }
         if (m_EditorCamera.Valid())
         {
-            bool& active = m_EditorCamera.GetComponent<ScriptComponent>().instance->GetField("active").Get<bool>();
+            bool& active = m_EditorCamera.GetComponent<ScriptComponent>()->GetField("active").Get<bool>();
             if (m_State.m_InputState == InputState::ViewPort)
             {
                 active = true;

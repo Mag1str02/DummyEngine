@@ -5,6 +5,7 @@
 .cache/
 build/
 
+Sandbox/imgui.ini
 Sandbox/DummyEditor
 Sandbox/Logs/**
 Sandbox/Cache/**
