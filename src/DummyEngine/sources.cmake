@@ -17,13 +17,7 @@ Core/Application/Window.cpp
 Core/Application/Input.cpp
 Core/Application/Initializer.cpp
 
-Core/ECS/ComponentArray.hpp
-Core/ECS/ComponentManager.hpp
-Core/ECS/Entity.hpp
-Core/ECS/EntityManager.hpp
-Core/ECS/System.hpp
-Core/ECS/SystemManager.hpp
-Core/ECS/ECSStorage.hpp
+Core/ECS/ECS.cpp
 
 Core/Scene/Components.cpp
 Core/Scene/Scene.cpp

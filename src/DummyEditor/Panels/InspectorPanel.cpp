@@ -33,9 +33,9 @@ namespace DE
 
         if (m_Entity.Valid())
         {
-            if (m_Entity.HasComponent<ScriptComponent>())
+            if (m_Entity.Has<ScriptComponent>())
             {
-                auto component = m_Entity.GetComponent<ScriptComponent>();
+                auto component = m_Entity.Get<ScriptComponent>();
                 if (ImGui::CollapsingHeader("Script"))
                 {
                     ImGui::Text("UUID: %s", component->ID().Hex().c_str());
@@ -72,9 +72,9 @@ namespace DE
                     }
                 }
             }
-            if (m_Entity.HasComponent<TagComponent>())
+            if (m_Entity.Has<TagComponent>())
             {
-                auto& component = m_Entity.GetComponent<TagComponent>();
+                auto& component = m_Entity.Get<TagComponent>();
                 if (ImGui::CollapsingHeader("Tag"))
                 {
                     ImGui::Text("Tag");
@@ -83,19 +83,19 @@ namespace DE
                     ImGui::InputText("", &component.tag);
                 }
             }
-            if (m_Entity.HasComponent<IdComponent>())
+            if (m_Entity.Has<IdComponent>())
             {
-                auto& component = m_Entity.GetComponent<IdComponent>();
+                auto& component = m_Entity.Get<IdComponent>();
                 if (ImGui::CollapsingHeader("UUID"))
                 {
                     ImGui::Text("%s", component.Hex().c_str());
                 }
             }
-            if (m_Entity.HasComponent<TransformComponent>())
+            if (m_Entity.Has<TransformComponent>())
             {
                 if (ImGui::CollapsingHeader("Transformation"))
                 {
-                    auto& transform = m_Entity.GetComponent<TransformComponent>();
+                    auto& transform = m_Entity.Get<TransformComponent>();
 
                     ImGui::Text("Translation");
                     ImGui::SameLine(100);
@@ -115,19 +115,19 @@ namespace DE
                     ClampRoundValue(transform.rotation, 0, 360);
                 }
             }
-            if (m_Entity.HasComponent<RenderMeshComponent>())
+            if (m_Entity.Has<RenderMeshComponent>())
             {
                 if (ImGui::CollapsingHeader("Render Mesh"))
                 {
-                    auto& render_mesh = m_Entity.GetComponent<RenderMeshComponent>();
+                    auto& render_mesh = m_Entity.Get<RenderMeshComponent>();
                     ImGui::Text("%s", ("Mesh UUID: " + render_mesh.id.Hex()).c_str());
                 }
             }
-            if (m_Entity.HasComponent<FPSCamera>())
+            if (m_Entity.Has<FPSCamera>())
             {
                 if (ImGui::CollapsingHeader("FPSCamera"))
                 {
-                    auto& camera = m_Entity.GetComponent<FPSCamera>();
+                    auto& camera = m_Entity.Get<FPSCamera>();
 
                     ImGui::Text("Position");
                     ImGui::SameLine(100);
@@ -150,11 +150,11 @@ namespace DE
                     ImGui::DragFloat("##FOV", &(camera.m_FOV), sensitivity, 0, 360);
                 }
             }
-            if (m_Entity.HasComponent<LightSource>())
+            if (m_Entity.Has<LightSource>())
             {
                 if (ImGui::CollapsingHeader("Light Soruce"))
                 {
-                    auto&       source        = m_Entity.GetComponent<LightSource>();
+                    auto&       source        = m_Entity.Get<LightSource>();
                     const char* light_types[] = {"Directional", "Point", "Spot"};
 
                     ImGui::Text("Type");

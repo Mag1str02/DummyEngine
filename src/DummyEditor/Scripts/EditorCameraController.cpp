@@ -12,7 +12,7 @@ public:
     {
         if (active)
         {
-            auto& camera      = GetComponent<FPSCamera>();
+            auto& camera      = Get<FPSCamera>();
             float speed       = 15;
             float sensitivity = 0.07;
 

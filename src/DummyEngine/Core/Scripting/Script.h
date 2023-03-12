@@ -1,7 +1,8 @@
 #pragma once
 
+#include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Utils/Base.h"
-#include "DummyEngine/Core/ECS/Entity.hpp"
+#include "DummyEngine/Core/Scene/Scene.h"
 
 namespace DE
 {
@@ -59,9 +60,11 @@ namespace DE
         ScriptField                                   GetField(const std::string& field_name) { return m_Fields[field_name]; }
 
     protected:
-        template <typename T> T& GetComponent() { return m_Entity.GetComponent<T>(); }
-        Entity                   GetEntityByName(const std::string& name) const { return m_Scene->GetByName(name); };
-        void                     AddField(const ScriptField& field) { m_Fields[field.GetName()] = field; }
+        template <typename T> T&   Add(const T& t) { return m_Entity.Add<T>(t); }
+        template <typename T> T&   Get() { return m_Entity.Get<T>(); }
+        template <typename T> bool Has() { return m_Entity.Has<T>(); }
+        Entity                     GetEntityByName(const std::string& name) const { return m_Scene->GetByName(name); };
+        void                       AddField(const ScriptField& field) { m_Fields[field.GetName()] = field; }
 
         friend class Scene;
 
@@ -78,37 +81,37 @@ namespace DE
 
 #define ADD_FIELD(field) AddField(ScriptField(std::string(#field), &field, TypeToScriptFieldType(field)))
 
-#define SCRIPT_BASE(type)                                           \
-    DE_SCRIPT_API void type##Construct(void* adr)                   \
-    {                                                               \
-        new (adr) type();                                           \
-    }                                                               \
-    DE_SCRIPT_API void type##Destruct(void* adr)                    \
-    {                                                               \
-        reinterpret_cast<type*>(adr)->~type();                      \
-    }                                                               \
-    DE_SCRIPT_API void type##OnCreate(void* adr)                    \
-    {                                                               \
-        reinterpret_cast<type*>(adr)->OnCreate();                   \
-    }                                                               \
-    DE_SCRIPT_API void type##OnUpdate(void* adr, float dt)          \
-    {                                                               \
-        reinterpret_cast<type*>(adr)->OnUpdate(dt);                 \
-    }                                                               \
-    DE_SCRIPT_API void type##OnDestroy(void* adr)                   \
-    {                                                               \
-        reinterpret_cast<type*>(adr)->OnDestroy();                  \
-    }                                                               \
-    DE_SCRIPT_API uint32_t type##AlignOf()                          \
-    {                                                               \
-        return alignof(type);                                       \
-    }                                                               \
-    DE_SCRIPT_API uint32_t type##SizeOf()                           \
-    {                                                               \
-        return sizeof(type);                                        \
-    }                                                               \
-    DE_SCRIPT_API Ref<Script> type##CreateInstance()                \
-    {                                                               \
+#define SCRIPT_BASE(type)                                         \
+    DE_SCRIPT_API void type##Construct(void* adr)                 \
+    {                                                             \
+        new (adr) type();                                         \
+    }                                                             \
+    DE_SCRIPT_API void type##Destruct(void* adr)                  \
+    {                                                             \
+        reinterpret_cast<type*>(adr)->~type();                    \
+    }                                                             \
+    DE_SCRIPT_API void type##OnCreate(void* adr)                  \
+    {                                                             \
+        reinterpret_cast<type*>(adr)->OnCreate();                 \
+    }                                                             \
+    DE_SCRIPT_API void type##OnUpdate(void* adr, float dt)        \
+    {                                                             \
+        reinterpret_cast<type*>(adr)->OnUpdate(dt);               \
+    }                                                             \
+    DE_SCRIPT_API void type##OnDestroy(void* adr)                 \
+    {                                                             \
+        reinterpret_cast<type*>(adr)->OnDestroy();                \
+    }                                                             \
+    DE_SCRIPT_API uint32_t type##AlignOf()                        \
+    {                                                             \
+        return alignof(type);                                     \
+    }                                                             \
+    DE_SCRIPT_API uint32_t type##SizeOf()                         \
+    {                                                             \
+        return sizeof(type);                                      \
+    }                                                             \
+    DE_SCRIPT_API Ref<Script> type##CreateInstance()              \
+    {                                                             \
         LOG_INFO(StrCat("Creating instance of: ", #type), #type); \
-        return CreateRef<type>();                                   \
+        return CreateRef<type>();                                 \
     }

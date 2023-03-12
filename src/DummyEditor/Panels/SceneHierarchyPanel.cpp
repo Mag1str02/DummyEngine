@@ -82,7 +82,7 @@ namespace DE
         else
         {
             auto entity = node->GetEntity();
-            open = ImGui::Selectable(entity.GetComponent<TagComponent>().tag.c_str(), &node->Selected(), ImGuiSelectableFlags_AllowDoubleClick);
+            open        = ImGui::Selectable(entity.Get<TagComponent>().tag.c_str(), &node->Selected(), ImGuiSelectableFlags_AllowDoubleClick);
             if (open)
             {
                 if (ImGui::IsMouseDoubleClicked(0))

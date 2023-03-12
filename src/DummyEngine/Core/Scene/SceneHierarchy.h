@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DummyEngine/Utils/Base.h"
-#include "DummyEngine/Core/ECS/Entity.hpp"
+#include "DummyEngine/Core/ECS/ECS.h"
 
 namespace DE
 {
@@ -28,9 +28,9 @@ namespace DE
         std::vector<Ref<SceneHierarchyNode>>::iterator end();
 
     private:
+        std::string                          m_Name;
         std::vector<Ref<SceneHierarchyNode>> m_Childs;
         Entity                               m_Entity;
-        std::string                          m_Name;
         SceneHierarchyNode*                  m_Parent;
         bool                                 m_Selected;
     };

@@ -3,7 +3,7 @@
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/Scene/Components.h"
-#include "DummyEngine/Core/ECS/Entity.hpp"
+#include "DummyEngine/Core/ECS/ECS.h"
 
 namespace DE
 {
@@ -34,11 +34,6 @@ namespace DE
 
         auto camera = m_Scene->GetCamera();
 
-        auto meshes          = m_Scene->m_Storage.GetComponentArray<RenderMeshComponent>();
-        auto shaders         = m_Scene->m_Storage.GetComponentArray<ShaderComponent>();
-        auto transformations = m_Scene->m_Storage.GetComponentArray<TransformComponent>();
-        auto skyboxes        = m_Scene->m_Storage.GetComponentArray<SkyBox>();
-
         Renderer::Clear();
 
         UpdateVP();
@@ -52,10 +47,10 @@ namespace DE
             Renderer::Submit(target.first, target.second);
         }
 
-        for (auto [id, skybox] : skyboxes)
+        for (auto e : m_Scene->m_Storage.View<SkyBox, TransformComponent, ShaderComponent>())
         {
-            transformations[id].translation = m_Camera.GetComponent<FPSCamera>().GetPos();
-            Renderer::Submit(skybox.map, shaders[id].shader, transformations[id].GetTransform());
+            e.Get<TransformComponent>().translation = m_Camera.Get<FPSCamera>().GetPos();
+            Renderer::Submit(e.Get<SkyBox>().map, e.Get<ShaderComponent>().shader, e.Get<TransformComponent>().GetTransform());
         }
         glCheckError();
     }
@@ -64,11 +59,10 @@ namespace DE
     {
         DE_PROFILE_SCOPE("UpdateLights");
 
-        auto& u_LightSources = m_Scene->m_Storage.GetComponentArray<LightSource>();
-
         int cnt_light_sources = 0;
-        for (auto [entity_id, light_source] : u_LightSources)
+        for (auto enitity : m_Scene->m_Storage.View<LightSource>())
         {
+            auto& light_source                           = enitity.Get<LightSource>();
             m_Lights->at(cnt_light_sources).Get<Vec3>(0) = light_source.ambient;
             m_Lights->at(cnt_light_sources).Get<Vec3>(1) = light_source.diffuse;
             m_Lights->at(cnt_light_sources).Get<Vec3>(2) = light_source.specular;
@@ -92,12 +86,13 @@ namespace DE
     {
         DE_PROFILE_SCOPE("UpdateVP");
 
-        for (auto [entity_id, id] : m_EntityToVPIndex)
+        for (std::pair<Entity, uint32_t> p : m_EntityToVPIndex)
         {
-            Entity entity(entity_id, m_Scene);
-            if (entity.HasComponent<FPSCamera>())
+            Entity   entity = p.first;
+            uint32_t id     = p.second;
+            if (entity.Has<FPSCamera>())
             {
-                auto& camera              = entity.GetComponent<FPSCamera>();
+                auto& camera              = entity.Get<FPSCamera>();
                 m_VP->at(id).Get<Mat4>(0) = camera.GetViewMatrix();
                 m_VP->at(id).Get<Mat4>(1) = camera.GetProjectionMatrix();
             }
@@ -108,11 +103,11 @@ namespace DE
 
     void SceneRenderData::SetVPEntity(const Entity& entity)
     {
-        DE_ASSERT(m_EntityToVPIndex.contains(entity.m_Id), "Wrong VP entity.");
+        DE_ASSERT(m_EntityToVPIndex.contains(entity), "Wrong VP entity.");
         for (auto [id, shader] : m_Shaders)
         {
             shader->Bind();
-            shader->SetInt("u_VP", m_EntityToVPIndex[entity.m_Id]);
+            shader->SetInt("u_VP", m_EntityToVPIndex[entity]);
             glCheckError();
         }
     }
@@ -128,10 +123,10 @@ namespace DE
     }
     void SceneRenderData::AddVPEntity(const Entity& entity)
     {
-        if (!m_EntityToVPIndex.contains(entity.m_Id))
+        if (!m_EntityToVPIndex.contains(entity))
         {
-            uint32_t index                 = m_EntityToVPIndex.size();
-            m_EntityToVPIndex[entity.m_Id] = index;
+            uint32_t index            = m_EntityToVPIndex.size();
+            m_EntityToVPIndex[entity] = index;
         }
     }
     void SceneRenderData::SetCamera(const Entity& camera) { m_Camera = camera; }

@@ -21,7 +21,7 @@ public:
     {
         current_time += dt;
         float persent  = ((current_time + offset) - cycle_time * (int)((current_time + offset) / cycle_time)) / cycle_time;
-        auto& position = GetComponent<TransformComponent>().translation;
+        auto& position = Get<TransformComponent>().translation;
         if (persent <= 0.25f)
         {
             position = Vec3(left_back.x, height, left_back.y) + Smouth(4.0f * (persent - 0.0f)) * Vec3(right_front.x - left_back.x, 0, 0);

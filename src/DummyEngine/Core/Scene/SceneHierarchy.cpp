@@ -35,7 +35,7 @@ namespace DE
     {
         if (m_Entity.Valid())
         {
-            return m_Entity.GetComponent<TagComponent>().tag;
+            return m_Entity.Get<TagComponent>().tag;
         }
         return m_Name;
     }

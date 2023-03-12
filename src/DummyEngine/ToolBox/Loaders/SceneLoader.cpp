@@ -1,6 +1,6 @@
 #include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"
-#include "DummyEngine/Core/ECS/Entity.hpp"
+#include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/ToolBox/Loaders/SceneLoader.h"
 #include "DummyEngine/ToolBox/Loaders/ModelLoader.h"
 #include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
@@ -73,78 +73,84 @@ namespace DE
     }
     template <> void SceneLoader::SaveComponent<TagComponent>(YAML::Node& n_Entity, Entity entity)
     {
-        if (entity.HasComponent<TagComponent>()) n_Entity["Tag"] = entity.GetComponent<TagComponent>().tag;
+        if (entity.Has<TagComponent>())
+        {
+            n_Entity["Tag"] = entity.Get<TagComponent>().tag;
+        }
     }
     template <> void SceneLoader::SaveComponent<IdComponent>(YAML::Node& n_Entity, Entity entity)
     {
         // TODO: Save UUID in hex format.
-        if (entity.HasComponent<IdComponent>()) n_Entity["UUID"] = (uint64_t)entity.GetComponent<IdComponent>();
+        if (entity.Has<IdComponent>())
+        {
+            n_Entity["UUID"] = (uint64_t)entity.Get<IdComponent>();
+        }
     }
     template <> void SceneLoader::SaveComponent<TransformComponent>(YAML::Node& n_Entity, Entity entity)
     {
-        if (entity.HasComponent<TransformComponent>())
+        if (entity.Has<TransformComponent>())
         {
-            n_Entity["Transformation"]["Translation"]       = NodeVec3(entity.GetComponent<TransformComponent>().translation);
-            n_Entity["Transformation"]["TranslationOffset"] = NodeVec3(entity.GetComponent<TransformComponent>().translation_offset);
-            n_Entity["Transformation"]["Rotation"]          = NodeVec3(entity.GetComponent<TransformComponent>().rotation);
-            n_Entity["Transformation"]["RotationOffset"]    = NodeVec3(entity.GetComponent<TransformComponent>().rotation_offet);
-            n_Entity["Transformation"]["Scale"]             = NodeVec3(entity.GetComponent<TransformComponent>().scale);
-            n_Entity["Transformation"]["ScaleOffset"]       = NodeVec3(entity.GetComponent<TransformComponent>().scale_offset);
+            n_Entity["Transformation"]["Translation"]       = NodeVec3(entity.Get<TransformComponent>().translation);
+            n_Entity["Transformation"]["TranslationOffset"] = NodeVec3(entity.Get<TransformComponent>().translation_offset);
+            n_Entity["Transformation"]["Rotation"]          = NodeVec3(entity.Get<TransformComponent>().rotation);
+            n_Entity["Transformation"]["RotationOffset"]    = NodeVec3(entity.Get<TransformComponent>().rotation_offet);
+            n_Entity["Transformation"]["Scale"]             = NodeVec3(entity.Get<TransformComponent>().scale);
+            n_Entity["Transformation"]["ScaleOffset"]       = NodeVec3(entity.Get<TransformComponent>().scale_offset);
         }
     }
     template <> void SceneLoader::SaveComponent<RenderMeshComponent>(YAML::Node& n_Entity, Entity entity)
     {
-        if (entity.HasComponent<RenderMeshComponent>())
+        if (entity.Has<RenderMeshComponent>())
         {
-            n_Entity["RenderModel"] = (uint64_t)entity.GetComponent<RenderMeshComponent>().id;
+            n_Entity["RenderModel"] = (uint64_t)entity.Get<RenderMeshComponent>().id;
         }
     }
     template <> void SceneLoader::SaveComponent<ShaderComponent>(YAML::Node& n_Entity, Entity entity)
     {
-        if (entity.HasComponent<ShaderComponent>())
+        if (entity.Has<ShaderComponent>())
         {
-            n_Entity["Shader"] = (uint64_t)entity.GetComponent<ShaderComponent>().id;
+            n_Entity["Shader"] = (uint64_t)entity.Get<ShaderComponent>().id;
         }
     }
     template <> void SceneLoader::SaveComponent<FPSCamera>(YAML::Node& n_Entity, Entity entity)
     {
-        if (entity.HasComponent<FPSCamera>())
+        if (entity.Has<FPSCamera>())
         {
-            n_Entity["FPSCamera"]["FOV"]       = entity.GetComponent<FPSCamera>().m_FOV;
-            n_Entity["FPSCamera"]["Aspect"]    = entity.GetComponent<FPSCamera>().m_Aspect;
-            n_Entity["FPSCamera"]["NearPlane"] = entity.GetComponent<FPSCamera>().m_NearPlane;
-            n_Entity["FPSCamera"]["FarPlane"]  = entity.GetComponent<FPSCamera>().m_FarPlane;
-            n_Entity["FPSCamera"]["Position"]  = NodeVec3(entity.GetComponent<FPSCamera>().m_Position);
-            n_Entity["FPSCamera"]["Direction"] = NodeVec3(entity.GetComponent<FPSCamera>().m_Direction);
+            n_Entity["FPSCamera"]["FOV"]       = entity.Get<FPSCamera>().m_FOV;
+            n_Entity["FPSCamera"]["Aspect"]    = entity.Get<FPSCamera>().m_Aspect;
+            n_Entity["FPSCamera"]["NearPlane"] = entity.Get<FPSCamera>().m_NearPlane;
+            n_Entity["FPSCamera"]["FarPlane"]  = entity.Get<FPSCamera>().m_FarPlane;
+            n_Entity["FPSCamera"]["Position"]  = NodeVec3(entity.Get<FPSCamera>().m_Position);
+            n_Entity["FPSCamera"]["Direction"] = NodeVec3(entity.Get<FPSCamera>().m_Direction);
         }
     }
     template <> void SceneLoader::SaveComponent<LightSource>(YAML::Node& n_Entity, Entity entity)
     {
-        if (entity.HasComponent<LightSource>())
+        if (entity.Has<LightSource>())
         {
-            n_Entity["LightSource"]["Type"]      = LightSourceTypeToString(entity.GetComponent<LightSource>().type);
-            n_Entity["LightSource"]["Ambient"]   = NodeVec3(entity.GetComponent<LightSource>().ambient);
-            n_Entity["LightSource"]["Diffuse"]   = NodeVec3(entity.GetComponent<LightSource>().diffuse);
-            n_Entity["LightSource"]["Specular"]  = NodeVec3(entity.GetComponent<LightSource>().specular);
-            n_Entity["LightSource"]["Direction"] = NodeVec3(entity.GetComponent<LightSource>().direction);
-            n_Entity["LightSource"]["Position"]  = NodeVec3(entity.GetComponent<LightSource>().position);
-            n_Entity["LightSource"]["CLQ"]       = NodeVec3(entity.GetComponent<LightSource>().clq);
-            n_Entity["LightSource"]["InnerCone"] = entity.GetComponent<LightSource>().inner_cone_cos;
-            n_Entity["LightSource"]["OuterCone"] = entity.GetComponent<LightSource>().outer_cone_cos;
+            n_Entity["LightSource"]["Type"]      = LightSourceTypeToString(entity.Get<LightSource>().type);
+            n_Entity["LightSource"]["Ambient"]   = NodeVec3(entity.Get<LightSource>().ambient);
+            n_Entity["LightSource"]["Diffuse"]   = NodeVec3(entity.Get<LightSource>().diffuse);
+            n_Entity["LightSource"]["Specular"]  = NodeVec3(entity.Get<LightSource>().specular);
+            n_Entity["LightSource"]["Direction"] = NodeVec3(entity.Get<LightSource>().direction);
+            n_Entity["LightSource"]["Position"]  = NodeVec3(entity.Get<LightSource>().position);
+            n_Entity["LightSource"]["CLQ"]       = NodeVec3(entity.Get<LightSource>().clq);
+            n_Entity["LightSource"]["InnerCone"] = entity.Get<LightSource>().inner_cone_cos;
+            n_Entity["LightSource"]["OuterCone"] = entity.Get<LightSource>().outer_cone_cos;
         }
     }
     template <> void SceneLoader::SaveComponent<SkyBox>(YAML::Node& n_Entity, Entity entity)
     {
-        if (entity.HasComponent<SkyBox>())
+        if (entity.Has<SkyBox>())
         {
-            n_Entity["SkyBox"] = (uint64_t)entity.GetComponent<SkyBox>().id;
+            n_Entity["SkyBox"] = (uint64_t)entity.Get<SkyBox>().id;
         }
     }
     template <> void SceneLoader::SaveComponent<ScriptComponent>(YAML::Node& n_Entity, Entity entity)
     {
-        if (entity.HasComponent<ScriptComponent>())
+        if (entity.Has<ScriptComponent>())
         {
-            auto& script_instance      = entity.GetComponent<ScriptComponent>();
+            auto& script_instance      = entity.Get<ScriptComponent>();
             n_Entity["Script"]["UUID"] = (uint64_t)script_instance->ID();
             for (auto& [name, field] : (*script_instance)->GetFields())
             {
@@ -527,12 +533,12 @@ namespace DE
         if (n_Entity["SkyBox"]) LoadComponent<SkyBox>(n_Entity["SkyBox"], entity);
         if (n_Entity["Script"]) LoadComponent<ScriptComponent>(n_Entity["Script"], entity);
 
-        if (entity.HasComponent<RenderMeshComponent>() && entity.HasComponent<ShaderComponent>())
+        if (entity.Has<RenderMeshComponent>() && entity.Has<ShaderComponent>())
         {
-            uint64_t mesh_id   = entity.GetComponent<RenderMeshComponent>().id;
-            uint64_t shader_id = entity.GetComponent<ShaderComponent>().id;
+            uint64_t mesh_id   = entity.Get<RenderMeshComponent>().id;
+            uint64_t shader_id = entity.Get<ShaderComponent>().id;
 
-            entity.GetComponent<RenderMeshComponent>().mesh_instance = m_Scene->m_RenderData->GetRenderMeshInstance(mesh_id, shader_id);
+            entity.Get<RenderMeshComponent>().mesh_instance = m_Scene->m_RenderData->GetRenderMeshInstance(mesh_id, shader_id);
         }
 
         m_Scene->UpdateEmptyEntity(entity);
@@ -545,7 +551,7 @@ namespace DE
             if (node["Entity"])
             {
                 Entity entity = LoadEntity(node["Entity"]);
-                load_to->AttachChild(CreateRef<SceneHierarchyNode>(entity.GetComponent<TagComponent>(), entity));
+                load_to->AttachChild(CreateRef<SceneHierarchyNode>(entity.Get<TagComponent>(), entity));
             }
             if (node["Node"])
             {

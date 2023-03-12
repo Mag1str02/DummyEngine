@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DummyEngine/Core/ECS/ECSStorage.hpp"
+#include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
 
 namespace DE
@@ -41,13 +41,11 @@ namespace DE
         void   UpdateEmptyEntity(Entity entity);
         void   OnEntityDestroy(Entity entity);
 
-        template <typename Component> void OnComponentAttach(Entity entity);
-
-        std::string                               m_Name;
-        ECSStorage                                m_Storage;
-        Ref<SceneRenderData>                      m_RenderData;
-        Ref<SceneHierarchyNode>                   m_HierarchyRoot;
-        std::unordered_map<uint64_t, EntityId>    m_EntityByUUID;
-        std::unordered_map<std::string, EntityId> m_EntityByName;
+        std::string                             m_Name;
+        Storage                                 m_Storage;
+        Ref<SceneRenderData>                    m_RenderData;
+        Ref<SceneHierarchyNode>                 m_HierarchyRoot;
+        std::unordered_map<uint64_t, Entity>    m_EntityByUUID;
+        std::unordered_map<std::string, Entity> m_EntityByName;
     };
 }  // namespace DE

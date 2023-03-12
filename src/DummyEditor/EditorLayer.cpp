@@ -10,23 +10,16 @@ namespace DE
         MovingSystem() {}
         virtual std::string GetName() const override { return "MovingSystem"; }
 
-        void Update(double dt) override
+        void Update(float dt) override
         {
-            auto& positions     = GetComponentArray<TransformComponent>();
-            auto& meshes        = GetComponentArray<RenderMeshComponent>();
-            auto& light_sources = GetComponentArray<LightSource>();
-
-            for (auto [id, mesh] : meshes)
+            for (auto entity : View<RenderMeshComponent, TransformComponent>())
             {
-                mesh.mesh_instance->at<Mat4>(0) = positions[id].GetTransform();
+                entity.Get<RenderMeshComponent>().mesh_instance->at<Mat4>(0) = entity.Get<TransformComponent>().GetTransform();
             }
 
-            for (auto [entity_id, light_source] : light_sources)
+            for (auto entity : View<LightSource, TransformComponent>())
             {
-                if (positions.HasComponent(entity_id))
-                {
-                    light_source.position = positions[entity_id].translation;
-                }
+                entity.Get<LightSource>().position = entity.Get<TransformComponent>().translation;
             }
         }
     };
@@ -227,7 +220,7 @@ namespace DE
         }
         if (m_EditorCamera.Valid())
         {
-            bool& active = m_EditorCamera.GetComponent<ScriptComponent>()->GetField("active").Get<bool>();
+            bool& active = m_EditorCamera.Get<ScriptComponent>()->GetField("active").Get<bool>();
             if (m_State.m_InputState == InputState::ViewPort)
             {
                 active = true;

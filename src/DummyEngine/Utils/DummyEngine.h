@@ -2,8 +2,7 @@
 
 #include "DummyEngine/Utils/Base.h"
 
-#include "DummyEngine/Core/ECS/Entity.hpp"
-#include "DummyEngine/Core/ECS/SystemManager.hpp"
+#include "DummyEngine/Core/ECS/ECS.h"
 
 #include "DummyEngine/Core/Scene/Scene.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"

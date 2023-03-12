@@ -1,70 +1,52 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
-#include "DummyEngine/ToolBox/Dev/Logger.h"
-
 namespace DE
 {
-
-    class EntityManager
+#ifdef ECS_IMPLEMENTATION
+    std::pair<uint32_t, uint32_t> EntityManager::CreateEntity()
     {
-    private:
-        using Signature = std::vector<bool>;
-
-        uint64_t               m_EntitiesAmount;
-        uint64_t               m_ComponentAmount;
-        std::queue<EntityId>   m_AvailableEntities;
-        std::vector<Signature> m_Signatures;
-
-    public:
-        EntityManager() : m_EntitiesAmount(0), m_ComponentAmount(0)
+        if (m_AvailableEntities.empty())
         {
-            // Logger::Info("ECS", "EntityManager", "EntityManager created.");
+            m_AvailableEntities.push(m_States.size());
+            m_States.push_back(false);
+            m_Generations.push_back(0);
         }
-        ~EntityManager()
+        auto id = m_AvailableEntities.front();
+        m_AvailableEntities.pop();
+        m_States[id] = true;
+        ++m_Generations[id];
+        return std::make_pair(id, m_Generations[id]);
+    }
+    void EntityManager::Destroy(uint32_t id)
+    {
+        m_States[id] = false;
+        m_AvailableEntities.push(id);
+    }
+    bool EntityManager::Valid(uint32_t id, uint32_t gen) const { return m_States[id] && m_Generations[id] == gen; }
+
+    uint32_t EntityManager::NextEntity(uint32_t id) const
+    {
+        if (id >= m_States.size())
         {
-            // Logger::Info("ECS", "EntityManager", "EntityManager terminated.");
+            return m_States.size();
         }
-
-        std::pair<EntityId, bool> CreateEntity()
+        do
         {
-            bool new_entity_created = false;
-            if (m_AvailableEntities.empty())
-            {
-                m_AvailableEntities.push(m_Signatures.size());
-                m_Signatures.push_back(Signature(m_ComponentAmount, false));
-                new_entity_created = true;
-            }
-
-            EntityId entity_id = m_AvailableEntities.front();
-            m_AvailableEntities.pop();
-            ++m_EntitiesAmount;
-
-            // Logger::Info("ECS", "EntityManager", "Entity created (" + std::to_string(entity_id) + ")");
-
-            return std::make_pair(entity_id, new_entity_created);
+            ++id;
         }
-        void DestroyEntity(EntityId entity_id)
+        while (id < m_States.size() && !m_States[id]);
+        return id;
+    }
+    uint32_t EntityManager::Generation(uint32_t id) const { return m_Generations[id]; }
+    uint32_t EntityManager::BeginEntity() const
+    {
+        uint32_t res = 0;
+        while (res < m_States.size() && !m_States[res])
         {
-            m_AvailableEntities.push(entity_id);
-            --m_EntitiesAmount;
-
-            // Logger::sInfo("ECS", "EntityManager", "Entity destroyed (" + std::to_string(entity_id) + ")");
+            ++res;
         }
-
-        void AddComponent(EntityId entity_id, ComponentId component_id) { m_Signatures[entity_id][component_id] = 1; }
-        void RemoveComponent(EntityId entity_id, ComponentId component_id) { m_Signatures[entity_id][component_id] = 0; }
-        bool GetComponent(EntityId entity_id, ComponentId component_id) { return m_Signatures[entity_id][component_id]; }
-
-        void CopyEntity(EntityId from, EntityId to) { m_Signatures[to] = m_Signatures[from]; }
-
-        void ExtendSignatures()
-        {
-            ++m_ComponentAmount;
-            for (auto& signature : m_Signatures)
-            {
-                signature.push_back(false);
-            }
-        }
-    };
+        return res;
+    }
+    uint32_t EntityManager::EndEntity() const { return m_States.size(); }
+#endif
 }  // namespace DE

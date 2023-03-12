@@ -1,5 +1,5 @@
 #include "DummyEngine/Core/Application/Window.h"
-#include "DummyEngine/Core/ECS/SystemManager.hpp"
+#include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
 namespace DE

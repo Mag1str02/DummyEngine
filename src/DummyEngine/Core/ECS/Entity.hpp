@@ -1,68 +1,68 @@
 #pragma once
 
-#include "DummyEngine/ToolBox/Dev/Logger.h"
-#include "DummyEngine/Core/Scene/Scene.h"
-
 namespace DE
 {
+#ifdef ECS_IMPLEMENTATION
+    Entity::Entity() : m_ID(0), m_Gen(0), m_Storage(nullptr) {}
 
-    class Entity
+    bool Entity::Valid() const { return m_Storage && m_Storage->Valid(m_ID, m_Gen); }
+    void Entity::Destroy()
     {
-    public:
-        Entity() : m_Id(-1), m_Scene(nullptr) {}
-        Entity(EntityId id, Scene* scene) : m_Id(id), m_Scene(scene) {}
-
-        bool Valid() const { return m_Scene != nullptr && m_Id != -1; }
-        void Destroy()
+        if (m_Storage)
         {
-            if (Valid())
-            {
-                m_Scene->OnEntityDestroy(*this);
-                m_Scene->m_Storage.DestroyEntity(m_Id);
-                m_Scene = nullptr;
-            }
+            m_Storage->Destroy(m_ID, m_Gen);
         }
+        *this = Entity();
+    }
+    bool Entity::operator==(const Entity& other) const { return m_ID == other.m_ID && m_Gen == other.m_Gen && m_Storage == other.m_Storage; }
+    bool Entity::operator!=(const Entity& other) const { return m_ID != other.m_ID || m_Gen != other.m_Gen || m_Storage != other.m_Storage; }
+#endif
 
-        template <typename ComponentType> ComponentType& AddComponent(ComponentType component = ComponentType())
+    template <typename ComponentType> ComponentType* Entity::AddComponent(ComponentType component)
+    {
+        return (m_Storage ? m_Storage->AddComponent<ComponentType>(m_ID, m_Gen, component) : nullptr);
+    }
+    template <typename ComponentType> ComponentType* Entity::GetComponent()
+    {
+        return (m_Storage ? m_Storage->GetComponent<ComponentType>(m_ID, m_Gen) : nullptr);
+    }
+    template <typename ComponentType> ComponentType& Entity::Add(ComponentType component)
+    {
+        auto ptr = m_Storage->AddComponent<ComponentType>(m_ID, m_Gen, component);
+        DE_ASSERT(ptr, "Failed to add component");
+        return *ptr;
+    }
+    template <typename ComponentType> ComponentType& Entity::Get()
+    {
+        auto ptr = m_Storage->GetComponent<ComponentType>(m_ID, m_Gen);
+        DE_ASSERT(ptr, "Failed to add component");
+        return *ptr;
+    }
+    template <typename ComponentType> bool Entity::Has() const
+    {
+        if (!m_Storage)
         {
-            DE_ASSERT(m_Scene != nullptr, "Entity either was not initialized properly, or was destroyed before using AddComponent command.");
-
-            auto& return_component = m_Scene->m_Storage.AddComponent(m_Id, component);
-            m_Scene->OnComponentAttach<ComponentType>(*this);
-            return return_component;
+            return false;
         }
-        template <typename ComponentType> void RemoveComponent()
+        return m_Storage->HasComponent<ComponentType>(m_ID, m_Gen);
+    }
+    template <typename ComponentType> void Entity::Remove()
+    {
+        if (m_Storage)
         {
-            DE_ASSERT(m_Scene != nullptr, "Entity either was not initialized properly, or was destroyed before using RemoveComponent command.");
-            m_Scene->m_Storage.RemoveComponent<ComponentType>(m_Id);
+            m_Storage->RemoveComponent<ComponentType>(m_ID, m_Gen);
         }
-        template <typename ComponentType> ComponentType& GetComponent()
-        {
-            DE_ASSERT(m_Scene != nullptr, "Entity either was not initialized properly, or was destroyed before using GetComponent command.");
-            DE_ASSERT(HasComponent<ComponentType>(), "Trying to access non-existing component.");
-            return m_Scene->m_Storage.GetComponent<ComponentType>(m_Id);
-        }
-        template <typename ComponentType> bool HasComponent()
-        {
-            DE_ASSERT(m_Scene != nullptr, "Entity either was not initialized properly, or was destroyed before using HasComponent command.");
-            return m_Scene->m_Storage.HasComponent<ComponentType>(m_Id);
-        }
+    }
 
-        bool operator==(const Entity& other) const { return m_Id == other.m_Id && m_Scene == other.m_Scene; }
-
-    private:
-        friend class Scene;
-        friend class SceneRenderData;
-        friend struct std::hash<Entity>;
-
-        EntityId m_Id;
-        Scene*   m_Scene;
-    };
 }  // namespace DE
+
 namespace std
 {
     template <> struct hash<DE::Entity>
     {
-        std::size_t operator()(const DE::Entity& entity) const { return hash<int64_t>()(entity.m_Id); }
+        std::size_t operator()(const DE::Entity& entity) const
+        {
+            return hash<uint64_t>()(((uint64_t)entity.m_ID << 32) + entity.m_Gen) ^ hash<uint64_t>()(reinterpret_cast<uint64_t>(entity.m_Storage));
+        }
     };
 }  // namespace std
