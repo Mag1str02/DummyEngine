@@ -7,6 +7,7 @@
 #include "DummyEngine/Core/Scene/SceneRenderData.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"
 #include "DummyEngine/Core/Scripting/Script.h"
+#include "DummyEngine/Core/Scripting/ScriptEngine.h"
 
 namespace DE
 {
@@ -15,7 +16,8 @@ namespace DE
         m_Name(name), m_RenderData(CreateRef<SceneRenderData>(this)), m_HierarchyRoot(CreateRef<SceneHierarchyNode>())
     {
         m_Storage.SetAddHandler<FPSCamera>([this](Entity entity) { m_RenderData->AddVPEntity(entity); });
-        m_Storage.SetAddHandler<ScriptComponent>([this](Entity entity) { (*entity.Get<ScriptComponent>())->AttachToEntity(this, entity); });
+        m_Storage.SetAddHandler<ScriptComponent>([this](Entity entity) { entity.Get<ScriptComponent>()->AttachToScene(this, entity); });
+        m_Storage.SetRemoveHandler<ScriptComponent>([this](Entity entity) { entity.Get<ScriptComponent>().Destroy(); });
     }
 
     Entity Scene::CreateHiddenEntity(const std::string& name)
@@ -97,8 +99,8 @@ namespace DE
     {
         DE_PROFILE_SCOPE("Scene OnUpdate");
 
-        UpdateScripts(dt);
         m_Storage.UpdateSystems(dt);
+        UpdateScripts(dt);
     }
 
     void Scene::OnViewPortResize(uint32_t x, uint32_t y)
@@ -108,15 +110,6 @@ namespace DE
         for (auto e : cameras)
         {
             e.Get<FPSCamera>().SetAspect(aspect);
-        }
-    }
-    void Scene::UpdateScripts(double dt)
-    {
-        DE_PROFILE_SCOPE("Scene UpdateScripts");
-        auto scripts = m_Storage.View<ScriptComponent>();
-        for (auto e : scripts)
-        {
-            (*e.Get<ScriptComponent>())->OnUpdate(dt);
         }
     }
     void Scene::Render()
@@ -149,5 +142,15 @@ namespace DE
         DE_ASSERT(!cameras.Empty(), "No available camera in scene.");
         return *cameras.begin();
     }
-
+    void Scene::UpdateScripts(float dt)
+    {
+        for (auto e : m_Storage.View<ScriptComponent>())
+        {
+            auto& component = e.Get<ScriptComponent>();
+            if (component.Valid())
+            {
+                component->OnUpdate(dt);
+            }
+        }
+    }
 }  // namespace DE

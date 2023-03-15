@@ -8,6 +8,7 @@ namespace DE
     class Entity;
     class SceneRenderData;
     class SceneHierarchyNode;
+    class ScripyEngine;
 
     class Scene
     {
@@ -27,12 +28,13 @@ namespace DE
 
         void OnUpdate(double dt);
         void OnViewPortResize(uint32_t x, uint32_t y);
-        void UpdateScripts(double dt);
+        void UpdateScripts(float dt);
         void Render();
 
         template <typename System> void RegisterSystem() { m_Storage.RegisterSystem<System>(); }
 
     private:
+        friend class ScriptEngine;
         friend class SceneLoader;
         friend class SceneRenderData;
         friend class Entity;

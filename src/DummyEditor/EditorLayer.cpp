@@ -180,6 +180,9 @@ namespace DE
     }
     void EditorLayer::OpenScene(const Path& scene_path)
     {
+        m_SceneData.m_Scene = nullptr;
+        m_SceneHierarchy.SetActiveScene(nullptr);
+
         ScriptManager::PrepareScripts(scene_path);
         SceneLoader::Load(m_SceneData.m_Scene, scene_path);
 

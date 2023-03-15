@@ -35,11 +35,11 @@ namespace DE
         {
             if (m_Entity.Has<ScriptComponent>())
             {
-                auto component = m_Entity.Get<ScriptComponent>();
+                auto& component = m_Entity.Get<ScriptComponent>();
                 if (ImGui::CollapsingHeader("Script"))
                 {
-                    ImGui::Text("UUID: %s", component->ID().Hex().c_str());
-                    if (component->Valid())
+                    ImGui::Text("UUID: %s", component.ID().Hex().c_str());
+                    if (component.Valid())
                     {
                         auto& fields = component->GetFields();
                         for (auto& [name, field] : fields)

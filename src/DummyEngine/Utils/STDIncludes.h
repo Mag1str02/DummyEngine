@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdlib>
 #include <memory>
 #include <iostream>
 #include <iomanip>
@@ -27,4 +28,3 @@
 #include <unistd.h>
 #include <cstring>
 #include <typeindex>
-

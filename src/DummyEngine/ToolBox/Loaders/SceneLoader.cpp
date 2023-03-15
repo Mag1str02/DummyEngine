@@ -151,8 +151,8 @@ namespace DE
         if (entity.Has<ScriptComponent>())
         {
             auto& script_instance      = entity.Get<ScriptComponent>();
-            n_Entity["Script"]["UUID"] = (uint64_t)script_instance->ID();
-            for (auto& [name, field] : (*script_instance)->GetFields())
+            n_Entity["Script"]["UUID"] = (uint64_t)script_instance.ID();
+            for (auto& [name, field] : script_instance->GetFields())
             {
                 n_Entity["Script"]["Fields"][name] = NodeScriptField(field);
             }
@@ -434,12 +434,19 @@ namespace DE
     {
         ScriptComponent script = ScriptEngine::CreateScript(n_Component["UUID"].as<uint64_t>());
         entity.AddComponent<ScriptComponent>(script);
-        for (auto& [name, field] : (*script)->GetFields())
+        if (script.Valid())
         {
-            if (n_Component["Fields"][name])
+            for (auto& [name, field] : script->GetFields())
             {
-                GetField(n_Component["Fields"][name], field);
+                if (n_Component["Fields"][name])
+                {
+                    GetField(n_Component["Fields"][name], field);
+                }
             }
+        }
+        else
+        {
+            LOG_INFO(StrCat("Failed to create valid script: ", std::to_string(script.ID())), "SceneLoader");
         }
     }
 

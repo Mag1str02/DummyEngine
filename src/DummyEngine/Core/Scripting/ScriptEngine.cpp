@@ -1,7 +1,15 @@
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
+#include "DummyEngine/Core/Scene/Scene.h"
+#include "DummyEngine/Core/Scene/Components.h"
 
 namespace DE
 {
+    UUID    ScriptComponent::ID() const { return ScriptEngine::GetUUID(*this); }
+    bool    ScriptComponent::Valid() const { return ScriptEngine::Valid(*this); }
+    void    ScriptComponent::Destroy() { ScriptEngine::Destroy(*this); }
+    Script& ScriptComponent::operator*() { return *ScriptEngine::GetScript(*this); }
+    Script* ScriptComponent::operator->() { return ScriptEngine::GetScript(*this); }
+
     SINGLETON_BASE(ScriptEngine);
 
     Unit ScriptEngine::Initialize()
@@ -38,6 +46,13 @@ namespace DE
             m_ScriptClasses[asset.id].Load(lib);
             if (m_ScriptClasses[asset.id].Valid())
             {
+                for (auto& instance : m_ProxyManager)
+                {
+                    if (instance.m_Id == asset.id)
+                    {
+                        instance.m_Script = m_ScriptClasses[asset.id].Create();
+                    }
+                }
                 break;
             }
         }
@@ -50,12 +65,15 @@ namespace DE
         {
             return Unit();
         }
-        for (auto it = m_HandleManager.begin(); it != m_HandleManager.end(); ++it)
+        if (m_ScriptClasses[id].Valid())
         {
-            if (it->m_Id == id)
+            for (auto& instance : m_ProxyManager)
             {
-                //! Abuses iterator invalidation
-                m_HandleManager.Destroy(it.ID());
+                if (instance.m_Id == id)
+                {
+                    m_ScriptClasses[id].Delete(instance.m_Script);
+                    instance.m_Script = nullptr;
+                }
             }
         }
         m_ScriptClasses.erase(id);
@@ -65,7 +83,14 @@ namespace DE
     S_METHOD_IMPL(ScriptEngine, Unit, ClearScripts, (), ())
     {
         LOG_INFO("Clearing scripts...", "ScriptEngine");
-        m_HandleManager.Clear();
+        for (auto& instance : m_ProxyManager)
+        {
+            if (instance.m_Script)
+            {
+                m_ScriptClasses[instance.m_Id].Delete(instance.m_Script);
+            }
+            instance.m_Script = nullptr;
+        }
         m_ScriptClasses.clear();
         return Unit();
     }
@@ -108,11 +133,14 @@ namespace DE
 
         //*Invalidate Instances
         {
-            std::unordered_set<UUID> invalid_classes = GetInvalidClasses();
-            for (auto& instance : m_HandleManager)
+            for (auto& instance : m_ProxyManager)
             {
-                if (invalid_classes.contains(instance.m_Id))
+                if (!m_ScriptClasses[instance.m_Id].Valid())
                 {
+                    if (instance.m_Script)
+                    {
+                        m_ScriptClasses[instance.m_Id].Delete(instance.m_Script);
+                    }
                     instance.m_Script = nullptr;
                 }
             }
@@ -138,59 +166,81 @@ namespace DE
         {
             lib->Invalidate();
         }
-        for (auto& script_instance : m_HandleManager)
+        for (auto& instance : m_ProxyManager)
         {
-            script_instance.m_Script = nullptr;
+            if (instance.m_Script)
+            {
+                m_ScriptClasses[instance.m_Id].Delete(instance.m_Script);
+            }
+            instance.m_Script = nullptr;
         }
         m_Libraries.clear();
         return Unit();
     }
 
-    S_METHOD_IMPL(ScriptEngine, Handle<ScriptInstance>, CreateScript, (UUID id), (id))
+    S_METHOD_IMPL(ScriptEngine, ScriptComponent, CreateScript, (UUID id), (id))
     {
+        LOG_INFO(StrCat("Creating script instance: ", std::to_string(id)), "ScriptEngine");
+        auto [p_id, gen]      = m_ProxyManager.CreateProxy();
+        auto&           proxy = m_ProxyManager.GetProxy(p_id);
+        ScriptComponent res(p_id, gen);
+        proxy.m_Id = id;
         if (!m_ScriptClasses.contains(id))
         {
             LOG_INFO(StrCat("Creating unknown script: ", std::to_string(id)), "ScriptEngine");
-            return Handle<ScriptInstance>();
         }
-        auto res        = m_HandleManager.CreateHandle();
-        (*res).m_Script = m_ScriptClasses[id].CreateInstance();
-        (*res).m_Id     = id;
-        LOG_INFO(StrCat("Creating script: ", std::to_string(id), " Handle ID: ", std::to_string(res.GetId())), "ScriptEngine");
+        else
+        {
+            LOG_INFO(StrCat("Creating script from dll function..."), "ScriptEngine");
+            if (m_ScriptClasses[id].Valid())
+            {
+                proxy.m_Script = m_ScriptClasses[id].Create();
+            }
+        }
         return res;
+    }
+    S_METHOD_IMPL(ScriptEngine, Script*, GetScript, (const ScriptComponent& component), (component))
+    {
+        return m_ProxyManager.GetProxy(component.m_ID).m_Script;
+    }
+    S_METHOD_IMPL(ScriptEngine, UUID, GetUUID, (const ScriptComponent& component), (component))
+    {
+        return m_ProxyManager.GetProxy(component.m_ID).m_Id;
+    }
+    S_METHOD_IMPL(ScriptEngine, bool, Valid, (const ScriptComponent& component), (component))
+    {
+        return m_ProxyManager.Valid(component.m_ID, component.m_Gen) && m_ProxyManager.GetProxy(component.m_ID).m_Script;
+    }
+    S_METHOD_IMPL(ScriptEngine, Unit, Destroy, (const ScriptComponent& component), (component))
+    {
+        if (m_ProxyManager.Valid(component.m_ID, component.m_Gen))
+        {
+            ScriptProxy& proxy = m_ProxyManager.GetProxy(component.m_ID);
+            if (proxy.m_Script)
+            {
+                m_ScriptClasses[proxy.m_Id].Delete(proxy.m_Script);
+            }
+            m_ProxyManager.Destroy(component.m_ID);
+        }
+        return Unit();
     }
 
     void ScriptEngine::UpdateScriptClasses(Ref<SharedObject> library)
     {
-        std::unordered_set<UUID> loaded_classes;
-        std::unordered_set<UUID> invalid_classes = GetInvalidClasses();
-
-        for (auto id : invalid_classes)
-        {
-            if (m_ScriptClasses[id].Load(library))
-            {
-                loaded_classes.insert(id);
-            }
-        }
-        for (auto& instance : m_HandleManager)
-        {
-            if (loaded_classes.contains(instance.m_Id))
-            {
-                instance.m_Script = m_ScriptClasses[instance.m_Id].CreateInstance();
-            }
-        }
-    }
-    std::unordered_set<UUID> ScriptEngine::GetInvalidClasses()
-    {
-        std::unordered_set<UUID> loaded_classes;
         for (auto& [id, script_class] : m_ScriptClasses)
         {
             if (!script_class.Valid())
             {
-                loaded_classes.insert(id);
+                script_class.Load(library);
             }
         }
-        return loaded_classes;
+        for (auto& instance : m_ProxyManager)
+        {
+            if (!instance.m_Script)
+            {
+                instance.m_Script = m_ScriptClasses[instance.m_Id].Create();
+            }
+        }
     }
 
 }  // namespace DE

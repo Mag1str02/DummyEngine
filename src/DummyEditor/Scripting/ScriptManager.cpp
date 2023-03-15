@@ -75,7 +75,6 @@ namespace DE
                 return Unit();
             }
         }
-        LOG_INFO("Reloading scripts...", "ScriptManager");
 
         //*Compile sources
         {
@@ -85,7 +84,6 @@ namespace DE
                 DE_ASSERT(compilation_success, StrCat("Failed to compile: ", m_Scripts[id].string()));
             }
         }
-        LOG_INFO("Reloading scripts...", "ScriptManager");
 
         //*Swap library
         {
@@ -100,7 +98,6 @@ namespace DE
 
             LoadLibrary(new_name);
         }
-        LOG_INFO("Reloading scripts...", "ScriptManager");
 
         return Unit();
     }

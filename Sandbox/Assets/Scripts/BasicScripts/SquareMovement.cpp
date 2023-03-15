@@ -2,8 +2,6 @@
 
 using namespace DE;
 
-class SquareMovement;
-
 class SquareMovement : public Script
 {
 public:

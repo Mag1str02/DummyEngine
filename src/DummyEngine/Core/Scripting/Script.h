@@ -6,6 +6,8 @@
 
 namespace DE
 {
+    template <typename T, typename U> constexpr size_t OffsetOf(U T::*member) { return (char*)&((T*)nullptr->*member) - (char*)nullptr; }
+
     enum class ScriptFieldType
     {
         None = 0,
@@ -58,6 +60,11 @@ namespace DE
 
         std::unordered_map<std::string, ScriptField>& GetFields() { return m_Fields; }
         ScriptField                                   GetField(const std::string& field_name) { return m_Fields[field_name]; }
+        void                                          AttachToScene(Scene* scene, Entity entity)
+        {
+            m_Scene  = scene;
+            m_Entity = entity;
+        }
 
     protected:
         template <typename T> T&   Add(const T& t) { return m_Entity.Add<T>(t); }
@@ -68,11 +75,6 @@ namespace DE
 
         friend class Scene;
 
-        void AttachToEntity(Scene* scene, Entity entity)
-        {
-            m_Scene  = scene;
-            m_Entity = entity;
-        }
         std::unordered_map<std::string, ScriptField> m_Fields;
         Scene*                                       m_Scene;
         Entity                                       m_Entity;
@@ -81,37 +83,12 @@ namespace DE
 
 #define ADD_FIELD(field) AddField(ScriptField(std::string(#field), &field, TypeToScriptFieldType(field)))
 
-#define SCRIPT_BASE(type)                                         \
-    DE_SCRIPT_API void type##Construct(void* adr)                 \
-    {                                                             \
-        new (adr) type();                                         \
-    }                                                             \
-    DE_SCRIPT_API void type##Destruct(void* adr)                  \
-    {                                                             \
-        reinterpret_cast<type*>(adr)->~type();                    \
-    }                                                             \
-    DE_SCRIPT_API void type##OnCreate(void* adr)                  \
-    {                                                             \
-        reinterpret_cast<type*>(adr)->OnCreate();                 \
-    }                                                             \
-    DE_SCRIPT_API void type##OnUpdate(void* adr, float dt)        \
-    {                                                             \
-        reinterpret_cast<type*>(adr)->OnUpdate(dt);               \
-    }                                                             \
-    DE_SCRIPT_API void type##OnDestroy(void* adr)                 \
-    {                                                             \
-        reinterpret_cast<type*>(adr)->OnDestroy();                \
-    }                                                             \
-    DE_SCRIPT_API uint32_t type##AlignOf()                        \
-    {                                                             \
-        return alignof(type);                                     \
-    }                                                             \
-    DE_SCRIPT_API uint32_t type##SizeOf()                         \
-    {                                                             \
-        return sizeof(type);                                      \
-    }                                                             \
-    DE_SCRIPT_API Ref<Script> type##CreateInstance()              \
-    {                                                             \
-        LOG_INFO(StrCat("Creating instance of: ", #type), #type); \
-        return CreateRef<type>();                                 \
+#define SCRIPT_BASE(type)                           \
+    DE_SCRIPT_API Script* type##Create()            \
+    {                                               \
+        return new type();                          \
+    }                                               \
+    DE_SCRIPT_API void type##Delete(Script* script) \
+    {                                               \
+        delete script;                              \
     }

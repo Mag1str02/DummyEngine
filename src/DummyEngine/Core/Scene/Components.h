@@ -56,6 +56,4 @@ namespace DE
 
         Ref<CubeMap> map = nullptr;
     };
-
-    using ScriptComponent = Handle<ScriptInstance>;
 }  // namespace DE
