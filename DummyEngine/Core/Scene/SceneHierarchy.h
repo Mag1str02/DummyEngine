@@ -1,13 +1,11 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/ECS/ECS.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
 
-    class SceneHierarchyNode
-    {
+    class SceneHierarchyNode {
     public:
         SceneHierarchyNode(const std::string& name = "", Entity entity = Entity());
 

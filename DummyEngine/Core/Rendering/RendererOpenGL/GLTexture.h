@@ -2,20 +2,18 @@
 
 #include <glad/glad.h>
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Rendering/Renderer/Texture.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
 
-    class GLTexture : public Texture
-    {
+    class GLTexture : public Texture {
     public:
-        GLTexture() = delete;
-        GLTexture(const GLTexture& other) = delete;
-        GLTexture(GLTexture&& other) = delete;
+        GLTexture()                                  = delete;
+        GLTexture(const GLTexture& other)            = delete;
+        GLTexture(GLTexture&& other)                 = delete;
         GLTexture& operator=(const GLTexture& other) = delete;
-        GLTexture& operator=(GLTexture&& other) = delete;
+        GLTexture& operator=(GLTexture&& other)      = delete;
 
         GLTexture(uint32_t width, uint32_t height, TextureFormat format);
         GLTexture(const TextureData& data);
@@ -32,12 +30,12 @@ namespace DE
 
     private:
         friend class GLFrameBuffer;
-        
+
         uint32_t m_Width;
         uint32_t m_Height;
-        GLuint m_TextureId;
-        GLenum m_InternalFormat;
-        GLenum m_Format;
+        GLuint   m_TextureId;
+        GLenum   m_InternalFormat;
+        GLenum   m_Format;
     };
 
     // class GLTexture

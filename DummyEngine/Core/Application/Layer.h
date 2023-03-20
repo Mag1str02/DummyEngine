@@ -1,12 +1,10 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Application/Event.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
-    class Layer
-    {
+namespace DE {
+    class Layer {
     public:
         Layer(const std::string& name = "Layer") : m_Name(name) {}
         virtual ~Layer() = default;
@@ -17,15 +15,9 @@ namespace DE
         virtual void OnImGuiRender() {}
         virtual void OnEvent(Event& event) {}
 
-        const std::string& GetName() const
-        {
-            return m_Name;
-        }
+        const std::string& GetName() const { return m_Name; }
 
-        void BroadcastEvent(Event& event)
-        {
-            m_EventCallback(event);
-        }
+        void BroadcastEvent(Event& event) { m_EventCallback(event); }
 
     protected:
         std::string m_Name;

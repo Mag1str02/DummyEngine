@@ -2,10 +2,8 @@
 
 #include "DummyEditor/DummyEngineInclude.h"
 
-namespace DE
-{
-    class SceneHierarchyPanel : public ImGuiPanel
-    {
+namespace DE {
+    class SceneHierarchyPanel : public ImGuiPanel {
     public:
         SceneHierarchyPanel() : ImGuiPanel("Scene Hierarchy") {}
         virtual void View() override;

@@ -1,9 +1,7 @@
 #pragma once
 
-namespace DE
-{
-    class Initializer
-    {
+namespace DE {
+    class Initializer {
     public:
         static void Initialize();
         static void Terminate();

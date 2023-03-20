@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 #include "DummyEngine/Core/Application/Event.h"
 #include "DummyEngine/Core/Rendering/Renderer/Context.h"

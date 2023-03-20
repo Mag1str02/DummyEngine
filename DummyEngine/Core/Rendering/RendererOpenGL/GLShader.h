@@ -2,21 +2,19 @@
 
 #include <glad/glad.h>
 
-#include "DummyEngine/Utils/Base.h"
-#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 #include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
+#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
     namespace fs = std::filesystem;
 
-    class GLShader : public Shader
-    {
+    class GLShader : public Shader {
     public:
-        GLShader()                    = delete;
-        GLShader(const Shader& other) = delete;
-        GLShader(Shader&& other)      = delete;
-        GLShader& operator=(Shader&& other) = delete;
+        GLShader()                               = delete;
+        GLShader(const Shader& other)            = delete;
+        GLShader(Shader&& other)                 = delete;
+        GLShader& operator=(Shader&& other)      = delete;
         GLShader& operator=(const Shader& other) = delete;
 
         GLShader(const std::vector<ShaderPart>& shader_parts);

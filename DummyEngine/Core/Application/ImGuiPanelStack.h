@@ -1,12 +1,10 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Application/ImGuiPanel.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
-    class ImGuiPanelStack
-    {
+namespace DE {
+    class ImGuiPanelStack {
     public:
         ImGuiPanelStack() = default;
 

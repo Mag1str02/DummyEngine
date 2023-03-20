@@ -1,13 +1,11 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
 
-    class Shader
-    {
+    class Shader {
     public:
         virtual ~Shader() = default;
 

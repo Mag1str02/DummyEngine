@@ -1,13 +1,11 @@
 #include "DummyEngine/Core/Rendering/Renderer/Texture.h"
-#include "DummyEngine/Core/Rendering/RendererOpenGL/GLTexture.h"
-#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
-namespace DE
-{
-    Ref<Texture> Texture::Create(uint32_t widht, uint32_t height, TextureFormat format)
-    {
-        switch (Renderer::CurrentAPI())
-        {
+#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLTexture.h"
+
+namespace DE {
+    Ref<Texture> Texture::Create(uint32_t widht, uint32_t height, TextureFormat format) {
+        switch (Renderer::CurrentAPI()) {
             case API::OpenGL: return CreateRef<GLTexture>(widht, height, format);
             case API::Vulkan: {
                 DE_ASSERT(false, "Attempt to create Texture on VulkanAPI which is currently unsupported.");
@@ -22,10 +20,8 @@ namespace DE
         }
         return nullptr;
     }
-    Ref<Texture> Texture::Create(const TextureData& texture_data)
-    {
-        switch (Renderer::CurrentAPI())
-        {
+    Ref<Texture> Texture::Create(const TextureData& texture_data) {
+        switch (Renderer::CurrentAPI()) {
             case API::OpenGL: return CreateRef<GLTexture>(texture_data);
             case API::Vulkan: {
                 DE_ASSERT(false, "Attempt to create Texture on VulkanAPI which is currently unsupported.");

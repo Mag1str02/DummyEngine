@@ -1,17 +1,15 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/ResourceManaging/RawData.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
-    class Texture
-    {
+namespace DE {
+    class Texture {
     public:
         virtual ~Texture() = default;
 
-        virtual uint32_t Width() const = 0;
-        virtual uint32_t Height() const = 0;
+        virtual uint32_t Width() const      = 0;
+        virtual uint32_t Height() const     = 0;
         virtual uint32_t RendererId() const = 0;
 
         virtual void SetData(const void* data, uint32_t size) = 0;

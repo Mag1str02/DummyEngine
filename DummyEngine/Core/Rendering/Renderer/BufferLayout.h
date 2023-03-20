@@ -2,10 +2,8 @@
 
 #include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
-    struct BufferElement
-    {
+namespace DE {
+    struct BufferElement {
         BufferElementType type;
         uint32_t          size;
         size_t            offset;
@@ -19,15 +17,9 @@ namespace DE
         static uint32_t SizeOfElementType(BufferElementType type);
     };
 
-    enum class BufferLayoutType
-    {
-        None = 0,
-        Vertex,
-        Uniform
-    };
+    enum class BufferLayoutType { None = 0, Vertex, Uniform };
 
-    class BufferLayout
-    {
+    class BufferLayout {
     public:
         BufferLayout() = default;
         BufferLayout(std::initializer_list<BufferElement> elements, uint32_t divisor = 0);

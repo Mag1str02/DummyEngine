@@ -2,12 +2,10 @@
 
 #include "DummyEditor/DummyEngineInclude.h"
 
-namespace DE
-{
-    class ProfilerPanel : public ImGuiPanel
-    {
+namespace DE {
+    class ProfilerPanel : public ImGuiPanel {
     public:
-        ProfilerPanel() : ImGuiPanel("Profiler"){}
+        ProfilerPanel() : ImGuiPanel("Profiler") {}
         virtual void View() override;
 
     private:

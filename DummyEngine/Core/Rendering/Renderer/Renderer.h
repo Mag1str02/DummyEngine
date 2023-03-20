@@ -1,24 +1,21 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
-#include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
-#include "DummyEngine/Core/Rendering/Renderer/Texture.h"
+#include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
 #include "DummyEngine/Core/Rendering/Renderer/RenderAPI.h"
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
-#include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
+#include "DummyEngine/Core/Rendering/Renderer/Texture.h"
+#include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
-    struct FrameStatistics
-    {
+namespace DE {
+    struct FrameStatistics {
         uint32_t m_DrawCallsAmount;
         uint32_t m_DrawnInstances;
 
         void Reset();
     };
 
-    class Renderer
-    {
+    class Renderer {
     public:
         static void Initialize();
         static void Terminate();

@@ -1,13 +1,11 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Rendering/Renderer/LocalBuffer.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
 
-    class VertexBuffer
-    {
+    class VertexBuffer {
     public:
         virtual ~VertexBuffer() = default;
 
@@ -26,8 +24,7 @@ namespace DE
         static Ref<VertexBuffer> Create(const BufferLayout& layout, uint32_t size, const void* data, BufferUsage usage = BufferUsage::Static);
     };
 
-    class IndexBuffer
-    {
+    class IndexBuffer {
     public:
         virtual ~IndexBuffer() = default;
 

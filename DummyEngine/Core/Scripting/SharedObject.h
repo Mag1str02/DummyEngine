@@ -2,13 +2,11 @@
 
 #include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
 
     class SharedObjectImpl;
 
-    class SharedObject
-    {
+    class SharedObject {
     public:
         SharedObject();
         ~SharedObject();

@@ -2,22 +2,20 @@
 
 #include <glad/glad.h>
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
-    class GLFrameBuffer : public FrameBuffer
-    {
+namespace DE {
+    class GLFrameBuffer : public FrameBuffer {
     public:
         GLFrameBuffer(const FrameBufferProperties& properties);
         virtual ~GLFrameBuffer();
 
-        GLFrameBuffer() = delete;
-        GLFrameBuffer(const FrameBuffer& other) = delete;
-        GLFrameBuffer(FrameBuffer&& other) = delete;
+        GLFrameBuffer()                                    = delete;
+        GLFrameBuffer(const FrameBuffer& other)            = delete;
+        GLFrameBuffer(FrameBuffer&& other)                 = delete;
         GLFrameBuffer& operator=(const FrameBuffer& other) = delete;
-        GLFrameBuffer& operator=(FrameBuffer&& other) = delete;
+        GLFrameBuffer& operator=(FrameBuffer&& other)      = delete;
 
         virtual void Bind() override;
         virtual void UnBind() override;
@@ -35,10 +33,10 @@ namespace DE
     private:
         void Rebuild();
 
-        GLuint m_BufferId;
+        GLuint                m_BufferId;
         FrameBufferProperties m_Properties;
 
-        FrameBufferAttchment m_DepthAttachment;
+        FrameBufferAttchment              m_DepthAttachment;
         std::vector<FrameBufferAttchment> m_ColorAttachments;
     };
 }  // namespace DE

@@ -2,11 +2,9 @@
 
 #include "DummyEngine/Core/Application/Layer.h"
 
-namespace DE
-{
+namespace DE {
 
-    class ImGuiLayer : public Layer
-    {
+    class ImGuiLayer : public Layer {
     public:
         ImGuiLayer();
         ~ImGuiLayer() = default;

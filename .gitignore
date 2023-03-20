@@ -4,6 +4,8 @@
 .vscode/
 .cache/
 build/
+.idea/
+cmake-build-debug/
 
 Sandbox/imgui.ini
 Sandbox/DummyEditor
