@@ -1,17 +1,16 @@
 #pragma once
 
-#include <string>
-#include <vector>
-#include <queue>
-#include <stack>
 #include <chrono>
 #include <iostream>
+#include <queue>
+#include <stack>
+#include <string>
+#include <vector>
+
 #include "DummyEngine/Utils/Singleton.h"
 
-namespace DE
-{
-    struct TimeLapse
-    {
+namespace DE {
+    struct TimeLapse {
         std::chrono::time_point<std::chrono::high_resolution_clock> m_Start;
         std::chrono::time_point<std::chrono::high_resolution_clock> m_End;
         std::vector<uint32_t>                                       m_Childs;
@@ -22,20 +21,15 @@ namespace DE
 
         TimeLapse(const std::string& name) : m_Name(name) {}
     };
-    struct ProfilerFrame
-    {
+    struct ProfilerFrame {
         std::vector<TimeLapse> m_TimeLapses;
 
         ProfilerFrame(uint32_t predicted_lapse_amount);
     };
 
-    class Profiler : public Singleton<Profiler>
-    {
+    class Profiler : public Singleton<Profiler> {
         SINGLETON(Profiler)
     public:
-        S_METHOD_DEF(Unit, Initialize, ());
-        S_METHOD_DEF(Unit, Terminate, ());
-
         S_METHOD_DEF(const ProfilerFrame&, GetOldestFrame, ());
         S_METHOD_DEF(Unit, BeginFrame, ());
         S_METHOD_DEF(Unit, PushTimeLapse, (const std::string& name));
@@ -43,16 +37,13 @@ namespace DE
 
     private:
         friend class ProfilerScopeObject;
-        Profiler()  = default;
-        ~Profiler() = default;
 
         std::queue<ProfilerFrame> m_Frames;
         std::stack<uint32_t>      m_TimeLapseStack;
         uint32_t                  m_PrevFrameTimeLapseAmount = 0;
     };
 
-    class ProfilerScopeObject
-    {
+    class ProfilerScopeObject {
     public:
         ProfilerScopeObject(const std::string& name);
         ~ProfilerScopeObject();

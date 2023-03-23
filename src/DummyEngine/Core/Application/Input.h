@@ -1,14 +1,12 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Application/Event.h"
 #include "DummyEngine/Core/Application/KeyCodes.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
 
-    struct InputFrame
-    {
+    struct InputFrame {
         bool              mouse_locked = false;
         double            x_pos;
         double            y_pos;
@@ -17,13 +15,9 @@ namespace DE
         InputFrame();
     };
 
-    class Input : public Singleton<Input>
-    {
+    class Input : public Singleton<Input> {
         SINGLETON(Input)
     public:
-        S_METHOD_DEF(Unit, Initialize, ());
-        S_METHOD_DEF(Unit, Terminate, ());
-
         S_METHOD_DEF(Unit, OnEvent, (Event & e));
         S_METHOD_DEF(Unit, NewFrame, ());
 
@@ -37,9 +31,6 @@ namespace DE
         S_METHOD_DEF(bool, KeyUp, (Key key));
 
     private:
-        Input()  = default;
-        ~Input() = default;
-
         InputFrame             m_CurrentFrame;
         EventDispatcher        m_EventDispatcher;
         std::deque<InputFrame> m_Frames;

@@ -1,26 +1,36 @@
 #pragma once
 
-#include <yaml-cpp/yaml.h>
-
+// clang-format off
+#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Scene/Components.h"
 #include "DummyEngine/Core/Scene/Scene.h"
-#include "DummyEngine/Utils/Base.h"
+
+#include <yaml-cpp/yaml.h>
+// clang-format on
 
 namespace DE {
-    YAML::Node NodeVec2(Vec2 vec);
-    YAML::Node NodeVec3(Vec3 vec);
-    YAML::Node NodeVec4(Vec4 vec);
+    struct SceneAssets {
+        std::vector<ScriptAsset>     scripts;
+        std::vector<RenderMeshAsset> render_meshes;
+        std::vector<TextureAsset>    textures;
+        std::vector<ShaderAsset>     shaders;
+    };
+
+    struct SceneSerializationData {
+        SceneAssets assets;
+        YAML::Node  hierarchy_node;
+        std::string name;
+    };
 
     class SceneLoader {
     public:
-        static void Save(Ref<Scene> scene, const Path& path);
-        static void Load(Ref<Scene>& scene, const Path& path);
+        static void                   Save(Ref<Scene> scene, const Path& path);
+        static Ref<Scene>             Instantiate(const SceneSerializationData& data);
+        static SceneSerializationData LoadSerializationData(const Path& path);
 
     private:
-        // TODO: Think how user can create custom load and save functions for own components.
-
         template <typename ComponentType> static void SaveComponent(YAML::Node& n_Entity, Entity entity);
-        template <typename ComponentType> static void LoadComponent(YAML::Node n_Component, Entity& entity);
+        template <typename ComponentType> static void LoadComponent(Ref<Scene> scene, YAML::Node n_Component, Entity& entity);
 
         static YAML::Node SaveModels();
         static YAML::Node SaveScripts();
@@ -30,15 +40,10 @@ namespace DE {
         static YAML::Node SaveNode(Ref<SceneHierarchyNode> node);
         static void       SaveEntity(YAML::Node& n_Entities, Entity entity);
 
-        static void   LoadModels(YAML::Node n_Models);
-        static void   LoadScripts(YAML::Node n_Scripts);
-        static void   LoadTextures(YAML::Node n_Textures);
-        static void   LoadShaders(YAML::Node n_Shaders);
-        static void   LoadAssets(YAML::Node n_Assets);
-        static void   LoadHierarchyNode(YAML::Node n_Array, Ref<SceneHierarchyNode> load_to);
-        static Entity LoadEntity(YAML::Node n_Entity);
+        static void   LoadHierarchyNode(Ref<Scene> scene, YAML::Node n_Array, Ref<SceneHierarchyNode> load_to);
+        static Entity LoadEntity(Ref<Scene> scene, YAML::Node n_Entity);
 
-        static Ref<Scene> m_Scene;
+        static void SLoadAssets(SceneAssets& data, const YAML::Node& assets);
     };
 
 }  // namespace DE

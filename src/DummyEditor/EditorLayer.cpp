@@ -161,13 +161,21 @@ namespace DE {
         }
     }
     void EditorLayer::OpenScene(const Path& scene_path) {
-        SceneLoader::Load(m_SceneData.m_Scene, scene_path);
+        auto data            = SceneLoader::LoadSerializationData(scene_path);
+        m_SceneData.m_Assets = std::move(data.assets);
+        LoadAssets();
+        ScriptManager::LoadScripts(m_SceneData.m_Assets.scripts);
+
+        LOG_DEBUG("EditorLayer", "Ready to instantiate scene");
+        m_SceneData.m_Scene = SceneLoader::Instantiate(data);
+        LOG_DEBUG("EditorLayer", "Scene instantiated");
+
         PrepareScene();
-        ScriptManager::ReloadScripts(m_SceneData.m_Scene);
+        ScriptManager::AttachScripts(m_SceneData.m_Scene);
         LOG_INFO("EditorLayer", "Opened scene");
     }
     void EditorLayer::SaveScene(const Path& path) {
-        SceneLoader::Save(m_SceneData.m_Scene, path);
+        // SceneLoader::Save(m_SceneData.m_Scene, path);
     }
     void EditorLayer::ReloadScripts() {}
     void EditorLayer::CloseScene() {
@@ -178,6 +186,34 @@ namespace DE {
         LOG_INFO("EditorLayer", "Closed scene");
     }
 
+    void EditorLayer::LoadAssets() {
+        for (const auto& asset : m_SceneData.m_Assets.textures) {
+            AssetManager::AddTextureAsset(asset);
+        }
+        for (const auto& asset : m_SceneData.m_Assets.scripts) {
+            AssetManager::AddScriptAsset(asset);
+        }
+        for (const auto& asset : m_SceneData.m_Assets.render_meshes) {
+            AssetManager::AddRenderMeshAsset(asset);
+        }
+        for (const auto& asset : m_SceneData.m_Assets.shaders) {
+            AssetManager::AddShaderAsset(asset);
+        }
+    }
+    void EditorLayer::UnloadAssets() {
+        for (const auto& asset : m_SceneData.m_Assets.textures) {
+            AssetManager::RemoveTextureAsset(asset.id);
+        }
+        for (const auto& asset : m_SceneData.m_Assets.scripts) {
+            AssetManager::RemoveScriptAsset(asset.id);
+        }
+        for (const auto& asset : m_SceneData.m_Assets.render_meshes) {
+            AssetManager::RemoveRenderMeshAsset(asset.id);
+        }
+        for (const auto& asset : m_SceneData.m_Assets.shaders) {
+            AssetManager::RemoveShaderAsset(asset.id);
+        }
+    }
     void EditorLayer::PrepareScene() {
         m_EditorCamera = m_SceneData.m_Scene->CreateHiddenEntity("Editor Camera");
         m_EditorCamera.AddComponent<FPSCamera>();

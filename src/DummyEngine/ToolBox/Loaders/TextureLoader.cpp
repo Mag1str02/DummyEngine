@@ -1,15 +1,14 @@
+#include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
+
 #include <stb_image.h>
 #include <stb_image_write.h>
 
-#include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
 #include "DummyEngine/ToolBox/Dev/Logger.h"
 
-namespace DE
-{
+namespace DE {
     TextureLoader::LoaderState TextureLoader::m_State;
 
-    Ref<TextureData> TextureLoader::Load(const TextureLoadingProps& props)
-    {
+    Ref<TextureData> TextureLoader::Load(const TextureAsset::LoadingProperties& props) {
         unsigned char* stb_data;
         int            width, height, nrChannels;
         TextureFormat  format;
@@ -21,14 +20,12 @@ namespace DE
 
         stb_data = stbi_load(props.path.string().c_str(), &width, &height, &nrChannels, 0);
 
-        if (!stb_data)
-        {
+        if (!stb_data) {
             LOG_ERROR("TextureLoader", "Failed to load texture ", RelativeToExecutable(props.path));
             return nullptr;
         }
 
-        switch (nrChannels)
-        {
+        switch (nrChannels) {
             case 1:
                 format_s = "RED";
                 format   = TextureFormat::RED;
@@ -53,10 +50,8 @@ namespace DE
         LOG_INFO("TextureLoader", "Texture loaded ", RelativeToExecutable(props.path), " Format (", format_s, ")");
         return m_State.m_CurrentData;
     }
-    void TextureLoader::Save(const Path& path, const Ref<TextureData> data)
-    {
-        switch (data->Format())
-        {
+    void TextureLoader::Save(const Path& path, const Ref<TextureData> data) {
+        switch (data->Format()) {
             case TextureFormat::RGBA: {
                 stbi_write_png(
                     path.string().c_str(), data->Width(), data->Height(), data->Channels(), data->Data(), data->Width() * data->Channels());

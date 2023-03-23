@@ -1,16 +1,14 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/ResourceManaging/Assets.h"
-#include "DummyEngine/Core/Scripting/Script.h"
-#include "DummyEngine/Core/Scripting/SharedObject.h"
-#include "DummyEngine/Core/Scripting/ScriptClass.h"
 #include "DummyEngine/Core/ResourceManaging/HandleManager.h"
+#include "DummyEngine/Core/Scripting/Script.h"
+#include "DummyEngine/Core/Scripting/ScriptClass.h"
+#include "DummyEngine/Core/Scripting/SharedObject.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
-    class ScriptComponent
-    {
+namespace DE {
+    class ScriptComponent {
     public:
         ScriptComponent(uint32_t id, uint32_t gen) : m_ID(id), m_Gen(gen) {}
         UUID    ID() const;
@@ -26,32 +24,25 @@ namespace DE
         uint32_t m_Gen = 0;
     };
 
-    struct ScriptProxy
-    {
+    struct ScriptProxy {
         Script* m_Script = nullptr;
         UUID    m_Id;
     };
 
-    class ScriptProxyManager
-    {
+    class ScriptProxyManager {
     public:
-        class Iterator
-        {
+        class Iterator {
         public:
             bool operator==(const Iterator& other) const { return m_Manager == other.m_Manager && m_ID == other.m_ID; }
             bool operator!=(const Iterator& other) const { return m_ID != other.m_ID || m_Manager != other.m_Manager; }
 
-            Iterator& operator++()
-            {
-                do
-                {
+            Iterator& operator++() {
+                do {
                     ++m_ID;
-                }
-                while (m_ID < m_Manager->m_States.size() && !m_Manager->m_States[m_ID]);
+                } while (m_ID < m_Manager->m_States.size() && !m_Manager->m_States[m_ID]);
                 return *this;
             }
-            Iterator operator++(int)
-            {
+            Iterator operator++(int) {
                 Iterator res = *this;
                 return ++(*this);
             }
@@ -66,27 +57,23 @@ namespace DE
             uint32_t            m_ID      = 0;
         };
 
-        Iterator begin()
-        {
+        Iterator begin() {
             int id = 0;
-            while (id < m_States.size() && !m_States[id])
-            {
+            while (id < m_States.size() && !m_States[id]) {
                 ++id;
             }
             return Iterator(this, id);
         }
         Iterator end() { return Iterator(this, m_States.size()); }
 
-        void Clear()
-        {
+        void Clear() {
             m_States.clear();
             m_Proxys.clear();
             m_Generations.clear();
             m_States.clear();
         }
         bool Valid(uint32_t id, uint32_t gen) { return id < m_Proxys.size() && m_States[id] && m_Generations[id] == gen; }
-        void Destroy(uint32_t id)
-        {
+        void Destroy(uint32_t id) {
             m_AvailableIds.push_back(id);
             m_States[id] = false;
             LOG_INFO("ScriptProxyManager", "Destroyed handle (", id, ")");
@@ -94,8 +81,7 @@ namespace DE
         void Destroy(Iterator it) { Destroy(it.m_ID); }
 
         ScriptProxy&                  GetProxy(uint32_t id) { return m_Proxys[id]; }
-        std::pair<uint32_t, uint32_t> CreateProxy()
-        {
+        std::pair<uint32_t, uint32_t> CreateProxy() {
             ExtendIfRequired();
             uint32_t id = m_AvailableIds.front();
             m_AvailableIds.pop_front();
@@ -107,10 +93,8 @@ namespace DE
         }
 
     private:
-        void ExtendIfRequired()
-        {
-            if (m_AvailableIds.empty())
-            {
+        void ExtendIfRequired() {
+            if (m_AvailableIds.empty()) {
                 m_AvailableIds.push_back(m_Proxys.size());
                 m_Proxys.push_back({nullptr, 0});
                 m_States.push_back(false);
@@ -124,15 +108,11 @@ namespace DE
         std::vector<bool>        m_States;
     };
 
-    class ScriptEngine : public Singleton<ScriptEngine>
-    {
+    class ScriptEngine : public Singleton<ScriptEngine> {
         SINGLETON(ScriptEngine)
     public:
-        S_METHOD_DEF(Unit, Initialize, ());
-        S_METHOD_DEF(Unit, Terminate, ());
-
-        S_METHOD_DEF(Unit, AddScript, (const ScriptAsset& asset));
-        S_METHOD_DEF(Unit, DeleteScript, (UUID id));
+        S_METHOD_DEF(bool, AddScript, (UUID id));
+        S_METHOD_DEF(bool, DeleteScript, (UUID id));
         S_METHOD_DEF(bool, Valid, (UUID id));
         S_METHOD_DEF(Unit, ClearScripts, ());
 
@@ -148,8 +128,6 @@ namespace DE
         S_METHOD_DEF(Unit, Destroy, (const ScriptComponent& compoent));
 
     private:
-        ScriptEngine()  = default;
-        ~ScriptEngine() = default;
         void UpdateScriptClasses(Ref<SharedObject> library);
 
         std::vector<Ref<SharedObject>>        m_Libraries;

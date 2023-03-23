@@ -1,78 +1,107 @@
 #include "DummyEngine/Core/ResourceManaging/AssetManager.h"
 
-namespace DE
-{
-    AssetManager::AssetManagerData AssetManager::m_Data;
-
-    void AssetManager::Clear()
-    {
-        m_Data.m_RenderMeshes.clear();
-        m_Data.m_Textures.clear();
-        m_Data.m_Shaders.clear();
-        m_Data.m_Scripts.clear();
+namespace DE {
+    SINGLETON_BASE(AssetManager);
+    S_INITIALIZE() {
+        return Unit();
+    }
+    S_TERMINATE() {
+        return Unit();
     }
 
-    template <> void AssetManager::AddAsset<TextureAsset>(const TextureAsset& asset) { m_Data.m_Textures[asset.id] = asset; }
-    template <> void AssetManager::AddAsset<RenderMeshAsset>(const RenderMeshAsset& asset) { m_Data.m_RenderMeshes[asset.id] = asset; }
-    template <> void AssetManager::AddAsset<ShaderAsset>(const ShaderAsset& asset) { m_Data.m_Shaders[asset.id] = asset; }
-    template <> void AssetManager::AddAsset<ScriptAsset>(const ScriptAsset& asset) { m_Data.m_Scripts[asset.id] = asset; }
+    S_METHOD_IMPL(bool, AddScriptAsset, (const ScriptAsset& asset), (asset)) {
+        if (m_Scripts.contains(asset.id)) {
+            return false;
+        }
+        m_Scripts[asset.id] = asset;
+        LOG_INFO("Asset manager", "Added ScriptAsset(", asset.name, "|", asset.id.Hex(), ")");
+        return true;
+    }
+    S_METHOD_IMPL(bool, AddTextureAsset, (const TextureAsset& asset), (asset)) {
+        if (m_Textures.contains(asset.id)) {
+            return false;
+        }
+        m_Textures[asset.id] = asset;
+        LOG_INFO("Asset manager", "Added TextureAsset(", asset.name, "|", asset.id.Hex(), ")");
+        return true;
+    }
+    S_METHOD_IMPL(bool, AddShaderAsset, (const ShaderAsset& asset), (asset)) {
+        if (m_Shaders.contains(asset.id)) {
+            return false;
+        }
+        m_Shaders[asset.id] = asset;
+        LOG_INFO("Asset manager", "Added ShaderAsset(", asset.name, "|", asset.id.Hex(), ")");
+        return true;
+    }
+    S_METHOD_IMPL(bool, AddRenderMeshAsset, (const RenderMeshAsset& asset), (asset)) {
+        if (m_RenderMeshes.contains(asset.id)) {
+            return false;
+        }
+        m_RenderMeshes[asset.id] = asset;
+        LOG_INFO("Asset manager", "Added RenderMeshAsset(", asset.name, "|", asset.id.Hex(), ")");
+        return true;
+    }
 
-    template <> const RenderMeshAsset& AssetManager::GetAsset<RenderMeshAsset>(UUID id)
-    {
-        DE_ASSERT(m_Data.m_RenderMeshes.find(id) != m_Data.m_RenderMeshes.end(),
-                  "RenderMesh asset with UUID: " + std::to_string(id) + " does not exists.");
-        return m_Data.m_RenderMeshes[id];
+    S_METHOD_IMPL(std::optional<ScriptAsset>, GetScriptAsset, (UUID id), (id)) {
+        if (!m_Scripts.contains(id)) {
+            return {};
+        }
+        return m_Scripts[id];
     }
-    template <> const TextureAsset& AssetManager::GetAsset<TextureAsset>(UUID id)
-    {
-        DE_ASSERT(m_Data.m_Textures.find(id) != m_Data.m_Textures.end(), "Texture asset with UUID: " + std::to_string(id) + " does not exists.");
-        return m_Data.m_Textures[id];
+    S_METHOD_IMPL(std::optional<TextureAsset>, GetTextureAsset, (UUID id), (id)) {
+        if (!m_Textures.contains(id)) {
+            return {};
+        }
+        return m_Textures[id];
     }
-    template <> const ShaderAsset& AssetManager::GetAsset<ShaderAsset>(UUID id)
-    {
-        DE_ASSERT(m_Data.m_Shaders.find(id) != m_Data.m_Shaders.end(), "Shader asset with UUID: " + std::to_string(id) + " does not exists.");
-        return m_Data.m_Shaders[id];
+    S_METHOD_IMPL(std::optional<ShaderAsset>, GetShaderAsset, (UUID id), (id)) {
+        if (!m_Shaders.contains(id)) {
+            return {};
+        }
+        return m_Shaders[id];
     }
-    template <> const ScriptAsset& AssetManager::GetAsset<ScriptAsset>(UUID id)
-    {
-        DE_ASSERT(m_Data.m_Scripts.find(id) != m_Data.m_Scripts.end(), "Script asset with UUID: " + std::to_string(id) + " does not exists.");
-        return m_Data.m_Scripts[id];
+    S_METHOD_IMPL(std::optional<RenderMeshAsset>, GetRenderMeshAsset, (UUID id), (id)) {
+        if (!m_RenderMeshes.contains(id)) {
+            return {};
+        }
+        return m_RenderMeshes[id];
     }
 
-    template <> std::vector<RenderMeshAsset> AssetManager::GetAllAssets()
-    {
-        std::vector<RenderMeshAsset> result;
-        for (const auto& [id, asset] : m_Data.m_RenderMeshes)
-        {
-            result.push_back(asset);
+    S_METHOD_IMPL(bool, RemoveScriptAsset, (UUID id), (id)) {
+        if (m_Scripts.contains(id)) {
+            m_Scripts.erase(id);
+            return true;
         }
-        return result;
+        return false;
     }
-    template <> std::vector<ShaderAsset> AssetManager::GetAllAssets()
-    {
-        std::vector<ShaderAsset> result;
-        for (const auto& [id, asset] : m_Data.m_Shaders)
-        {
-            result.push_back(asset);
+    S_METHOD_IMPL(bool, RemoveTextureAsset, (UUID id), (id)) {
+        if (m_Textures.contains(id)) {
+            m_Textures.erase(id);
+            return true;
         }
-        return result;
+        return false;
     }
-    template <> std::vector<TextureAsset> AssetManager::GetAllAssets()
-    {
-        std::vector<TextureAsset> result;
-        for (const auto& [id, asset] : m_Data.m_Textures)
-        {
-            result.push_back(asset);
+    S_METHOD_IMPL(bool, RemoveShaderAsset, (UUID id), (id)) {
+        if (m_Shaders.contains(id)) {
+            m_Shaders.erase(id);
+            return true;
         }
-        return result;
+        return false;
     }
-    template <> std::vector<ScriptAsset> AssetManager::GetAllAssets()
-    {
-        std::vector<ScriptAsset> result;
-        for (const auto& [id, asset] : m_Data.m_Scripts)
-        {
-            result.push_back(asset);
+    S_METHOD_IMPL(bool, RemoveRenderMeshAsset, (UUID id), (id)) {
+        if (m_RenderMeshes.contains(id)) {
+            m_RenderMeshes.erase(id);
+            return true;
         }
-        return result;
+        return false;
     }
+
+    S_METHOD_IMPL(Unit, Clear, (), ()) {
+        m_RenderMeshes.clear();
+        m_Textures.clear();
+        m_Shaders.clear();
+        m_Scripts.clear();
+        return Unit();
+    }
+
 }  // namespace DE

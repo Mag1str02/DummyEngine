@@ -1,27 +1,33 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
-#include "DummyEngine/Core/ResourceManaging/Assets.h"
-#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 #include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
+#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
+#include "DummyEngine/Core/ResourceManaging/Assets.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
-    class ResourceManager
-    {
+namespace DE {
+    class ResourceManager : public Singleton<ResourceManager> {
+        SINGLETON(ResourceManager)
     public:
-        template <typename ResourceType, typename InputResource> static void AddResource(const InputResource& resource);
-        template <typename ResourceType> static Ref<ResourceType> GetResource(UUID id);
-        template <typename ResourceType> static bool HasResource(UUID id);
+        S_METHOD_DEF(bool, LoadShader, (UUID id));
+        S_METHOD_DEF(bool, LoadRenderMesh, (UUID id));
+        S_METHOD_DEF(bool, LoadCubeMap, (UUID id));
+
+        S_METHOD_DEF(std::optional<Ref<Shader>>, GetShader, (UUID id));
+        S_METHOD_DEF(std::optional<Ref<RenderMesh>>, GetRenderMesh, (UUID id));
+        S_METHOD_DEF(std::optional<Ref<CubeMap>>, GetCubeMap, (UUID id));
+
+        S_METHOD_DEF(bool, HasShader, (UUID id));
+        S_METHOD_DEF(bool, HasRenderMesh, (UUID id));
+        S_METHOD_DEF(bool, HasCubeMap, (UUID id));
+
+        S_METHOD_DEF(bool, DeleteShader, (UUID id));
+        S_METHOD_DEF(bool, DeleteRenderMesh, (UUID id));
+        S_METHOD_DEF(bool, DeleteCubeMap, (UUID id));
 
     private:
-        struct Resources
-        {
-            std::unordered_map<uint64_t, Ref<Shader>> m_Shaders;
-            std::unordered_map<uint64_t, Ref<RenderMesh>> m_RenderMeshes;
-            std::unordered_map<uint64_t, Ref<CubeMap>> m_CubeMaps;
-        };
-        static Resources m_Resources;
+        std::unordered_map<UUID, Ref<Shader>>     m_Shaders;
+        std::unordered_map<UUID, Ref<RenderMesh>> m_RenderMeshes;
+        std::unordered_map<UUID, Ref<CubeMap>>    m_CubeMaps;
     };
-
 }  // namespace DE

@@ -1,22 +1,19 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/ResourceManaging/Assets.h"
 #include "DummyEngine/Core/ResourceManaging/RawData.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
     namespace fs = std::filesystem;
 
-    class TextureLoader
-    {
+    class TextureLoader {
     public:
-        static Ref<TextureData> Load(const TextureLoadingProps& props);
-        static void Save(const Path& path, const Ref<TextureData> data);
+        static Ref<TextureData> Load(const TextureAsset::LoadingProperties& props);
+        static void             Save(const Path& path, const Ref<TextureData> data);
 
     private:
-        struct LoaderState
-        {
+        struct LoaderState {
             Ref<TextureData> m_CurrentData;
         };
 

@@ -1,26 +1,16 @@
 #pragma once
 
 #include "DummyEngine/Utils/STDIncludes.h"
-#include "DummyEngine/Utils/Types.h"
 #include "DummyEngine/Utils/Singleton.h"
 #include "DummyEngine/Utils/StringOperations.h"
+#include "DummyEngine/Utils/Types.h"
 
-namespace DE
-{
-    enum class LogMessageType
-    {
-        None = 0,
-        Debug,
-        Info,
-        Warning,
-        Error,
-        Fatal
-    };
+namespace DE {
+    enum class LogMessageType { None = 0, Debug, Info, Warning, Error, Fatal };
 
     std::string LogMessageTypeToStr(LogMessageType type);
 
-    struct LogRecord
-    {
+    struct LogRecord {
         time_t         time;
         LogMessageType type;
         std::string    author;
@@ -29,35 +19,25 @@ namespace DE
         std::string ToString() const;
     };
 
-    class Logger : public Singleton<Logger>
-    {
+    class Logger : public Singleton<Logger> {
         SINGLETON(Logger)
     public:
-        S_METHOD_DEF(Unit, Initialize, ());
-        S_METHOD_DEF(Unit, Terminate, ());
-
         S_METHOD_DEF(bool, Open, (const std::string& log_name));
         S_METHOD_DEF(Unit, Close, (const std::string& log_name));
 
-        template <typename... Message> static void Log(LogMessageType type, const std::string& author, Message... message)
-        {
+        template <typename... Message> static void Log(LogMessageType type, const std::string& author, Message... message) {
             Get().LogInternal(type, author, "", StrCat(message...));
         }
-        template <typename... Message> static void LogTo(LogMessageType type, const std::string& author, const std::string& to, Message... message)
-        {
+        template <typename... Message> static void LogTo(LogMessageType type, const std::string& author, const std::string& to, Message... message) {
             Get().LogInternal(type, author, to, StrCat(message...));
         }
         S_METHOD_DEF(const std::deque<LogRecord>&, GetLog, (const std::string& log = ""));
         S_METHOD_DEF(Unit, SetDepth, (uint32_t depth, const std::string& log = ""));
 
     private:
-        Logger()  = default;
-        ~Logger() = default;
-
         void LogInternal(LogMessageType type, const std::string& author, const std::string& to, const std::string& str);
 
-        struct LogStream
-        {
+        struct LogStream {
             std::deque<LogRecord> records;
             std::ofstream         stream;
             uint32_t              depth = 32;

@@ -2,6 +2,29 @@
 
 struct Unit {};
 
+#define SINGLETON(type)                     \
+private:                                    \
+    friend class Singleton<type>;           \
+                                            \
+public:                                     \
+    type()                       = default; \
+    ~type()                      = default; \
+    type(const type&)            = delete;  \
+    type(type&&)                 = delete;  \
+    type& operator=(const type&) = delete;  \
+    type& operator=(type&&)      = delete;  \
+    S_METHOD_DEF(Unit, Initialize, ());     \
+    S_METHOD_DEF(Unit, Terminate, ());
+
+#define SINGLETON_BASE(type)                                                                      \
+    static const std::string CurrentSingletonName        = #type;                                 \
+    template <> type*        Singleton<type>::s_Instance = nullptr;                               \
+    template <> type&        Singleton<type>::Get() {                                             \
+        DE_ASSERT(s_Instance, "Using " + CurrentSingletonName + " before initialization"); \
+        return *s_Instance;                                                                \
+    }                                                                                             \
+    using CurrentSingleton = type
+
 #define DEL_BRACKETS(a) SECOND(FIRST a)
 #define FIRST(...) FIRST __VA_ARGS__
 #define SECOND(...) THIRD(__VA_ARGS__)
@@ -16,23 +39,28 @@ struct Unit {};
     static DEL_BRACKETS(return_type) name(DEL_BRACKETS(signature)); \
     DEL_BRACKETS(return_type) I##name(DEL_BRACKETS(signature));
 
-#define S_METHOD_IMPL(type, return_type, name, signature, variables)                                                       \
-    DEL_BRACKETS(return_type) type::name(DEL_BRACKETS(signature)) { return type::Get().I##name(DEL_BRACKETS(variables)); } \
-    DEL_BRACKETS(return_type) type::I##name(DEL_BRACKETS(signature))
+#define S_METHOD_IMPL(return_type, name, signature, variables)                                                                                     \
+    DEL_BRACKETS(return_type) CurrentSingleton::name(DEL_BRACKETS(signature)) { return CurrentSingleton::Get().I##name(DEL_BRACKETS(variables)); } \
+    DEL_BRACKETS(return_type) CurrentSingleton::I##name(DEL_BRACKETS(signature))
 
-#define SINGLETON(type)                    \
-private:                                   \
-    friend class Singleton<type>;          \
-                                           \
-public:                                    \
-    type(const type&)            = delete; \
-    type(type&&)                 = delete; \
-    type& operator=(const type&) = delete; \
-    type& operator=(type&&)      = delete;
-
-#define SINGLETON_BASE(type)                                 \
-    template <> type* Singleton<type>::s_Instance = nullptr; \
-    template <> type& Singleton<type>::Get() { return *s_Instance; }
+#define S_INITIALIZE()                                                                  \
+    Unit CurrentSingleton::Initialize() {                                               \
+        DE_ASSERT(!s_Instance, "Double initialization of " + CurrentSingletonName);     \
+        s_Instance = new CurrentSingleton();                                            \
+        DE_ASSERT(s_Instance, "Failed to allocate memory for " + CurrentSingletonName); \
+        s_Instance->IInitialize();                                                      \
+        return Unit();                                                                  \
+    }                                                                                   \
+    Unit CurrentSingleton::IInitialize()
+#define S_TERMINATE()                                                                          \
+    Unit CurrentSingleton::Terminate() {                                                       \
+        DE_ASSERT(s_Instance, "Terminating before initialization of " + CurrentSingletonName); \
+        s_Instance->ITerminate();                                                              \
+        delete s_Instance;                                                                     \
+        s_Instance = nullptr;                                                                  \
+        return Unit();                                                                         \
+    }                                                                                          \
+    Unit CurrentSingleton::ITerminate()
 
 namespace DE {
     template <typename T> class Singleton {

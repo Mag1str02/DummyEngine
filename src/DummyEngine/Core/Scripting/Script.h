@@ -44,7 +44,7 @@ namespace DE {
 
     class Script {
     public:
-        Script() : m_Scene(nullptr) {}
+        Script() {}
         virtual ~Script() {}
 
         virtual void OnCreate() {}
@@ -58,22 +58,35 @@ namespace DE {
 
         std::unordered_map<std::string, ScriptField>& GetFields() { return m_Fields; }
         ScriptField                                   GetField(const std::string& field_name) { return m_Fields[field_name]; }
-        void                                          AttachToScene(Scene* scene, Entity entity) {
+        void                                          AttachToScene(WeakRef<Scene> scene, Entity entity) {
             m_Scene  = scene;
             m_Entity = entity;
         }
 
     protected:
-        template <typename T> T&   Add(const T& t) { return m_Entity.Add<T>(t); }
-        template <typename T> T&   Get() { return m_Entity.Get<T>(); }
-        template <typename T> bool Has() { return m_Entity.Has<T>(); }
-        Entity                     GetEntityByName(const std::string& name) const { return m_Scene->GetByName(name); };
-        void                       AddField(const ScriptField& field) { m_Fields[field.GetName()] = field; }
+        template <typename T> T& Add(const T& t) {
+            DE_ASSERT(m_Entity.Valid(), "Using invalid entity in script");
+            return m_Entity.Add<T>(t);
+        }
+        template <typename T> T& Get() {
+            DE_ASSERT(m_Entity.Valid(), "Using invalid entity in script");
+            return m_Entity.Get<T>();
+        }
+        template <typename T> bool Has() {
+            DE_ASSERT(m_Entity.Valid(), "Using invalid entity in script");
+            return m_Entity.Has<T>();
+        }
+        Entity GetEntityByName(const std::string& name) const {
+            auto scene = m_Scene.lock();
+            DE_ASSERT(scene != nullptr, "Using invalid scene in script");
+            return scene->GetByName(name);
+        };
+        void AddField(const ScriptField& field) { m_Fields[field.GetName()] = field; }
 
         friend class Scene;
 
         std::unordered_map<std::string, ScriptField> m_Fields;
-        Scene*                                       m_Scene;
+        WeakRef<Scene>                               m_Scene;
         Entity                                       m_Entity;
     };
 }  // namespace DE

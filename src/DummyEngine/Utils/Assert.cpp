@@ -1,25 +1,21 @@
-#include "DummyEngine/Utils/STDIncludes.h"
 #include "DummyEngine/Utils/Assert.h"
-#include "DummyEngine/Utils/StackTrace.h"
+
 #include "DummyEngine/ToolBox/Dev/Logger.h"
+#include "DummyEngine/Utils/STDIncludes.h"
+#include "DummyEngine/Utils/StackTrace.h"
 
-namespace DE
-{
+namespace DE {
 
-    void DEAssert(const char* expr_str, bool expr, const char* file, int line, std::string msg)
-    {
-        if (!expr)
-        {
-            std::stringstream ss = StackTrace();
-            ss << "\n"
-               << "Assert failed:\t" << msg << "\n"
-               << "Expected:\t" << expr_str << "\n"
-               << "Source:\t\t" << file << ", line " << line << "\n";
+    void FailAssert(const char* expr_str, const char* file, int line, const std::string& msg) {
+        std::stringstream ss = StackTrace();
+        ss << "\n"
+           << "Assert failed:\t" << msg << "\n"
+           << "Expected:\t" << expr_str << "\n"
+           << "Source:\t\t" << file << ", line " << line << "\n";
 
-            LOG_FATAL("Assertion", 0, ss.str());
-            std::cerr << ss.str() << std::endl;
-            abort();
-        }
+        LOG_FATAL("Assertion", 0, ss.str());
+        std::cerr << ss.str() << std::endl;
+        abort();
     }
 
 }  // namespace DE

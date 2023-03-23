@@ -1,27 +1,33 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/ResourceManaging/Assets.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
-    class AssetManager
-    {
+namespace DE {
+    class AssetManager : public Singleton<AssetManager> {
+        SINGLETON(AssetManager)
     public:
-        template <typename AssetType> static void AddAsset(const AssetType& asset);
-        template <typename AssetType> static const AssetType& GetAsset(UUID id);
-        template <typename AssetType> static std::vector<AssetType> GetAllAssets();
+        S_METHOD_DEF(bool, AddScriptAsset, (const ScriptAsset& asset));
+        S_METHOD_DEF(bool, AddTextureAsset, (const TextureAsset& asset));
+        S_METHOD_DEF(bool, AddShaderAsset, (const ShaderAsset& asset));
+        S_METHOD_DEF(bool, AddRenderMeshAsset, (const RenderMeshAsset& asset));
 
-        void Clear();
+        S_METHOD_DEF(std::optional<ScriptAsset>, GetScriptAsset, (UUID id));
+        S_METHOD_DEF(std::optional<TextureAsset>, GetTextureAsset, (UUID id));
+        S_METHOD_DEF(std::optional<ShaderAsset>, GetShaderAsset, (UUID id));
+        S_METHOD_DEF(std::optional<RenderMeshAsset>, GetRenderMeshAsset, (UUID id));
+
+        S_METHOD_DEF(bool, RemoveScriptAsset, (UUID id));
+        S_METHOD_DEF(bool, RemoveTextureAsset, (UUID id));
+        S_METHOD_DEF(bool, RemoveShaderAsset, (UUID id));
+        S_METHOD_DEF(bool, RemoveRenderMeshAsset, (UUID id));
+
+        S_METHOD_DEF(Unit, Clear, ());
 
     private:
-        struct AssetManagerData
-        {
-            std::unordered_map<uint64_t, RenderMeshAsset> m_RenderMeshes;
-            std::unordered_map<uint64_t, TextureAsset> m_Textures;
-            std::unordered_map<uint64_t, ShaderAsset> m_Shaders;
-            std::unordered_map<uint64_t, ScriptAsset> m_Scripts;
-        };
-        static AssetManagerData m_Data;
+        std::unordered_map<UUID, RenderMeshAsset> m_RenderMeshes;
+        std::unordered_map<UUID, TextureAsset>    m_Textures;
+        std::unordered_map<UUID, ShaderAsset>     m_Shaders;
+        std::unordered_map<UUID, ScriptAsset>     m_Scripts;
     };
 }  // namespace DE

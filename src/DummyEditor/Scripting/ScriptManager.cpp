@@ -2,6 +2,7 @@
 
 #include "DummyEditor/Scripting/Compiler.h"
 #include "DummyEditor/Scripting/EditorScripts.h"
+#include "DummyEngine/Core/ResourceManaging/AssetManager.h"
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
 #include "DummyEngine/ToolBox/Loaders/SceneLoader.h"
 
@@ -11,98 +12,41 @@ namespace DE {
     }
 
     SINGLETON_BASE(ScriptManager);
-
-    Unit ScriptManager::Initialize() {
-        DE_ASSERT(!s_Instance, "Double ScriptManager initialization");
-        s_Instance = new ScriptManager();
-        DE_ASSERT(s_Instance, "Failed to allocate memory for ScriptManager");
-        s_Instance->IInitialize();
-        LOG_INFO("ScriptManager", "ScriptManager initialized");
-
-        return Unit();
-    }
-    Unit ScriptManager::IInitialize() {
+    S_INITIALIZE() {
         LoadEditorLibrary();
         LoadEditorScripts();
         return Unit();
     }
-    Unit ScriptManager::Terminate() {
-        s_Instance->ITerminate();
-        delete s_Instance;
-        return Unit();
-    }
-    Unit ScriptManager::ITerminate() {
+    S_TERMINATE() {
         return Unit();
     }
 
-    // S_METHOD_IMPL(ScriptManager, Unit, PrepareScripts, (Ref<Scene> scene), (scene)) {
-    //     LOG_INFO("ScriptManager", "Preparing scripts...");
-    //     ScriptEngine::ClearScripts();
-    //     auto assets = SceneLoader::GetScriptAssets(scene_path);
-    //     for (const auto& script : assets) {
-    //         scripts.push_back(script.path);
-    //     }
-    //     ReloadSripts();
-    //     LoadEditorScripts();
-
-    //     LOG_INFO("ScriptManager", "Scripts prepared");
-    //     return Unit();
-    // }
-    S_METHOD_IMPL(ScriptManager, Unit, ReloadScripts, (Ref<Scene> scene), (scene)) {
-        const auto& scripts = scene->GetScripts();
+    S_METHOD_IMPL(Unit, LoadScripts, (const std::vector<ScriptAsset>& scripts), (scripts)) {
         if (scripts.empty()) {
             return Unit();
         }
-
-        bool                  need_recompile = false;
-        std::vector<uint32_t> recompile_ids;
-
-        //*Find scripts to recompile
-        {
-            for (size_t i = 0; i < scripts.size(); ++i) {
-                DE_ASSERT(fs::exists(scripts[i]), StrCat("Failed to find script in library: ", scripts[i].string()));
-                if (NeedToCompile(scripts[i])) {
-                    recompile_ids.push_back(i);
-                    need_recompile = true;
-                }
-            }
-            if (!need_recompile && !m_LibraryName.empty()) {
-                return Unit();
+        for (const auto& script : scripts) {
+            ScriptEngine::AddScript(script.id);
+        }
+        std::vector<uint32_t> recompile_ids = RecompilationList(scripts);
+        if (!recompile_ids.empty()) {
+            auto failed_file = CompileSelected(scripts, recompile_ids);
+            DE_ASSERT(!failed_file.has_value(), StrCat("Failed to compile source file (", failed_file.value().string(), ")"));
+            auto new_library_name = LinkLibrary(scripts);
+            DE_ASSERT(new_library_name.has_value(), StrCat("Failed to link library (", new_library_name.value(), ")"));
+            auto swapped = SwapLibrary(new_library_name.value());
+            DE_ASSERT(swapped, StrCat("Failed to load library (", new_library_name.value(), ")"));
+        }
+        LOG_INFO("ScriptManager", "Loaded script for scene");
+        return Unit();
+    }
+    S_METHOD_IMPL(Unit, AttachScripts, (Ref<Scene> scene), (scene)) {
+        for (auto entity : scene->View<ScriptComponent>()) {
+            auto& script_component = entity.Get<ScriptComponent>();
+            if (script_component.Valid()) {
+                script_component->AttachToScene(scene, entity);
             }
         }
-
-        //*Compile sources
-        {
-            for (auto id : recompile_ids) {
-                bool compilation_success = Compiler::Compile(scripts[id], PathToCompiledScript(scripts[id]));
-                DE_ASSERT(compilation_success, StrCat("Failed to compile: ", scripts[id].string()));
-            }
-        }
-
-        //*Swap library
-        {
-            std::vector<Path> compiled_sources;
-            for (const auto& path : scripts) {
-                compiled_sources.push_back(PathToCompiledScript(path));
-            }
-            std::string new_name     = AvailableName();
-            bool        link_success = Compiler::Link(compiled_sources, Config::GetPath(DE_CFG_SCRIPT_CACHE_PATH), new_name);
-            DE_ASSERT(link_success, "Failed to link library.");
-
-            LoadLibrary(new_name);
-        }
-
-        //*Attach scripts to scene
-        {
-            for (auto entity : scene->View<ScriptComponent>()) {
-                auto& script_component = entity.Get<ScriptComponent>();
-                if (script_component.Valid()) {
-                    script_component->AttachToScene(scene.get(), entity);
-                }
-            }
-        }
-
-        LOG_INFO("ScriptManager", "Reloaded script for scene (", scene->GetName(), ")");
         return Unit();
     }
 
@@ -114,18 +58,48 @@ namespace DE {
     }
     void ScriptManager::LoadEditorScripts() {
         for (const auto& asset : g_EditorScriptAssets) {
-            ScriptEngine::AddScript(asset);
+            AssetManager::AddScriptAsset(asset);
+            ScriptEngine::AddScript(asset.id);
         }
     }
 
-    void ScriptManager::LoadLibrary(const std::string& name) {
-        Ref<SharedObject> library      = CreateRef<SharedObject>();
-        bool              load_success = library->Load(Config::GetPath(DE_CFG_SCRIPT_CACHE_PATH), name);
-        DE_ASSERT(load_success, "Failed to load library.");
-
-        ScriptEngine::DeleteLibrary(m_LibraryName);
+    std::vector<uint32_t> ScriptManager::RecompilationList(const std::vector<ScriptAsset>& scripts) {
+        std::vector<uint32_t> recompile_ids;
+        for (size_t i = 0; i < scripts.size(); ++i) {
+            DE_ASSERT(fs::exists(scripts[i].path), StrCat("Failed to find script source file(", scripts[i].path.string(), ")"));
+            if (NeedToCompile(scripts[i].path)) {
+                recompile_ids.push_back(i);
+            }
+        }
+        return recompile_ids;
+    }
+    std::optional<Path> ScriptManager::CompileSelected(const std::vector<ScriptAsset>& scripts, const std::vector<uint32_t> ids) {
+        for (auto id : ids) {
+            if (!Compiler::Compile(scripts[id].path, PathToCompiledScript(scripts[id].path))) {
+                return scripts[id].path;
+            }
+        }
+        return {};
+    }
+    std::optional<std::string> ScriptManager::LinkLibrary(const std::vector<ScriptAsset>& scripts) {
+        std::vector<Path> compiled_sources;
+        for (const auto& script : scripts) {
+            compiled_sources.push_back(PathToCompiledScript(script.path));
+        }
+        std::string new_name = AvailableName();
+        return (Compiler::Link(compiled_sources, Config::GetPath(DE_CFG_SCRIPT_CACHE_PATH), new_name) ? new_name : std::optional<std::string>());
+    }
+    bool ScriptManager::SwapLibrary(const std::string& name) {
+        Ref<SharedObject> library = CreateRef<SharedObject>();
+        if (!library->Load(Config::GetPath(DE_CFG_SCRIPT_CACHE_PATH), name)) {
+            return false;
+        }
+        if (!m_LibraryName.empty()) {
+            ScriptEngine::DeleteLibrary(m_LibraryName);
+        }
         ScriptEngine::AddLibrary(library);
         m_LibraryName = name;
+        return true;
     }
     bool ScriptManager::NeedToCompile(const Path& path) {
         if (!m_CompiledScripts.contains(path)) {

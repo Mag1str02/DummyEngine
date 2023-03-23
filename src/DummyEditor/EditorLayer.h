@@ -10,6 +10,7 @@ namespace DE {
     struct SceneData {
         Ref<Scene>       m_Scene;
         Ref<FrameBuffer> m_FrameBuffer;
+        SceneAssets      m_Assets;
     };
     enum class InputState { NonSpecified = 0, ViewPort };
 
@@ -47,6 +48,8 @@ namespace DE {
         void ReloadScripts();
         void CloseScene();
 
+        void LoadAssets();
+        void UnloadAssets();
         void PrepareScene();
 
         void ProcessControlls(float dt);
