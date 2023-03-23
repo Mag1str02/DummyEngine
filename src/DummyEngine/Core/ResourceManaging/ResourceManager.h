@@ -25,6 +25,8 @@ namespace DE {
         S_METHOD_DEF(bool, DeleteRenderMesh, (UUID id));
         S_METHOD_DEF(bool, DeleteCubeMap, (UUID id));
 
+        S_METHOD_DEF(Unit, Clear, ());
+
     private:
         std::unordered_map<UUID, Ref<Shader>>     m_Shaders;
         std::unordered_map<UUID, Ref<RenderMesh>> m_RenderMeshes;

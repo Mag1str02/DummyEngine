@@ -5,7 +5,6 @@
 #include "DummyEngine/ToolBox/Dev/Logger.h"
 #include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
 
-
 namespace DE {
 
     ModelLoader::LoaderState ModelLoader::m_State;
@@ -16,9 +15,9 @@ namespace DE {
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
             LOG_ERROR("ModelLoader",
-                      "Failed to load model \"",
+                      "Failed to load model (",
                       RelativeToExecutable(properties.path),
-                      "\" Error (",
+                      ") with error (",
                       m_State.m_Importer.GetErrorString(),
                       ")");
             return nullptr;
@@ -36,18 +35,17 @@ namespace DE {
         m_State.m_CurrentData->meshes.resize(m_State.m_MeshesAmount);
         ProcessNode(scene->mRootNode, scene);
 
-        LOG_INFO("ModelLoader",
-                 "Model loaded ",
-                 RelativeToExecutable(properties.path),
-                 " Meshes (",
-                 std::to_string(m_State.m_MeshesAmount),
-                 ") Vertices (",
-                 std::to_string(m_State.m_VerticesAmount),
-                 ")");
         if (properties.compress) {
             m_State.m_CurrentData->Compress();
         }
-
+        LOG_INFO("ModelLoader",
+                 "Model loaded (",
+                 RelativeToExecutable(properties.path),
+                 ") with (",
+                 m_State.m_MeshesAmount,
+                 ") meshes, (",
+                 m_State.m_VerticesAmount,
+                 ") verticies");
         return m_State.m_CurrentData;
     }
 

@@ -1,30 +1,27 @@
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
-#include "DummyEngine/Core/Rendering/RendererOpenGL/GLRenderAPI.h"
-#include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
-#include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
-#include "DummyEngine/ToolBox/Dev/Logger.h"
+
 #include <glad/glad.h>
 
-namespace DE
-{
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLRenderAPI.h"
+#include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
+#include "DummyEngine/ToolBox/Dev/Logger.h"
+#include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
+
+namespace DE {
     Scope<FrameStatistics> Renderer::m_FrameStatistics = nullptr;
     Scope<RenderAPI>       Renderer::m_RenderAPI       = nullptr;
     Ref<Texture>           Renderer::m_DefaultTexture  = nullptr;
     Ref<VertexArray>       Renderer::m_FullScreenQuad  = nullptr;
     Ref<VertexArray>       Renderer::m_Cube            = nullptr;
 
-    void FrameStatistics::Reset()
-    {
+    void FrameStatistics::Reset() {
         m_DrawCallsAmount = 0;
         m_DrawnInstances  = 0;
     }
 
-    void Renderer::Initialize()
-    {
-        LOG_INFO("Renderer", "Initializing Renderer...");
+    void Renderer::Initialize() {
         m_FrameStatistics = CreateScope<FrameStatistics>();
-        switch (Config::GetRenderAPI())
-        {
+        switch (Config::GetRenderAPI()) {
             case API::OpenGL: m_RenderAPI = CreateScope<GLRenderAPI>(); break;
             case API::Vulkan: {
                 DE_ASSERT(false, "Attempt to init Renderer with VulkanAPI which is currently unsupported");
@@ -44,28 +41,29 @@ namespace DE
         GenFullScreenQuad();
         GenCube();
 
-        LOG_INFO("Renderer", "Renderer initialized.");
+        LOG_INFO("Renderer", "Renderer initialized");
     }
     void Renderer::Terminate() {}
 
-    void Renderer::OnWindowResize(uint32_t width, uint32_t height)
-    {
+    void Renderer::OnWindowResize(uint32_t width, uint32_t height) {
         DE_PROFILE_SCOPE("On Window Resize");
 
         m_RenderAPI->SetViewport(0, 0, width, height);
     }
 
-    void Renderer::BeginFrame()
-    {
+    void Renderer::BeginFrame() {
         DE_PROFILE_SCOPE("Renderer BeginFrame");
 
         m_FrameStatistics->Reset();
     }
-    void Renderer::EndFrame() { DE_PROFILE_SCOPE("Renderer EndFrame"); }
+    void Renderer::EndFrame() {
+        DE_PROFILE_SCOPE("Renderer EndFrame");
+    }
 
-    void Renderer::Clear() { m_RenderAPI->Clear(); }
-    void Renderer::Submit(const Ref<VertexArray>& vertex_array, Ref<Shader> shader, const Mat4& trasform)
-    {
+    void Renderer::Clear() {
+        m_RenderAPI->Clear();
+    }
+    void Renderer::Submit(const Ref<VertexArray>& vertex_array, Ref<Shader> shader, const Mat4& trasform) {
         shader->Bind();
         shader->SetMat4("u_Transform", trasform);
         vertex_array->Bind();
@@ -74,14 +72,11 @@ namespace DE
         ++m_FrameStatistics->m_DrawCallsAmount;
         ++m_FrameStatistics->m_DrawnInstances;
     }
-    void Renderer::Submit(Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& trasform)
-    {
+    void Renderer::Submit(Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& trasform) {
         shader->Bind();
-        if (mesh->m_InstanceBuffer)
-        {
+        if (mesh->m_InstanceBuffer) {
             shader->SetInt("u_Instanced", 1);
-            for (const auto& sub_mesh : mesh->m_SubMeshes)
-            {
+            for (const auto& sub_mesh : mesh->m_SubMeshes) {
                 shader->SetMaterial("u_Material", sub_mesh.material);
                 sub_mesh.vertex_array->Bind();
                 m_RenderAPI->DrawInstanced(sub_mesh.vertex_array, mesh->m_Instances.size());
@@ -89,13 +84,10 @@ namespace DE
                 ++m_FrameStatistics->m_DrawCallsAmount;
                 m_FrameStatistics->m_DrawnInstances += mesh->m_Instances.size();
             }
-        }
-        else
-        {
+        } else {
             shader->SetInt("u_Instanced", 0);
             shader->SetMat4("u_Transform", trasform);
-            for (const auto& sub_mesh : mesh->m_SubMeshes)
-            {
+            for (const auto& sub_mesh : mesh->m_SubMeshes) {
                 shader->SetMaterial("u_Material", sub_mesh.material);
                 sub_mesh.vertex_array->Bind();
                 m_RenderAPI->DrawInstanced(sub_mesh.vertex_array, 1);
@@ -105,8 +97,7 @@ namespace DE
             }
         }
     }
-    void Renderer::Submit(Ref<CubeMap> cube_map, Ref<Shader> shader, const Mat4& trasform)
-    {
+    void Renderer::Submit(Ref<CubeMap> cube_map, Ref<Shader> shader, const Mat4& trasform) {
         cube_map->Bind();
         shader->Bind();
         shader->SetMat4("u_Transform", trasform);
@@ -116,23 +107,42 @@ namespace DE
         ++m_FrameStatistics->m_DrawnInstances;
     }
 
-    void Renderer::Enable(RenderSetting setting) { m_RenderAPI->Enable(setting); }
-    void Renderer::Disable(RenderSetting setting) { m_RenderAPI->Disable(setting); }
+    void Renderer::Enable(RenderSetting setting) {
+        m_RenderAPI->Enable(setting);
+    }
+    void Renderer::Disable(RenderSetting setting) {
+        m_RenderAPI->Disable(setting);
+    }
 
-    void Renderer::SetClearColor(Vec4 color) { m_RenderAPI->SetClearColor(color); }
-    void Renderer::SetClearColor(float r, float g, float b, float a) { m_RenderAPI->SetClearColor(Vec4(r, g, b, a)); }
+    void Renderer::SetClearColor(Vec4 color) {
+        m_RenderAPI->SetClearColor(color);
+    }
+    void Renderer::SetClearColor(float r, float g, float b, float a) {
+        m_RenderAPI->SetClearColor(Vec4(r, g, b, a));
+    }
 
-    Ref<Texture>     Renderer::GetDefaultTexture() { return m_DefaultTexture; }
-    Ref<VertexArray> Renderer::GetFullScreenQuad() { return m_FullScreenQuad; }
-    Ref<VertexArray> Renderer::GetCube() { return m_Cube; }
-    API              Renderer::CurrentAPI() { return m_RenderAPI->GetAPI(); }
-    FrameStatistics  Renderer::GetStatistics() { return *m_FrameStatistics; }
-    RenderAPI&       Renderer::GetRenderAPI() { return *m_RenderAPI; }
+    Ref<Texture> Renderer::GetDefaultTexture() {
+        return m_DefaultTexture;
+    }
+    Ref<VertexArray> Renderer::GetFullScreenQuad() {
+        return m_FullScreenQuad;
+    }
+    Ref<VertexArray> Renderer::GetCube() {
+        return m_Cube;
+    }
+    API Renderer::CurrentAPI() {
+        return m_RenderAPI->GetAPI();
+    }
+    FrameStatistics Renderer::GetStatistics() {
+        return *m_FrameStatistics;
+    }
+    RenderAPI& Renderer::GetRenderAPI() {
+        return *m_RenderAPI;
+    }
 
     // TODO: Think to move somewhere else...
 
-    void Renderer::GenDefaultTexture()
-    {
+    void Renderer::GenDefaultTexture() {
         uint32_t             width  = 1;
         uint32_t             height = 1;
         TextureFormat        format = TextureFormat::RGBA;
@@ -141,8 +151,7 @@ namespace DE
         TextureData tex_data(&data[0], width, height, format);
         m_DefaultTexture = Texture::Create(tex_data);
     }
-    void Renderer::GenFullScreenQuad()
-    {
+    void Renderer::GenFullScreenQuad() {
         uint32_t indices[] = {
             0,
             1,
@@ -180,8 +189,7 @@ namespace DE
         m_FullScreenQuad->SetIndexBuffer(ib);
         m_FullScreenQuad->AddVertexBuffer(vb);
     }
-    void Renderer::GenCube()
-    {
+    void Renderer::GenCube() {
         uint32_t indices[] = {
             0, 1, 2,  //
             2, 3, 0,  //

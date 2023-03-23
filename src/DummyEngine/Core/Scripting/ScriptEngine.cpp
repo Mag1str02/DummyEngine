@@ -41,24 +41,24 @@ namespace DE {
         const auto& name = asset.value().name;
 
         if (m_ScriptClasses.contains(id)) {
-            LOG_WARNING("ScriptEngine", "Script (", id.Hex(), "|", name, ") wasn't added because already exists");
+            LOG_WARNING("ScriptEngine", "Script (", name, "|", id.Hex(), ") wasn't added because already exists");
             return false;
         }
         m_ScriptClasses[id] = ScriptClass(name);
         for (auto lib : m_Libraries) {
             m_ScriptClasses[id].Load(lib);
             if (m_ScriptClasses[id].Valid()) {
-                LOG_INFO("ScriptEngine", "Script (", id.Hex(), "|", name, ") found in library (", lib->GetName(), ")");
+                LOG_INFO("ScriptEngine", "Script (", name, "|", id.Hex(), ") found in library (", lib->GetName(), ")");
                 for (auto& instance : m_ProxyManager) {
                     if (instance.m_Id == id) {
                         instance.m_Script = m_ScriptClasses[id].Create();
-                        LOG_INFO("ScriptEngine", "Created instance of (", id.Hex(), "|", name, ")");
+                        LOG_INFO("ScriptEngine", "Created instance of (", name, "|", id.Hex(), ")");
                     }
                 }
                 return true;
             }
         }
-        LOG_WARNING("ScriptEngine", "Script (", id.Hex(), "|", name, ") was not found in any library");
+        LOG_WARNING("ScriptEngine", "Script (", name, "|", id.Hex(), ") was not found in any library");
         return false;
     }
     S_METHOD_IMPL(bool, DeleteScript, (UUID id), (id)) {
@@ -71,7 +71,7 @@ namespace DE {
                 if (instance.m_Id == id) {
                     m_ScriptClasses[id].Delete(instance.m_Script);
                     instance.m_Script = nullptr;
-                    LOG_INFO("ScriptEngine", "Deleted instance of (", id.Hex(), ")");
+                    LOG_INFO("ScriptEngine", "Deleted instance of (", m_ScriptClasses[id].GetName(), "|", id.Hex(), ")");
                 }
             }
         }
@@ -87,7 +87,7 @@ namespace DE {
             if (instance.m_Script) {
                 m_ScriptClasses[instance.m_Id].Delete(instance.m_Script);
                 instance.m_Script = nullptr;
-                LOG_INFO("ScriptEngine", "Deleted instance of (", instance.m_Id.Hex(), ")");
+                LOG_INFO("ScriptEngine", "Deleted instance of (", m_ScriptClasses[instance.m_Id].GetName(), "|", instance.m_Id.Hex(), ")");
             }
         }
         m_ScriptClasses.clear();
@@ -133,7 +133,7 @@ namespace DE {
                     if (instance.m_Script) {
                         m_ScriptClasses[instance.m_Id].Delete(instance.m_Script);
                         instance.m_Script = nullptr;
-                        LOG_INFO("ScriptEngine", "Deleted instance of (", instance.m_Id.Hex(), ")");
+                        LOG_INFO("ScriptEngine", "Deleted instance of (", m_ScriptClasses[instance.m_Id].GetName(), "|", instance.m_Id.Hex(), ")");
                     }
                 }
             }
@@ -159,7 +159,7 @@ namespace DE {
             if (instance.m_Script) {
                 m_ScriptClasses[instance.m_Id].Delete(instance.m_Script);
                 instance.m_Script = nullptr;
-                LOG_INFO("ScriptEngine", "Deleted instance of (", instance.m_Id.Hex(), ")");
+                LOG_INFO("ScriptEngine", "Deleted instance of (", m_ScriptClasses[instance.m_Id].GetName(), "|", instance.m_Id.Hex(), ")");
             }
         }
         m_Libraries.clear();
@@ -177,7 +177,7 @@ namespace DE {
         } else {
             if (m_ScriptClasses[id].Valid()) {
                 proxy.m_Script = m_ScriptClasses[id].Create();
-                LOG_INFO("ScriptEngine", "Created instance of (", id.Hex(), ")");
+                LOG_INFO("ScriptEngine", "Created instance of (", m_ScriptClasses[id].GetName(), "|", id.Hex(), ")");
             } else {
                 LOG_WARNING("ScriptEngine", "Creating ScriptComponent of not yet loaded ScriptClass (", id.Hex(), ")");
             }
@@ -199,7 +199,7 @@ namespace DE {
             if (proxy.m_Script) {
                 m_ScriptClasses[proxy.m_Id].Delete(proxy.m_Script);
                 proxy.m_Script = nullptr;
-                LOG_INFO("ScriptEngine", "Deleted instance of (", proxy.m_Id.Hex(), ")");
+                LOG_INFO("ScriptEngine", "Deleted instance of (", m_ScriptClasses[proxy.m_Id].GetName(), "|", proxy.m_Id.Hex(), ")");
             }
             m_ProxyManager.Destroy(component.m_ID);
         }
@@ -217,7 +217,7 @@ namespace DE {
         for (auto& instance : m_ProxyManager) {
             if (!instance.m_Script && m_ScriptClasses.contains(instance.m_Id) && m_ScriptClasses[instance.m_Id].Valid()) {
                 instance.m_Script = m_ScriptClasses[instance.m_Id].Create();
-                LOG_INFO("ScriptEngine", "Created instance of (", instance.m_Id.Hex(), ")");
+                LOG_INFO("ScriptEngine", "Created instance of (", m_ScriptClasses[instance.m_Id].GetName(), "|", instance.m_Id.Hex(), ")");
             }
         }
     }

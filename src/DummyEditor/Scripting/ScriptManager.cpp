@@ -78,6 +78,7 @@ namespace DE {
             if (!Compiler::Compile(scripts[id].path, PathToCompiledScript(scripts[id].path))) {
                 return scripts[id].path;
             }
+            m_CompiledScripts.insert(scripts[id].path);
         }
         return {};
     }

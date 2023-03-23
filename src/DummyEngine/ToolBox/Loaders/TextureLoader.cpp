@@ -21,7 +21,7 @@ namespace DE {
         stb_data = stbi_load(props.path.string().c_str(), &width, &height, &nrChannels, 0);
 
         if (!stb_data) {
-            LOG_ERROR("TextureLoader", "Failed to load texture ", RelativeToExecutable(props.path));
+            LOG_ERROR("TextureLoader", "Failed to load texture (", RelativeToExecutable(props.path), ")");
             return nullptr;
         }
 
@@ -47,7 +47,7 @@ namespace DE {
         m_State.m_CurrentData->SetData(stb_data, width, height, format);
         stbi_image_free(stb_data);
 
-        LOG_INFO("TextureLoader", "Texture loaded ", RelativeToExecutable(props.path), " Format (", format_s, ")");
+        LOG_INFO("TextureLoader", "Texture loaded (", RelativeToExecutable(props.path), ") format (", format_s, ")");
         return m_State.m_CurrentData;
     }
     void TextureLoader::Save(const Path& path, const Ref<TextureData> data) {

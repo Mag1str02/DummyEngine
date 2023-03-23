@@ -15,35 +15,44 @@ namespace DE {
 
     S_METHOD_IMPL(bool, LoadShader, (UUID id), (id)) {
         if (m_Shaders.contains(id)) {
+            LOG_WARNING("ResourceManager", "Shader (", id.Hex(), ") was not loaded because already loaded");
             return false;
         }
         auto asset = AssetManager::GetShaderAsset(id);
         if (!asset) {
+            LOG_WARNING("ResourceManager", "Shader (", id.Hex(), ") was not loaded because does not exist in AssetManager");
             return false;
         }
         m_Shaders[id] = Shader::Create(asset.value().parts);
+        LOG_INFO("ResourceManager", "Shader (", id.Hex(), ") was added");
         return true;
     }
     S_METHOD_IMPL(bool, LoadRenderMesh, (UUID id), (id)) {
         if (m_RenderMeshes.contains(id)) {
+            LOG_WARNING("ResourceManager", "RenderMesh (", id.Hex(), ") was not loaded because already loaded");
             return false;
         }
         auto asset = AssetManager::GetRenderMeshAsset(id);
         if (!asset) {
+            LOG_WARNING("ResourceManager", "RenderMesh (", id.Hex(), ") was not loaded because does not exist in AssetManager");
             return false;
         }
         m_RenderMeshes[id] = CreateRef<RenderMesh>(ModelLoader::Load(asset.value().loading_props));
+        LOG_INFO("ResourceManager", "RenderMesh (", id.Hex(), ") was added");
         return true;
     }
     S_METHOD_IMPL(bool, LoadCubeMap, (UUID id), (id)) {
         if (m_CubeMaps.contains(id)) {
+            LOG_WARNING("ResourceManager", "CubeMap (", id.Hex(), ") was not loaded because already loaded");
             return false;
         }
         auto asset = AssetManager::GetTextureAsset(id);
         if (!asset) {
+            LOG_WARNING("ResourceManager", "CubeMap (", id.Hex(), ") was not loaded because does not exist in AssetManager");
             return false;
         }
         m_CubeMaps[id] = CubeMap::Create(TextureLoader::Load(asset.value().loading_props));
+        LOG_INFO("ResourceManager", "CubeMap (", id.Hex(), ") was added");
         return true;
     }
 
@@ -79,6 +88,7 @@ namespace DE {
     S_METHOD_IMPL(bool, DeleteShader, (UUID id), (id)) {
         if (m_Shaders.contains(id)) {
             m_Shaders.erase(id);
+            LOG_INFO("ResourceManager", "Shader (", id.Hex(), ") was deleted");
             return true;
         }
         return false;
@@ -86,6 +96,7 @@ namespace DE {
     S_METHOD_IMPL(bool, DeleteRenderMesh, (UUID id), (id)) {
         if (m_RenderMeshes.contains(id)) {
             m_RenderMeshes.erase(id);
+            LOG_INFO("ResourceManager", "RenderMesh (", id.Hex(), ") was deleted");
             return true;
         }
         return false;
@@ -93,8 +104,17 @@ namespace DE {
     S_METHOD_IMPL(bool, DeleteCubeMap, (UUID id), (id)) {
         if (m_CubeMaps.contains(id)) {
             m_CubeMaps.erase(id);
+            LOG_INFO("ResourceManager", "CubeMap (", id.Hex(), ") was deleted");
             return true;
         }
         return false;
+    }
+
+    S_METHOD_IMPL(Unit, Clear, (), ()) {
+        m_Shaders.clear();
+        m_RenderMeshes.clear();
+        m_CubeMaps.clear();
+        LOG_INFO("ResourceManager", "Cleared all resources");
+        return Unit();
     }
 }  // namespace DE

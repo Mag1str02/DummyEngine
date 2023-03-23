@@ -80,6 +80,10 @@ namespace DE {
     }
 
     void EditorLayer::OnDetach() {
+        if (m_SceneData.m_Scene) {
+            CloseScene();
+        }
+
         ScriptManager::Terminate();
         Compiler::Terminate();
     }
@@ -166,9 +170,7 @@ namespace DE {
         LoadAssets();
         ScriptManager::LoadScripts(m_SceneData.m_Assets.scripts);
 
-        LOG_DEBUG("EditorLayer", "Ready to instantiate scene");
         m_SceneData.m_Scene = SceneLoader::Instantiate(data);
-        LOG_DEBUG("EditorLayer", "Scene instantiated");
 
         PrepareScene();
         ScriptManager::AttachScripts(m_SceneData.m_Scene);
@@ -183,6 +185,8 @@ namespace DE {
         m_SceneHierarchy.UnSelect();
         m_SceneHierarchy.SetActiveScene(nullptr);
         m_SceneData.m_Scene = nullptr;
+        ResourceManager::Clear();
+        UnloadAssets();
         LOG_INFO("EditorLayer", "Closed scene");
     }
 
