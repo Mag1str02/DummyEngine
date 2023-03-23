@@ -28,29 +28,29 @@ namespace DE
         Profiler::Initialize();
         Config::Initialize();
         Logger::Initialize();
-        LOG_INFO("Logger and config initialized", "Initializer");
+        LOG_INFO("Initializer", "Logger and config initialized");
     }
     void Initializer::DepInitialize()
     {
-        LOG_STAGE("Initializing dependencies", "Initializer");
+        LOG_INFO("Initializer", "Initializing dependencies");
         //* Init GLFW
         {
             if (!glfwInit())
             {
-                LOG_FATAL("Failed to initialize GLFW", "Initializer");
+                LOG_FATAL("Initializer", "Failed to initialize GLFW");
                 DE_ASSERT(false, "Failed to initialize GLFW");
             }
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-            LOG_INFO("Initialized GLFW", "Initializer");
+            LOG_INFO("Initializer", "Initialized GLFW");
         }
     }
     void Initializer::EngineInitialize()
     {
         DE_PROFILER_BEGIN_FRAME();
 
-        LOG_STAGE("Initializing Engine", "Initializer");
+        LOG_INFO("Initializer", "Initializing Engine");
         ScriptEngine::Initialize();
         Input::Initialize();
         Application::Initialize();
@@ -59,7 +59,7 @@ namespace DE
 
     void Initializer::EngineTerminate()
     {
-        LOG_STAGE("Terminating Engine", "Initializer");
+        LOG_INFO("Initializer", "Terminating Engine");
         Renderer::Terminate();
         Application::Terminate();
         Input::Terminate();
@@ -67,7 +67,7 @@ namespace DE
     }
     void Initializer::DepTerminate()
     {
-        LOG_STAGE("Terminating dependencies", "Initializer");
+        LOG_INFO("Initializer", "Terminating dependencies");
         //* Terminate GLFW
         {
             glfwTerminate();
@@ -75,7 +75,7 @@ namespace DE
     }
     void Initializer::PostTerminate()
     {
-        LOG_STAGE("PostTerminating", "Initializer");
+        LOG_INFO("Initializer", "PostTerminating");
         Logger::Terminate();
         Config::Terminate();
         Profiler::Terminate();

@@ -47,7 +47,7 @@ namespace DE
             Renderer::Submit(target.first, target.second);
         }
 
-        for (auto e : m_Scene->m_Storage.View<SkyBox, TransformComponent, ShaderComponent>())
+        for (auto e : m_Scene->m_Storage->View<SkyBox, TransformComponent, ShaderComponent>())
         {
             e.Get<TransformComponent>().translation = m_Camera.Get<FPSCamera>().GetPos();
             Renderer::Submit(e.Get<SkyBox>().map, e.Get<ShaderComponent>().shader, e.Get<TransformComponent>().GetTransform());
@@ -60,7 +60,7 @@ namespace DE
         DE_PROFILE_SCOPE("UpdateLights");
 
         int cnt_light_sources = 0;
-        for (auto enitity : m_Scene->m_Storage.View<LightSource>())
+        for (auto enitity : m_Scene->m_Storage->View<LightSource>())
         {
             auto& light_source                           = enitity.Get<LightSource>();
             m_Lights->at(cnt_light_sources).Get<Vec3>(0) = light_source.ambient;

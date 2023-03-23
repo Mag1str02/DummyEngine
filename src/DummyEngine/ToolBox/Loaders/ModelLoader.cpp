@@ -16,12 +16,12 @@ namespace DE
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         {
-            LOG_ERROR(StrCat("Failed to load model \"",
-                             RelativeToExecutable(properties.path).string(),
-                             "\" Error (",
-                             m_State.m_Importer.GetErrorString(),
-                             ")"),
-                      "ModelLoader");
+            LOG_ERROR("ModelLoader",
+                      "Failed to load model \"",
+                      RelativeToExecutable(properties.path),
+                      "\" Error (",
+                      m_State.m_Importer.GetErrorString(),
+                      ")");
             return nullptr;
         }
 
@@ -37,14 +37,14 @@ namespace DE
         m_State.m_CurrentData->meshes.resize(m_State.m_MeshesAmount);
         ProcessNode(scene->mRootNode, scene);
 
-        LOG_INFO(StrCat("Model loaded ",
-                        RelativeToExecutable(properties.path).string(),
-                        " Meshes (",
-                        std::to_string(m_State.m_MeshesAmount),
-                        ") Vertices (",
-                        std::to_string(m_State.m_VerticesAmount),
-                        ")"),
-                 "ModelLoader");
+        LOG_INFO("ModelLoader",
+                 "Model loaded ",
+                 RelativeToExecutable(properties.path),
+                 " Meshes (",
+                 std::to_string(m_State.m_MeshesAmount),
+                 ") Vertices (",
+                 std::to_string(m_State.m_VerticesAmount),
+                 ")");
         if (properties.compress)
         {
             m_State.m_CurrentData->Compress();
@@ -133,7 +133,7 @@ namespace DE
         }
         else if (mat->GetTextureCount(type) > 1)
         {
-            LOG_WARNING("Model has more multiple textures of same type. Loading only first one.", "ModelLoader");
+            LOG_WARNING("ModelLoader", "Model has more multiple textures of same type. Loading only first one.");
         }
         mat->GetTexture(type, 0, &file_name);
 

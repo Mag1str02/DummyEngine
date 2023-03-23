@@ -16,8 +16,9 @@ namespace DE
         ScriptClass() = default;
         ScriptClass(const std::string& name);
 
-        bool Load(Ref<SharedObject> library);
-        bool Valid();
+        bool               Load(Ref<SharedObject> library);
+        bool               Valid();
+        const std::string& GetName() const;
 
         inline Script* Create() { return f_create(); }
         inline void    Delete(Script* ptr) { f_delete(ptr); }

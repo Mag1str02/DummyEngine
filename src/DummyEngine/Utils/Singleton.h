@@ -1,7 +1,6 @@
 #pragma once
 
-struct Unit
-{};
+struct Unit {};
 
 #define DEL_BRACKETS(a) SECOND(FIRST a)
 #define FIRST(...) FIRST __VA_ARGS__
@@ -9,22 +8,16 @@ struct Unit
 #define THIRD(...) ERASE##__VA_ARGS__
 #define ERASEFIRST
 
-#define S_METHOD(return_type, name, signature, variables)          \
-    static DEL_BRACKETS(return_type) name(DEL_BRACKETS(signature)) \
-    {                                                              \
-        return Get().I##name(DEL_BRACKETS(variables));             \
-    }                                                              \
+#define S_METHOD(return_type, name, signature, variables)                                                             \
+    static DEL_BRACKETS(return_type) name(DEL_BRACKETS(signature)) { return Get().I##name(DEL_BRACKETS(variables)); } \
     DEL_BRACKETS(return_type) I##name(DEL_BRACKETS(signature))
 
 #define S_METHOD_DEF(return_type, name, signature)                  \
     static DEL_BRACKETS(return_type) name(DEL_BRACKETS(signature)); \
     DEL_BRACKETS(return_type) I##name(DEL_BRACKETS(signature));
 
-#define S_METHOD_IMPL(type, return_type, name, signature, variables) \
-    DEL_BRACKETS(return_type) type::name(DEL_BRACKETS(signature))    \
-    {                                                                \
-        return type::Get().I##name(DEL_BRACKETS(variables));         \
-    }                                                                \
+#define S_METHOD_IMPL(type, return_type, name, signature, variables)                                                       \
+    DEL_BRACKETS(return_type) type::name(DEL_BRACKETS(signature)) { return type::Get().I##name(DEL_BRACKETS(variables)); } \
     DEL_BRACKETS(return_type) type::I##name(DEL_BRACKETS(signature))
 
 #define SINGLETON(type)                    \
@@ -39,15 +32,10 @@ public:                                    \
 
 #define SINGLETON_BASE(type)                                 \
     template <> type* Singleton<type>::s_Instance = nullptr; \
-    template <> type& Singleton<type>::Get()                 \
-    {                                                        \
-        return *s_Instance;                                  \
-    }
+    template <> type& Singleton<type>::Get() { return *s_Instance; }
 
-namespace DE
-{
-    template <typename T> class Singleton
-    {
+namespace DE {
+    template <typename T> class Singleton {
     public:
         static T& Get();
 

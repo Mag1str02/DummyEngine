@@ -1,15 +1,15 @@
 #pragma once
 
 #include "DummyEngine/Core/ECS/ECS.h"
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Scene/Scene.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
-    template <typename T, typename U> constexpr size_t OffsetOf(U T::*member) { return (char*)&((T*)nullptr->*member) - (char*)nullptr; }
+namespace DE {
+    template <typename T, typename U> constexpr size_t OffsetOf(U T::*member) {
+        return (char*)&((T*)nullptr->*member) - (char*)nullptr;
+    }
 
-    enum class ScriptFieldType
-    {
+    enum class ScriptFieldType {
         None = 0,
         Float,
         Double,
@@ -26,8 +26,7 @@ namespace DE
 
     template <typename T> ScriptFieldType TypeToScriptFieldType(const T& value);
 
-    class ScriptField
-    {
+    class ScriptField {
     public:
         ScriptField() {}
         ScriptField(const std::string& name, void* ptr, ScriptFieldType type) : m_Name(name), m_Data(ptr), m_Type(type) {}
@@ -43,8 +42,7 @@ namespace DE
         void*           m_Data;
     };
 
-    class Script
-    {
+    class Script {
     public:
         Script() : m_Scene(nullptr) {}
         virtual ~Script() {}
@@ -60,8 +58,7 @@ namespace DE
 
         std::unordered_map<std::string, ScriptField>& GetFields() { return m_Fields; }
         ScriptField                                   GetField(const std::string& field_name) { return m_Fields[field_name]; }
-        void                                          AttachToScene(Scene* scene, Entity entity)
-        {
+        void                                          AttachToScene(Scene* scene, Entity entity) {
             m_Scene  = scene;
             m_Entity = entity;
         }
@@ -83,12 +80,6 @@ namespace DE
 
 #define ADD_FIELD(field) AddField(ScriptField(std::string(#field), &field, TypeToScriptFieldType(field)))
 
-#define SCRIPT_BASE(type)                           \
-    DE_SCRIPT_API Script* type##Create()            \
-    {                                               \
-        return new type();                          \
-    }                                               \
-    DE_SCRIPT_API void type##Delete(Script* script) \
-    {                                               \
-        delete script;                              \
-    }
+#define SCRIPT_BASE(type)                                       \
+    DE_SCRIPT_API Script* type##Create() { return new type(); } \
+    DE_SCRIPT_API void    type##Delete(Script* script) { delete script; }

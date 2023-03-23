@@ -1,26 +1,19 @@
 #pragma once
 
 #include "DummyEditor/DummyEngineInclude.h"
-#include "DummyEditor/Panels/ViewportPanel.h"
+#include "DummyEditor/Panels/InspectorPanel.h"
 #include "DummyEditor/Panels/ProfilerPanel.h"
 #include "DummyEditor/Panels/SceneHierarchyPanel.h"
-#include "DummyEditor/Panels/InspectorPanel.h"
+#include "DummyEditor/Panels/ViewportPanel.h"
 
-namespace DE
-{
-    struct SceneData
-    {
+namespace DE {
+    struct SceneData {
         Ref<Scene>       m_Scene;
         Ref<FrameBuffer> m_FrameBuffer;
     };
-    enum class InputState
-    {
-        NonSpecified = 0,
-        ViewPort
-    };
+    enum class InputState { NonSpecified = 0, ViewPort };
 
-    struct EditorState
-    {
+    struct EditorState {
         bool m_ViewportEnabled       = true;
         bool m_ProfilerEnabled       = true;
         bool m_InspectorEnabled      = true;
@@ -29,8 +22,7 @@ namespace DE
         InputState m_InputState;
     };
 
-    class EditorLayer : public DE::Layer
-    {
+    class EditorLayer : public DE::Layer {
     public:
         EditorLayer();
 
@@ -49,8 +41,13 @@ namespace DE
 
         void OpenSceneDialog();
         void SaveSceneDialog();
+
         void OpenScene(const Path& path);
         void SaveScene(const Path& path);
+        void ReloadScripts();
+        void CloseScene();
+
+        void PrepareScene();
 
         void ProcessControlls(float dt);
 

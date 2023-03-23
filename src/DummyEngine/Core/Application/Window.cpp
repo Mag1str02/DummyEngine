@@ -18,7 +18,7 @@ namespace DE
         m_Window = glfwCreateWindow(1280, 720, m_State.name.c_str(), NULL, NULL);
         glfwSwapInterval(0);
         DE_ASSERT(m_Window != nullptr, StrCat("Failed to create GLFW Window: ", m_State.name));
-        LOG_INFO(StrCat("Window created: ", m_State.name), "Window");
+        LOG_INFO("Window", "Window created: ", m_State.name);
 
         m_Context = Context::Create(m_Window);
         m_Context->Load();

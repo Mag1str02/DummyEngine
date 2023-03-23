@@ -21,7 +21,7 @@ namespace DE
 
     void Renderer::Initialize()
     {
-        LOG_INFO("Initializing Renderer...", "Renderer");
+        LOG_INFO("Renderer", "Initializing Renderer...");
         m_FrameStatistics = CreateScope<FrameStatistics>();
         switch (Config::GetRenderAPI())
         {
@@ -44,7 +44,7 @@ namespace DE
         GenFullScreenQuad();
         GenCube();
 
-        LOG_INFO("Renderer initialized.", "Renderer");
+        LOG_INFO("Renderer", "Renderer initialized.");
     }
     void Renderer::Terminate() {}
 

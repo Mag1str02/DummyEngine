@@ -12,7 +12,7 @@ namespace DE
         m_Library = library;
 
         f_create = reinterpret_cast<FCreate>(library->GetFunction(m_Name + "Create"));
-        f_delete  = reinterpret_cast<FDelete>(library->GetFunction(m_Name + "Delete"));
+        f_delete = reinterpret_cast<FDelete>(library->GetFunction(m_Name + "Delete"));
         return Valid();
     }
     bool ScriptClass::Valid()
@@ -24,4 +24,5 @@ namespace DE
         }
         return ptr->Valid() && f_create && f_delete;
     }
+    const std::string& ScriptClass::GetName() const { return m_Name; }
 }  // namespace DE

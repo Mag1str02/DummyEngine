@@ -31,7 +31,7 @@ namespace DE
             {
                 error += "(Width / 4 != Height / 3)";
             }
-            LOG_WARNING(StrCat("Attempt to create cubemap with wrong texture size: ", error), "GLCubeMap");
+            LOG_WARNING("GLCubeMap", "Attempt to create cubemap with wrong texture size: ", error);
         }
 
         for (size_t i = 0; i < 6; ++i)

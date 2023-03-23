@@ -89,6 +89,7 @@ namespace DE
         {
             m_AvailableIds.push_back(id);
             m_States[id] = false;
+            LOG_INFO("ScriptProxyManager", "Destroyed handle (", id, ")");
         }
         void Destroy(Iterator it) { Destroy(it.m_ID); }
 
@@ -101,6 +102,7 @@ namespace DE
             m_States[id]          = true;
             m_Proxys[id].m_Id     = 0;
             m_Proxys[id].m_Script = nullptr;
+            LOG_INFO("ScriptProxyManager", "Created handle (", id, ")");
             return {id, ++m_Generations[id]};
         }
 

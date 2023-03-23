@@ -3,26 +3,24 @@
 #include "DummyEngine/Utils/STDIncludes.h"
 #include "DummyEngine/Utils/Types.h"
 #include "DummyEngine/Utils/Singleton.h"
+#include "DummyEngine/Utils/StringOperations.h"
 
 namespace DE
 {
     enum class LogMessageType
     {
         None = 0,
+        Debug,
         Info,
         Warning,
-        Stage,
         Error,
         Fatal
     };
 
     std::string LogMessageTypeToStr(LogMessageType type);
 
-    // TODO: Level hierarchy rules. Currently all lvl 0.
-
     struct LogRecord
     {
-        uint32_t       level = 0;
         time_t         time;
         LogMessageType type;
         std::string    author;
@@ -41,16 +39,22 @@ namespace DE
         S_METHOD_DEF(bool, Open, (const std::string& log_name));
         S_METHOD_DEF(Unit, Close, (const std::string& log_name));
 
-        S_METHOD_DEF(
-            Unit,
-            Log,
-            (LogMessageType type, const std::string& str, const std::string& author = "Anonymous", uint32_t lvl = 0, const std::string& to = ""));
+        template <typename... Message> static void Log(LogMessageType type, const std::string& author, Message... message)
+        {
+            Get().LogInternal(type, author, "", StrCat(message...));
+        }
+        template <typename... Message> static void LogTo(LogMessageType type, const std::string& author, const std::string& to, Message... message)
+        {
+            Get().LogInternal(type, author, to, StrCat(message...));
+        }
         S_METHOD_DEF(const std::deque<LogRecord>&, GetLog, (const std::string& log = ""));
         S_METHOD_DEF(Unit, SetDepth, (uint32_t depth, const std::string& log = ""));
 
     private:
         Logger()  = default;
         ~Logger() = default;
+
+        void LogInternal(LogMessageType type, const std::string& author, const std::string& to, const std::string& str);
 
         struct LogStream
         {
@@ -64,15 +68,15 @@ namespace DE
 }  // namespace DE
 
 #if DE_ENABLE_LOGGING == 1
-#define LOG_ERROR(...) Logger::Log(LogMessageType::Error, __VA_ARGS__)
+#define LOG_DEBUG(...) Logger::Log(LogMessageType::Debug, __VA_ARGS__)
 #define LOG_INFO(...) Logger::Log(LogMessageType::Info, __VA_ARGS__)
 #define LOG_WARNING(...) Logger::Log(LogMessageType::Warning, __VA_ARGS__)
-#define LOG_STAGE(...) Logger::Log(LogMessageType::Stage, __VA_ARGS__)
+#define LOG_ERROR(...) Logger::Log(LogMessageType::Error, __VA_ARGS__)
 #define LOG_FATAL(...) Logger::Log(LogMessageType::Fatal, __VA_ARGS__)
 #else
-#define LOG_ERROR(...)
+#define LOG_DEBUG(...)
 #define LOG_INFO(...)
 #define LOG_WARNING(...)
-#define LOG_STAGE(...)
+#define LOG_ERROR(...)
 #define LOG_FATAL(...)
 #endif

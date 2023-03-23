@@ -70,6 +70,7 @@ ToolBox/Editors/TextureEditor.cpp
 if(${CMAKE_PLATFORM} STREQUAL "WINDOWS")
 set(PLATFORM_SOURCES
     Platform/Windows/Utils/FileSystem.cpp
+    Platform/Windows/Utils/StackTrace.cpp
     Platform/Windows/Core/Scripting/SharedObject.cpp
 )
 endif()

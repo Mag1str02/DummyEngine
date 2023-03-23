@@ -3,51 +3,53 @@
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
 
-namespace DE
-{
+namespace DE {
     class Entity;
     class SceneRenderData;
     class SceneHierarchyNode;
     class ScripyEngine;
 
-    class Scene
-    {
+    class Scene {
     public:
         Scene(const std::string& name = "Scene");
+        ~Scene();
 
         Entity CreateHiddenEntity(const std::string& name = "Entity");
         Entity CreateEntity(const std::string& name = "Entity");
         Entity CreateEntityWithUUID(UUID uuid, const std::string& name = "Entity");
         Entity CloneEntity(const std::string& entity_to_clone, const std::string& new_name);
 
-        Entity                  GetByUUID(UUID uuid);
-        Entity                  GetByName(const std::string& name);
-        Entity                  GetCamera();
-        std::string             GetName() const;
-        Ref<SceneHierarchyNode> GetHierarchy();
+        Entity                   GetByUUID(UUID uuid);
+        Entity                   GetByName(const std::string& name);
+        Entity                   GetCamera();
+        const std::string&       GetName() const;
+        const std::vector<Path>& GetScripts() const;
+        Ref<SceneHierarchyNode>  GetHierarchy();
 
         void OnUpdate(double dt);
         void OnViewPortResize(uint32_t x, uint32_t y);
         void UpdateScripts(float dt);
         void Render();
 
-        template <typename System> void RegisterSystem() { m_Storage.RegisterSystem<System>(); }
+        template <typename System> void                              RegisterSystem() { m_Storage->RegisterSystem<System>(); }
+        template <typename... Components> StorageView<Components...> View() { return m_Storage->View<Components...>(); }
 
     private:
         friend class ScriptEngine;
         friend class SceneLoader;
         friend class SceneRenderData;
-        friend class Entity;
 
         Entity CreateEmptyEntity();
         void   UpdateEmptyEntity(Entity entity);
         void   OnEntityDestroy(Entity entity);
 
         std::string                             m_Name;
-        Storage                                 m_Storage;
+        Ref<Storage>                            m_Storage;
         Ref<SceneRenderData>                    m_RenderData;
         Ref<SceneHierarchyNode>                 m_HierarchyRoot;
         std::unordered_map<uint64_t, Entity>    m_EntityByUUID;
         std::unordered_map<std::string, Entity> m_EntityByName;
+        // TODO: Remove when asset manager is useful)
+        std::vector<Path> m_ScriptFiles;
     };
 }  // namespace DE

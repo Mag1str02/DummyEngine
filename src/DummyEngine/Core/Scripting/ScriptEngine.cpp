@@ -20,7 +20,11 @@ namespace DE
         s_Instance->IInitialize();
         return Unit();
     }
-    Unit ScriptEngine::IInitialize() { return Unit(); }
+    Unit ScriptEngine::IInitialize()
+    {
+        LOG_INFO("ScriptEngine", "ScriptEngine initialized");
+        return Unit();
+    }
     Unit ScriptEngine::Terminate()
     {
         s_Instance->ITerminate();
@@ -30,14 +34,15 @@ namespace DE
     Unit ScriptEngine::ITerminate()
     {
         ClearLibraries();
+        LOG_INFO("ScriptEngine", "ScriptEngine terminated");
         return Unit();
     }
 
     S_METHOD_IMPL(ScriptEngine, Unit, AddScript, (const ScriptAsset& asset), (asset))
     {
-        LOG_INFO(StrCat("Adding script: ", asset.name, " - ", std::to_string(asset.id)), "ScriptEngine");
         if (m_ScriptClasses.contains(asset.id))
         {
+            LOG_WARNING("ScriptEngine", "Script (", asset.id.Hex(), "|", asset.name, ") wasn't added because already exists");
             return Unit();
         }
         m_ScriptClasses[asset.id] = ScriptClass(asset.name);
@@ -46,23 +51,26 @@ namespace DE
             m_ScriptClasses[asset.id].Load(lib);
             if (m_ScriptClasses[asset.id].Valid())
             {
+                LOG_INFO("ScriptEngine", "Script (", asset.id.Hex(), "|", asset.name, ") found in library (", lib->GetName(), ")");
                 for (auto& instance : m_ProxyManager)
                 {
                     if (instance.m_Id == asset.id)
                     {
                         instance.m_Script = m_ScriptClasses[asset.id].Create();
+                        LOG_INFO("ScriptEngine", "Created instance of (", asset.id.Hex(), "|", asset.name, ")");
                     }
                 }
-                break;
+                return Unit();
             }
         }
+        LOG_WARNING("ScriptEngine", "Script (", asset.id.Hex(), "|", asset.name, ") was not found in any library");
         return Unit();
     }
     S_METHOD_IMPL(ScriptEngine, Unit, DeleteScript, (UUID id), (id))
     {
-        LOG_INFO(StrCat("Deleting script: ", std::to_string(id)), "ScriptEngine");
         if (!m_ScriptClasses.contains(id))
         {
+            LOG_WARNING("ScriptEngine", "Script (", id.Hex(), ") was not deleted because does not exists");
             return Unit();
         }
         if (m_ScriptClasses[id].Valid())
@@ -73,41 +81,45 @@ namespace DE
                 {
                     m_ScriptClasses[id].Delete(instance.m_Script);
                     instance.m_Script = nullptr;
+                    LOG_INFO("ScriptEngine", "Deleted instance of (", id.Hex(), ")");
                 }
             }
         }
         m_ScriptClasses.erase(id);
+        LOG_INFO("ScriptEngine", "Script (", id.Hex(), ") was deleted");
         return Unit();
     }
     S_METHOD_IMPL(ScriptEngine, bool, Valid, (UUID id), (id)) { return m_ScriptClasses.contains(id) && m_ScriptClasses[id].Valid(); }
     S_METHOD_IMPL(ScriptEngine, Unit, ClearScripts, (), ())
     {
-        LOG_INFO("Clearing scripts...", "ScriptEngine");
         for (auto& instance : m_ProxyManager)
         {
             if (instance.m_Script)
             {
                 m_ScriptClasses[instance.m_Id].Delete(instance.m_Script);
+                instance.m_Script = nullptr;
+                LOG_INFO("ScriptEngine", "Deleted instance of (", instance.m_Id.Hex(), ")");
             }
-            instance.m_Script = nullptr;
         }
         m_ScriptClasses.clear();
+        LOG_INFO("ScriptEngine", "Cleared all scripts");
         return Unit();
     }
 
     S_METHOD_IMPL(ScriptEngine, Unit, AddLibrary, (Ref<SharedObject> library), (library))
     {
-        LOG_INFO(StrCat("Adding library: ", library->GetName()), "ScriptEngine");
         for (size_t i = 0; i < m_Libraries.size(); ++i)
         {
             if (m_Libraries[i]->GetName() == library->GetName())
             {
                 DeleteLibrary(m_Libraries[i]->GetName());
+                LOG_WARNING("ScriptEngine", "Deleted library (", library->GetName(), ") because already loaded");
                 break;
             }
         }
         m_Libraries.push_back(library);
         UpdateScriptClasses(library);
+        LOG_INFO("ScriptEngine", "Library (", library->GetName(), ") was added");
         return Unit();
     }
     S_METHOD_IMPL(ScriptEngine, Unit, DeleteLibrary, (const std::string& name), (name))
@@ -125,6 +137,7 @@ namespace DE
             }
             if (id == -1)
             {
+                LOG_WARNING("ScriptEngine", "Library (", name, ") was not deleted because does not exist");
                 return Unit();
             }
         }
@@ -140,13 +153,15 @@ namespace DE
                     if (instance.m_Script)
                     {
                         m_ScriptClasses[instance.m_Id].Delete(instance.m_Script);
+                        instance.m_Script = nullptr;
+                        LOG_INFO("ScriptEngine", "Deleted instance of (", instance.m_Id.Hex(), ")");
                     }
-                    instance.m_Script = nullptr;
                 }
             }
         }
 
         m_Libraries.erase(m_Libraries.begin() + id);
+        LOG_INFO("ScriptEngine", "Library (", name, ") was deleted");
         return Unit();
     }
     S_METHOD_IMPL(ScriptEngine, bool, LibraryLoaded, (const std::string& name), (name))
@@ -171,30 +186,35 @@ namespace DE
             if (instance.m_Script)
             {
                 m_ScriptClasses[instance.m_Id].Delete(instance.m_Script);
+                instance.m_Script = nullptr;
+                LOG_INFO("ScriptEngine", "Deleted instance of (", instance.m_Id.Hex(), ")");
             }
-            instance.m_Script = nullptr;
         }
         m_Libraries.clear();
+        LOG_INFO("ScriptEngine", "Cleared all libraries");
         return Unit();
     }
 
     S_METHOD_IMPL(ScriptEngine, ScriptComponent, CreateScript, (UUID id), (id))
     {
-        LOG_INFO(StrCat("Creating script instance: ", std::to_string(id)), "ScriptEngine");
         auto [p_id, gen]      = m_ProxyManager.CreateProxy();
         auto&           proxy = m_ProxyManager.GetProxy(p_id);
         ScriptComponent res(p_id, gen);
         proxy.m_Id = id;
         if (!m_ScriptClasses.contains(id))
         {
-            LOG_INFO(StrCat("Creating unknown script: ", std::to_string(id)), "ScriptEngine");
+            LOG_WARNING("ScriptEngine", "Creating ScriptComponent of unknown ScriptClass (", id.Hex(), ")");
         }
         else
         {
-            LOG_INFO(StrCat("Creating script from dll function..."), "ScriptEngine");
             if (m_ScriptClasses[id].Valid())
             {
                 proxy.m_Script = m_ScriptClasses[id].Create();
+                LOG_INFO("ScriptEngine", "Created instance of (", id.Hex(), ")");
+            }
+            else
+            {
+                LOG_WARNING("ScriptEngine", "Creating ScriptComponent of not yet loaded ScriptClass (", id.Hex(), ")");
             }
         }
         return res;
@@ -219,6 +239,8 @@ namespace DE
             if (proxy.m_Script)
             {
                 m_ScriptClasses[proxy.m_Id].Delete(proxy.m_Script);
+                proxy.m_Script = nullptr;
+                LOG_INFO("ScriptEngine", "Deleted instance of (", proxy.m_Id.Hex(), ")");
             }
             m_ProxyManager.Destroy(component.m_ID);
         }
@@ -231,14 +253,18 @@ namespace DE
         {
             if (!script_class.Valid())
             {
-                script_class.Load(library);
+                if (script_class.Load(library))
+                {
+                    LOG_INFO("ScriptEngine", "ScriptClass (", script_class.GetName(), ") was  found in library (", library->GetName(), ")");
+                }
             }
         }
         for (auto& instance : m_ProxyManager)
         {
-            if (!instance.m_Script)
+            if (!instance.m_Script && m_ScriptClasses.contains(instance.m_Id) && m_ScriptClasses[instance.m_Id].Valid())
             {
                 instance.m_Script = m_ScriptClasses[instance.m_Id].Create();
+                LOG_INFO("ScriptEngine", "Created instance of (", instance.m_Id.Hex(), ")");
             }
         }
     }

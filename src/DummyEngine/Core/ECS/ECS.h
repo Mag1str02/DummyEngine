@@ -4,8 +4,7 @@
 
 #define INDEX(type) std::type_index(typeid(type))
 
-namespace DE
-{
+namespace DE {
     //*___CLASS_DECLARATIONS___________________________________________________________________________________________________________________________________________________________________________________________________
 
     class Entity;
@@ -20,41 +19,37 @@ namespace DE
 
     //*___COMPONENT_MANAGER___________________________________________________________________________________________________________________________________________________________________________________________
 
-    class IComponentArray
-    {
+    class IComponentArray {
     public:
         virtual ~IComponentArray()                               = default;
         virtual void* AddComponent(uint32_t id, void* component) = 0;
         virtual void* GetComponent(uint32_t id)                  = 0;
+        virtual bool  HasComponent(uint32_t id)                  = 0;
         virtual void  RemoveComponent(uint32_t id)               = 0;
     };
-    template <typename ComponentType> class ComponentArray : public IComponentArray
-    {
+    template <typename ComponentType> class ComponentArray : public IComponentArray {
     public:
         ComponentArray() = default;
-
         virtual void* AddComponent(uint32_t id, void* component);
         virtual void* GetComponent(uint32_t id);
+        virtual bool  HasComponent(uint32_t id);
         virtual void  RemoveComponent(uint32_t id);
 
     private:
         std::unordered_map<uint32_t, uint32_t> m_EntityToIndex;
+        std::vector<uint32_t>                  m_IndexToEntity;
         std::vector<ComponentType>             m_ComponentArray;
     };
 
-    class Signature
-    {
+    class Signature {
     public:
         bool   Get(uint64_t id) const;
         void   Set(uint64_t id, bool value);
         bool   Matches(const Signature& required) const;
-        size_t Size() const
-        {
+        size_t Size() const {
             size_t size = 0;
-            for (size_t i = 0; i < 64 * m_Data.size(); ++i)
-            {
-                if (Get(i))
-                {
+            for (size_t i = 0; i < 64 * m_Data.size(); ++i) {
+                if (Get(i)) {
                     ++size;
                 }
             }
@@ -64,8 +59,7 @@ namespace DE
     private:
         std::vector<uint64_t> m_Data;
     };
-    class ComponentManager
-    {
+    class ComponentManager {
     public:
         ComponentManager(Storage* storage);
 
@@ -101,23 +95,20 @@ namespace DE
 
     //*___ENTITY_MANAGER___________________________________________________________________________________________________________________________________________________________________________________________
 
-    class EntityManager
-    {
+    class EntityManager {
     public:
         EntityManager() = default;
 
         std::pair<uint32_t, uint32_t> CreateEntity();
-        uint32_t                      Generation(uint32_t id) const;
         void                          Destroy(uint32_t id);
         bool                          Valid(uint32_t id, uint32_t gen) const;
 
-    private:
-        template <typename... Components> friend class StorageView;
-
+        uint32_t Generation(uint32_t id) const;
         uint32_t NextEntity(uint32_t id) const;
         uint32_t BeginEntity() const;
         uint32_t EndEntity() const;
 
+    private:
         std::vector<uint32_t> m_Generations;
         std::vector<bool>     m_States;
         std::queue<uint32_t>  m_AvailableEntities;
@@ -125,8 +116,7 @@ namespace DE
 
     //*___SYSTEM_MANAGER___________________________________________________________________________________________________________________________________________________________________________________________
 
-    class System
-    {
+    class System {
     public:
         virtual ~System()                    = default;
         virtual void        Update(float dt) = 0;
@@ -141,8 +131,7 @@ namespace DE
 
         Storage* m_Storage;
     };
-    class SystemManager
-    {
+    class SystemManager {
     public:
         SystemManager(Storage* storage);
         void                                            Update(float dt);
@@ -158,8 +147,7 @@ namespace DE
 
     //*___ENTITY____________________________________________________________________________________________________________________________________________________________________________________________________
 
-    class Entity
-    {
+    class Entity {
     public:
         Entity();
         ~Entity()                        = default;
@@ -186,17 +174,18 @@ namespace DE
         friend struct std::hash<Entity>;
         friend class Storage;
 
-        uint32_t m_ID;
-        uint32_t m_Gen;
-        Storage* m_Storage;
+        uint32_t         m_ID;
+        uint32_t         m_Gen;
+        WeakRef<Storage> m_Storage;
     };
 
     //*___STORAGE___________________________________________________________________________________________________________________________________________________________________________________________
 
-    class Storage
-    {
+    class Storage : public std::enable_shared_from_this<Storage> {
     public:
         Storage();
+        // If any of remove callbacks use functions of passed entity, Destruct should be called before destructor
+        void Destruct();
         ~Storage()                         = default;
         Storage(const Storage&)            = delete;
         Storage(Storage&&)                 = delete;
@@ -216,6 +205,7 @@ namespace DE
         template <typename... Components> friend class StorageView;
         friend class Entity;
         friend class ComponentManager;
+        friend struct StorageDeleter;
 
         Entity GetEntity(uint32_t id);
         bool   Valid(uint32_t id, uint32_t gen) const;
@@ -230,11 +220,9 @@ namespace DE
         ComponentManager m_ComponentManager;
         SystemManager    m_SystemManager;
     };
-    template <typename... Components> class StorageView
-    {
+    template <typename... Components> class StorageView {
     public:
-        class Iterator
-        {
+        class Iterator {
         public:
             Iterator(uint32_t id, StorageView* v);
 
@@ -265,8 +253,8 @@ namespace DE
 
 #include "DummyEngine/Core/ECS/ComponentArray.hpp"
 #include "DummyEngine/Core/ECS/ComponentManager.hpp"
-#include "DummyEngine/Core/ECS/EntityManager.hpp"
 #include "DummyEngine/Core/ECS/Entity.hpp"
+#include "DummyEngine/Core/ECS/EntityManager.hpp"
 #include "DummyEngine/Core/ECS/Storage.hpp"
 #include "DummyEngine/Core/ECS/StorageView.hpp"
 #include "DummyEngine/Core/ECS/System.hpp"

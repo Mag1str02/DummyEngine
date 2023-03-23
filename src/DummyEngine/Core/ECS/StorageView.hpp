@@ -57,7 +57,7 @@ namespace DE
         Entity res;
         res.m_ID      = m_ID;
         res.m_Gen     = m_View->m_Storage->m_EntityManager.Generation(m_ID);
-        res.m_Storage = m_View->m_Storage;
+        res.m_Storage = m_View->m_Storage->weak_from_this();
         return res;
     }
 

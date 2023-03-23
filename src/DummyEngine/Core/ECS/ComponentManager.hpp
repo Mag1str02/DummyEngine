@@ -40,8 +40,11 @@ namespace DE
         Entity e = m_Storage->GetEntity(entity_id);
         for (const auto& [id, array] : m_ComponentArrays)
         {
-            m_RemoveHandlers[id](e);
-            array->RemoveComponent(entity_id);
+            if (array->HasComponent(entity_id))
+            {
+                m_RemoveHandlers[id](e);
+                array->RemoveComponent(entity_id);
+            }
         }
         m_Signatures[entity_id] = Signature();
     }
@@ -51,8 +54,6 @@ namespace DE
         {
             return false;
         }
-        // printf("Cheking %u...\n", id);
-        // m_Signatures.at(id).Print();
         return m_Signatures.at(id).Matches(signature);
     }
     void ComponentManager::ValidateSignature(uint32_t entity_id)

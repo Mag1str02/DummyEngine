@@ -11,9 +11,9 @@ namespace DE
     {
         switch (type)
         {
+            case LogMessageType::Debug: return "Debug";
             case LogMessageType::Info: return "Info";
             case LogMessageType::Warning: return "Warning";
-            case LogMessageType::Stage: return "Stage";
             case LogMessageType::Error: return "Error";
             case LogMessageType::Fatal: return "Fatal";
             default: return "None";
@@ -116,33 +116,24 @@ namespace DE
         return Unit();
     }
 
-    S_METHOD_IMPL(Logger,
-                  Unit,
-                  Log,
-                  (LogMessageType type, const std::string& str, const std::string& author, uint32_t lvl, const std::string& to),
-                  (type, str, author, lvl, to))
+    void Logger::LogInternal(LogMessageType type, const std::string& author, const std::string& to, const std::string& str)
     {
-        if (!m_Streams.contains(to))
+        LogStream* log = &m_Streams[""];
+        if (m_Streams.contains(to))
         {
-            if (type == LogMessageType::Fatal)
-            {
-                ITerminate();
-            }
-            return Unit();
+            log = &m_Streams[to];
         }
-        LogStream& log = m_Streams[to];
-        log.records.push_back({lvl, time(0), type, author, str});
-        if (log.records.size() > log.depth)
+        log->records.push_back({time(0), type, author, str});
+        if (log->records.size() > log->depth)
         {
-            log.records.pop_front();
+            log->records.pop_front();
         }
-        log.stream << log.records.back().ToString();
-        log.stream.flush();
+        log->stream << log->records.back().ToString();
+        log->stream.flush();
         if (type == LogMessageType::Fatal)
         {
             ITerminate();
         }
-        return Unit();
     }
     S_METHOD_IMPL(Logger, const std::deque<LogRecord>&, GetLog, (const std::string& log), (log))
     {

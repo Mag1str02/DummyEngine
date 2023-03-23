@@ -1,24 +1,21 @@
-#include "DummyEngine/Utils/Base.h"
-#include "DummyEngine/Core/ResourceManaging/Assets.h"
-#include "DummyEngine/Core/Scripting/Script.h"
-#include "DummyEngine/Core/Scripting/SharedObject.h"
-#include "DummyEngine/Core/Scripting/ScriptClass.h"
-
 #include "DummyEditor/Scripting/EditorScripts.h"
+#include "DummyEngine/Core/ResourceManaging/Assets.h"
+#include "DummyEngine/Core/Scene/Scene.h"
+#include "DummyEngine/Core/Scripting/Script.h"
+#include "DummyEngine/Core/Scripting/ScriptClass.h"
+#include "DummyEngine/Core/Scripting/SharedObject.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
     using CreateScriptFunc = Ref<Script> (*)();
 
-    class ScriptManager : public Singleton<ScriptManager>
-    {
+    class ScriptManager : public Singleton<ScriptManager> {
         SINGLETON(ScriptManager)
     public:
         S_METHOD_DEF(Unit, Initialize, ());
         S_METHOD_DEF(Unit, Terminate, ());
 
-        S_METHOD_DEF(Unit, PrepareScripts, (const Path& scene_path));
-        S_METHOD_DEF(Unit, ReloadSripts, ());
+        S_METHOD_DEF(Unit, ReloadScripts, (Ref<Scene> scene));
 
     private:
         ScriptManager()  = default;
@@ -31,9 +28,7 @@ namespace DE
         bool        NeedToCompile(const Path& path);
         std::string AvailableName();
 
-        const std::string kName1 = "ScriptLibrary1";
-        const std::string kName2 = "ScriptLibrary2";
-        std::vector<Path> m_Scripts;
-        std::string       m_LibraryName = kName1;
+        std::unordered_set<Path> m_CompiledScripts;
+        std::string              m_LibraryName;
     };
 }  // namespace DE

@@ -1,24 +1,20 @@
 #include "DummyEditor/EditorLayer.h"
-#include "DummyEditor/Scripting/ScriptManager.h"
-#include "DummyEditor/Scripting/Compiler.h"
 
-namespace DE
-{
-    class MovingSystem : public System
-    {
+#include "DummyEditor/Scripting/Compiler.h"
+#include "DummyEditor/Scripting/ScriptManager.h"
+
+namespace DE {
+    class MovingSystem : public System {
     public:
         MovingSystem() {}
         virtual std::string GetName() const override { return "MovingSystem"; }
 
-        void Update(float dt) override
-        {
-            for (auto entity : View<RenderMeshComponent, TransformComponent>())
-            {
+        void Update(float dt) override {
+            for (auto entity : View<RenderMeshComponent, TransformComponent>()) {
                 entity.Get<RenderMeshComponent>().mesh_instance->at<Mat4>(0) = entity.Get<TransformComponent>().GetTransform();
             }
 
-            for (auto entity : View<LightSource, TransformComponent>())
-            {
+            for (auto entity : View<LightSource, TransformComponent>()) {
                 entity.Get<LightSource>().position = entity.Get<TransformComponent>().translation;
             }
         }
@@ -26,8 +22,7 @@ namespace DE
 
     EditorLayer::EditorLayer() : Layer("EditorLayer") {}
 
-    void EditorLayer::OnAttach()
-    {
+    void EditorLayer::OnAttach() {
         Compiler::Initialize();
         ScriptManager::Initialize();
 
@@ -46,8 +41,7 @@ namespace DE
         m_Inspector.SetController(m_State.m_InspectorEnabled);
         m_Profiler.SetController(m_State.m_ProfilerEnabled);
     }
-    void EditorLayer::OnUpdate(float dt)
-    {
+    void EditorLayer::OnUpdate(float dt) {
         DE_PROFILE_SCOPE("EditorLayer OnUpdate");
 
         ProcessControlls(dt);
@@ -59,9 +53,7 @@ namespace DE
             Renderer::OnWindowResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
             m_SceneData.m_FrameBuffer->Bind();
         }
-
-        if (m_SceneData.m_Scene)
-        {
+        if (m_SceneData.m_Scene) {
             m_SceneData.m_Scene->OnViewPortResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
             m_SceneData.m_Scene->OnUpdate(dt);
             m_SceneData.m_Scene->Render();
@@ -69,12 +61,10 @@ namespace DE
 
         m_SceneData.m_FrameBuffer->UnBind();
     }
-    void EditorLayer::OnImGuiRender()
-    {
+    void EditorLayer::OnImGuiRender() {
         DE_PROFILE_SCOPE("EditorLayer OnImGuiRender");
 
-        if (m_SceneData.m_Scene)
-        {
+        if (m_SceneData.m_Scene) {
             m_Inspector.SetActiveEntity(m_SceneHierarchy.GetActiveEntity());
         }
 
@@ -89,16 +79,14 @@ namespace DE
         }
     }
 
-    void EditorLayer::OnDetach()
-    {
+    void EditorLayer::OnDetach() {
         ScriptManager::Terminate();
         Compiler::Terminate();
     }
 
     //*~~~EditorGUI~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    void EditorLayer::ShowDockingSpace()
-    {
+    void EditorLayer::ShowDockingSpace() {
         DE_PROFILE_SCOPE("DockSpace");
 
         static bool p_open = true;
@@ -125,30 +113,23 @@ namespace DE
 
         ImGui::End();
     }
-    void EditorLayer::ShowDockingSpaceTabBar()
-    {
-        if (ImGui::BeginMenuBar())
-        {
-            if (ImGui::BeginMenu("File"))
-            {
-                if (ImGui::MenuItem("Open Scene"))
-                {
+    void EditorLayer::ShowDockingSpaceTabBar() {
+        if (ImGui::BeginMenuBar()) {
+            if (ImGui::BeginMenu("File")) {
+                if (ImGui::MenuItem("Open Scene")) {
                     OpenSceneDialog();
                 }
-                if (ImGui::MenuItem("Save Scene"))
-                {
+                if (ImGui::MenuItem("Save Scene")) {
                     SaveSceneDialog();
                 }
                 ImGui::Separator();
-                if (ImGui::MenuItem("Exit"))
-                {
+                if (ImGui::MenuItem("Exit")) {
                     WindowCloseEvent event;
                     BroadcastEvent(event);
                 }
                 ImGui::EndMenu();
             }
-            if (ImGui::BeginMenu("View"))
-            {
+            if (ImGui::BeginMenu("View")) {
                 ImGui::MenuItem("Viewport", NULL, &m_State.m_ViewportEnabled);
                 ImGui::MenuItem("Scene Hierarchy", NULL, &m_State.m_SceneHierarchyEnabled);
                 ImGui::MenuItem("Inspector", NULL, &m_State.m_InspectorEnabled);
@@ -162,30 +143,42 @@ namespace DE
 
     //*~~~EditorFunctionality~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    void EditorLayer::OpenSceneDialog()
-    {
+    void EditorLayer::OpenSceneDialog() {
         Path path = FileSystem::OpenFileDialog("Dummy Engine Scene (*.yml)", "*.yml");
-        if (path != Path())
-        {
+        if (path != Path()) {
+            if (m_SceneData.m_Scene) {
+                CloseScene();
+            }
             OpenScene(path);
         }
     }
-    void EditorLayer::SaveSceneDialog()
-    {
-        Path path = FileSystem::SaveFileDialog("Dummy Engine Scene (*.yml)", "*.yml");
-        if (path != Path())
-        {
-            SaveScene(path);
+    void EditorLayer::SaveSceneDialog() {
+        if (m_SceneData.m_Scene) {
+            Path path = FileSystem::SaveFileDialog("Dummy Engine Scene (*.yml)", "*.yml");
+            if (path != Path()) {
+                SaveScene(path);
+            }
         }
     }
-    void EditorLayer::OpenScene(const Path& scene_path)
-    {
-        m_SceneData.m_Scene = nullptr;
-        m_SceneHierarchy.SetActiveScene(nullptr);
-
-        ScriptManager::PrepareScripts(scene_path);
+    void EditorLayer::OpenScene(const Path& scene_path) {
         SceneLoader::Load(m_SceneData.m_Scene, scene_path);
+        PrepareScene();
+        ScriptManager::ReloadScripts(m_SceneData.m_Scene);
+        LOG_INFO("EditorLayer", "Opened scene");
+    }
+    void EditorLayer::SaveScene(const Path& path) {
+        SceneLoader::Save(m_SceneData.m_Scene, path);
+    }
+    void EditorLayer::ReloadScripts() {}
+    void EditorLayer::CloseScene() {
+        m_Inspector.SetActiveEntity(Entity());
+        m_SceneHierarchy.UnSelect();
+        m_SceneHierarchy.SetActiveScene(nullptr);
+        m_SceneData.m_Scene = nullptr;
+        LOG_INFO("EditorLayer", "Closed scene");
+    }
 
+    void EditorLayer::PrepareScene() {
         m_EditorCamera = m_SceneData.m_Scene->CreateHiddenEntity("Editor Camera");
         m_EditorCamera.AddComponent<FPSCamera>();
         m_EditorCamera.AddComponent<ScriptComponent>(ScriptEngine::CreateScript(g_EditorScriptNameToId["EditorCameraController"]));
@@ -195,41 +188,35 @@ namespace DE
         m_SceneHierarchy.UnSelect();
         m_Inspector.SetActiveEntity(m_SceneHierarchy.GetActiveEntity());
     }
-    void EditorLayer::SaveScene(const Path& path) { SceneLoader::Save(m_SceneData.m_Scene, path); }
 
-    void EditorLayer::ProcessControlls(float dt)
-    {
+    void EditorLayer::ProcessControlls(float dt) {
         DE_PROFILE_SCOPE("ProcessControlls");
 
-        if (Input::KeyDown(Key::LeftControl))
-        {
-            if (Input::KeyReleased(Key::GraveAccent) && m_SceneData.m_Scene != nullptr)
-            {
+        if (Input::KeyDown(Key::LeftControl)) {
+            if (Input::KeyReleased(Key::GraveAccent) && m_SceneData.m_Scene != nullptr) {
                 m_State.m_InputState = (m_State.m_InputState == InputState::ViewPort ? InputState::NonSpecified : InputState::ViewPort);
                 SetMouseLockToggleEvent event;
                 BroadcastEvent(event);
             }
-            if (m_State.m_InputState != InputState::ViewPort)
-            {
-                if (Input::KeyReleased(Key::O))
-                {
+            if (m_State.m_InputState != InputState::ViewPort) {
+                if (Input::KeyReleased(Key::O)) {
                     OpenSceneDialog();
                 }
-                if (Input::KeyReleased(Key::S))
-                {
+                if (Input::KeyReleased(Key::S)) {
                     SaveSceneDialog();
+                }
+                if (Input::KeyReleased(Key::X)) {
+                    if (m_SceneData.m_Scene) {
+                        CloseScene();
+                    }
                 }
             }
         }
-        if (m_EditorCamera.Valid())
-        {
+        if (m_EditorCamera.Valid()) {
             bool& active = m_EditorCamera.Get<ScriptComponent>()->GetField("active").Get<bool>();
-            if (m_State.m_InputState == InputState::ViewPort)
-            {
+            if (m_State.m_InputState == InputState::ViewPort) {
                 active = true;
-            }
-            else
-            {
+            } else {
                 active = false;
             }
         }

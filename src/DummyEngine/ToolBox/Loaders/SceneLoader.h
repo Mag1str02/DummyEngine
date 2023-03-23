@@ -1,24 +1,20 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
-#include "DummyEngine/Core/Scene/Components.h"
-#include "DummyEngine/Core/Scene/Scene.h"
-
 #include <yaml-cpp/yaml.h>
 
-namespace DE
-{
+#include "DummyEngine/Core/Scene/Components.h"
+#include "DummyEngine/Core/Scene/Scene.h"
+#include "DummyEngine/Utils/Base.h"
+
+namespace DE {
     YAML::Node NodeVec2(Vec2 vec);
     YAML::Node NodeVec3(Vec3 vec);
     YAML::Node NodeVec4(Vec4 vec);
 
-    class SceneLoader
-    {
+    class SceneLoader {
     public:
         static void Save(Ref<Scene> scene, const Path& path);
         static void Load(Ref<Scene>& scene, const Path& path);
-
-        static std::vector<ScriptAsset> GetScriptAssets(const Path& path);
 
     private:
         // TODO: Think how user can create custom load and save functions for own components.

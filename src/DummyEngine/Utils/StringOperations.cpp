@@ -1,4 +1,5 @@
 #include "DummyEngine/Utils/StringOperations.h"
+#include "DummyEngine/Utils/Base.h"
 
 bool StartsWith(std::string_view input, std::string_view text)
 {
@@ -285,6 +286,7 @@ template <> size_t StrLen<unsigned long long>(const unsigned long long& value)
 }
 template <> size_t StrLen<std::string>(const std::string& value) { return value.size(); }
 template <> size_t StrLen<std::string_view>(const std::string_view& value) { return value.size(); }
+template <> size_t StrLen<DE::Path>(const DE::Path& value) { return value.native().size(); }
 
 size_t StrLen(const char* str) { return std::strlen(str); }
 
@@ -411,6 +413,13 @@ template <> void Append<std::string_view>(std::string& input, const std::string_
     for (size_t i = 0; i < value.size(); ++i)
     {
         input[start + i] = value[i];
+    }
+}
+template <> void Append<DE::Path>(std::string& input, const DE::Path& value, size_t start)
+{
+    for (size_t i = 0; i < value.native().size(); ++i)
+    {
+        input[start + i] = value.native()[i];
     }
 }
 

@@ -1,16 +1,12 @@
 #include "DummyEditor/Scripting/Compiler.h"
 
-namespace DE
-{
-    class CompilerImpl
-    {
+namespace DE {
+    class CompilerImpl {
     public:
-        bool Compile(const Path& source, const Path& destination)
-        {
-            LOG_INFO(StrCat("Compiling: ", source.string()), "Compiler");
-            if (!fs::exists(source) || destination.filename().empty())
-            {
-                LOG_WARNING(StrCat("Skipping: ", source.string()), "Compiler");
+        bool Compile(const Path& source, const Path& destination) {
+            LOG_INFO("Compiler", "Compiling file: ", source);
+            if (!fs::exists(source) || destination.filename().empty()) {
+                LOG_WARNING("Compiler", "Skipped file compilation: ", source);
                 return false;
             }
 
@@ -20,7 +16,7 @@ namespace DE
 
             std::string compile_command;
             compile_command.append(GetCompiler());
-            compile_command.append(" -c");
+            compile_command.append(" -c -std=c++20");
             compile_command.append(AddIncludeDirArguments());
             compile_command.append(AddSourceArgument(source));
             compile_command.append(AddDestinationArgument(source, destination));
@@ -28,23 +24,19 @@ namespace DE
 
             int res = system(compile_command.c_str());
 
-            LOG_INFO(StrCat("Compiled: ", source.string()), "Compiler");
+            LOG_INFO("Compiler", "Compiled: ", source);
             return res == 0;
         }
-        bool Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name)
-        {
-            LOG_INFO(StrCat("Linking: ", library_name), "Compiler");
-            for (const auto& source : sources)
-            {
-                if (!fs::exists(source))
-                {
-                    LOG_ERROR(StrCat("Source missing: ", source.string()), "Compiler");
+        bool Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name) {
+            LOG_INFO("Compiler", "Linking: ", library_name);
+            for (const auto& source : sources) {
+                if (!fs::exists(source)) {
+                    LOG_ERROR("Compiler", "Source missing: ", source);
                     return false;
                 }
             }
-            if (!fs::is_directory(destination))
-            {
-                LOG_ERROR(StrCat("Wrong destination: ", destination.string()), "Compiler");
+            if (!fs::is_directory(destination)) {
+                LOG_ERROR("Compiler", "Wrong destination: ", destination.string());
                 return false;
             }
             FileSystem::CreateDirectory(destination);
@@ -59,7 +51,7 @@ namespace DE
 
             int res = system(link_command.c_str());
 
-            LOG_INFO(StrCat("Linked: ", library_name), "Compiler");
+            LOG_INFO("Compiler", "Linked: ", library_name);
             return res == 0;
         }
         void AddIncludeDir(const Path& dir) { m_IncludeDirs.insert(dir); }
@@ -68,18 +60,15 @@ namespace DE
         void DeleteLinkLibrary(const Path& library) { m_Libraries.erase(library); }
 
     private:
-        std::string GetCompiler()
-        {
+        std::string GetCompiler() {
             // TODO: Get compiler from config.
             return "g++";
         }
         void FixSlash(std::string& command) { std::replace(command.begin(), command.end(), '\\', '/'); }
 
-        std::string AddIncludeDirArguments()
-        {
+        std::string AddIncludeDirArguments() {
             std::string res;
-            for (const auto& dir : m_IncludeDirs)
-            {
+            for (const auto& dir : m_IncludeDirs) {
                 res.append(" -I ");
                 res.append(dir.string());
             }
@@ -88,25 +77,20 @@ namespace DE
         std::string AddSourceArgument(const Path& source) { return " " + source.string(); }
         std::string AddDestinationArgument(const Path& source, const Path& destination) { return " -o " + destination.string(); }
 
-        std::string AddSourcesArguments(const std::vector<Path>& sources)
-        {
+        std::string AddSourcesArguments(const std::vector<Path>& sources) {
             std::string res;
-            for (const auto& source : sources)
-            {
+            for (const auto& source : sources) {
                 res.append(" ");
                 res.append(source.string());
             }
             return res;
         }
-        std::string AddLinkArgs()
-        {
+        std::string AddLinkArgs() {
             std::string res;
-            for (auto lib : m_Libraries)
-            {
+            for (auto lib : m_Libraries) {
                 std::string name = lib.stem().string();
                 lib.remove_filename();
-                if (lib.empty())
-                {
+                if (lib.empty()) {
                     lib = ".";
                 }
                 res.append(" -L ");
@@ -116,8 +100,7 @@ namespace DE
             }
             return res;
         }
-        std::string AddPathDLL(const Path& destination, const std::string& library_name)
-        {
+        std::string AddPathDLL(const Path& destination, const std::string& library_name) {
             return " -o " + destination.string() + "/" + library_name + ".dll";
         }
 
@@ -127,24 +110,34 @@ namespace DE
 
     Scope<CompilerImpl> Compiler::m_Impl;
 
-    void Compiler::Initialize()
-    {
+    void Compiler::Initialize() {
         DE_ASSERT(!m_Impl, "Compiler already started.");
         m_Impl = CreateScope<CompilerImpl>();
         AddIncludeDir("../src");
         AddIncludeDir("../src/DummyEngine/Libs/GLM");
         AddLinkLibrary("DummyEngineLib");
     }
-    void Compiler::Terminate() { m_Impl = nullptr; }
+    void Compiler::Terminate() {
+        m_Impl = nullptr;
+    }
 
-    bool Compiler::Compile(const Path& source, const Path& destination) { return m_Impl->Compile(source, destination); }
-    bool Compiler::Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name)
-    {
+    bool Compiler::Compile(const Path& source, const Path& destination) {
+        return m_Impl->Compile(source, destination);
+    }
+    bool Compiler::Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name) {
         return m_Impl->Link(sources, destination, library_name);
     }
-    void Compiler::AddIncludeDir(const Path& dir) { m_Impl->AddIncludeDir(dir); }
-    void Compiler::DeleteIncludeDir(const Path& dir) { m_Impl->DeleteIncludeDir(dir); }
-    void Compiler::AddLinkLibrary(const Path& library) { m_Impl->AddLinkLibrary(library); }
-    void Compiler::DeleteLinkLibrary(const Path& library) { m_Impl->DeleteLinkLibrary(library); }
+    void Compiler::AddIncludeDir(const Path& dir) {
+        m_Impl->AddIncludeDir(dir);
+    }
+    void Compiler::DeleteIncludeDir(const Path& dir) {
+        m_Impl->DeleteIncludeDir(dir);
+    }
+    void Compiler::AddLinkLibrary(const Path& library) {
+        m_Impl->AddLinkLibrary(library);
+    }
+    void Compiler::DeleteLinkLibrary(const Path& library) {
+        m_Impl->DeleteLinkLibrary(library);
+    }
 
 };  // namespace DE
