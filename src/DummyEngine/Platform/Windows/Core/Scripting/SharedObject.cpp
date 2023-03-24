@@ -40,7 +40,7 @@ namespace DE {
             m_Directory = directory;
             m_Name      = name;
             m_Valid     = true;
-            LOG_INFO("SharedObject", "Loaded library (", (directory / (name + ".dll")).string(), ")");
+            LOG_INFO("SharedObject", "Loaded library (", RelativeToExecutable(directory / (name + ".dll")), ")");
             return true;
         }
         void Invalidate() { m_Valid = false; }

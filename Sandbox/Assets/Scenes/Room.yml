@@ -1,5 +1,5 @@
 Scene:
-  Name: NewScene
+  Name: Scene
   Assets:
     Models:
       CubeModel:
@@ -7,16 +7,16 @@ Scene:
         Compress: true
         FlipUV: false
         UUID: 6557233926725796949
-    Shaders:
-      TexturedPhong:
-        UUID: 3566111628970667214
-        Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
-        Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
     Textures:
       Sky:
         Path: Assets\Textures\Skyboxes\Sky.png
         FlipUV: false
         UUID: 4297990474523151207
+    Shaders:
+      TexturedPhong:
+        UUID: 3566111628970667214
+        Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
+        Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
     Scripts:
       SquareMovement:
         Path: Assets\Scripts\BasicScripts\SquareMovement.cpp

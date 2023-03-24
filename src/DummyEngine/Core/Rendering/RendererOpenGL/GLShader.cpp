@@ -124,7 +124,7 @@ namespace DE {
 
         std::ifstream fin(path_to_file);
         if (!fin.is_open()) {
-            LOG_ERROR("GLShader", "Can't open shader source file (", path_to_file.string(), ")");
+            LOG_ERROR("GLShader", "Can't open shader source file (", RelativeToExecutable(path_to_file), ")");
             return source_string;
         }
         try {
@@ -132,7 +132,7 @@ namespace DE {
                 source_string.append(line + "\n");
             }
         } catch (...) {
-            LOG_ERROR("GLShader", "Failed to read shader source file (", path_to_file.string(), ")");
+            LOG_ERROR("GLShader", "Failed to read shader source file (", RelativeToExecutable(path_to_file), ")");
             return source_string;
         }
         return source_string;
@@ -154,7 +154,7 @@ namespace DE {
             LOG_ERROR("GLShader", "Failed to compile shader (", part.path.string(), ")\n", reinterpret_cast<const char*>(&infoLog));
             return;
         }
-        LOG_INFO("GLShader", "GLShader source file successfully compiled (", part.path.string(), ")");
+        LOG_INFO("GLShader", "File (", RelativeToExecutable(part.path), ") compiled");
 
         glAttachShader(m_ShaderId, shader_part);
     }

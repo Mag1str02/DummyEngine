@@ -1,5 +1,5 @@
 Scene:
-  Name: NewScene
+  Name: Scene
   Assets:
     Models:
       CubeModel:
@@ -12,16 +12,16 @@ Scene:
         Compress: false
         FlipUV: true
         UUID: 18245820808254477624
-    Shaders:
-      TexturedPhong:
-        UUID: 3566111628970667214
-        Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
-        Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
     Textures:
       Sky:
         Path: Assets\Textures\Skyboxes\Sky.png
         FlipUV: false
         UUID: 4297990474523151207
+    Shaders:
+      TexturedPhong:
+        UUID: 3566111628970667214
+        Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
+        Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
     Scripts:
       SquareMovement:
         Path: Assets\Scripts\BasicScripts\SquareMovement.cpp
@@ -34,7 +34,7 @@ Scene:
               Tag: LampBlue
               UUID: 5169756284600285649
               Transformation:
-                Translation: [-13.7471361, 3, -9]
+                Translation: [22, 3, 4.99738598]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -48,7 +48,7 @@ Scene:
                 Diffuse: [0, 0, 1]
                 Specular: [0, 0, 1]
                 Direction: [0, -1, 0]
-                Position: [-13.7471361, 3, -9]
+                Position: [22, 3, 4.98980236]
                 CLQ: [1, 0.00700000022, 0.000199999995]
                 InnerCone: 0
                 OuterCone: 0
@@ -57,14 +57,14 @@ Scene:
                 Fields:
                   left_back: [22, 9]
                   offset: 8
-                  cycle_time: 16
                   right_front: [-25, -9]
                   height: 3
+                  cycle_time: 16
           - Entity:
               Tag: LampGreen
               UUID: 7834402933725978860
               Transformation:
-                Translation: [7.67911339, 3, -1]
+                Translation: [-20, 3, -1]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -78,7 +78,7 @@ Scene:
                 Diffuse: [0, 1, 0]
                 Specular: [0, 1, 0]
                 Direction: [0, -1, 0]
-                Position: [7.67911339, 3, -1]
+                Position: [-20, 3, -1]
                 CLQ: [1, 0.0219999999, 0.00190000003]
                 InnerCone: 0
                 OuterCone: 0
@@ -87,14 +87,14 @@ Scene:
                 Fields:
                   left_back: [18, -1]
                   offset: 4
-                  cycle_time: 8
                   right_front: [-20, -1]
                   height: 3
+                  cycle_time: 8
           - Entity:
               Tag: LampRed
               UUID: 7834405913725978860
               Transformation:
-                Translation: [10.7471361, 3, 9]
+                Translation: [-25, 3, -4.99738598]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -108,7 +108,7 @@ Scene:
                 Diffuse: [1, 0, 0]
                 Specular: [1, 0, 0]
                 Direction: [0, -1, 0]
-                Position: [10.7471361, 3, 9]
+                Position: [-25, 3, -4.98980236]
                 CLQ: [1, 0.0219999999, 0.00190000003]
                 InnerCone: 0
                 OuterCone: 0
@@ -117,9 +117,9 @@ Scene:
                 Fields:
                   left_back: [22, 9]
                   offset: 0
-                  cycle_time: 16
                   right_front: [-25, -9]
                   height: 3
+                  cycle_time: 16
     - Node:
         Name: Objects
         Childs:

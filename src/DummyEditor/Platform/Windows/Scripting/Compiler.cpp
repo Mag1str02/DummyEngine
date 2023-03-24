@@ -23,7 +23,7 @@ namespace DE {
 
             int res = system(compile_command.c_str());
 
-            LOG_INFO("Compiler", "Compiled file (", source, ")");
+            LOG_INFO("Compiler", "Compiled file (", RelativeToExecutable(source), ")");
             return res == 0;
         }
         bool Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name) {

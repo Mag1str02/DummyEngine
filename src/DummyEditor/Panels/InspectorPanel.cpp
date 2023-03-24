@@ -14,10 +14,10 @@ namespace DE {
         switch (type) {
             case ScriptFieldType::Double: return ImGuiDataType_Double;
             case ScriptFieldType::Float: return ImGuiDataType_Float;
-            case ScriptFieldType::I32: return ImGuiDataType_S32;
-            case ScriptFieldType::UI32: return ImGuiDataType_U32;
-            case ScriptFieldType::I64: return ImGuiDataType_S64;
-            case ScriptFieldType::UI64: return ImGuiDataType_U64;
+            case ScriptFieldType::S32: return ImGuiDataType_S32;
+            case ScriptFieldType::U32: return ImGuiDataType_U32;
+            case ScriptFieldType::S64: return ImGuiDataType_S64;
+            case ScriptFieldType::U64: return ImGuiDataType_U64;
             default: return ImGuiDataType_COUNT;
         }
     }
@@ -42,10 +42,10 @@ namespace DE {
                             switch (field.GetType()) {
                                 case ScriptFieldType::Double:
                                 case ScriptFieldType::Float:
-                                case ScriptFieldType::I32:
-                                case ScriptFieldType::UI32:
-                                case ScriptFieldType::I64:
-                                case ScriptFieldType::UI64:
+                                case ScriptFieldType::S32:
+                                case ScriptFieldType::U32:
+                                case ScriptFieldType::S64:
+                                case ScriptFieldType::U64:
                                     ImGui::DragScalar(("##" + name.get()).c_str(), ScriptFieldTypeToImGuiType(field.GetType()), field.Get());
                                     break;
                                 case ScriptFieldType::Bool: ImGui::Checkbox(("##" + name.get()).c_str(), &field.Get<bool>()); break;

@@ -12,10 +12,19 @@ namespace DE {
     public:
         S_METHOD_DEF(Unit, LoadScripts, (const std::vector<ScriptAsset>& scripts));
         S_METHOD_DEF(Unit, UnloadScripts, (const std::vector<ScriptAsset>& scripts));
-        S_METHOD_DEF(Unit, ReloadScripts, (Ref<Scene> scene));
+        S_METHOD_DEF(Unit, ReloadScripts, (const std::vector<ScriptAsset>& scripts, Ref<Scene> scene));
         S_METHOD_DEF(Unit, AttachScripts, (Ref<Scene> scene));
 
     private:
+        using ScriptStates = std::unordered_map<Entity, std::unordered_map<std::string, Script::Field>>;
+
+        ScriptStates SaveSciptStates(Ref<Scene> scene);
+        void         RestoreSciptStates(const ScriptStates& states, Ref<Scene> scene);
+
+        void* Clone(const Script::Field& field) const;
+        void  Restore(ScriptComponent& script, const std::string& name, const Script::Field& field) const;
+        void  Delete(const Script::Field& field) const;
+
         void LoadEditorLibrary();
         void LoadEditorScripts();
 

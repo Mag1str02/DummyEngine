@@ -24,7 +24,7 @@ namespace DE {
 
     class SceneLoader {
     public:
-        static void                   Save(Ref<Scene> scene, const Path& path);
+        static void                   Save(Ref<Scene> scene, const SceneAssets& assets, const Path& path);
         static Ref<Scene>             Instantiate(const SceneSerializationData& data);
         static SceneSerializationData LoadSerializationData(const Path& path);
 
@@ -32,12 +32,13 @@ namespace DE {
         template <typename ComponentType> static void SaveComponent(YAML::Node& n_Entity, Entity entity);
         template <typename ComponentType> static void LoadComponent(Ref<Scene> scene, YAML::Node n_Component, Entity& entity);
 
-        static YAML::Node SaveModels();
-        static YAML::Node SaveScripts();
-        static YAML::Node SaveTextures();
-        static YAML::Node SaveShaders();
-        static YAML::Node SaveAssets();
+        static YAML::Node SaveModels(const SceneAssets& assets);
+        static YAML::Node SaveScripts(const SceneAssets& assets);
+        static YAML::Node SaveTextures(const SceneAssets& assets);
+        static YAML::Node SaveShaders(const SceneAssets& assets);
+        static YAML::Node SaveAssets(const SceneAssets& assets);
         static YAML::Node SaveNode(Ref<SceneHierarchyNode> node);
+        static YAML::Node SaveHierarchy(Ref<Scene> scene);
         static void       SaveEntity(YAML::Node& n_Entities, Entity entity);
 
         static void   LoadHierarchyNode(Ref<Scene> scene, YAML::Node n_Array, Ref<SceneHierarchyNode> load_to);

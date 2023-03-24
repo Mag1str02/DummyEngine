@@ -9,10 +9,10 @@ namespace DE {
             case ScriptFieldType::Double: return "Double";
             case ScriptFieldType::Bool: return "Boolean";
             case ScriptFieldType::String: return "String";
-            case ScriptFieldType::I32: return "I32";
-            case ScriptFieldType::I64: return "I64";
-            case ScriptFieldType::UI32: return "UI32";
-            case ScriptFieldType::UI64: return "UI64";
+            case ScriptFieldType::S32: return "I32";
+            case ScriptFieldType::S64: return "I64";
+            case ScriptFieldType::U32: return "UI32";
+            case ScriptFieldType::U64: return "UI64";
             case ScriptFieldType::Vec2: return "Vec2";
             case ScriptFieldType::Vec3: return "Vec3";
             case ScriptFieldType::Vec4: return "Vec4";
@@ -35,16 +35,16 @@ namespace DE {
         return ScriptFieldType::String;
     }
     template <> ScriptFieldType TypeToScriptFieldType<int32_t>() {
-        return ScriptFieldType::I32;
+        return ScriptFieldType::S32;
     }
     template <> ScriptFieldType TypeToScriptFieldType<int64_t>() {
-        return ScriptFieldType::I64;
+        return ScriptFieldType::S64;
     }
     template <> ScriptFieldType TypeToScriptFieldType<uint32_t>() {
-        return ScriptFieldType::UI32;
+        return ScriptFieldType::U32;
     }
     template <> ScriptFieldType TypeToScriptFieldType<uint64_t>() {
-        return ScriptFieldType::UI64;
+        return ScriptFieldType::U64;
     }
     template <> ScriptFieldType TypeToScriptFieldType<Vec2>() {
         return ScriptFieldType::Vec2;
@@ -84,9 +84,23 @@ namespace DE {
         return FieldIterator(this, GetClassFields().end());
     }
     Script::Field::Field(ScriptFieldType type, void* ptr) : m_Type(type), m_Data(ptr) {}
+
     void Script::AttachToScene(WeakRef<Scene> scene, Entity entity) {
         m_Scene  = scene;
         m_Entity = entity;
+    }
+
+    ScriptFieldType Script::GetFieldType(const std::string& name) const {
+        if (GetClassFields().contains(name)) {
+            return GetClassFields().at(name).type;
+        }
+        return ScriptFieldType::None;
+    }
+    bool Script::HasField(const std::string& name) const {
+        return GetClassFields().contains(name);
+    }
+    bool Script::AttachedToScene() const {
+        return !m_Scene.expired() && m_Entity.Valid();
     }
     Entity Script::GetEntityByName(const std::string& name) const {
         auto scene = m_Scene.lock();

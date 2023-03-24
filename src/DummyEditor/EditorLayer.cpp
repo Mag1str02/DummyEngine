@@ -177,9 +177,11 @@ namespace DE {
         LOG_INFO("EditorLayer", "Opened scene");
     }
     void EditorLayer::SaveScene(const Path& path) {
-        // SceneLoader::Save(m_SceneData.m_Scene, path);
+        SceneLoader::Save(m_SceneData.m_Scene, m_SceneData.m_Assets, path);
     }
-    void EditorLayer::ReloadScripts() {}
+    void EditorLayer::ReloadScripts() {
+        ScriptManager::ReloadScripts(m_SceneData.m_Assets.scripts, m_SceneData.m_Scene);
+    }
     void EditorLayer::CloseScene() {
         m_Inspector.SetActiveEntity(Entity());
         m_SceneHierarchy.UnSelect();
@@ -249,6 +251,11 @@ namespace DE {
                 if (Input::KeyReleased(Key::X)) {
                     if (m_SceneData.m_Scene) {
                         CloseScene();
+                    }
+                }
+                if (Input::KeyReleased(Key::R)) {
+                    if (m_SceneData.m_Scene) {
+                        ReloadScripts();
                     }
                 }
             }

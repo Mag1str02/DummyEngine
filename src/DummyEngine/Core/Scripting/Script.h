@@ -13,10 +13,10 @@ namespace DE {
         Double,
         Bool,
         String,
-        I32,
-        I64,
-        UI32,
-        UI64,
+        S32,
+        S64,
+        U32,
+        U64,
         Vec2,
         Vec3,
         Vec4,
@@ -36,10 +36,12 @@ namespace DE {
     public:
         class Field {
         public:
+            Field() = default;
             Field(ScriptFieldType type, void* ptr);
-            template <typename T> T& Get();
-            ScriptFieldType          GetType() const { return m_Type; }
-            void*                    Get() { return m_Data; }
+            template <typename T> T&       Get();
+            template <typename T> const T& Get() const;
+            ScriptFieldType                GetType() const { return m_Type; }
+            void*                          Get() const { return m_Data; }
 
         private:
             ScriptFieldType m_Type;
@@ -76,7 +78,10 @@ namespace DE {
         FieldIterator end();
 
         template <typename T> T& GetField(const std::string& name);
+        ScriptFieldType          GetFieldType(const std::string& name) const;
+        bool                     HasField(const std::string& name) const;
         void                     AttachToScene(WeakRef<Scene> scene, Entity entity);
+        bool                     AttachedToScene() const;
 
     protected:
         virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const = 0;
@@ -118,6 +123,12 @@ protected:                                                                      
             StrCat("Wrong field type (", ScriptFieldTypeToString(TypeToScriptFieldType<T>()), ") expected (", ScriptFieldTypeToString(m_Type), ")"));
         return *(T*)m_Data;
     }
+    template <typename T> const T& Script::Field::Get() const {
+        DE_ASSERT(
+            m_Type == TypeToScriptFieldType<T>(),
+            StrCat("Wrong field type (", ScriptFieldTypeToString(TypeToScriptFieldType<T>()), ") expected (", ScriptFieldTypeToString(m_Type), ")"));
+        return *(T*)m_Data;
+    }
     template <typename T> T& Script::GetField(const std::string& name) {
         DE_ASSERT(GetClassFields().contains(name), "Wrong field name");
         DE_ASSERT(GetClassFields().at(name).type == TypeToScriptFieldType<T>(),
@@ -128,7 +139,6 @@ protected:                                                                      
                          ")"));
         return *(T*)((char*)this + GetClassFields().at(name).offset);
     }
-
     template <typename T> T& Script::Add(const T& t) {
         DE_ASSERT(m_Entity.Valid(), "Using invalid entity in script");
         return m_Entity.Add<T>(t);

@@ -124,7 +124,7 @@ namespace DE {
         S_METHOD_DEF(ScriptComponent, CreateScript, (UUID id));
         S_METHOD_DEF(Script*, GetScript, (const ScriptComponent& compoent));
         S_METHOD_DEF(UUID, GetUUID, (const ScriptComponent& compoent));
-        S_METHOD_DEF(bool, Valid, (const ScriptComponent& compoent));
+        S_METHOD_DEF(bool, ValidComponent, (const ScriptComponent& compoent));
         S_METHOD_DEF(Unit, Destroy, (const ScriptComponent& compoent));
 
     private:

@@ -42,212 +42,199 @@ namespace DE {
         return res;
     }
 
-    // YAML::Node NodeScriptField(ScriptField& field) {
-    //     switch (field.GetType()) {
-    //         case ScriptFieldType::Float: return YAML::Node(field.Get<float>());
-    //         case ScriptFieldType::Double: return YAML::Node(field.Get<double>());
-    //         case ScriptFieldType::Bool: return YAML::Node(field.Get<bool>());
-    //         case ScriptFieldType::String: return YAML::Node(field.Get<std::string>());
-    //         case ScriptFieldType::I32: return YAML::Node(field.Get<int32_t>());
-    //         case ScriptFieldType::I64: return YAML::Node(field.Get<int64_t>());
-    //         case ScriptFieldType::UI32: return YAML::Node(field.Get<uint32_t>());
-    //         case ScriptFieldType::UI64: return YAML::Node(field.Get<uint64_t>());
-    //         case ScriptFieldType::Vec2: return NodeVec2(field.Get<Vec2>());
-    //         case ScriptFieldType::Vec3: return NodeVec3(field.Get<Vec3>());
-    //         case ScriptFieldType::Vec4: return NodeVec4(field.Get<Vec4>());
-    //         default: return YAML::Node();
-    //     }
-    // }
+    YAML::Node NodeScriptField(Script::Field& field) {
+        switch (field.GetType()) {
+            case ScriptFieldType::Float: return YAML::Node(field.Get<float>());
+            case ScriptFieldType::Double: return YAML::Node(field.Get<double>());
+            case ScriptFieldType::Bool: return YAML::Node(field.Get<bool>());
+            case ScriptFieldType::String: return YAML::Node(field.Get<std::string>());
+            case ScriptFieldType::S32: return YAML::Node(field.Get<int32_t>());
+            case ScriptFieldType::S64: return YAML::Node(field.Get<int64_t>());
+            case ScriptFieldType::U32: return YAML::Node(field.Get<uint32_t>());
+            case ScriptFieldType::U64: return YAML::Node(field.Get<uint64_t>());
+            case ScriptFieldType::Vec2: return NodeVec2(field.Get<Vec2>());
+            case ScriptFieldType::Vec3: return NodeVec3(field.Get<Vec3>());
+            case ScriptFieldType::Vec4: return NodeVec4(field.Get<Vec4>());
+            default: return YAML::Node();
+        }
+    }
 
-    // template <typename ComponentType> void SceneLoader::SaveComponent(YAML::Node& n_Entity, Entity entity) {
-    //     // TODO: Different names for different unknown components...
-    //     DE_ASSERT(false, "Trying to save unknown component.");
-    // }
-    // template <> void SceneLoader::SaveComponent<TagComponent>(YAML::Node& n_Entity, Entity entity) {
-    //     if (entity.Has<TagComponent>()) {
-    //         n_Entity["Tag"] = entity.Get<TagComponent>().tag;
-    //     }
-    // }
-    // template <> void SceneLoader::SaveComponent<IdComponent>(YAML::Node& n_Entity, Entity entity) {
-    //     // TODO: Save UUID in hex format.
-    //     if (entity.Has<IdComponent>()) {
-    //         n_Entity["UUID"] = (uint64_t)entity.Get<IdComponent>();
-    //     }
-    // }
-    // template <> void SceneLoader::SaveComponent<TransformComponent>(YAML::Node& n_Entity, Entity entity) {
-    //     if (entity.Has<TransformComponent>()) {
-    //         n_Entity["Transformation"]["Translation"]       = NodeVec3(entity.Get<TransformComponent>().translation);
-    //         n_Entity["Transformation"]["TranslationOffset"] = NodeVec3(entity.Get<TransformComponent>().translation_offset);
-    //         n_Entity["Transformation"]["Rotation"]          = NodeVec3(entity.Get<TransformComponent>().rotation);
-    //         n_Entity["Transformation"]["RotationOffset"]    = NodeVec3(entity.Get<TransformComponent>().rotation_offet);
-    //         n_Entity["Transformation"]["Scale"]             = NodeVec3(entity.Get<TransformComponent>().scale);
-    //         n_Entity["Transformation"]["ScaleOffset"]       = NodeVec3(entity.Get<TransformComponent>().scale_offset);
-    //     }
-    // }
-    // template <> void SceneLoader::SaveComponent<RenderMeshComponent>(YAML::Node& n_Entity, Entity entity) {
-    //     if (entity.Has<RenderMeshComponent>()) {
-    //         n_Entity["RenderModel"] = (uint64_t)entity.Get<RenderMeshComponent>().id;
-    //     }
-    // }
-    // template <> void SceneLoader::SaveComponent<ShaderComponent>(YAML::Node& n_Entity, Entity entity) {
-    //     if (entity.Has<ShaderComponent>()) {
-    //         n_Entity["Shader"] = (uint64_t)entity.Get<ShaderComponent>().id;
-    //     }
-    // }
-    // template <> void SceneLoader::SaveComponent<FPSCamera>(YAML::Node& n_Entity, Entity entity) {
-    //     if (entity.Has<FPSCamera>()) {
-    //         n_Entity["FPSCamera"]["FOV"]       = entity.Get<FPSCamera>().m_FOV;
-    //         n_Entity["FPSCamera"]["Aspect"]    = entity.Get<FPSCamera>().m_Aspect;
-    //         n_Entity["FPSCamera"]["NearPlane"] = entity.Get<FPSCamera>().m_NearPlane;
-    //         n_Entity["FPSCamera"]["FarPlane"]  = entity.Get<FPSCamera>().m_FarPlane;
-    //         n_Entity["FPSCamera"]["Position"]  = NodeVec3(entity.Get<FPSCamera>().m_Position);
-    //         n_Entity["FPSCamera"]["Direction"] = NodeVec3(entity.Get<FPSCamera>().m_Direction);
-    //     }
-    // }
-    // template <> void SceneLoader::SaveComponent<LightSource>(YAML::Node& n_Entity, Entity entity) {
-    //     if (entity.Has<LightSource>()) {
-    //         n_Entity["LightSource"]["Type"]      = LightSourceTypeToString(entity.Get<LightSource>().type);
-    //         n_Entity["LightSource"]["Ambient"]   = NodeVec3(entity.Get<LightSource>().ambient);
-    //         n_Entity["LightSource"]["Diffuse"]   = NodeVec3(entity.Get<LightSource>().diffuse);
-    //         n_Entity["LightSource"]["Specular"]  = NodeVec3(entity.Get<LightSource>().specular);
-    //         n_Entity["LightSource"]["Direction"] = NodeVec3(entity.Get<LightSource>().direction);
-    //         n_Entity["LightSource"]["Position"]  = NodeVec3(entity.Get<LightSource>().position);
-    //         n_Entity["LightSource"]["CLQ"]       = NodeVec3(entity.Get<LightSource>().clq);
-    //         n_Entity["LightSource"]["InnerCone"] = entity.Get<LightSource>().inner_cone_cos;
-    //         n_Entity["LightSource"]["OuterCone"] = entity.Get<LightSource>().outer_cone_cos;
-    //     }
-    // }
-    // template <> void SceneLoader::SaveComponent<SkyBox>(YAML::Node& n_Entity, Entity entity) {
-    //     if (entity.Has<SkyBox>()) {
-    //         n_Entity["SkyBox"] = (uint64_t)entity.Get<SkyBox>().id;
-    //     }
-    // }
-    // template <> void SceneLoader::SaveComponent<ScriptComponent>(YAML::Node& n_Entity, Entity entity) {
-    //     if (entity.Has<ScriptComponent>()) {
-    //         auto& script_instance      = entity.Get<ScriptComponent>();
-    //         n_Entity["Script"]["UUID"] = (uint64_t)script_instance.ID();
-    //         for (auto& [name, field] : script_instance->GetFields()) {
-    //             n_Entity["Script"]["Fields"][name] = NodeScriptField(field);
-    //         }
-    //     }
-    // }
+    template <typename ComponentType> void SceneLoader::SaveComponent(YAML::Node& n_Entity, Entity entity) {
+        // TODO: Different names for different unknown components...
+        DE_ASSERT(false, "Trying to save unknown component.");
+    }
+    template <> void SceneLoader::SaveComponent<TagComponent>(YAML::Node& n_Entity, Entity entity) {
+        if (entity.Has<TagComponent>()) {
+            n_Entity["Tag"] = entity.Get<TagComponent>().tag;
+        }
+    }
+    template <> void SceneLoader::SaveComponent<IdComponent>(YAML::Node& n_Entity, Entity entity) {
+        // TODO: Save UUID in hex format.
+        if (entity.Has<IdComponent>()) {
+            n_Entity["UUID"] = (uint64_t)entity.Get<IdComponent>();
+        }
+    }
+    template <> void SceneLoader::SaveComponent<TransformComponent>(YAML::Node& n_Entity, Entity entity) {
+        if (entity.Has<TransformComponent>()) {
+            n_Entity["Transformation"]["Translation"]       = NodeVec3(entity.Get<TransformComponent>().translation);
+            n_Entity["Transformation"]["TranslationOffset"] = NodeVec3(entity.Get<TransformComponent>().translation_offset);
+            n_Entity["Transformation"]["Rotation"]          = NodeVec3(entity.Get<TransformComponent>().rotation);
+            n_Entity["Transformation"]["RotationOffset"]    = NodeVec3(entity.Get<TransformComponent>().rotation_offet);
+            n_Entity["Transformation"]["Scale"]             = NodeVec3(entity.Get<TransformComponent>().scale);
+            n_Entity["Transformation"]["ScaleOffset"]       = NodeVec3(entity.Get<TransformComponent>().scale_offset);
+        }
+    }
+    template <> void SceneLoader::SaveComponent<RenderMeshComponent>(YAML::Node& n_Entity, Entity entity) {
+        if (entity.Has<RenderMeshComponent>()) {
+            n_Entity["RenderModel"] = (uint64_t)entity.Get<RenderMeshComponent>().id;
+        }
+    }
+    template <> void SceneLoader::SaveComponent<ShaderComponent>(YAML::Node& n_Entity, Entity entity) {
+        if (entity.Has<ShaderComponent>()) {
+            n_Entity["Shader"] = (uint64_t)entity.Get<ShaderComponent>().id;
+        }
+    }
+    template <> void SceneLoader::SaveComponent<FPSCamera>(YAML::Node& n_Entity, Entity entity) {
+        if (entity.Has<FPSCamera>()) {
+            n_Entity["FPSCamera"]["FOV"]       = entity.Get<FPSCamera>().m_FOV;
+            n_Entity["FPSCamera"]["Aspect"]    = entity.Get<FPSCamera>().m_Aspect;
+            n_Entity["FPSCamera"]["NearPlane"] = entity.Get<FPSCamera>().m_NearPlane;
+            n_Entity["FPSCamera"]["FarPlane"]  = entity.Get<FPSCamera>().m_FarPlane;
+            n_Entity["FPSCamera"]["Position"]  = NodeVec3(entity.Get<FPSCamera>().m_Position);
+            n_Entity["FPSCamera"]["Direction"] = NodeVec3(entity.Get<FPSCamera>().m_Direction);
+        }
+    }
+    template <> void SceneLoader::SaveComponent<LightSource>(YAML::Node& n_Entity, Entity entity) {
+        if (entity.Has<LightSource>()) {
+            n_Entity["LightSource"]["Type"]      = LightSourceTypeToString(entity.Get<LightSource>().type);
+            n_Entity["LightSource"]["Ambient"]   = NodeVec3(entity.Get<LightSource>().ambient);
+            n_Entity["LightSource"]["Diffuse"]   = NodeVec3(entity.Get<LightSource>().diffuse);
+            n_Entity["LightSource"]["Specular"]  = NodeVec3(entity.Get<LightSource>().specular);
+            n_Entity["LightSource"]["Direction"] = NodeVec3(entity.Get<LightSource>().direction);
+            n_Entity["LightSource"]["Position"]  = NodeVec3(entity.Get<LightSource>().position);
+            n_Entity["LightSource"]["CLQ"]       = NodeVec3(entity.Get<LightSource>().clq);
+            n_Entity["LightSource"]["InnerCone"] = entity.Get<LightSource>().inner_cone_cos;
+            n_Entity["LightSource"]["OuterCone"] = entity.Get<LightSource>().outer_cone_cos;
+        }
+    }
+    template <> void SceneLoader::SaveComponent<SkyBox>(YAML::Node& n_Entity, Entity entity) {
+        if (entity.Has<SkyBox>()) {
+            n_Entity["SkyBox"] = (uint64_t)entity.Get<SkyBox>().id;
+        }
+    }
+    template <> void SceneLoader::SaveComponent<ScriptComponent>(YAML::Node& n_Entity, Entity entity) {
+        if (entity.Has<ScriptComponent>() && entity.Get<ScriptComponent>().Valid()) {
+            auto& script_instance      = entity.Get<ScriptComponent>();
+            n_Entity["Script"]["UUID"] = (uint64_t)script_instance.ID();
+            for (auto [name, field] : *script_instance) {
+                n_Entity["Script"]["Fields"][name.get()] = NodeScriptField(field);
+            }
+        }
+    }
 
-    // void SceneLoader::SaveEntity(YAML::Node& n_Entity, Entity entity) {
-    //     SaveComponent<TagComponent>(n_Entity, entity);
-    //     SaveComponent<IdComponent>(n_Entity, entity);
-    //     SaveComponent<TransformComponent>(n_Entity, entity);
-    //     SaveComponent<RenderMeshComponent>(n_Entity, entity);
-    //     SaveComponent<ShaderComponent>(n_Entity, entity);
-    //     SaveComponent<FPSCamera>(n_Entity, entity);
-    //     SaveComponent<LightSource>(n_Entity, entity);
-    //     SaveComponent<SkyBox>(n_Entity, entity);
-    //     SaveComponent<ScriptComponent>(n_Entity, entity);
-    // }
-    // YAML::Node SceneLoader::SaveTextures() {
-    //     YAML::Node                n_Textures;
-    //     std::vector<TextureAsset> textures = AssetManager::GetAllAssets<TextureAsset>();
-    //     std::sort(textures.begin(), textures.end(), [](const TextureAsset& a, const TextureAsset& b) { return a.name < b.name; });
+    void SceneLoader::SaveEntity(YAML::Node& n_Entity, Entity entity) {
+        SaveComponent<TagComponent>(n_Entity, entity);
+        SaveComponent<IdComponent>(n_Entity, entity);
+        SaveComponent<TransformComponent>(n_Entity, entity);
+        SaveComponent<RenderMeshComponent>(n_Entity, entity);
+        SaveComponent<ShaderComponent>(n_Entity, entity);
+        SaveComponent<FPSCamera>(n_Entity, entity);
+        SaveComponent<LightSource>(n_Entity, entity);
+        SaveComponent<SkyBox>(n_Entity, entity);
+        SaveComponent<ScriptComponent>(n_Entity, entity);
+    }
+    YAML::Node SceneLoader::SaveTextures(const SceneAssets& assets) {
+        YAML::Node n_Textures;
+        for (const auto& texture : assets.textures) {
+            YAML::Node n_Texture;
+            n_Textures[texture.name] = n_Texture;
+            n_Texture["Path"]        = RelativeToExecutable(texture.loading_props.path).string();
+            n_Texture["FlipUV"]      = texture.loading_props.flip_uvs;
+            n_Texture["UUID"]        = (uint64_t)texture.id;
+        }
+        return n_Textures;
+    }
+    YAML::Node SceneLoader::SaveModels(const SceneAssets& assets) {
+        YAML::Node n_Models;
+        for (const auto& model : assets.render_meshes) {
+            YAML::Node n_Model;
 
-    //     for (const auto& texture : textures) {
-    //         YAML::Node n_Texture;
+            n_Models[model.name] = n_Model;
+            n_Model["Path"]      = RelativeToExecutable(model.loading_props.path).string();
+            n_Model["Compress"]  = model.loading_props.compress;
+            n_Model["FlipUV"]    = model.loading_props.flip_uvs;
+            n_Model["UUID"]      = (uint64_t)model.id;
+        }
+        return n_Models;
+    }
+    YAML::Node SceneLoader::SaveScripts(const SceneAssets& assets) {
+        YAML::Node n_Scripts;
+        for (const auto& script : assets.scripts) {
+            YAML::Node n_Script;
+            n_Scripts[script.name] = n_Script;
+            n_Script["Path"]       = RelativeToExecutable(script.path).string();
+            n_Script["UUID"]       = (uint64_t)script.id;
+        }
+        return n_Scripts;
+    }
+    YAML::Node SceneLoader::SaveShaders(const SceneAssets& assets) {
+        YAML::Node n_Shaders;
+        for (const auto& shader : assets.shaders) {
+            YAML::Node n_Shader;
+            n_Shaders[shader.name] = n_Shader;
+            n_Shader["UUID"]       = (uint64_t)shader.id;
+            for (const auto& part : shader.parts) {
+                n_Shader[ShaderPartTypeToString(part.type)] = RelativeToExecutable(part.path).string();
+            }
+        }
+        return n_Shaders;
+    }
+    YAML::Node SceneLoader::SaveAssets(const SceneAssets& assets) {
+        YAML::Node res;
+        res["Models"]   = SaveModels(assets);
+        res["Textures"] = SaveTextures(assets);
+        res["Shaders"]  = SaveShaders(assets);
+        res["Scripts"]  = SaveScripts(assets);
+        return res;
+    }
+    YAML::Node SceneLoader::SaveNode(Ref<SceneHierarchyNode> node) {
+        YAML::Node res;
+        if (node->IsEntity()) {
+            YAML::Node entity = res["Entity"];
+            SaveEntity(entity, node->GetEntity());
+        } else {
+            res["Node"]["Name"] = node->GetName();
 
-    //         n_Textures[texture.name] = n_Texture;
-    //         n_Texture["Path"]        = RelativeToExecutable(texture.loading_props.path).string();
-    //         n_Texture["FlipUV"]      = texture.loading_props.flip_uvs;
-    //         n_Texture["UUID"]        = (uint64_t)texture.id;
-    //     }
+            auto childs = res["Node"]["Childs"];
+            for (auto child : *node) {
+                childs.push_back(SaveNode(child));
+            }
+        }
+        return res;
+    }
+    YAML::Node SceneLoader::SaveHierarchy(Ref<Scene> scene) {
+        YAML::Node res;
+        for (auto child : *scene->GetHierarchy()) {
+            res.push_back(SaveNode(child));
+        }
+        return res;
+    }
 
-    //     return n_Textures;
-    // }
-    // YAML::Node SceneLoader::SaveModels() {
-    //     YAML::Node                   n_Models;
-    //     std::vector<RenderMeshAsset> meshes = AssetManager::GetAllAssets<RenderMeshAsset>();
-    //     std::sort(meshes.begin(), meshes.end(), [](const RenderMeshAsset& a, const RenderMeshAsset& b) { return a.name < b.name; });
+    void SceneLoader::Save(Ref<Scene> scene, const SceneAssets& assets, const Path& path) {
+        YAML::Node    n_Root, n_Scene;
+        std::ofstream output_file;
 
-    //     for (const auto& model : meshes) {
-    //         YAML::Node n_Model;
+        output_file.open(path);
+        // TODO: Switch to throw.
+        DE_ASSERT(output_file.is_open(), "Failed to open file to save scene.");
 
-    //         n_Models[model.name] = n_Model;
-    //         n_Model["Path"]      = RelativeToExecutable(model.loading_props.path).string();
-    //         n_Model["Compress"]  = model.loading_props.compress;
-    //         n_Model["FlipUV"]    = model.loading_props.flip_uvs;
-    //         n_Model["UUID"]      = (uint64_t)model.id;
-    //     }
+        n_Root["Scene"]      = n_Scene;
+        n_Scene["Name"]      = scene->GetName();
+        n_Scene["Assets"]    = SaveAssets(assets);
+        n_Scene["Hierarchy"] = SaveHierarchy(scene);
 
-    //     return n_Models;
-    // }
-    // YAML::Node SceneLoader::SaveScripts() {
-    //     YAML::Node               n_Scripts;
-    //     std::vector<ScriptAsset> scripts = AssetManager::GetAllAssets<ScriptAsset>();
-    //     std::sort(scripts.begin(), scripts.end(), [](const ScriptAsset& a, const ScriptAsset& b) { return a.path < b.path; });
-
-    //     for (const auto& script : scripts) {
-    //         if (script.name == "") {
-    //             continue;
-    //         }
-    //         YAML::Node n_Script;
-
-    //         n_Scripts[script.name] = n_Script;
-    //         n_Script["Path"]       = RelativeToExecutable(script.path).string();
-    //         n_Script["UUID"]       = (uint64_t)script.id;
-    //     }
-
-    //     return n_Scripts;
-    // }
-    // YAML::Node SceneLoader::SaveShaders() {
-    //     YAML::Node               n_Shaders;
-    //     std::vector<ShaderAsset> shaders = AssetManager::GetAllAssets<ShaderAsset>();
-    //     std::sort(shaders.begin(), shaders.end(), [](const ShaderAsset& a, const ShaderAsset& b) { return a.name < b.name; });
-
-    //     for (const auto& shader : shaders) {
-    //         YAML::Node n_Shader;
-
-    //         n_Shaders[shader.name] = n_Shader;
-    //         n_Shader["UUID"]       = (uint64_t)shader.id;
-    //         for (const auto& part : shader.parts) {
-    //             n_Shader[ShaderPartTypeToString(part.type)] = RelativeToExecutable(part.path).string();
-    //         }
-    //     }
-    //     return n_Shaders;
-    // }
-    // YAML::Node SceneLoader::SaveNode(Ref<SceneHierarchyNode> node) {
-    //     YAML::Node res;
-    //     if (node->IsEntity()) {
-    //         YAML::Node entity = res["Entity"];
-    //         SaveEntity(entity, node->GetEntity());
-    //     } else {
-    //         res["Node"]["Name"] = node->GetName();
-
-    //         auto childs = res["Node"]["Childs"];
-    //         for (auto child : *node) {
-    //             childs.push_back(SaveNode(child));
-    //         }
-    //     }
-    //     return res;
-    // }
-
-    // void SceneLoader::Save(Ref<Scene> scene, const Path& path) {
-    //     YAML::Node    n_Root, n_Scene, n_Assets;
-    //     std::ofstream output_file;
-
-    //     output_file.open(path);
-    //     // TODO: Switch to throw.
-    //     DE_ASSERT(output_file.is_open(), "Failed to open file to save scene.");
-
-    //     n_Root["Scene"]   = n_Scene;
-    //     n_Scene["Name"]   = scene->GetName();
-    //     n_Scene["Assets"] = n_Assets;
-
-    //     n_Assets["Models"]   = SaveModels();
-    //     n_Assets["Shaders"]  = SaveShaders();
-    //     n_Assets["Textures"] = SaveTextures();
-    //     n_Assets["Scripts"]  = SaveScripts();
-    //     for (auto child : *scene->GetHierarchy()) {
-    //         n_Scene["Hierarchy"].push_back(SaveNode(child));
-    //     }
-
-    //     output_file << n_Root;
-    // }
+        output_file << n_Root;
+    }
 
     // //*~~~Loading~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -284,10 +271,10 @@ namespace DE {
             case ScriptFieldType::Double: field.Get<double>() = node.as<double>(); break;
             case ScriptFieldType::Bool: field.Get<bool>() = node.as<bool>(); break;
             case ScriptFieldType::String: field.Get<std::string>() = node.as<std::string>(); break;
-            case ScriptFieldType::I32: field.Get<int32_t>() = node.as<int32_t>(); break;
-            case ScriptFieldType::I64: field.Get<int64_t>() = node.as<int64_t>(); break;
-            case ScriptFieldType::UI32: field.Get<uint32_t>() = node.as<uint32_t>(); break;
-            case ScriptFieldType::UI64: field.Get<uint64_t>() = node.as<uint64_t>(); break;
+            case ScriptFieldType::S32: field.Get<int32_t>() = node.as<int32_t>(); break;
+            case ScriptFieldType::S64: field.Get<int64_t>() = node.as<int64_t>(); break;
+            case ScriptFieldType::U32: field.Get<uint32_t>() = node.as<uint32_t>(); break;
+            case ScriptFieldType::U64: field.Get<uint64_t>() = node.as<uint64_t>(); break;
             case ScriptFieldType::Vec2: field.Get<Vec2>() = GetVec2(node); break;
             case ScriptFieldType::Vec3: field.Get<Vec3>() = GetVec3(node); break;
             case ScriptFieldType::Vec4: field.Get<Vec4>() = GetVec4(node); break;
@@ -486,7 +473,7 @@ namespace DE {
             LOG_ERROR("SceneLoader", "Failed to load scene serialization data for (", path.string(), ")");
             return SceneSerializationData();
         }
-        LOG_INFO("SceneLoader", "Loaded scene serialization data for (", path.string(), ")");
+        LOG_INFO("SceneLoader", "Loaded scene serialization data for (", RelativeToExecutable(path), ")");
         return result;
     }
 

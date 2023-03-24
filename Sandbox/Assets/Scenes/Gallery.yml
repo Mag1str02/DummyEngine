@@ -1,5 +1,5 @@
 Scene:
-  Name: NewScene
+  Name: Scene
   Assets:
     Models:
       ArchModel:
@@ -52,6 +52,11 @@ Scene:
         Compress: false
         FlipUV: false
         UUID: 18245352808254477256
+    Textures:
+      Sky:
+        Path: Assets\Textures\Skyboxes\Space.png
+        FlipUV: false
+        UUID: 4297990474523151207
     Shaders:
       SkyBox:
         UUID: 3566111620382667214
@@ -61,11 +66,7 @@ Scene:
         UUID: 3566111628970667214
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
-    Textures:
-      Sky:
-        Path: Assets\Textures\Skyboxes\Space.png
-        FlipUV: false
-        UUID: 4297990474523151207
+    Scripts: ~
   Hierarchy:
     - Entity:
         Tag: skybox

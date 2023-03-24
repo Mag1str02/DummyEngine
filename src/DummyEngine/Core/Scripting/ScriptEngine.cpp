@@ -9,7 +9,7 @@ namespace DE {
         return ScriptEngine::GetUUID(*this);
     }
     bool ScriptComponent::Valid() const {
-        return ScriptEngine::Valid(*this);
+        return ScriptEngine::ValidComponent(*this);
     }
     void ScriptComponent::Destroy() {
         ScriptEngine::Destroy(*this);
@@ -190,7 +190,7 @@ namespace DE {
     S_METHOD_IMPL(UUID, GetUUID, (const ScriptComponent& component), (component)) {
         return m_ProxyManager.GetProxy(component.m_ID).m_Id;
     }
-    S_METHOD_IMPL(bool, Valid, (const ScriptComponent& component), (component)) {
+    S_METHOD_IMPL(bool, ValidComponent, (const ScriptComponent& component), (component)) {
         return m_ProxyManager.Valid(component.m_ID, component.m_Gen) && m_ProxyManager.GetProxy(component.m_ID).m_Script;
     }
     S_METHOD_IMPL(Unit, Destroy, (const ScriptComponent& component), (component)) {
