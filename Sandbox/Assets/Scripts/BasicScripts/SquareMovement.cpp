@@ -3,15 +3,8 @@
 using namespace DE;
 
 class SquareMovement : public Script {
+    SCRIPT(SquareMovement)
 public:
-    SquareMovement() : current_time(0.0f), cycle_time(1.0f), height(0.0), left_back({0.0, 0.0}), right_front({0.0, 0.0}) {
-        ADD_FIELD(height);
-        ADD_FIELD(offset);
-        ADD_FIELD(left_back);
-        ADD_FIELD(right_front);
-        ADD_FIELD(cycle_time);
-    }
-
     virtual void OnCreate() override {}
     virtual void OnUpdate(float dt) override {
         current_time += dt;
@@ -33,12 +26,12 @@ public:
 private:
     float Smouth(float delta) const { return (std::sin((delta * 2 - 1) * 3.1415926 / 2) + 1) / 2; }
 
-    float cycle_time;
-    float current_time;
-    float height;
-    float offset;
-    Vec2  left_back;
-    Vec2  right_front;
+    float cycle_time   = 1;
+    float current_time = 0;
+    float height       = 10;
+    float offset       = 0;
+    Vec2  left_back    = {10, 10};
+    Vec2  right_front  = {0.0, 0.0};
 };
 
-SCRIPT_BASE(SquareMovement)
+SCRIPT_BASE(SquareMovement, FIELD(cycle_time), FIELD(height), FIELD(offset), FIELD(left_back), FIELD(right_front))

@@ -278,7 +278,7 @@ namespace DE {
 
         return res;
     }
-    void GetField(YAML::Node node, ScriptField& field) {
+    void GetField(YAML::Node node, Script::Field field) {
         switch (field.GetType()) {
             case ScriptFieldType::Float: field.Get<float>() = node.as<float>(); break;
             case ScriptFieldType::Double: field.Get<double>() = node.as<double>(); break;
@@ -371,9 +371,9 @@ namespace DE {
         ScriptComponent script = ScriptEngine::CreateScript(n_Component["UUID"].as<uint64_t>());
         entity.AddComponent<ScriptComponent>(script);
         if (script.Valid()) {
-            for (auto& [name, field] : script->GetFields()) {
-                if (n_Component["Fields"][name]) {
-                    GetField(n_Component["Fields"][name], field);
+            for (auto [name, field] : *script) {
+                if (n_Component["Fields"][name.get()]) {
+                    GetField(n_Component["Fields"][name.get()], field);
                 }
             }
         } else {

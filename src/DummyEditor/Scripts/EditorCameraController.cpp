@@ -2,16 +2,12 @@
 
 using namespace DE;
 
-class EditorCameraController : public Script
-{
+class EditorCameraController : public Script {
+    SCRIPT(EditorCameraController)
 public:
-    EditorCameraController() { ADD_FIELD(active); }
-
     virtual void OnCreate() override {}
-    virtual void OnUpdate(float dt) override
-    {
-        if (active)
-        {
+    virtual void OnUpdate(float dt) override {
+        if (active) {
             auto& camera      = Get<FPSCamera>();
             float speed       = 15;
             float sensitivity = 0.07;
@@ -19,32 +15,25 @@ public:
             camera.RotateY(Input::CursorXOffset() * sensitivity);
             camera.RotateX(Input::CursorYOffset() * sensitivity / 16 * 9);
 
-            if (Input::KeyDown(Key::LeftShift))
-            {
+            if (Input::KeyDown(Key::LeftShift)) {
                 speed = 100.0f;
             }
-            if (Input::KeyDown(Key::S))
-            {
+            if (Input::KeyDown(Key::S)) {
                 camera.MoveInLocal(Vec3(0.0f, 0.0f, -1.0f) * speed * dt);
             }
-            if (Input::KeyDown(Key::W))
-            {
+            if (Input::KeyDown(Key::W)) {
                 camera.MoveInLocal(Vec3(0.0f, 0.0f, 1.0f) * speed * dt);
             }
-            if (Input::KeyDown(Key::D))
-            {
+            if (Input::KeyDown(Key::D)) {
                 camera.MoveInLocal(Vec3(1.0f, 0.0f, 0.0f) * speed * dt);
             }
-            if (Input::KeyDown(Key::A))
-            {
+            if (Input::KeyDown(Key::A)) {
                 camera.MoveInLocal(Vec3(-1.0f, 0.0f, 0.0f) * speed * dt);
             }
-            if (Input::KeyDown(Key::Space))
-            {
+            if (Input::KeyDown(Key::Space)) {
                 camera.MoveInWorld(Vec3(0.0f, 1.0f, 0.0f) * speed * dt);
             }
-            if (Input::KeyDown(Key::C))
-            {
+            if (Input::KeyDown(Key::C)) {
                 camera.MoveInWorld(Vec3(0.0f, -1.0f, 0.0f) * speed * dt);
             }
         }
@@ -55,4 +44,4 @@ private:
     bool active = false;
 };
 
-SCRIPT_BASE(EditorCameraController)
+SCRIPT_BASE(EditorCameraController, FIELD(active))

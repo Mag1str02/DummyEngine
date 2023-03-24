@@ -1,9 +1,7 @@
 #include "DummyEditor/Panels/InspectorPanel.h"
 
-namespace DE
-{
-    void ClampRoundValue(Vec3& vec, float min, float max)
-    {
+namespace DE {
+    void ClampRoundValue(Vec3& vec, float min, float max) {
         if (vec.x < min) vec.x = max;
         if (vec.x > max) vec.x = min;
         if (vec.y < min) vec.y = max;
@@ -12,10 +10,8 @@ namespace DE
         if (vec.z > max) vec.z = min;
     }
 
-    ImGuiDataType_ ScriptFieldTypeToImGuiType(ScriptFieldType type)
-    {
-        switch (type)
-        {
+    ImGuiDataType_ ScriptFieldTypeToImGuiType(ScriptFieldType type) {
+        switch (type) {
             case ScriptFieldType::Double: return ImGuiDataType_Double;
             case ScriptFieldType::Float: return ImGuiDataType_Float;
             case ScriptFieldType::I32: return ImGuiDataType_S32;
@@ -25,76 +21,61 @@ namespace DE
             default: return ImGuiDataType_COUNT;
         }
     }
-    void InspectorPanel::View()
-    {
+    void InspectorPanel::View() {
         DE_PROFILE_SCOPE("InspectorPanel View");
 
         float sensitivity = 0.1;
 
-        if (m_Entity.Valid())
-        {
-            if (m_Entity.Has<ScriptComponent>())
-            {
+        if (m_Entity.Valid()) {
+            if (m_Entity.Has<ScriptComponent>()) {
                 auto& component = m_Entity.Get<ScriptComponent>();
-                if (ImGui::CollapsingHeader("Script"))
-                {
+                if (ImGui::CollapsingHeader("Script")) {
                     ImGui::Text("UUID: %s", component.ID().Hex().c_str());
-                    if (component.Valid())
-                    {
-                        auto& fields = component->GetFields();
-                        for (auto& [name, field] : fields)
-                        {
-                            if (field.GetType() != ScriptFieldType::None)
-                            {
-                                ImGui::Text("%s", field.GetName().c_str());
+                    if (component.Valid()) {
+                        for (auto [name, field] : *component) {
+                            if (field.GetType() != ScriptFieldType::None) {
+                                ImGui::Text("%s", name.get().c_str());
                                 ImGui::SameLine(100);
                                 ImGui::SetNextItemWidth(-1);
                             }
 
-                            switch (field.GetType())
-                            {
+                            switch (field.GetType()) {
                                 case ScriptFieldType::Double:
                                 case ScriptFieldType::Float:
                                 case ScriptFieldType::I32:
                                 case ScriptFieldType::UI32:
                                 case ScriptFieldType::I64:
                                 case ScriptFieldType::UI64:
-                                    ImGui::DragScalar(("##" + field.GetName()).c_str(), ScriptFieldTypeToImGuiType(field.GetType()), field.Get());
+                                    ImGui::DragScalar(("##" + name.get()).c_str(), ScriptFieldTypeToImGuiType(field.GetType()), field.Get());
                                     break;
-                                case ScriptFieldType::Bool: ImGui::Checkbox(("##" + field.GetName()).c_str(), &field.Get<bool>()); break;
-                                case ScriptFieldType::String: ImGui::InputText(("##" + field.GetName()).c_str(), &field.Get<std::string>()); break;
-                                case ScriptFieldType::Vec2: ImGui::DragFloat2(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
-                                case ScriptFieldType::Vec3: ImGui::DragFloat3(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
-                                case ScriptFieldType::Vec4: ImGui::DragFloat4(("##" + field.GetName()).c_str(), &field.Get<float>()); break;
+                                case ScriptFieldType::Bool: ImGui::Checkbox(("##" + name.get()).c_str(), &field.Get<bool>()); break;
+                                case ScriptFieldType::String: ImGui::InputText(("##" + name.get()).c_str(), &field.Get<std::string>()); break;
+                                case ScriptFieldType::Vec2: ImGui::DragFloat2(("##" + name.get()).c_str(), &field.Get<Vec2>()[0]); break;
+                                case ScriptFieldType::Vec3: ImGui::DragFloat3(("##" + name.get()).c_str(), &field.Get<Vec3>()[0]); break;
+                                case ScriptFieldType::Vec4: ImGui::DragFloat4(("##" + name.get()).c_str(), &field.Get<Vec4>()[0]); break;
                                 default: break;
                             }
                         }
                     }
                 }
             }
-            if (m_Entity.Has<TagComponent>())
-            {
+            if (m_Entity.Has<TagComponent>()) {
                 auto& component = m_Entity.Get<TagComponent>();
-                if (ImGui::CollapsingHeader("Tag"))
-                {
+                if (ImGui::CollapsingHeader("Tag")) {
                     ImGui::Text("Tag");
                     ImGui::SameLine(100);
                     ImGui::SetNextItemWidth(-1);
                     ImGui::InputText("", &component.tag);
                 }
             }
-            if (m_Entity.Has<IdComponent>())
-            {
+            if (m_Entity.Has<IdComponent>()) {
                 auto& component = m_Entity.Get<IdComponent>();
-                if (ImGui::CollapsingHeader("UUID"))
-                {
+                if (ImGui::CollapsingHeader("UUID")) {
                     ImGui::Text("%s", component.Hex().c_str());
                 }
             }
-            if (m_Entity.Has<TransformComponent>())
-            {
-                if (ImGui::CollapsingHeader("Transformation"))
-                {
+            if (m_Entity.Has<TransformComponent>()) {
+                if (ImGui::CollapsingHeader("Transformation")) {
                     auto& transform = m_Entity.Get<TransformComponent>();
 
                     ImGui::Text("Translation");
@@ -115,18 +96,14 @@ namespace DE
                     ClampRoundValue(transform.rotation, 0, 360);
                 }
             }
-            if (m_Entity.Has<RenderMeshComponent>())
-            {
-                if (ImGui::CollapsingHeader("Render Mesh"))
-                {
+            if (m_Entity.Has<RenderMeshComponent>()) {
+                if (ImGui::CollapsingHeader("Render Mesh")) {
                     auto& render_mesh = m_Entity.Get<RenderMeshComponent>();
                     ImGui::Text("%s", ("Mesh UUID: " + render_mesh.id.Hex()).c_str());
                 }
             }
-            if (m_Entity.Has<FPSCamera>())
-            {
-                if (ImGui::CollapsingHeader("FPSCamera"))
-                {
+            if (m_Entity.Has<FPSCamera>()) {
+                if (ImGui::CollapsingHeader("FPSCamera")) {
                     auto& camera = m_Entity.Get<FPSCamera>();
 
                     ImGui::Text("Position");
@@ -150,10 +127,8 @@ namespace DE
                     ImGui::DragFloat("##FOV", &(camera.m_FOV), sensitivity, 0, 360);
                 }
             }
-            if (m_Entity.Has<LightSource>())
-            {
-                if (ImGui::CollapsingHeader("Light Soruce"))
-                {
+            if (m_Entity.Has<LightSource>()) {
+                if (ImGui::CollapsingHeader("Light Soruce")) {
                     auto&       source        = m_Entity.Get<LightSource>();
                     const char* light_types[] = {"Directional", "Point", "Spot"};
 
@@ -178,29 +153,25 @@ namespace DE
                     ImGui::SetNextItemWidth(-1);
                     ImGui::ColorEdit3("##Specular", &(source.specular.x));
 
-                    if (source.type == LightSourceType::Point || source.type == LightSourceType::Spot)
-                    {
+                    if (source.type == LightSourceType::Point || source.type == LightSourceType::Spot) {
                         ImGui::Text("CLQ");
                         ImGui::SameLine(100);
                         ImGui::SetNextItemWidth(-24);
                         ImGui::DragFloat3("##CLQ", &(source.clq.x), sensitivity, 0, 1);
                     }
-                    if (source.type == LightSourceType::Spot || source.type == LightSourceType::Direction)
-                    {
+                    if (source.type == LightSourceType::Spot || source.type == LightSourceType::Direction) {
                         ImGui::Text("Direction");
                         ImGui::SameLine(100);
                         ImGui::SetNextItemWidth(-24);
                         ImGui::DragFloat3("##Direction", &(source.direction.x), sensitivity, 0, 1);
                     }
-                    if (source.type == LightSourceType::Spot || source.type == LightSourceType::Point)
-                    {
+                    if (source.type == LightSourceType::Spot || source.type == LightSourceType::Point) {
                         ImGui::Text("Position");
                         ImGui::SameLine(100);
                         ImGui::SetNextItemWidth(-24);
                         ImGui::DragFloat3("##Position", &(source.position.x), sensitivity);
                     }
-                    if (source.type == LightSourceType::Spot)
-                    {
+                    if (source.type == LightSourceType::Spot) {
                         ImGui::Text("Inner Cone");
                         ImGui::SameLine(100);
                         ImGui::SetNextItemWidth(-24);
@@ -215,6 +186,8 @@ namespace DE
             }
         }
     }
-    void InspectorPanel::SetActiveEntity(Entity entity) { m_Entity = entity; }
+    void InspectorPanel::SetActiveEntity(Entity entity) {
+        m_Entity = entity;
+    }
 
 }  // namespace DE

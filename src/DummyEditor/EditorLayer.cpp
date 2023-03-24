@@ -186,6 +186,7 @@ namespace DE {
         m_SceneHierarchy.SetActiveScene(nullptr);
         m_SceneData.m_Scene = nullptr;
         ResourceManager::Clear();
+        ScriptManager::UnloadScripts(m_SceneData.m_Assets.scripts);
         UnloadAssets();
         LOG_INFO("EditorLayer", "Closed scene");
     }
@@ -253,7 +254,7 @@ namespace DE {
             }
         }
         if (m_EditorCamera.Valid()) {
-            bool& active = m_EditorCamera.Get<ScriptComponent>()->GetField("active").Get<bool>();
+            bool& active = m_EditorCamera.Get<ScriptComponent>()->GetField<bool>("active");
             if (m_State.m_InputState == InputState::ViewPort) {
                 active = true;
             } else {

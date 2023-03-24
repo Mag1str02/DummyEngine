@@ -11,6 +11,7 @@ namespace DE {
         SINGLETON(ScriptManager)
     public:
         S_METHOD_DEF(Unit, LoadScripts, (const std::vector<ScriptAsset>& scripts));
+        S_METHOD_DEF(Unit, UnloadScripts, (const std::vector<ScriptAsset>& scripts));
         S_METHOD_DEF(Unit, ReloadScripts, (Ref<Scene> scene));
         S_METHOD_DEF(Unit, AttachScripts, (Ref<Scene> scene));
 
