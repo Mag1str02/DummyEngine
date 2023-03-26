@@ -1,9 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <ImGui/imgui.h>
-#include <ImGui/backends/imgui_impl_glfw.h>
-#include <ImGui/backends/imgui_impl_opengl3.h>
+#include <IMGUI/imgui.h>
+#include <IMGUI/backends/imgui_impl_glfw.h>
+#include <IMGUI/backends/imgui_impl_opengl3.h> 
 
 #include "DummyEngine/Core/Application/ImGuiLayer.h"
 #include "DummyEngine/Core/Application/Application.h"
