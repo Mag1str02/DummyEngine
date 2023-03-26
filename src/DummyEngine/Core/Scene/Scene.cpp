@@ -88,12 +88,10 @@ namespace DE {
         return m_Storage->CreateEntity();
     }
     Entity Scene::GetByUUID(UUID uuid) {
-        DE_ASSERT(m_EntityByUUID.find(uuid) != m_EntityByUUID.end(), "Entity with name " + std::to_string(uuid) + " not found.");
-        return m_EntityByUUID.at(uuid);
+        return (m_EntityByUUID.contains(uuid) ? m_EntityByUUID.at(uuid) : Entity());
     }
     Entity Scene::GetByName(const std::string& name) {
-        DE_ASSERT(m_EntityByName.find(name) != m_EntityByName.end(), "Entity with name " + name + " not found.");
-        return m_EntityByName.at(name);
+        return (m_EntityByName.contains(name) ? m_EntityByName.at(name) : Entity());
     }
     const std::string& Scene::GetName() const {
         return m_Name;
