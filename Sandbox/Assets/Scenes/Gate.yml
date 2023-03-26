@@ -86,7 +86,7 @@ Scene:
           InnerCone: 0
           OuterCone: 0
     - Node:
-        Name: Folder
+        Name: Gate
         Childs:
           - Entity:
               Tag: WallLarge2
@@ -125,7 +125,7 @@ Scene:
               RenderModel: 6557233926725796949
               Shader: 3566111628970667214
           - Entity:
-              Tag: Gate
+              Tag: Door
               UUID: 1629994334753701442
               Transformation:
                 Translation: [10, 4, 0]

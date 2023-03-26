@@ -118,8 +118,8 @@ namespace DE {
     void Compiler::Initialize() {
         DE_ASSERT(!m_Impl, "Compiler already started.");
         m_Impl = CreateScope<CompilerImpl>();
-        AddIncludeDir("../src");
-        AddIncludeDir("../src/DummyEngine/Libs/GLM");
+        AddIncludeDir("..");
+        AddIncludeDir("../DummyEngine/Libs/GLM");
         AddLinkLibrary("DummyEngineLib");
     }
     void Compiler::Terminate() {

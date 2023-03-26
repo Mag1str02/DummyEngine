@@ -1,17 +1,14 @@
-#include "../DummyEngine/Addition/DummyEngine.h"
-#include "../DummyEngine/Core/Application/EntryPoint.h"
+#include "DummyEngine/Core/Application/EntryPoint.h"
+#include "DummyEngine/Utils/DummyEngine.h"
 
-class MyLayer : public DE::Layer
-{
+
+class MyLayer : public DE::Layer {
 public:
     MyLayer() : DE::Layer("MyLayer") {}
 };
-namespace DE
-{
-    Application* CreateApplication()
-    {
-        Application* app = new Application("MyApplication");
-        app->PushLayer(new MyLayer());
-        return app;
+namespace DE {
+
+    void SetupApplication() {
+        Application::PushLayer(new MyLayer());
     }
 }  // namespace DE

@@ -11,15 +11,4 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../Sandbox)
 
 add_subdirectory(DummyEngine)
 add_subdirectory(DummyEditor)
-
-add_executable(EmptyApplication Examples/EmptyApplication.cpp)
-add_executable(ImguiTest Examples/ImGuiTest.cpp)
-add_executable(LoadingScene Examples/LoadingScene.cpp)
-add_executable(HelloTriangle Examples/HelloTriangle.cpp)
-add_executable(Test Examples/Test.cpp)
-
-target_link_libraries(EmptyApplication PUBLIC DummyEngineLib)
-target_link_libraries(ImguiTest PUBLIC DummyEngineLib)
-target_link_libraries(LoadingScene PUBLIC DummyEngineLib)
-target_link_libraries(HelloTriangle PUBLIC DummyEngineLib)
-target_link_libraries(Test PUBLIC DummyEngineLib)
+add_subdirectory(Examples)
