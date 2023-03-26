@@ -1,4 +1,4 @@
-#include <ImGui/imgui.h>
+#include <IMGUI/imgui.h>
 
 #include "DummyEngine/Core/Application/ImGuiPanel.h"
 
