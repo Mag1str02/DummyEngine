@@ -20,6 +20,7 @@ namespace DE {
     public:
         S_METHOD_DEF(Unit, OnEvent, (Event & e));
         S_METHOD_DEF(Unit, NewFrame, ());
+        S_METHOD_DEF(Unit, SetFrameAmount, (size_t n));
 
         S_METHOD_DEF(double, CursorXOffset, ());
         S_METHOD_DEF(double, CursorYOffset, ());
@@ -34,5 +35,6 @@ namespace DE {
         InputFrame             m_CurrentFrame;
         EventDispatcher        m_EventDispatcher;
         std::deque<InputFrame> m_Frames;
+        size_t                 m_MaxFrameAmount = 100;
     };
 }  // namespace DE

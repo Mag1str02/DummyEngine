@@ -37,6 +37,13 @@ namespace DE {
         DE_PROFILE_SCOPE("Imput Frame Begin");
 
         m_Frames.push_front(m_CurrentFrame);
+        if (m_Frames.size() > m_MaxFrameAmount) {
+            m_Frames.pop_back();
+        }
+        return Unit();
+    }
+    S_METHOD_IMPL(Unit, SetFrameAmount, (size_t n), (n)) {
+        m_MaxFrameAmount = n;
         return Unit();
     }
 
