@@ -1,7 +1,7 @@
 #include "DummyEngine/Utils/Debug/Assert.h"
 
-#include "DummyEngine/ToolBox/Dev/Logger.h"
 #include "DummyEngine/Utils/Base/STDIncludes.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
 #include "DummyEngine/Utils/Debug/StackTrace.h"
 
 namespace DE {

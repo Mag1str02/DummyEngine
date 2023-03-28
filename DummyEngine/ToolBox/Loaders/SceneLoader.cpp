@@ -69,10 +69,10 @@ namespace DE {
             n_Entity["Tag"] = entity.Get<TagComponent>().Get();
         }
     }
-    template <> void SceneLoader::SaveComponent<IdComponent>(YAML::Node& n_Entity, Entity entity) {
+    template <> void SceneLoader::SaveComponent<IDComponent>(YAML::Node& n_Entity, Entity entity) {
         // TODO: Save UUID in hex format.
-        if (entity.Has<IdComponent>()) {
-            n_Entity["UUID"] = entity.Get<IdComponent>().Hex();
+        if (entity.Has<IDComponent>()) {
+            n_Entity["UUID"] = entity.Get<IDComponent>().Hex();
         }
     }
     template <> void SceneLoader::SaveComponent<TransformComponent>(YAML::Node& n_Entity, Entity entity) {
@@ -135,7 +135,7 @@ namespace DE {
 
     void SceneLoader::SaveEntity(YAML::Node& n_Entity, Entity entity) {
         SaveComponent<TagComponent>(n_Entity, entity);
-        SaveComponent<IdComponent>(n_Entity, entity);
+        SaveComponent<IDComponent>(n_Entity, entity);
         SaveComponent<TransformComponent>(n_Entity, entity);
         SaveComponent<RenderMeshComponent>(n_Entity, entity);
         SaveComponent<ShaderComponent>(n_Entity, entity);
@@ -289,13 +289,9 @@ namespace DE {
     template <> void SceneLoader::LoadComponent<TagComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
         entity.AddComponent<TagComponent>(n_Component.as<std::string>());
     }
-    template <> void SceneLoader::LoadComponent<IdComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
+    template <> void SceneLoader::LoadComponent<IDComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
         auto s = n_Component.as<std::string>();
-        if (s.size() == 32) {
-            entity.AddComponent<IdComponent>(IdComponent(UUID(n_Component.as<std::string>())));
-        } else {
-            entity.AddComponent<IdComponent>(IdComponent(UUID::Generate()));
-        }
+        entity.AddComponent<IDComponent>(IDComponent(UUID(n_Component.as<std::string>())));
     }
     template <> void SceneLoader::LoadComponent<TransformComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
         TransformComponent transformation;
@@ -378,7 +374,7 @@ namespace DE {
         Entity entity = scene->CreateEmptyEntity();
 
         if (n_Entity["Tag"]) LoadComponent<TagComponent>(scene, n_Entity["Tag"], entity);
-        if (n_Entity["UUID"]) LoadComponent<IdComponent>(scene, n_Entity["UUID"], entity);
+        if (n_Entity["UUID"]) LoadComponent<IDComponent>(scene, n_Entity["UUID"], entity);
         if (n_Entity["Transformation"]) LoadComponent<TransformComponent>(scene, n_Entity["Transformation"], entity);
         if (n_Entity["RenderModel"]) LoadComponent<RenderMeshComponent>(scene, n_Entity["RenderModel"], entity);
         if (n_Entity["Shader"]) LoadComponent<ShaderComponent>(scene, n_Entity["Shader"], entity);
@@ -393,8 +389,6 @@ namespace DE {
 
             entity.Get<RenderMeshComponent>().mesh_instance = scene->m_RenderData->GetRenderMeshInstance(mesh_id, shader_id);
         }
-
-        scene->UpdateEmptyEntity(entity);
         return entity;
     }
     void SceneLoader::LoadHierarchyNode(Ref<Scene> scene, YAML::Node n_Array, Ref<SceneHierarchyNode> load_to) {
@@ -464,8 +458,9 @@ namespace DE {
     }
 
     Ref<Scene> SceneLoader::Instantiate(const SceneSerializationData& data) {
-        Ref<Scene> scene = CreateRef<Scene>();
+        Ref<Scene> scene = CreateRef<Scene>(data.name);
         LoadHierarchyNode(scene, data.hierarchy_node, scene->m_HierarchyRoot);
+        LOG_INFO("SceneLoader", "Instantiated scene (", data.name, ")");
         return scene;
     }
     SceneSerializationData SceneLoader::LoadSerializationData(const Path& path) {

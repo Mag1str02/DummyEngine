@@ -7,8 +7,8 @@ class EditorCameraController : public Script {
 public:
     virtual void OnCreate() override {}
     virtual void OnUpdate(float dt) override {
+        auto& camera = Get<FPSCamera>();
         if (active) {
-            auto& camera      = Get<FPSCamera>();
             float speed       = 15;
             float sensitivity = 0.07;
 
@@ -37,6 +37,7 @@ public:
                 camera.MoveInWorld(Vec3(0.0f, -1.0f, 0.0f) * speed * dt);
             }
         }
+        Get<TransformComponent>().translation = camera.GetPos();
     }
     virtual void OnDestroy() override {}
 

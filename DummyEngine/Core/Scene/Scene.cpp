@@ -18,7 +18,18 @@ namespace DE {
         m_RenderData(CreateRef<SceneRenderData>(this)),
         m_HierarchyRoot(CreateRef<SceneHierarchyNode>()) {
         m_Storage->SetAddHandler<FPSCamera>([this](Entity entity) { m_RenderData->AddVPEntity(entity); });
-        // m_Storage->SetAddHandler<ScriptComponent>([this](Entity entity) { entity.Get<ScriptComponent>()->AttachToScene(this, entity); });
+        m_Storage->SetAddHandler<TagComponent>([this](Entity entity) {
+            auto& name = entity.Get<TagComponent>();
+            DE_ASSERT(m_EntityByTag.find(name) == m_EntityByTag.end(), "Name collision occured (", name.Get(), ")");
+            m_EntityByTag[name] = entity;
+        });
+        m_Storage->SetAddHandler<IDComponent>([this](Entity entity) {
+            auto id = entity.Get<IDComponent>();
+            DE_ASSERT(m_EntityByID.find(id) == m_EntityByID.end(), "UUID collision occured (", id.Get(), ")");
+            m_EntityByID[id] = entity;
+        });
+        m_Storage->SetRemoveHandler<TagComponent>([this](Entity entity) { m_EntityByTag.erase(entity.Get<TagComponent>()); });
+        m_Storage->SetRemoveHandler<IDComponent>([this](Entity entity) { m_EntityByID.erase(entity.Get<IDComponent>()); });
         m_Storage->SetRemoveHandler<ScriptComponent>([this](Entity entity) { entity.Get<ScriptComponent>().Destroy(); });
         LOG_INFO("Scene", "Scene (", name, ") was created");
     }
@@ -29,69 +40,37 @@ namespace DE {
         LOG_INFO("Scene", "Scene (", m_Name, ") was destroyed");
     }
 
+    Entity Scene::CreateEmptyEntity() {
+        return m_Storage->CreateEntity();
+    }
     Entity Scene::CreateHiddenEntity(const std::string& name) {
-        Entity      new_entity = m_Storage->CreateEntity();
-        IdComponent id;
-
-        DE_ASSERT(m_EntityByUUID.find(id) == m_EntityByUUID.end(), "UUID collision occured.");
-
-        new_entity.AddComponent(TagComponent(name));
-        new_entity.AddComponent(id);
-
-        m_EntityByUUID[id] = new_entity;
-
+        Entity new_entity = m_Storage->CreateEntity();
+        new_entity.AddComponent(TagComponent(GenAvilableEntityName(name)));
+        new_entity.AddComponent(IDComponent(UUID::Generate()));
         return new_entity;
     }
     Entity Scene::CreateEntity(const std::string& name) {
-        Entity      new_entity = m_Storage->CreateEntity();
-        IdComponent id;
-
-        DE_ASSERT(m_EntityByUUID.find(id) == m_EntityByUUID.end(), "UUID collision occured.");
-        DE_ASSERT(m_EntityByName.find(name) == m_EntityByName.end(), "Name collision occured.");
-
-        new_entity.AddComponent(TagComponent(name));
-        new_entity.AddComponent(id);
-
-        m_EntityByUUID[id]   = new_entity;
-        m_EntityByName[name] = new_entity;
-
-        return new_entity;
-    }
-    Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name) {
         Entity new_entity = m_Storage->CreateEntity();
-
-        DE_ASSERT(m_EntityByUUID.find(uuid) == m_EntityByUUID.end(), "UUID collision occured.");
-        DE_ASSERT(m_EntityByName.find(name) == m_EntityByName.end(), "Name collision occured.");
-
-        new_entity.AddComponent(TagComponent(name));
-        new_entity.AddComponent(IdComponent(uuid));
-
-        m_EntityByUUID[uuid] = new_entity;
-        m_EntityByName[name] = new_entity;
-
+        new_entity.AddComponent(TagComponent(GenAvilableEntityName(name)));
+        new_entity.AddComponent(IDComponent(UUID::Generate()));
         return new_entity;
     }
     Entity Scene::CloneEntity(const std::string& entity_to_clone, const std::string& new_name) {
         DE_ASSERT(false, "Clone of entity not implemented yet.");
-        // EntityId    entity_id = m_Storage.CopyEntity(m_EntityByName[entity_to_clone]);
-        // Entity      new_entity(entity_id, this);
-        // IdComponent id;
-
-        // DE_ASSERT(m_EntityByName.find(new_name) == m_EntityByName.end(), "Name collision occured.");
-
-        // new_entity.GetComponent<TagComponent>() = new_name;
-        // new_entity.GetComponent<IdComponent>()  = id;
-
-        // m_EntityByUUID[id]       = entity_id;
-        // m_EntityByName[new_name] = entity_id;
-
         return m_Storage->CreateEntity();
     }
-    Entity Scene::GetByUUID(UUID uuid) {
-        return (m_EntityByUUID.contains(uuid) ? m_EntityByUUID.at(uuid) : Entity());
+    bool Scene::ExistsEntityWithTag(const TagComponent& name) {
+        return m_EntityByTag.contains(name);
     }
-    Entity Scene::GetByName(const std::string& name) {
-        return (m_EntityByName.contains(name) ? m_EntityByName.at(name) : Entity());
+    bool Scene::ExistsEntityWithID(UUID id) {
+        return m_EntityByID.contains(id);
+    }
+
+    Entity Scene::GetByID(UUID uuid) {
+        return (m_EntityByID.contains(uuid) ? m_EntityByID.at(uuid) : Entity());
+    }
+    Entity Scene::GetByTag(const std::string& name) {
+        return (m_EntityByTag.contains(name) ? m_EntityByTag.at(name) : Entity());
     }
     const std::string& Scene::GetName() const {
         return m_Name;
@@ -120,24 +99,6 @@ namespace DE {
         m_RenderData->Render();
     }
 
-    Entity Scene::CreateEmptyEntity() {
-        return m_Storage->CreateEntity();
-    }
-    void Scene::UpdateEmptyEntity(Entity entity) {
-        IdComponent  id  = entity.Get<IdComponent>();
-        TagComponent tag = entity.Get<TagComponent>();
-
-        DE_ASSERT(m_EntityByUUID.find(id) == m_EntityByUUID.end(), "UUID collision occured.");
-        DE_ASSERT(m_EntityByName.find(tag) == m_EntityByName.end(), "Name collision occured.");
-
-        m_EntityByUUID[id]  = entity;
-        m_EntityByName[tag] = entity;
-    }
-    void Scene::OnEntityDestroy(Entity entity) {
-        m_EntityByUUID.erase(entity.Get<IdComponent>());
-        m_EntityByName.erase(entity.Get<TagComponent>());
-    }
-
     Entity Scene::GetCamera() {
         auto cameras = m_Storage->View<FPSCamera>();
         DE_ASSERT(!cameras.Empty(), "No available camera in scene.");
@@ -150,5 +111,14 @@ namespace DE {
                 component->OnUpdate(dt);
             }
         }
+    }
+
+    std::string Scene::GenAvilableEntityName(const std::string& prefered) {
+        std::string name = prefered;
+        uint32_t    cnt  = 0;
+        while (ExistsEntityWithTag(name)) {
+            name = StrCat(prefered, "(", ++cnt, ")");
+        }
+        return name;
     }
 }  // namespace DE

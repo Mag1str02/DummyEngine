@@ -5,12 +5,13 @@
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
-    class IdComponent {
+    class IDComponent {
     public:
-        IdComponent()                   = default;
-        IdComponent(const IdComponent&) = default;
-        IdComponent(UUID uuid) : m_ID(uuid) {}
+        IDComponent()                   = default;
+        IDComponent(const IDComponent&) = default;
+        IDComponent(UUID uuid) : m_ID(uuid) {}
 
+        UUID        Get() const { return m_ID; }
         std::string Hex() const { return m_ID; }
 
         operator UUID() const { return m_ID; }
@@ -25,8 +26,6 @@ namespace DE {
         TagComponent(const std::string& tag) : m_Tag(tag) {}
         TagComponent(const TagComponent&) = default;
 
-        // TODO: Delete
-        std::string&       Get() { return m_Tag; }
         const std::string& Get() const { return m_Tag; }
 
         operator std::string() const { return m_Tag; }

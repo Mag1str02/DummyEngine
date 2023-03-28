@@ -1,13 +1,13 @@
 #pragma once
 
-#include "DummyEngine/ToolBox/Dev/Logger.h"
-#include "DummyEngine/ToolBox/Dev/Profiler.h"
 #include "DummyEngine/Utils/Base/CompilerSpecific.h"
 #include "DummyEngine/Utils/Base/Constants.h"
 #include "DummyEngine/Utils/Base/GLMIncludes.h"
 #include "DummyEngine/Utils/Base/STDIncludes.h"
 #include "DummyEngine/Utils/Debug/Assert.h"
 #include "DummyEngine/Utils/Debug/Demangler.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
+#include "DummyEngine/Utils/Debug/Profiler.h"
 #include "DummyEngine/Utils/Debug/StackTrace.h"
 #include "DummyEngine/Utils/Helpers/Conversions.h"
 #include "DummyEngine/Utils/Helpers/Random.h"

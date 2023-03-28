@@ -15,16 +15,21 @@ namespace DE {
         Scene(const std::string& name = "Scene");
         ~Scene();
 
+        Entity CreateEmptyEntity();
         Entity CreateHiddenEntity(const std::string& name = "Entity");
         Entity CreateEntity(const std::string& name = "Entity");
-        Entity CreateEntityWithUUID(UUID uuid, const std::string& name = "Entity");
         Entity CloneEntity(const std::string& entity_to_clone, const std::string& new_name);
 
-        Entity                   GetByUUID(UUID uuid);
-        Entity                   GetByName(const std::string& name);
-        Entity                   GetCamera();
-        const std::string&       GetName() const;
-        Ref<SceneHierarchyNode>  GetHierarchy();
+        bool ExistsEntityWithTag(const TagComponent& name);
+        bool ExistsEntityWithID(UUID id);
+
+        Entity      GetByID(UUID uuid);
+        Entity      GetByTag(const std::string& name);
+        std::string GenAvilableEntityName(const std::string& prefered);
+
+        Entity                  GetCamera();
+        const std::string&      GetName() const;
+        Ref<SceneHierarchyNode> GetHierarchy();
 
         void OnUpdate(double dt);
         void OnViewPortResize(uint32_t x, uint32_t y);
@@ -39,15 +44,11 @@ namespace DE {
         friend class SceneLoader;
         friend class SceneRenderData;
 
-        Entity CreateEmptyEntity();
-        void   UpdateEmptyEntity(Entity entity);
-        void   OnEntityDestroy(Entity entity);
-
         std::string                              m_Name;
         Ref<Storage>                             m_Storage;
         Ref<SceneRenderData>                     m_RenderData;
         Ref<SceneHierarchyNode>                  m_HierarchyRoot;
-        std::unordered_map<UUID, Entity>         m_EntityByUUID;
-        std::unordered_map<TagComponent, Entity> m_EntityByName;
+        std::unordered_map<UUID, Entity>         m_EntityByID;
+        std::unordered_map<TagComponent, Entity> m_EntityByTag;
     };
 }  // namespace DE

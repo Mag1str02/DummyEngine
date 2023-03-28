@@ -220,11 +220,13 @@ namespace DE {
     }
     void EditorLayer::PrepareScene() {
         m_EditorCamera = m_SceneData.m_Scene->CreateHiddenEntity("Editor Camera");
+        m_EditorCamera.AddComponent<TransformComponent>();
         m_EditorCamera.AddComponent<FPSCamera>();
         m_EditorCamera.AddComponent<ScriptComponent>(ScriptEngine::CreateScript(ScriptManager::EditorScript("EditorCameraController")));
 
         m_SceneData.m_Scene->RegisterSystem<MovingSystem>();
         m_SceneHierarchy.SetActiveScene(m_SceneData.m_Scene);
+        m_Inspector.SetScene(m_SceneData.m_Scene);
         m_SceneHierarchy.UnSelect();
         m_Inspector.SetActiveEntity(m_SceneHierarchy.GetActiveEntity());
     }

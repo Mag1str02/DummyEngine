@@ -1,5 +1,7 @@
 
 set(ENGINE_SOURCES  
+Utils/Debug/Logger.cpp
+Utils/Debug/Profiler.cpp
 Utils/Debug/Assert.cpp
 Utils/Helpers/Conversions.cpp
 Utils/Helpers/Random.cpp
@@ -59,8 +61,6 @@ Core/Scripting/Script.cpp
 Core/Scripting/ScriptEngine.cpp
 Core/Scripting/ScriptClass.cpp
 
-ToolBox/Dev/Logger.cpp
-ToolBox/Dev/Profiler.cpp
 ToolBox/Loaders/ModelLoader.cpp
 ToolBox/Loaders/TextureLoader.cpp 
 ToolBox/Loaders/SceneLoader.cpp

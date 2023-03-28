@@ -2,7 +2,6 @@
 
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLRenderAPI.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLUtils.h"
-#include "DummyEngine/ToolBox/Dev/Logger.h"
 
 namespace DE
 {

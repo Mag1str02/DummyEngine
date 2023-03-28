@@ -7,5 +7,4 @@
 #include "DummyEngine/Core/Scene/Components.h"
 #include "DummyEngine/Core/Scene/Scene.h"
 #include "DummyEngine/Core/Scripting/Script.h"
-#include "DummyEngine/ToolBox/Dev/Logger.h"
 #include "DummyEngine/Utils/Base.h"

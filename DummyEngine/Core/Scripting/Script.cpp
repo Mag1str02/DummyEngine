@@ -105,7 +105,7 @@ namespace DE {
     Entity Script::GetEntityByName(const std::string& name) const {
         auto scene = m_Scene.lock();
         DE_ASSERT(scene, "Using invalid scene in script");
-        return scene->GetByName(name);
+        return scene->GetByTag(name);
     };
 
 }  // namespace DE

@@ -1,4 +1,4 @@
-#include "DummyEngine/ToolBox/Dev/Profiler.h"
+#include "DummyEngine/Utils/Debug/Profiler.h"
 
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 

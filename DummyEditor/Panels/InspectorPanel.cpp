@@ -23,6 +23,10 @@ namespace DE {
     }
     void InspectorPanel::View() {
         DE_PROFILE_SCOPE("InspectorPanel View");
+        auto scene = m_Scene.lock();
+        if (!scene) {
+            return;
+        }
 
         float sensitivity = 0.1;
 
@@ -60,16 +64,37 @@ namespace DE {
                 }
             }
             if (m_Entity.Has<TagComponent>()) {
-                auto& component = m_Entity.Get<TagComponent>();
+                // TODO: Find proper library function or write own
+                auto&      component = m_Entity.Get<TagComponent>();
+                static int swap      = 2;
                 if (ImGui::CollapsingHeader("Tag")) {
+                    static std::string current_name = "";
+                    if (swap == 2) {
+                        current_name = component.Get();
+                    }
+                    if (swap == 1) {
+                        m_Entity.Remove<TagComponent>();
+                        m_Entity.AddComponent<TagComponent>(scene->GenAvilableEntityName(current_name));
+                    }
+                    swap = 0;
+
                     ImGui::Text("Tag");
                     ImGui::SameLine(100);
                     ImGui::SetNextItemWidth(-1);
-                    ImGui::InputText("", &component.Get());
+
+                    ImGui::InputText("", &current_name, ImGuiInputTextFlags_CharsNoBlank);
+                    if (ImGui::IsItemDeactivatedAfterEdit()) {
+                        swap = 1;
+                    }
+                    if (ImGui::IsItemActivated()) {
+                        swap = 2;
+                    }
+                } else {
+                    swap = 2;
                 }
             }
-            if (m_Entity.Has<IdComponent>()) {
-                auto& component = m_Entity.Get<IdComponent>();
+            if (m_Entity.Has<IDComponent>()) {
+                auto& component = m_Entity.Get<IDComponent>();
                 if (ImGui::CollapsingHeader("UUID")) {
                     ImGui::Text("%s", component.Hex().c_str());
                 }
@@ -188,6 +213,9 @@ namespace DE {
     }
     void InspectorPanel::SetActiveEntity(Entity entity) {
         m_Entity = entity;
+    }
+    void InspectorPanel::SetScene(WeakRef<Scene> scene) {
+        m_Scene = scene;
     }
 
 }  // namespace DE

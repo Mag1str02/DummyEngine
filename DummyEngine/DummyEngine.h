@@ -16,8 +16,6 @@
 #include "DummyEngine/Core/Scene/Scene.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
-#include "DummyEngine/ToolBox/Dev/Logger.h"
-#include "DummyEngine/ToolBox/Dev/Profiler.h"
 #include "DummyEngine/ToolBox/Editors/TextureEditor.h"
 #include "DummyEngine/ToolBox/Loaders/ModelLoader.h"
 #include "DummyEngine/ToolBox/Loaders/SceneLoader.h"

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DummyEngine/Utils/Base/STDIncludes.h"
+
 namespace DE {
     namespace Constants {
         const float DefaultCameraFOV       = 90.0f;

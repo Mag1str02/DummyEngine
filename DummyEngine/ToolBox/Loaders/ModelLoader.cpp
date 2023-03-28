@@ -3,7 +3,6 @@
 #include <assimp/postprocess.h>
 
 #include "DummyEngine/Core/Application/Config.h"
-#include "DummyEngine/ToolBox/Dev/Logger.h"
 #include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
 
 namespace DE {
