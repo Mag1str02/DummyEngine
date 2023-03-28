@@ -1,10 +1,10 @@
 #include "DummyEngine/ToolBox/Dev/Logger.h"
 
-#include "DummyEngine/Utils/Assert.h"
-#include "DummyEngine/Utils/Config.h"
-#include "DummyEngine/Utils/Constants.h"
-#include "DummyEngine/Utils/FileSystem.h"
-#include "DummyEngine/Utils/StringOperations.h"
+#include "DummyEngine/Core/Application/Config.h"
+#include "DummyEngine/Core/Application/FileSystem.h"
+#include "DummyEngine/Utils/Base/Constants.h"
+#include "DummyEngine/Utils/Debug/Assert.h"
+#include "DummyEngine/Utils/Helpers/StringOperations.h"
 
 namespace DE {
     std::string LogMessageTypeToStr(LogMessageType type) {

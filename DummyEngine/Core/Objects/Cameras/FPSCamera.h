@@ -2,20 +2,18 @@
 
 #include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
     class SceneLoader;
 
-    class FPSCamera
-    {
+    class FPSCamera {
     private:
         friend class InspectorPanel;
         friend class SceneLoader;
 
-        float m_FOV       = Config::GetF(DE_CFG_DEFAULT_CAMERA_FOV);
-        float m_Aspect    = Config::GetF(DE_CFG_DEFAULT_CAMERA_ASPECT);
-        float m_NearPlane = Config::GetF(DE_CFG_DEFAULT_CAMERA_NEAR_PLANE);
-        float m_FarPlane  = Config::GetF(DE_CFG_DEFAULT_CAMERA_FAR_PLANE);
+        float m_FOV       = Constants::DefaultCameraFOV;
+        float m_Aspect    = Constants::DefaultCameraAspect;
+        float m_NearPlane = Constants::DefaultCameraNearPlane;
+        float m_FarPlane  = Constants::DefaultCameraFarPlane;
 
         Vec3 m_WorldUp  = Vec3(0.0f, 1.0f, 0.0f);
         Vec3 m_Position = Vec3(0.0f, 0.0f, 0.0f);

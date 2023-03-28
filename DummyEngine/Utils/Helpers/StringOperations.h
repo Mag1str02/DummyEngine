@@ -1,5 +1,5 @@
 #pragma once
-#include "DummyEngine/Utils/STDIncludes.h"
+#include "DummyEngine/Utils/Base/STDIncludes.h"
 
 bool StartsWith(std::string_view string, std::string_view text);
 bool EndsWith(std::string_view string, std::string_view text);
@@ -18,8 +18,6 @@ std::string_view Dirname(std::string_view path);
 
 std::string CollapseSlashes(std::string_view path);
 std::string StrJoin(const std::vector<std::string_view>& strings, std::string_view delimiter);
-
-std::string ReadN(const std::string&, size_t n);
 
 std::vector<std::string_view> StrSplit(std::string_view text, std::string_view delimiter);
 

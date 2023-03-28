@@ -3,7 +3,7 @@
 namespace DE {
     void ProfilerPanel::View() {
         DE_PROFILE_SCOPE("ProfilerPanel OnImGuiRender");
-#if DE_PROFILER_ENABLED
+#if DE_ENABLE_PROFILER
         RenderTimeLapse(Profiler::GetOldestFrame().m_TimeLapses, 0);
 #endif
     }

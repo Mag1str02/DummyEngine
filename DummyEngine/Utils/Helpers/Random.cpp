@@ -1,4 +1,4 @@
-#include "DummyEngine/Utils/Random.h"
+#include "DummyEngine/Utils/Helpers/Random.h"
 
 namespace DE
 {

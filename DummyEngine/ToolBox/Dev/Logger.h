@@ -1,9 +1,8 @@
 #pragma once
 
-#include "DummyEngine/Utils/STDIncludes.h"
-#include "DummyEngine/Utils/Singleton.h"
-#include "DummyEngine/Utils/StringOperations.h"
-#include "DummyEngine/Utils/Types.h"
+#include "DummyEngine/Utils/Base/STDIncludes.h"
+#include "DummyEngine/Utils/Helpers/Singleton.h"
+#include "DummyEngine/Utils/Helpers/StringOperations.h"
 
 namespace DE {
     enum class LogMessageType { None = 0, Debug, Info, Warning, Error, Fatal };

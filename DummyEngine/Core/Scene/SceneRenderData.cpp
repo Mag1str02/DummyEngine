@@ -48,7 +48,6 @@ namespace DE {
             e.Get<TransformComponent>().translation = m_Camera.Get<FPSCamera>().GetPos();
             Renderer::Submit(e.Get<SkyBox>().map, e.Get<ShaderComponent>().shader, e.Get<TransformComponent>().GetTransform());
         }
-        glCheckError();
     }
 
     void SceneRenderData::UpdateLights() {
@@ -73,7 +72,6 @@ namespace DE {
             shader->Bind();
             shader->SetInt("u_LightAmount", cnt_light_sources);
         }
-        glCheckError();
     }
     void SceneRenderData::UpdateVP() {
         DE_PROFILE_SCOPE("UpdateVP");
@@ -88,7 +86,6 @@ namespace DE {
             }
         }
         m_VP->PushData();
-        glCheckError();
     }
 
     void SceneRenderData::SetVPEntity(const Entity& entity) {
@@ -96,7 +93,6 @@ namespace DE {
         for (auto [id, shader] : m_Shaders) {
             shader->Bind();
             shader->SetInt("u_VP", m_EntityToVPIndex[entity]);
-            glCheckError();
         }
     }
 

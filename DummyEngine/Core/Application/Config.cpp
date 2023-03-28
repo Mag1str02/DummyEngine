@@ -1,6 +1,4 @@
-#include "DummyEngine/Utils/STDIncludes.h"
-#include "DummyEngine/Utils/Config.h"
-#include "DummyEngine/Utils/Assert.h"
+#include "DummyEngine/Core/Application/Config.h"
 
 namespace DE
 {

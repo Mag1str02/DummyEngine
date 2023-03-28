@@ -1,6 +1,8 @@
 #include "DummyEngine/Core/Scripting/SharedObject.h"
 
-#include "DummyEngine/Platform/PlatformIncludes.h"
+#include <windows.h>
+
+#include "DummyEngine/Core/Application/Config.h"
 
 namespace DE {
     class SharedObjectImpl {

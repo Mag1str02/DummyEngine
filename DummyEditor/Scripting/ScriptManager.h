@@ -1,10 +1,5 @@
+#include "DummyEditor/DummyEngineInclude.h"
 #include "DummyEditor/Scripting/EditorScripts.h"
-#include "DummyEngine/Core/ResourceManaging/Assets.h"
-#include "DummyEngine/Core/Scene/Scene.h"
-#include "DummyEngine/Core/Scripting/Script.h"
-#include "DummyEngine/Core/Scripting/ScriptClass.h"
-#include "DummyEngine/Core/Scripting/SharedObject.h"
-#include "DummyEngine/Utils/Base.h"
 
 namespace DE {
     class ScriptManager : public Singleton<ScriptManager> {

@@ -6,6 +6,7 @@
 // clang-format on
 
 #include "DummyEngine/Core/Application/Application.h"
+#include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 #include "DummyEngine/Core/ResourceManaging/AssetManager.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"

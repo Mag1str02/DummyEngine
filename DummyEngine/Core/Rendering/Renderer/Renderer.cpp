@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 
+#include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLRenderAPI.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/ToolBox/Dev/Logger.h"

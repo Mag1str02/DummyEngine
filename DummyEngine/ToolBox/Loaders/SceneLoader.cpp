@@ -1,5 +1,6 @@
 #include "DummyEngine/ToolBox/Loaders/SceneLoader.h"
 
+#include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
@@ -283,7 +284,7 @@ namespace DE {
     }
 
     template <typename ComponentType> void SceneLoader::LoadComponent(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
-        LOG_WARNING("SceneLoader", "Load function of ", DemangleName<ComponentType>(), " undefined.");
+        LOG_WARNING("SceneLoader", "Load function of ", DemangledName<ComponentType>(), " undefined.");
     }
     template <> void SceneLoader::LoadComponent<TagComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
         entity.AddComponent<TagComponent>(n_Component.as<std::string>());

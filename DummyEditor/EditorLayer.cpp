@@ -46,13 +46,10 @@ namespace DE {
 
         ProcessControlls(dt);
 
-        {
-            DE_PROFILE_SCOPE("OnViewPortResize");
+        m_SceneData.m_FrameBuffer->Resize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
+        m_SceneData.m_FrameBuffer->Bind();
+        Renderer::OnWindowResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
 
-            m_SceneData.m_FrameBuffer->Resize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
-            Renderer::OnWindowResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
-            m_SceneData.m_FrameBuffer->Bind();
-        }
         if (m_SceneData.m_Scene) {
             m_SceneData.m_Scene->OnViewPortResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
             m_SceneData.m_Scene->OnUpdate(dt);

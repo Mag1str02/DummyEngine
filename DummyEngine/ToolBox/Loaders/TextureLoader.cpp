@@ -3,6 +3,7 @@
 #include <stb_image.h>
 #include <stb_image_write.h>
 
+#include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/ToolBox/Dev/Logger.h"
 
 namespace DE {

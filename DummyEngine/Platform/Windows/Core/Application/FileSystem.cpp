@@ -1,19 +1,17 @@
 #define GLFW_EXPOSE_NATIVE_WIN32
-#include <windows.h>
-
-#include "DummyEngine/Utils/FileSystem.h"
-#include "DummyEngine/Core/Application/Application.h"
+#include "DummyEngine/Core/Application/FileSystem.h"
 
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
+#include <windows.h>
 
-namespace DE
-{
+#include "DummyEngine/Core/Application/Application.h"
+
+namespace DE {
 
     using namespace std::string_literals;
 
-    Path FileSystem::OpenFileDialog(const std::string& description, const std::string& filter)
-    {
+    Path FileSystem::OpenFileDialog(const std::string& description, const std::string& filter) {
         std::string filter_command;
         filter_command.reserve(description.size() + filter.size() + 3);
         filter_command.append(description);
@@ -21,7 +19,7 @@ namespace DE
         filter_command.append(filter);
         filter_command.append("\0"s);
         filter_command.append("\0"s);
-        
+
         OPENFILENAMEA ofn;
         CHAR          szFile[260]     = {0};
         CHAR          currentDir[256] = {0};
@@ -40,8 +38,7 @@ namespace DE
         return Path();
     }
 
-    Path FileSystem::SaveFileDialog(const std::string& description, const std::string& filter)
-    {
+    Path FileSystem::SaveFileDialog(const std::string& description, const std::string& filter) {
         std::string filter_command;
         filter_command.reserve(description.size() + filter.size() + 3);
         filter_command.append(description);
@@ -66,8 +63,7 @@ namespace DE
         // Sets the default extension by extracting it from the filter
         ofn.lpstrDefExt = strchr(filter_command.c_str(), '\0') + 1;
 
-        if (GetSaveFileNameA(&ofn) == TRUE)
-        {
+        if (GetSaveFileNameA(&ofn) == TRUE) {
             return ofn.lpstrFile;
         }
 

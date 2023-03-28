@@ -1,13 +1,11 @@
 
 set(ENGINE_SOURCES  
-Utils/GLDebug.cpp
-Utils/Assert.cpp
-Utils/Config.cpp
-Utils/Conversions.cpp
-Utils/UUID.cpp
-Utils/Random.cpp
-Utils/Timer.cpp
-Utils/StringOperations.cpp
+Utils/Debug/Assert.cpp
+Utils/Helpers/Conversions.cpp
+Utils/Helpers/Random.cpp
+Utils/Helpers/Timer.cpp
+Utils/Helpers/StringOperations.cpp
+Utils/Types/UUID.cpp
 
 Core/Application/Application.cpp
 Core/Application/ImGuiLayer.cpp
@@ -16,6 +14,7 @@ Core/Application/ImGuiPanelStack.cpp
 Core/Application/Window.cpp
 Core/Application/Input.cpp
 Core/Application/Initializer.cpp
+Core/Application/Config.cpp
 
 Core/ECS/ECS.cpp
 
@@ -50,6 +49,7 @@ Core/Rendering/RendererOpenGL/GLShader.cpp
 Core/Rendering/RendererOpenGL/GLTexture.cpp
 Core/Rendering/RendererOpenGL/GLUniformBuffer.cpp
 Core/Rendering/RendererOpenGL/GLRenderAPI.cpp
+Core/Rendering/RendererOpenGL/GLDebug.cpp
 
 Core/ResourceManaging/AssetManager.cpp
 Core/ResourceManaging/RawData.cpp
@@ -67,10 +67,10 @@ ToolBox/Loaders/SceneLoader.cpp
 ToolBox/Editors/TextureEditor.cpp
 )
 
-if(${CMAKE_PLATFORM} STREQUAL "WINDOWS")
+if( ${CMAKE_PLATFORM} STREQUAL "WINDOWS")
 set(PLATFORM_SOURCES
-    Platform/Windows/Utils/FileSystem.cpp
-    Platform/Windows/Utils/StackTrace.cpp
+    Platform/Windows/Core/Application/FileSystem.cpp
+    Platform/Windows/Utils/Debug/StackTrace.cpp
     Platform/Windows/Core/Scripting/SharedObject.cpp
 )
 endif()

@@ -2,9 +2,6 @@
 
 #include "DummyEditor/Scripting/Compiler.h"
 #include "DummyEditor/Scripting/EditorScripts.h"
-#include "DummyEngine/Core/ResourceManaging/AssetManager.h"
-#include "DummyEngine/Core/Scripting/ScriptEngine.h"
-#include "DummyEngine/ToolBox/Loaders/SceneLoader.h"
 
 namespace DE {
     Path PathToCompiledScript(Path path) {

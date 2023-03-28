@@ -5,7 +5,6 @@
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
-    template <typename T, typename U> constexpr uint32_t OffsetOf(U T::*member);
 
     enum class ScriptFieldType {
         None = 0,
@@ -21,9 +20,6 @@ namespace DE {
         Vec3,
         Vec4,
     };
-    std::string                           ScriptFieldTypeToString(ScriptFieldType type);
-    template <typename T> ScriptFieldType TypeToScriptFieldType();
-
     struct ScriptClassField {
         ScriptFieldType type;
         uint32_t        offset;
@@ -95,23 +91,8 @@ namespace DE {
         WeakRef<Scene> m_Scene;
         Entity         m_Entity;
     };
-
-#define FIELD(field)                                                                              \
-    {                                                                                             \
-#field, { TypeToScriptFieldType<decltype(field)>(), OffsetOf(&CurrentScriptType::field) } \
-    }
-
-#define SCRIPT(type)                                                              \
-    static const std::unordered_map<std::string, ScriptClassField> s_ClassFields; \
-                                                                                  \
-protected:                                                                        \
-    virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const override { return s_ClassFields; }
-
-#define SCRIPT_BASE(type, ...)                                                                    \
-    using CurrentScriptType                                                     = type;           \
-    const std::unordered_map<std::string, ScriptClassField> type::s_ClassFields = {__VA_ARGS__};  \
-    DE_SCRIPT_API Script*                                   type##Create() { return new type(); } \
-    DE_SCRIPT_API void                                      type##Delete(Script* script) { delete script; }
+    std::string                           ScriptFieldTypeToString(ScriptFieldType type);
+    template <typename T> ScriptFieldType TypeToScriptFieldType();
 
     template <typename T, typename U> constexpr uint32_t OffsetOf(U T::*member) {
         return (char*)&((T*)nullptr->*member) - (char*)nullptr;
@@ -155,4 +136,22 @@ protected:                                                                      
         DE_ASSERT(m_Entity.Valid(), "Using invalid entity in script");
         m_Entity.Remove<T>();
     }
+
+#define FIELD(field)                                                                              \
+    {                                                                                             \
+#field, { TypeToScriptFieldType<decltype(field)>(), OffsetOf(&CurrentScriptType::field) } \
+    }
+
+#define SCRIPT(type)                                                              \
+    static const std::unordered_map<std::string, ScriptClassField> s_ClassFields; \
+                                                                                  \
+protected:                                                                        \
+    virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const override { return s_ClassFields; }
+
+#define SCRIPT_BASE(type, ...)                                                                    \
+    using CurrentScriptType                                                     = type;           \
+    const std::unordered_map<std::string, ScriptClassField> type::s_ClassFields = {__VA_ARGS__};  \
+    DE_SCRIPT_API Script*                                   type##Create() { return new type(); } \
+    DE_SCRIPT_API void                                      type##Delete(Script* script) { delete script; }
+
 }  // namespace DE

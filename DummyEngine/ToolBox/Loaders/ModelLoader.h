@@ -6,7 +6,6 @@
 
 #include "DummyEngine/Core/ResourceManaging/Assets.h"
 
-
 namespace DE {
     namespace fs = std::filesystem;
 

@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "DummyEngine/Utils/Singleton.h"
+#include "DummyEngine/Utils/Helpers/Singleton.h"
 
 namespace DE {
     struct TimeLapse {
@@ -49,7 +49,7 @@ namespace DE {
         ~ProfilerScopeObject();
     };
 
-#if DE_PROFILER_ENABLED
+#if DE_ENABLE_PROFILER
 #define DE_PROFILE_SCOPE(name) ProfilerScopeObject profiler_scope_object(name)
 #define DE_PROFILER_BEGIN_FRAME() Profiler::BeginFrame()
 #else

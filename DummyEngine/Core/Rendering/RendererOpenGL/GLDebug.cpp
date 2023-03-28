@@ -1,6 +1,6 @@
 #include <glad/glad.h>
-#include "DummyEngine/Utils/GLDebug.h"
-#include "DummyEngine/Utils/STDIncludes.h"
+
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLDebug.h"
 
 namespace DE
 {

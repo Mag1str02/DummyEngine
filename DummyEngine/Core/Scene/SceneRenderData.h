@@ -1,16 +1,14 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
-#include "DummyEngine/Core/Scene/Scene.h"
 #include "DummyEngine/Core/ECS/ECS.h"
-#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 #include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
+#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 #include "DummyEngine/Core/Rendering/Renderer/UniformBuffer.h"
+#include "DummyEngine/Core/Scene/Scene.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
-    class SceneRenderData
-    {
+namespace DE {
+    class SceneRenderData {
     public:
         SceneRenderData(Scene* scene);
 
@@ -29,12 +27,12 @@ namespace DE
     private:
         void CreateInstancedMesh(UUID mesh_id, UUID shader_id);
 
-        std::unordered_map<uint64_t, Ref<Shader>>                                                     m_Shaders;
-        std::unordered_map<std::pair<UUID, UUID>, Pair<Ref<RenderMesh>, Ref<Shader>>, std::pair_hash> m_InstancedMeshes;
-        std::unordered_map<Entity, uint32_t>                                                          m_EntityToVPIndex;
-        Ref<UniformBuffer>                                                                            m_Lights;
-        Ref<UniformBuffer>                                                                            m_VP;
-        Scene*                                                                                        m_Scene;
-        Entity                                                                                        m_Camera;
+        std::unordered_map<UUID, Ref<Shader>>                                                   m_Shaders;
+        std::unordered_map<std::pair<UUID, UUID>, Pair<Ref<RenderMesh>, Ref<Shader>>, PairHash> m_InstancedMeshes;
+        std::unordered_map<Entity, uint32_t>                                                    m_EntityToVPIndex;
+        Ref<UniformBuffer>                                                                      m_Lights;
+        Ref<UniformBuffer>                                                                      m_VP;
+        Scene*                                                                                  m_Scene;
+        Entity                                                                                  m_Camera;
     };
 }  // namespace DE

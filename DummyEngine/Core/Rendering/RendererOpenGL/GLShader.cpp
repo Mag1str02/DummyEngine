@@ -1,6 +1,8 @@
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLShader.h"
 
+#include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLDebug.h"
 #include "DummyEngine/ToolBox/Dev/Logger.h"
 
 namespace DE {

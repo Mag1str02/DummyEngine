@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLDebug.h"
 #include "DummyEngine/Core/ResourceManaging/RawData.h"
 
 namespace DE

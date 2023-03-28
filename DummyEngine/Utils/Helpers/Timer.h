@@ -1,10 +1,9 @@
 #pragma once
-#include "DummyEngine/Utils/STDIncludes.h"
 
-namespace DE
-{
-    class Timer
-    {
+#include "DummyEngine/Utils/Base/STDIncludes.h"
+
+namespace DE {
+    class Timer {
     public:
         Timer();
 

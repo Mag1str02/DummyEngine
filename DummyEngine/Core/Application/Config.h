@@ -1,8 +1,8 @@
 #pragma once
-#include "DummyEngine/Utils/Types.h"
 
-namespace DE
-{
+#include "DummyEngine/Utils/Base.h"
+
+namespace DE {
 
 #define DE_CFG_MAX_COMPILE_ERROR_LEN 1
 #define DE_CFG_MAX_INPUT_FRAME_AMOUNT 2
@@ -27,8 +27,7 @@ namespace DE
 
     // TODO: Singleton
 
-    class Config
-    {
+    class Config {
     public:
         static uint32_t GetI(uint32_t setting);
         static float    GetF(uint32_t setting);
@@ -40,8 +39,7 @@ namespace DE
         static void Terminate();
 
     private:
-        struct Configs
-        {
+        struct Configs {
             uint32_t c_MaxShaderCompileErrorLen = 512;
             uint32_t c_MaxInputFrameAmount      = 100;
             uint32_t c_MaxMessageTypeLength     = 7;

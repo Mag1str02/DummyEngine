@@ -1,9 +1,8 @@
 #pragma once
 
-#include "DummyEngine/Core/Scripting/ScriptEngine.h"
+#include "DummyEditor/DummyEngineInclude.h"
 
-namespace DE
-{
+namespace DE {
     extern std::vector<ScriptAsset>              g_EditorScriptAssets;
     extern std::unordered_map<std::string, UUID> g_EditorScriptNameToId;
 }  // namespace DE
