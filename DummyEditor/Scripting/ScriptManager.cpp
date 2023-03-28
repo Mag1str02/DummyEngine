@@ -1,7 +1,6 @@
 #include "DummyEditor/Scripting/ScriptManager.h"
 
 #include "DummyEditor/Scripting/Compiler.h"
-#include "DummyEditor/Scripting/EditorScripts.h"
 
 namespace DE {
     Path PathToCompiledScript(Path path) {
@@ -25,12 +24,12 @@ namespace DE {
         std::vector<uint32_t> recompile_ids = RecompilationList(scripts);
         if (!recompile_ids.empty()) {
             auto failed_file = CompileSelected(scripts, recompile_ids);
-            DE_ASSERT(!failed_file.has_value(), StrCat("Failed to compile source file (", failed_file.value().string(), ")"));
+            DE_ASSERT(!failed_file.has_value(), "Failed to compile source file (", failed_file.value().string(), ")");
         }
         auto new_library_name = LinkLibrary(scripts);
-        DE_ASSERT(new_library_name.has_value(), StrCat("Failed to link library (", new_library_name.value(), ")"));
+        DE_ASSERT(new_library_name.has_value(), "Failed to link library (", new_library_name.value(), ")");
         auto swapped = SwapLibrary(new_library_name.value());
-        DE_ASSERT(swapped, StrCat("Failed to load library (", new_library_name.value(), ")"));
+        DE_ASSERT(swapped, "Failed to load library (", new_library_name.value(), ")");
 
         for (const auto& script : scripts) {
             ScriptEngine::AddScript(script.id);
@@ -61,11 +60,11 @@ namespace DE {
         auto states = SaveSciptStates(scene);
 
         auto failed_file = CompileSelected(scripts, recompile_ids);
-        DE_ASSERT(!failed_file.has_value(), StrCat("Failed to compile source file (", failed_file.value().string(), ")"));
+        DE_ASSERT(!failed_file.has_value(), "Failed to compile source file (", failed_file.value().string(), ")");
         auto new_library_name = LinkLibrary(scripts);
-        DE_ASSERT(new_library_name.has_value(), StrCat("Failed to link library (", new_library_name.value(), ")"));
+        DE_ASSERT(new_library_name.has_value(), "Failed to link library (", new_library_name.value(), ")");
         auto swapped = SwapLibrary(new_library_name.value());
-        DE_ASSERT(swapped, StrCat("Failed to load library (", new_library_name.value(), ")"));
+        DE_ASSERT(swapped, "Failed to load library (", new_library_name.value(), ")");
 
         RestoreSciptStates(states, scene);
         AttachScripts(scene);
@@ -80,6 +79,10 @@ namespace DE {
             }
         }
         return Unit();
+    }
+    S_METHOD_IMPL(UUID, EditorScript, (const std::string& name), (name)) {
+        DE_ASSERT(m_EditorScriptNameToId.contains(name), "There is no editor script with name (", name, ")");
+        return m_EditorScriptNameToId.at(name);
     }
 
     ScriptManager::ScriptStates ScriptManager::SaveSciptStates(Ref<Scene> scene) {
@@ -162,11 +165,11 @@ namespace DE {
     void ScriptManager::LoadEditorLibrary() {
         Ref<SharedObject> library               = CreateRef<SharedObject>();
         bool              editor_library_loaded = library->Load(Config::GetPath(DE_CFG_EXECUTABLE_PATH), DE_EDITOR_LIBRARY_NAME);
-        DE_ASSERT(editor_library_loaded, "Failed to load editor library.");
+        DE_ASSERT(editor_library_loaded, "Failed to load editor library (", DE_EDITOR_LIBRARY_NAME, ")");
         ScriptEngine::AddLibrary(library);
     }
     void ScriptManager::LoadEditorScripts() {
-        for (const auto& asset : g_EditorScriptAssets) {
+        for (const auto& asset : m_EditorScriptAssets) {
             AssetManager::AddScriptAsset(asset);
             ScriptEngine::AddScript(asset.id);
         }
@@ -175,7 +178,7 @@ namespace DE {
     std::vector<uint32_t> ScriptManager::RecompilationList(const std::vector<ScriptAsset>& scripts) {
         std::vector<uint32_t> recompile_ids;
         for (size_t i = 0; i < scripts.size(); ++i) {
-            DE_ASSERT(fs::exists(scripts[i].path), StrCat("Failed to find script source file(", scripts[i].path.string(), ")"));
+            DE_ASSERT(fs::exists(scripts[i].path), "Failed to find script source file(", scripts[i].path.string(), ")");
             if (NeedToCompile(scripts[i].path)) {
                 recompile_ids.push_back(i);
             }

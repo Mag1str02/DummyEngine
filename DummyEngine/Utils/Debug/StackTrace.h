@@ -2,7 +2,6 @@
 
 #include "DummyEngine/Utils/Base/STDIncludes.h"
 
-namespace DE
-{
-    std::stringstream StackTrace();
+namespace DE {
+    std::string StackTrace();
 }

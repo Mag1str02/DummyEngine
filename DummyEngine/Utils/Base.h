@@ -7,6 +7,7 @@
 #include "DummyEngine/Utils/Base/GLMIncludes.h"
 #include "DummyEngine/Utils/Base/STDIncludes.h"
 #include "DummyEngine/Utils/Debug/Assert.h"
+#include "DummyEngine/Utils/Debug/Demangler.h"
 #include "DummyEngine/Utils/Debug/StackTrace.h"
 #include "DummyEngine/Utils/Helpers/Conversions.h"
 #include "DummyEngine/Utils/Helpers/Random.h"

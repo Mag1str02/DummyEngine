@@ -8,6 +8,7 @@ namespace DE {
     extern void SetupApplication();
 }
 
+
 int main() {
     try {
         DE::Initializer::Initialize();
@@ -17,7 +18,7 @@ int main() {
 
         DE::Initializer::Terminate();
     } catch (const std::exception& e) {
-        DE::Logger::Log(DE::LogMessageType::Fatal, "EntryPoint", StrCat("Unhandled exeption occured: ", e.what()));
+        DE::Logger::Log(DE::LogMessageType::Fatal, "EntryPoint", DE::StrCat("Unhandled exeption occured: ", e.what()));
         return -1;
     } catch (...) {
         DE::Logger::Log(DE::LogMessageType::Fatal, "EntryPoint", "Unknown error occured");

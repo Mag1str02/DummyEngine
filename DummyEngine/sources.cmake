@@ -71,6 +71,7 @@ if( ${CMAKE_PLATFORM} STREQUAL "WINDOWS")
 set(PLATFORM_SOURCES
     Platform/Windows/Core/Application/FileSystem.cpp
     Platform/Windows/Utils/Debug/StackTrace.cpp
+    Platform/Windows/Utils/Debug/Demangler.cpp
     Platform/Windows/Core/Scripting/SharedObject.cpp
 )
 endif()

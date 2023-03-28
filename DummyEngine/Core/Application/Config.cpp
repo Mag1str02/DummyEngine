@@ -1,35 +1,28 @@
 #include "DummyEngine/Core/Application/Config.h"
 
-namespace DE
-{
+namespace DE {
     Config::Configs Config::m_Configs;
 
-    uint32_t Config::GetI(uint32_t setting)
-    {
-        switch (setting)
-        {
+    uint32_t Config::GetI(uint32_t setting) {
+        switch (setting) {
             case DE_CFG_MAX_COMPILE_ERROR_LEN: return m_Configs.c_MaxShaderCompileErrorLen;
             case DE_CFG_MAX_INPUT_FRAME_AMOUNT: return m_Configs.c_MaxInputFrameAmount;
-            default: DE_ASSERT(false, "Wrong config requested.");
+            default: DE_ASSERT(false, "Wrong config requested (", setting, ")");
         }
         return 0;
     }
-    float Config::GetF(uint32_t setting)
-    {
-        switch (setting)
-        {
+    float Config::GetF(uint32_t setting) {
+        switch (setting) {
             case DE_CFG_DEFAULT_CAMERA_FOV: return m_Configs.c_DefaultCameraFOV;
             case DE_CFG_DEFAULT_CAMERA_ASPECT: return m_Configs.c_DefaultCameraAspect;
             case DE_CFG_DEFAULT_CAMERA_NEAR_PLANE: return m_Configs.c_DefaultCameraNearPlane;
             case DE_CFG_DEFAULT_CAMERA_FAR_PLANE: return m_Configs.c_DefaultCameraFarPlane;
-            default: DE_ASSERT(false, "Wrong config requested.");
+            default: DE_ASSERT(false, "Wrong config requested (", setting, ")");
         }
         return 0;
     }
-    Path Config::GetPath(uint32_t setting)
-    {
-        switch (setting)
-        {
+    Path Config::GetPath(uint32_t setting) {
+        switch (setting) {
             case DE_CFG_EXECUTABLE_PATH: return m_Configs.c_ExecutablePath;
             case DE_CFG_ASSET_PATH: return m_Configs.c_AssetPath;
             case DE_CFG_LOG_PATH: return m_Configs.c_LogPath;
@@ -39,13 +32,14 @@ namespace DE
             case DE_CFG_SCRIPT_PATH: return m_Configs.c_ScriptPath;
             case DE_CFG_CACHE_PATH: return m_Configs.c_CachePath;
             case DE_CFG_SCRIPT_CACHE_PATH: return m_Configs.c_ScriptCachePath;
-            default: DE_ASSERT(false, "Wrong config requested.");
+            default: DE_ASSERT(false, "Wrong config requested (", setting, ")");
         }
         return Path(".");
     }
-    API  Config::GetRenderAPI() { return m_Configs.c_RenderAPI; }
-    void Config::Initialize()
-    {
+    API Config::GetRenderAPI() {
+        return m_Configs.c_RenderAPI;
+    }
+    void Config::Initialize() {
         m_Configs.c_ExecutablePath = fs::current_path();
         std::cout << "Executable path: " << m_Configs.c_ExecutablePath.string() << std::endl;
 
@@ -62,5 +56,7 @@ namespace DE
     }
     void Config::Terminate() {}
 
-    Path RelativeToExecutable(const Path& path) { return fs::relative(path, Config::GetPath(DE_CFG_EXECUTABLE_PATH)); }
+    Path RelativeToExecutable(const Path& path) {
+        return fs::relative(path, Config::GetPath(DE_CFG_EXECUTABLE_PATH));
+    }
 }  // namespace DE

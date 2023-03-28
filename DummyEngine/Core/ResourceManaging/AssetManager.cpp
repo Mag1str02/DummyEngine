@@ -14,7 +14,7 @@ namespace DE {
             return false;
         }
         m_Scripts[asset.id] = asset;
-        LOG_INFO("AssetManager", "Added ScriptAsset(", asset.name, "|", asset.id.Hex(), ")");
+        LOG_INFO("AssetManager", "Added ScriptAsset(", asset.name, "|", asset.id, ")");
         return true;
     }
     S_METHOD_IMPL(bool, AddTextureAsset, (const TextureAsset& asset), (asset)) {
@@ -22,7 +22,7 @@ namespace DE {
             return false;
         }
         m_Textures[asset.id] = asset;
-        LOG_INFO("AssetManager", "Added TextureAsset(", asset.name, "|", asset.id.Hex(), ")");
+        LOG_INFO("AssetManager", "Added TextureAsset(", asset.name, "|", asset.id, ")");
         return true;
     }
     S_METHOD_IMPL(bool, AddShaderAsset, (const ShaderAsset& asset), (asset)) {
@@ -30,7 +30,7 @@ namespace DE {
             return false;
         }
         m_Shaders[asset.id] = asset;
-        LOG_INFO("AssetManager", "Added ShaderAsset(", asset.name, "|", asset.id.Hex(), ")");
+        LOG_INFO("AssetManager", "Added ShaderAsset(", asset.name, "|", asset.id, ")");
         return true;
     }
     S_METHOD_IMPL(bool, AddRenderMeshAsset, (const RenderMeshAsset& asset), (asset)) {
@@ -38,7 +38,7 @@ namespace DE {
             return false;
         }
         m_RenderMeshes[asset.id] = asset;
-        LOG_INFO("AssetManager", "Added RenderMeshAsset(", asset.name, "|", asset.id.Hex(), ")");
+        LOG_INFO("AssetManager", "Added RenderMeshAsset(", asset.name, "|", asset.id, ")");
         return true;
     }
 
@@ -70,7 +70,7 @@ namespace DE {
     S_METHOD_IMPL(bool, RemoveScriptAsset, (UUID id), (id)) {
         if (m_Scripts.contains(id)) {
             m_Scripts.erase(id);
-            LOG_INFO("AssetManager", "Remove ScriptAsset(", id.Hex(), ")");
+            LOG_INFO("AssetManager", "Remove ScriptAsset(", id, ")");
             return true;
         }
         return false;
@@ -78,7 +78,7 @@ namespace DE {
     S_METHOD_IMPL(bool, RemoveTextureAsset, (UUID id), (id)) {
         if (m_Textures.contains(id)) {
             m_Textures.erase(id);
-            LOG_INFO("AssetManager", "Remove TextureAsset(", id.Hex(), ")");
+            LOG_INFO("AssetManager", "Remove TextureAsset(", id, ")");
             return true;
         }
         return false;
@@ -86,7 +86,7 @@ namespace DE {
     S_METHOD_IMPL(bool, RemoveShaderAsset, (UUID id), (id)) {
         if (m_Shaders.contains(id)) {
             m_Shaders.erase(id);
-            LOG_INFO("AssetManager", "Remove ShaderAsset(", id.Hex(), ")");
+            LOG_INFO("AssetManager", "Remove ShaderAsset(", id, ")");
             return true;
         }
         return false;
@@ -94,7 +94,7 @@ namespace DE {
     S_METHOD_IMPL(bool, RemoveRenderMeshAsset, (UUID id), (id)) {
         if (m_RenderMeshes.contains(id)) {
             m_RenderMeshes.erase(id);
-            LOG_INFO("AssetManager", "Remove RenderMeshAsset(", id.Hex(), ")");
+            LOG_INFO("AssetManager", "Remove RenderMeshAsset(", id, ")");
             return true;
         }
         return false;

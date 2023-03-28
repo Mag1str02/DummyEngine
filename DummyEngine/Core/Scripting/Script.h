@@ -99,25 +99,31 @@ namespace DE {
     }
 
     template <typename T> T& Script::Field::Get() {
-        DE_ASSERT(
-            m_Type == TypeToScriptFieldType<T>(),
-            StrCat("Wrong field type (", ScriptFieldTypeToString(TypeToScriptFieldType<T>()), ") expected (", ScriptFieldTypeToString(m_Type), ")"));
+        DE_ASSERT(m_Type == TypeToScriptFieldType<T>(),
+                  "Wrong field type (",
+                  ScriptFieldTypeToString(TypeToScriptFieldType<T>()),
+                  ") expected (",
+                  ScriptFieldTypeToString(m_Type),
+                  ")");
         return *(T*)m_Data;
     }
     template <typename T> const T& Script::Field::Get() const {
-        DE_ASSERT(
-            m_Type == TypeToScriptFieldType<T>(),
-            StrCat("Wrong field type (", ScriptFieldTypeToString(TypeToScriptFieldType<T>()), ") expected (", ScriptFieldTypeToString(m_Type), ")"));
+        DE_ASSERT(m_Type == TypeToScriptFieldType<T>(),
+                  "Wrong field type (",
+                  ScriptFieldTypeToString(TypeToScriptFieldType<T>()),
+                  ") expected (",
+                  ScriptFieldTypeToString(m_Type),
+                  ")");
         return *(T*)m_Data;
     }
     template <typename T> T& Script::GetField(const std::string& name) {
-        DE_ASSERT(GetClassFields().contains(name), "Wrong field name");
+        DE_ASSERT(GetClassFields().contains(name), "Wrong field name(", name, ")");
         DE_ASSERT(GetClassFields().at(name).type == TypeToScriptFieldType<T>(),
-                  StrCat("Wrong field type (",
-                         ScriptFieldTypeToString(TypeToScriptFieldType<T>()),
-                         ") expected (",
-                         ScriptFieldTypeToString(GetClassFields().at(name).type),
-                         ")"));
+                  "Wrong field type (",
+                  ScriptFieldTypeToString(TypeToScriptFieldType<T>()),
+                  ") expected (",
+                  ScriptFieldTypeToString(GetClassFields().at(name).type),
+                  ")");
         return *(T*)((char*)this + GetClassFields().at(name).offset);
     }
     template <typename T> T& Script::Add(const T& t) {

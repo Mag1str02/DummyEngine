@@ -2,18 +2,19 @@
 
 struct Unit {};
 
-#define SINGLETON(type)                     \
-private:                                    \
-    friend class Singleton<type>;           \
-                                            \
-public:                                     \
-    type()                       = default; \
-    ~type()                      = default; \
-    type(const type&)            = delete;  \
-    type(type&&)                 = delete;  \
-    type& operator=(const type&) = delete;  \
-    type& operator=(type&&)      = delete;  \
-    S_METHOD_DEF(Unit, Initialize, ());     \
+#define SINGLETON(type)                           \
+private:                                          \
+    friend class Singleton<type>;                 \
+                                                  \
+public:                                           \
+    type()                             = default; \
+    ~type()                            = default; \
+    type(const type&)                  = delete;  \
+    type(type&&)                       = delete;  \
+    type&       operator=(const type&) = delete;  \
+    type&       operator=(type&&)      = delete;  \
+    static bool Initialized();                    \
+    S_METHOD_DEF(Unit, Initialize, ());           \
     S_METHOD_DEF(Unit, Terminate, ());
 
 #define SINGLETON_BASE(type)                                                                      \
@@ -23,6 +24,7 @@ public:                                     \
         DE_ASSERT(s_Instance, "Using " + CurrentSingletonName + " before initialization"); \
         return *s_Instance;                                                                \
     }                                                                                             \
+    bool type::Initialized() { return s_Instance != nullptr; }                                    \
     using CurrentSingleton = type
 
 #define DEL_BRACKETS(a) SECOND(FIRST a)

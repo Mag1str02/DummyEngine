@@ -89,7 +89,7 @@ namespace DE {
     }
 
     void SceneRenderData::SetVPEntity(const Entity& entity) {
-        DE_ASSERT(m_EntityToVPIndex.contains(entity), "Wrong VP entity.");
+        DE_ASSERT(m_EntityToVPIndex.contains(entity), "Wrong VP entity");
         for (auto [id, shader] : m_Shaders) {
             shader->Bind();
             shader->SetInt("u_VP", m_EntityToVPIndex[entity]);
@@ -104,7 +104,7 @@ namespace DE {
                 m_Shaders[shader_id]->SetUnifromBlock("ub_Lights", LIGHT_UB_ID);
                 m_Shaders[shader_id]->SetUnifromBlock("ub_VP", VP_UB_ID);
             } else {
-                LOG_WARNING("SceneRenderData", "Shader (", shader_id.Hex(), ") not found in ResourceManager");
+                LOG_WARNING("SceneRenderData", "Shader (", shader_id, ") not found in ResourceManager");
             }
         }
     }
@@ -131,9 +131,9 @@ namespace DE {
         auto mesh   = ResourceManager::GetRenderMesh(mesh_id);
         auto shader = ResourceManager::GetShader(shader_id);
         if (!mesh) {
-            LOG_WARNING("SceneRenderData", "RenderMesh (", mesh_id.Hex(), ") not found in ResourceManager");
+            LOG_WARNING("SceneRenderData", "RenderMesh (", mesh_id, ") not found in ResourceManager");
         } else if (!shader) {
-            LOG_WARNING("SceneRenderData", "Shader (", shader_id.Hex(), ") not found in ResourceManager");
+            LOG_WARNING("SceneRenderData", "Shader (", shader_id, ") not found in ResourceManager");
         } else {
             m_InstancedMeshes[{mesh_id, shader_id}] = {mesh.value()->Copy(), shader.value()};
             m_InstancedMeshes[{mesh_id, shader_id}].first->SetInstanceBuffer({{BufferElementType::Mat4}, 1}, MAX_INSTANCES_PER_BUFFER);

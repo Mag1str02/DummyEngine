@@ -221,7 +221,7 @@ namespace DE {
     void EditorLayer::PrepareScene() {
         m_EditorCamera = m_SceneData.m_Scene->CreateHiddenEntity("Editor Camera");
         m_EditorCamera.AddComponent<FPSCamera>();
-        m_EditorCamera.AddComponent<ScriptComponent>(ScriptEngine::CreateScript(g_EditorScriptNameToId["EditorCameraController"]));
+        m_EditorCamera.AddComponent<ScriptComponent>(ScriptEngine::CreateScript(ScriptManager::EditorScript("EditorCameraController")));
 
         m_SceneData.m_Scene->RegisterSystem<MovingSystem>();
         m_SceneHierarchy.SetActiveScene(m_SceneData.m_Scene);

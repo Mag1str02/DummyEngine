@@ -27,7 +27,10 @@ namespace DE {
         }
     }
 
-    std::stringstream StackTrace() {
+    std::string StackTrace() {
+#if 1
+        return "StackTrace not impemented\n";
+#else
         std::stringstream ss;
         DWORD             machine = IMAGE_FILE_MACHINE_AMD64;
         HANDLE            process = GetCurrentProcess();
@@ -35,7 +38,7 @@ namespace DE {
 
         if (SymInitialize(process, NULL, TRUE) == FALSE) {
             ss << "Failed to get stack trace\n";
-            return ss;
+            return ss.str();
         }
         SymSetOptions(SYMOPT_LOAD_LINES);
 
@@ -109,6 +112,7 @@ namespace DE {
             ss << frame.name << " in " << frame.module << "\n";
         }
 
-        return ss;
+        return ss.str();
+#endif
     }
 }  // namespace DE

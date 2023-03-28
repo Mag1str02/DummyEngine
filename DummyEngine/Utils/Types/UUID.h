@@ -2,44 +2,38 @@
 
 #include "DummyEngine/Utils/Base/STDIncludes.h"
 
-namespace DE
-{
-    class UUID
-    {
+namespace DE {
+    class UUID {
     public:
-        UUID();
-        UUID(uint64_t id) : m_UUID(id) {}
-        UUID(const UUID&) = default;
+        static UUID Generate();
 
-        operator uint64_t() const { return m_UUID; }
-        operator std::string() const
-        {
-            std::stringstream stream;
-            stream << std::setfill('0') << std::setw(16) << std::hex << m_UUID;
-            return stream.str();
-        }
-        std::string Hex() const
-        {
-            std::stringstream stream;
-            stream << std::setfill('0') << std::setw(16) << std::hex << m_UUID;
-            return stream.str();
-        }
-        bool operator==(const UUID& other) const { return (m_UUID == other.m_UUID); }
-        bool operator!=(const UUID& other) const { return (m_UUID != other.m_UUID); }
+        UUID()            = default;
+        UUID(const UUID&) = default;
+        UUID(const std::string& str);
+
+        operator std::string() const;
+
+        bool operator==(const UUID& other) const;
+        bool operator!=(const UUID& other) const;
+        bool operator<(const UUID& other) const;
+        bool operator>(const UUID& other) const;
+
+        std::string     Hex() const;
+        static uint32_t HexSize() { return 32; }
 
     private:
-        uint64_t m_UUID;
+        template <typename T> friend struct std::hash;
+        uint64_t m_First  = 0;
+        uint64_t m_Second = 0;
     };
 
 }  // namespace DE
 
-namespace std
-{
+namespace std {
     template <typename T> struct hash;
 
-    template <> struct hash<DE::UUID>
-    {
-        std::size_t operator()(const DE::UUID& uuid) const { return (uint64_t)uuid; }
+    template <> struct hash<DE::UUID> {
+        std::size_t operator()(const DE::UUID& uuid) const { return uuid.m_First ^ uuid.m_Second; }
     };
 
 }  // namespace std

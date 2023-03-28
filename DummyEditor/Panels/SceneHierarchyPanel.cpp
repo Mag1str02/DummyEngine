@@ -1,35 +1,30 @@
 #include "DummyEditor/Panels/SceneHierarchyPanel.h"
 
-namespace DE
-{
-    void SceneHierarchyPanel::SetActiveScene(Ref<Scene> scene) { m_Scene = scene; }
-    void SceneHierarchyPanel::View()
-    {
+namespace DE {
+    void SceneHierarchyPanel::SetActiveScene(Ref<Scene> scene) {
+        m_Scene = scene;
+    }
+    void SceneHierarchyPanel::View() {
         DE_PROFILE_SCOPE("SceneHierarchyPanel View");
 
-        if (m_Scene)
-        {
+        if (m_Scene) {
             m_From = nullptr;
             m_To   = nullptr;
 
             auto res  = m_Scene->GetHierarchy();
             bool open = ImGui::TreeNode("Scene");
             DropTarget(res);
-            if (open)
-            {
+            if (open) {
                 int32_t id = 0;
-                for (auto child : *res)
-                {
+                for (auto child : *res) {
                     ImGui::PushID(id++);
                     ShowNode(child);
                     ImGui::PopID();
                 }
                 ImGui::TreePop();
             }
-            if (m_From && m_To)
-            {
-                if (m_To->IsEntity() && m_From->IsEntity())
-                {
+            if (m_From && m_To) {
+                if (m_To->IsEntity() && m_From->IsEntity()) {
                     auto parent = m_To->GetParent();
                     auto node   = CreateRef<SceneHierarchyNode>("Folder");
 
@@ -39,8 +34,7 @@ namespace DE
                     node->AttachChild(ref);
                     parent->AttachChild(node);
                 }
-                if (!m_To->IsEntity() && !m_To->IsAnsestor(m_From))
-                {
+                if (!m_To->IsEntity() && !m_To->IsAnsestor(m_From)) {
                     auto ref = m_From->Detach();
                     m_To->AttachChild(ref);
                 }
@@ -48,29 +42,25 @@ namespace DE
         }
     }
 
-    void   SceneHierarchyPanel::UnSelect() { m_SelectedNode = nullptr; }
-    Entity SceneHierarchyPanel::GetActiveEntity()
-    {
-        if (m_SelectedNode)
-        {
+    void SceneHierarchyPanel::UnSelect() {
+        m_SelectedNode = nullptr;
+    }
+    Entity SceneHierarchyPanel::GetActiveEntity() {
+        if (m_SelectedNode) {
             return m_SelectedNode->GetEntity();
         }
         return Entity();
     }
 
-    void SceneHierarchyPanel::ShowNode(Ref<SceneHierarchyNode> node)
-    {
+    void SceneHierarchyPanel::ShowNode(Ref<SceneHierarchyNode> node) {
         bool open;
-        if (!node->IsEntity())
-        {
+        if (!node->IsEntity()) {
             open = ImGui::TreeNode(node->GetName().c_str());
             DropTarget(node);
             DragTarget(node);
-            if (open)
-            {
+            if (open) {
                 int32_t id = 0;
-                for (auto child : *node)
-                {
+                for (auto child : *node) {
                     ImGui::PushID(id++);
                     ShowNode(child);
                     ImGui::PopID();
@@ -78,15 +68,11 @@ namespace DE
 
                 ImGui::TreePop();
             }
-        }
-        else
-        {
+        } else {
             auto entity = node->GetEntity();
-            open        = ImGui::Selectable(entity.Get<TagComponent>().tag.c_str(), &node->Selected(), ImGuiSelectableFlags_AllowDoubleClick);
-            if (open)
-            {
-                if (ImGui::IsMouseDoubleClicked(0))
-                {
+            open        = ImGui::Selectable(entity.Get<TagComponent>().Get().c_str(), &node->Selected(), ImGuiSelectableFlags_AllowDoubleClick);
+            if (open) {
+                if (ImGui::IsMouseDoubleClicked(0)) {
                     m_SelectedNode = node;
                 }
             }
@@ -95,22 +81,17 @@ namespace DE
         }
     }
 
-    void SceneHierarchyPanel::DragTarget(Ref<SceneHierarchyNode> node)
-    {
-        if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoHoldToOpenOthers))
-        {
+    void SceneHierarchyPanel::DragTarget(Ref<SceneHierarchyNode> node) {
+        if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoHoldToOpenOthers)) {
             size_t ptr = (size_t) & (*node);
             ImGui::SetDragDropPayload("DND_HIERARCHY_NODE", &ptr, sizeof(size_t), ImGuiCond_Once);
             ImGui::Text("Moveing: %s", node->GetName().c_str());
             ImGui::EndDragDropSource();
         }
     }
-    void SceneHierarchyPanel::DropTarget(Ref<SceneHierarchyNode> node)
-    {
-        if (ImGui::BeginDragDropTarget())
-        {
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_HIERARCHY_NODE"))
-            {
+    void SceneHierarchyPanel::DropTarget(Ref<SceneHierarchyNode> node) {
+        if (ImGui::BeginDragDropTarget()) {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_HIERARCHY_NODE")) {
                 m_From = (SceneHierarchyNode*)(*(size_t*)payload->Data);
                 m_To   = node;
             }

@@ -6,28 +6,28 @@ Scene:
         Path: Assets\Models\Cube\cube.obj
         Compress: true
         FlipUV: false
-        UUID: 6557233926725796949
+        UUID: 02afee3bc1cb75b7d8b882a8667faa84
     Textures:
       Sky:
         Path: Assets\Textures\Skyboxes\Sky.png
         FlipUV: false
-        UUID: 4297990474523151207
+        UUID: 8911b8a8458923946819fb45fbb794fd
     Shaders:
       TexturedPhong:
-        UUID: 3566111628970667214
+        UUID: 24116af57b6022cd2464fbf641ae946a
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
     Scripts:
       GateController:
         Path: Assets\Scripts\Gate\GateController.cpp
-        UUID: 4297992829523151207
+        UUID: 15fa3d63323bca9ceb7b9ae14b5d2111
       SinMovement:
         Path: Assets\Scripts\Gate\SinMovement.cpp
-        UUID: 4297992829523150219
+        UUID: b54e9fbf43a0fd9437c0f2c1f19082ce
   Hierarchy:
     - Entity:
         Tag: Surface
-        UUID: 1629924334753701623
+        UUID: 30624f9f9f6a9301e3ee3e843d2c84a8
         Transformation:
           Translation: [0, -1, 0]
           TranslationOffset: [0, 0, 0]
@@ -35,39 +35,39 @@ Scene:
           RotationOffset: [0, 0, 0]
           Scale: [500, 1, 500]
           ScaleOffset: [1, 1, 1]
-        RenderModel: 6557233926725796949
-        Shader: 3566111628970667214
+        RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+        Shader: 24116af57b6022cd2464fbf641ae946a
     - Entity:
         Tag: Lamp
-        UUID: 7834405913725978824
+        UUID: 83e18dd0c2524c974f820b992bbddaa3
         Transformation:
-          Translation: [19.5832233, 4, 0]
+          Translation: [14.7047653, 4, 0]
           TranslationOffset: [0, 0, 0]
           Rotation: [0, 0, 0]
           RotationOffset: [0, 0, 0]
           Scale: [0.100000001, 0.100000001, 0.100000001]
           ScaleOffset: [1, 1, 1]
-        RenderModel: 6557233926725796949
-        Shader: 3566111628970667214
+        RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+        Shader: 24116af57b6022cd2464fbf641ae946a
         LightSource:
           Type: Point
           Ambient: [0, 0, 0]
           Diffuse: [0.284284055, 0.573529422, 0.126513824]
           Specular: [0.346743822, 0.897058845, 0.0835496038]
           Direction: [0, -1, 0]
-          Position: [19.5872459, 4, 0]
+          Position: [14.696743, 4, 0]
           CLQ: [1, 0.0219999999, 0.00190000003]
           InnerCone: 0
           OuterCone: 0
         Script:
-          UUID: 4297992829523150219
+          UUID: b54e9fbf43a0fd9437c0f2c1f19082ce
           Fields:
             Speed: 1
             PosB: [0, 4, 0]
             PosA: [20, 4, 0]
     - Entity:
         Tag: Sun
-        UUID: 7834405913725978852
+        UUID: 2efbdeb9c46b01cff562aee205853e19
         Transformation:
           Translation: [-36.5579987, 6.69999981, -2.5999999]
           TranslationOffset: [0, 0, 0]
@@ -90,7 +90,7 @@ Scene:
         Childs:
           - Entity:
               Tag: WallLarge2
-              UUID: 1629924334024701623
+              UUID: b3bf7b086de1abfc426cb5472f46ae01
               Transformation:
                 Translation: [10, 5, -10]
                 TranslationOffset: [0, 0, 0]
@@ -98,11 +98,11 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [1, 5, 5]
                 ScaleOffset: [1, 1, 1]
-              RenderModel: 6557233926725796949
-              Shader: 3566111628970667214
+              RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+              Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: WallLarge1
-              UUID: 16299134334753701623
+              UUID: 7f9a6126f46eaf20b151fb4acac67aa3
               Transformation:
                 Translation: [10, 5, 10]
                 TranslationOffset: [0, 0, 0]
@@ -110,11 +110,11 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [1, 5, 5]
                 ScaleOffset: [1, 1, 1]
-              RenderModel: 6557233926725796949
-              Shader: 3566111628970667214
+              RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+              Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: WallLarge
-              UUID: 1629924334024701029
+              UUID: 9a7a30b9569eb870e6815d3662321c4c
               Transformation:
                 Translation: [10, 9, 0]
                 TranslationOffset: [0, 0, 0]
@@ -122,22 +122,22 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [1, 1, 5]
                 ScaleOffset: [1, 1, 1]
-              RenderModel: 6557233926725796949
-              Shader: 3566111628970667214
+              RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+              Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Door
-              UUID: 1629994334753701442
+              UUID: 214ec18617d03032346bb9b0b1227d10
               Transformation:
-                Translation: [10, 4, 0]
+                Translation: [10, 9, 0]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
-                Scale: [0.300000012, 4, 5]
+                Scale: [0.300000012, 1, 5]
                 ScaleOffset: [1, 1, 1]
-              RenderModel: 6557233926725796949
-              Shader: 3566111628970667214
+              RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+              Shader: 24116af57b6022cd2464fbf641ae946a
               Script:
-                UUID: 4297992829523151207
+                UUID: 15fa3d63323bca9ceb7b9ae14b5d2111
                 Fields:
                   CloseHeight: 4
                   OpenHeight: 9

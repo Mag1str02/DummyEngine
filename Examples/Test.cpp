@@ -1,15 +1,10 @@
-#include "DummyEngine/Utils/DummyEngine.h"
+#include "DummyEngine/DummyEngine.h"
 
 using namespace DE;
 
-int main()
-{
-    BufferLayout layout({BufferElementType::Float2, BufferElementType::Float2, BufferElementType::Float2, BufferElementType::Mat4}, 0);
-    layout.SetLayoutType(BufferLayoutType::Vertex);
-
-    for (auto& element : layout)
-    {
-        std::cout << element.offset << " " << std::endl;
+int main() {
+    freopen("output.txt", "w", stdout);
+    for (size_t i = 0; i < 100; ++i) {
+        std::cout << (std::string)UUID::Generate() << std::endl;
     }
-    std::cout << layout.GetStride() << " " << std::endl;
 }

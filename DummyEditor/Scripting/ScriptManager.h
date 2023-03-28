@@ -1,5 +1,4 @@
 #include "DummyEditor/DummyEngineInclude.h"
-#include "DummyEditor/Scripting/EditorScripts.h"
 
 namespace DE {
     class ScriptManager : public Singleton<ScriptManager> {
@@ -9,6 +8,7 @@ namespace DE {
         S_METHOD_DEF(Unit, UnloadScripts, (const std::vector<ScriptAsset>& scripts));
         S_METHOD_DEF(Unit, ReloadScripts, (const std::vector<ScriptAsset>& scripts, Ref<Scene> scene));
         S_METHOD_DEF(Unit, AttachScripts, (Ref<Scene> scene));
+        S_METHOD_DEF(UUID, EditorScript, (const std::string& name));
 
     private:
         using ScriptStates = std::unordered_map<Entity, std::unordered_map<std::string, Script::Field>>;
@@ -32,5 +32,12 @@ namespace DE {
 
         std::unordered_set<Path> m_CompiledScripts;
         std::string              m_LibraryName;
+
+        const std::vector<ScriptAsset> m_EditorScriptAssets = {
+            {UUID("0000000000000000000000000000f001"), "EditorCameraController", Path()}
+        };
+        const std::unordered_map<std::string, UUID> m_EditorScriptNameToId = {
+            {"EditorCameraController", UUID("0000000000000000000000000000f001")}
+        };
     };
 }  // namespace DE

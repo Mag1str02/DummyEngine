@@ -97,9 +97,6 @@ namespace DE {
         return m_Name;
     }
 
-    const std::vector<Path>& Scene::GetScripts() const {
-        return m_ScriptFiles;
-    }
     Ref<SceneHierarchyNode> Scene::GetHierarchy() {
         return m_HierarchyRoot;
     }

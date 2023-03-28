@@ -37,7 +37,6 @@ namespace DE {
         //* Init GLFW
         {
             if (!glfwInit()) {
-                LOG_FATAL("Initializer", "Failed to initialize GLFW");
                 DE_ASSERT(false, "Failed to initialize GLFW");
             }
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);

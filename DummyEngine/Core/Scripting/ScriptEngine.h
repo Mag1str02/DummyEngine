@@ -26,7 +26,7 @@ namespace DE {
 
     struct ScriptProxy {
         Script* m_Script = nullptr;
-        UUID    m_Id;
+        UUID    m_ID;
     };
 
     class ScriptProxyManager {
@@ -86,7 +86,7 @@ namespace DE {
             uint32_t id = m_AvailableIds.front();
             m_AvailableIds.pop_front();
             m_States[id]          = true;
-            m_Proxys[id].m_Id     = 0;
+            m_Proxys[id].m_ID     = UUID();
             m_Proxys[id].m_Script = nullptr;
             // LOG_INFO("ScriptProxyManager", "Created handle (", id, ")");
             return {id, ++m_Generations[id]};
@@ -96,7 +96,7 @@ namespace DE {
         void ExtendIfRequired() {
             if (m_AvailableIds.empty()) {
                 m_AvailableIds.push_back(m_Proxys.size());
-                m_Proxys.push_back({nullptr, 0});
+                m_Proxys.push_back({nullptr, UUID()});
                 m_States.push_back(false);
                 m_Generations.push_back(0);
             }

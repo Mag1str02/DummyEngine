@@ -7,7 +7,6 @@ set(EDITOR_SOURCES
     Panels/SceneHierarchyPanel.cpp
     Panels/InspectorPanel.cpp
 
-    Scripting/EditorScripts.cpp
     Scripting/ScriptManager.cpp
 )
 if(${CMAKE_PLATFORM} STREQUAL "WINDOWS")

@@ -62,17 +62,17 @@ namespace DE {
 
     template <typename ComponentType> void SceneLoader::SaveComponent(YAML::Node& n_Entity, Entity entity) {
         // TODO: Different names for different unknown components...
-        DE_ASSERT(false, "Trying to save unknown component.");
+        DE_ASSERT(false, "Trying to save unknown component");
     }
     template <> void SceneLoader::SaveComponent<TagComponent>(YAML::Node& n_Entity, Entity entity) {
         if (entity.Has<TagComponent>()) {
-            n_Entity["Tag"] = entity.Get<TagComponent>().tag;
+            n_Entity["Tag"] = entity.Get<TagComponent>().Get();
         }
     }
     template <> void SceneLoader::SaveComponent<IdComponent>(YAML::Node& n_Entity, Entity entity) {
         // TODO: Save UUID in hex format.
         if (entity.Has<IdComponent>()) {
-            n_Entity["UUID"] = (uint64_t)entity.Get<IdComponent>();
+            n_Entity["UUID"] = entity.Get<IdComponent>().Hex();
         }
     }
     template <> void SceneLoader::SaveComponent<TransformComponent>(YAML::Node& n_Entity, Entity entity) {
@@ -87,12 +87,12 @@ namespace DE {
     }
     template <> void SceneLoader::SaveComponent<RenderMeshComponent>(YAML::Node& n_Entity, Entity entity) {
         if (entity.Has<RenderMeshComponent>()) {
-            n_Entity["RenderModel"] = (uint64_t)entity.Get<RenderMeshComponent>().id;
+            n_Entity["RenderModel"] = entity.Get<RenderMeshComponent>().id.Hex();
         }
     }
     template <> void SceneLoader::SaveComponent<ShaderComponent>(YAML::Node& n_Entity, Entity entity) {
         if (entity.Has<ShaderComponent>()) {
-            n_Entity["Shader"] = (uint64_t)entity.Get<ShaderComponent>().id;
+            n_Entity["Shader"] = entity.Get<ShaderComponent>().id.Hex();
         }
     }
     template <> void SceneLoader::SaveComponent<FPSCamera>(YAML::Node& n_Entity, Entity entity) {
@@ -120,13 +120,13 @@ namespace DE {
     }
     template <> void SceneLoader::SaveComponent<SkyBox>(YAML::Node& n_Entity, Entity entity) {
         if (entity.Has<SkyBox>()) {
-            n_Entity["SkyBox"] = (uint64_t)entity.Get<SkyBox>().id;
+            n_Entity["SkyBox"] = entity.Get<SkyBox>().id.Hex();
         }
     }
     template <> void SceneLoader::SaveComponent<ScriptComponent>(YAML::Node& n_Entity, Entity entity) {
         if (entity.Has<ScriptComponent>() && entity.Get<ScriptComponent>().Valid()) {
             auto& script_instance      = entity.Get<ScriptComponent>();
-            n_Entity["Script"]["UUID"] = (uint64_t)script_instance.ID();
+            n_Entity["Script"]["UUID"] = script_instance.ID().Hex();
             for (auto [name, field] : *script_instance) {
                 n_Entity["Script"]["Fields"][name.get()] = NodeScriptField(field);
             }
@@ -151,7 +151,7 @@ namespace DE {
             n_Textures[texture.name] = n_Texture;
             n_Texture["Path"]        = RelativeToExecutable(texture.loading_props.path).string();
             n_Texture["FlipUV"]      = texture.loading_props.flip_uvs;
-            n_Texture["UUID"]        = (uint64_t)texture.id;
+            n_Texture["UUID"]        = texture.id.Hex();
         }
         return n_Textures;
     }
@@ -164,7 +164,7 @@ namespace DE {
             n_Model["Path"]      = RelativeToExecutable(model.loading_props.path).string();
             n_Model["Compress"]  = model.loading_props.compress;
             n_Model["FlipUV"]    = model.loading_props.flip_uvs;
-            n_Model["UUID"]      = (uint64_t)model.id;
+            n_Model["UUID"]      = model.id.Hex();
         }
         return n_Models;
     }
@@ -174,7 +174,7 @@ namespace DE {
             YAML::Node n_Script;
             n_Scripts[script.name] = n_Script;
             n_Script["Path"]       = RelativeToExecutable(script.path).string();
-            n_Script["UUID"]       = (uint64_t)script.id;
+            n_Script["UUID"]       = script.id.Hex();
         }
         return n_Scripts;
     }
@@ -183,7 +183,7 @@ namespace DE {
         for (const auto& shader : assets.shaders) {
             YAML::Node n_Shader;
             n_Shaders[shader.name] = n_Shader;
-            n_Shader["UUID"]       = (uint64_t)shader.id;
+            n_Shader["UUID"]       = shader.id.Hex();
             for (const auto& part : shader.parts) {
                 n_Shader[ShaderPartTypeToString(part.type)] = RelativeToExecutable(part.path).string();
             }
@@ -227,7 +227,7 @@ namespace DE {
 
         output_file.open(path);
         // TODO: Switch to throw.
-        DE_ASSERT(output_file.is_open(), "Failed to open file to save scene.");
+        DE_ASSERT(output_file.is_open(), "Failed to open file (", RelativeToExecutable(path), ") to save scene");
 
         n_Root["Scene"]      = n_Scene;
         n_Scene["Name"]      = scene->GetName();
@@ -290,7 +290,12 @@ namespace DE {
         entity.AddComponent<TagComponent>(n_Component.as<std::string>());
     }
     template <> void SceneLoader::LoadComponent<IdComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
-        entity.AddComponent<IdComponent>(IdComponent(UUID(n_Component.as<uint64_t>())));
+        auto s = n_Component.as<std::string>();
+        if (s.size() == 32) {
+            entity.AddComponent<IdComponent>(IdComponent(UUID(n_Component.as<std::string>())));
+        } else {
+            entity.AddComponent<IdComponent>(IdComponent(UUID::Generate()));
+        }
     }
     template <> void SceneLoader::LoadComponent<TransformComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
         TransformComponent transformation;
@@ -305,16 +310,16 @@ namespace DE {
         entity.AddComponent(transformation);
     }
     template <> void SceneLoader::LoadComponent<RenderMeshComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
-        UUID id = n_Component.as<uint64_t>();
+        UUID id = n_Component.as<std::string>();
         if (!ResourceManager::HasRenderMesh(id) && !ResourceManager::LoadRenderMesh(id)) {
-            LOG_WARNING("SceneLoader", "RenderMesh (", id.Hex(), ") not found in ResourceManager");
+            LOG_WARNING("SceneLoader", "RenderMesh (", id, ") not found in ResourceManager");
         }
         entity.AddComponent<RenderMeshComponent>({id, nullptr});
     }
     template <> void SceneLoader::LoadComponent<ShaderComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
-        UUID id = n_Component.as<uint64_t>();
+        UUID id = n_Component.as<std::string>();
         if (!ResourceManager::HasShader(id) && !ResourceManager::LoadShader(id)) {
-            LOG_WARNING("SceneLoader", "Shader (", id.Hex(), ") not found in ResourceManager");
+            LOG_WARNING("SceneLoader", "Shader (", id, ") not found in ResourceManager");
         } else {
             entity.AddComponent<ShaderComponent>({id, ResourceManager::GetShader(id).value()});
             scene->m_RenderData->RequestShader(id);
@@ -348,15 +353,15 @@ namespace DE {
         entity.AddComponent<LightSource>(light_source);
     }
     template <> void SceneLoader::LoadComponent<SkyBox>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
-        UUID id = n_Component.as<uint64_t>();
+        UUID id = n_Component.as<std::string>();
         if (!ResourceManager::HasCubeMap(id) && !ResourceManager::LoadCubeMap(id)) {
-            LOG_WARNING("SceneLoader", "CubeMap (", id.Hex(), ") not found in ResourceManager");
+            LOG_WARNING("SceneLoader", "CubeMap (", id, ") not found in ResourceManager");
         } else {
             entity.AddComponent<SkyBox>({id, ResourceManager::GetCubeMap(id).value()});
         }
     }
     template <> void SceneLoader::LoadComponent<ScriptComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
-        ScriptComponent script = ScriptEngine::CreateScript(n_Component["UUID"].as<uint64_t>());
+        ScriptComponent script = ScriptEngine::CreateScript(n_Component["UUID"].as<std::string>());
         entity.AddComponent<ScriptComponent>(script);
         if (script.Valid()) {
             for (auto [name, field] : *script) {
@@ -365,7 +370,7 @@ namespace DE {
                 }
             }
         } else {
-            LOG_INFO("SceneLoader", "Failed to create valid script: ", std::to_string(script.ID()));
+            LOG_INFO("SceneLoader", "Failed to create valid script: ", script.ID());
         }
     }
 
@@ -383,8 +388,8 @@ namespace DE {
         if (n_Entity["Script"]) LoadComponent<ScriptComponent>(scene, n_Entity["Script"], entity);
 
         if (entity.Has<RenderMeshComponent>() && entity.Has<ShaderComponent>()) {
-            uint64_t mesh_id   = entity.Get<RenderMeshComponent>().id;
-            uint64_t shader_id = entity.Get<ShaderComponent>().id;
+            UUID mesh_id   = entity.Get<RenderMeshComponent>().id;
+            UUID shader_id = entity.Get<ShaderComponent>().id;
 
             entity.Get<RenderMeshComponent>().mesh_instance = scene->m_RenderData->GetRenderMeshInstance(mesh_id, shader_id);
         }
@@ -410,7 +415,7 @@ namespace DE {
         {
             for (const auto& node : assets["Scripts"]) {
                 ScriptAsset asset;
-                asset.id   = node.second["UUID"].as<uint64_t>();
+                asset.id   = node.second["UUID"].as<std::string>();
                 asset.name = node.first.as<std::string>();
                 asset.path = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
                 data.scripts.emplace_back(std::move(asset));
@@ -421,7 +426,7 @@ namespace DE {
             for (const auto& node : assets["Models"]) {
                 RenderMeshAsset asset;
                 asset.name                   = node.first.as<std::string>();
-                asset.id                     = node.second["UUID"].as<uint64_t>();
+                asset.id                     = node.second["UUID"].as<std::string>();
                 asset.loading_props.compress = node.second["Compress"].as<bool>();
                 asset.loading_props.flip_uvs = node.second["FlipUV"].as<bool>();
                 asset.loading_props.path     = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
@@ -432,7 +437,7 @@ namespace DE {
         {
             for (const auto& node : assets["Textures"]) {
                 TextureAsset asset;
-                asset.id                     = node.second["UUID"].as<uint64_t>();
+                asset.id                     = node.second["UUID"].as<std::string>();
                 asset.name                   = node.first.as<std::string>();
                 asset.loading_props.flip_uvs = node.second["FlipUV"].as<bool>();
                 asset.loading_props.path     = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
@@ -443,7 +448,7 @@ namespace DE {
         {
             for (const auto& n_Shader : assets["Shaders"]) {
                 ShaderAsset asset;
-                asset.id   = n_Shader.second["UUID"].as<uint64_t>();
+                asset.id   = n_Shader.second["UUID"].as<std::string>();
                 asset.name = n_Shader.first.as<std::string>();
                 for (const auto& n_Part : n_Shader.second) {
                     if (n_Part.first.as<std::string>() != "UUID") {

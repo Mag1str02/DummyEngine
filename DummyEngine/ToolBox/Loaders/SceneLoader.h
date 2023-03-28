@@ -2,7 +2,7 @@
 
 // clang-format off
 #include "DummyEngine/Utils/Base.h"
-#include "DummyEngine/Core/Scene/Components.h"
+#include "DummyEngine/Core/ResourceManaging/Assets.h"
 #include "DummyEngine/Core/Scene/Scene.h"
 
 #include <yaml-cpp/yaml.h>

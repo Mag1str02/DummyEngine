@@ -1,15 +1,12 @@
 #include "DummyEngine/Core/Rendering/Renderer/BufferLayout.h"
 
-namespace DE
-{
+namespace DE {
 
     //*~~~BufferElement~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     BufferElement::BufferElement(BufferElementType type, bool normalized) : type(type), normalized(normalized), size(SizeOfElementType(type)) {}
-    uint32_t BufferElement::SizeOfElementType(BufferElementType type)
-    {
-        switch (type)
-        {
+    uint32_t BufferElement::SizeOfElementType(BufferElementType type) {
+        switch (type) {
             case BufferElementType::Float: return 4;
             case BufferElementType::Float2: return 8;
             case BufferElementType::Float3: return 12;
@@ -22,10 +19,8 @@ namespace DE
             default: return 0;
         }
     }
-    uint32_t BufferElement::ComponentCount() const
-    {
-        switch (type)
-        {
+    uint32_t BufferElement::ComponentCount() const {
+        switch (type) {
             case BufferElementType::Float: return 1;
             case BufferElementType::Float2: return 2;
             case BufferElementType::Float3: return 3;
@@ -41,21 +36,18 @@ namespace DE
 
     //*~~~BufferLayout~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    BufferLayout::BufferLayout(std::initializer_list<BufferElement> elements, uint32_t divisor) : m_Elements(elements), m_Type(BufferLayoutType::Vertex), m_Divisor(divisor) {}
+    BufferLayout::BufferLayout(std::initializer_list<BufferElement> elements, uint32_t divisor) :
+        m_Elements(elements), m_Type(BufferLayoutType::Vertex), m_Divisor(divisor) {}
 
-    void BufferLayout::SetLayoutType(BufferLayoutType type)
-    {
+    void BufferLayout::SetLayoutType(BufferLayoutType type) {
         m_Type = type;
         CalculateOffsetsAndStride();
     }
-    void BufferLayout::CalculateOffsetsAndStride()
-    {
-        switch (m_Type)
-        {
+    void BufferLayout::CalculateOffsetsAndStride() {
+        switch (m_Type) {
             case BufferLayoutType::Vertex: {
                 uint32_t offset = 0;
-                for (auto& element : m_Elements)
-                {
+                for (auto& element : m_Elements) {
                     element.offset = offset;
                     offset += element.size;
                 }
@@ -64,10 +56,8 @@ namespace DE
             }
             case BufferLayoutType::Uniform: {
                 uint32_t offset = 0;
-                for (auto& element : m_Elements)
-                {
-                    switch (element.type)
-                    {
+                for (auto& element : m_Elements) {
+                    switch (element.type) {
                         case BufferElementType::Float:
                         case BufferElementType::Int: {
                             element.offset = offset;
@@ -76,8 +66,7 @@ namespace DE
                         }
                         case BufferElementType::Float2:
                         case BufferElementType::Int2: {
-                            if (offset % 8 != 0)
-                            {
+                            if (offset % 8 != 0) {
                                 offset += 4;
                             }
                             element.offset = offset;
@@ -89,8 +78,7 @@ namespace DE
                         case BufferElementType::Float4:
                         case BufferElementType::Int4:
                         case BufferElementType::Mat4: {
-                            if (offset % 16 != 0)
-                            {
+                            if (offset % 16 != 0) {
                                 offset += 16 - offset % 16;
                             }
                             element.offset = offset;
@@ -100,8 +88,7 @@ namespace DE
                         default: break;
                     }
                 }
-                if (offset % 16 != 0)
-                {
+                if (offset % 16 != 0) {
                     offset += 16 - offset % 16;
                 }
                 m_Stride = offset;
@@ -111,16 +98,27 @@ namespace DE
         }
     }
 
-    std::vector<BufferElement>::iterator       BufferLayout::begin() { return m_Elements.begin(); }
-    std::vector<BufferElement>::iterator       BufferLayout::end() { return m_Elements.end(); }
-    std::vector<BufferElement>::const_iterator BufferLayout::begin() const { return m_Elements.begin(); }
-    std::vector<BufferElement>::const_iterator BufferLayout::end() const { return m_Elements.end(); }
-    const BufferElement& BufferLayout::operator[](uint32_t index) const
-    {
-        DE_ASSERT(index >= 0 && index < m_Elements.size(), "Index out of bounce.");
+    std::vector<BufferElement>::iterator BufferLayout::begin() {
+        return m_Elements.begin();
+    }
+    std::vector<BufferElement>::iterator BufferLayout::end() {
+        return m_Elements.end();
+    }
+    std::vector<BufferElement>::const_iterator BufferLayout::begin() const {
+        return m_Elements.begin();
+    }
+    std::vector<BufferElement>::const_iterator BufferLayout::end() const {
+        return m_Elements.end();
+    }
+    const BufferElement& BufferLayout::operator[](uint32_t index) const {
+        DE_ASSERT(index >= 0 && index < m_Elements.size(), "Index out of bounce (", index, ") should be between [0,", m_Elements.size(), ")");
         return m_Elements[index];
     }
 
-    uint32_t BufferLayout::GetStride() const { return m_Stride; }
-    uint32_t BufferLayout::GetDivisor() const { return m_Divisor; }
+    uint32_t BufferLayout::GetStride() const {
+        return m_Stride;
+    }
+    uint32_t BufferLayout::GetDivisor() const {
+        return m_Divisor;
+    }
 }  // namespace DE

@@ -65,7 +65,7 @@ namespace DE {
                     ImGui::Text("Tag");
                     ImGui::SameLine(100);
                     ImGui::SetNextItemWidth(-1);
-                    ImGui::InputText("", &component.tag);
+                    ImGui::InputText("", &component.Get());
                 }
             }
             if (m_Entity.Has<IdComponent>()) {

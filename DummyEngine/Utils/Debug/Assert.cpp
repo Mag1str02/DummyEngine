@@ -6,16 +6,21 @@
 
 namespace DE {
 
+    extern bool g_EnteredInMain;
+
     void FailAssert(const char* expr_str, const char* file, int line, const std::string& msg) {
-        std::stringstream ss = StackTrace();
+        std::stringstream ss;
+        ss << StackTrace();
+
         ss << "\n"
            << "Assert failed:\t" << msg << "\n"
            << "Expected:\t" << expr_str << "\n"
            << "Source:\t\t" << file << ", line " << line << "\n";
-
-        LOG_FATAL("Assertion", 0, ss.str());
         std::cerr << ss.str() << std::endl;
-        abort();
+        if (Logger::Initialized()) {
+            LOG_FATAL("Assertion", 0, ss.str());
+        }
+        exit(1);
     }
 
 }  // namespace DE

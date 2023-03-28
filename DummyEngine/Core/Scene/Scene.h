@@ -2,6 +2,7 @@
 
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
+#include "DummyEngine/Core/Scene/Components.h"
 
 namespace DE {
     class Entity;
@@ -23,7 +24,6 @@ namespace DE {
         Entity                   GetByName(const std::string& name);
         Entity                   GetCamera();
         const std::string&       GetName() const;
-        const std::vector<Path>& GetScripts() const;
         Ref<SceneHierarchyNode>  GetHierarchy();
 
         void OnUpdate(double dt);
@@ -43,13 +43,11 @@ namespace DE {
         void   UpdateEmptyEntity(Entity entity);
         void   OnEntityDestroy(Entity entity);
 
-        std::string                             m_Name;
-        Ref<Storage>                            m_Storage;
-        Ref<SceneRenderData>                    m_RenderData;
-        Ref<SceneHierarchyNode>                 m_HierarchyRoot;
-        std::unordered_map<uint64_t, Entity>    m_EntityByUUID;
-        std::unordered_map<std::string, Entity> m_EntityByName;
-        // TODO: Remove when asset manager is useful)
-        std::vector<Path> m_ScriptFiles;
+        std::string                              m_Name;
+        Ref<Storage>                             m_Storage;
+        Ref<SceneRenderData>                     m_RenderData;
+        Ref<SceneHierarchyNode>                  m_HierarchyRoot;
+        std::unordered_map<UUID, Entity>         m_EntityByUUID;
+        std::unordered_map<TagComponent, Entity> m_EntityByName;
     };
 }  // namespace DE

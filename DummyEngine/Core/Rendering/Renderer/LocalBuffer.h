@@ -1,13 +1,12 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Rendering/Renderer/BufferLayout.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
+    // TODO: Weak ptr stuff
     class LocalBufferNode;
-    class LocalBuffer
-    {
+    class LocalBuffer {
     public:
         LocalBuffer();
         ~LocalBuffer();
@@ -25,17 +24,13 @@ namespace DE
         friend class LocalBufferNode;
 
         BufferLayout m_Layout;
-        uint8_t* m_Data;
-        uint32_t m_Size;
+        uint8_t*     m_Data;
+        uint32_t     m_Size;
     };
-    class LocalBufferNode
-    {
+    class LocalBufferNode {
     public:
-        template <typename T> T& Get(uint32_t index)
-        {
-            return *(T*)(m_Pointer + m_Buffer->m_Layout[index].offset);
-        }
-        LocalBufferNode& operator=(const LocalBufferNode& other);
+        template <typename T> T& Get(uint32_t index) { return *(T*)(m_Pointer + m_Buffer->m_Layout[index].offset); }
+        LocalBufferNode&         operator=(const LocalBufferNode& other);
 
     private:
         LocalBufferNode(LocalBuffer* buffer, uint8_t* pointer);
@@ -43,6 +38,6 @@ namespace DE
         friend class LocalBuffer;
 
         LocalBuffer* m_Buffer;
-        uint8_t* m_Pointer;
+        uint8_t*     m_Pointer;
     };
 }  // namespace DE

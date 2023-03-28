@@ -15,12 +15,12 @@ namespace DE
         bool     Valid() const;
         void     Destroy();
         //! Temporary
-        uint32_t GetId() const { return m_Id; }
+        uint32_t GetId() const { return m_ID; }
 
     private:
         friend class HandleManager<T>;
         HandleManager<T>* m_Manager = nullptr;
-        uint32_t          m_Id      = 0;
+        uint32_t          m_ID      = 0;
         uint32_t          m_Gen     = 0;
     };
 
@@ -46,7 +46,7 @@ namespace DE
             Iterator(HandleManager<T>* manager, uint32_t id);
 
             HandleManager<T>* m_Manager = nullptr;
-            uint32_t          m_Id      = 0;
+            uint32_t          m_ID      = 0;
         };
 
         Iterator begin();
@@ -73,20 +73,20 @@ namespace DE
 
     template <class T> bool HandleManager<T>::Iterator::operator==(const Iterator& other) const
     {
-        return m_Manager == other.m_Manager && m_Id == other.m_Id;
+        return m_Manager == other.m_Manager && m_ID == other.m_ID;
     }
     template <class T> bool HandleManager<T>::Iterator::operator!=(const Iterator& other) const
     {
-        return m_Manager != other.m_Manager || m_Id != other.m_Id;
+        return m_Manager != other.m_Manager || m_ID != other.m_ID;
     }
 
     template <class T> typename HandleManager<T>::Iterator& HandleManager<T>::Iterator::operator++()
     {
         do
         {
-            ++m_Id;
+            ++m_ID;
         }
-        while (m_Id < m_Manager->m_Instances.size() && !m_Manager->m_Instances[m_Id].valid);
+        while (m_ID < m_Manager->m_Instances.size() && !m_Manager->m_Instances[m_ID].valid);
         return *this;
     }
     template <class T> typename HandleManager<T>::Iterator HandleManager<T>::Iterator::operator++(int)
@@ -94,18 +94,18 @@ namespace DE
         Iterator res = *this;
         do
         {
-            ++m_Id;
+            ++m_ID;
         }
-        while (m_Id < m_Manager->m_Instances.size() && !m_Manager->m_Instances[m_Id].valid);
+        while (m_ID < m_Manager->m_Instances.size() && !m_Manager->m_Instances[m_ID].valid);
         return res;
     }
     template <class T> typename HandleManager<T>::Iterator& HandleManager<T>::Iterator::operator--()
     {
         do
         {
-            --m_Id;
+            --m_ID;
         }
-        while (m_Id > 0 && !m_Manager->m_Instances[m_Id].valid);
+        while (m_ID > 0 && !m_Manager->m_Instances[m_ID].valid);
         return *this;
     }
     template <class T> typename HandleManager<T>::Iterator HandleManager<T>::Iterator::operator--(int)
@@ -113,16 +113,16 @@ namespace DE
         Iterator res = *this;
         do
         {
-            --m_Id;
+            --m_ID;
         }
-        while (m_Id > 0 && !m_Manager->m_Instances[m_Id].valid);
+        while (m_ID > 0 && !m_Manager->m_Instances[m_ID].valid);
         return res;
     }
-    template <class T> T& HandleManager<T>::Iterator::operator*() { return m_Manager->m_Instances[m_Id].instance; }
-    template <class T> T* HandleManager<T>::Iterator::operator->() { return &(m_Manager->m_Instances[m_Id].instance); }
-    template <class T> uint32_t                       HandleManager<T>::Iterator::ID() const { return m_Id; }
+    template <class T> T& HandleManager<T>::Iterator::operator*() { return m_Manager->m_Instances[m_ID].instance; }
+    template <class T> T* HandleManager<T>::Iterator::operator->() { return &(m_Manager->m_Instances[m_ID].instance); }
+    template <class T> uint32_t                       HandleManager<T>::Iterator::ID() const { return m_ID; }
 
-    template <class T> HandleManager<T>::Iterator::Iterator(HandleManager<T>* manager, uint32_t id) : m_Manager(manager), m_Id(id) {}
+    template <class T> HandleManager<T>::Iterator::Iterator(HandleManager<T>* manager, uint32_t id) : m_Manager(manager), m_ID(id) {}
 
     template <class T> typename HandleManager<T>::Iterator HandleManager<T>::begin()
     {
@@ -145,9 +145,9 @@ namespace DE
         }
         Handle<T> res;
         res.m_Manager               = this;
-        res.m_Id                    = m_AvailableIds.front();
-        res.m_Gen                   = ++m_Instances[res.m_Id].gen;
-        m_Instances[res.m_Id].valid = true;
+        res.m_ID                    = m_AvailableIds.front();
+        res.m_Gen                   = ++m_Instances[res.m_ID].gen;
+        m_Instances[res.m_ID].valid = true;
         m_AvailableIds.pop_front();
         return res;
     }
@@ -173,17 +173,17 @@ namespace DE
         m_Instances.push_back(Instance());
     }
 
-    template <class T> T& Handle<T>::operator*() { return m_Manager->m_Instances[m_Id].instance; }
-    template <class T> const T& Handle<T>::operator*() const { return m_Manager->m_Instances[m_Id].instance; }
-    template <class T> T* Handle<T>::operator->() { return &(m_Manager->m_Instances[m_Id].instance); }
-    template <class T> const T* Handle<T>::operator->() const { return &(m_Manager->m_Instances[m_Id].instance); }
+    template <class T> T& Handle<T>::operator*() { return m_Manager->m_Instances[m_ID].instance; }
+    template <class T> const T& Handle<T>::operator*() const { return m_Manager->m_Instances[m_ID].instance; }
+    template <class T> T* Handle<T>::operator->() { return &(m_Manager->m_Instances[m_ID].instance); }
+    template <class T> const T* Handle<T>::operator->() const { return &(m_Manager->m_Instances[m_ID].instance); }
     template <class T> bool                Handle<T>::Valid() const
     {
-        return m_Manager && m_Manager->m_Instances[m_Id].valid && m_Manager->m_Instances[m_Id].gen == m_Gen;
+        return m_Manager && m_Manager->m_Instances[m_ID].valid && m_Manager->m_Instances[m_ID].gen == m_Gen;
     }
     template <class T> void Handle<T>::Destroy()
     {
-        m_Manager->m_AvailableIds.push_back(m_Id);
-        m_Manager->m_Instances[m_Id].valid = false;
+        m_Manager->m_AvailableIds.push_back(m_ID);
+        m_Manager->m_Instances[m_ID].valid = false;
     }
 }  // namespace DE

@@ -6,54 +6,54 @@ Scene:
         Path: Assets\Models\Cube\cube.obj
         Compress: true
         FlipUV: false
-        UUID: 6557233926725796949
+        UUID: 02afee3bc1cb75b7d8b882a8667faa84
       SponzaModel:
         Path: Assets\Models\Sponza\sponza.obj
         Compress: false
         FlipUV: true
-        UUID: 18245820808254477624
+        UUID: 70c19b08ddaef2bceb1ef82f6b6f6817
     Textures:
       Sky:
         Path: Assets\Textures\Skyboxes\Sky.png
         FlipUV: false
-        UUID: 4297990474523151207
+        UUID: 8911b8a8458923946819fb45fbb794fd
     Shaders:
       TexturedPhong:
-        UUID: 3566111628970667214
+        UUID: 24116af57b6022cd2464fbf641ae946a
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
     Scripts:
       SquareMovement:
         Path: Assets\Scripts\BasicScripts\SquareMovement.cpp
-        UUID: 4297990029523151207
+        UUID: 8e0df0e696a071bec7e8cc15f2430fa4
   Hierarchy:
     - Node:
         Name: Light
         Childs:
           - Entity:
               Tag: LampBlue
-              UUID: 5169756284600285649
+              UUID: 76151602bc2d78e0264e42da85cd5748
               Transformation:
-                Translation: [22, 3, 4.99738598]
+                Translation: [-25, 3, 5.84769535]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
                 Scale: [0.100000001, 0.100000001, 0.100000001]
                 ScaleOffset: [1, 1, 1]
-              RenderModel: 6557233926725796949
-              Shader: 3566111628970667214
+              RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+              Shader: 24116af57b6022cd2464fbf641ae946a
               LightSource:
                 Type: Point
                 Ambient: [0, 0, 0]
                 Diffuse: [0, 0, 1]
                 Specular: [0, 0, 1]
                 Direction: [0, -1, 0]
-                Position: [22, 3, 4.98980236]
+                Position: [-25, 3, 5.85369873]
                 CLQ: [1, 0.00700000022, 0.000199999995]
                 InnerCone: 0
                 OuterCone: 0
               Script:
-                UUID: 4297990029523151207
+                UUID: 8e0df0e696a071bec7e8cc15f2430fa4
                 Fields:
                   left_back: [22, 9]
                   offset: 8
@@ -62,28 +62,28 @@ Scene:
                   cycle_time: 16
           - Entity:
               Tag: LampGreen
-              UUID: 7834402933725978860
+              UUID: 44a9b096e51040cdd8df66953f111c67
               Transformation:
-                Translation: [-20, 3, -1]
+                Translation: [-3.95764732, 3, -1]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
                 Scale: [0.100000001, 0.100000001, 0.100000001]
                 ScaleOffset: [1, 1, 1]
-              RenderModel: 6557233926725796949
-              Shader: 3566111628970667214
+              RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+              Shader: 24116af57b6022cd2464fbf641ae946a
               LightSource:
                 Type: Point
                 Ambient: [0, 0, 0]
                 Diffuse: [0, 1, 0]
                 Specular: [0, 1, 0]
                 Direction: [0, -1, 0]
-                Position: [-20, 3, -1]
+                Position: [-3.92469215, 3, -1]
                 CLQ: [1, 0.0219999999, 0.00190000003]
                 InnerCone: 0
                 OuterCone: 0
               Script:
-                UUID: 4297990029523151207
+                UUID: 8e0df0e696a071bec7e8cc15f2430fa4
                 Fields:
                   left_back: [18, -1]
                   offset: 4
@@ -92,28 +92,28 @@ Scene:
                   cycle_time: 8
           - Entity:
               Tag: LampRed
-              UUID: 7834405913725978860
+              UUID: 1f865d0ed12e29e12ab57853f84b7da1
               Transformation:
-                Translation: [-25, 3, -4.99738598]
+                Translation: [22, 3, -5.84769535]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
                 Scale: [0.100000001, 0.100000001, 0.100000001]
                 ScaleOffset: [1, 1, 1]
-              RenderModel: 6557233926725796949
-              Shader: 3566111628970667214
+              RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+              Shader: 24116af57b6022cd2464fbf641ae946a
               LightSource:
                 Type: Point
                 Ambient: [0, 0, 0]
                 Diffuse: [1, 0, 0]
                 Specular: [1, 0, 0]
                 Direction: [0, -1, 0]
-                Position: [-25, 3, -4.98980236]
+                Position: [22, 3, -5.85369873]
                 CLQ: [1, 0.0219999999, 0.00190000003]
                 InnerCone: 0
                 OuterCone: 0
               Script:
-                UUID: 4297990029523151207
+                UUID: 8e0df0e696a071bec7e8cc15f2430fa4
                 Fields:
                   left_back: [22, 9]
                   offset: 0
@@ -125,7 +125,7 @@ Scene:
         Childs:
           - Entity:
               Tag: Sponza
-              UUID: 15605333383906278036
+              UUID: b6c5d20cc60f596bdd6551ccfae1aec3
               Transformation:
                 Translation: [0, 0, 0]
                 TranslationOffset: [0, 0, 0]
@@ -133,11 +133,11 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [0.0199999996, 0.0199999996, 0.0199999996]
                 ScaleOffset: [1, 1, 1]
-              RenderModel: 18245820808254477624
-              Shader: 3566111628970667214
+              RenderModel: 70c19b08ddaef2bceb1ef82f6b6f6817
+              Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Surface
-              UUID: 16299243349270162803
+              UUID: 4290bd0be4747a88bb824a573e666397
               Transformation:
                 Translation: [0, -10, 0]
                 TranslationOffset: [0, 0, 0]
@@ -145,5 +145,5 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [500, 0.100000001, 500]
                 ScaleOffset: [1, 1, 1]
-              RenderModel: 6557233926725796949
-              Shader: 3566111628970667214
+              RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+              Shader: 24116af57b6022cd2464fbf641ae946a
