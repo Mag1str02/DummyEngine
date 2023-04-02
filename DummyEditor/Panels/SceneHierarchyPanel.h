@@ -1,11 +1,9 @@
 #pragma once
 
-#include "DummyEditor/DummyEngineInclude.h"
+#include "DummyEditor/ImGuiUtils/ImGuiPanel.h"
 
-namespace DE
-{
-    class SceneHierarchyPanel : public ImGuiPanel
-    {
+namespace DE {
+    class SceneHierarchyPanel : public ImGuiPanel {
     public:
         SceneHierarchyPanel() : ImGuiPanel("Scene Hierarchy") {}
         virtual void View() override;

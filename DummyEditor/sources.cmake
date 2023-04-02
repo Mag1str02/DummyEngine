@@ -2,10 +2,16 @@ set(EDITOR_SOURCES
     Editor.cpp
     EditorLayer.cpp
 
+    ImGuiUtils/ImGuiPanel.cpp
+    ImGuiUtils/ImGuiManager.cpp
+    ImGuiUtils/ImGuiUtils.cpp
+
     Panels/ViewportPanel.cpp
+    Panels/MenuBar.cpp
     Panels/ProfilerPanel.cpp
     Panels/SceneHierarchyPanel.cpp
     Panels/InspectorPanel.cpp
+    Panels/ThemePanel.cpp
 
     Scripting/ScriptManager.cpp
 )

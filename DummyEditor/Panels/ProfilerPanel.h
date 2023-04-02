@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DummyEditor/DummyEngineInclude.h"
+#include "DummyEditor/ImGuiUtils/ImGuiPanel.h"
 
 namespace DE
 {

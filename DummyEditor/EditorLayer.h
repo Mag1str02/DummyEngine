@@ -1,9 +1,12 @@
 #pragma once
 
 #include "DummyEditor/DummyEngineInclude.h"
+#include "DummyEditor/ImGuiUtils/ImGuiManager.h"
 #include "DummyEditor/Panels/InspectorPanel.h"
+#include "DummyEditor/Panels/MenuBar.h"
 #include "DummyEditor/Panels/ProfilerPanel.h"
 #include "DummyEditor/Panels/SceneHierarchyPanel.h"
+#include "DummyEditor/Panels/ThemePanel.h"
 #include "DummyEditor/Panels/ViewportPanel.h"
 
 namespace DE {
@@ -33,10 +36,7 @@ namespace DE {
         virtual void OnDetach() override;
 
     private:
-        //*~~~EditorGUI~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        void ShowDockingSpace();
-        void ShowDockingSpaceTabBar();
+        friend class MenuBar;
 
         //*~~~EditorFunctionality~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -58,7 +58,10 @@ namespace DE {
         SceneHierarchyPanel m_SceneHierarchy;
         InspectorPanel      m_Inspector;
         ProfilerPanel       m_Profiler;
-        ImGuiPanelStack     m_Panels;
+        ThemePanel          m_ThemePanel;
+        MenuBar             m_MenuBar;
+
+        ImGuiManager m_ImGuiManager;
 
         EditorState m_State;
         Entity      m_EditorCamera;

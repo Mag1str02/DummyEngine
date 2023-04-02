@@ -31,15 +31,14 @@ namespace DE {
         m_SceneData.m_FrameBuffer->SetDepthAttachment(TextureFormat::DepthStencil);
         m_Viewport.SetFrameBuffer(m_SceneData.m_FrameBuffer);
 
-        m_Panels.PushPanel(&m_Viewport);
-        m_Panels.PushPanel(&m_SceneHierarchy);
-        m_Panels.PushPanel(&m_Inspector);
-        m_Panels.PushPanel(&m_Profiler);
-
-        m_Viewport.SetController(m_State.m_ViewportEnabled);
-        m_SceneHierarchy.SetController(m_State.m_SceneHierarchyEnabled);
-        m_Inspector.SetController(m_State.m_InspectorEnabled);
-        m_Profiler.SetController(m_State.m_ProfilerEnabled);
+        m_ImGuiManager.LoadEditorResources();
+        m_ImGuiManager.AddPanel(&m_Viewport);
+        m_ImGuiManager.AddPanel(&m_SceneHierarchy);
+        m_ImGuiManager.AddPanel(&m_Inspector);
+        m_ImGuiManager.AddPanel(&m_Profiler);
+        m_ImGuiManager.AddPanel(&m_ThemePanel);
+        m_ImGuiManager.SetMenuBar(&m_MenuBar);
+        m_MenuBar.AttachToEditor(this);
     }
     void EditorLayer::OnUpdate(float dt) {
         DE_PROFILE_SCOPE("EditorLayer OnUpdate");
@@ -65,15 +64,12 @@ namespace DE {
             m_Inspector.SetActiveEntity(m_SceneHierarchy.GetActiveEntity());
         }
 
-        ShowDockingSpace();
+        m_ImGuiManager.OnImGui();
 
-        m_Panels.OnImGuiRender();
-
-        {
-            DE_PROFILE_SCOPE("Demo Window");
-
-            ImGui::ShowDemoWindow();
-        }
+        ImGui::Begin("Dear ImGui Style Editor");
+        ImGui::ShowStyleEditor();
+        ImGui::End();
+        ImGui::ShowDemoWindow();
     }
 
     void EditorLayer::OnDetach() {
@@ -83,63 +79,6 @@ namespace DE {
 
         ScriptManager::Terminate();
         Compiler::Terminate();
-    }
-
-    //*~~~EditorGUI~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    void EditorLayer::ShowDockingSpace() {
-        DE_PROFILE_SCOPE("DockSpace");
-
-        static bool p_open = true;
-
-        const ImGuiViewport* viewport = ImGui::GetMainViewport();
-        ImGui::SetNextWindowViewport(viewport->ID);
-        ImGui::SetNextWindowPos(viewport->WorkPos);
-        ImGui::SetNextWindowSize(viewport->WorkSize);
-
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-
-        ImGui::Begin("DockSpace",
-                     &p_open,
-                     ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |
-                         ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_MenuBar |
-                         ImGuiWindowFlags_NoDocking);
-        ImGui::PopStyleVar(3);
-
-        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
-        ShowDockingSpaceTabBar();
-
-        ImGui::End();
-    }
-    void EditorLayer::ShowDockingSpaceTabBar() {
-        if (ImGui::BeginMenuBar()) {
-            if (ImGui::BeginMenu("File")) {
-                if (ImGui::MenuItem("Open Scene")) {
-                    OpenSceneDialog();
-                }
-                if (ImGui::MenuItem("Save Scene")) {
-                    SaveSceneDialog();
-                }
-                ImGui::Separator();
-                if (ImGui::MenuItem("Exit")) {
-                    WindowCloseEvent event;
-                    BroadcastEvent(event);
-                }
-                ImGui::EndMenu();
-            }
-            if (ImGui::BeginMenu("View")) {
-                ImGui::MenuItem("Viewport", NULL, &m_State.m_ViewportEnabled);
-                ImGui::MenuItem("Scene Hierarchy", NULL, &m_State.m_SceneHierarchyEnabled);
-                ImGui::MenuItem("Inspector", NULL, &m_State.m_InspectorEnabled);
-                ImGui::MenuItem("Profiler", NULL, &m_State.m_ProfilerEnabled);
-                ImGui::EndMenu();
-            }
-
-            ImGui::EndMenuBar();
-        }
     }
 
     //*~~~EditorFunctionality~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

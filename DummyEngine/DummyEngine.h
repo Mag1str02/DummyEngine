@@ -3,7 +3,6 @@
 #include "DummyEngine/Core/Application/Application.h"
 #include "DummyEngine/Core/Application/FileSystem.h"
 #include "DummyEngine/Core/Application/Config.h"
-#include "DummyEngine/Core/Application/ImGuiPanelStack.h"
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"

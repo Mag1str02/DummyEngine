@@ -32,6 +32,7 @@ namespace DE {
             case DE_CFG_SCRIPT_PATH: return m_Configs.c_ScriptPath;
             case DE_CFG_CACHE_PATH: return m_Configs.c_CachePath;
             case DE_CFG_SCRIPT_CACHE_PATH: return m_Configs.c_ScriptCachePath;
+            case DE_CFG_FONT_PATH: return m_Configs.c_FontPath;
             default: DE_ASSERT(false, "Wrong config requested (", setting, ")");
         }
         return Path(".");
@@ -51,6 +52,7 @@ namespace DE {
         m_Configs.c_ScriptPath      = m_Configs.c_AssetPath / "Scripts";
         m_Configs.c_CachePath       = m_Configs.c_ExecutablePath / "Cache";
         m_Configs.c_ScriptCachePath = m_Configs.c_CachePath / "Scripts";
+        m_Configs.c_FontPath        = m_Configs.c_AssetPath / "Fonts";
 
         m_Configs.c_RenderAPI = API::OpenGL;
     }

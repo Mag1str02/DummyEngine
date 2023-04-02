@@ -2,11 +2,9 @@
 
 #include "DummyEngine/Core/Application/Layer.h"
 
-namespace DE
-{
+namespace DE {
 
-    class ImGuiLayer : public Layer
-    {
+    class ImGuiLayer : public Layer {
     public:
         ImGuiLayer();
         ~ImGuiLayer() = default;
@@ -16,9 +14,6 @@ namespace DE
 
         void BeginFrame();
         void EndFrame();
-
-    private:
-        void SetDarkThemeColors();
     };
 
 }  // namespace DE
