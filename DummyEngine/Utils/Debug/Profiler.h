@@ -8,12 +8,13 @@
 #include <vector>
 
 #include "DummyEngine/Utils/Helpers/Singleton.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
 namespace DE {
     struct TimeLapse {
         std::chrono::time_point<std::chrono::high_resolution_clock> m_Start;
         std::chrono::time_point<std::chrono::high_resolution_clock> m_End;
-        std::vector<uint32_t>                                       m_Childs;
+        std::vector<U32>                                       m_Childs;
         std::string                                                 m_Name;
 
         float       Duration() const { return (m_End - m_Start).count() * 0.001 * 0.001; }
@@ -24,7 +25,7 @@ namespace DE {
     struct ProfilerFrame {
         std::vector<TimeLapse> m_TimeLapses;
 
-        ProfilerFrame(uint32_t predicted_lapse_amount);
+        ProfilerFrame(U32 predicted_lapse_amount);
     };
 
     class Profiler : public Singleton<Profiler> {
@@ -39,8 +40,8 @@ namespace DE {
         friend class ProfilerScopeObject;
 
         std::queue<ProfilerFrame> m_Frames;
-        std::stack<uint32_t>      m_TimeLapseStack;
-        uint32_t                  m_PrevFrameTimeLapseAmount = 0;
+        std::stack<U32>      m_TimeLapseStack;
+        U32                  m_PrevFrameTimeLapseAmount = 0;
     };
 
     class ProfilerScopeObject {

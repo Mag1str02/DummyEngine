@@ -27,6 +27,6 @@ namespace DE
         Ref<IndexBuffer> m_IndexBuffer;
 
         GLuint m_ArrayId;
-        uint32_t m_CurrentAtributeId;
+        U32 m_CurrentAtributeId;
     };
 }  // namespace DE

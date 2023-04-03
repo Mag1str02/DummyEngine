@@ -7,12 +7,12 @@
 #include "DummyEngine/Core/Scene/Components.h"
 
 namespace DE {
-    const uint32_t MAX_LIGHTS_IN_SCENE      = 1000;
-    const uint32_t MAX_VP_AMOUNT            = 32;
-    const uint32_t MAX_INSTANCES_PER_BUFFER = 1000;
+    const U32 MAX_LIGHTS_IN_SCENE      = 1000;
+    const U32 MAX_VP_AMOUNT            = 32;
+    const U32 MAX_INSTANCES_PER_BUFFER = 1000;
 
-    const uint32_t VP_UB_ID    = 1;
-    const uint32_t LIGHT_UB_ID = 2;
+    const U32 VP_UB_ID    = 1;
+    const U32 LIGHT_UB_ID = 2;
 
     SceneRenderData::SceneRenderData(Scene* scene) : m_Scene(scene) {
         m_VP     = UniformBuffer::Create({BufferElementType::Mat4, BufferElementType::Mat4}, MAX_VP_AMOUNT);
@@ -76,9 +76,9 @@ namespace DE {
     void SceneRenderData::UpdateVP() {
         DE_PROFILE_SCOPE("UpdateVP");
 
-        for (std::pair<Entity, uint32_t> p : m_EntityToVPIndex) {
+        for (std::pair<Entity, U32> p : m_EntityToVPIndex) {
             Entity   entity = p.first;
-            uint32_t id     = p.second;
+            U32 id     = p.second;
             if (entity.Has<FPSCamera>()) {
                 auto& camera              = entity.Get<FPSCamera>();
                 m_VP->at(id).Get<Mat4>(0) = camera.GetViewMatrix();
@@ -110,7 +110,7 @@ namespace DE {
     }
     void SceneRenderData::AddVPEntity(const Entity& entity) {
         if (!m_EntityToVPIndex.contains(entity)) {
-            uint32_t index            = m_EntityToVPIndex.size();
+            U32 index            = m_EntityToVPIndex.size();
             m_EntityToVPIndex[entity] = index;
         }
     }

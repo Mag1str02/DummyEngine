@@ -34,16 +34,28 @@ namespace DE {
     template <> ScriptFieldType TypeToScriptFieldType<std::string>() {
         return ScriptFieldType::String;
     }
-    template <> ScriptFieldType TypeToScriptFieldType<int32_t>() {
+    template <> ScriptFieldType TypeToScriptFieldType<S8>() {
+        return ScriptFieldType::S8;
+    }
+    template <> ScriptFieldType TypeToScriptFieldType<S16>() {
+        return ScriptFieldType::S16;
+    }
+    template <> ScriptFieldType TypeToScriptFieldType<S32>() {
         return ScriptFieldType::S32;
     }
-    template <> ScriptFieldType TypeToScriptFieldType<int64_t>() {
+    template <> ScriptFieldType TypeToScriptFieldType<S64>() {
         return ScriptFieldType::S64;
     }
-    template <> ScriptFieldType TypeToScriptFieldType<uint32_t>() {
+    template <> ScriptFieldType TypeToScriptFieldType<U8>() {
+        return ScriptFieldType::U8;
+    }
+    template <> ScriptFieldType TypeToScriptFieldType<U16>() {
+        return ScriptFieldType::U16;
+    }
+    template <> ScriptFieldType TypeToScriptFieldType<U32>() {
         return ScriptFieldType::U32;
     }
-    template <> ScriptFieldType TypeToScriptFieldType<uint64_t>() {
+    template <> ScriptFieldType TypeToScriptFieldType<U64>() {
         return ScriptFieldType::U64;
     }
     template <> ScriptFieldType TypeToScriptFieldType<Vec2>() {

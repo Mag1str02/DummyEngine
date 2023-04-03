@@ -11,6 +11,6 @@ namespace DE
         virtual void View() override;
 
     private:
-        void RenderTimeLapse(const std::vector<TimeLapse>& time_lapses, uint32_t index);
+        void RenderTimeLapse(const std::vector<TimeLapse>& time_lapses, U32 index);
     };
 }  // namespace DE

@@ -22,29 +22,29 @@ namespace DE {
     class IComponentArray {
     public:
         virtual ~IComponentArray()                               = default;
-        virtual void* AddComponent(uint32_t id, void* component) = 0;
-        virtual void* GetComponent(uint32_t id)                  = 0;
-        virtual bool  HasComponent(uint32_t id)                  = 0;
-        virtual void  RemoveComponent(uint32_t id)               = 0;
+        virtual void* AddComponent(U32 id, void* component) = 0;
+        virtual void* GetComponent(U32 id)                  = 0;
+        virtual bool  HasComponent(U32 id)                  = 0;
+        virtual void  RemoveComponent(U32 id)               = 0;
     };
     template <typename ComponentType> class ComponentArray : public IComponentArray {
     public:
         ComponentArray() = default;
-        virtual void* AddComponent(uint32_t id, void* component);
-        virtual void* GetComponent(uint32_t id);
-        virtual bool  HasComponent(uint32_t id);
-        virtual void  RemoveComponent(uint32_t id);
+        virtual void* AddComponent(U32 id, void* component);
+        virtual void* GetComponent(U32 id);
+        virtual bool  HasComponent(U32 id);
+        virtual void  RemoveComponent(U32 id);
 
     private:
-        std::unordered_map<uint32_t, uint32_t> m_EntityToIndex;
-        std::vector<uint32_t>                  m_IndexToEntity;
+        std::unordered_map<U32, U32> m_EntityToIndex;
+        std::vector<U32>                  m_IndexToEntity;
         std::vector<ComponentType>             m_ComponentArray;
     };
 
     class Signature {
     public:
-        bool   Get(uint64_t id) const;
-        void   Set(uint64_t id, bool value);
+        bool   Get(U64 id) const;
+        void   Set(U64 id, bool value);
         bool   Matches(const Signature& required) const;
         size_t Size() const {
             size_t size = 0;
@@ -57,23 +57,23 @@ namespace DE {
         }
 
     private:
-        std::vector<uint64_t> m_Data;
+        std::vector<U64> m_Data;
     };
     class ComponentManager {
     public:
         ComponentManager(Storage* storage);
 
-        template <typename ComponentType> ComponentType* AddComponent(uint32_t entity_id, const ComponentType& component);
-        template <typename ComponentType> ComponentType* GetComponent(uint32_t entity_id);
-        template <typename ComponentType> void           RemoveComponent(uint32_t entity_id);
-        template <typename ComponentType> bool           HasComponent(uint32_t entity_id) const;
-        void                                             Destroy(uint32_t entity_id);
+        template <typename ComponentType> ComponentType* AddComponent(U32 entity_id, const ComponentType& component);
+        template <typename ComponentType> ComponentType* GetComponent(U32 entity_id);
+        template <typename ComponentType> void           RemoveComponent(U32 entity_id);
+        template <typename ComponentType> bool           HasComponent(U32 entity_id) const;
+        void                                             Destroy(U32 entity_id);
 
         template <typename ComponentType> void SetAddHandler(std::function<void(Entity)> func);
         template <typename ComponentType> void SetRemoveHandler(std::function<void(Entity)> func);
 
         template <typename... Components> Signature BuildSignature();
-        bool                                        Matches(uint32_t id, const Signature& signature) const;
+        bool                                        Matches(U32 id, const Signature& signature) const;
 
     private:
         template <typename... Components> typename std::enable_if<sizeof...(Components) == 0, bool>::type ValidateComponents() const;
@@ -82,11 +82,11 @@ namespace DE {
         template <typename... Components> typename std::enable_if<sizeof...(Components) == 0, Signature>::type GetSignature() const;
         template <typename T, typename... Components> Signature                                                GetSignature() const;
 
-        void                                   ValidateSignature(uint32_t entity_id);
+        void                                   ValidateSignature(U32 entity_id);
         template <typename ComponentType> void RegisterComponent();
 
         std::unordered_map<std::type_index, std::shared_ptr<IComponentArray>> m_ComponentArrays;
-        std::unordered_map<std::type_index, uint32_t>                         m_ComponentId;
+        std::unordered_map<std::type_index, U32>                         m_ComponentId;
         std::unordered_map<std::type_index, std::function<void(Entity)>>      m_AddHandlers;
         std::unordered_map<std::type_index, std::function<void(Entity)>>      m_RemoveHandlers;
         std::vector<Signature>                                                m_Signatures;
@@ -99,19 +99,19 @@ namespace DE {
     public:
         EntityManager() = default;
 
-        std::pair<uint32_t, uint32_t> CreateEntity();
-        void                          Destroy(uint32_t id);
-        bool                          Valid(uint32_t id, uint32_t gen) const;
+        std::pair<U32, U32> CreateEntity();
+        void                          Destroy(U32 id);
+        bool                          Valid(U32 id, U32 gen) const;
 
-        uint32_t Generation(uint32_t id) const;
-        uint32_t NextEntity(uint32_t id) const;
-        uint32_t BeginEntity() const;
-        uint32_t EndEntity() const;
+        U32 Generation(U32 id) const;
+        U32 NextEntity(U32 id) const;
+        U32 BeginEntity() const;
+        U32 EndEntity() const;
 
     private:
-        std::vector<uint32_t> m_Generations;
+        std::vector<U32> m_Generations;
         std::vector<bool>     m_States;
-        std::queue<uint32_t>  m_AvailableEntities;
+        std::queue<U32>  m_AvailableEntities;
     };
 
     //*___SYSTEM_MANAGER___________________________________________________________________________________________________________________________________________________________________________________________
@@ -140,8 +140,8 @@ namespace DE {
 
     private:
         std::vector<std::shared_ptr<System>>          m_Systems;
-        std::unordered_map<std::type_index, uint32_t> m_SystemId;
-        std::vector<std::vector<uint32_t>>            m_DependencyGraph;
+        std::unordered_map<std::type_index, U32> m_SystemId;
+        std::vector<std::vector<U32>>            m_DependencyGraph;
         Storage*                                      m_Storage;
     };
 
@@ -174,8 +174,8 @@ namespace DE {
         friend struct std::hash<Entity>;
         friend class Storage;
 
-        uint32_t         m_ID;
-        uint32_t         m_Gen;
+        U32         m_ID;
+        U32         m_Gen;
         WeakRef<Storage> m_Storage;
     };
 
@@ -207,14 +207,14 @@ namespace DE {
         friend class ComponentManager;
         friend struct StorageDeleter;
 
-        Entity GetEntity(uint32_t id);
-        bool   Valid(uint32_t id, uint32_t gen) const;
-        void   Destroy(uint32_t id, uint32_t gen);
+        Entity GetEntity(U32 id);
+        bool   Valid(U32 id, U32 gen) const;
+        void   Destroy(U32 id, U32 gen);
 
-        template <typename ComponentType> ComponentType* AddComponent(uint32_t id, uint32_t gen, const ComponentType& component);
-        template <typename ComponentType> ComponentType* GetComponent(uint32_t id, uint32_t gen);
-        template <typename ComponentType> bool           HasComponent(uint32_t id, uint32_t gen) const;
-        template <typename ComponentType> void           RemoveComponent(uint32_t id, uint32_t gen);
+        template <typename ComponentType> ComponentType* AddComponent(U32 id, U32 gen, const ComponentType& component);
+        template <typename ComponentType> ComponentType* GetComponent(U32 id, U32 gen);
+        template <typename ComponentType> bool           HasComponent(U32 id, U32 gen) const;
+        template <typename ComponentType> void           RemoveComponent(U32 id, U32 gen);
 
         EntityManager    m_EntityManager;
         ComponentManager m_ComponentManager;
@@ -224,7 +224,7 @@ namespace DE {
     public:
         class Iterator {
         public:
-            Iterator(uint32_t id, StorageView* v);
+            Iterator(U32 id, StorageView* v);
 
             bool      operator==(const Iterator& other) const;
             bool      operator!=(const Iterator& other) const;
@@ -234,7 +234,7 @@ namespace DE {
 
         private:
             friend class StorageView;
-            uint32_t     m_ID;
+            U32     m_ID;
             StorageView* m_View;
         };
         Iterator begin();

@@ -10,9 +10,10 @@
 namespace DE {
     class ScriptComponent {
     public:
-        ScriptComponent(uint32_t id, uint32_t gen) : m_ID(id), m_Gen(gen) {}
+        ScriptComponent(U32 id, U32 gen) : m_ID(id), m_Gen(gen) {}
         UUID    ID() const;
         bool    Valid() const;
+        bool    Loaded() const;
         void    Destroy();
         Script& operator*();
         Script* operator->();
@@ -20,8 +21,8 @@ namespace DE {
     private:
         friend class ScriptEngine;
 
-        uint32_t m_ID  = 0;
-        uint32_t m_Gen = 0;
+        U32 m_ID  = 0;
+        U32 m_Gen = 0;
     };
 
     struct ScriptProxy {
@@ -51,10 +52,10 @@ namespace DE {
 
         private:
             friend class ScriptProxyManager;
-            Iterator(ScriptProxyManager* manager, uint32_t id) : m_Manager(manager), m_ID(id) {}
+            Iterator(ScriptProxyManager* manager, U32 id) : m_Manager(manager), m_ID(id) {}
 
             ScriptProxyManager* m_Manager = nullptr;
-            uint32_t            m_ID      = 0;
+            U32            m_ID      = 0;
         };
 
         Iterator begin() {
@@ -72,18 +73,18 @@ namespace DE {
             m_Generations.clear();
             m_States.clear();
         }
-        bool Valid(uint32_t id, uint32_t gen) { return id < m_Proxys.size() && m_States[id] && m_Generations[id] == gen; }
-        void Destroy(uint32_t id) {
+        bool Valid(U32 id, U32 gen) { return id < m_Proxys.size() && m_States[id] && m_Generations[id] == gen; }
+        void Destroy(U32 id) {
             m_AvailableIds.push_back(id);
             m_States[id] = false;
             // LOG_INFO("ScriptProxyManager", "Destroyed handle (", id, ")");
         }
         void Destroy(Iterator it) { Destroy(it.m_ID); }
 
-        ScriptProxy&                  GetProxy(uint32_t id) { return m_Proxys[id]; }
-        std::pair<uint32_t, uint32_t> CreateProxy() {
+        ScriptProxy&                  GetProxy(U32 id) { return m_Proxys[id]; }
+        std::pair<U32, U32> CreateProxy() {
             ExtendIfRequired();
-            uint32_t id = m_AvailableIds.front();
+            U32 id = m_AvailableIds.front();
             m_AvailableIds.pop_front();
             m_States[id]          = true;
             m_Proxys[id].m_ID     = UUID();
@@ -103,8 +104,8 @@ namespace DE {
         }
 
         std::vector<ScriptProxy> m_Proxys;
-        std::vector<uint32_t>    m_Generations;
-        std::deque<uint32_t>     m_AvailableIds;
+        std::vector<U32>    m_Generations;
+        std::deque<U32>     m_AvailableIds;
         std::vector<bool>        m_States;
     };
 
@@ -113,7 +114,7 @@ namespace DE {
     public:
         S_METHOD_DEF(bool, AddScript, (UUID id));
         S_METHOD_DEF(bool, DeleteScript, (UUID id));
-        S_METHOD_DEF(bool, Valid, (UUID id));
+        S_METHOD_DEF(bool, ValidScript, (UUID id));
         S_METHOD_DEF(Unit, ClearScripts, ());
 
         S_METHOD_DEF(Unit, AddLibrary, (Ref<SharedObject> library));
@@ -122,10 +123,11 @@ namespace DE {
         S_METHOD_DEF(Unit, ClearLibraries, ());
 
         S_METHOD_DEF(ScriptComponent, CreateScript, (UUID id));
-        S_METHOD_DEF(Script*, GetScript, (const ScriptComponent& compoent));
-        S_METHOD_DEF(UUID, GetUUID, (const ScriptComponent& compoent));
-        S_METHOD_DEF(bool, ValidComponent, (const ScriptComponent& compoent));
-        S_METHOD_DEF(Unit, Destroy, (const ScriptComponent& compoent));
+        S_METHOD_DEF(Script*, GetScript, (const ScriptComponent& component));
+        S_METHOD_DEF(UUID, GetUUID, (const ScriptComponent& component));
+        S_METHOD_DEF(bool, Valid, (const ScriptComponent& component));
+        S_METHOD_DEF(bool, Loaded, (const ScriptComponent& component));
+        S_METHOD_DEF(Unit, Destroy, (const ScriptComponent& component));
 
     private:
         void UpdateScriptClasses(Ref<SharedObject> library);

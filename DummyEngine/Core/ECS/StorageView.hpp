@@ -3,7 +3,7 @@
 namespace DE
 {
 
-    template <typename... Components> StorageView<Components...>::Iterator::Iterator(uint32_t id, StorageView* v) : m_ID(id), m_View(v) {}
+    template <typename... Components> StorageView<Components...>::Iterator::Iterator(U32 id, StorageView* v) : m_ID(id), m_View(v) {}
 
     template <typename... Components> bool StorageView<Components...>::Iterator::operator==(const Iterator& other) const
     {

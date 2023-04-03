@@ -58,8 +58,8 @@ namespace DE
                     break;
                 }
                 case BufferElementType::Mat4: {
-                    uint32_t count = element.ComponentCount();
-                    for (uint8_t i = 0; i < count; ++i)
+                    U32 count = element.ComponentCount();
+                    for (U8 i = 0; i < count; ++i)
                     {
                         glEnableVertexAttribArray(m_CurrentAtributeId);
                         glVertexAttribPointer(m_CurrentAtributeId,

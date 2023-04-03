@@ -3,6 +3,7 @@
 #include "DummyEngine/Utils/Base/STDIncludes.h"
 #include "DummyEngine/Utils/Helpers/Singleton.h"
 #include "DummyEngine/Utils/Helpers/StringOperations.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
 namespace DE {
     enum class LogMessageType { None = 0, Debug, Info, Warning, Error, Fatal };
@@ -31,7 +32,7 @@ namespace DE {
             Get().LogInternal(type, author, to, StrCat(message...));
         }
         S_METHOD_DEF(const std::deque<LogRecord>&, GetLog, (const std::string& log = ""));
-        S_METHOD_DEF(Unit, SetDepth, (uint32_t depth, const std::string& log = ""));
+        S_METHOD_DEF(Unit, SetDepth, (U32 depth, const std::string& log = ""));
 
     private:
         void LogInternal(LogMessageType type, const std::string& author, const std::string& to, const std::string& str);
@@ -39,7 +40,7 @@ namespace DE {
         struct LogStream {
             std::deque<LogRecord> records;
             std::ofstream         stream;
-            uint32_t              depth = 32;
+            U32                   depth = 32;
         };
         std::deque<LogRecord>                      m_Empty;
         std::unordered_map<std::string, LogStream> m_Streams;

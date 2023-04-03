@@ -23,8 +23,8 @@ namespace DE {
         void LoadEditorLibrary();
         void LoadEditorScripts();
 
-        std::vector<uint32_t>      RecompilationList(const std::vector<ScriptAsset>& scripts);
-        std::optional<Path>        CompileSelected(const std::vector<ScriptAsset>& scripts, const std::vector<uint32_t> ids);
+        std::vector<U32>      RecompilationList(const std::vector<ScriptAsset>& scripts);
+        std::optional<Path>        CompileSelected(const std::vector<ScriptAsset>& scripts, const std::vector<U32> ids);
         std::optional<std::string> LinkLibrary(const std::vector<ScriptAsset>& scripts);
         bool                       SwapLibrary(const std::string& name);
         bool                       NeedToCompile(const Path& path);

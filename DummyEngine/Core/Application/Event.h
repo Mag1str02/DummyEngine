@@ -72,16 +72,16 @@ namespace DE
     class WindowResizeEvent : public Event
     {
     public:
-        WindowResizeEvent(uint32_t width, uint32_t height) : m_Width(width), m_Height(height) {}
+        WindowResizeEvent(U32 width, U32 height) : m_Width(width), m_Height(height) {}
 
-        uint32_t GetWidth() const { return m_Width; }
-        uint32_t GetHeight() const { return m_Height; }
+        U32 GetWidth() const { return m_Width; }
+        U32 GetHeight() const { return m_Height; }
 
         EVENT_TYPE(WindowResize);
 
     private:
-        uint32_t m_Width;
-        uint32_t m_Height;
+        U32 m_Width;
+        U32 m_Height;
     };
     class WindowCloseEvent : public Event
     {
@@ -94,51 +94,51 @@ namespace DE
     class KeyPressedEvent : public Event
     {
     public:
-        KeyPressedEvent(uint32_t key) : m_KeyKode(key) {}
+        KeyPressedEvent(U32 key) : m_KeyKode(key) {}
 
-        uint32_t GetKey() const { return m_KeyKode; }
+        U32 GetKey() const { return m_KeyKode; }
 
         EVENT_TYPE(KeyPressed);
 
     private:
-        uint32_t m_KeyKode;
+        U32 m_KeyKode;
     };
     class KeyReleasedEvent : public Event
     {
     public:
-        KeyReleasedEvent(uint32_t key) : m_KeyKode(key) {}
+        KeyReleasedEvent(U32 key) : m_KeyKode(key) {}
 
-        uint32_t GetKey() const { return m_KeyKode; }
+        U32 GetKey() const { return m_KeyKode; }
 
         EVENT_TYPE(KeyReleased);
 
     private:
-        uint32_t m_KeyKode;
+        U32 m_KeyKode;
     };
 
     class MouseButtonPressedEvent : public Event
     {
     public:
-        MouseButtonPressedEvent(uint32_t key) : m_KeyKode(key) {}
+        MouseButtonPressedEvent(U32 key) : m_KeyKode(key) {}
 
-        uint32_t GetKey() const { return m_KeyKode; }
+        U32 GetKey() const { return m_KeyKode; }
 
         EVENT_TYPE(MouseButtonPressed);
 
     private:
-        uint32_t m_KeyKode;
+        U32 m_KeyKode;
     };
     class MouseButtonReleasedEvent : public Event
     {
     public:
-        MouseButtonReleasedEvent(uint32_t key) : m_KeyKode(key) {}
+        MouseButtonReleasedEvent(U32 key) : m_KeyKode(key) {}
 
-        uint32_t GetKey() const { return m_KeyKode; }
+        U32 GetKey() const { return m_KeyKode; }
 
         EVENT_TYPE(MouseButtonReleased);
 
     private:
-        uint32_t m_KeyKode;
+        U32 m_KeyKode;
     };
     class MouseScrolledEvent : public Event
     {
@@ -174,32 +174,32 @@ namespace DE
     class SetWindowModeWindowedEvent : public Event
     {
     public:
-        SetWindowModeWindowedEvent(uint32_t width = 1280, uint32_t height = 720, uint32_t x_pos = 100, uint32_t y_pos = 100) : m_Width(width), m_Height(height), m_XPos(x_pos), m_YPos(y_pos) {}
+        SetWindowModeWindowedEvent(U32 width = 1280, U32 height = 720, U32 x_pos = 100, U32 y_pos = 100) : m_Width(width), m_Height(height), m_XPos(x_pos), m_YPos(y_pos) {}
 
-        uint32_t GetWidth() const { return m_Width; }
-        uint32_t GetHeight() const { return m_Height; }
-        uint32_t GetXPos() const { return m_XPos; }
-        uint32_t GetYPos() const { return m_YPos; }
+        U32 GetWidth() const { return m_Width; }
+        U32 GetHeight() const { return m_Height; }
+        U32 GetXPos() const { return m_XPos; }
+        U32 GetYPos() const { return m_YPos; }
 
         EVENT_TYPE(SetWindowModeWindowed);
 
     private:
-        uint32_t m_Width;
-        uint32_t m_Height;
-        uint32_t m_XPos;
-        uint32_t m_YPos;
+        U32 m_Width;
+        U32 m_Height;
+        U32 m_XPos;
+        U32 m_YPos;
     };
     class SetWindowModeFullscreenEvent : public Event
     {
     public:
-        SetWindowModeFullscreenEvent(uint32_t monitor_id) : m_MonitorId(monitor_id) {}
+        SetWindowModeFullscreenEvent(U32 monitor_id) : m_MonitorId(monitor_id) {}
 
-        uint32_t GetMonitorId() const { return m_MonitorId; }
+        U32 GetMonitorId() const { return m_MonitorId; }
 
         EVENT_TYPE(SetWindowModeFullscreen);
 
     private:
-        uint32_t m_MonitorId;
+        U32 m_MonitorId;
     };
 
     class SetMouseLockEvent : public Event

@@ -9,7 +9,7 @@ namespace DE
     class GLUniformBuffer : public UniformBuffer
     {
     public:
-        GLUniformBuffer(const BufferLayout& layout, uint32_t size);
+        GLUniformBuffer(const BufferLayout& layout, U32 size);
         virtual ~GLUniformBuffer();
 
         GLUniformBuffer()                             = delete;
@@ -18,8 +18,8 @@ namespace DE
         GLUniformBuffer& operator=(const GLUniformBuffer& other) = delete;
         GLUniformBuffer& operator=(GLUniformBuffer&& other) = delete;
 
-        virtual void                Bind(uint32_t index) const;
-        virtual LocalBufferNode     at(uint32_t index);
+        virtual void                Bind(U32 index) const;
+        virtual LocalBufferNode     at(U32 index);
         virtual void                PushData() const;
         virtual const BufferLayout& GetLayout() const;
 
@@ -27,6 +27,6 @@ namespace DE
         GLuint       m_BufferId;
         LocalBuffer  m_LocalBuffer;
         BufferLayout m_Layout;
-        uint32_t     m_Size;
+        U32     m_Size;
     };
 }  // namespace DE

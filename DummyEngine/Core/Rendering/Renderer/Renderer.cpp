@@ -45,7 +45,7 @@ namespace DE {
     }
     void Renderer::Terminate() {}
 
-    void Renderer::OnWindowResize(uint32_t width, uint32_t height) {
+    void Renderer::OnWindowResize(U32 width, U32 height) {
         DE_PROFILE_SCOPE("On Window Resize");
 
         m_RenderAPI->SetViewport(0, 0, width, height);
@@ -143,16 +143,16 @@ namespace DE {
     // TODO: Think to move somewhere else...
 
     void Renderer::GenDefaultTexture() {
-        uint32_t             width  = 1;
-        uint32_t             height = 1;
+        U32             width  = 1;
+        U32             height = 1;
         TextureFormat        format = TextureFormat::RGBA;
-        std::vector<uint8_t> data(4, 255);
+        std::vector<U8> data(4, 255);
 
         TextureData tex_data(&data[0], width, height, format);
         m_DefaultTexture = Texture::Create(tex_data);
     }
     void Renderer::GenFullScreenQuad() {
-        uint32_t indices[] = {
+        U32 indices[] = {
             0,
             1,
             2,  //
@@ -190,7 +190,7 @@ namespace DE {
         m_FullScreenQuad->AddVertexBuffer(vb);
     }
     void Renderer::GenCube() {
-        uint32_t indices[] = {
+        U32 indices[] = {
             0, 1, 2,  //
             2, 3, 0,  //
 

@@ -11,8 +11,8 @@ namespace DE {
         virtual void PopStyle() override { ImGui::PopStyleVar(); }
 
         void     SetFrameBuffer(Ref<FrameBuffer> buffer);
-        uint32_t GetWidth() const { return m_ViewportSize.x; }
-        uint32_t GetHeight() const { return m_ViewportSize.y; }
+        U32 GetWidth() const { return m_ViewportSize.x; }
+        U32 GetHeight() const { return m_ViewportSize.y; }
 
     private:
         ImVec2           m_ViewportSize;

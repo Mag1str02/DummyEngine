@@ -20,7 +20,7 @@ namespace DE
         return LightSourceType::Direction;
     }
 
-    uint32_t LightSourceTypeToId(LightSourceType type)
+    U32 LightSourceTypeToId(LightSourceType type)
     {
         switch (type)
         {

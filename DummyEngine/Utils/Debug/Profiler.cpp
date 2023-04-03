@@ -3,7 +3,7 @@
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
 namespace DE {
-    ProfilerFrame::ProfilerFrame(uint32_t predicted_lapse_amount) {
+    ProfilerFrame::ProfilerFrame(U32 predicted_lapse_amount) {
         m_TimeLapses.reserve(predicted_lapse_amount);
     }
 
@@ -35,7 +35,7 @@ namespace DE {
     }
     S_METHOD_IMPL(Unit, PushTimeLapse, (const std::string& name), (name)) {
         ++m_PrevFrameTimeLapseAmount;
-        uint32_t index = m_Frames.back().m_TimeLapses.size();
+        U32 index = m_Frames.back().m_TimeLapses.size();
         m_Frames.back().m_TimeLapses.push_back(TimeLapse(name));
         m_Frames.back().m_TimeLapses.back().m_Start = std::chrono::high_resolution_clock::now();
         if (!m_TimeLapseStack.empty()) {

@@ -75,7 +75,7 @@ namespace DE {
         }
         return res;
     }
-    void RenderMesh::SetInstanceBuffer(const BufferLayout& layout, uint32_t size) {
+    void RenderMesh::SetInstanceBuffer(const BufferLayout& layout, U32 size) {
         m_InstanceBuffer = VertexBuffer::Create(layout, size, BufferUsage::Dynamic);
         for (auto& sub_mesh : m_SubMeshes) {
             sub_mesh.vertex_array->AddVertexBuffer(m_InstanceBuffer);

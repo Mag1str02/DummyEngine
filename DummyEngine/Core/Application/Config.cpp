@@ -3,7 +3,7 @@
 namespace DE {
     Config::Configs Config::m_Configs;
 
-    uint32_t Config::GetI(uint32_t setting) {
+    U32 Config::GetI(U32 setting) {
         switch (setting) {
             case DE_CFG_MAX_COMPILE_ERROR_LEN: return m_Configs.c_MaxShaderCompileErrorLen;
             case DE_CFG_MAX_INPUT_FRAME_AMOUNT: return m_Configs.c_MaxInputFrameAmount;
@@ -11,7 +11,7 @@ namespace DE {
         }
         return 0;
     }
-    float Config::GetF(uint32_t setting) {
+    float Config::GetF(U32 setting) {
         switch (setting) {
             case DE_CFG_DEFAULT_CAMERA_FOV: return m_Configs.c_DefaultCameraFOV;
             case DE_CFG_DEFAULT_CAMERA_ASPECT: return m_Configs.c_DefaultCameraAspect;
@@ -21,7 +21,7 @@ namespace DE {
         }
         return 0;
     }
-    Path Config::GetPath(uint32_t setting) {
+    Path Config::GetPath(U32 setting) {
         switch (setting) {
             case DE_CFG_EXECUTABLE_PATH: return m_Configs.c_ExecutablePath;
             case DE_CFG_ASSET_PATH: return m_Configs.c_AssetPath;

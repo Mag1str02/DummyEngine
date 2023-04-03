@@ -6,14 +6,19 @@
 
 namespace DE {
 
+    // TODO: Add entity field
     enum class ScriptFieldType {
         None = 0,
         Float,
         Double,
         Bool,
         String,
+        S8,
+        S16,
         S32,
         S64,
+        U8,
+        U16,
         U32,
         U64,
         Vec2,
@@ -22,7 +27,7 @@ namespace DE {
     };
     struct ScriptClassField {
         ScriptFieldType type;
-        uint32_t        offset;
+        U32            offset;
     };
 
     class Script {
@@ -94,7 +99,7 @@ namespace DE {
     std::string                           ScriptFieldTypeToString(ScriptFieldType type);
     template <typename T> ScriptFieldType TypeToScriptFieldType();
 
-    template <typename T, typename U> constexpr uint32_t OffsetOf(U T::*member) {
+    template <typename T, typename U> constexpr U32 OffsetOf(U T::*member) {
         return (char*)&((T*)nullptr->*member) - (char*)nullptr;
     }
 

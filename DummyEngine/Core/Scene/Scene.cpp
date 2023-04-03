@@ -87,7 +87,7 @@ namespace DE {
         UpdateScripts(dt);
     }
 
-    void Scene::OnViewPortResize(uint32_t x, uint32_t y) {
+    void Scene::OnViewPortResize(U32 x, U32 y) {
         double aspect  = double(x) / double(y);
         auto   cameras = m_Storage->View<FPSCamera>();
         for (auto e : cameras) {
@@ -115,7 +115,7 @@ namespace DE {
 
     std::string Scene::GenAvilableEntityName(const std::string& prefered) {
         std::string name = prefered;
-        uint32_t    cnt  = 0;
+        U32    cnt  = 0;
         while (ExistsEntityWithTag(name)) {
             name = StrCat(prefered, "(", ++cnt, ")");
         }

@@ -4,7 +4,7 @@
 
 namespace DE
 {
-    Ref<VertexBuffer> VertexBuffer::Create(const BufferLayout& layout, uint32_t size, BufferUsage usage)
+    Ref<VertexBuffer> VertexBuffer::Create(const BufferLayout& layout, U32 size, BufferUsage usage)
     {
         switch (Renderer::CurrentAPI())
         {
@@ -23,7 +23,7 @@ namespace DE
 
         return nullptr;
     }
-    Ref<VertexBuffer> VertexBuffer::Create(const BufferLayout& layout, uint32_t size, const void* data, BufferUsage usage)
+    Ref<VertexBuffer> VertexBuffer::Create(const BufferLayout& layout, U32 size, const void* data, BufferUsage usage)
     {
         switch (Renderer::CurrentAPI())
         {
@@ -42,7 +42,7 @@ namespace DE
         return nullptr;
     }
 
-    Ref<IndexBuffer> IndexBuffer::Create(const uint32_t* indices, uint32_t count)
+    Ref<IndexBuffer> IndexBuffer::Create(const U32* indices, U32 count)
     {
         switch (Renderer::CurrentAPI())
         {

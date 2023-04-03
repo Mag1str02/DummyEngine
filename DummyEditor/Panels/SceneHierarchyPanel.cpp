@@ -15,7 +15,7 @@ namespace DE {
             bool open = ImGui::TreeNode("Scene");
             DropTarget(res);
             if (open) {
-                int32_t id = 0;
+                S32 id = 0;
                 for (auto child : *res) {
                     ImGui::PushID(id++);
                     ShowNode(child);
@@ -59,7 +59,7 @@ namespace DE {
             DropTarget(node);
             DragTarget(node);
             if (open) {
-                int32_t id = 0;
+                S32 id = 0;
                 for (auto child : *node) {
                     ImGui::PushID(id++);
                     ShowNode(child);

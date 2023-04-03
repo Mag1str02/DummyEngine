@@ -3,7 +3,7 @@
 namespace DE
 {
 #ifdef ECS_IMPLEMENTATION
-    std::pair<uint32_t, uint32_t> EntityManager::CreateEntity()
+    std::pair<U32, U32> EntityManager::CreateEntity()
     {
         if (m_AvailableEntities.empty())
         {
@@ -17,14 +17,14 @@ namespace DE
         ++m_Generations[id];
         return std::make_pair(id, m_Generations[id]);
     }
-    void EntityManager::Destroy(uint32_t id)
+    void EntityManager::Destroy(U32 id)
     {
         m_States[id] = false;
         m_AvailableEntities.push(id);
     }
-    bool EntityManager::Valid(uint32_t id, uint32_t gen) const { return m_States[id] && m_Generations[id] == gen; }
+    bool EntityManager::Valid(U32 id, U32 gen) const { return m_States[id] && m_Generations[id] == gen; }
 
-    uint32_t EntityManager::NextEntity(uint32_t id) const
+    U32 EntityManager::NextEntity(U32 id) const
     {
         if (id >= m_States.size())
         {
@@ -37,16 +37,16 @@ namespace DE
         while (id < m_States.size() && !m_States[id]);
         return id;
     }
-    uint32_t EntityManager::Generation(uint32_t id) const { return m_Generations[id]; }
-    uint32_t EntityManager::BeginEntity() const
+    U32 EntityManager::Generation(U32 id) const { return m_Generations[id]; }
+    U32 EntityManager::BeginEntity() const
     {
-        uint32_t res = 0;
+        U32 res = 0;
         while (res < m_States.size() && !m_States[res])
         {
             ++res;
         }
         return res;
     }
-    uint32_t EntityManager::EndEntity() const { return m_States.size(); }
+    U32 EntityManager::EndEntity() const { return m_States.size(); }
 #endif
 }  // namespace DE

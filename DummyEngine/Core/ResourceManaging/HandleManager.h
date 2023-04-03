@@ -15,13 +15,13 @@ namespace DE
         bool     Valid() const;
         void     Destroy();
         //! Temporary
-        uint32_t GetId() const { return m_ID; }
+        U32 GetId() const { return m_ID; }
 
     private:
         friend class HandleManager<T>;
         HandleManager<T>* m_Manager = nullptr;
-        uint32_t          m_ID      = 0;
-        uint32_t          m_Gen     = 0;
+        U32          m_ID      = 0;
+        U32          m_Gen     = 0;
     };
 
     template <class T> class HandleManager
@@ -39,21 +39,21 @@ namespace DE
             Iterator  operator--(int);
             T&        operator*();
             T*        operator->();
-            uint32_t  ID() const;
+            U32  ID() const;
 
         private:
             friend class HandleManager;
-            Iterator(HandleManager<T>* manager, uint32_t id);
+            Iterator(HandleManager<T>* manager, U32 id);
 
             HandleManager<T>* m_Manager = nullptr;
-            uint32_t          m_ID      = 0;
+            U32          m_ID      = 0;
         };
 
         Iterator begin();
         Iterator end();
 
         Handle<T> CreateHandle();
-        void      Destroy(uint32_t id);
+        void      Destroy(U32 id);
         void      Clear();
 
     private:
@@ -63,11 +63,11 @@ namespace DE
         struct Instance
         {
             T        instance;
-            uint32_t gen   = 0;
+            U32 gen   = 0;
             bool     valid = false;
         };
 
-        std::deque<uint32_t>  m_AvailableIds;
+        std::deque<U32>  m_AvailableIds;
         std::vector<Instance> m_Instances;
     };
 
@@ -120,9 +120,9 @@ namespace DE
     }
     template <class T> T& HandleManager<T>::Iterator::operator*() { return m_Manager->m_Instances[m_ID].instance; }
     template <class T> T* HandleManager<T>::Iterator::operator->() { return &(m_Manager->m_Instances[m_ID].instance); }
-    template <class T> uint32_t                       HandleManager<T>::Iterator::ID() const { return m_ID; }
+    template <class T> U32                       HandleManager<T>::Iterator::ID() const { return m_ID; }
 
-    template <class T> HandleManager<T>::Iterator::Iterator(HandleManager<T>* manager, uint32_t id) : m_Manager(manager), m_ID(id) {}
+    template <class T> HandleManager<T>::Iterator::Iterator(HandleManager<T>* manager, U32 id) : m_Manager(manager), m_ID(id) {}
 
     template <class T> typename HandleManager<T>::Iterator HandleManager<T>::begin()
     {
@@ -151,7 +151,7 @@ namespace DE
         m_AvailableIds.pop_front();
         return res;
     }
-    template <class T> void HandleManager<T>::Destroy(uint32_t id)
+    template <class T> void HandleManager<T>::Destroy(U32 id)
     {
         if (m_Instances[id].valid)
         {
@@ -162,7 +162,7 @@ namespace DE
     }
     template <class T> void HandleManager<T>::Clear()
     {
-        for (uint32_t i = 0; i < m_Instances.size(); ++i)
+        for (U32 i = 0; i < m_Instances.size(); ++i)
         {
             Destroy(i);
         }

@@ -10,7 +10,7 @@ namespace DE {
 
     // TODO: Think about not creating LocalBuffer if BufferUsage is Static.
 
-    GLVertexBuffer::GLVertexBuffer(const BufferLayout& layout, uint32_t size, BufferUsage usage) : m_Layout(layout), m_Usage(usage) {
+    GLVertexBuffer::GLVertexBuffer(const BufferLayout& layout, U32 size, BufferUsage usage) : m_Layout(layout), m_Usage(usage) {
         m_Layout.SetLayoutType(BufferLayoutType::Vertex);
         m_Size = (size * m_Layout.GetStride());
 
@@ -21,7 +21,7 @@ namespace DE {
         glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
         glBufferData(GL_ARRAY_BUFFER, m_Size, nullptr, BufferUsafeToGLBufferUsage(usage));
     }
-    GLVertexBuffer::GLVertexBuffer(const BufferLayout& layout, uint32_t size, const void* data, BufferUsage usage) :
+    GLVertexBuffer::GLVertexBuffer(const BufferLayout& layout, U32 size, const void* data, BufferUsage usage) :
         m_Layout(layout), m_Usage(usage) {
         m_Layout.SetLayoutType(BufferLayoutType::Vertex);
         m_Size = (size * m_Layout.GetStride());
@@ -43,11 +43,11 @@ namespace DE {
         return m_Layout;
     }
 
-    LocalBufferNode GLVertexBuffer::at(uint32_t index) {
+    LocalBufferNode GLVertexBuffer::at(U32 index) {
         DE_ASSERT(m_Usage == BufferUsage::Dynamic, "Using at function on non-dynamic-usage vertex_buffer");
         return m_LocalBuffer.at(index);
     }
-    void GLVertexBuffer::SetData(const void* data, uint32_t size) {
+    void GLVertexBuffer::SetData(const void* data, U32 size) {
         if (m_Usage == BufferUsage::Dynamic) {
             m_LocalBuffer.SetData(data, size);
         } else {
@@ -71,16 +71,16 @@ namespace DE {
             default: return GL_STATIC_DRAW;
         }
     }
-    uint32_t GLVertexBuffer::Size() const {
+    U32 GLVertexBuffer::Size() const {
         return m_Size / m_Layout.GetStride();
     }
 
     //*----------------------------------------------------------------------------------
 
-    GLIndexBuffer::GLIndexBuffer(const uint32_t* indices, uint32_t indices_amount) : _indices_amount(indices_amount) {
+    GLIndexBuffer::GLIndexBuffer(const U32* indices, U32 indices_amount) : _indices_amount(indices_amount) {
         glCreateBuffers(1, &m_BufferId);
         glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
-        glBufferData(GL_ARRAY_BUFFER, indices_amount * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, indices_amount * sizeof(U32), indices, GL_STATIC_DRAW);
     }
     GLIndexBuffer::~GLIndexBuffer() {
         glDeleteBuffers(1, &m_BufferId);
@@ -93,7 +93,7 @@ namespace DE {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
-    uint32_t GLIndexBuffer::IndicesAmount() const {
+    U32 GLIndexBuffer::IndicesAmount() const {
         return _indices_amount;
     }
 

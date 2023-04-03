@@ -17,24 +17,24 @@ namespace DE
         GLTexture& operator=(const GLTexture& other) = delete;
         GLTexture& operator=(GLTexture&& other) = delete;
 
-        GLTexture(uint32_t width, uint32_t height, TextureFormat format);
+        GLTexture(U32 width, U32 height, TextureFormat format);
         GLTexture(const TextureData& data);
 
         virtual ~GLTexture();
 
-        virtual uint32_t Width() const override;
-        virtual uint32_t Height() const override;
-        virtual uint32_t RendererId() const override;
+        virtual U32 Width() const override;
+        virtual U32 Height() const override;
+        virtual U32 RendererId() const override;
 
-        virtual void SetData(const void* data, uint32_t size) override;
+        virtual void SetData(const void* data, U32 size) override;
 
-        virtual void Bind(uint32_t slot) const override;
+        virtual void Bind(U32 slot) const override;
 
     private:
         friend class GLFrameBuffer;
         
-        uint32_t m_Width;
-        uint32_t m_Height;
+        U32 m_Width;
+        U32 m_Height;
         GLuint m_TextureId;
         GLenum m_InternalFormat;
         GLenum m_Format;
@@ -60,7 +60,7 @@ namespace DE
     //     {
     //     private:
     //         bool _initialized;
-    //         std::unordered_map<unsigned int, int64_t> _reference_count;
+    //         std::unordered_map<unsigned int, S64> _reference_count;
 
     //         Texture2DManager();
 

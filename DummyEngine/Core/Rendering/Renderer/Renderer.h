@@ -11,8 +11,8 @@ namespace DE
 {
     struct FrameStatistics
     {
-        uint32_t m_DrawCallsAmount;
-        uint32_t m_DrawnInstances;
+        U32 m_DrawCallsAmount;
+        U32 m_DrawnInstances;
 
         void Reset();
     };
@@ -23,7 +23,7 @@ namespace DE
         static void Initialize();
         static void Terminate();
 
-        static void OnWindowResize(uint32_t width, uint32_t height);
+        static void OnWindowResize(U32 width, U32 height);
 
         static void BeginFrame();
         static void EndFrame();

@@ -6,7 +6,7 @@
 namespace DE {
     static std::random_device                      s_RandomDevice;
     static std::mt19937_64                         s_Engine(s_RandomDevice());
-    static std::uniform_int_distribution<uint64_t> s_UniformDistribution;
+    static std::uniform_int_distribution<U64> s_UniformDistribution;
 
     UUID::UUID(const std::string& str) {
         DE_ASSERT(str.size() == 32, "Wrong str size (", str.size(), ")");

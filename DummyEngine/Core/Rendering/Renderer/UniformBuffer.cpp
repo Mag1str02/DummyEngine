@@ -4,7 +4,7 @@
 
 namespace DE
 {
-    Ref<UniformBuffer> UniformBuffer::Create(const BufferLayout& layout, uint32_t size)
+    Ref<UniformBuffer> UniformBuffer::Create(const BufferLayout& layout, U32 size)
     {
         switch (Renderer::CurrentAPI())
         {

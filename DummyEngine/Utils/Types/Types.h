@@ -3,25 +3,26 @@
 #include "DummyEngine/Utils/Base/GLMIncludes.h"
 #include "DummyEngine/Utils/Base/STDIncludes.h"
 
+using U8  = uint8_t;
+using U16 = uint16_t;
+using U32 = uint32_t;
+using U64 = uint64_t;
+using S8  = int8_t;
+using S16 = int16_t;
+using S32 = int32_t;
+using S64 = int64_t;
+
 namespace DE {
     namespace fs = std::filesystem;
 
     using VoidFPtr = void (*)();
 
-    using U8  = uint8_t;
-    using U16 = uint16_t;
-    using U32 = uint32_t;
-    using U64 = uint64_t;
-    using S8  = int8_t;
-    using S16 = int16_t;
-    using S32 = int32_t;
-    using S64 = int64_t;
+    using Mat4 = glm::mat4;
+    using Vec4 = glm::vec4;
+    using Vec3 = glm::vec3;
+    using Vec2 = glm::vec2;
+    using Path = std::filesystem::path;
 
-    using Mat4                                   = glm::mat4;
-    using Vec4                                   = glm::vec4;
-    using Vec3                                   = glm::vec3;
-    using Vec2                                   = glm::vec2;
-    using Path                                   = std::filesystem::path;
     template <typename A, typename B> using Pair = std::pair<A, B>;
 
     // TODO: Move away

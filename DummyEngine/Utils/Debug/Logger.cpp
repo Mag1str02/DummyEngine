@@ -90,7 +90,7 @@ namespace DE {
         }
         return m_Streams[log].records;
     }
-    S_METHOD_IMPL(Unit, SetDepth, (uint32_t depth, const std::string& log), (depth, log)) {
+    S_METHOD_IMPL(Unit, SetDepth, (U32 depth, const std::string& log), (depth, log)) {
         if (!m_Streams.contains(log)) {
             return Unit();
         }

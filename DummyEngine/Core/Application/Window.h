@@ -13,11 +13,11 @@ namespace DE {
     struct WindowState {
         WindowMode  mode         = WindowMode::Windowed;
         std::string name         = "Window";
-        uint32_t    width        = 1280;
-        uint32_t    height       = 720;
-        uint32_t    x_pos        = 100;
-        uint32_t    y_pos        = 100;
-        uint32_t    monitor_id   = 0;
+        U32    width        = 1280;
+        U32    height       = 720;
+        U32    x_pos        = 100;
+        U32    y_pos        = 100;
+        U32    monitor_id   = 0;
         bool        mouse_locked = false;
 
         EventCallback<Event> event_callback;
@@ -31,8 +31,8 @@ namespace DE {
         void OnUpdate();
         void SetEventCallback(EventCallback<Event> callback);
 
-        void FullScreen(uint32_t monitor_id);
-        void Windowed(uint32_t width = 1280, uint32_t height = 720, uint32_t x_pos = 100, uint32_t y_pos = 100);
+        void FullScreen(U32 monitor_id);
+        void Windowed(U32 width = 1280, U32 height = 720, U32 x_pos = 100, U32 y_pos = 100);
 
         void LockMouse();
         void UnlockMouse();

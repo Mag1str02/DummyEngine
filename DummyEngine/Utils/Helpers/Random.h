@@ -1,12 +1,11 @@
 #pragma once
-#include "DummyEngine/Utils/Base/STDIncludes.h"
 
-namespace DE
-{
-    class Random
-    {
+#include "DummyEngine/Utils/Types/Types.h"
+
+namespace DE {
+    class Random {
     public:
-        static float   Float(float range_begin = 0.0f, float range_end = 1.0f);
-        static int32_t Int(int32_t range_begin = 0, int32_t rang_end = 1024);
+        static float Float(float range_begin = 0.0f, float range_end = 1.0f);
+        static S32   Int(S32 range_begin = 0, S32 rang_end = 1024);
     };
 }  // namespace DE

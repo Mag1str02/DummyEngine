@@ -32,7 +32,7 @@ namespace DE {
         Ref<SceneHierarchyNode> GetHierarchy();
 
         void OnUpdate(double dt);
-        void OnViewPortResize(uint32_t x, uint32_t y);
+        void OnViewPortResize(U32 x, U32 y);
         void UpdateScripts(float dt);
         void Render();
 

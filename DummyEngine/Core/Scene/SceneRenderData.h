@@ -29,7 +29,7 @@ namespace DE {
 
         std::unordered_map<UUID, Ref<Shader>>                                                   m_Shaders;
         std::unordered_map<std::pair<UUID, UUID>, Pair<Ref<RenderMesh>, Ref<Shader>>, PairHash> m_InstancedMeshes;
-        std::unordered_map<Entity, uint32_t>                                                    m_EntityToVPIndex;
+        std::unordered_map<Entity, U32>                                                    m_EntityToVPIndex;
         Ref<UniformBuffer>                                                                      m_Lights;
         Ref<UniformBuffer>                                                                      m_VP;
         Scene*                                                                                  m_Scene;

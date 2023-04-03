@@ -19,7 +19,7 @@ namespace DE
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
-    void GLRenderAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) { glViewport(x, y, width, height); }
+    void GLRenderAPI::SetViewport(U32 x, U32 y, U32 width, U32 height) { glViewport(x, y, width, height); }
 
     void GLRenderAPI::Clear() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); }
 
@@ -33,7 +33,7 @@ namespace DE
         vertex_array->Bind();
         glDrawElements(RenderPrimitiveToGL(primitive), vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, nullptr);
     }
-    void GLRenderAPI::DrawInstanced(const Ref<VertexArray>& vertex_array, uint32_t instance_count, RenderPrimitive primitive)
+    void GLRenderAPI::DrawInstanced(const Ref<VertexArray>& vertex_array, U32 instance_count, RenderPrimitive primitive)
     {
         vertex_array->Bind();
         glDrawElementsInstanced(RenderPrimitiveToGL(primitive), vertex_array->GetIndexBuffer()->IndicesAmount(), GL_UNSIGNED_INT, nullptr, instance_count);

@@ -13,7 +13,7 @@ namespace DE
 
     std::string LightSourceTypeToString(LightSourceType type);
     LightSourceType StringToLightSourceType(const std::string& type);
-    uint32_t LightSourceTypeToId(LightSourceType type);
+    U32 LightSourceTypeToId(LightSourceType type);
 
     struct LightSource
     {

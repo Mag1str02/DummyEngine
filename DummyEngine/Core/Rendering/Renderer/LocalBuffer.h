@@ -11,33 +11,33 @@ namespace DE {
         LocalBuffer();
         ~LocalBuffer();
 
-        void SetData(const void* data, uint32_t size);
-        void Allocate(const BufferLayout& layout, uint32_t size);
+        void SetData(const void* data, U32 size);
+        void Allocate(const BufferLayout& layout, U32 size);
 
-        LocalBufferNode at(uint32_t index);
+        LocalBufferNode at(U32 index);
 
     private:
-        void Allocate(uint32_t size);
+        void Allocate(U32 size);
 
         friend class GLVertexBuffer;
         friend class GLUniformBuffer;
         friend class LocalBufferNode;
 
         BufferLayout m_Layout;
-        uint8_t*     m_Data;
-        uint32_t     m_Size;
+        U8*     m_Data;
+        U32     m_Size;
     };
     class LocalBufferNode {
     public:
-        template <typename T> T& Get(uint32_t index) { return *(T*)(m_Pointer + m_Buffer->m_Layout[index].offset); }
+        template <typename T> T& Get(U32 index) { return *(T*)(m_Pointer + m_Buffer->m_Layout[index].offset); }
         LocalBufferNode&         operator=(const LocalBufferNode& other);
 
     private:
-        LocalBufferNode(LocalBuffer* buffer, uint8_t* pointer);
+        LocalBufferNode(LocalBuffer* buffer, U8* pointer);
 
         friend class LocalBuffer;
 
         LocalBuffer* m_Buffer;
-        uint8_t*     m_Pointer;
+        U8*     m_Pointer;
     };
 }  // namespace DE

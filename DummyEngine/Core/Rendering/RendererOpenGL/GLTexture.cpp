@@ -4,7 +4,7 @@
 
 namespace DE {
 
-    GLTexture::GLTexture(uint32_t width, uint32_t height, TextureFormat format) :
+    GLTexture::GLTexture(U32 width, U32 height, TextureFormat format) :
         m_Width(width),
         m_Height(height),
         m_InternalFormat(TextureFormatToGLTextureInternalFormat(format)),
@@ -42,22 +42,22 @@ namespace DE {
         glDeleteTextures(1, &m_TextureId);
     }
 
-    uint32_t GLTexture::Width() const {
+    U32 GLTexture::Width() const {
         return m_Width;
     }
-    uint32_t GLTexture::Height() const {
+    U32 GLTexture::Height() const {
         return m_Height;
     }
-    uint32_t GLTexture::RendererId() const {
+    U32 GLTexture::RendererId() const {
         return m_TextureId;
     }
 
-    void GLTexture::SetData(const void* data, uint32_t size) {
+    void GLTexture::SetData(const void* data, U32 size) {
         DE_ASSERT(size == m_Width * m_Height, "Data size mismatches texture size (", size, ") expected (", m_Width * m_Height, ")");
         glTextureSubImage2D(m_TextureId, 0, 0, 0, m_Width, m_Height, m_Format, GL_UNSIGNED_BYTE, data);
     }
 
-    void GLTexture::Bind(uint32_t unit_id) const {
+    void GLTexture::Bind(U32 unit_id) const {
         glActiveTexture(GL_TEXTURE0 + unit_id);
         glBindTexture(GL_TEXTURE_2D, m_TextureId);
     }

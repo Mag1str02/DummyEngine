@@ -9,7 +9,10 @@ namespace DE {
         return ScriptEngine::GetUUID(*this);
     }
     bool ScriptComponent::Valid() const {
-        return ScriptEngine::ValidComponent(*this);
+        return ScriptEngine::Valid(*this);
+    }
+    bool ScriptComponent::Loaded() const {
+        return ScriptEngine::Loaded(*this);
     }
     void ScriptComponent::Destroy() {
         ScriptEngine::Destroy(*this);
@@ -79,7 +82,7 @@ namespace DE {
         LOG_INFO("ScriptEngine", "Script (", id, ") was deleted");
         return true;
     }
-    S_METHOD_IMPL(bool, Valid, (UUID id), (id)) {
+    S_METHOD_IMPL(bool, ValidScript, (UUID id), (id)) {
         return m_ScriptClasses.contains(id) && m_ScriptClasses[id].Valid();
     }
     S_METHOD_IMPL(Unit, ClearScripts, (), ()) {
@@ -109,7 +112,7 @@ namespace DE {
         return Unit();
     }
     S_METHOD_IMPL(Unit, DeleteLibrary, (const std::string& name), (name)) {
-        int32_t id = -1;
+        S32 id = -1;
         //*Find library
         {
             for (size_t i = 0; i < m_Libraries.size(); ++i) {
@@ -190,7 +193,10 @@ namespace DE {
     S_METHOD_IMPL(UUID, GetUUID, (const ScriptComponent& component), (component)) {
         return m_ProxyManager.GetProxy(component.m_ID).m_ID;
     }
-    S_METHOD_IMPL(bool, ValidComponent, (const ScriptComponent& component), (component)) {
+    S_METHOD_IMPL(bool, Valid, (const ScriptComponent& component), (component)) {
+        return m_ProxyManager.Valid(component.m_ID, component.m_Gen);
+    }
+    S_METHOD_IMPL(bool, Loaded, (const ScriptComponent& component), (component)) {
         return m_ProxyManager.Valid(component.m_ID, component.m_Gen) && m_ProxyManager.GetProxy(component.m_ID).m_Script;
     }
     S_METHOD_IMPL(Unit, Destroy, (const ScriptComponent& component), (component)) {

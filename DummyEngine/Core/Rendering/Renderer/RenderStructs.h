@@ -36,10 +36,10 @@ namespace DE
         void Bind(Ref<RenderMesh> mesh);
         void UnBind();
 
-        template <typename Type> Type& at(uint32_t index);
+        template <typename Type> Type& at(U32 index);
 
     private:
-        uint32_t m_Index;
+        U32 m_Index;
         Ref<RenderMesh> m_Mesh;
     };
     class RenderMesh
@@ -50,7 +50,7 @@ namespace DE
         Ref<RenderMesh> Copy() const;
 
         void UpdateInstanceBuffer();
-        void SetInstanceBuffer(const BufferLayout& layout, uint32_t size);
+        void SetInstanceBuffer(const BufferLayout& layout, U32 size);
         void FillData(Ref<RenderMeshData> data);
 
     private:
@@ -61,7 +61,7 @@ namespace DE
         std::vector<RenderMeshInstance*> m_Instances;
         Ref<VertexBuffer> m_InstanceBuffer;
     };
-    template <typename Type> Type& RenderMeshInstance::at(uint32_t index)
+    template <typename Type> Type& RenderMeshInstance::at(U32 index)
     {
         return m_Mesh->m_InstanceBuffer->at(m_Index).Get<Type>(index);
     }

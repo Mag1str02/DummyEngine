@@ -2,13 +2,13 @@
 
 namespace DE
 {
-    Ref<TextureData> TextureEditor::GetTexturePart(const Ref<TextureData> data, uint32_t width, uint32_t height, uint32_t x_pos, uint32_t y_pos)
+    Ref<TextureData> TextureEditor::GetTexturePart(const Ref<TextureData> data, U32 width, U32 height, U32 x_pos, U32 y_pos)
     {
         Ref<TextureData> res = CreateRef<TextureData>();
         res->SetData(data->Data(), width, height, data->Format());
-        uint32_t pixel_size = data->Channels();
-        uint8_t* new_image = res->Data();
-        const uint8_t* old_image = data->Data();
+        U32 pixel_size = data->Channels();
+        U8* new_image = res->Data();
+        const U8* old_image = data->Data();
         for (size_t i = 0; i < height; ++i)
         {
             std::memcpy(new_image + (i * width * pixel_size), old_image + (data->Width() * (i + y_pos) + x_pos) * pixel_size, width * pixel_size);
@@ -18,8 +18,8 @@ namespace DE
 
     Ref<TextureData> TextureEditor::GetSkyBoxSide(const Ref<TextureData> data, CubeSide side)
     {
-        uint32_t x_step = data->Width() / 4;
-        uint32_t y_step = data->Height() / 3;
+        U32 x_step = data->Width() / 4;
+        U32 y_step = data->Height() / 3;
 
         switch (side)
         {

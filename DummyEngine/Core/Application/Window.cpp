@@ -5,7 +5,7 @@
 
 namespace DE {
 
-    GLFWmonitor* GetMonitor(uint32_t id) {
+    GLFWmonitor* GetMonitor(U32 id) {
         int           monitors_amount;
         GLFWmonitor** monitors = glfwGetMonitors(&monitors_amount);
         DE_ASSERT(0 <= id && id < monitors_amount, "Wrong monitor id (", id, ") should be between [0, ", monitors_amount, ")");
@@ -29,12 +29,12 @@ namespace DE {
         glfwDestroyWindow(m_Window);
     }
 
-    void Window::FullScreen(uint32_t id) {
+    void Window::FullScreen(U32 id) {
         m_State.mode = WindowMode::FullScreen;
 
         Invalidate();
     }
-    void Window::Windowed(uint32_t width, uint32_t height, uint32_t x_pos, uint32_t y_pos) {
+    void Window::Windowed(U32 width, U32 height, U32 x_pos, U32 y_pos) {
         m_State.mode   = WindowMode::Windowed;
         m_State.width  = width;
         m_State.height = height;

@@ -17,21 +17,21 @@ namespace DE
         GLVertexBuffer& operator=(const GLVertexBuffer& other) = delete;
         GLVertexBuffer& operator=(GLVertexBuffer&& other) = delete;
 
-        GLVertexBuffer(const BufferLayout& layout, uint32_t size, BufferUsage usage = BufferUsage::Static);
-        GLVertexBuffer(const BufferLayout& layout, uint32_t size, const void* data, BufferUsage usage = BufferUsage::Static);
+        GLVertexBuffer(const BufferLayout& layout, U32 size, BufferUsage usage = BufferUsage::Static);
+        GLVertexBuffer(const BufferLayout& layout, U32 size, const void* data, BufferUsage usage = BufferUsage::Static);
 
         virtual ~GLVertexBuffer();
 
         virtual void Bind() const override;
         virtual void UnBind() const override;
 
-        virtual LocalBufferNode at(uint32_t index) override;
+        virtual LocalBufferNode at(U32 index) override;
 
-        virtual void SetData(const void* data, uint32_t size) override;
+        virtual void SetData(const void* data, U32 size) override;
         virtual void PushData() override;
 
         virtual const BufferLayout& GetLayout() const override;
-        virtual uint32_t Size() const override;
+        virtual U32 Size() const override;
 
     private:
         static GLenum BufferUsafeToGLBufferUsage(BufferUsage usage);
@@ -40,7 +40,7 @@ namespace DE
         LocalBuffer m_LocalBuffer;
         BufferLayout m_Layout;
         GLuint m_BufferId;
-        uint32_t m_Size;
+        U32 m_Size;
     };
 
     class GLIndexBuffer : public IndexBuffer
@@ -52,16 +52,16 @@ namespace DE
         GLIndexBuffer& operator=(const GLIndexBuffer& other) = delete;
         GLIndexBuffer& operator=(GLIndexBuffer&& other) = delete;
 
-        GLIndexBuffer(const uint32_t* indices, uint32_t count);
+        GLIndexBuffer(const U32* indices, U32 count);
         virtual ~GLIndexBuffer();
 
         virtual void Bind() const override;
         virtual void UnBind() const override;
 
-        virtual uint32_t IndicesAmount() const override;
+        virtual U32 IndicesAmount() const override;
 
     private:
         GLuint m_BufferId;
-        uint32_t _indices_amount;
+        U32 _indices_amount;
     };
 }  // namespace DE

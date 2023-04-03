@@ -8,7 +8,7 @@ namespace DE {
 #endif
     }
 
-    void ProfilerPanel::RenderTimeLapse(const std::vector<TimeLapse>& time_lapses, uint32_t index) {
+    void ProfilerPanel::RenderTimeLapse(const std::vector<TimeLapse>& time_lapses, U32 index) {
         std::string node_name = (time_lapses[index].m_Name);
         if (time_lapses[index].m_Childs.empty()) {
             ImGui::BulletText("%s: %s", node_name.c_str(), time_lapses[index].StrDuration().c_str());

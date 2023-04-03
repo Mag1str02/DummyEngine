@@ -5,7 +5,7 @@ namespace DE {
     //*~~~BufferElement~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     BufferElement::BufferElement(BufferElementType type, bool normalized) : type(type), normalized(normalized), size(SizeOfElementType(type)) {}
-    uint32_t BufferElement::SizeOfElementType(BufferElementType type) {
+    U32 BufferElement::SizeOfElementType(BufferElementType type) {
         switch (type) {
             case BufferElementType::Float: return 4;
             case BufferElementType::Float2: return 8;
@@ -19,7 +19,7 @@ namespace DE {
             default: return 0;
         }
     }
-    uint32_t BufferElement::ComponentCount() const {
+    U32 BufferElement::ComponentCount() const {
         switch (type) {
             case BufferElementType::Float: return 1;
             case BufferElementType::Float2: return 2;
@@ -36,7 +36,7 @@ namespace DE {
 
     //*~~~BufferLayout~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    BufferLayout::BufferLayout(std::initializer_list<BufferElement> elements, uint32_t divisor) :
+    BufferLayout::BufferLayout(std::initializer_list<BufferElement> elements, U32 divisor) :
         m_Elements(elements), m_Type(BufferLayoutType::Vertex), m_Divisor(divisor) {}
 
     void BufferLayout::SetLayoutType(BufferLayoutType type) {
@@ -46,7 +46,7 @@ namespace DE {
     void BufferLayout::CalculateOffsetsAndStride() {
         switch (m_Type) {
             case BufferLayoutType::Vertex: {
-                uint32_t offset = 0;
+                U32 offset = 0;
                 for (auto& element : m_Elements) {
                     element.offset = offset;
                     offset += element.size;
@@ -55,7 +55,7 @@ namespace DE {
                 break;
             }
             case BufferLayoutType::Uniform: {
-                uint32_t offset = 0;
+                U32 offset = 0;
                 for (auto& element : m_Elements) {
                     switch (element.type) {
                         case BufferElementType::Float:
@@ -110,15 +110,15 @@ namespace DE {
     std::vector<BufferElement>::const_iterator BufferLayout::end() const {
         return m_Elements.end();
     }
-    const BufferElement& BufferLayout::operator[](uint32_t index) const {
+    const BufferElement& BufferLayout::operator[](U32 index) const {
         DE_ASSERT(index >= 0 && index < m_Elements.size(), "Index out of bounce (", index, ") should be between [0,", m_Elements.size(), ")");
         return m_Elements[index];
     }
 
-    uint32_t BufferLayout::GetStride() const {
+    U32 BufferLayout::GetStride() const {
         return m_Stride;
     }
-    uint32_t BufferLayout::GetDivisor() const {
+    U32 BufferLayout::GetDivisor() const {
         return m_Divisor;
     }
 }  // namespace DE

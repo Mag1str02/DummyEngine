@@ -104,7 +104,7 @@ namespace DE {
                                0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-    void GLFrameBuffer::Resize(uint32_t width, uint32_t height) {
+    void GLFrameBuffer::Resize(U32 width, U32 height) {
         DE_PROFILE_SCOPE("FrameBuffer Resize");
 
         if ((m_Properties.width != width || m_Properties.height != height) && 0 < width && 0 < height) {
@@ -114,7 +114,7 @@ namespace DE {
         }
     }
 
-    Ref<Texture> GLFrameBuffer::GetColorAttachment(uint32_t attachment_id = 0) {
+    Ref<Texture> GLFrameBuffer::GetColorAttachment(U32 attachment_id = 0) {
         DE_ASSERT(
             0 <= attachment_id && attachment_id < m_ColorAttachments.size(), "Color attachment with index (", attachment_id, ") does not exist");
         return m_ColorAttachments[attachment_id].m_Texture;
