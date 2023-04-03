@@ -5,22 +5,22 @@
 
 namespace DE {
     struct EditorTheme {
-        ImVec4 Text            = {1.0f, 1.0f, 1.0f, 1.0f};
-        ImVec4 TextDisabled    = {0.15f, 0.1505f, 0.151f, 1.0f};
-        ImVec4 WidgetInactive  = {0.15f, 0.1505f, 0.151f, 1.0f};
-        ImVec4 WidgetHovered   = {0.3f, 0.305f, 0.31f, 1.0f};
-        ImVec4 WidgetActive    = {0.15f, 0.1505f, 0.151f, 1.0f};
-        ImVec4 Background      = U32ToColor(0xFF242424);
-        ImVec4 FieldBackground = {0.2f, 0.205f, 0.21f, 1.0f};
-        ImVec4 Border          = {0.1f, 0.105f, 0.11f, 1.0f};
-        ImVec4 Separator       = {0.0f, 0.0f, 0.0f, 0.0f};
-        ImVec4 Button          = {0.2f, 0.205f, 0.21f, 1.0f};
-        ImVec4 Header          = {0.15f, 0.1505f, 0.151f, 1.0f};
-        ImVec4 TitleBar        = {0.15f, 0.1505f, 0.151f, 1.0f};
-        ImVec4 MenuBar         = {0.0f, 0.0f, 0.0f, 0.0f};
-        ImVec4 Tab             = {0.15f, 0.1505f, 0.151f, 1.0f};
-        ImVec4 CheckMark       = {1.0f, 1.0f, 1.0f, 1.0f};
-        ImVec4 Default         = {0.0f, 1.0f, 0.0f, 1.0f};
+        std::string Name;
+
+        ImVec4 Background      = ImGuiUtils::U32ToColor(0xFF323232);
+        ImVec4 FieldBackground = ImGuiUtils::U32ToColor(0xFF2A2A2A);
+        ImVec4 TitleBar        = ImGuiUtils::U32ToColor(0xFF282828);
+        ImVec4 MenuBar         = ImGuiUtils::U32ToColor(0xFF202020);
+        ImVec4 Header          = ImGuiUtils::U32ToColor(0xFF3E3E3E);
+
+        ImVec4 Text           = ImGuiUtils::U32ToColor(0xFFFFFFFF);
+        ImVec4 TextDisabled   = ImGuiUtils::U32ToColor(0xFF797979);
+        ImVec4 WidgetInactive = ImGuiUtils::U32ToColor(0xFF333333);
+        ImVec4 WidgetHovered  = ImGuiUtils::U32ToColor(0xFF4D4D4D);
+        ImVec4 WidgetActive   = ImGuiUtils::U32ToColor(0xFF4D4D4D);
+        ImVec4 Button         = ImGuiUtils::U32ToColor(0xFF585858);
+        ImVec4 CheckMark      = ImGuiUtils::U32ToColor(0xFF597092);
+        ImVec4 Default        = ImGuiUtils::U32ToColor(0xFF00FF00);
 
         void Apply() const;
     };
@@ -28,14 +28,14 @@ namespace DE {
     public:
         ThemePanel() : ImGuiPanel("ThemePanel") { SetDefaultTheme(); }
 
-        void AddTheme(const EditorTheme& theme);
-        void SetTheme(const std::string& name);
-        void SetDefaultTheme();
+        void               SetTheme(const EditorTheme& name);
+        void               SetDefaultTheme();
+        const EditorTheme& GetCurrentTheme();
 
         virtual void View() override;
 
     private:
-        std::unordered_map<std::string, EditorTheme> m_Themes;
+        EditorTheme m_ActiveTheme;
     };
 }  // namespace DE
    //*Enums for colors

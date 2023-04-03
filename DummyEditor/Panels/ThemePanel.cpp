@@ -9,8 +9,8 @@ namespace DE {
         colors[ImGuiCol_WindowBg]              = Background;
         colors[ImGuiCol_ChildBg]               = Background;
         colors[ImGuiCol_PopupBg]               = Background;
-        colors[ImGuiCol_Border]                = Border;
-        colors[ImGuiCol_BorderShadow]          = Border;
+        colors[ImGuiCol_Border]                = MenuBar;
+        colors[ImGuiCol_BorderShadow]          = MenuBar;
         colors[ImGuiCol_FrameBg]               = FieldBackground;
         colors[ImGuiCol_FrameBgHovered]        = WidgetHovered;
         colors[ImGuiCol_FrameBgActive]         = WidgetActive;
@@ -31,16 +31,16 @@ namespace DE {
         colors[ImGuiCol_Header]                = Header;
         colors[ImGuiCol_HeaderHovered]         = WidgetHovered;
         colors[ImGuiCol_HeaderActive]          = WidgetActive;
-        colors[ImGuiCol_Separator]             = Separator;
-        colors[ImGuiCol_SeparatorHovered]      = Separator;
-        colors[ImGuiCol_SeparatorActive]       = Separator;
+        colors[ImGuiCol_Separator]             = MenuBar;
+        colors[ImGuiCol_SeparatorHovered]      = MenuBar;
+        colors[ImGuiCol_SeparatorActive]       = MenuBar;
         colors[ImGuiCol_ResizeGrip]            = WidgetInactive;
         colors[ImGuiCol_ResizeGripHovered]     = WidgetHovered;
         colors[ImGuiCol_ResizeGripActive]      = WidgetActive;
-        colors[ImGuiCol_Tab]                   = Tab;
+        colors[ImGuiCol_Tab]                   = TitleBar;
         colors[ImGuiCol_TabHovered]            = WidgetHovered;
         colors[ImGuiCol_TabActive]             = Background;
-        colors[ImGuiCol_TabUnfocused]          = Tab;
+        colors[ImGuiCol_TabUnfocused]          = TitleBar;
         colors[ImGuiCol_TabUnfocusedActive]    = Background;
         colors[ImGuiCol_DockingPreview]        = WidgetActive;
         colors[ImGuiCol_DockingEmptyBg]        = WidgetHovered;
@@ -60,18 +60,34 @@ namespace DE {
         colors[ImGuiCol_NavWindowingDimBg]     = Default;
         colors[ImGuiCol_ModalWindowDimBg]      = Default;
     }
-    void ThemePanel::AddTheme(const EditorTheme& theme) {}
-    void ThemePanel::SetTheme(const std::string& name) {
-        if (!m_Themes.contains(name)) {
-            return;
-        }
-        const auto& theme = m_Themes.at(name);
-        theme.Apply();
+    void ThemePanel::SetTheme(const EditorTheme& theme) {
+        m_ActiveTheme = theme;
+        m_ActiveTheme.Apply();
     }
     void ThemePanel::SetDefaultTheme() {
-        EditorTheme tmp;
-        tmp.Apply();
+        m_ActiveTheme = EditorTheme();
+        m_ActiveTheme.Apply();
     }
 
-    void ThemePanel::View() {}
+    void ThemePanel::View() {
+        ImGui::Separator();
+        ImGui::Columns(2);
+        ImGuiUtils::EditProperty("Background", m_ActiveTheme.Background, ImGuiUtils::PropertyType::Color);
+        ImGuiUtils::EditProperty("FieldBackground", m_ActiveTheme.FieldBackground, ImGuiUtils::PropertyType::Color);
+        ImGuiUtils::EditProperty("TitleBar", m_ActiveTheme.TitleBar, ImGuiUtils::PropertyType::Color);
+        ImGuiUtils::EditProperty("MenuBar", m_ActiveTheme.MenuBar, ImGuiUtils::PropertyType::Color);
+        ImGuiUtils::EditProperty("Header", m_ActiveTheme.Header, ImGuiUtils::PropertyType::Color);
+
+        ImGuiUtils::EditProperty("Text", m_ActiveTheme.Text, ImGuiUtils::PropertyType::Color);
+        ImGuiUtils::EditProperty("TextDisabled", m_ActiveTheme.TextDisabled, ImGuiUtils::PropertyType::Color);
+        ImGuiUtils::EditProperty("WidgetInactive", m_ActiveTheme.WidgetInactive, ImGuiUtils::PropertyType::Color);
+        ImGuiUtils::EditProperty("WidgetHovered", m_ActiveTheme.WidgetHovered, ImGuiUtils::PropertyType::Color);
+        ImGuiUtils::EditProperty("WidgetActive", m_ActiveTheme.WidgetActive, ImGuiUtils::PropertyType::Color);
+        ImGuiUtils::EditProperty("Button", m_ActiveTheme.Button, ImGuiUtils::PropertyType::Color);
+        ImGuiUtils::EditProperty("CheckMark", m_ActiveTheme.CheckMark, ImGuiUtils::PropertyType::Color);
+        ImGuiUtils::EditProperty("Default", m_ActiveTheme.Default, ImGuiUtils::PropertyType::Color);
+        ImGui::Columns(1);
+        ImGui::Separator();
+        m_ActiveTheme.Apply();
+    }
 }  // namespace DE

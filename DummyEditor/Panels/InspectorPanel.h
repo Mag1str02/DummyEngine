@@ -12,6 +12,8 @@ namespace DE {
         void SetScene(WeakRef<Scene> scene);
 
     private:
+        template <typename Component> void DrawComponentWidget(Component& component);
+
         Entity         m_Entity;
         WeakRef<Scene> m_Scene;
     };

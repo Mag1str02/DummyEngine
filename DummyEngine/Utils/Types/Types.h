@@ -8,6 +8,15 @@ namespace DE {
 
     using VoidFPtr = void (*)();
 
+    using U8  = uint8_t;
+    using U16 = uint16_t;
+    using U32 = uint32_t;
+    using U64 = uint64_t;
+    using S8  = int8_t;
+    using S16 = int16_t;
+    using S32 = int32_t;
+    using S64 = int64_t;
+
     using Mat4                                   = glm::mat4;
     using Vec4                                   = glm::vec4;
     using Vec3                                   = glm::vec3;

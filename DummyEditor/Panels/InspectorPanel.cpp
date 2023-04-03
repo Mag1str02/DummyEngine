@@ -1,6 +1,7 @@
 #include "DummyEditor/Panels/InspectorPanel.h"
 
 namespace DE {
+
     void ClampRoundValue(Vec3& vec, float min, float max) {
         if (vec.x < min) vec.x = max;
         if (vec.x > max) vec.x = min;
@@ -21,6 +22,43 @@ namespace DE {
             default: return ImGuiDataType_COUNT;
         }
     }
+
+    template <typename Component> void InspectorPanel::DrawComponentWidget(Component& component) {}
+
+    template <> void InspectorPanel::DrawComponentWidget<ScriptComponent>(ScriptComponent& component) {
+        if (m_Entity.Has<ScriptComponent>()) {
+            auto& component = m_Entity.Get<ScriptComponent>();
+            if (ImGui::CollapsingHeader("Script")) {
+                ImGui::Text("UUID: %s", component.ID().Hex().c_str());
+                if (component.Valid()) {
+                    for (auto [name, field] : *component) {
+                        if (field.GetType() != ScriptFieldType::None) {
+                            ImGui::Text("%s", name.get().c_str());
+                            ImGui::SameLine(100);
+                            ImGui::SetNextItemWidth(-1);
+                        }
+
+                        switch (field.GetType()) {
+                            case ScriptFieldType::Double:
+                            case ScriptFieldType::Float:
+                            case ScriptFieldType::S32:
+                            case ScriptFieldType::U32:
+                            case ScriptFieldType::S64:
+                            case ScriptFieldType::U64:
+                                ImGui::DragScalar(("##" + name.get()).c_str(), ScriptFieldTypeToImGuiType(field.GetType()), field.Get());
+                                break;
+                            case ScriptFieldType::Bool: ImGui::Checkbox(("##" + name.get()).c_str(), &field.Get<bool>()); break;
+                            case ScriptFieldType::String: ImGui::InputText(("##" + name.get()).c_str(), &field.Get<std::string>()); break;
+                            case ScriptFieldType::Vec2: ImGui::DragFloat2(("##" + name.get()).c_str(), &field.Get<Vec2>()[0]); break;
+                            case ScriptFieldType::Vec3: ImGui::DragFloat3(("##" + name.get()).c_str(), &field.Get<Vec3>()[0]); break;
+                            case ScriptFieldType::Vec4: ImGui::DragFloat4(("##" + name.get()).c_str(), &field.Get<Vec4>()[0]); break;
+                            default: break;
+                        }
+                    }
+                }
+            }
+        }
+    }
     void InspectorPanel::View() {
         DE_PROFILE_SCOPE("InspectorPanel View");
         auto scene = m_Scene.lock();
@@ -31,38 +69,6 @@ namespace DE {
         float sensitivity = 0.1;
 
         if (m_Entity.Valid()) {
-            if (m_Entity.Has<ScriptComponent>()) {
-                auto& component = m_Entity.Get<ScriptComponent>();
-                if (ImGui::CollapsingHeader("Script")) {
-                    ImGui::Text("UUID: %s", component.ID().Hex().c_str());
-                    if (component.Valid()) {
-                        for (auto [name, field] : *component) {
-                            if (field.GetType() != ScriptFieldType::None) {
-                                ImGui::Text("%s", name.get().c_str());
-                                ImGui::SameLine(100);
-                                ImGui::SetNextItemWidth(-1);
-                            }
-
-                            switch (field.GetType()) {
-                                case ScriptFieldType::Double:
-                                case ScriptFieldType::Float:
-                                case ScriptFieldType::S32:
-                                case ScriptFieldType::U32:
-                                case ScriptFieldType::S64:
-                                case ScriptFieldType::U64:
-                                    ImGui::DragScalar(("##" + name.get()).c_str(), ScriptFieldTypeToImGuiType(field.GetType()), field.Get());
-                                    break;
-                                case ScriptFieldType::Bool: ImGui::Checkbox(("##" + name.get()).c_str(), &field.Get<bool>()); break;
-                                case ScriptFieldType::String: ImGui::InputText(("##" + name.get()).c_str(), &field.Get<std::string>()); break;
-                                case ScriptFieldType::Vec2: ImGui::DragFloat2(("##" + name.get()).c_str(), &field.Get<Vec2>()[0]); break;
-                                case ScriptFieldType::Vec3: ImGui::DragFloat3(("##" + name.get()).c_str(), &field.Get<Vec3>()[0]); break;
-                                case ScriptFieldType::Vec4: ImGui::DragFloat4(("##" + name.get()).c_str(), &field.Get<Vec4>()[0]); break;
-                                default: break;
-                            }
-                        }
-                    }
-                }
-            }
             if (m_Entity.Has<TagComponent>()) {
                 // TODO: Find proper library function or write own
                 auto&      component = m_Entity.Get<TagComponent>();

@@ -25,7 +25,7 @@ namespace DE {
         m_Frames.push(ProfilerFrame(m_PrevFrameTimeLapseAmount));
         m_PrevFrameTimeLapseAmount = 0;
 
-        // TODO: Move somewher frame storage size.
+        // TODO: Move somewhere frame storage size.
         if (m_Frames.size() > 2) {
             m_Frames.pop();
         }

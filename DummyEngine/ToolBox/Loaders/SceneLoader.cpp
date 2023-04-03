@@ -70,7 +70,6 @@ namespace DE {
         }
     }
     template <> void SceneLoader::SaveComponent<IDComponent>(YAML::Node& n_Entity, Entity entity) {
-        // TODO: Save UUID in hex format.
         if (entity.Has<IDComponent>()) {
             n_Entity["UUID"] = entity.Get<IDComponent>().Hex();
         }
