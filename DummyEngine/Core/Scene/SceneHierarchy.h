@@ -1,13 +1,35 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/ECS/ECS.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
 
-    class SceneHierarchyNode
-    {
+    // class SceneHierarchy {
+    // public:
+    //     SceneHierarchy(const std::string& name) { m_Nodes.emplace_back(name); }
+    //     class Node {
+    //     public:
+    //         Node(Entity entity) : m_Node({.entity = entity}) {}
+    //         Node(const std::string& name) : m_Node({.name = name, .childs = {}}) {}
+    //         bool IsEntity() const {}
+
+    //     private:
+    //         struct FolderNode {
+    //             std::string      name;
+    //             std::vector<U32> childs;
+    //         };
+    //         struct EntityNode {
+    //             Entity entity;
+    //         };
+    //         std::variant<FolderNode, EntityNode> m_Node;
+    //         U32                                  m_Parent = -1;
+    //     };
+
+    // private:
+    //     std::vector<Node> m_Nodes;
+    // };
+    class SceneHierarchyNode {
     public:
         SceneHierarchyNode(const std::string& name = "", Entity entity = Entity());
 
@@ -29,8 +51,8 @@ namespace DE
 
     private:
         std::string                          m_Name;
-        std::vector<Ref<SceneHierarchyNode>> m_Childs;
         Entity                               m_Entity;
+        std::vector<Ref<SceneHierarchyNode>> m_Childs;
         SceneHierarchyNode*                  m_Parent;
         bool                                 m_Selected;
     };

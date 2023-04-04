@@ -11,18 +11,8 @@ namespace DE {
             m_From = nullptr;
             m_To   = nullptr;
 
-            auto res  = m_Scene->GetHierarchy();
-            bool open = ImGui::TreeNode("Scene");
-            DropTarget(res);
-            if (open) {
-                S32 id = 0;
-                for (auto child : *res) {
-                    ImGui::PushID(id++);
-                    ShowNode(child);
-                    ImGui::PopID();
-                }
-                ImGui::TreePop();
-            }
+            ShowNode(m_Scene->GetHierarchy());
+
             if (m_From && m_To) {
                 if (m_To->IsEntity() && m_From->IsEntity()) {
                     auto parent = m_To->GetParent();
@@ -57,7 +47,9 @@ namespace DE {
         if (!node->IsEntity()) {
             open = ImGui::TreeNode(node->GetName().c_str());
             DropTarget(node);
-            DragTarget(node);
+            if (node->GetParent()) {
+                DragTarget(node);
+            }
             if (open) {
                 S32 id = 0;
                 for (auto child : *node) {
@@ -83,9 +75,9 @@ namespace DE {
 
     void SceneHierarchyPanel::DragTarget(Ref<SceneHierarchyNode> node) {
         if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoHoldToOpenOthers)) {
-            size_t ptr = (size_t) & (*node);
+            size_t ptr = (size_t)node.get();
             ImGui::SetDragDropPayload("DND_HIERARCHY_NODE", &ptr, sizeof(size_t), ImGuiCond_Once);
-            ImGui::Text("Moveing: %s", node->GetName().c_str());
+            ImGui::Text("Moving: %s", node->GetName().c_str());
             ImGui::EndDragDropSource();
         }
     }

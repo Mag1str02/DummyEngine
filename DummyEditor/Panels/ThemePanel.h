@@ -26,7 +26,7 @@ namespace DE {
     };
     class ThemePanel : public ImGuiPanel {
     public:
-        ThemePanel() : ImGuiPanel("ThemePanel") { SetDefaultTheme(); }
+        ThemePanel() : ImGuiPanel(ICON_MD_BRUSH "  ThemePanel") { SetDefaultTheme(); }
 
         void               SetTheme(const EditorTheme& name);
         void               SetDefaultTheme();

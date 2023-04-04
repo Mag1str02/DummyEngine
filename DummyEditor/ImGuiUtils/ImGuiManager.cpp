@@ -1,7 +1,6 @@
 #include "DummyEditor/ImGuiUtils/ImGuiManager.h"
 
 namespace DE {
-
     void ImGuiManager::SetMenuBar(ImGuiItem* bar) {
         m_MenuBar = bar;
     }
@@ -20,14 +19,21 @@ namespace DE {
     }
 
     void ImGuiManager::LoadEditorResources() {
-        ImGuiIO& io       = ImGui::GetIO();
-        Path     font_dir = Config::GetPath(DE_CFG_FONT_PATH) / "Editor";
+        ImGuiIO& io             = ImGui::GetIO();
+        Path     font_dir       = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Editor" / "Fonts";
+        Path     icon_font_path = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Editor" / "Icons" / "IconsMaterialDesign.ttf";
         for (const auto& entry : fs::directory_iterator(font_dir)) {
             // TODO: font size to settings
-            io.Fonts->AddFontFromFileTTF(entry.path().string().c_str(), 15.0f);
+            auto*                ptr1           = io.Fonts->AddFontFromFileTTF(entry.path().string().c_str(), ImGuiUtils::Constants::BasicFontSize);
+            static const ImWchar icons_ranges[] = {ICON_MIN_MD, ICON_MAX_16_MD, 0};
+            ImFontConfig         icons_config;
+            icons_config.MergeMode   = true;
+            icons_config.PixelSnapH  = true;
+            icons_config.GlyphOffset = {0.f, 4.f};
+            auto* ptr2 =
+                io.Fonts->AddFontFromFileTTF(icon_font_path.string().c_str(), ImGuiUtils::Constants::BasicFontSize + 1, &icons_config, icons_ranges);
         }
     }
-
     void ImGuiManager::CreateDockingSpace() {
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowViewport(viewport->ID);

@@ -5,7 +5,7 @@
 namespace DE {
     class SceneHierarchyPanel : public ImGuiPanel {
     public:
-        SceneHierarchyPanel() : ImGuiPanel("Scene Hierarchy") {}
+        SceneHierarchyPanel() : ImGuiPanel(ICON_MD_ACCOUNT_TREE "  Scene Hierarchy") {}
         virtual void View() override;
 
         void   SetActiveScene(Ref<Scene> scene);

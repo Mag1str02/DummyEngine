@@ -25,7 +25,7 @@ namespace DE {
 
     template <> void InspectorPanel::DrawComponentWidget<TransformComponent>(Ref<Scene> scene, Entity entity) {
         if (m_Entity.Has<TransformComponent>()) {
-            if (ImGui::CollapsingHeader("Transformation", ImGuiTreeNodeFlags_DefaultOpen)) {
+            if (ImGui::CollapsingHeader(ICON_MD_OPEN_IN_FULL "  Transformation", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto& transform = m_Entity.Get<TransformComponent>();
 
                 ImGui::Columns(2);
@@ -42,7 +42,7 @@ namespace DE {
             // TODO: Find proper library function or write own
             auto&      component = m_Entity.Get<TagComponent>();
             static int swap      = 2;
-            if (ImGui::CollapsingHeader("Tag", ImGuiTreeNodeFlags_DefaultOpen)) {
+            if (ImGui::CollapsingHeader(ICON_MD_VIEW_IN_AR "  Tag", ImGuiTreeNodeFlags_DefaultOpen)) {
                 static std::string current_name = "";
                 if (swap == 2) {
                     current_name = component.Get();
@@ -74,7 +74,7 @@ namespace DE {
     template <> void InspectorPanel::DrawComponentWidget<ScriptComponent>(Ref<Scene> scene, Entity entity) {
         if (m_Entity.Has<ScriptComponent>()) {
             auto& component = m_Entity.Get<ScriptComponent>();
-            if (ImGui::CollapsingHeader("Script", ImGuiTreeNodeFlags_DefaultOpen)) {
+            if (ImGui::CollapsingHeader(ICON_MD_DESCRIPTION "  Script", ImGuiTreeNodeFlags_DefaultOpen)) {
                 ImGui::Columns(2);
                 if (component.Loaded()) {
                     for (auto [name, field] : *component) {
@@ -107,7 +107,7 @@ namespace DE {
     }
     template <> void InspectorPanel::DrawComponentWidget<FPSCamera>(Ref<Scene> scene, Entity entity) {
         if (m_Entity.Has<FPSCamera>()) {
-            if (ImGui::CollapsingHeader("FPSCamera", ImGuiTreeNodeFlags_DefaultOpen)) {
+            if (ImGui::CollapsingHeader(ICON_MD_VIDEOCAM "  FPSCamera", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto& camera = m_Entity.Get<FPSCamera>();
 
                 ImGui::Text("Position");
@@ -134,7 +134,7 @@ namespace DE {
     }
     template <> void InspectorPanel::DrawComponentWidget<LightSource>(Ref<Scene> scene, Entity entity) {
         if (m_Entity.Has<LightSource>()) {
-            if (ImGui::CollapsingHeader("Light Soruce", ImGuiTreeNodeFlags_DefaultOpen)) {
+            if (ImGui::CollapsingHeader(ICON_MD_LIGHTBULB "  LightSoruce", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto&       source        = m_Entity.Get<LightSource>();
                 const char* light_types[] = {"Directional", "Point", "Spot"};
                 ImGui::Columns(2);

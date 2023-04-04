@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DummyEditor/DummyEngineInclude.h"
+#include "DummyEditor/ImGuiUtils/ImGuiIcons.h"
 
 namespace DE {
     class ImGuiItem {
@@ -20,6 +21,12 @@ namespace DE {
     };
 
     namespace ImGuiUtils {
+        namespace Constants {
+            constexpr S32 BasicFontSize = 16;
+            constexpr S32 ColorPading   = -1;
+            constexpr S32 SliderPadding = -15;
+        }  // namespace Constants
+
         void ClampRoundValue(Vec3& vec, float min, float max);
         void ClampRoundValue(Vec4& vec, float min, float max);
 

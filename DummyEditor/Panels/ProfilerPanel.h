@@ -2,12 +2,10 @@
 
 #include "DummyEditor/ImGuiUtils/ImGuiPanel.h"
 
-namespace DE
-{
-    class ProfilerPanel : public ImGuiPanel
-    {
+namespace DE {
+    class ProfilerPanel : public ImGuiPanel {
     public:
-        ProfilerPanel() : ImGuiPanel("Profiler"){}
+        ProfilerPanel() : ImGuiPanel(ICON_MD_TRENDING_UP "  Profiler") {}
         virtual void View() override;
 
     private:

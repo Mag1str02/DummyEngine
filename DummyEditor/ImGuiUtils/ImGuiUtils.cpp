@@ -14,11 +14,6 @@ namespace DE {
         return m_Name;
     }
     namespace ImGuiUtils {
-        enum Constants {
-            ColorPading   = -1,
-            SliderPadding = -26,
-        };
-
         void ClampRoundValue(Vec3& vec, float min, float max) {
             if (vec.x < min) vec.x = max;
             if (vec.x > max) vec.x = min;
