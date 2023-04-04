@@ -34,9 +34,10 @@ namespace DE {
         }
 
         void EditProperty(std::string name, ImGuiDataType type, void* value, PropertyType property_type) {
+            ImGui::SetCursorPosX(Constants::DefaultLeftPadding);
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
-            ImGui::SetNextItemWidth(-1);
+            ImGui::SetNextItemWidth(Constants::DefaultRightPadding);
             name.insert(name.begin(), 2, '#');
             ImGui::DragScalar(name.c_str(), type, value);
             ImGui::NextColumn();
@@ -79,22 +80,25 @@ namespace DE {
             ImGui::NextColumn();
         }
         void EditProperty(std::string name, std::string& value, PropertyType property_type) {
+            ImGui::SetCursorPosX(Constants::DefaultLeftPadding);
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
-            ImGui::SetNextItemWidth(-1);
+            ImGui::SetNextItemWidth(Constants::DefaultRightPadding);
             name.insert(name.begin(), 2, '#');
             ImGui::InputText(name.c_str(), &value);
             ImGui::NextColumn();
         }
         void EditProperty(std::string name, Vec2& vec, PropertyType property_type) {
+            ImGui::SetCursorPosX(Constants::DefaultLeftPadding);
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
-            ImGui::SetNextItemWidth(-1);
+            ImGui::SetNextItemWidth(Constants::DefaultRightPadding);
             name.insert(name.begin(), 2, '#');
             ImGui::DragFloat2(name.c_str(), &vec.x);
             ImGui::NextColumn();
         }
         void EditProperty(std::string name, Vec3& vec, PropertyType property_type) {
+            ImGui::SetCursorPosX(Constants::DefaultLeftPadding);
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
             name.insert(name.begin(), 2, '#');
@@ -104,13 +108,14 @@ namespace DE {
                     ImGui::ColorEdit3(name.c_str(), &vec.x, ImGuiColorEditFlags_NoLabel);
                     break;
                 default:
-                    ImGui::SetNextItemWidth(Constants::SliderPadding);
+                    ImGui::SetNextItemWidth(Constants::DefaultRightPadding);
                     ImGui::DragFloat3(name.c_str(), &vec.x);
                     break;
             }
             ImGui::NextColumn();
         }
         void EditProperty(std::string name, Vec4& vec, PropertyType property_type) {
+            ImGui::SetCursorPosX(Constants::DefaultLeftPadding);
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
             name.insert(name.begin(), 2, '#');
@@ -120,7 +125,7 @@ namespace DE {
                     ImGui::ColorEdit4(name.c_str(), &vec.x, ImGuiColorEditFlags_NoLabel);
                     break;
                 default:
-                    ImGui::SetNextItemWidth(Constants::SliderPadding);
+                    ImGui::SetNextItemWidth(Constants::DefaultRightPadding);
                     ImGui::DragFloat4(name.c_str(), &vec.x);
                     break;
             }

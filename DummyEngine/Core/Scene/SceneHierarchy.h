@@ -4,57 +4,65 @@
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
-
-    // class SceneHierarchy {
-    // public:
-    //     SceneHierarchy(const std::string& name) { m_Nodes.emplace_back(name); }
-    //     class Node {
-    //     public:
-    //         Node(Entity entity) : m_Node({.entity = entity}) {}
-    //         Node(const std::string& name) : m_Node({.name = name, .childs = {}}) {}
-    //         bool IsEntity() const {}
-
-    //     private:
-    //         struct FolderNode {
-    //             std::string      name;
-    //             std::vector<U32> childs;
-    //         };
-    //         struct EntityNode {
-    //             Entity entity;
-    //         };
-    //         std::variant<FolderNode, EntityNode> m_Node;
-    //         U32                                  m_Parent = -1;
-    //     };
-
-    // private:
-    //     std::vector<Node> m_Nodes;
-    // };
-    class SceneHierarchyNode {
+    class SceneHierarchy {
     public:
-        SceneHierarchyNode(const std::string& name = "", Entity entity = Entity());
+        class Node {
+        public:
+            Node() = default;
 
-        void                    AttachChild(Ref<SceneHierarchyNode> child);
-        Ref<SceneHierarchyNode> DetachChild(SceneHierarchyNode* child);
-        Ref<SceneHierarchyNode> Detach();
+            bool Valid() const;
+            bool IsEntity() const;
+            bool IsFolder() const;
+            U32  GetID() const;
+            Node GetParent() const;
 
-        SceneHierarchyNode* GetParent() const;
-        const std::string&  GetName();
-        Entity              GetEntity() const;
-        void                SetName(const std::string& name);
-        void                SetEntity(const Entity& entity);
-        bool                IsEntity() const;
-        bool&               Selected();
-        bool                IsAnsestor(SceneHierarchyNode* node) const;
+            bool Attach(Node other);
+            Node AddEntity(Entity entity);
+            Node AddFolder(const std::string& name);
 
-        std::vector<Ref<SceneHierarchyNode>>::iterator begin();
-        std::vector<Ref<SceneHierarchyNode>>::iterator end();
+            Entity             GetEntity() const;
+            std::vector<Node>  GetChilds() const;
+            const std::string& GetName() const;
+
+        private:
+            friend class SceneHierarchy;
+            Node(SceneHierarchy* owner, U32 id);
+
+            SceneHierarchy* m_Owner = nullptr;
+            U32             m_ID    = -1;
+        };
+
+        SceneHierarchy(const std::string& name);
+
+        Node GetRoot();
+        Node AddFolder(const std::string& name);
+        Node AddEntity(Entity entity);
+        void DeleteNode(Node node);
+        bool Attach(Node parent, Node child);
 
     private:
-        std::string                          m_Name;
-        Entity                               m_Entity;
-        std::vector<Ref<SceneHierarchyNode>> m_Childs;
-        SceneHierarchyNode*                  m_Parent;
-        bool                                 m_Selected;
+        bool IsAnsestor(U32 parent, U32 child);
+
+        struct NodeData {
+            NodeData() = default;
+            NodeData(Entity entity, U32 parent = -1);
+            NodeData(const std::string& name, U32 parent = -1);
+
+            struct FolderNode {
+                std::string      name;
+                std::vector<U32> childs;
+                FolderNode(const std::string& name);
+            };
+            struct EntityNode {
+                Entity entity;
+                EntityNode(Entity ent);
+            };
+
+            std::variant<std::monostate, FolderNode, EntityNode> node;
+            U32                                                  parent;
+        };
+        std::vector<NodeData> m_Nodes;
+        std::queue<U32>       m_AvailableNodes;
     };
 
 }  // namespace DE

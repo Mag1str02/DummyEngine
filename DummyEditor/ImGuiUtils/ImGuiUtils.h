@@ -22,9 +22,10 @@ namespace DE {
 
     namespace ImGuiUtils {
         namespace Constants {
-            constexpr S32 BasicFontSize = 16;
-            constexpr S32 ColorPading   = -1;
-            constexpr S32 SliderPadding = -15;
+            constexpr S32 BasicFontSize       = 16;
+            constexpr S32 ColorPading         = -1;
+            constexpr S32 DefaultRightPadding = -26;
+            constexpr S32 DefaultLeftPadding  = 25;
         }  // namespace Constants
 
         void ClampRoundValue(Vec3& vec, float min, float max);

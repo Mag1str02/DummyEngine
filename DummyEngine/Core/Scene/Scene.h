@@ -3,21 +3,20 @@
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
 #include "DummyEngine/Core/Scene/Components.h"
+#include "DummyEngine/Core/Scene/SceneHierarchy.h"
 
 namespace DE {
     class Entity;
     class SceneRenderData;
-    class SceneHierarchyNode;
     class ScripyEngine;
 
     class Scene {
     public:
-        Scene(const std::string& name = "Scene");
+        Scene();
         ~Scene();
 
         Entity CreateEmptyEntity();
-        Entity CreateHiddenEntity(const std::string& name = "Entity");
-        Entity CreateEntity(const std::string& name = "Entity");
+        Entity CreateEntity(const std::string& name = "Entity", bool visisble = true);
         Entity CloneEntity(const std::string& entity_to_clone, const std::string& new_name);
 
         bool ExistsEntityWithTag(const TagComponent& name);
@@ -27,9 +26,11 @@ namespace DE {
         Entity      GetByTag(const std::string& name);
         std::string GenAvilableEntityName(const std::string& prefered);
 
-        Entity                  GetCamera();
-        const std::string&      GetName() const;
-        Ref<SceneHierarchyNode> GetHierarchy();
+        Entity GetCamera();
+        // TODO: maybe expose only root node
+        SceneHierarchy& GetHierarchy();
+        // TODO: remove when render graph implemented
+        Ref<SceneRenderData> GetRenderData() { return m_RenderData; }
 
         void OnUpdate(double dt);
         void OnViewPortResize(U32 x, U32 y);
@@ -41,13 +42,11 @@ namespace DE {
 
     private:
         friend class ScriptEngine;
-        friend class SceneLoader;
         friend class SceneRenderData;
 
-        std::string                              m_Name;
         Ref<Storage>                             m_Storage;
         Ref<SceneRenderData>                     m_RenderData;
-        Ref<SceneHierarchyNode>                  m_HierarchyRoot;
+        SceneHierarchy                           m_Hierarchy;
         std::unordered_map<UUID, Entity>         m_EntityByID;
         std::unordered_map<TagComponent, Entity> m_EntityByTag;
     };

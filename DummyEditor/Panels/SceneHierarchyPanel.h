@@ -8,18 +8,17 @@ namespace DE {
         SceneHierarchyPanel() : ImGuiPanel(ICON_MD_ACCOUNT_TREE "  Scene Hierarchy") {}
         virtual void View() override;
 
-        void   SetActiveScene(Ref<Scene> scene);
-        void   UnSelect();
+        void   SetActiveScene(WeakRef<Scene> scene);
         Entity GetActiveEntity();
 
     private:
-        void ShowNode(Ref<SceneHierarchyNode> node);
-        void DragTarget(Ref<SceneHierarchyNode> node);
-        void DropTarget(Ref<SceneHierarchyNode> node);
+        void ShowNode(SceneHierarchy::Node node);
+        void DragTarget(SceneHierarchy::Node node);
+        void DropTarget(SceneHierarchy::Node node);
 
-        Ref<Scene>              m_Scene;
-        Ref<SceneHierarchyNode> m_SelectedNode;
-        SceneHierarchyNode*     m_From;
-        Ref<SceneHierarchyNode> m_To;
+        WeakRef<Scene>       m_Scene;
+        SceneHierarchy::Node m_SelectedNode;
+        SceneHierarchy::Node m_From;
+        SceneHierarchy::Node m_To;
     };
 }  // namespace DE

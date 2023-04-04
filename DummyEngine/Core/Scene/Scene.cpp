@@ -11,12 +11,7 @@
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
 
 namespace DE {
-
-    Scene::Scene(const std::string& name) :
-        m_Name(name),
-        m_Storage(CreateRef<Storage>()),
-        m_RenderData(CreateRef<SceneRenderData>(this)),
-        m_HierarchyRoot(CreateRef<SceneHierarchyNode>()) {
+    Scene::Scene() : m_Storage(CreateRef<Storage>()), m_RenderData(CreateRef<SceneRenderData>(this)), m_Hierarchy("Scene") {
         m_Storage->SetAddHandler<FPSCamera>([this](Entity entity) { m_RenderData->AddVPEntity(entity); });
         m_Storage->SetAddHandler<TagComponent>([this](Entity entity) {
             auto& name = entity.Get<TagComponent>();
@@ -31,28 +26,23 @@ namespace DE {
         m_Storage->SetRemoveHandler<TagComponent>([this](Entity entity) { m_EntityByTag.erase(entity.Get<TagComponent>()); });
         m_Storage->SetRemoveHandler<IDComponent>([this](Entity entity) { m_EntityByID.erase(entity.Get<IDComponent>()); });
         m_Storage->SetRemoveHandler<ScriptComponent>([this](Entity entity) { entity.Get<ScriptComponent>().Destroy(); });
-        LOG_INFO("Scene", "Scene (", name, ") was created");
     }
 
     Scene::~Scene() {
         m_Storage->Destruct();
         m_Storage = nullptr;
-        LOG_INFO("Scene", "Scene (", m_Name, ") was destroyed");
     }
 
     Entity Scene::CreateEmptyEntity() {
         return m_Storage->CreateEntity();
     }
-    Entity Scene::CreateHiddenEntity(const std::string& name) {
+    Entity Scene::CreateEntity(const std::string& name, bool visisble) {
         Entity new_entity = m_Storage->CreateEntity();
         new_entity.AddComponent(TagComponent(GenAvilableEntityName(name)));
         new_entity.AddComponent(IDComponent(UUID::Generate()));
-        return new_entity;
-    }
-    Entity Scene::CreateEntity(const std::string& name) {
-        Entity new_entity = m_Storage->CreateEntity();
-        new_entity.AddComponent(TagComponent(GenAvilableEntityName(name)));
-        new_entity.AddComponent(IDComponent(UUID::Generate()));
+        if (visisble) {
+            m_Hierarchy.AddEntity(new_entity);
+        }
         return new_entity;
     }
     Entity Scene::CloneEntity(const std::string& entity_to_clone, const std::string& new_name) {
@@ -72,12 +62,9 @@ namespace DE {
     Entity Scene::GetByTag(const std::string& name) {
         return (m_EntityByTag.contains(name) ? m_EntityByTag.at(name) : Entity());
     }
-    const std::string& Scene::GetName() const {
-        return m_Name;
-    }
 
-    Ref<SceneHierarchyNode> Scene::GetHierarchy() {
-        return m_HierarchyRoot;
+    SceneHierarchy& Scene::GetHierarchy() {
+        return m_Hierarchy;
     }
 
     void Scene::OnUpdate(double dt) {
@@ -115,7 +102,7 @@ namespace DE {
 
     std::string Scene::GenAvilableEntityName(const std::string& prefered) {
         std::string name = prefered;
-        U32    cnt  = 0;
+        U32         cnt  = 0;
         while (ExistsEntityWithTag(name)) {
             name = StrCat(prefered, "(", ++cnt, ")");
         }

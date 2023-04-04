@@ -1,68 +1,51 @@
 #include "DummyEditor/Panels/SceneHierarchyPanel.h"
 
 namespace DE {
-    void SceneHierarchyPanel::SetActiveScene(Ref<Scene> scene) {
-        m_Scene = scene;
+    void SceneHierarchyPanel::SetActiveScene(WeakRef<Scene> scene) {
+        m_Scene        = scene;
+        m_SelectedNode = SceneHierarchy::Node();
     }
     void SceneHierarchyPanel::View() {
         DE_PROFILE_SCOPE("SceneHierarchyPanel View");
+        auto scene = m_Scene.lock();
+        if (scene) {
+            m_From = SceneHierarchy::Node();
+            m_To   = SceneHierarchy::Node();
 
-        if (m_Scene) {
-            m_From = nullptr;
-            m_To   = nullptr;
+            ShowNode(scene->GetHierarchy().GetRoot());
 
-            ShowNode(m_Scene->GetHierarchy());
-
-            if (m_From && m_To) {
-                if (m_To->IsEntity() && m_From->IsEntity()) {
-                    auto parent = m_To->GetParent();
-                    auto node   = CreateRef<SceneHierarchyNode>("Folder");
-
-                    auto ref = m_From->Detach();
-                    m_To->Detach();
-                    node->AttachChild(m_To);
-                    node->AttachChild(ref);
-                    parent->AttachChild(node);
-                }
-                if (!m_To->IsEntity() && !m_To->IsAnsestor(m_From)) {
-                    auto ref = m_From->Detach();
-                    m_To->AttachChild(ref);
-                }
+            if (m_From.Valid() && m_To.IsFolder()) {
+                m_To.Attach(m_From);
             }
         }
     }
 
-    void SceneHierarchyPanel::UnSelect() {
-        m_SelectedNode = nullptr;
-    }
     Entity SceneHierarchyPanel::GetActiveEntity() {
-        if (m_SelectedNode) {
-            return m_SelectedNode->GetEntity();
+        auto scene = m_Scene.lock();
+        if (scene && m_SelectedNode.IsEntity()) {
+            return m_SelectedNode.GetEntity();
         }
         return Entity();
     }
 
-    void SceneHierarchyPanel::ShowNode(Ref<SceneHierarchyNode> node) {
+    void SceneHierarchyPanel::ShowNode(SceneHierarchy::Node node) {
         bool open;
-        if (!node->IsEntity()) {
-            open = ImGui::TreeNode(node->GetName().c_str());
+        if (node.IsFolder()) {
+            open = ImGui::TreeNode(node.GetName().c_str());
             DropTarget(node);
-            if (node->GetParent()) {
-                DragTarget(node);
-            }
+            DragTarget(node);
             if (open) {
-                S32 id = 0;
-                for (auto child : *node) {
-                    ImGui::PushID(id++);
+                for (auto child : node.GetChilds()) {
+                    ImGui::PushID(node.GetID());
                     ShowNode(child);
                     ImGui::PopID();
                 }
-
                 ImGui::TreePop();
             }
-        } else {
-            auto entity = node->GetEntity();
-            open        = ImGui::Selectable(entity.Get<TagComponent>().Get().c_str(), &node->Selected(), ImGuiSelectableFlags_AllowDoubleClick);
+        }
+        if (node.IsEntity()) {
+            auto entity = node.GetEntity();
+            open        = ImGui::Selectable(entity.Get<TagComponent>().Get().c_str(), false, ImGuiSelectableFlags_AllowDoubleClick);
             if (open) {
                 if (ImGui::IsMouseDoubleClicked(0)) {
                     m_SelectedNode = node;
@@ -73,18 +56,16 @@ namespace DE {
         }
     }
 
-    void SceneHierarchyPanel::DragTarget(Ref<SceneHierarchyNode> node) {
+    void SceneHierarchyPanel::DragTarget(SceneHierarchy::Node node) {
         if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoHoldToOpenOthers)) {
-            size_t ptr = (size_t)node.get();
-            ImGui::SetDragDropPayload("DND_HIERARCHY_NODE", &ptr, sizeof(size_t), ImGuiCond_Once);
-            ImGui::Text("Moving: %s", node->GetName().c_str());
+            ImGui::SetDragDropPayload("DND_HIERARCHY_NODE", &node, sizeof(node), ImGuiCond_Once);
             ImGui::EndDragDropSource();
         }
     }
-    void SceneHierarchyPanel::DropTarget(Ref<SceneHierarchyNode> node) {
+    void SceneHierarchyPanel::DropTarget(SceneHierarchy::Node node) {
         if (ImGui::BeginDragDropTarget()) {
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_HIERARCHY_NODE")) {
-                m_From = (SceneHierarchyNode*)(*(size_t*)payload->Data);
+                m_From = *(SceneHierarchy::Node*)payload->Data;
                 m_To   = node;
             }
             ImGui::EndDragDropTarget();

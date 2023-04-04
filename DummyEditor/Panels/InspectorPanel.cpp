@@ -18,6 +18,7 @@ namespace DE {
         if (m_Entity.Has<Component>()) {
             std::string name = DemangledName<Component>();
             if (ImGui::CollapsingHeader(name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+                ImGui::SetCursorPosX(ImGuiUtils::Constants::DefaultLeftPadding);
                 ImGui::Text("Widget for %s not yet implmented", name.c_str());
             }
         }
@@ -53,9 +54,10 @@ namespace DE {
                 }
                 swap = 0;
                 ImGui::Columns(2);
+                ImGui::SetCursorPosX(ImGuiUtils::Constants::DefaultLeftPadding);
                 ImGui::Text("Tag");
                 ImGui::NextColumn();
-                ImGui::SetNextItemWidth(-1);
+                ImGui::SetNextItemWidth(ImGuiUtils::Constants::DefaultRightPadding);
 
                 ImGui::InputText("##", &current_name, ImGuiInputTextFlags_CharsNoBlank);
                 if (ImGui::IsItemDeactivatedAfterEdit()) {
@@ -139,6 +141,7 @@ namespace DE {
                 const char* light_types[] = {"Directional", "Point", "Spot"};
                 ImGui::Columns(2);
 
+                ImGui::SetCursorPosX(ImGuiUtils::Constants::DefaultLeftPadding);
                 ImGui::Text("Type");
                 ImGui::NextColumn();
                 ImGui::SetNextItemWidth(-1);
