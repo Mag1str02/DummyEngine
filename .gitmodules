@@ -1,19 +1,19 @@
-[submodule "src/DummyEngine/Libs/GLM"]
+[submodule "DummyEngine/Libs/GLM"]
 	path = DummyEngine/Libs/GLM
 	url = https://github.com/g-truc/glm
-[submodule "src/DummyEngine/Libs/GLFW"]
+[submodule "DummyEngine/Libs/GLFW"]
 	path = DummyEngine/Libs/GLFW
 	url = https://github.com/glfw/glfw
-[submodule "src/DummyEngine/Libs/STB_IMAGE"]
+[submodule "DummyEngine/Libs/STB_IMAGE"]
 	path = DummyEngine/Libs/STB_IMAGE
 	url = https://github.com/nothings/stb
-[submodule "src/DummyEngine/Libs/YAML"]
+[submodule "DummyEngine/Libs/YAML"]
 	path = DummyEngine/Libs/YAML
 	url = https://github.com/jbeder/yaml-cpp
-[submodule "src/DummyEngine/Libs/ASSIMP"]
+[submodule "DummyEngine/Libs/ASSIMP"]
 	path = DummyEngine/Libs/ASSIMP
 	url = https://github.com/assimp/assimp
-[submodule "src/DummyEngine/Libs/GLAD"]
+[submodule "DummyEngine/Libs/GLAD"]
 	path = DummyEngine/Libs/GLAD
 	url = https://github.com/Mag1str02/GLAD
 [submodule "DummyEngine/Libs/IMGUI"]
