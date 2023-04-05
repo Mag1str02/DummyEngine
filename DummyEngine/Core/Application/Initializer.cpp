@@ -13,6 +13,7 @@
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
 #include "DummyEngine/Utils/Base.h"
 
+extern void (*g_ImGuiFailAssert)(const char* expr_str, const char* file, int line, const std::string& msg);
 namespace DE {
 
     void Initializer::Initialize() {
@@ -42,6 +43,7 @@ namespace DE {
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+            g_ImGuiFailAssert = FailAssert;
             LOG_INFO("Initializer", "Initialized GLFW");
         }
     }
