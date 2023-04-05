@@ -10,12 +10,12 @@
 [submodule "src/DummyEngine/Libs/YAML"]
 	path = DummyEngine/Libs/YAML
 	url = https://github.com/jbeder/yaml-cpp
-[submodule "src/DummyEngine/Libs/IMGUI"]
-	path = DummyEngine/Libs/IMGUI
-	url = https://github.com/ocornut/imgui
 [submodule "src/DummyEngine/Libs/ASSIMP"]
 	path = DummyEngine/Libs/ASSIMP
 	url = https://github.com/assimp/assimp
 [submodule "src/DummyEngine/Libs/GLAD"]
 	path = DummyEngine/Libs/GLAD
 	url = https://github.com/Mag1str02/GLAD
+[submodule "DummyEngine/Libs/IMGUI"]
+	path = DummyEngine/Libs/IMGUI
+	url = https://github.com/Mag1str02/DummyEngine_ImGui
