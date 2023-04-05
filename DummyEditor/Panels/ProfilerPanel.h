@@ -5,7 +5,7 @@
 namespace DE {
     class ProfilerPanel : public ImGuiPanel {
     public:
-        ProfilerPanel() : ImGuiPanel(ICON_MD_TRENDING_UP "  Profiler") {}
+        ProfilerPanel() : ImGuiPanel(ICON_MD_SPEED "  Profiler") {}
         virtual void View() override;
 
     private:

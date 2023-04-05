@@ -18,6 +18,7 @@ static void glfw_error_callback(int error, const char* description) {
 }
 
 int main(int, char**) {
+    IM_ASSERT(false);
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit()) return 1;

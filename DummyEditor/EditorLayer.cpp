@@ -66,10 +66,11 @@ namespace DE {
 
         m_ImGuiManager.OnImGui();
 
-        ImGui::Begin("Dear ImGui Style Editor");
-        ImGui::ShowStyleEditor();
-        ImGui::End();
-        ImGui::ShowDemoWindow();
+        // ImGui::Begin("Style Editor");
+        // ImGui::ShowStyleEditor();
+        // ImGui::End();
+        // ImGui::ShowDemoWindow();
+        // ImGui::ShowStackToolWindow();
     }
 
     void EditorLayer::OnDetach() {
