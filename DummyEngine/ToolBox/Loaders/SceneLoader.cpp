@@ -56,6 +56,13 @@ namespace DE {
             case ScriptFieldType::Vec2: return NodeVec2(field.Get<Vec2>());
             case ScriptFieldType::Vec3: return NodeVec3(field.Get<Vec3>());
             case ScriptFieldType::Vec4: return NodeVec4(field.Get<Vec4>());
+            case ScriptFieldType::Entity:
+                if (field.Get<Entity>().Valid()) {
+                    return YAML::Node(field.Get<Entity>().Get<IDComponent>().Hex());
+                } else {
+                    return YAML::Node();
+                }
+                break;
             default: return YAML::Node();
         }
     }
@@ -261,6 +268,7 @@ namespace DE {
             case ScriptFieldType::Vec2: field.Get<Vec2>() = GetVec2(node); break;
             case ScriptFieldType::Vec3: field.Get<Vec3>() = GetVec3(node); break;
             case ScriptFieldType::Vec4: field.Get<Vec4>() = GetVec4(node); break;
+            // case ScriptFieldType::Entity: field.Get<Entity>() = GetVec4(node); break;
             default: break;
         }
     }

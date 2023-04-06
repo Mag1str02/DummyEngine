@@ -8,6 +8,8 @@ namespace DE {
         m_Editor->m_ImGuiManager.SetMenuBar(this);
     }
     void MenuBar::OnImGui() {
+        DE_PROFILE_SCOPE("MenuBar OnImGui");
+
         if (ImGui::BeginMenuBar()) {
             FileMenu();
             ViewMenu();

@@ -47,4 +47,4 @@ private:
     Entity Controller;
 };
 
-SCRIPT_BASE(GateController, FIELD(Speed), FIELD(Distance), FIELD(OpenHeight), FIELD(CloseHeight))
+SCRIPT_BASE(GateController, FIELD(Speed), FIELD(Distance), FIELD(OpenHeight), FIELD(CloseHeight), FIELD(Controller))

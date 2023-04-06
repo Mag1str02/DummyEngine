@@ -19,8 +19,6 @@ namespace DE {
     }
 
     void GLFrameBuffer::Rebuild() {
-        DE_PROFILE_SCOPE("FrameBuffer Rebuild");
-
         if (m_BufferId) {
             glDeleteFramebuffers(1, &m_BufferId);
             m_DepthAttachment.m_Texture = nullptr;
@@ -71,8 +69,6 @@ namespace DE {
     }
 
     void GLFrameBuffer::Bind() {
-        DE_PROFILE_SCOPE("FrameBuffer Bind");
-
         glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
     }
     void GLFrameBuffer::UnBind() {
@@ -105,8 +101,6 @@ namespace DE {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
     void GLFrameBuffer::Resize(U32 width, U32 height) {
-        DE_PROFILE_SCOPE("FrameBuffer Resize");
-
         if ((m_Properties.width != width || m_Properties.height != height) && 0 < width && 0 < height) {
             m_Properties.width  = width;
             m_Properties.height = height;

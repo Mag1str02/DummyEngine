@@ -5,7 +5,7 @@
 namespace DE {
     class InspectorPanel : public ImGuiPanel {
     public:
-        InspectorPanel() : ImGuiPanel("InspectorPanel") {}
+        InspectorPanel() : ImGuiPanel("Inspector") {}
         virtual void OnImGui() override;
 
         void SetActiveEntity(Entity entity);

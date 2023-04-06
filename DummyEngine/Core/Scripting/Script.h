@@ -6,7 +6,6 @@
 
 namespace DE {
 
-    // TODO: Add entity field
     enum class ScriptFieldType {
         None = 0,
         Float,
@@ -24,6 +23,7 @@ namespace DE {
         Vec2,
         Vec3,
         Vec4,
+        Entity,
     };
     struct ScriptClassField {
         ScriptFieldType type;
@@ -83,6 +83,7 @@ namespace DE {
         bool                     HasField(const std::string& name) const;
         void                     AttachToScene(WeakRef<Scene> scene, Entity entity);
         bool                     AttachedToScene() const;
+        Ref<Scene>               GetScene() const;
 
     protected:
         virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const = 0;

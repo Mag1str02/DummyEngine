@@ -46,19 +46,13 @@ namespace DE {
     void Renderer::Terminate() {}
 
     void Renderer::OnWindowResize(U32 width, U32 height) {
-        DE_PROFILE_SCOPE("On Window Resize");
-
         m_RenderAPI->SetViewport(0, 0, width, height);
     }
 
     void Renderer::BeginFrame() {
-        DE_PROFILE_SCOPE("Renderer BeginFrame");
-
         m_FrameStatistics->Reset();
     }
-    void Renderer::EndFrame() {
-        DE_PROFILE_SCOPE("Renderer EndFrame");
-    }
+    void Renderer::EndFrame() {}
 
     void Renderer::Clear() {
         m_RenderAPI->Clear();
@@ -145,7 +139,7 @@ namespace DE {
     void Renderer::GenDefaultTexture() {
         U32             width  = 1;
         U32             height = 1;
-        TextureFormat        format = TextureFormat::RGBA;
+        TextureFormat   format = TextureFormat::RGBA;
         std::vector<U8> data(4, 255);
 
         TextureData tex_data(&data[0], width, height, format);

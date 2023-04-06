@@ -16,6 +16,7 @@ namespace DE {
     }
 
     void ThemePanel::OnImGui() {
+        DE_PROFILE_SCOPE("ThemePanel OnImGui");
         if (m_Controller) {
             if (ImGui::Begin(ICON_MD_BRUSH "  ThemePanel")) {
                 ImGui::Separator();

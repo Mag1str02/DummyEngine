@@ -122,6 +122,37 @@ namespace DE {
         void EditProperty(const std::string& name, ImVec4& vec, PropertyType property_type) {
             EditProperty(name, *(Vec4*)&vec, property_type);
         }
+        void EditProperty(const std::string& name, Entity& entity, Ref<Scene> scene) {
+            ImGui::SetCursorPosX(Constants::DefaultLeftPadding);
+            ImGui::TextUnformatted(name.c_str());
+            ImGui::NextColumn();
+            std::string preview = "Invalid entity";
+            if (entity.Valid()) {
+                preview = entity.Get<TagComponent>();
+            }
+            int cnt = 0;
+            ImGui::SetNextItemWidth(Constants::ColorPading);
+            if (ImGui::BeginCombo("##EntitySelect", preview.c_str())) {
+                ImGui::PushID(cnt++);
+                for (auto e : scene->View<TagComponent, IDComponent>()) {
+                    if (ImGui::Selectable(e.Get<TagComponent>().tag.c_str(), entity == e)) {
+                        entity = e;
+                    }
+                }
+                ImGui::PopID();
+                ImGui::EndCombo();
+            }
+            if (ImGui::BeginDragDropTarget()) {
+                std::cout << "Dragger" << std::endl;
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_ENTITY")) {
+                    std::cout << "Accepted" << std::endl;
+                    entity = *(Entity*)payload->Data;
+                }
+                ImGui::EndDragDropTarget();
+            }
+
+            ImGui::NextColumn();
+        }
 
     }  // namespace ImGuiUtils
 }  // namespace DE

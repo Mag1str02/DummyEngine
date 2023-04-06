@@ -23,7 +23,7 @@ namespace DE {
     }
 
     void GLContext::SwapBuffers() {
-        // DE_PROFILE_SCOPE("Context SwapBuffers");
+        DE_PROFILE_SCOPE("Context SwapBuffers");
 
         glfwSwapBuffers(m_Window);
     }

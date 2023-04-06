@@ -45,6 +45,7 @@ namespace DE {
         void EditProperty(std::string name, Vec3& vec, PropertyType property_type = PropertyType::None);
         void EditProperty(std::string name, Vec4& vec, PropertyType property_type = PropertyType::None);
         void EditProperty(const std::string& name, ImVec4& vec, PropertyType property_type = PropertyType::None);
+        void EditProperty(const std::string& name, Entity& entity, Ref<Scene> scene);
     }  // namespace ImGuiUtils
 
 }  // namespace DE

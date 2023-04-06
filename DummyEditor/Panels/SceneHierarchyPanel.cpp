@@ -6,7 +6,7 @@ namespace DE {
         m_SelectedNode = SceneHierarchy::Node();
     }
     void SceneHierarchyPanel::OnImGui() {
-        DE_PROFILE_SCOPE("SceneHierarchyPanel View");
+        DE_PROFILE_SCOPE("SceneHierarchyPanel OnImGui");
         if (m_Controller) {
             if (ImGui::Begin(ICON_MD_ACCOUNT_TREE "  Scene Hierarchy")) {
                 auto scene = m_Scene.lock();
@@ -41,7 +41,7 @@ namespace DE {
                 node.AddFolder("Folder");
                 ImGui::CloseCurrentPopup();
             }
-            if (node.GetID() && ImGui::MenuItem("Rename")) {
+            if (ImGui::MenuItem("Rename")) {
                 m_Rename = node;
                 ImGui::CloseCurrentPopup();
             }
@@ -71,7 +71,7 @@ namespace DE {
     void SceneHierarchyPanel::ShowNode(SceneHierarchy::Node node) {
         bool open;
         if (node.IsFolder()) {
-            ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
+            ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
             if (node != m_Rename) {
                 flags |= ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_SpanAvailWidth;
             }
@@ -86,14 +86,10 @@ namespace DE {
                 DragTarget(node);
                 ImGui::SameLine();
                 if (m_Rename == node) {
-                    if (!ImGui::IsWindowFocused()) {
+                    ImGui::SetKeyboardFocusHere();
+                    if (ImGui::InputText(
+                            "###FolderRename", &m_Rename.GetName(), ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue)) {
                         m_Rename = SceneHierarchy::Node();
-                    } else {
-                        ImGui::SetKeyboardFocusHere();
-                        if (ImGui::InputText(
-                                "###FolderRename", &m_Rename.GetName(), ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue)) {
-                            m_Rename = SceneHierarchy::Node();
-                        }
                     }
                 } else {
                     ImGui::Text("%s", node.GetName().c_str());
@@ -135,6 +131,10 @@ namespace DE {
             m_From = node;
             ImGui::Text("%s", GetDNDText(node, m_To).c_str());
             ImGui::SetDragDropPayload("DND_HIERARCHY_NODE", &node, sizeof(node), ImGuiCond_Once);
+            if (node.IsEntity()) {
+                auto entity = node.GetEntity();
+                ImGui::SetDragDropPayload("DND_ENTITY", &entity, sizeof(entity));
+            }
             ImGui::EndDragDropSource();
         }
         ImGui::PopStyleVar();

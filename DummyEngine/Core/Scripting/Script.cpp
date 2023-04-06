@@ -16,6 +16,7 @@ namespace DE {
             case ScriptFieldType::Vec2: return "Vec2";
             case ScriptFieldType::Vec3: return "Vec3";
             case ScriptFieldType::Vec4: return "Vec4";
+            case ScriptFieldType::Entity: return "Entity";
             default: return "Unknown";
         }
     }
@@ -67,6 +68,9 @@ namespace DE {
     template <> ScriptFieldType TypeToScriptFieldType<Vec4>() {
         return ScriptFieldType::Vec4;
     }
+    template <> ScriptFieldType TypeToScriptFieldType<Entity>() {
+        return ScriptFieldType::Entity;
+    }
 
     bool Script::FieldIterator::operator==(const FieldIterator& other) const {
         return m_Script == other.m_Script && m_Iterator == other.m_Iterator;
@@ -113,5 +117,8 @@ namespace DE {
     }
     bool Script::AttachedToScene() const {
         return !m_Scene.expired() && m_Entity.Valid();
+    }
+    Ref<Scene> Script::GetScene() const {
+        return m_Scene.lock();
     }
 }  // namespace DE

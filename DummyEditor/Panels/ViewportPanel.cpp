@@ -2,8 +2,7 @@
 
 namespace DE {
     void ViewportPanel::OnImGui() {
-        DE_PROFILE_SCOPE("ViewportPanel View");
-
+        DE_PROFILE_SCOPE("ViewportPanel OnImGui");
         if (m_Controller) {
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
             if (ImGui::Begin(ICON_MD_TV "  Viewport")) {

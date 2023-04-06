@@ -53,6 +53,7 @@ namespace DE {
             if (ImGui::CollapsingHeader(ICON_MD_DESCRIPTION "  Script", ImGuiTreeNodeFlags_DefaultOpen)) {
                 ImGui::Columns(2);
                 if (component.Loaded()) {
+                    auto scene = component->GetScene();
                     for (auto [name, field] : *component) {
                         switch (field.GetType()) {
                             case ScriptFieldType::Double: ImGuiUtils::EditProperty(name.get(), field.Get<double>()); break;
@@ -70,6 +71,7 @@ namespace DE {
                             case ScriptFieldType::Vec2: ImGuiUtils::EditProperty(name.get(), field.Get<Vec2>()); break;
                             case ScriptFieldType::Vec3: ImGuiUtils::EditProperty(name.get(), field.Get<Vec3>()); break;
                             case ScriptFieldType::Vec4: ImGuiUtils::EditProperty(name.get(), field.Get<Vec4>()); break;
+                            case ScriptFieldType::Entity: ImGuiUtils::EditProperty(name.get(), field.Get<Entity>(), scene); break;
                             default: break;
                         }
                     }
@@ -146,7 +148,7 @@ namespace DE {
     }
 
     void InspectorPanel::OnImGui() {
-        DE_PROFILE_SCOPE("InspectorPanel View");
+        DE_PROFILE_SCOPE("InspectorPanel OnImGui");
         if (m_Controller) {
             if (ImGui::Begin(ICON_MD_INFO "  Inspector")) {
                 auto scene = m_Scene.lock();
