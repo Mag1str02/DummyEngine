@@ -4,27 +4,11 @@
 #include "DummyEditor/ImGuiUtils/ImGuiIcons.h"
 
 namespace DE {
-    class ImGuiItem {
-    public:
-        ImGuiItem(const std::string& name) : m_Name(name) {}
-        virtual ~ImGuiItem() = default;
-
-        virtual void       OnImGui() = 0;
-        void               Enable();
-        void               Disable();
-        bool&              GetController();
-        const std::string& GetName() const;
-
-    protected:
-        bool        m_Controller = true;
-        std::string m_Name       = "UnnamedItem";
-    };
-
     namespace ImGuiUtils {
         namespace Constants {
             constexpr S32 BasicFontSize       = 16;
             constexpr S32 ColorPading         = -1;
-            constexpr S32 DefaultRightPadding = -26;
+            constexpr S32 DefaultRightPadding = -23;
             constexpr S32 DefaultLeftPadding  = 25;
         }  // namespace Constants
 

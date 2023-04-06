@@ -68,18 +68,6 @@ Scene:
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
     Scripts: ~
   Hierarchy:
-    - Entity:
-        Tag: skybox
-        UUID: 8952b3e3f10f491222a7c60918c65cf9
-        Transformation:
-          Translation: [0, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [-180, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [1, 1, 1]
-          ScaleOffset: [1, 1, 1]
-        Shader: f1e74e1b9ab55315492a3d5ee699e18b
-        SkyBox: 8911b8a8458923946819fb45fbb794fd
     - Node:
         Name: Arches
         Childs:
@@ -336,7 +324,7 @@ Scene:
               RenderModel: 40fb5568addff10da5c21859fe9d3c3a
               Shader: 24116af57b6022cd2464fbf641ae946a
     - Node:
-        Name: Lights
+        Name: Enviroment
         Childs:
           - Entity:
               Tag: sun_9
@@ -520,6 +508,18 @@ Scene:
                 CLQ: [0.5, 0.00700000022, 0.000199999995]
                 InnerCone: 0
                 OuterCone: 0
+          - Entity:
+              Tag: skybox
+              UUID: 8952b3e3f10f491222a7c60918c65cf9
+              Transformation:
+                Translation: [9.03587532, 72.0855713, 198.097214]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [-180, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              Shader: f1e74e1b9ab55315492a3d5ee699e18b
+              SkyBox: 8911b8a8458923946819fb45fbb794fd
     - Node:
         Name: Objects
         Childs:

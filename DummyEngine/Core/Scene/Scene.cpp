@@ -13,17 +13,11 @@
 namespace DE {
     Scene::Scene() : m_Storage(CreateRef<Storage>()), m_RenderData(CreateRef<SceneRenderData>(this)), m_Hierarchy("Scene") {
         m_Storage->SetAddHandler<FPSCamera>([this](Entity entity) { m_RenderData->AddVPEntity(entity); });
-        m_Storage->SetAddHandler<TagComponent>([this](Entity entity) {
-            auto& name = entity.Get<TagComponent>();
-            DE_ASSERT(m_EntityByTag.find(name) == m_EntityByTag.end(), "Name collision occured (", name.Get(), ")");
-            m_EntityByTag[name] = entity;
-        });
         m_Storage->SetAddHandler<IDComponent>([this](Entity entity) {
             auto id = entity.Get<IDComponent>();
             DE_ASSERT(m_EntityByID.find(id) == m_EntityByID.end(), "UUID collision occured (", id.Get(), ")");
             m_EntityByID[id] = entity;
         });
-        m_Storage->SetRemoveHandler<TagComponent>([this](Entity entity) { m_EntityByTag.erase(entity.Get<TagComponent>()); });
         m_Storage->SetRemoveHandler<IDComponent>([this](Entity entity) { m_EntityByID.erase(entity.Get<IDComponent>()); });
         m_Storage->SetRemoveHandler<ScriptComponent>([this](Entity entity) { entity.Get<ScriptComponent>().Destroy(); });
     }
@@ -38,19 +32,16 @@ namespace DE {
     }
     Entity Scene::CreateEntity(const std::string& name, bool visisble) {
         Entity new_entity = m_Storage->CreateEntity();
-        new_entity.AddComponent(TagComponent(GenAvilableEntityName(name)));
+        new_entity.AddComponent(TagComponent(name));
         new_entity.AddComponent(IDComponent(UUID::Generate()));
         if (visisble) {
             m_Hierarchy.AddEntity(new_entity);
         }
         return new_entity;
     }
-    Entity Scene::CloneEntity(const std::string& entity_to_clone, const std::string& new_name) {
-        DE_ASSERT(false, "Clone of entity not implemented yet.");
-        return m_Storage->CreateEntity();
-    }
-    bool Scene::ExistsEntityWithTag(const TagComponent& name) {
-        return m_EntityByTag.contains(name);
+    Entity Scene::CloneEntity(Entity entity) {
+        // DE_ASSERT(false, "Clone of entity not implemented yet.");
+        return CreateEntity("Entity", false);
     }
     bool Scene::ExistsEntityWithID(UUID id) {
         return m_EntityByID.contains(id);
@@ -59,12 +50,8 @@ namespace DE {
     Entity Scene::GetByID(UUID uuid) {
         return (m_EntityByID.contains(uuid) ? m_EntityByID.at(uuid) : Entity());
     }
-    Entity Scene::GetByTag(const std::string& name) {
-        return (m_EntityByTag.contains(name) ? m_EntityByTag.at(name) : Entity());
-    }
-
-    SceneHierarchy& Scene::GetHierarchy() {
-        return m_Hierarchy;
+    SceneHierarchy::Node Scene::GetHierarchyRoot() {
+        return m_Hierarchy.GetRoot();
     }
 
     void Scene::OnUpdate(double dt) {
@@ -98,14 +85,5 @@ namespace DE {
                 component->OnUpdate(dt);
             }
         }
-    }
-
-    std::string Scene::GenAvilableEntityName(const std::string& prefered) {
-        std::string name = prefered;
-        U32         cnt  = 0;
-        while (ExistsEntityWithTag(name)) {
-            name = StrCat(prefered, "(", ++cnt, ")");
-        }
-        return name;
     }
 }  // namespace DE

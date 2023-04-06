@@ -66,7 +66,7 @@ namespace DE {
     }
     template <> void SaveComponent<TagComponent>(YAML::Node& n_Entity, Entity entity) {
         if (entity.Has<TagComponent>()) {
-            n_Entity["Tag"] = entity.Get<TagComponent>().Get();
+            n_Entity["Tag"] = entity.Get<TagComponent>().tag;
         }
     }
     template <> void SaveComponent<IDComponent>(YAML::Node& n_Entity, Entity entity) {
@@ -457,7 +457,7 @@ namespace DE {
     Ref<Scene> SceneLoader::Serialize(const YAML::Node& hierarchy) {
         try {
             Ref<Scene> scene = CreateRef<Scene>();
-            LoadHierarchyNode(scene, hierarchy, scene->GetHierarchy().GetRoot());
+            LoadHierarchyNode(scene, hierarchy, scene->GetHierarchyRoot());
             LOG_INFO("SceneLoader", "Serialized scene");
             return scene;
         } catch (...) {
@@ -466,7 +466,7 @@ namespace DE {
         }
     }
     YAML::Node SceneLoader::Deserialize(Ref<Scene> scene) {
-        return SaveNode(scene->GetHierarchy().GetRoot());
+        return SaveNode(scene->GetHierarchyRoot());
     }
     bool SceneLoader::SaveScene(const SceneFileData& data, const Path& path) {
         try {

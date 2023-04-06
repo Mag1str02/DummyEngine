@@ -1,7 +1,7 @@
 #include "DummyEditor/ImGuiUtils/ImGuiManager.h"
 
 namespace DE {
-    void ImGuiManager::SetMenuBar(ImGuiItem* bar) {
+    void ImGuiManager::SetMenuBar(ImGuiPanel* bar) {
         m_MenuBar = bar;
     }
     void ImGuiManager::AddPanel(ImGuiPanel* panel) {

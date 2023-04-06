@@ -114,10 +114,4 @@ namespace DE {
     bool Script::AttachedToScene() const {
         return !m_Scene.expired() && m_Entity.Valid();
     }
-    Entity Script::GetEntityByName(const std::string& name) const {
-        auto scene = m_Scene.lock();
-        DE_ASSERT(scene, "Using invalid scene in script");
-        return scene->GetByTag(name);
-    };
-
 }  // namespace DE

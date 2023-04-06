@@ -15,7 +15,7 @@ namespace DE {
 
         ImVec4 Text           = ImGuiUtils::U32ToColor(0xFFFFFFFF);
         ImVec4 TextDisabled   = ImGuiUtils::U32ToColor(0xFF797979);
-        ImVec4 WidgetInactive = ImGuiUtils::U32ToColor(0xFF333333);
+        ImVec4 WidgetInactive = ImGuiUtils::U32ToColor(0xFF3E3E3E);
         ImVec4 WidgetHovered  = ImGuiUtils::U32ToColor(0xFF4D4D4D);
         ImVec4 WidgetActive   = ImGuiUtils::U32ToColor(0xFF4D4D4D);
         ImVec4 Button         = ImGuiUtils::U32ToColor(0xFF585858);
@@ -26,15 +26,17 @@ namespace DE {
     };
     class ThemePanel : public ImGuiPanel {
     public:
-        ThemePanel() : ImGuiPanel(ICON_MD_BRUSH "  ThemePanel") { SetDefaultTheme(); }
+        ThemePanel();
 
         void               SetTheme(const EditorTheme& name);
         void               SetDefaultTheme();
         const EditorTheme& GetCurrentTheme();
 
-        virtual void View() override;
+        virtual void OnImGui() override;
 
     private:
+        void SetDefaultStyle();
+
         EditorTheme m_ActiveTheme;
     };
 }  // namespace DE

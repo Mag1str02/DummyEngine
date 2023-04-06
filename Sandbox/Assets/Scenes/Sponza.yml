@@ -28,13 +28,13 @@ Scene:
         UUID: 8e0df0e696a071bec7e8cc15f2430fa4
   Hierarchy:
     - Node:
-        Name: Light
+        Name: Lamps
         Childs:
           - Entity:
               Tag: LampBlue
               UUID: 76151602bc2d78e0264e42da85cd5748
               Transformation:
-                Translation: [-25, 3, 5.84769535]
+                Translation: [-25, 3, -0.625530243]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -48,7 +48,7 @@ Scene:
                 Diffuse: [0, 0, 1]
                 Specular: [0, 0, 1]
                 Direction: [0, -1, 0]
-                Position: [-25, 3, 5.85369873]
+                Position: [-25, 3, -0.61702919]
                 CLQ: [1, 0.00700000022, 0.000199999995]
                 InnerCone: 0
                 OuterCone: 0
@@ -64,7 +64,7 @@ Scene:
               Tag: LampGreen
               UUID: 44a9b096e51040cdd8df66953f111c67
               Transformation:
-                Translation: [-3.95764732, 3, -1]
+                Translation: [-20, 3, -1]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -78,7 +78,7 @@ Scene:
                 Diffuse: [0, 1, 0]
                 Specular: [0, 1, 0]
                 Direction: [0, -1, 0]
-                Position: [-3.92469215, 3, -1]
+                Position: [-20, 3, -1]
                 CLQ: [1, 0.0219999999, 0.00190000003]
                 InnerCone: 0
                 OuterCone: 0
@@ -94,7 +94,7 @@ Scene:
               Tag: LampRed
               UUID: 1f865d0ed12e29e12ab57853f84b7da1
               Transformation:
-                Translation: [22, 3, -5.84769535]
+                Translation: [22, 3, 0.625530243]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -108,7 +108,7 @@ Scene:
                 Diffuse: [1, 0, 0]
                 Specular: [1, 0, 0]
                 Direction: [0, -1, 0]
-                Position: [22, 3, -5.85369873]
+                Position: [22, 3, 0.61702919]
                 CLQ: [1, 0.0219999999, 0.00190000003]
                 InnerCone: 0
                 OuterCone: 0
@@ -121,7 +121,7 @@ Scene:
                   height: 3
                   cycle_time: 16
     - Node:
-        Name: Objects
+        Name: Enviroment
         Childs:
           - Entity:
               Tag: Sponza

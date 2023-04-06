@@ -14,21 +14,20 @@ namespace DE {
         }
     }
 
-    template <typename Component> void InspectorPanel::DrawComponentWidget(Ref<Scene> scene, Entity entity) {
+    template <typename Component> void InspectorPanel::DrawComponentWidget(Entity entity) {
         if (m_Entity.Has<Component>()) {
-            std::string name = DemangledName<Component>();
-            if (ImGui::CollapsingHeader(name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+            std::string header = ICON_MD_REPORT_PROBLEM "  " + DemangledName<Component>();
+            if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
                 ImGui::SetCursorPosX(ImGuiUtils::Constants::DefaultLeftPadding);
-                ImGui::Text("Widget for %s not yet implmented", name.c_str());
+                ImGui::Text("Widget for %s not yet implmented", DemangledName<Component>().c_str());
             }
         }
     }
 
-    template <> void InspectorPanel::DrawComponentWidget<TransformComponent>(Ref<Scene> scene, Entity entity) {
+    template <> void InspectorPanel::DrawComponentWidget<TransformComponent>(Entity entity) {
         if (m_Entity.Has<TransformComponent>()) {
             if (ImGui::CollapsingHeader(ICON_MD_OPEN_IN_FULL "  Transformation", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto& transform = m_Entity.Get<TransformComponent>();
-
                 ImGui::Columns(2);
                 ImGuiUtils::EditProperty("Translation", transform.translation);
                 ImGuiUtils::EditProperty("Scale", transform.scale);
@@ -38,42 +37,17 @@ namespace DE {
             }
         }
     }
-    template <> void InspectorPanel::DrawComponentWidget<TagComponent>(Ref<Scene> scene, Entity entity) {
+    template <> void InspectorPanel::DrawComponentWidget<TagComponent>(Entity entity) {
         if (m_Entity.Has<TagComponent>()) {
-            // TODO: Find proper library function or write own
-            auto&      component = m_Entity.Get<TagComponent>();
-            static int swap      = 2;
+            auto& component = m_Entity.Get<TagComponent>();
             if (ImGui::CollapsingHeader(ICON_MD_VIEW_IN_AR "  Tag", ImGuiTreeNodeFlags_DefaultOpen)) {
-                static std::string current_name = "";
-                if (swap == 2) {
-                    current_name = component.Get();
-                }
-                if (swap == 1) {
-                    m_Entity.Remove<TagComponent>();
-                    m_Entity.AddComponent<TagComponent>(scene->GenAvilableEntityName(current_name));
-                }
-                swap = 0;
                 ImGui::Columns(2);
-                ImGui::SetCursorPosX(ImGuiUtils::Constants::DefaultLeftPadding);
-                ImGui::Text("Tag");
-                ImGui::NextColumn();
-                ImGui::SetNextItemWidth(ImGuiUtils::Constants::DefaultRightPadding);
-
-                ImGui::InputText("##", &current_name, ImGuiInputTextFlags_CharsNoBlank);
-                if (ImGui::IsItemDeactivatedAfterEdit()) {
-                    swap = 1;
-                }
-                if (ImGui::IsItemActivated()) {
-                    swap = 2;
-                }
-                ImGui::NextColumn();
+                ImGuiUtils::EditProperty("Tag", component.tag);
                 ImGui::Columns(1);
-            } else {
-                swap = 2;
             }
         }
     }
-    template <> void InspectorPanel::DrawComponentWidget<ScriptComponent>(Ref<Scene> scene, Entity entity) {
+    template <> void InspectorPanel::DrawComponentWidget<ScriptComponent>(Entity entity) {
         if (m_Entity.Has<ScriptComponent>()) {
             auto& component = m_Entity.Get<ScriptComponent>();
             if (ImGui::CollapsingHeader(ICON_MD_DESCRIPTION "  Script", ImGuiTreeNodeFlags_DefaultOpen)) {
@@ -107,7 +81,7 @@ namespace DE {
             }
         }
     }
-    template <> void InspectorPanel::DrawComponentWidget<FPSCamera>(Ref<Scene> scene, Entity entity) {
+    template <> void InspectorPanel::DrawComponentWidget<FPSCamera>(Entity entity) {
         if (m_Entity.Has<FPSCamera>()) {
             if (ImGui::CollapsingHeader(ICON_MD_VIDEOCAM "  FPSCamera", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto& camera = m_Entity.Get<FPSCamera>();
@@ -134,7 +108,7 @@ namespace DE {
             }
         }
     }
-    template <> void InspectorPanel::DrawComponentWidget<LightSource>(Ref<Scene> scene, Entity entity) {
+    template <> void InspectorPanel::DrawComponentWidget<LightSource>(Entity entity) {
         if (m_Entity.Has<LightSource>()) {
             if (ImGui::CollapsingHeader(ICON_MD_LIGHTBULB "  LightSoruce", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto&       source        = m_Entity.Get<LightSource>();
@@ -171,20 +145,22 @@ namespace DE {
         }
     }
 
-    void InspectorPanel::View() {
+    void InspectorPanel::OnImGui() {
         DE_PROFILE_SCOPE("InspectorPanel View");
-        auto scene = m_Scene.lock();
-        if (!scene) {
-            return;
-        }
-
-        if (m_Entity.Valid()) {
-            DrawComponentWidget<TagComponent>(scene, m_Entity);
-            DrawComponentWidget<ScriptComponent>(scene, m_Entity);
-            DrawComponentWidget<TransformComponent>(scene, m_Entity);
-            DrawComponentWidget<FPSCamera>(scene, m_Entity);
-            DrawComponentWidget<LightSource>(scene, m_Entity);
-            DrawComponentWidget<RenderMeshComponent>(scene, m_Entity);
+        if (m_Controller) {
+            if (ImGui::Begin(ICON_MD_INFO "  Inspector")) {
+                auto scene = m_Scene.lock();
+                if (scene && m_Entity.Valid()) {
+                    DrawComponentWidget<TagComponent>(m_Entity);
+                    DrawComponentWidget<ScriptComponent>(m_Entity);
+                    DrawComponentWidget<TransformComponent>(m_Entity);
+                    DrawComponentWidget<FPSCamera>(m_Entity);
+                    DrawComponentWidget<LightSource>(m_Entity);
+                    DrawComponentWidget<RenderMeshComponent>(m_Entity);
+                    DrawComponentWidget<SkyBox>(m_Entity);
+                }
+            }
+            ImGui::End();
         }
     }
     void InspectorPanel::SetActiveEntity(Entity entity) {

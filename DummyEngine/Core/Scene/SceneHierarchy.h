@@ -13,16 +13,22 @@ namespace DE {
             bool Valid() const;
             bool IsEntity() const;
             bool IsFolder() const;
+            bool IsAnsestorOf(const Node& child) const;
+
             U32  GetID() const;
             Node GetParent() const;
 
             bool Attach(Node other);
             Node AddEntity(Entity entity);
             Node AddFolder(const std::string& name);
+            void Delete();
 
-            Entity             GetEntity() const;
-            std::vector<Node>  GetChilds() const;
-            const std::string& GetName() const;
+            Entity            GetEntity() const;
+            std::vector<Node> GetChilds() const;
+            std::string&      GetName();
+
+            bool operator==(const Node& other) const;
+            bool operator!=(const Node& other) const;
 
         private:
             friend class SceneHierarchy;
@@ -41,7 +47,7 @@ namespace DE {
         bool Attach(Node parent, Node child);
 
     private:
-        bool IsAnsestor(U32 parent, U32 child);
+        bool IsAnsestor(U32 parent, U32 child) const;
 
         struct NodeData {
             NodeData() = default;

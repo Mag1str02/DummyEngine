@@ -5,10 +5,8 @@
 namespace DE {
     class ViewportPanel : public ImGuiPanel {
     public:
-        ViewportPanel() : ImGuiPanel(ICON_MD_TV "  Viewport") {}
-        virtual void View() override;
-        virtual void PushStyle() override { ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)); }
-        virtual void PopStyle() override { ImGui::PopStyleVar(); }
+        ViewportPanel() : ImGuiPanel("Viewport") {}
+        virtual void OnImGui() override;
 
         void SetFrameBuffer(Ref<FrameBuffer> buffer);
         U32  GetWidth() const { return m_ViewportSize.x; }

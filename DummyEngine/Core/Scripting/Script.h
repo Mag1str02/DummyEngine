@@ -27,7 +27,7 @@ namespace DE {
     };
     struct ScriptClassField {
         ScriptFieldType type;
-        U32            offset;
+        U32             offset;
     };
 
     class Script {
@@ -91,7 +91,6 @@ namespace DE {
         template <typename T> T&   Get();
         template <typename T> bool Has();
         template <typename T> void Remove();
-        Entity                     GetEntityByName(const std::string& name) const;
 
         WeakRef<Scene> m_Scene;
         Entity         m_Entity;

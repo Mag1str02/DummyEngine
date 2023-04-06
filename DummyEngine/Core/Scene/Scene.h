@@ -17,18 +17,13 @@ namespace DE {
 
         Entity CreateEmptyEntity();
         Entity CreateEntity(const std::string& name = "Entity", bool visisble = true);
-        Entity CloneEntity(const std::string& entity_to_clone, const std::string& new_name);
+        Entity CloneEntity(Entity entity);
 
-        bool ExistsEntityWithTag(const TagComponent& name);
-        bool ExistsEntityWithID(UUID id);
+        bool   ExistsEntityWithID(UUID id);
+        Entity GetByID(UUID uuid);
 
-        Entity      GetByID(UUID uuid);
-        Entity      GetByTag(const std::string& name);
-        std::string GenAvilableEntityName(const std::string& prefered);
-
-        Entity GetCamera();
-        // TODO: maybe expose only root node
-        SceneHierarchy& GetHierarchy();
+        Entity               GetCamera();
+        SceneHierarchy::Node GetHierarchyRoot();
         // TODO: remove when render graph implemented
         Ref<SceneRenderData> GetRenderData() { return m_RenderData; }
 
@@ -44,10 +39,9 @@ namespace DE {
         friend class ScriptEngine;
         friend class SceneRenderData;
 
-        Ref<Storage>                             m_Storage;
-        Ref<SceneRenderData>                     m_RenderData;
-        SceneHierarchy                           m_Hierarchy;
-        std::unordered_map<UUID, Entity>         m_EntityByID;
-        std::unordered_map<TagComponent, Entity> m_EntityByTag;
+        Ref<Storage>                     m_Storage;
+        Ref<SceneRenderData>             m_RenderData;
+        SceneHierarchy                   m_Hierarchy;
+        std::unordered_map<UUID, Entity> m_EntityByID;
     };
 }  // namespace DE

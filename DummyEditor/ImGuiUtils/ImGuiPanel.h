@@ -4,14 +4,19 @@
 #include "DummyEditor/ImGuiUtils/ImGuiUtils.h"
 
 namespace DE {
-    class ImGuiPanel : public ImGuiItem {
+    class ImGuiPanel {
     public:
-        ImGuiPanel(const std::string& name) : ImGuiItem(name) {}
+        ImGuiPanel(const std::string& name) : m_Name(name) {}
         virtual ~ImGuiPanel() = default;
-        virtual void View()   = 0;
-        virtual void PushStyle() {}
-        virtual void PopStyle() {}
 
-        virtual void OnImGui() final;
+        virtual void       OnImGui() = 0;
+        void               Enable();
+        void               Disable();
+        bool&              GetController();
+        const std::string& GetName() const;
+
+    protected:
+        bool        m_Controller = true;
+        std::string m_Name       = "UnnamedPanel";
     };
 }  // namespace DE

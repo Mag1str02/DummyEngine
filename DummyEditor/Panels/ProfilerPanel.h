@@ -5,8 +5,8 @@
 namespace DE {
     class ProfilerPanel : public ImGuiPanel {
     public:
-        ProfilerPanel() : ImGuiPanel(ICON_MD_SPEED "  Profiler") {}
-        virtual void View() override;
+        ProfilerPanel() : ImGuiPanel("Profiler") {}
+        virtual void OnImGui() override;
 
     private:
         void RenderTimeLapse(const std::vector<TimeLapse>& time_lapses, U32 index);

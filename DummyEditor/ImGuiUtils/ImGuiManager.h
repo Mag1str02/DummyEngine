@@ -5,13 +5,12 @@
 #include "DummyEditor/ImGuiUtils/ImGuiUtils.h"
 
 namespace DE {
-    class MenuBar;
     class ImGuiManager {
     public:
         ImGuiManager() = default;
 
         const std::vector<ImGuiPanel*>& GetPanels();
-        void                            SetMenuBar(ImGuiItem* bar);
+        void                            SetMenuBar(ImGuiPanel* bar);
         void                            AddPanel(ImGuiPanel* panel);
         void                            OnImGui();
 
@@ -19,7 +18,7 @@ namespace DE {
 
     private:
         void                     CreateDockingSpace();
-        ImGuiItem*               m_MenuBar;
+        ImGuiPanel*              m_MenuBar;
         std::vector<ImGuiPanel*> m_Panels;
     };
 }  // namespace DE

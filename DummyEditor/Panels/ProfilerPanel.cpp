@@ -1,11 +1,16 @@
 #include "DummyEditor/Panels/ProfilerPanel.h"
 
 namespace DE {
-    void ProfilerPanel::View() {
+    void ProfilerPanel::OnImGui() {
         DE_PROFILE_SCOPE("ProfilerPanel OnImGuiRender");
+        if (m_Controller) {
+            if (ImGui::Begin(ICON_MD_SPEED "  Profiler")) {
 #if DE_ENABLE_PROFILER
-        RenderTimeLapse(Profiler::GetOldestFrame().m_TimeLapses, 0);
+                RenderTimeLapse(Profiler::GetOldestFrame().m_TimeLapses, 0);
 #endif
+            }
+            ImGui::End();
+        }
     }
 
     void ProfilerPanel::RenderTimeLapse(const std::vector<TimeLapse>& time_lapses, U32 index) {

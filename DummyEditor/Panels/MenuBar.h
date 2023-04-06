@@ -1,15 +1,16 @@
 #pragma once
 
 #include "DummyEditor/DummyEngineInclude.h"
-#include "DummyEditor/ImGuiUtils/ImGuiUtils.h"
+#include "DummyEditor/ImGuiUtils/ImGuiPanel.h"
 
 namespace DE {
     class EditorLayer;
-    class MenuBar : public ImGuiItem {
+    class MenuBar : public ImGuiPanel {
     public:
-        MenuBar() : ImGuiItem("MenuBar") {}
+        MenuBar() : ImGuiPanel("MenuBar") {}
+        virtual void OnImGui() override;
+
         void AttachToEditor(EditorLayer* editor);
-        void OnImGui() override;
 
     private:
         void ViewMenu();

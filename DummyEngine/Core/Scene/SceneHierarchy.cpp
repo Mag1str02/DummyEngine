@@ -12,6 +12,12 @@ namespace DE {
     bool SceneHierarchy::Node::IsFolder() const {
         return m_ID != -1 && m_Owner && std::holds_alternative<NodeData::FolderNode>(m_Owner->m_Nodes[m_ID].node);
     }
+    bool SceneHierarchy::Node::IsAnsestorOf(const Node& child) const {
+        if (!Valid() || !child.Valid() || m_Owner != child.m_Owner) {
+            return false;
+        }
+        return m_Owner->IsAnsestor(m_ID, child.m_ID);
+    }
     U32 SceneHierarchy::Node::GetID() const {
         return m_ID;
     }
@@ -36,6 +42,11 @@ namespace DE {
         m_Owner->Attach(*this, folder);
         return folder;
     }
+    void SceneHierarchy::Node::Delete() {
+        DE_ASSERT(m_ID != -1 && m_Owner, "Use of Delete on invalid SceneHierarchy::Node");
+        m_Owner->DeleteNode(*this);
+        *this = Node();
+    }
 
     Entity SceneHierarchy::Node::GetEntity() const {
         DE_ASSERT(IsEntity(), "Use of GetEntity on non entity node");
@@ -51,10 +62,16 @@ namespace DE {
         }
         return res;
     }
-    const std::string& SceneHierarchy::Node::GetName() const {
+    std::string& SceneHierarchy::Node::GetName() {
         DE_ASSERT(IsFolder(), "Use of GetName on non folder node");
-        const auto& folder = std::get<NodeData::FolderNode>(m_Owner->m_Nodes[m_ID].node);
+        auto& folder = std::get<NodeData::FolderNode>(m_Owner->m_Nodes[m_ID].node);
         return folder.name;
+    }
+    bool SceneHierarchy::Node::operator==(const Node& other) const {
+        return m_ID == other.m_ID && m_Owner == other.m_Owner;
+    }
+    bool SceneHierarchy::Node::operator!=(const Node& other) const {
+        return m_ID != other.m_ID || m_Owner != other.m_Owner;
     }
 
     SceneHierarchy::Node::Node(SceneHierarchy* owner, U32 id) : m_Owner(owner), m_ID(id) {}
@@ -95,6 +112,13 @@ namespace DE {
     void SceneHierarchy::DeleteNode(Node node) {
         DE_ASSERT(node.m_ID < m_Nodes.size(), "Use of DeleteNode on invalid SceneHierarchy::Node");
         DE_ASSERT(node.m_ID != 0, "Use of DeleteNode on root SceneHierarchy::Node");
+        auto& parent = std::get<NodeData::FolderNode>(m_Nodes[m_Nodes[node.m_ID].parent].node);
+        for (auto it = parent.childs.begin(); it != parent.childs.end(); ++it) {
+            if (*it == node.m_ID) {
+                parent.childs.erase(it);
+                break;
+            }
+        }
         m_Nodes[node.m_ID] = NodeData();
         m_AvailableNodes.push(node.m_ID);
     }
@@ -120,7 +144,7 @@ namespace DE {
         return true;
     }
 
-    bool SceneHierarchy::IsAnsestor(U32 parent, U32 child) {
+    bool SceneHierarchy::IsAnsestor(U32 parent, U32 child) const {
         do {
             if (m_Nodes[child].parent == parent) {
                 return true;
