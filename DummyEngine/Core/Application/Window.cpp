@@ -14,7 +14,7 @@ namespace DE {
 
     Window::Window(const WindowState& state) : m_State(state) {
         m_Window = glfwCreateWindow(1280, 720, m_State.name.c_str(), NULL, NULL);
-        glfwSwapInterval(0);
+        // glfwSwapInterval(0);
         DE_ASSERT(m_Window, "Failed to create GLFW Window (", m_State.name, ")");
         LOG_INFO("Window", "Window created: ", m_State.name);
 
