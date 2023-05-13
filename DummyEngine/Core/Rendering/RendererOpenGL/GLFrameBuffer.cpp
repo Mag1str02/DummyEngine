@@ -27,7 +27,7 @@ namespace DE {
             }
         }
 
-        glCreateFramebuffers(1, &m_BufferId);
+        glGenFramebuffers(1, &m_BufferId);
         glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
 
         {
@@ -62,7 +62,7 @@ namespace DE {
     }
 
     GLFrameBuffer::GLFrameBuffer(const FrameBufferProperties& properties) : m_BufferId(0), m_Properties(properties) {
-        glCreateFramebuffers(1, &m_BufferId);
+        glGenFramebuffers(1, &m_BufferId);
     }
     GLFrameBuffer::~GLFrameBuffer() {
         glDeleteFramebuffers(1, &m_BufferId);

@@ -3,9 +3,11 @@
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLUtils.h"
 #include "DummyEngine/ToolBox/Editors/TextureEditor.h"
 
-namespace DE {
-    GLCubeMap::GLCubeMap(const Ref<TextureData> data) {
-        glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &m_MapId);
+namespace DE
+{
+    GLCubeMap::GLCubeMap(const Ref<TextureData> data)
+    {
+        glGenTextures(1, &m_MapId);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_MapId);
 
         // TODO: move somewhere else...
@@ -26,7 +28,7 @@ namespace DE {
             if (data->Width() / 4 != data->Height() / 3) {
                 error += "(Width / 4 != Height / 3)";
             }
-            LOG_WARNING("GLCubeMap", "Attempt to create cubemap with wrong texture size: ", error);
+            Logger::Warning("loading", "GLCubeMap", "Attempt to create cubemap with wrong texture size:" + error);
         }
 
         for (size_t i = 0; i < 6; ++i) {
