@@ -22,9 +22,11 @@ set(PLATFORM_SOURCES
 endif()
 if(${CMAKE_PLATFORM} STREQUAL "LINUX")
 set(PLATFORM_SOURCES
+    Platform/Linux/Scripting/Compiler.cpp
 )
 endif()
 if(${CMAKE_PLATFORM} STREQUAL "MACOS")
 set(PLATFORM_SOURCES
+    Platform/Macos/Scripting/Compiler.cpp
 )
 endif()

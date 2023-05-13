@@ -1,6 +1,8 @@
 #pragma once
 
+#include <array>
 #include <chrono>
+#include <concepts>
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
@@ -23,4 +25,3 @@
 #include <unordered_set>
 #include <variant>
 #include <vector>
-#include <concepts>

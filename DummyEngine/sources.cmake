@@ -67,15 +67,25 @@ ToolBox/Editors/TextureEditor.cpp
 
 if( ${CMAKE_PLATFORM} STREQUAL "WINDOWS")
 set(PLATFORM_SOURCES
-    Platform/Windows/Core/Application/FileSystem.cpp
     Platform/Windows/Utils/Debug/StackTrace.cpp
     Platform/Windows/Utils/Debug/Demangler.cpp
+    Platform/Windows/Core/Application/FileSystem.cpp
     Platform/Windows/Core/Scripting/SharedObject.cpp
 )
 endif()
 if(${CMAKE_PLATFORM} STREQUAL "LINUX")
-set(PLATFORM_SOURCES)
+set(PLATFORM_SOURCES
+Platform/Linux/Utils/Debug/StackTrace.cpp
+Platform/Linux/Utils/Debug/Demangler.cpp
+Platform/Linux/Core/Application/FileSystem.cpp
+Platform/Linux/Core/Scripting/SharedObject.cpp
+)
 endif()
 if(${CMAKE_PLATFORM} STREQUAL "MACOS")
-set(PLATFORM_SOURCES)
+set(PLATFORM_SOURCES
+    Platform/Macos/Utils/Debug/StackTrace.cpp
+    Platform/Macos/Utils/Debug/Demangler.cpp
+    Platform/Macos/Core/Application/FileSystem.cpp
+    Platform/Macos/Core/Scripting/SharedObject.cpp
+)
 endif()
