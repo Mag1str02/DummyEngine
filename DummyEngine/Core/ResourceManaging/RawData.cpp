@@ -7,7 +7,7 @@ namespace DE {
             case TextureFormat::RGB: return "RGB";
             case TextureFormat::RGBA: return "RGBA";
             case TextureFormat::None: return "None";
-            case TextureFormat::DepthStencil: return "DepthStencil";
+            case TextureFormat::Depth: return "Depth";
             default: return "Unknown";
         }
     }

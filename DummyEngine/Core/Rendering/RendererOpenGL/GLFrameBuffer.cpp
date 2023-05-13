@@ -36,7 +36,7 @@ namespace DE {
             for (size_t i = 0; i < m_ColorAttachments.size(); ++i) {
                 auto& attachment = m_ColorAttachments[i];
                 DE_ASSERT(IsColorFormat(attachment.m_Format),
-                          "Worng texture format for FrameBuffer color attachment (",
+                          "Wrong texture format for FrameBuffer color attachment (",
                           TextureFormatToStr(attachment.m_Format),
                           ")");
                 attachment.m_Texture = Texture::Create(m_Properties.width, m_Properties.height, attachment.m_Format);
@@ -45,7 +45,7 @@ namespace DE {
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, t_id, 0);
             }
             DE_ASSERT(IsDepthFormat(m_DepthAttachment.m_Format),
-                      "Worng texture format for FrameBuffer depth attachment (",
+                      "Wrong texture format for FrameBuffer depth attachment (",
                       TextureFormatToStr(m_DepthAttachment.m_Format),
                       ")");
             m_DepthAttachment.m_Texture = Texture::Create(m_Properties.width, m_Properties.height, m_DepthAttachment.m_Format);
