@@ -46,6 +46,7 @@ namespace DE {
             glfwSetErrorCallback(error_callback);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             ImGui::g_ImGuiFailAssert                                    = FailAssert;
             ImGui::g_ExternalSettings.DragAndDropTooltipAlphaMultiplyer = 1.0;
