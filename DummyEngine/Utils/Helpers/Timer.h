@@ -12,6 +12,6 @@ namespace DE {
         float Reset();
 
     private:
-        std::chrono::_V2::system_clock::time_point m_StartTime;
+        std::chrono::system_clock::time_point m_StartTime;
     };
 }  // namespace DE
