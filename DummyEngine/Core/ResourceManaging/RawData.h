@@ -2,7 +2,7 @@
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
-    enum class TextureFormat { None = 0, RED, RGB, RGBA, DepthStencil };
+    enum class TextureFormat { None = 0, RED, RGB, RGBA, Depth };
     enum CubeSide {
         Right  = 0,
         Left   = 1,

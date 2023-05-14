@@ -11,9 +11,11 @@ namespace DE {
             default: return false;
         }
     }
-    bool IsDepthFormat(TextureFormat format) {
-        switch (format) {
-            case TextureFormat::DepthStencil: return true;
+    bool IsDepthFormat(TextureFormat format)
+    {
+        switch (format)
+        {
+            case TextureFormat::Depth: return true;
             default: return false;
         }
     }
@@ -38,23 +40,18 @@ namespace DE {
                           TextureFormatToStr(attachment.m_Format),
                           ")");
                 attachment.m_Texture = Texture::Create(m_Properties.width, m_Properties.height, attachment.m_Format);
-
                 // TODO: Try to avoid this
-                glFramebufferTexture2D(GL_FRAMEBUFFER,
-                                       GL_COLOR_ATTACHMENT0 + i,
-                                       GL_TEXTURE_2D,
-                                       std::dynamic_pointer_cast<GLTexture>(attachment.m_Texture)->m_TextureId,
-                                       0);
+                GLuint t_id = std::dynamic_pointer_cast<GLTexture>(attachment.m_Texture)->m_TextureId;
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, t_id, 0);
             }
             DE_ASSERT(IsDepthFormat(m_DepthAttachment.m_Format),
                       "Worng texture format for FrameBuffer depth attachment (",
                       TextureFormatToStr(m_DepthAttachment.m_Format),
                       ")");
             m_DepthAttachment.m_Texture = Texture::Create(m_Properties.width, m_Properties.height, m_DepthAttachment.m_Format);
-
             // TODO: and this...
             glFramebufferTexture2D(GL_FRAMEBUFFER,
-                                   GL_DEPTH_STENCIL_ATTACHMENT,
+                                   GL_DEPTH_ATTACHMENT,
                                    GL_TEXTURE_2D,
                                    std::dynamic_pointer_cast<GLTexture>(m_DepthAttachment.m_Texture)->m_TextureId,
                                    0);
@@ -88,17 +85,13 @@ namespace DE {
                                0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-    void GLFrameBuffer::SetDepthAttachment(TextureFormat format) {
-        // TODO: Switch 8 to GPU capabilities.
+    void GLFrameBuffer::SetDepthAttachment(TextureFormat format)
+    {
         glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
         m_DepthAttachment.m_Format  = format;
         m_DepthAttachment.m_Texture = Texture::Create(m_Properties.width, m_Properties.height, format);
-        glFramebufferTexture2D(GL_FRAMEBUFFER,
-                               GL_DEPTH_STENCIL_ATTACHMENT,
-                               GL_TEXTURE_2D,
-                               std::dynamic_pointer_cast<GLTexture>(m_DepthAttachment.m_Texture)->m_TextureId,
-                               0);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glFramebufferTexture2D(
+            GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, std::dynamic_pointer_cast<GLTexture>(m_DepthAttachment.m_Texture)->m_TextureId, 0);
     }
     void GLFrameBuffer::Resize(U32 width, U32 height) {
         if ((m_Properties.width != width || m_Properties.height != height) && 0 < width && 0 < height) {

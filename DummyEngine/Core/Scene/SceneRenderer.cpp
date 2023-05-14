@@ -27,7 +27,7 @@ namespace DE {
                                          MAX_LIGHTS_IN_SCENE);
         m_FrameBuffer = FrameBuffer::Create({1920, 1080});
         m_FrameBuffer->AddColorAttachment(TextureFormat::RGBA);
-        m_FrameBuffer->SetDepthAttachment(TextureFormat::DepthStencil);
+        m_FrameBuffer->SetDepthAttachment(TextureFormat::Depth);
     }
     void SceneRenderer::OnViewPortResize(U32 x, U32 y) {
         m_FrameBuffer->Resize(x, y);
