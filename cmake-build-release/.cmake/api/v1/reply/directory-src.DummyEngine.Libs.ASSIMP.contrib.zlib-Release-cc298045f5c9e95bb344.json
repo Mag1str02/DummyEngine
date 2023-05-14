@@ -1,0 +1,45 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"INSTALL"
+		],
+		"files" : 
+		[
+			"src/DummyEngine/Libs/ASSIMP/contrib/zlib/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 201,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"src/DummyEngine/Libs/ASSIMP/contrib/zlib/libzlibstatic.a"
+			],
+			"targetId" : "zlibstatic::@0a777b992d7a686845ec",
+			"targetIndex" : 20,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "src/DummyEngine/Libs/ASSIMP/contrib/zlib",
+		"source" : "src/DummyEngine/Libs/ASSIMP/contrib/zlib"
+	}
+}

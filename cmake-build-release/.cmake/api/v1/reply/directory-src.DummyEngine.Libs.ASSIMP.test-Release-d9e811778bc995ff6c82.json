@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "src/DummyEngine/Libs/ASSIMP/test",
+		"source" : "src/DummyEngine/Libs/ASSIMP/test"
+	}
+}

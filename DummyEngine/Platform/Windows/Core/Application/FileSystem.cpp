@@ -1,11 +1,12 @@
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include "DummyEngine/Core/Application/FileSystem.h"
 
+// clang-format off
+#include "DummyEngine/Core/Application/Application.h"
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 #include <windows.h>
-
-#include "DummyEngine/Core/Application/Application.h"
+// clang-format on
 
 namespace DE {
 
