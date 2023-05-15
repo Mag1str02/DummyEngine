@@ -126,7 +126,6 @@ namespace DE {
     void SceneHierarchyPanel::DragTarget(SceneHierarchy::Node node) {
         ImGui::PushStyleVar(ImGuiStyleVar_Alpha, 1.0f);
         if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoHoldToOpenOthers)) {
-            printf("DND_SOURSE\n");
             m_From = node;
             ImGui::Text("%s", GetDNDText(node, m_To).c_str());
             ImGui::SetDragDropPayload("DND_HIERARCHY_NODE", &node, sizeof(node), ImGuiCond_Once);
@@ -139,7 +138,6 @@ namespace DE {
             return;
         }
         if (ImGui::BeginDragDropTarget()) {
-            printf("DND_TARGET\n");
             m_To        = node;
             m_WasTarget = true;
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_HIERARCHY_NODE")) {

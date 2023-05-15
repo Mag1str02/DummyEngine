@@ -7,7 +7,10 @@ namespace DE {
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
             if (ImGui::Begin(ICON_MD_TV "  Viewport")) {
                 m_ViewportSize = ImGui::GetContentRegionAvail();
-                ImGui::Image(reinterpret_cast<void*>(m_FrameBuffer->GetColorAttachment(0)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
+                auto buffer    = m_FrameBuffer.lock();
+                if (buffer) {
+                    ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(0)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
+                }
             }
             ImGui::End();
             ImGui::PopStyleVar();

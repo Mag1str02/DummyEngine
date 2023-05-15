@@ -21,7 +21,7 @@ Core/ECS/ECS.cpp
 Core/Scene/Components.cpp
 Core/Scene/Scene.cpp
 Core/Scene/SceneHierarchy.cpp
-Core/Scene/SceneRenderData.cpp
+Core/Scene/SceneRenderer.cpp
 
 Core/Objects/LightSources/LightSource.cpp
 Core/Objects/Cameras/FPSCamera.cpp

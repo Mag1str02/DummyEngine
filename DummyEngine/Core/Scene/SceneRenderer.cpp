@@ -1,8 +1,9 @@
-#include "DummyEngine/Core/Scene/SceneRenderData.h"
+#include "DummyEngine/Core/Scene/SceneRenderer.h"
 
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLDebug.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/Scene/Components.h"
 
@@ -14,24 +15,30 @@ namespace DE {
     const U32 VP_UB_ID    = 1;
     const U32 LIGHT_UB_ID = 2;
 
-    SceneRenderData::SceneRenderData(Scene* scene) : m_Scene(scene) {
-        m_VP     = UniformBuffer::Create({BufferElementType::Mat4, BufferElementType::Mat4}, MAX_VP_AMOUNT);
-        m_Lights = UniformBuffer::Create({BufferElementType::Float3,
-                                          BufferElementType::Float3,
-                                          BufferElementType::Float3,
-                                          BufferElementType::Float3,
-                                          BufferElementType::Float3,
-                                          BufferElementType::Float3,
-                                          BufferElementType::Float3},
+    SceneRenderer::SceneRenderer(Scene* scene) : m_Scene(scene) {
+        m_VP          = UniformBuffer::Create({BufferElementType::Mat4, BufferElementType::Mat4}, MAX_VP_AMOUNT);
+        m_Lights      = UniformBuffer::Create({BufferElementType::Float3,
+                                               BufferElementType::Float3,
+                                               BufferElementType::Float3,
+                                               BufferElementType::Float3,
+                                               BufferElementType::Float3,
+                                               BufferElementType::Float3,
+                                               BufferElementType::Float3},
                                          MAX_LIGHTS_IN_SCENE);
-        m_VP->Bind(VP_UB_ID);
-        m_Lights->Bind(LIGHT_UB_ID);
+        m_FrameBuffer = FrameBuffer::Create({1920, 1080});
+        m_FrameBuffer->AddColorAttachment(TextureFormat::RGBA);
+        m_FrameBuffer->SetDepthAttachment(TextureFormat::DepthStencil);
     }
-    void SceneRenderData::Render() {
+    void SceneRenderer::OnViewPortResize(U32 x, U32 y) {
+        m_FrameBuffer->Resize(x, y);
+    }
+    void SceneRenderer::Render(Entity camera) {
         DE_PROFILE_SCOPE("Scene Render");
 
-        auto camera = m_Scene->GetCamera();
-
+        m_FrameBuffer->Bind();
+        m_VP->Bind(VP_UB_ID);
+        m_Lights->Bind(LIGHT_UB_ID);
+        Renderer::OnWindowResize(m_FrameBuffer->GetWidth(), m_FrameBuffer->GetHeight());
         Renderer::Clear();
 
         UpdateVP();
@@ -45,12 +52,13 @@ namespace DE {
         }
 
         for (auto e : m_Scene->m_Storage->View<SkyBox, TransformComponent, ShaderComponent>()) {
-            e.Get<TransformComponent>().translation = m_Camera.Get<FPSCamera>().GetPos();
+            e.Get<TransformComponent>().translation = camera.Get<FPSCamera>().GetPos();
             Renderer::Submit(e.Get<SkyBox>().map, e.Get<ShaderComponent>().shader, e.Get<TransformComponent>().GetTransform());
         }
+        m_FrameBuffer->UnBind();
     }
 
-    void SceneRenderData::UpdateLights() {
+    void SceneRenderer::UpdateLights() {
         DE_PROFILE_SCOPE("UpdateLights");
 
         int cnt_light_sources = 0;
@@ -73,12 +81,12 @@ namespace DE {
             shader->SetInt("u_LightAmount", cnt_light_sources);
         }
     }
-    void SceneRenderData::UpdateVP() {
+    void SceneRenderer::UpdateVP() {
         DE_PROFILE_SCOPE("UpdateVP");
 
         for (std::pair<Entity, U32> p : m_EntityToVPIndex) {
-            Entity   entity = p.first;
-            U32 id     = p.second;
+            Entity entity = p.first;
+            U32    id     = p.second;
             if (entity.Has<FPSCamera>()) {
                 auto& camera              = entity.Get<FPSCamera>();
                 m_VP->at(id).Get<Mat4>(0) = camera.GetViewMatrix();
@@ -88,7 +96,11 @@ namespace DE {
         m_VP->PushData();
     }
 
-    void SceneRenderData::SetVPEntity(const Entity& entity) {
+    Ref<FrameBuffer> SceneRenderer::GetFrameBuffer() {
+        return m_FrameBuffer;
+    }
+
+    void SceneRenderer::SetVPEntity(const Entity& entity) {
         DE_ASSERT(m_EntityToVPIndex.contains(entity), "Wrong VP entity");
         for (auto [id, shader] : m_Shaders) {
             shader->Bind();
@@ -96,7 +108,7 @@ namespace DE {
         }
     }
 
-    void SceneRenderData::RequestShader(UUID shader_id) {
+    void SceneRenderer::RequestShader(UUID shader_id) {
         if (!m_Shaders.contains(shader_id)) {
             auto shader = ResourceManager::GetShader(shader_id);
             if (shader) {
@@ -104,21 +116,18 @@ namespace DE {
                 m_Shaders[shader_id]->SetUnifromBlock("ub_Lights", LIGHT_UB_ID);
                 m_Shaders[shader_id]->SetUnifromBlock("ub_VP", VP_UB_ID);
             } else {
-                LOG_WARNING("SceneRenderData", "Shader (", shader_id, ") not found in ResourceManager");
+                LOG_WARNING("SceneRenderer", "Shader (", shader_id, ") not found in ResourceManager");
             }
         }
     }
-    void SceneRenderData::AddVPEntity(const Entity& entity) {
+    void SceneRenderer::AddVPEntity(const Entity& entity) {
         if (!m_EntityToVPIndex.contains(entity)) {
-            U32 index            = m_EntityToVPIndex.size();
+            U32 index                 = m_EntityToVPIndex.size();
             m_EntityToVPIndex[entity] = index;
         }
     }
-    void SceneRenderData::SetCamera(const Entity& camera) {
-        m_Camera = camera;
-    }
 
-    Ref<RenderMeshInstance> SceneRenderData::GetRenderMeshInstance(UUID mesh_id, UUID shader_id) {
+    Ref<RenderMeshInstance> SceneRenderer::GetRenderMeshInstance(UUID mesh_id, UUID shader_id) {
         if (!m_InstancedMeshes.contains({mesh_id, shader_id})) {
             CreateInstancedMesh(mesh_id, shader_id);
         }
@@ -127,13 +136,13 @@ namespace DE {
         return instance;
     }
 
-    void SceneRenderData::CreateInstancedMesh(UUID mesh_id, UUID shader_id) {
+    void SceneRenderer::CreateInstancedMesh(UUID mesh_id, UUID shader_id) {
         auto mesh   = ResourceManager::GetRenderMesh(mesh_id);
         auto shader = ResourceManager::GetShader(shader_id);
         if (!mesh) {
-            LOG_WARNING("SceneRenderData", "RenderMesh (", mesh_id, ") not found in ResourceManager");
+            LOG_WARNING("SceneRenderer", "RenderMesh (", mesh_id, ") not found in ResourceManager");
         } else if (!shader) {
-            LOG_WARNING("SceneRenderData", "Shader (", shader_id, ") not found in ResourceManager");
+            LOG_WARNING("SceneRenderer", "Shader (", shader_id, ") not found in ResourceManager");
         } else {
             m_InstancedMeshes[{mesh_id, shader_id}] = {mesh.value()->Copy(), shader.value()};
             m_InstancedMeshes[{mesh_id, shader_id}].first->SetInstanceBuffer({{BufferElementType::Mat4}, 1}, MAX_INSTANCES_PER_BUFFER);

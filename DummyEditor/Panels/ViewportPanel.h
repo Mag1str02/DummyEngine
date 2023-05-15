@@ -14,6 +14,6 @@ namespace DE {
 
     private:
         ImVec2           m_ViewportSize;
-        Ref<FrameBuffer> m_FrameBuffer;
+        WeakRef<FrameBuffer> m_FrameBuffer;
     };
 }  // namespace DE

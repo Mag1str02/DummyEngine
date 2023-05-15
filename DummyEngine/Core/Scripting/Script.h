@@ -71,9 +71,11 @@ namespace DE {
         Script& operator=(const Script&) = delete;
         Script& operator=(Script&&)      = delete;
 
-        virtual void OnCreate() {}
+        virtual void OnAttach() {}
+        virtual void OnRuntimeStart() {}
         virtual void OnUpdate(float dt) {}
-        virtual void OnDestroy() {}
+        virtual void OnRuntimeStop() {}
+        virtual void OnDetach() {}
 
         FieldIterator begin();
         FieldIterator end();
@@ -148,21 +150,29 @@ namespace DE {
         m_Entity.Remove<T>();
     }
 
-#define FIELD(field)                                                                              \
-    {                                                                                             \
-#field, { TypeToScriptFieldType<decltype(field)>(), OffsetOf(&CurrentScriptType::field) } \
+#define FIELD(field)                                                                      \
+    {                                                                                     \
+        #field, {                                                                         \
+            TypeToScriptFieldType<decltype(field)>(), OffsetOf(&CurrentScriptType::field) \
+        }                                                                                 \
     }
 
-#define SCRIPT(type)                                                              \
-    static const std::unordered_map<std::string, ScriptClassField> s_ClassFields; \
-                                                                                  \
-protected:                                                                        \
-    virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const override { return s_ClassFields; }
+#define SCRIPT(type)                                                                                   \
+    static const std::unordered_map<std::string, ScriptClassField> s_ClassFields;                      \
+                                                                                                       \
+protected:                                                                                             \
+    virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const override { \
+        return s_ClassFields;                                                                          \
+    }
 
-#define SCRIPT_BASE(type, ...)                                                                    \
-    using CurrentScriptType                                                     = type;           \
-    const std::unordered_map<std::string, ScriptClassField> type::s_ClassFields = {__VA_ARGS__};  \
-    DE_SCRIPT_API Script*                                   type##Create() { return new type(); } \
-    DE_SCRIPT_API void                                      type##Delete(Script* script) { delete script; }
+#define SCRIPT_BASE(type, ...)                                                                   \
+    using CurrentScriptType                                                     = type;          \
+    const std::unordered_map<std::string, ScriptClassField> type::s_ClassFields = {__VA_ARGS__}; \
+    DE_SCRIPT_API Script*                                   type##Create() {                     \
+        return new type();                                     \
+    }                                                                                            \
+    DE_SCRIPT_API void type##Delete(Script* script) {                                            \
+        delete script;                                                                           \
+    }
 
 }  // namespace DE

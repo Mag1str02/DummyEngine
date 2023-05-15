@@ -5,7 +5,6 @@ using namespace DE;
 class SinMovement : public Script {
     SCRIPT(SinMovement)
 public:
-    virtual void OnCreate() override {}
     virtual void OnUpdate(float dt) override {
         DE_PROFILE_SCOPE("SinMovement");
         current_time += dt * Speed;
@@ -13,7 +12,6 @@ public:
         float d   = (sin(current_time) + 1) / 2;
         pos       = d * PosA + (1 - d) * PosB;
     }
-    virtual void OnDestroy() override {}
 
 private:
     Vec3  PosA         = Vec3(0, 0, 0);

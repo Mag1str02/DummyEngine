@@ -114,6 +114,9 @@ namespace DE {
     void Renderer::SetClearColor(float r, float g, float b, float a) {
         m_RenderAPI->SetClearColor(Vec4(r, g, b, a));
     }
+    void Renderer::SetDefaultFrameBuffer() {
+        m_RenderAPI->SetDefaultFrameBuffer();
+    }
 
     Ref<Texture> Renderer::GetDefaultTexture() {
         return m_DefaultTexture;

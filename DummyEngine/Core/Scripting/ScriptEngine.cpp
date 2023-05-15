@@ -24,6 +24,84 @@ namespace DE {
         return ScriptEngine::GetScript(*this);
     }
 
+    bool ScriptProxyManager::Iterator::operator==(const Iterator& other) const {
+        return m_Manager == other.m_Manager && m_ID == other.m_ID;
+    }
+    bool ScriptProxyManager::Iterator::operator!=(const Iterator& other) const {
+        return m_ID != other.m_ID || m_Manager != other.m_Manager;
+    }
+
+    ScriptProxyManager::Iterator& ScriptProxyManager::Iterator::operator++() {
+        do {
+            ++m_ID;
+        } while (m_ID < m_Manager->m_States.size() && !m_Manager->m_States[m_ID]);
+        return *this;
+    }
+    ScriptProxyManager::Iterator ScriptProxyManager::Iterator::operator++(int) {
+        Iterator res = *this;
+        return ++(*this);
+    }
+    ScriptProxy& ScriptProxyManager::Iterator::operator*() {
+        return m_Manager->m_Proxys[m_ID];
+    }
+    ScriptProxy* ScriptProxyManager::Iterator::operator->() {
+        return &(m_Manager->m_Proxys[m_ID]);
+    }
+
+    ScriptProxyManager::Iterator::Iterator(ScriptProxyManager* manager, U32 id) : m_Manager(manager), m_ID(id) {}
+
+    ScriptProxyManager::Iterator ScriptProxyManager::begin() {
+        int id = 0;
+        while (id < m_States.size() && !m_States[id]) {
+            ++id;
+        }
+        return Iterator(this, id);
+    }
+    ScriptProxyManager::Iterator ScriptProxyManager::end() {
+        return Iterator(this, m_States.size());
+    }
+
+    void ScriptProxyManager::Clear() {
+        m_States.clear();
+        m_Proxys.clear();
+        m_Generations.clear();
+        m_States.clear();
+    }
+    bool ScriptProxyManager::Valid(U32 id, U32 gen) {
+        return id < m_Proxys.size() && m_States[id] && m_Generations[id] == gen;
+    }
+    void ScriptProxyManager::Destroy(U32 id) {
+        m_AvailableIds.push_back(id);
+        m_States[id] = false;
+        // LOG_INFO("ScriptProxyManager", "Destroyed handle (", id, ")");
+    }
+    void ScriptProxyManager::Destroy(Iterator it) {
+        Destroy(it.m_ID);
+    }
+
+    ScriptProxy& ScriptProxyManager::GetProxy(U32 id) {
+        return m_Proxys[id];
+    }
+    std::pair<U32, U32> ScriptProxyManager::CreateProxy() {
+        ExtendIfRequired();
+        U32 id = m_AvailableIds.front();
+        m_AvailableIds.pop_front();
+        m_States[id]          = true;
+        m_Proxys[id].m_ID     = UUID();
+        m_Proxys[id].m_Script = nullptr;
+        // LOG_INFO("ScriptProxyManager", "Created handle (", id, ")");
+        return {id, ++m_Generations[id]};
+    }
+
+    void ScriptProxyManager::ExtendIfRequired() {
+        if (m_AvailableIds.empty()) {
+            m_AvailableIds.push_back(m_Proxys.size());
+            m_Proxys.push_back({nullptr, UUID()});
+            m_States.push_back(false);
+            m_Generations.push_back(0);
+        }
+    }
+
     SINGLETON_BASE(ScriptEngine);
     S_INITIALIZE() {
         LOG_INFO("ScriptEngine", "ScriptEngine initialized");

@@ -5,7 +5,6 @@ using namespace DE;
 class EditorCameraController : public Script {
     SCRIPT(EditorCameraController)
 public:
-    virtual void OnCreate() override {}
     virtual void OnUpdate(float dt) override {
         auto& camera = Get<FPSCamera>();
         if (active) {
@@ -39,7 +38,6 @@ public:
         }
         Get<TransformComponent>().translation = camera.GetPos();
     }
-    virtual void OnDestroy() override {}
 
 private:
     bool active = false;

@@ -38,6 +38,7 @@ namespace DE
         static void Disable(RenderSetting setting);
         static void SetClearColor(Vec4 color);
         static void SetClearColor(float r, float g, float b, float a);
+        static void SetDefaultFrameBuffer();
 
         // TMP
         static Ref<Texture>     GetDefaultTexture();

@@ -34,78 +34,39 @@ namespace DE {
     public:
         class Iterator {
         public:
-            bool operator==(const Iterator& other) const { return m_Manager == other.m_Manager && m_ID == other.m_ID; }
-            bool operator!=(const Iterator& other) const { return m_ID != other.m_ID || m_Manager != other.m_Manager; }
+            bool operator==(const Iterator& other) const;
+            bool operator!=(const Iterator& other) const;
 
-            Iterator& operator++() {
-                do {
-                    ++m_ID;
-                } while (m_ID < m_Manager->m_States.size() && !m_Manager->m_States[m_ID]);
-                return *this;
-            }
-            Iterator operator++(int) {
-                Iterator res = *this;
-                return ++(*this);
-            }
-            ScriptProxy& operator*() { return m_Manager->m_Proxys[m_ID]; }
-            ScriptProxy* operator->() { return &(m_Manager->m_Proxys[m_ID]); }
+            Iterator&    operator++();
+            Iterator     operator++(int);
+            ScriptProxy& operator*();
+            ScriptProxy* operator->();
 
         private:
             friend class ScriptProxyManager;
-            Iterator(ScriptProxyManager* manager, U32 id) : m_Manager(manager), m_ID(id) {}
+            Iterator(ScriptProxyManager* manager, U32 id);
 
             ScriptProxyManager* m_Manager = nullptr;
-            U32            m_ID      = 0;
+            U32                 m_ID      = 0;
         };
 
-        Iterator begin() {
-            int id = 0;
-            while (id < m_States.size() && !m_States[id]) {
-                ++id;
-            }
-            return Iterator(this, id);
-        }
-        Iterator end() { return Iterator(this, m_States.size()); }
+        Iterator begin();
+        Iterator end();
 
-        void Clear() {
-            m_States.clear();
-            m_Proxys.clear();
-            m_Generations.clear();
-            m_States.clear();
-        }
-        bool Valid(U32 id, U32 gen) { return id < m_Proxys.size() && m_States[id] && m_Generations[id] == gen; }
-        void Destroy(U32 id) {
-            m_AvailableIds.push_back(id);
-            m_States[id] = false;
-            // LOG_INFO("ScriptProxyManager", "Destroyed handle (", id, ")");
-        }
-        void Destroy(Iterator it) { Destroy(it.m_ID); }
+        void Clear();
+        bool Valid(U32 id, U32 gen);
+        void Destroy(U32 id);
+        void Destroy(Iterator it);
 
-        ScriptProxy&                  GetProxy(U32 id) { return m_Proxys[id]; }
-        std::pair<U32, U32> CreateProxy() {
-            ExtendIfRequired();
-            U32 id = m_AvailableIds.front();
-            m_AvailableIds.pop_front();
-            m_States[id]          = true;
-            m_Proxys[id].m_ID     = UUID();
-            m_Proxys[id].m_Script = nullptr;
-            // LOG_INFO("ScriptProxyManager", "Created handle (", id, ")");
-            return {id, ++m_Generations[id]};
-        }
+        ScriptProxy&        GetProxy(U32 id);
+        std::pair<U32, U32> CreateProxy();
 
     private:
-        void ExtendIfRequired() {
-            if (m_AvailableIds.empty()) {
-                m_AvailableIds.push_back(m_Proxys.size());
-                m_Proxys.push_back({nullptr, UUID()});
-                m_States.push_back(false);
-                m_Generations.push_back(0);
-            }
-        }
+        void ExtendIfRequired();
 
         std::vector<ScriptProxy> m_Proxys;
-        std::vector<U32>    m_Generations;
-        std::deque<U32>     m_AvailableIds;
+        std::vector<U32>         m_Generations;
+        std::deque<U32>          m_AvailableIds;
         std::vector<bool>        m_States;
     };
 

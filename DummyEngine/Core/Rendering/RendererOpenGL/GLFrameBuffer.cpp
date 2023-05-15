@@ -65,7 +65,7 @@ namespace DE {
         glCreateFramebuffers(1, &m_BufferId);
     }
     GLFrameBuffer::~GLFrameBuffer() {
-        glDeleteBuffers(1, &m_BufferId);
+        glDeleteFramebuffers(1, &m_BufferId);
     }
 
     void GLFrameBuffer::Bind() {
@@ -106,6 +106,12 @@ namespace DE {
             m_Properties.height = height;
             Rebuild();
         }
+    }
+    U32 GLFrameBuffer::GetWidth() const {
+        return m_Properties.width;
+    }
+    U32 GLFrameBuffer::GetHeight() const {
+        return m_Properties.height;
     }
 
     Ref<Texture> GLFrameBuffer::GetColorAttachment(U32 attachment_id = 0) {

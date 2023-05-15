@@ -5,7 +5,7 @@
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"
-#include "DummyEngine/Core/Scene/SceneRenderData.h"
+#include "DummyEngine/Core/Scene/SceneRenderer.h"
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
 #include "DummyEngine/ToolBox/Loaders/ModelLoader.h"
 #include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
@@ -308,7 +308,7 @@ namespace DE {
             LOG_WARNING("SceneLoader", "Shader (", id, ") not found in ResourceManager");
         } else {
             entity.AddComponent<ShaderComponent>({id, ResourceManager::GetShader(id).value()});
-            scene->GetRenderData()->RequestShader(id);
+            scene->GetRenderer()->RequestShader(id);
         }
     }
     template <> void LoadComponent<FPSCamera>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
@@ -377,7 +377,7 @@ namespace DE {
             UUID mesh_id   = entity.Get<RenderMeshComponent>().id;
             UUID shader_id = entity.Get<ShaderComponent>().id;
 
-            entity.Get<RenderMeshComponent>().mesh_instance = scene->GetRenderData()->GetRenderMeshInstance(mesh_id, shader_id);
+            entity.Get<RenderMeshComponent>().mesh_instance = scene->GetRenderer()->GetRenderMeshInstance(mesh_id, shader_id);
         }
         return entity;
     }

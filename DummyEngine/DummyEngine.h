@@ -13,6 +13,7 @@
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/Scene/Components.h"
 #include "DummyEngine/Core/Scene/Scene.h"
+#include "DummyEngine/Core/Scene/SceneRenderer.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
 #include "DummyEngine/ToolBox/Editors/TextureEditor.h"

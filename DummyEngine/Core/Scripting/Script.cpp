@@ -104,6 +104,7 @@ namespace DE {
     void Script::AttachToScene(WeakRef<Scene> scene, Entity entity) {
         m_Scene  = scene;
         m_Entity = entity;
+        OnAttach();
     }
 
     ScriptFieldType Script::GetFieldType(const std::string& name) const {

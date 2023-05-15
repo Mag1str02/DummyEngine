@@ -37,11 +37,6 @@ namespace DE {
         Compiler::Initialize();
         ScriptManager::Initialize();
 
-        m_SceneData.frame_buffer = FrameBuffer::Create({1920, 1080});
-        m_SceneData.frame_buffer->AddColorAttachment(TextureFormat::RGBA);
-        m_SceneData.frame_buffer->SetDepthAttachment(TextureFormat::DepthStencil);
-        m_Viewport.SetFrameBuffer(m_SceneData.frame_buffer);
-
         m_ImGuiManager.LoadEditorResources();
         m_ImGuiManager.AddPanel(&m_Viewport);
         m_ImGuiManager.AddPanel(&m_SceneHierarchy);
@@ -55,18 +50,13 @@ namespace DE {
         DE_PROFILE_SCOPE("EditorLayer OnUpdate");
 
         ProcessControlls(dt);
-
-        m_SceneData.frame_buffer->Resize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
-        m_SceneData.frame_buffer->Bind();
-        Renderer::OnWindowResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
+        Renderer::SetDefaultFrameBuffer();
 
         if (m_SceneData.scene) {
-            m_SceneData.scene->OnViewPortResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
             m_SceneData.scene->OnUpdate(dt);
-            m_SceneData.scene->Render();
+            m_SceneData.scene->OnViewPortResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
+            m_SceneData.scene->OnRender(m_EditorCamera);
         }
-
-        m_SceneData.frame_buffer->UnBind();
     }
     void EditorLayer::OnImGuiRender() {
         DE_PROFILE_SCOPE("EditorLayer OnImGuiRender");
@@ -152,6 +142,7 @@ namespace DE {
         }
         PrepareScene();
         ScriptManager::AttachScripts(m_SceneData.scene);
+        m_Viewport.SetFrameBuffer(m_SceneData.scene->GetRenderer()->GetFrameBuffer());
         LOG_INFO("EditorLayer", "Opened scene");
     }
     void EditorLayer::SaveScene(const Path& path) {

@@ -6,13 +6,53 @@
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/Scene/Components.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"
-#include "DummyEngine/Core/Scene/SceneRenderData.h"
+#include "DummyEngine/Core/Scene/SceneRenderer.h"
 #include "DummyEngine/Core/Scripting/Script.h"
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
 
 namespace DE {
-    Scene::Scene() : m_Storage(CreateRef<Storage>()), m_RenderData(CreateRef<SceneRenderData>(this)), m_Hierarchy("Scene") {
-        m_Storage->SetAddHandler<FPSCamera>([this](Entity entity) { m_RenderData->AddVPEntity(entity); });
+    void Scene::OnRuntimeStart() {
+        for (auto e : m_Storage->View<ScriptComponent>()) {
+            auto& component = e.Get<ScriptComponent>();
+            if (component.Valid()) {
+                component->OnRuntimeStart();
+            }
+        }
+    }
+    void Scene::OnRuntimeStop() {
+        for (auto e : m_Storage->View<ScriptComponent>()) {
+            auto& component = e.Get<ScriptComponent>();
+            if (component.Valid()) {
+                component->OnRuntimeStop();
+            }
+        }
+    }
+    void Scene::OnUpdate(float dt) {
+        DE_PROFILE_SCOPE("Scene OnUpdate");
+
+        m_Storage->UpdateSystems(dt);
+        for (auto e : m_Storage->View<ScriptComponent>()) {
+            auto& component = e.Get<ScriptComponent>();
+            if (component.Valid()) {
+                component->OnUpdate(dt);
+            }
+        }
+    }
+    void Scene::OnRender(Entity camera) {
+        m_Renderer->Render(camera);
+    }
+
+    void Scene::OnViewPortResize(U32 x, U32 y) {
+        double aspect  = double(x) / double(y);
+        auto   cameras = m_Storage->View<FPSCamera>();
+        for (auto e : cameras) {
+            e.Get<FPSCamera>().SetAspect(aspect);
+        }
+        m_Renderer->OnViewPortResize(x, y);
+    }
+
+    Scene::Scene() : m_Storage(CreateRef<Storage>()), m_Renderer(CreateRef<SceneRenderer>(this)), m_Hierarchy("Scene") {
+        m_Storage->SetAddHandler<FPSCamera>([this](Entity entity) { m_Renderer->AddVPEntity(entity); });
         m_Storage->SetAddHandler<IDComponent>([this](Entity entity) {
             auto id = entity.Get<IDComponent>();
             DE_ASSERT(m_EntityByID.find(id) == m_EntityByID.end(), "UUID collision occured (", id.Get(), ")");
@@ -40,11 +80,8 @@ namespace DE {
         return new_entity;
     }
     Entity Scene::CloneEntity(Entity entity) {
-        // DE_ASSERT(false, "Clone of entity not implemented yet.");
+        DE_ASSERT(false, "Clone of entity not implemented yet.");
         return CreateEntity("Entity", false);
-    }
-    bool Scene::ExistsEntityWithID(UUID id) {
-        return m_EntityByID.contains(id);
     }
 
     Entity Scene::GetByID(UUID uuid) {
@@ -52,38 +89,5 @@ namespace DE {
     }
     SceneHierarchy::Node Scene::GetHierarchyRoot() {
         return m_Hierarchy.GetRoot();
-    }
-
-    void Scene::OnUpdate(double dt) {
-        DE_PROFILE_SCOPE("Scene OnUpdate");
-
-        m_Storage->UpdateSystems(dt);
-        UpdateScripts(dt);
-    }
-
-    void Scene::OnViewPortResize(U32 x, U32 y) {
-        double aspect  = double(x) / double(y);
-        auto   cameras = m_Storage->View<FPSCamera>();
-        for (auto e : cameras) {
-            e.Get<FPSCamera>().SetAspect(aspect);
-        }
-    }
-    void Scene::Render() {
-        m_RenderData->SetCamera(GetCamera());
-        m_RenderData->Render();
-    }
-
-    Entity Scene::GetCamera() {
-        auto cameras = m_Storage->View<FPSCamera>();
-        DE_ASSERT(!cameras.Empty(), "No available camera in scene.");
-        return *cameras.begin();
-    }
-    void Scene::UpdateScripts(float dt) {
-        for (auto e : m_Storage->View<ScriptComponent>()) {
-            auto& component = e.Get<ScriptComponent>();
-            if (component.Valid()) {
-                component->OnUpdate(dt);
-            }
-        }
     }
 }  // namespace DE

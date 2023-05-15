@@ -12,7 +12,6 @@
 namespace DE {
     struct SceneData {
         Ref<Scene>       scene;
-        Ref<FrameBuffer> frame_buffer;
         SceneFileData    file_data;
     };
     enum class InputState { NonSpecified = 0, ViewPort };

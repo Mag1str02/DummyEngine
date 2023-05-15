@@ -5,7 +5,6 @@ using namespace DE;
 class GateController : public Script {
     SCRIPT(GateController)
 public:
-    virtual void OnCreate() override {}
     virtual void OnUpdate(float dt) override {
         DE_PROFILE_SCOPE("GateContoller");
         m_Open = false;
@@ -17,7 +16,6 @@ public:
         }
         Move();
     }
-    virtual void OnDestroy() override {}
 
 private:
     void Move() {
