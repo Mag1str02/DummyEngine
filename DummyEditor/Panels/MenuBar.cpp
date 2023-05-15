@@ -3,10 +3,6 @@
 #include "DummyEditor/EditorLayer.h"
 
 namespace DE {
-    void MenuBar::AttachToEditor(EditorLayer* editor) {
-        m_Editor = editor;
-        m_Editor->m_ImGuiManager.SetMenuBar(this);
-    }
     void MenuBar::OnImGui() {
         DE_PROFILE_SCOPE("MenuBar OnImGui");
 
@@ -17,31 +13,33 @@ namespace DE {
         }
     }
     void MenuBar::FileMenu() {
+        auto& editor = EditorLayer::Get();
         if (ImGui::BeginMenu("File")) {
             if (ImGui::MenuItem("Create Scene")) {
-                m_Editor->ActionCreateScene();
+                editor.ActionCreateScene();
             }
             if (ImGui::MenuItem("Open Scene")) {
-                m_Editor->ActionOpenScene();
+                editor.ActionOpenScene();
             }
             if (ImGui::MenuItem("Save Scene")) {
-                m_Editor->ActionSaveScene();
+                editor.ActionSaveScene();
             }
             if (ImGui::MenuItem("Close Scene")) {
-                m_Editor->ActionCloseScene();
+                editor.ActionCloseScene();
             }
             ImGui::Separator();
             if (ImGui::MenuItem("Exit")) {
                 WindowCloseEvent event;
-                m_Editor->BroadcastEvent(event);
+                editor.BroadcastEvent(event);
             }
             ImGui::EndMenu();
         }
     }
     void MenuBar::ViewMenu() {
+        auto& editor = EditorLayer::Get();
         if (ImGui::BeginMenu("View")) {
             int cnt = 0;
-            for (auto panel : m_Editor->m_ImGuiManager.GetPanels()) {
+            for (auto panel : editor.GetImGuiManager().GetPanels()) {
                 ImGuiUtils::ScopedID id(++cnt);
                 ImGui::MenuItem(panel->GetName().c_str(), NULL, &panel->GetController());
             }

@@ -6,15 +6,13 @@
 #include "DummyEngine/Core/Application/Config.h"
 
 namespace DE {
-    TextureLoader::LoaderState TextureLoader::m_State;
-
     Ref<TextureData> TextureLoader::Load(const TextureAsset::LoadingProperties& props) {
         unsigned char* stb_data;
         int            width, height, nrChannels;
         TextureFormat  format;
         std::string    format_s;
 
-        m_State.m_CurrentData = CreateRef<TextureData>();
+        auto res = CreateRef<TextureData>();
 
         stbi_set_flip_vertically_on_load(props.flip_uvs ? true : false);
 
@@ -44,11 +42,11 @@ namespace DE {
                 break;
         }
 
-        m_State.m_CurrentData->SetData(stb_data, width, height, format);
+        res->SetData(stb_data, width, height, format);
         stbi_image_free(stb_data);
 
         LOG_INFO("TextureLoader", "Texture loaded (", RelativeToExecutable(props.path), ") format (", format_s, ")");
-        return m_State.m_CurrentData;
+        return res;
     }
     void TextureLoader::Save(const Path& path, const Ref<TextureData> data) {
         switch (data->Format()) {

@@ -7,7 +7,7 @@ namespace DE {
     struct TextureAsset {
         struct LoadingProperties {
             Path path;
-            bool flip_uvs;
+            bool flip_uvs = true;
         };
         UUID              id;
         std::string       name;

@@ -4,34 +4,8 @@
 #include "DummyEditor/Scripting/ScriptManager.h"
 
 namespace DE {
-    EditorLayer* EditorLayer::s_Instance = nullptr;
 
-    class MovingSystem : public System {
-    public:
-        MovingSystem() {}
-        virtual std::string GetName() const override { return "MovingSystem"; }
-
-        void Update(float dt) override {
-            for (auto entity : View<RenderMeshComponent, TransformComponent>()) {
-                entity.Get<RenderMeshComponent>().mesh_instance->at<Mat4>(0) = entity.Get<TransformComponent>().GetTransform();
-            }
-
-            for (auto entity : View<LightSource, TransformComponent>()) {
-                entity.Get<LightSource>().position = entity.Get<TransformComponent>().translation;
-            }
-        }
-    };
-
-    EditorLayer::EditorLayer() : Layer("EditorLayer") {
-        DE_ASSERT(s_Instance == nullptr, "Editor layer already created");
-        s_Instance = this;
-    }
-    EditorLayer::~EditorLayer() {
-        s_Instance = nullptr;
-    }
-    EditorLayer& EditorLayer::Get() {
-        return *s_Instance;
-    }
+    //*___Layer________________________________________________________________________________________________________________________________________________________________________________________
 
     void EditorLayer::OnAttach() {
         Compiler::Initialize();
@@ -44,24 +18,42 @@ namespace DE {
         m_ImGuiManager.AddPanel(&m_Profiler);
         m_ImGuiManager.AddPanel(&m_ThemePanel);
         m_ImGuiManager.SetMenuBar(&m_MenuBar);
-        m_MenuBar.AttachToEditor(this);
+
+        m_TSSystem = CreateRef<TransformSyncSystem>();
+        LoadIcons();
     }
     void EditorLayer::OnUpdate(float dt) {
         DE_PROFILE_SCOPE("EditorLayer OnUpdate");
 
         ProcessControlls(dt);
-        Renderer::SetDefaultFrameBuffer();
 
-        if (m_SceneData.scene) {
-            m_SceneData.scene->OnUpdate(dt);
-            m_SceneData.scene->OnViewPortResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
-            m_SceneData.scene->OnRender(m_EditorCamera);
+        switch (m_SceneState) {
+            case SceneState::Running:
+                m_CurrentScene->OnUpdate(dt);
+                m_CurrentScene->OnViewPortResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
+                m_CurrentScene->OnRender(m_EditorCamera);
+                break;
+            case SceneState::Step:
+                m_CurrentScene->OnUpdate(dt);
+                m_CurrentScene->OnViewPortResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
+                m_CurrentScene->OnRender(m_EditorCamera);
+                m_SceneState = SceneState::Paused;
+                break;
+            case SceneState::Paused:
+            case SceneState::Editing:
+                m_TSSystem->Update(dt);
+                m_EditorCamera.Get<ScriptComponent>()->OnUpdate(dt);
+                m_CurrentScene->OnViewPortResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
+                m_CurrentScene->OnRender(m_EditorCamera);
+                break;
+            case SceneState::None: break;
+            default: DE_ASSERT(false, "Unsupported SceneState"); break;
         }
     }
     void EditorLayer::OnImGuiRender() {
         DE_PROFILE_SCOPE("EditorLayer OnImGuiRender");
 
-        if (m_SceneData.scene) {
+        if (m_CurrentScene) {
             m_Inspector.SetActiveEntity(m_SceneHierarchy.GetActiveEntity());
         }
 
@@ -72,9 +64,8 @@ namespace DE {
         // ImGui::End();
         // ImGui::ShowStackToolWindow();
     }
-
     void EditorLayer::OnDetach() {
-        if (m_SceneData.scene) {
+        if (m_CurrentScene) {
             CloseScene();
         }
 
@@ -82,24 +73,24 @@ namespace DE {
         Compiler::Terminate();
     }
 
-    //*___EditorActions____________________________________________________________________________________________________________________________________________________________________________
+    //*___EditorActions________________________________________________________________________________________________________________________________________________________________________________
 
     void EditorLayer::ActionOpenScene() {
         Path p = OpenSceneDialog();
         if (!p.empty()) {
-            if (m_SceneData.scene) {
+            if (m_CurrentScene) {
                 CloseScene();
             }
             OpenScene(p);
         }
     }
     void EditorLayer::ActionCloseScene() {
-        if (m_SceneData.scene) {
+        if (m_CurrentScene) {
             CloseScene();
         }
     }
     void EditorLayer::ActionSaveScene() {
-        if (m_SceneData.scene) {
+        if (m_CurrentScene) {
             Path p = SaveSceneDialog();
             if (!p.empty()) {
                 SaveScene(p);
@@ -107,17 +98,71 @@ namespace DE {
         }
     }
     void EditorLayer::ActionCreateScene() {
-        if (m_SceneData.scene) {
+        if (m_CurrentScene) {
             CloseScene();
         }
         OpenScene(Path());
     }
     void EditorLayer::ActionReloadScripts() {
-        if (m_SceneData.scene) {
+        if (m_CurrentScene) {
             ReloadScripts();
         }
     }
-    //*___Helpers__________________________________________________________________________________________________________________________________________________________________________________
+    void EditorLayer::ActionRunScene() {
+        if (m_CurrentScene) {
+            RunScene();
+        }
+    }
+    void EditorLayer::ActionStopScene() {
+        if (m_CurrentScene) {
+            StopScene();
+        }
+    }
+    void EditorLayer::ActionPauseScene() {
+        if (m_CurrentScene && m_SceneState == SceneState::Running) {
+            m_SceneState = SceneState::Paused;
+        }
+    }
+    void EditorLayer::ActionResumeScene() {
+        if (m_CurrentScene && m_SceneState == SceneState::Paused) {
+            m_SceneState = SceneState::Running;
+        }
+    }
+    void EditorLayer::ActionStepScene() {
+        if (m_CurrentScene && m_SceneState == SceneState::Paused) {
+            m_SceneState = SceneState::Step;
+        }
+    }
+
+    //*___Editor_______________________________________________________________________________________________________________________________________________________________________________________
+
+    EditorLayer::EditorLayer() : Layer("EditorLayer") {
+        DE_ASSERT(s_Instance == nullptr, "Editor layer already created");
+        s_Instance = this;
+    }
+    EditorLayer::~EditorLayer() {
+        s_Instance = nullptr;
+    }
+    EditorLayer& EditorLayer::Get() {
+        return *s_Instance;
+    }
+    ImGuiManager& EditorLayer::GetImGuiManager() {
+        return m_ImGuiManager;
+    }
+    EditorLayer::SceneState EditorLayer::GetSceneState() const {
+        return m_SceneState;
+    }
+    EditorLayer::InputState EditorLayer::GetInputState() const {
+        return m_InputState;
+    }
+    EditorLayer::Resources& EditorLayer::GetResources() {
+        return m_Resources;
+    }
+    //*___Helpers______________________________________________________________________________________________________________________________________________________________________________________
+
+    void EditorLayer::ReloadScripts() {
+        ScriptManager::ReloadScripts(m_SceneFileData.assets.scripts, m_CurrentScene);
+    }
 
     Path EditorLayer::OpenSceneDialog() {
         return FileSystem::OpenFileDialog("Dummy Engine Scene (*.yml)", "*.yml");
@@ -127,77 +172,83 @@ namespace DE {
     }
     void EditorLayer::OpenScene(const Path& scene_path) {
         if (scene_path.empty()) {
-            m_SceneData.file_data = SceneFileData();
-            m_SceneData.scene     = CreateRef<Scene>();
+            m_SceneFileData = SceneFileData();
+            m_CurrentScene  = CreateRef<Scene>();
         } else {
             auto res = SceneLoader::LoadScene(scene_path);
             if (!res) {
                 return;
             }
-            m_SceneData.file_data = res.value();
+            m_SceneFileData = res.value();
             LoadAssets();
-            ScriptManager::LoadScripts(m_SceneData.file_data.assets.scripts);
-
-            m_SceneData.scene = SceneLoader::Serialize(m_SceneData.file_data.hierarchy);
+            ScriptManager::LoadScripts(m_SceneFileData.assets.scripts);
+            m_CurrentScene = SceneLoader::Serialize(m_SceneFileData.hierarchy);
         }
         PrepareScene();
-        ScriptManager::AttachScripts(m_SceneData.scene);
-        m_Viewport.SetFrameBuffer(m_SceneData.scene->GetRenderer()->GetFrameBuffer());
+        ScriptManager::AttachScripts(m_CurrentScene);
+        m_Viewport.SetFrameBuffer(m_CurrentScene->GetRenderer()->GetFrameBuffer());
+        m_SceneState = SceneState::Editing;
         LOG_INFO("EditorLayer", "Opened scene");
     }
     void EditorLayer::SaveScene(const Path& path) {
-        m_SceneData.file_data.hierarchy = SceneLoader::Deserialize(m_SceneData.scene);
-        SceneLoader::SaveScene(m_SceneData.file_data, path);
-    }
-    void EditorLayer::ReloadScripts() {
-        ScriptManager::ReloadScripts(m_SceneData.file_data.assets.scripts, m_SceneData.scene);
+        m_SceneFileData.hierarchy = SceneLoader::Deserialize(m_CurrentScene);
+        SceneLoader::SaveScene(m_SceneFileData, path);
     }
     void EditorLayer::CloseScene() {
         m_Inspector.SetActiveEntity(Entity());
-        m_SceneData.scene = nullptr;
+        m_CurrentScene = nullptr;
+        m_SceneState   = SceneState::None;
         ResourceManager::Clear();
-        ScriptManager::UnloadScripts(m_SceneData.file_data.assets.scripts);
+        ScriptManager::UnloadScripts(m_SceneFileData.assets.scripts);
         UnloadAssets();
         LOG_INFO("EditorLayer", "Closed scene");
     }
+    void EditorLayer::RunScene() {
+        m_CurrentScene->OnRuntimeStart();
+        m_SceneState = SceneState::Running;
+    }
+    void EditorLayer::StopScene() {
+        m_CurrentScene->OnRuntimeStop();
+        m_SceneState = SceneState::Editing;
+    }
 
     void EditorLayer::LoadAssets() {
-        for (const auto& asset : m_SceneData.file_data.assets.textures) {
+        for (const auto& asset : m_SceneFileData.assets.textures) {
             AssetManager::AddTextureAsset(asset);
         }
-        for (const auto& asset : m_SceneData.file_data.assets.scripts) {
+        for (const auto& asset : m_SceneFileData.assets.scripts) {
             AssetManager::AddScriptAsset(asset);
         }
-        for (const auto& asset : m_SceneData.file_data.assets.render_meshes) {
+        for (const auto& asset : m_SceneFileData.assets.render_meshes) {
             AssetManager::AddRenderMeshAsset(asset);
         }
-        for (const auto& asset : m_SceneData.file_data.assets.shaders) {
+        for (const auto& asset : m_SceneFileData.assets.shaders) {
             AssetManager::AddShaderAsset(asset);
         }
     }
     void EditorLayer::UnloadAssets() {
-        for (const auto& asset : m_SceneData.file_data.assets.textures) {
+        for (const auto& asset : m_SceneFileData.assets.textures) {
             AssetManager::RemoveTextureAsset(asset.id);
         }
-        for (const auto& asset : m_SceneData.file_data.assets.scripts) {
+        for (const auto& asset : m_SceneFileData.assets.scripts) {
             AssetManager::RemoveScriptAsset(asset.id);
         }
-        for (const auto& asset : m_SceneData.file_data.assets.render_meshes) {
+        for (const auto& asset : m_SceneFileData.assets.render_meshes) {
             AssetManager::RemoveRenderMeshAsset(asset.id);
         }
-        for (const auto& asset : m_SceneData.file_data.assets.shaders) {
+        for (const auto& asset : m_SceneFileData.assets.shaders) {
             AssetManager::RemoveShaderAsset(asset.id);
         }
     }
     void EditorLayer::PrepareScene() {
-        m_EditorCamera = m_SceneData.scene->CreateEntity("Editor Camera", false);
+        m_EditorCamera = m_CurrentScene->CreateEntity("Editor Camera", false);
         m_EditorCamera.AddComponent<TransformComponent>();
         m_EditorCamera.AddComponent<FPSCamera>();
         m_EditorCamera.AddComponent<ScriptComponent>(ScriptEngine::CreateScript(ScriptManager::EditorScript("EditorCameraController")));
 
-        m_SceneData.scene->RegisterSystem<MovingSystem>();
-        m_SceneHierarchy.SetActiveScene(m_SceneData.scene);
-        m_Inspector.SetScene(m_SceneData.scene);
+        m_CurrentScene->AttachSystem(m_TSSystem);
+        m_SceneHierarchy.SetActiveScene(m_CurrentScene);
+        m_Inspector.SetScene(m_CurrentScene);
         m_Inspector.SetActiveEntity(m_SceneHierarchy.GetActiveEntity());
     }
 
@@ -210,12 +261,12 @@ namespace DE {
             }
         }
         if (Input::KeyDown(Key::LeftControl)) {
-            if (Input::KeyReleased(Key::GraveAccent) && m_SceneData.scene != nullptr) {
-                m_State.m_InputState = (m_State.m_InputState == InputState::ViewPort ? InputState::NonSpecified : InputState::ViewPort);
+            if (Input::KeyReleased(Key::GraveAccent) && m_CurrentScene != nullptr) {
+                m_InputState = (m_InputState == InputState::ViewPort ? InputState::NonSpecified : InputState::ViewPort);
                 SetMouseLockToggleEvent event;
                 BroadcastEvent(event);
             }
-            if (m_State.m_InputState != InputState::ViewPort) {
+            if (m_InputState != InputState::ViewPort) {
                 if (Input::KeyReleased(Key::O)) {
                     ActionOpenScene();
                 }
@@ -232,11 +283,49 @@ namespace DE {
         }
         if (m_EditorCamera.Valid()) {
             bool& active = m_EditorCamera.Get<ScriptComponent>()->GetField<bool>("active");
-            if (m_State.m_InputState == InputState::ViewPort) {
+            if (m_InputState == InputState::ViewPort) {
                 active = true;
             } else {
                 active = false;
             }
         }
     }
+
+    void EditorLayer::LoadIcons() {
+        auto play_data          = TextureLoader::Load({Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Editor/Icons/PlayButton.png"});
+        auto pause_data         = TextureLoader::Load({Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Editor/Icons/PauseButton.png"});
+        auto step_data          = TextureLoader::Load({Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Editor/Icons/StepButton.png"});
+        auto stop_data          = TextureLoader::Load({Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Editor/Icons/StopButton.png"});
+        auto build_data         = TextureLoader::Load({Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Editor/Icons/BuildButton.png"});
+        auto build_and_run_data = TextureLoader::Load({Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Editor/Icons/BuildAndRunButton.png"});
+
+        DE_ASSERT(play_data, "Failed to load play icon");
+        DE_ASSERT(pause_data, "Failed to load pause icon");
+        DE_ASSERT(step_data, "Failed to load step icon");
+        DE_ASSERT(stop_data, "Failed to load stop icon");
+        DE_ASSERT(build_data, "Failed to load build icon");
+        DE_ASSERT(build_and_run_data, "Failed to load build and run icon");
+
+        m_Resources.play_icon          = Texture::Create({*play_data});
+        m_Resources.pause_icon         = Texture::Create({*pause_data});
+        m_Resources.step_icon          = Texture::Create({*step_data});
+        m_Resources.stop_icon          = Texture::Create({*stop_data});
+        m_Resources.build_icon         = Texture::Create({*build_data});
+        m_Resources.build_and_run_icon = Texture::Create({*build_and_run_data});
+    }
+
+    //*___Other________________________________________________________________________________________________________________________________________________________________________________________
+
+    void TransformSyncSystem::Update(float dt) {
+        for (auto entity : View<RenderMeshComponent, TransformComponent>()) {
+            entity.Get<RenderMeshComponent>().mesh_instance->at<Mat4>(0) = entity.Get<TransformComponent>().GetTransform();
+        }
+
+        for (auto entity : View<LightSource, TransformComponent>()) {
+            entity.Get<LightSource>().position = entity.Get<TransformComponent>().translation;
+        }
+    }
+
+    EditorLayer* EditorLayer::s_Instance = nullptr;
+
 }  // namespace DE

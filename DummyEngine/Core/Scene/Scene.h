@@ -29,7 +29,13 @@ namespace DE {
         Ref<SceneRenderer>   GetRenderer() { return m_Renderer; }
         SceneHierarchy::Node GetHierarchyRoot();
 
-        template <typename System> void                              RegisterSystem() { m_Storage->RegisterSystem<System>(); }
+        template <typename System> Ref<System> AttachSystem(Ref<System> system = nullptr) {
+            if (!system) {
+                system = CreateRef<System>();
+            }
+            m_Storage->AttachSystem<System>(system);
+            return system;
+        }
         template <typename... Components> StorageView<Components...> View() { return m_Storage->View<Components...>(); }
 
     private:

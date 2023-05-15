@@ -49,8 +49,8 @@ namespace DE {
         m_ComponentManager.SetRemoveHandler<ComponentType>(func);
     }
 
-    template <typename SystemType> void Storage::RegisterSystem() {
-        m_SystemManager.RegisterSystem<SystemType>();
+    template <typename SystemType> void Storage::AttachSystem(std::shared_ptr<System> system) {
+        m_SystemManager.AttachSystem<SystemType>(system);
     }
 
     template <typename ComponentType> ComponentType* Storage::AddComponent(U32 id, U32 gen, const ComponentType& component) {

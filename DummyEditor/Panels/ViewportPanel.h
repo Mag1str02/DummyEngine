@@ -8,12 +8,13 @@ namespace DE {
         ViewportPanel() : ImGuiPanel("Viewport") {}
         virtual void OnImGui() override;
 
+        void ToolPanel();
         void SetFrameBuffer(Ref<FrameBuffer> buffer);
         U32  GetWidth() const { return m_ViewportSize.x; }
         U32  GetHeight() const { return m_ViewportSize.y; }
 
     private:
-        ImVec2           m_ViewportSize;
+        ImVec2               m_ViewportSize;
         WeakRef<FrameBuffer> m_FrameBuffer;
     };
 }  // namespace DE

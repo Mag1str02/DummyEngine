@@ -6,7 +6,6 @@
 
 namespace DE {
     //*___CLASS_DECLARATIONS___________________________________________________________________________________________________________________________________________________________________________________________________
-
     class Entity;
     class Storage;
     class System;
@@ -21,7 +20,7 @@ namespace DE {
 
     class IComponentArray {
     public:
-        virtual ~IComponentArray()                               = default;
+        virtual ~IComponentArray()                          = default;
         virtual void* AddComponent(U32 id, void* component) = 0;
         virtual void* GetComponent(U32 id)                  = 0;
         virtual bool  HasComponent(U32 id)                  = 0;
@@ -37,8 +36,8 @@ namespace DE {
 
     private:
         std::unordered_map<U32, U32> m_EntityToIndex;
-        std::vector<U32>                  m_IndexToEntity;
-        std::vector<ComponentType>             m_ComponentArray;
+        std::vector<U32>             m_IndexToEntity;
+        std::vector<ComponentType>   m_ComponentArray;
     };
 
     class Signature {
@@ -86,7 +85,7 @@ namespace DE {
         template <typename ComponentType> void RegisterComponent();
 
         std::unordered_map<std::type_index, std::shared_ptr<IComponentArray>> m_ComponentArrays;
-        std::unordered_map<std::type_index, U32>                         m_ComponentId;
+        std::unordered_map<std::type_index, U32>                              m_ComponentId;
         std::unordered_map<std::type_index, std::function<void(Entity)>>      m_AddHandlers;
         std::unordered_map<std::type_index, std::function<void(Entity)>>      m_RemoveHandlers;
         std::vector<Signature>                                                m_Signatures;
@@ -100,8 +99,8 @@ namespace DE {
         EntityManager() = default;
 
         std::pair<U32, U32> CreateEntity();
-        void                          Destroy(U32 id);
-        bool                          Valid(U32 id, U32 gen) const;
+        void                Destroy(U32 id);
+        bool                Valid(U32 id, U32 gen) const;
 
         U32 Generation(U32 id) const;
         U32 NextEntity(U32 id) const;
@@ -109,9 +108,9 @@ namespace DE {
         U32 EndEntity() const;
 
     private:
-        std::vector<U32> m_Generations;
-        std::vector<bool>     m_States;
-        std::queue<U32>  m_AvailableEntities;
+        std::vector<U32>  m_Generations;
+        std::vector<bool> m_States;
+        std::queue<U32>   m_AvailableEntities;
     };
 
     //*___SYSTEM_MANAGER___________________________________________________________________________________________________________________________________________________________________________________________
@@ -136,13 +135,13 @@ namespace DE {
         SystemManager(Storage* storage);
         void                                            Update(float dt);
         template <typename Before, typename After> void AddDependency();
-        template <typename SystemType> void             RegisterSystem();
+        template <typename SystemType> void             AttachSystem(std::shared_ptr<System> system);
 
     private:
-        std::vector<std::shared_ptr<System>>          m_Systems;
+        std::vector<std::shared_ptr<System>>     m_Systems;
         std::unordered_map<std::type_index, U32> m_SystemId;
         std::vector<std::vector<U32>>            m_DependencyGraph;
-        Storage*                                      m_Storage;
+        Storage*                                 m_Storage;
     };
 
     //*___ENTITY____________________________________________________________________________________________________________________________________________________________________________________________________
@@ -174,8 +173,8 @@ namespace DE {
         friend struct std::hash<Entity>;
         friend class Storage;
 
-        U32         m_ID;
-        U32         m_Gen;
+        U32              m_ID;
+        U32              m_Gen;
         WeakRef<Storage> m_Storage;
     };
 
@@ -198,7 +197,7 @@ namespace DE {
         template <typename ComponentType> void SetAddHandler(std::function<void(Entity)> func);
         template <typename ComponentType> void SetRemoveHandler(std::function<void(Entity)> func);
 
-        template <typename SystemType> void RegisterSystem();
+        template <typename SystemType> void AttachSystem(std::shared_ptr<System> system);
         void                                UpdateSystems(float dt);
 
     private:
@@ -234,7 +233,7 @@ namespace DE {
 
         private:
             friend class StorageView;
-            U32     m_ID;
+            U32          m_ID;
             StorageView* m_View;
         };
         Iterator begin();

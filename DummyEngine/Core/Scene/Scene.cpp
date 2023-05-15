@@ -39,6 +39,18 @@ namespace DE {
         }
     }
     void Scene::OnRender(Entity camera) {
+        if (!camera.Valid()) {
+            auto cameras = View<FPSCamera>();
+            if (cameras.Empty()) {
+                LOG_WARNING("No camera available in scene");
+                return;
+            }
+            camera = *cameras.begin();
+        }
+        if (!camera.Has<FPSCamera>()) {
+            LOG_WARNING("Specified camera entity has no camera component");
+            return;
+        }
         m_Renderer->Render(camera);
     }
 

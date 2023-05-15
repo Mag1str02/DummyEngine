@@ -11,12 +11,5 @@ namespace DE {
     public:
         static Ref<TextureData> Load(const TextureAsset::LoadingProperties& props);
         static void             Save(const Path& path, const Ref<TextureData> data);
-
-    private:
-        struct LoaderState {
-            Ref<TextureData> m_CurrentData;
-        };
-
-        static LoaderState m_State;
     };
 }  // namespace DE

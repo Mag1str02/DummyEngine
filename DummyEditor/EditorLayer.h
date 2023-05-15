@@ -10,27 +10,34 @@
 #include "DummyEditor/Panels/ViewportPanel.h"
 
 namespace DE {
-    struct SceneData {
-        Ref<Scene>       scene;
-        SceneFileData    file_data;
-    };
-    enum class InputState { NonSpecified = 0, ViewPort };
 
-    struct EditorState {
-        bool m_ViewportEnabled       = true;
-        bool m_ProfilerEnabled       = true;
-        bool m_InspectorEnabled      = true;
-        bool m_SceneHierarchyEnabled = true;
-
-        InputState m_InputState;
+    class TransformSyncSystem : public System {
+    public:
+        TransformSyncSystem() = default;
+        virtual std::string GetName() const override { return "TransformSyncSystem"; }
+        void                Update(float dt) override;
     };
 
     class EditorLayer : public DE::Layer {
     public:
-        EditorLayer();
-        ~EditorLayer();
+        enum class SceneState {
+            None = 0,
+            Paused,
+            Running,
+            Step,
+            Editing,
+        };
+        enum class InputState { NonSpecified = 0, ViewPort };
+        struct Resources {
+            Ref<Texture> play_icon;
+            Ref<Texture> pause_icon;
+            Ref<Texture> step_icon;
+            Ref<Texture> stop_icon;
+            Ref<Texture> build_icon;
+            Ref<Texture> build_and_run_icon;
+        };
 
-        static EditorLayer& Get();
+        //*___Layer____________________________________________________________________________________________________________________________________________________________________________________
 
         virtual void OnAttach() override;
         virtual void OnUpdate(float dt) override;
@@ -44,19 +51,35 @@ namespace DE {
         void ActionSaveScene();
         void ActionCreateScene();
         void ActionReloadScripts();
+        void ActionRunScene();
+        void ActionStopScene();
+        void ActionPauseScene();
+        void ActionResumeScene();
+        void ActionStepScene();
+
+        //*___Editor___________________________________________________________________________________________________________________________________________________________________________________
+
+        EditorLayer();
+        ~EditorLayer();
+        static EditorLayer& Get();
+
+        ImGuiManager& GetImGuiManager();
+        SceneState    GetSceneState() const;
+        InputState    GetInputState() const;
+        Resources&    GetResources();
 
     private:
-        friend class MenuBar;
-
         //*___Helpers__________________________________________________________________________________________________________________________________________________________________________________
+
+        void ReloadScripts();
 
         Path OpenSceneDialog();
         Path SaveSceneDialog();
-
         void OpenScene(const Path& path);
         void SaveScene(const Path& path);
-        void ReloadScripts();
         void CloseScene();
+        void RunScene();
+        void StopScene();
 
         void LoadAssets();
         void UnloadAssets();
@@ -64,6 +87,20 @@ namespace DE {
 
         void ProcessControlls(float dt);
 
+        void LoadIcons();
+
+        struct PanelsState {
+            bool m_ViewportEnabled       = true;
+            bool m_ProfilerEnabled       = true;
+            bool m_InspectorEnabled      = true;
+            bool m_SceneHierarchyEnabled = true;
+        };
+
+        InputState  m_InputState;
+        SceneState  m_SceneState;
+        PanelsState m_PanelState;
+
+        ImGuiManager        m_ImGuiManager;
         ViewportPanel       m_Viewport;
         SceneHierarchyPanel m_SceneHierarchy;
         InspectorPanel      m_Inspector;
@@ -71,13 +108,12 @@ namespace DE {
         ThemePanel          m_ThemePanel;
         MenuBar             m_MenuBar;
 
-        ImGuiManager m_ImGuiManager;
+        Ref<Scene>               m_CurrentScene;
+        SceneFileData            m_SceneFileData;
+        Entity                   m_EditorCamera;
+        Ref<TransformSyncSystem> m_TSSystem;
 
-        EditorState m_State;
-        Entity      m_EditorCamera;
-
-        SceneData m_SceneData;
-
+        Resources           m_Resources;
         static EditorLayer* s_Instance;
     };
 }  // namespace DE

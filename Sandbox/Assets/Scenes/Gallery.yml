@@ -66,7 +66,10 @@ Scene:
         UUID: 24116af57b6022cd2464fbf641ae946a
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
-    Scripts: ~
+    Scripts:
+      SkyContoller:
+        Path: Assets\Scripts\Sky\SkyController.cpp
+        UUID: 15fa3d63323b421ce0329ae14b5d2111
   Hierarchy:
     - Node:
         Name: Arches
@@ -512,14 +515,18 @@ Scene:
               Tag: skybox
               UUID: 8952b3e3f10f491222a7c60918c65cf9
               Transformation:
-                Translation: [9.03587532, 72.0855713, 198.097214]
+                Translation: [84.2201309, 33.2697372, 176.31781]
                 TranslationOffset: [0, 0, 0]
-                Rotation: [-180, 0, 0]
+                Rotation: [118.087708, 236.175415, 0]
                 RotationOffset: [0, 0, 0]
                 Scale: [1, 1, 1]
                 ScaleOffset: [1, 1, 1]
               Shader: f1e74e1b9ab55315492a3d5ee699e18b
               SkyBox: 8911b8a8458923946819fb45fbb794fd
+              Script:
+                UUID: 15fa3d63323b421ce0329ae14b5d2111
+                Fields:
+                  RotationSpeed: [5, 10, 0]
     - Node:
         Name: Objects
         Childs:
