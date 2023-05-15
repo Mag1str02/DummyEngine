@@ -4,6 +4,8 @@
 #include "DummyEditor/Scripting/ScriptManager.h"
 
 namespace DE {
+    EditorLayer* EditorLayer::s_Instance = nullptr;
+
     class MovingSystem : public System {
     public:
         MovingSystem() {}
@@ -20,7 +22,16 @@ namespace DE {
         }
     };
 
-    EditorLayer::EditorLayer() : Layer("EditorLayer") {}
+    EditorLayer::EditorLayer() : Layer("EditorLayer") {
+        DE_ASSERT(s_Instance == nullptr, "Editor layer already created");
+        s_Instance = this;
+    }
+    EditorLayer::~EditorLayer() {
+        s_Instance = nullptr;
+    }
+    EditorLayer& EditorLayer::Get() {
+        return *s_Instance;
+    }
 
     void EditorLayer::OnAttach() {
         Compiler::Initialize();
@@ -65,7 +76,6 @@ namespace DE {
         }
 
         m_ImGuiManager.OnImGui();
-
         // ImGui::ShowDemoWindow();
         // ImGui::Begin("Cal");
         // ImGui::ShowStyleEditor();
@@ -82,36 +92,64 @@ namespace DE {
         Compiler::Terminate();
     }
 
-    //*~~~EditorFunctionality~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //*___EditorActions____________________________________________________________________________________________________________________________________________________________________________
 
-    void EditorLayer::OpenSceneDialog() {
-        Path path = FileSystem::OpenFileDialog("Dummy Engine Scene (*.yml)", "*.yml");
-        if (path != Path()) {
+    void EditorLayer::ActionOpenScene() {
+        Path p = OpenSceneDialog();
+        if (!p.empty()) {
             if (m_SceneData.scene) {
                 CloseScene();
             }
-            OpenScene(path);
+            OpenScene(p);
         }
     }
-    void EditorLayer::SaveSceneDialog() {
+    void EditorLayer::ActionCloseScene() {
         if (m_SceneData.scene) {
-            Path path = FileSystem::SaveFileDialog("Dummy Engine Scene (*.yml)", "*.yml");
-            if (path != Path()) {
-                SaveScene(path);
+            CloseScene();
+        }
+    }
+    void EditorLayer::ActionSaveScene() {
+        if (m_SceneData.scene) {
+            Path p = SaveSceneDialog();
+            if (!p.empty()) {
+                SaveScene(p);
             }
         }
     }
-    void EditorLayer::OpenScene(const Path& scene_path) {
-        auto res = SceneLoader::LoadScene(scene_path);
-        if (!res) {
-            return;
+    void EditorLayer::ActionCreateScene() {
+        if (m_SceneData.scene) {
+            CloseScene();
         }
-        m_SceneData.file_data = res.value();
-        LoadAssets();
-        ScriptManager::LoadScripts(m_SceneData.file_data.assets.scripts);
+        OpenScene(Path());
+    }
+    void EditorLayer::ActionReloadScripts() {
+        if (m_SceneData.scene) {
+            ReloadScripts();
+        }
+    }
+    //*___Helpers__________________________________________________________________________________________________________________________________________________________________________________
 
-        m_SceneData.scene = SceneLoader::Serialize(m_SceneData.file_data.hierarchy);
+    Path EditorLayer::OpenSceneDialog() {
+        return FileSystem::OpenFileDialog("Dummy Engine Scene (*.yml)", "*.yml");
+    }
+    Path EditorLayer::SaveSceneDialog() {
+        return FileSystem::SaveFileDialog("Dummy Engine Scene (*.yml)", "*.yml");
+    }
+    void EditorLayer::OpenScene(const Path& scene_path) {
+        if (scene_path.empty()) {
+            m_SceneData.file_data = SceneFileData();
+            m_SceneData.scene     = CreateRef<Scene>();
+        } else {
+            auto res = SceneLoader::LoadScene(scene_path);
+            if (!res) {
+                return;
+            }
+            m_SceneData.file_data = res.value();
+            LoadAssets();
+            ScriptManager::LoadScripts(m_SceneData.file_data.assets.scripts);
 
+            m_SceneData.scene = SceneLoader::Serialize(m_SceneData.file_data.hierarchy);
+        }
         PrepareScene();
         ScriptManager::AttachScripts(m_SceneData.scene);
         LOG_INFO("EditorLayer", "Opened scene");
@@ -175,6 +213,11 @@ namespace DE {
     void EditorLayer::ProcessControlls(float dt) {
         DE_PROFILE_SCOPE("ProcessControlls");
 
+        if (Input::KeyDown(Key::LeftControl) && Input::KeyDown(Key::LeftShift)) {
+            if (Input::KeyReleased(Key::N)) {
+                ActionCreateScene();
+            }
+        }
         if (Input::KeyDown(Key::LeftControl)) {
             if (Input::KeyReleased(Key::GraveAccent) && m_SceneData.scene != nullptr) {
                 m_State.m_InputState = (m_State.m_InputState == InputState::ViewPort ? InputState::NonSpecified : InputState::ViewPort);
@@ -183,20 +226,16 @@ namespace DE {
             }
             if (m_State.m_InputState != InputState::ViewPort) {
                 if (Input::KeyReleased(Key::O)) {
-                    OpenSceneDialog();
+                    ActionOpenScene();
                 }
                 if (Input::KeyReleased(Key::S)) {
-                    SaveSceneDialog();
+                    ActionSaveScene();
                 }
                 if (Input::KeyReleased(Key::X)) {
-                    if (m_SceneData.scene) {
-                        CloseScene();
-                    }
+                    ActionCloseScene();
                 }
                 if (Input::KeyReleased(Key::R)) {
-                    if (m_SceneData.scene) {
-                        ReloadScripts();
-                    }
+                    ActionReloadScripts();
                 }
             }
         }

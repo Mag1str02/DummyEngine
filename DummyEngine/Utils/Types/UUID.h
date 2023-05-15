@@ -31,8 +31,6 @@ namespace DE {
 }  // namespace DE
 
 namespace std {
-    template <typename T> struct hash;
-
     template <> struct hash<DE::UUID> {
         std::size_t operator()(const DE::UUID& uuid) const { return uuid.m_First ^ uuid.m_Second; }
     };

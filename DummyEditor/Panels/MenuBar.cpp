@@ -18,11 +18,17 @@ namespace DE {
     }
     void MenuBar::FileMenu() {
         if (ImGui::BeginMenu("File")) {
+            if (ImGui::MenuItem("Create Scene")) {
+                m_Editor->ActionCreateScene();
+            }
             if (ImGui::MenuItem("Open Scene")) {
-                m_Editor->OpenSceneDialog();
+                m_Editor->ActionOpenScene();
             }
             if (ImGui::MenuItem("Save Scene")) {
-                m_Editor->SaveSceneDialog();
+                m_Editor->ActionSaveScene();
+            }
+            if (ImGui::MenuItem("Close Scene")) {
+                m_Editor->ActionCloseScene();
             }
             ImGui::Separator();
             if (ImGui::MenuItem("Exit")) {
@@ -34,7 +40,9 @@ namespace DE {
     }
     void MenuBar::ViewMenu() {
         if (ImGui::BeginMenu("View")) {
+            int cnt = 0;
             for (auto panel : m_Editor->m_ImGuiManager.GetPanels()) {
+                ImGuiUtils::ScopedID id(++cnt);
                 ImGui::MenuItem(panel->GetName().c_str(), NULL, &panel->GetController());
             }
             ImGui::EndMenu();

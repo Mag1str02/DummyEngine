@@ -25,6 +25,5 @@ namespace DE {
         SceneHierarchy::Node m_To;
         SceneHierarchy::Node m_Rename;
         bool                 m_WasTarget;
-        
     };
 }  // namespace DE

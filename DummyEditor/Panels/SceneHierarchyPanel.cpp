@@ -75,7 +75,7 @@ namespace DE {
             if (node != m_Rename) {
                 flags |= ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_SpanAvailWidth;
             }
-            ImGui::PushID(node.GetID());
+            ImGuiUtils::ScopedID id(node.GetID());
             open = ImGui::TreeNodeEx("Node", flags, ICON_MD_FOLDER);
             if (ImGui::BeginPopupContextItem("Node")) {
                 ShowNodeContextMenu(node);
@@ -103,13 +103,12 @@ namespace DE {
                 }
                 ImGui::TreePop();
             }
-            ImGui::PopID();
         }
         if (node.IsEntity()) {
-            ImGui::PushID(node.GetID());
-            auto        entity      = node.GetEntity();
-            std::string name        = "        " ICON_MD_CHECK_BOX_OUTLINE_BLANK "  " + entity.Get<TagComponent>().tag;
-            bool        is_selected = (m_SelectedNode.IsEntity() ? m_SelectedNode.GetEntity() == entity : false);
+            ImGuiUtils::ScopedID id(node.GetID());
+            auto                 entity      = node.GetEntity();
+            std::string          name        = "        " ICON_MD_CHECK_BOX_OUTLINE_BLANK "  " + entity.Get<TagComponent>().tag;
+            bool                 is_selected = (m_SelectedNode.IsEntity() ? m_SelectedNode.GetEntity() == entity : false);
             if (ImGui::Selectable(name.c_str(), is_selected, ImGuiSelectableFlags_AllowDoubleClick | ImGuiSelectableFlags_SpanAllColumns) &&
                 ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
                 m_SelectedNode = node;
@@ -121,20 +120,16 @@ namespace DE {
 
             DropTarget(node);
             DragTarget(node);
-            ImGui::PopID();
         }
     }
 
     void SceneHierarchyPanel::DragTarget(SceneHierarchy::Node node) {
         ImGui::PushStyleVar(ImGuiStyleVar_Alpha, 1.0f);
         if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoHoldToOpenOthers)) {
+            printf("DND_SOURSE\n");
             m_From = node;
             ImGui::Text("%s", GetDNDText(node, m_To).c_str());
             ImGui::SetDragDropPayload("DND_HIERARCHY_NODE", &node, sizeof(node), ImGuiCond_Once);
-            if (node.IsEntity()) {
-                auto entity = node.GetEntity();
-                ImGui::SetDragDropPayload("DND_ENTITY", &entity, sizeof(entity));
-            }
             ImGui::EndDragDropSource();
         }
         ImGui::PopStyleVar();
@@ -144,6 +139,7 @@ namespace DE {
             return;
         }
         if (ImGui::BeginDragDropTarget()) {
+            printf("DND_TARGET\n");
             m_To        = node;
             m_WasTarget = true;
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_HIERARCHY_NODE")) {

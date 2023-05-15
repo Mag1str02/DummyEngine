@@ -5,6 +5,15 @@
 
 namespace DE {
     namespace ImGuiUtils {
+        class ScopedID {
+        public:
+            ScopedID(int cnt);
+            ScopedID(const char* str);
+            ScopedID(const std::string& str);
+            ScopedID(const void* ptr);
+            ~ScopedID();
+        };
+
         namespace Constants {
             constexpr S32 BasicFontSize       = 16;
             constexpr S32 ColorPading         = -1;

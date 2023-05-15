@@ -2,6 +2,22 @@
 
 namespace DE {
     namespace ImGuiUtils {
+        ScopedID::ScopedID(int cnt) {
+            ImGui::PushID(cnt);
+        }
+        ScopedID::ScopedID(const char* str) {
+            ImGui::PushID(str);
+        }
+        ScopedID::ScopedID(const std::string& str) {
+            ImGui::PushID(str.c_str());
+        }
+        ScopedID::ScopedID(const void* ptr) {
+            ImGui::PushID(ptr);
+        }
+        ScopedID::~ScopedID() {
+            ImGui::PopID();
+        }
+
         void ClampRoundValue(Vec3& vec, float min, float max) {
             if (vec.x < min) vec.x = max;
             if (vec.x > max) vec.x = min;
@@ -133,26 +149,15 @@ namespace DE {
             int cnt = 0;
             ImGui::SetNextItemWidth(Constants::ColorPading);
             if (ImGui::BeginCombo("##EntitySelect", preview.c_str())) {
-                ImGui::PushID(cnt++);
                 for (auto e : scene->View<TagComponent, IDComponent>()) {
+                    ImGuiUtils::ScopedID id(cnt++);
                     if (ImGui::Selectable(e.Get<TagComponent>().tag.c_str(), entity == e)) {
                         entity = e;
                     }
                 }
-                ImGui::PopID();
                 ImGui::EndCombo();
             }
-            if (ImGui::BeginDragDropTarget()) {
-                std::cout << "Dragger" << std::endl;
-                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_ENTITY")) {
-                    std::cout << "Accepted" << std::endl;
-                    entity = *(Entity*)payload->Data;
-                }
-                ImGui::EndDragDropTarget();
-            }
-
             ImGui::NextColumn();
         }
-
     }  // namespace ImGuiUtils
 }  // namespace DE

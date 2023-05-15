@@ -7,6 +7,7 @@ class SinMovement : public Script {
 public:
     virtual void OnCreate() override {}
     virtual void OnUpdate(float dt) override {
+        DE_PROFILE_SCOPE("SinMovement");
         current_time += dt * Speed;
         auto& pos = Get<TransformComponent>().translation;
         float d   = (sin(current_time) + 1) / 2;

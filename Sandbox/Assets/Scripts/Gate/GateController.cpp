@@ -7,6 +7,7 @@ class GateController : public Script {
 public:
     virtual void OnCreate() override {}
     virtual void OnUpdate(float dt) override {
+        DE_PROFILE_SCOPE("GateContoller");
         m_Open = false;
         if (Controller.Valid()) {
             const auto& controller_pos = Controller.Get<TransformComponent>().translation;

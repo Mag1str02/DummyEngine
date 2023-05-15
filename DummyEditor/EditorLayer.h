@@ -29,19 +29,30 @@ namespace DE {
     class EditorLayer : public DE::Layer {
     public:
         EditorLayer();
+        ~EditorLayer();
+
+        static EditorLayer& Get();
 
         virtual void OnAttach() override;
         virtual void OnUpdate(float dt) override;
         virtual void OnImGuiRender() override;
         virtual void OnDetach() override;
 
+        //*___EditorActions____________________________________________________________________________________________________________________________________________________________________________
+
+        void ActionOpenScene();
+        void ActionCloseScene();
+        void ActionSaveScene();
+        void ActionCreateScene();
+        void ActionReloadScripts();
+
     private:
         friend class MenuBar;
 
-        //*~~~EditorFunctionality~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        //*___Helpers__________________________________________________________________________________________________________________________________________________________________________________
 
-        void OpenSceneDialog();
-        void SaveSceneDialog();
+        Path OpenSceneDialog();
+        Path SaveSceneDialog();
 
         void OpenScene(const Path& path);
         void SaveScene(const Path& path);
@@ -67,5 +78,7 @@ namespace DE {
         Entity      m_EditorCamera;
 
         SceneData m_SceneData;
+
+        static EditorLayer* s_Instance;
     };
 }  // namespace DE

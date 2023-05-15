@@ -15,8 +15,8 @@ namespace DE {
     }
 
     void ProfilerPanel::RenderTimeLapse(const std::vector<TimeLapse>& time_lapses, U32 index) {
-        ImGui::PushID(index);
-        ImGuiTreeNodeFlags flags =
+        ImGuiUtils::ScopedID id(index);
+        ImGuiTreeNodeFlags   flags =
             ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
         auto& name     = time_lapses[index].m_Name;
         auto  duration = time_lapses[index].StrDuration();
@@ -29,6 +29,5 @@ namespace DE {
             }
             ImGui::TreePop();
         }
-        ImGui::PopID();
     }
 }  // namespace DE
