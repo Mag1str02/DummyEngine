@@ -17,25 +17,35 @@ namespace DE {
         return Unit();
     }
 
-    S_METHOD_IMPL(Unit, LoadScripts, (const std::vector<ScriptAsset>& scripts), (scripts)) {
+    S_METHOD_IMPL(bool, LoadScripts, (const std::vector<ScriptAsset>& scripts), (scripts)) {
         if (scripts.empty()) {
-            return Unit();
+            return true;
         }
         std::vector<U32> recompile_ids = RecompilationList(scripts);
         if (!recompile_ids.empty()) {
             auto failed_file = CompileSelected(scripts, recompile_ids);
-            DE_ASSERT(!failed_file.has_value(), "Failed to compile source file (", failed_file.value().string(), ")");
-        }
+            if (failed_file.has_value()) {
+                LOG_WARNING("ScriptManager", "Failed to compile source file (", failed_file.value().string(), ")");
+                return false;
+            }
+        };
+
         auto new_library_name = LinkLibrary(scripts);
-        DE_ASSERT(new_library_name.has_value(), "Failed to link library (", new_library_name.value(), ")");
+        if (!new_library_name.has_value()) {
+            LOG_WARNING("ScriptManager", "Failed to link library (", new_library_name.value(), ")");
+            return false;
+        }
         auto swapped = SwapLibrary(new_library_name.value());
-        DE_ASSERT(swapped, "Failed to load library (", new_library_name.value(), ")");
+        if (!swapped) {
+            LOG_WARNING("ScriptManager", "Failed to load library (", new_library_name.value(), ")");
+            return false;
+        }
 
         for (const auto& script : scripts) {
             ScriptEngine::AddScript(script.id);
         }
         LOG_INFO("ScriptManager", "Loaded script for scene");
-        return Unit();
+        return true;
     }
     S_METHOD_IMPL(Unit, UnloadScripts, (const std::vector<ScriptAsset>& scripts), (scripts)) {
         for (const auto& script : scripts) {
@@ -48,28 +58,37 @@ namespace DE {
         LOG_INFO("ScriptManager", "Unloaded scripts");
         return Unit();
     }
-    S_METHOD_IMPL(Unit, ReloadScripts, (const std::vector<ScriptAsset>& scripts, Ref<Scene> scene), (scripts, scene)) {
+    S_METHOD_IMPL(bool, ReloadScripts, (const std::vector<ScriptAsset>& scripts, Ref<Scene> scene), (scripts, scene)) {
         if (scripts.empty()) {
-            return Unit();
+            return true;
         }
         std::vector<U32> recompile_ids = RecompilationList(scripts);
         if (recompile_ids.empty()) {
-            return Unit();
+            return true;
         }
 
         auto states = SaveSciptStates(scene);
 
         auto failed_file = CompileSelected(scripts, recompile_ids);
-        DE_ASSERT(!failed_file.has_value(), "Failed to compile source file (", failed_file.value().string(), ")");
+        if (failed_file.has_value()) {
+            LOG_WARNING("ScriptManager", "Failed to compile source file (", failed_file.value().string(), ")");
+            return false;
+        }
         auto new_library_name = LinkLibrary(scripts);
-        DE_ASSERT(new_library_name.has_value(), "Failed to link library (", new_library_name.value(), ")");
+        if (!new_library_name.has_value()) {
+            LOG_WARNING("ScriptManager", "Failed to link library (", new_library_name.value(), ")");
+            return false;
+        }
         auto swapped = SwapLibrary(new_library_name.value());
-        DE_ASSERT(swapped, "Failed to load library (", new_library_name.value(), ")");
+        if (!swapped) {
+            LOG_WARNING("ScriptManager", "Failed to load library (", new_library_name.value(), ")");
+            return false;
+        }
 
         RestoreSciptStates(states, scene);
         AttachScripts(scene);
 
-        return Unit();
+        return true;
     }
     S_METHOD_IMPL(Unit, AttachScripts, (Ref<Scene> scene), (scene)) {
         for (auto entity : scene->View<ScriptComponent>()) {

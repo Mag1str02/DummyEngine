@@ -103,13 +103,21 @@ namespace DE {
         }
         OpenScene(Path());
     }
-    void EditorLayer::ActionReloadScripts() {
+    void EditorLayer::ActionBuild() {
         if (m_CurrentScene) {
             ReloadScripts();
         }
     }
-    void EditorLayer::ActionRunScene() {
+    void EditorLayer::ActionBuildAndRun() {
         if (m_CurrentScene) {
+            ReloadScripts();
+            if (m_SceneScriptState == SceneScriptState::Compiled) {
+                RunScene();
+            }
+        }
+    }
+    void EditorLayer::ActionRunScene() {
+        if (m_CurrentScene && m_SceneScriptState != SceneScriptState::Uncompiled) {
             RunScene();
         }
     }
@@ -149,6 +157,9 @@ namespace DE {
     ImGuiManager& EditorLayer::GetImGuiManager() {
         return m_ImGuiManager;
     }
+    EditorLayer::SceneScriptState EditorLayer::GetSceneScriptState() const {
+        return m_SceneScriptState;
+    }
     EditorLayer::SceneState EditorLayer::GetSceneState() const {
         return m_SceneState;
     }
@@ -161,7 +172,19 @@ namespace DE {
     //*___Helpers______________________________________________________________________________________________________________________________________________________________________________________
 
     void EditorLayer::ReloadScripts() {
-        ScriptManager::ReloadScripts(m_SceneFileData.assets.scripts, m_CurrentScene);
+        auto res = ScriptManager::ReloadScripts(m_SceneFileData.assets.scripts, m_CurrentScene);
+        if (m_SceneScriptState == SceneScriptState::Uncompiled) {
+            if (res) {
+                m_SceneScriptState = SceneScriptState::Compiled;
+            }
+        }
+        if (m_SceneScriptState == SceneScriptState::Compiled || m_SceneScriptState == SceneScriptState::OldCompiled) {
+            if (res) {
+                m_SceneScriptState = SceneScriptState::Compiled;
+            } else {
+                m_SceneScriptState = SceneScriptState::OldCompiled;
+            }
+        }
     }
 
     Path EditorLayer::OpenSceneDialog() {
@@ -181,13 +204,16 @@ namespace DE {
             }
             m_SceneFileData = res.value();
             LoadAssets();
-            ScriptManager::LoadScripts(m_SceneFileData.assets.scripts);
+            if (!ScriptManager::LoadScripts(m_SceneFileData.assets.scripts)) {
+                return;
+            }
             m_CurrentScene = SceneLoader::Serialize(m_SceneFileData.hierarchy);
         }
         PrepareScene();
         ScriptManager::AttachScripts(m_CurrentScene);
         m_Viewport.SetFrameBuffer(m_CurrentScene->GetRenderer()->GetFrameBuffer());
-        m_SceneState = SceneState::Editing;
+        m_SceneState       = SceneState::Editing;
+        m_SceneScriptState = SceneScriptState::Compiled;
         LOG_INFO("EditorLayer", "Opened scene");
     }
     void EditorLayer::SaveScene(const Path& path) {
@@ -196,8 +222,9 @@ namespace DE {
     }
     void EditorLayer::CloseScene() {
         m_Inspector.SetActiveEntity(Entity());
-        m_CurrentScene = nullptr;
-        m_SceneState   = SceneState::None;
+        m_CurrentScene     = nullptr;
+        m_SceneState       = SceneState::None;
+        m_SceneScriptState = SceneScriptState::Uncompiled;
         ResourceManager::Clear();
         ScriptManager::UnloadScripts(m_SceneFileData.assets.scripts);
         UnloadAssets();
@@ -277,7 +304,7 @@ namespace DE {
                     ActionCloseScene();
                 }
                 if (Input::KeyReleased(Key::R)) {
-                    ActionReloadScripts();
+                    ActionBuild();
                 }
             }
         }

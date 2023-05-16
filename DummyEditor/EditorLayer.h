@@ -27,6 +27,11 @@ namespace DE {
             Step,
             Editing,
         };
+        enum class SceneScriptState {
+            Uncompiled,
+            Compiled,
+            OldCompiled,
+        };
         enum class InputState { NonSpecified = 0, ViewPort };
         struct Resources {
             Ref<Texture> play_icon;
@@ -50,7 +55,8 @@ namespace DE {
         void ActionCloseScene();
         void ActionSaveScene();
         void ActionCreateScene();
-        void ActionReloadScripts();
+        void ActionBuild();
+        void ActionBuildAndRun();
         void ActionRunScene();
         void ActionStopScene();
         void ActionPauseScene();
@@ -63,10 +69,11 @@ namespace DE {
         ~EditorLayer();
         static EditorLayer& Get();
 
-        ImGuiManager& GetImGuiManager();
-        SceneState    GetSceneState() const;
-        InputState    GetInputState() const;
-        Resources&    GetResources();
+        ImGuiManager&    GetImGuiManager();
+        SceneScriptState GetSceneScriptState() const;
+        SceneState       GetSceneState() const;
+        InputState       GetInputState() const;
+        Resources&       GetResources();
 
     private:
         //*___Helpers__________________________________________________________________________________________________________________________________________________________________________________
@@ -95,10 +102,10 @@ namespace DE {
             bool m_InspectorEnabled      = true;
             bool m_SceneHierarchyEnabled = true;
         };
-
-        InputState  m_InputState;
-        SceneState  m_SceneState;
-        PanelsState m_PanelState;
+        SceneScriptState m_SceneScriptState;
+        InputState       m_InputState;
+        SceneState       m_SceneState;
+        PanelsState      m_PanelState;
 
         ImGuiManager        m_ImGuiManager;
         ViewportPanel       m_Viewport;

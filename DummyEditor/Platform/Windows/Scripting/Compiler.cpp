@@ -23,22 +23,17 @@ namespace DE {
             FixSlash(compile_command);
 
             int res = system(compile_command.c_str());
-
-            LOG_INFO("Compiler", "Compiled file (", RelativeToExecutable(source), ")");
             return res == 0;
         }
         bool Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name) {
             if (library_name.empty()) {
-                LOG_ERROR("Compiler", "Failed to link library because of empty library name");
                 return false;
             }
             if (!fs::is_directory(destination)) {
-                LOG_ERROR("Compiler", "Failed to link library because of wrong destination folder (", destination.string(), ")");
                 return false;
             }
             for (const auto& source : sources) {
                 if (!fs::exists(source)) {
-                    LOG_ERROR("Compiler", "Failed to link library (", library_name, ") because of a missing source(", source, ")");
                     return false;
                 }
             }
@@ -53,11 +48,6 @@ namespace DE {
             FixSlash(link_command);
 
             int res = system(link_command.c_str());
-            if (res != 0) {
-                LOG_ERROR("Compiler", "Linking of (", library_name, ") failed with code (", res, ")");
-            } else {
-                LOG_INFO("Compiler", "Linked (", library_name, ")");
-            }
             return res == 0;
         }
         void AddIncludeDir(const Path& dir) { m_IncludeDirs.insert(dir); }
