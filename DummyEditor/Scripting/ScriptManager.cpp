@@ -124,6 +124,7 @@ namespace DE {
             case ScriptFieldType::Vec2: return new Vec2(field.Get<Vec2>());
             case ScriptFieldType::Vec3: return new Vec3(field.Get<Vec3>());
             case ScriptFieldType::Vec4: return new Vec4(field.Get<Vec4>());
+            case ScriptFieldType::Entity: return new Entity(field.Get<Entity>());
             default: return nullptr;
         }
     }
@@ -141,6 +142,7 @@ namespace DE {
                 case ScriptFieldType::Vec2: script->GetField<Vec2>(name) = field.Get<Vec2>(); break;
                 case ScriptFieldType::Vec3: script->GetField<Vec3>(name) = field.Get<Vec3>(); break;
                 case ScriptFieldType::Vec4: script->GetField<Vec4>(name) = field.Get<Vec4>(); break;
+                case ScriptFieldType::Entity: script->GetField<Entity>(name) = field.Get<Entity>(); break;
                 default: break;
             }
         }
@@ -158,6 +160,7 @@ namespace DE {
             case ScriptFieldType::Vec2: delete &field.Get<Vec2>(); break;
             case ScriptFieldType::Vec3: delete &field.Get<Vec3>(); break;
             case ScriptFieldType::Vec4: delete &field.Get<Vec4>(); break;
+            case ScriptFieldType::Entity: delete &field.Get<Entity>(); break;
             default: break;
         }
     }

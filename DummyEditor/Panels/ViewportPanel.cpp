@@ -99,14 +99,15 @@ namespace DE {
             ImGui::SetCursorPos(cursor_pos);
             cursor_pos.x += button_size.x + button_padding.x;
             if (ImGui::ImageButton("Build", reinterpret_cast<void*>(resources.build_icon->RendererId()), button_size)) {
-                DE_ASSERT(false, "Build not implemented");
+                editor.ActionReloadScripts();
             }
         }
         if (build_and_run) {
             ImGui::SetCursorPos(cursor_pos);
             cursor_pos.x += button_size.x + button_padding.x;
             if (ImGui::ImageButton("BuildAndRun", reinterpret_cast<void*>(resources.build_and_run_icon->RendererId()), button_size)) {
-                DE_ASSERT(false, "BuildAndRun not implemented");
+                editor.ActionReloadScripts();
+                editor.ActionRunScene();
             }
         }
     }

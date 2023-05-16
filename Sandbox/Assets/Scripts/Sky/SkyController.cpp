@@ -5,7 +5,7 @@ using namespace DE;
 class SkyContoller : public Script {
     SCRIPT(SkyContoller)
 public:
-    virtual void OnRuntimeStop() {
+    virtual void OnRuntimeStop() override {
         auto& pos = Get<TransformComponent>().rotation;
         pos       = {0.0, 0.0, 0.0};
     }
