@@ -8,6 +8,7 @@ namespace DE {
         InspectorPanel() : ImGuiPanel("Inspector") {}
         virtual void OnImGui() override;
 
+        void AddComponent();
         void SetActiveEntity(Entity entity);
         void SetScene(WeakRef<Scene> scene);
 

@@ -32,18 +32,18 @@ Scene:
               Tag: Door
               UUID: 214ec18617d03032346bb9b0b1227d10
               Transformation:
-                Translation: [10, -1.16995716, 0]
+                Translation: [10, -6, 0]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
-                Scale: [0.300000012, 1.10197425, 5]
+                Scale: [0.300000012, 4, 5]
                 ScaleOffset: [1, 1, 1]
               RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
               Shader: 24116af57b6022cd2464fbf641ae946a
               Script:
                 UUID: 15fa3d63323bca9ceb7b9ae14b5d2111
                 Fields:
-                  Controller: 83e18dd0c2524c974f820b992bbddaa3
+                  Controller: ~
                   CloseHeight: -6
                   OpenHeight: -1
                   Distance: 5
@@ -111,7 +111,7 @@ Scene:
               Tag: Lamp
               UUID: 83e18dd0c2524c974f820b992bbddaa3
               Transformation:
-                Translation: [7.49576569, -6, 0]
+                Translation: [7.95967817, -6, 0]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -125,7 +125,7 @@ Scene:
                 Diffuse: [0.284284055, 0.573529422, 0.126513824]
                 Specular: [0.346743822, 0.897058845, 0.0835496038]
                 Direction: [0, -1, 0]
-                Position: [7.48417091, -6, 0]
+                Position: [7.95967817, -6, 0]
                 CLQ: [1, 0.0219999999, 0.00190000003]
                 InnerCone: 0
                 OuterCone: 0
@@ -147,3 +147,13 @@ Scene:
                 ScaleOffset: [1, 1, 1]
               RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
               Shader: 24116af57b6022cd2464fbf641ae946a
+    - Entity:
+        Tag: Player
+        UUID: 091bb46fc39a4c4e97c5cdecb95de497
+        FPSCamera:
+          FOV: 90
+          Aspect: 1.35078537
+          NearPlane: 0.100000001
+          FarPlane: 2000000
+          Position: [0, 0, 0]
+          Direction: [0, 0, -1]

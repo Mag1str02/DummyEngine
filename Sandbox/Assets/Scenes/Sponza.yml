@@ -22,6 +22,10 @@ Scene:
         UUID: 24116af57b6022cd2464fbf641ae946a
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
+      SkyBox:
+        UUID: f1e74e1b9ab55315492a3d5ee699e18b
+        Vertex: Assets\Shaders\SkyBox\SkyBox.vs
+        Fragment: Assets\Shaders\SkyBox\SkyBox.fs
     Scripts:
       SquareMovement:
         Path: Assets\Scripts\BasicScripts\SquareMovement.cpp
@@ -48,7 +52,7 @@ Scene:
                 Diffuse: [0, 0, 1]
                 Specular: [0, 0, 1]
                 Direction: [0, -1, 0]
-                Position: [-12.1658497, 3, -9]
+                Position: [-12.1448898, 3, -9]
                 CLQ: [1, 0.00700000022, 0.000199999995]
                 InnerCone: 0
                 OuterCone: 0
@@ -78,7 +82,7 @@ Scene:
                 Diffuse: [0, 1, 0]
                 Specular: [0, 1, 0]
                 Direction: [0, -1, 0]
-                Position: [10.1722164, 3, -1]
+                Position: [10.2029381, 3, -1]
                 CLQ: [1, 0.0219999999, 0.00190000003]
                 InnerCone: 0
                 OuterCone: 0
@@ -108,7 +112,7 @@ Scene:
                 Diffuse: [1, 0, 0]
                 Specular: [1, 0, 0]
                 Direction: [0, -1, 0]
-                Position: [9.16584969, 3, 9]
+                Position: [9.14489651, 3, 9]
                 CLQ: [1, 0.0219999999, 0.00190000003]
                 InnerCone: 0
                 OuterCone: 0
@@ -147,3 +151,28 @@ Scene:
                 ScaleOffset: [1, 1, 1]
               RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
               Shader: 24116af57b6022cd2464fbf641ae946a
+          - Entity:
+              Tag: Sun
+              UUID: 86dc6765dd74d37a228aaf7fa0a9ad19
+              LightSource:
+                Type: Direction
+                Ambient: [1, 1, 1]
+                Diffuse: [1, 1, 1]
+                Specular: [1, 1, 1]
+                Direction: [0.569999993, -0.569999993, 0.569999993]
+                Position: [0, 0, 0]
+                CLQ: [1, 0.00700000022, 0.000199999995]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: Sky
+              UUID: ed39f278255d3fc7823454ad61d716e5
+              Transformation:
+                Translation: [16.9514027, 36.2624664, -97.3881531]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              Shader: f1e74e1b9ab55315492a3d5ee699e18b
+              SkyBox: 8911b8a8458923946819fb45fbb794fd

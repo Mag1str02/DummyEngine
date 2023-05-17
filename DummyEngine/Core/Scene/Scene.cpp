@@ -40,15 +40,10 @@ namespace DE {
     }
     void Scene::OnRender(Entity camera) {
         if (!camera.Valid()) {
-            auto cameras = View<FPSCamera>();
-            if (cameras.Empty()) {
-                LOG_WARNING("No camera available in scene");
-                return;
-            }
-            camera = *cameras.begin();
+            camera = m_Camera;
         }
         if (!camera.Has<FPSCamera>()) {
-            LOG_WARNING("Specified camera entity has no camera component");
+            LOG_WARNING("Scene", "Specified camera entity has no camera component");
             return;
         }
         m_Renderer->Render(camera);
@@ -101,5 +96,12 @@ namespace DE {
     }
     SceneHierarchy::Node Scene::GetHierarchyRoot() {
         return m_Hierarchy.GetRoot();
+    }
+    void Scene::SetCamera(Entity entity) {
+        DE_ASSERT(entity.Has<FPSCamera>(), "SetCamera on entity withour camera");
+        m_Camera = entity;
+    }
+    bool Scene::HasCamera() {
+        return m_Camera.Valid();
     }
 }  // namespace DE

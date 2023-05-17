@@ -87,26 +87,16 @@ namespace DE {
         if (m_Entity.Has<FPSCamera>()) {
             if (ImGui::CollapsingHeader(ICON_MD_VIDEOCAM "  FPSCamera", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto& camera = m_Entity.Get<FPSCamera>();
+                ImGui::Columns(2);
 
-                ImGui::Text("Position");
-                ImGui::SameLine(100);
-                ImGui::SetNextItemWidth(-1);
-                ImGui::DragFloat3("##Position", &(camera.m_Position.x), m_SliderSensitivity, 0, 0);
-
-                ImGui::Text("Near Plane");
-                ImGui::SameLine(100);
-                ImGui::SetNextItemWidth(-1);
-                ImGui::DragFloat("##Near Plane", &(camera.m_NearPlane), m_SliderSensitivity, 0, 0);
-
-                ImGui::Text("Far Plane");
-                ImGui::SameLine(100);
-                ImGui::SetNextItemWidth(-1);
-                ImGui::DragFloat("##Far Plane", &(camera.m_FarPlane), m_SliderSensitivity, 0, 0);
-
-                ImGui::Text("FOV");
-                ImGui::SameLine(100);
-                ImGui::SetNextItemWidth(-1);
-                ImGui::DragFloat("##FOV", &(camera.m_FOV), m_SliderSensitivity, 0, 360);
+                ImGuiUtils::EditProperty("Position", camera.m_Position);
+                ImGuiUtils::EditProperty("NearPlane", camera.m_NearPlane);
+                ImGuiUtils::EditProperty("FarPlane", camera.m_FarPlane);
+                ImGuiUtils::EditProperty("FIeldOfView", camera.m_FOV);
+                ImGui::Columns(1);
+                if (ImGui::Button("Select as main camera", {ImGui::GetContentRegionAvail().x, 20})) {
+                    m_Scene.lock()->SetCamera(entity);
+                }
             }
         }
     }
@@ -160,9 +150,27 @@ namespace DE {
                     DrawComponentWidget<LightSource>(m_Entity);
                     DrawComponentWidget<RenderMeshComponent>(m_Entity);
                     DrawComponentWidget<SkyBox>(m_Entity);
+                    AddComponent();
                 }
             }
             ImGui::End();
+        }
+    }
+    void InspectorPanel::AddComponent() {
+        if (ImGui::Button(ICON_MD_ADD "Add Component", {ImGui::GetContentRegionAvail().x, 30})) {
+            ImGui::OpenPopup("AddComponentPopup");
+        }
+        if (ImGui::BeginPopup("AddComponentPopup")) {
+            if (!m_Entity.Has<TransformComponent>() && ImGui::Selectable(ICON_MD_OPEN_IN_FULL "Transform")) {
+                m_Entity.Add<TransformComponent>();
+            }
+            if (!m_Entity.Has<LightSource>() && ImGui::Selectable(ICON_MD_LIGHTBULB "LightSource")) {
+                m_Entity.Add<LightSource>();
+            }
+            if (!m_Entity.Has<FPSCamera>() && ImGui::Selectable(ICON_MD_VIDEOCAM "Camera")) {
+                m_Entity.Add<FPSCamera>();
+            }
+            ImGui::EndPopup();
         }
     }
     void InspectorPanel::SetActiveEntity(Entity entity) {

@@ -28,11 +28,13 @@ namespace DE {
         ProcessControlls(dt);
 
         switch (m_SceneState) {
-            case SceneState::Running:
+            case SceneState::Running: {
+                Entity camera = (m_CurrentScene->HasCamera() ? Entity() : m_EditorCamera);
                 m_CurrentScene->OnUpdate(dt);
                 m_CurrentScene->OnViewPortResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());
-                m_CurrentScene->OnRender(m_EditorCamera);
+                m_CurrentScene->OnRender(camera);
                 break;
+            }
             case SceneState::Step:
                 m_CurrentScene->OnUpdate(dt);
                 m_CurrentScene->OnViewPortResize(m_Viewport.GetWidth(), m_Viewport.GetHeight());

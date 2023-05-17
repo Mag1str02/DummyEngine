@@ -25,6 +25,8 @@ namespace DE {
         Entity CreateEntity(const std::string& name = "Entity", bool visisble = true);
         Entity CloneEntity(Entity entity);
         Entity GetByID(UUID uuid);
+        void   SetCamera(Entity entity);
+        bool   HasCamera();
 
         Ref<SceneRenderer>   GetRenderer() { return m_Renderer; }
         SceneHierarchy::Node GetHierarchyRoot();
@@ -42,6 +44,7 @@ namespace DE {
         friend class ScriptEngine;
         friend class SceneRenderer;
 
+        Entity                           m_Camera;
         Ref<Storage>                     m_Storage;
         Ref<SceneRenderer>               m_Renderer;
         SceneHierarchy                   m_Hierarchy;
