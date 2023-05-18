@@ -11,4 +11,5 @@ newmtl Vehicle
 	Ks 0.89999997615814208 0.89999997615814208 0.89999997615814208
 	Ns 3.24900960922241212
 	map_Kd Vehicle_basecolor.png
-	map_Ks Vehicle_cavity.png
+	map_Ks Vehicle_ity.png
+	map_Kn Vehicle_normal.png

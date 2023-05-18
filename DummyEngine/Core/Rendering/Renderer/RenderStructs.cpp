@@ -6,13 +6,12 @@ namespace DE {
     Ref<Texture> SetupTexture(Ref<TextureData> texture_data) {
         if (texture_data) {
             return Texture::Create(*texture_data);
-        } else {
-            return Renderer::GetDefaultTexture();
         }
+        return nullptr;
     }
 
     void RenderSubMesh::FillData(const RenderSubMeshData& data) {
-        BufferLayout layout({BufferElementType::Float3, BufferElementType::Float3, BufferElementType::Float2});
+        BufferLayout layout({BufferElementType::Float3, BufferElementType::Float3, BufferElementType::Float3, BufferElementType::Float2});
 
         vertex_array = VertexArray::Create();
 
@@ -26,6 +25,7 @@ namespace DE {
 
         material.specular_map = SetupTexture(data.material.specular_map);
         material.diffuse_map  = SetupTexture(data.material.diffuse_map);
+        material.normal_map   = SetupTexture(data.material.normal_map);
 
         vertex_array->AddVertexBuffer(vertex_buffer);
         vertex_array->SetIndexBuffer(index_buffer);

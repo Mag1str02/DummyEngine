@@ -8,11 +8,12 @@
 #include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
 
 namespace DE {
-    Scope<FrameStatistics> Renderer::m_FrameStatistics = nullptr;
-    Scope<RenderAPI>       Renderer::m_RenderAPI       = nullptr;
-    Ref<Texture>           Renderer::m_DefaultTexture  = nullptr;
-    Ref<VertexArray>       Renderer::m_FullScreenQuad  = nullptr;
-    Ref<VertexArray>       Renderer::m_Cube            = nullptr;
+    Scope<FrameStatistics> Renderer::m_FrameStatistics      = nullptr;
+    Scope<RenderAPI>       Renderer::m_RenderAPI            = nullptr;
+    Ref<Texture>           Renderer::m_DefaultTexture       = nullptr;
+    Ref<Texture>           Renderer::m_DefaultNormalTexture = nullptr;
+    Ref<VertexArray>       Renderer::m_FullScreenQuad       = nullptr;
+    Ref<VertexArray>       Renderer::m_Cube                 = nullptr;
 
     void FrameStatistics::Reset() {
         m_DrawCallsAmount = 0;
@@ -38,6 +39,7 @@ namespace DE {
         m_RenderAPI->SetDefaultState();
 
         GenDefaultTexture();
+        GenDefaultNormalTexture();
         GenFullScreenQuad();
         GenCube();
 
@@ -121,6 +123,9 @@ namespace DE {
     Ref<Texture> Renderer::GetDefaultTexture() {
         return m_DefaultTexture;
     }
+    Ref<Texture> Renderer::GetDefaultNormalTexture() {
+        return m_DefaultNormalTexture;
+    }
     Ref<VertexArray> Renderer::GetFullScreenQuad() {
         return m_FullScreenQuad;
     }
@@ -185,6 +190,15 @@ namespace DE {
         m_FullScreenQuad = VertexArray::Create();
         m_FullScreenQuad->SetIndexBuffer(ib);
         m_FullScreenQuad->AddVertexBuffer(vb);
+    }
+    void Renderer::GenDefaultNormalTexture() {
+        U32             width  = 1;
+        U32             height = 1;
+        TextureFormat   format = TextureFormat::RGBA;
+        std::vector<U8> data   = {128, 128, 255, 255};
+
+        TextureData tex_data(&data[0], width, height, format);
+        m_DefaultNormalTexture = Texture::Create(tex_data);
     }
     void Renderer::GenCube() {
         U32 indices[] = {

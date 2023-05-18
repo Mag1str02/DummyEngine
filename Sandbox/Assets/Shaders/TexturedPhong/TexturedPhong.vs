@@ -2,8 +2,8 @@
 
 layout(location = 0) in vec3 i_Pos;
 layout(location = 1) in vec3 i_Normal;
-layout(location = 2) in vec2 i_TexCoords;
-layout(location = 3) in mat4 i_Transform;
+layout(location = 3) in vec2 i_TexCoords;
+layout(location = 4) in mat4 i_Transform;
 
 out VS_OUT
 {
