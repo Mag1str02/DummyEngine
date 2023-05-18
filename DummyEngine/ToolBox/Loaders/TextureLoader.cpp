@@ -28,6 +28,10 @@ namespace DE {
                 format_s = "RED";
                 format   = TextureFormat::RED;
                 break;
+            case 2:
+                format_s = "RA";
+                format   = TextureFormat::RA;
+                break;
             case 3:
                 format_s = "RGB";
                 format   = TextureFormat::RGB;

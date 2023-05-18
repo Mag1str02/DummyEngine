@@ -1,24 +1,21 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
-#include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
-#include "DummyEngine/Core/Rendering/Renderer/Texture.h"
+#include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
 #include "DummyEngine/Core/Rendering/Renderer/RenderAPI.h"
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
-#include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
+#include "DummyEngine/Core/Rendering/Renderer/Texture.h"
+#include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
-    struct FrameStatistics
-    {
+namespace DE {
+    struct FrameStatistics {
         U32 m_DrawCallsAmount;
         U32 m_DrawnInstances;
 
         void Reset();
     };
 
-    class Renderer
-    {
+    class Renderer {
     public:
         static void Initialize();
         static void Terminate();
@@ -42,6 +39,7 @@ namespace DE
 
         // TMP
         static Ref<Texture>     GetDefaultTexture();
+        static Ref<Texture>     GetDefaultNormalTexture();
         static Ref<VertexArray> GetFullScreenQuad();
         static Ref<VertexArray> GetCube();
 
@@ -53,12 +51,14 @@ namespace DE
         // TODO: Delete this
 
         static void GenDefaultTexture();
+        static void GenDefaultNormalTexture();
         static void GenFullScreenQuad();
         static void GenCube();
 
         static Scope<FrameStatistics> m_FrameStatistics;
         static Scope<RenderAPI>       m_RenderAPI;
         static Ref<Texture>           m_DefaultTexture;
+        static Ref<Texture>           m_DefaultNormalTexture;
         static Ref<VertexArray>       m_FullScreenQuad;
         static Ref<VertexArray>       m_Cube;
     };
