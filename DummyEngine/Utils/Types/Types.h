@@ -34,6 +34,7 @@ namespace DE {
     struct Vertex3D {
         Vec3 position;
         Vec3 normal;
+        Vec3 tangent;
         Vec2 tex_coords;
     };
 

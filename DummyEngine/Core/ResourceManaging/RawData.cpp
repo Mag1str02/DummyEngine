@@ -7,6 +7,7 @@ namespace DE {
             case TextureFormat::RGB: return "RGB";
             case TextureFormat::RGBA: return "RGBA";
             case TextureFormat::None: return "None";
+            case TextureFormat::RA: return "RA";
             case TextureFormat::DepthStencil: return "DepthStencil";
             default: return "Unknown";
         }
@@ -15,6 +16,7 @@ namespace DE {
         switch (format) {
             case TextureFormat::RGBA: return 4;
             case TextureFormat::RGB: return 3;
+            case TextureFormat::RA: return 2;
             case TextureFormat::RED: return 1;
             default: return 0;
         }

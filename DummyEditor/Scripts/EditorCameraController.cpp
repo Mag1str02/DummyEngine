@@ -15,7 +15,10 @@ public:
             camera.RotateX(Input::CursorYOffset() * sensitivity / 16 * 9);
 
             if (Input::KeyDown(Key::LeftShift)) {
-                speed = 100.0f;
+                speed *= 10.0f;
+            }
+            if (Input::KeyDown(Key::LeftControl)) {
+                speed /= 10.0f;
             }
             if (Input::KeyDown(Key::S)) {
                 camera.MoveInLocal(Vec3(0.0f, 0.0f, -1.0f) * speed * dt);
