@@ -47,7 +47,8 @@ namespace DE {
         glDeleteTextures(1, &m_MapId);
     }
 
-    void GLCubeMap::Bind() const {
+    void GLCubeMap::Bind(U32 slot) const {
+        glActiveTexture(GL_TEXTURE0 + slot);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_MapId);
     }
 }  // namespace DE

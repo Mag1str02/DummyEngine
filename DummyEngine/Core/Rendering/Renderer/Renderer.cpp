@@ -94,10 +94,13 @@ namespace DE {
         }
     }
     void Renderer::Submit(Ref<CubeMap> cube_map, Ref<Shader> shader, const Mat4& trasform) {
-        cube_map->Bind();
+        cube_map->Bind(1);
         shader->Bind();
+        shader->SetInt("u_SkyBox", 1);
         shader->SetMat4("u_Transform", trasform);
+        m_RenderAPI->Disable(RenderSetting::DepthMask);
         m_RenderAPI->DrawIndexed(GetCube());
+        m_RenderAPI->Enable(RenderSetting::DepthMask);
 
         ++m_FrameStatistics->m_DrawCallsAmount;
         ++m_FrameStatistics->m_DrawnInstances;

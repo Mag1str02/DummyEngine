@@ -10,9 +10,9 @@ layout(location = 1) in vec3 i_Normal;
 layout(location = 2) in vec3 i_Tangent;
 layout(location = 3) in vec2 i_TexCoords;
 layout(location = 4) in mat4 i_Transform;
-layout(std140) uniform ub_VP { VP vp[32]; };
+// layout(std140) uniform ub_VP { VP vp[32]; };
 
-uniform int u_VP;
+uniform VP u_Camera;
 
 out VS_OUT
 {
@@ -26,13 +26,13 @@ vs_out;
 
 void main()
 {  
-    mat4 view = -inverse(vp[u_VP].view) ;
+    mat4 view = -inverse(u_Camera.view) ;
     mat3 normal_matrix = mat3(transpose(inverse(i_Transform))); 
     vec3 tangent = normalize(normal_matrix * i_Tangent);
     vec3 normal = normalize(normal_matrix * i_Normal);
     vec3 bitangent = cross(normal, tangent);
 
-    gl_Position      = vp[u_VP].projection * vp[u_VP].view * i_Transform * vec4(i_Pos, 1.0);
+    gl_Position      = u_Camera.projection * u_Camera.view * i_Transform * vec4(i_Pos, 1.0);
     vs_out.FragPos   = vec3(i_Transform * vec4(i_Pos, 1.0));
     vs_out.Normal    = normal;
     vs_out.TexCoords = i_TexCoords;
