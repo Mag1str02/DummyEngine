@@ -25,7 +25,7 @@ namespace DE {
         virtual void SetInt4(const std::string& uniform_name, int x, int y, int z, int w) const           = 0;
         virtual void SetMat4(const std::string& uniform_name, Mat4 value) const                           = 0;
         virtual void SetMaterial(const std::string& uniform_name, const Material& mat) const              = 0;
-        virtual void SetUnifromBlock(const std::string& uniform_name, uint32_t id) const                  = 0;
+        virtual void SetUniformBlock(const std::string& uniform_name, uint32_t id) const                  = 0;
 
         static Ref<Shader> Create(const std::vector<ShaderPart>& initializers);
     };

@@ -37,6 +37,10 @@ Scene:
           ScaleOffset: [1, 1, 1]
         RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
         Shader: 24116af57b6022cd2464fbf641ae946a
+        Physics:
+          Mass: 10000
+          Collidable: true
+          Gravity: false
     - Entity:
         Tag: Lamp
         UUID: 83e18dd0c2524c974f820b992bbddaa3
@@ -124,6 +128,10 @@ Scene:
                 ScaleOffset: [1, 1, 1]
               RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
               Shader: 24116af57b6022cd2464fbf641ae946a
+              Physics:
+                Mass: 1
+                Collidable: true
+                Gravity: true
           - Entity:
               Tag: Door
               UUID: 214ec18617d03032346bb9b0b1227d10

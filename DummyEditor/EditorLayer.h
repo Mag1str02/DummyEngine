@@ -5,10 +5,12 @@
 #include "DummyEditor/Panels/ProfilerPanel.h"
 #include "DummyEditor/Panels/SceneHierarchyPanel.h"
 #include "DummyEditor/Panels/ViewportPanel.h"
+#include "DummyEngine/Core/Physics/Solver.hpp"
 
 namespace DE {
     struct SceneData {
         Ref<Scene>       m_Scene;
+        Ref<Physics::Solver> m_PhysicsSolver;
         Ref<FrameBuffer> m_FrameBuffer;
         SceneAssets      m_Assets;
     };

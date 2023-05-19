@@ -1,7 +1,3 @@
-//
-// Created by balanda on 4/21/2023.
-//
-
 #include "SceneConstants.hpp"
 
 const DE::Vec3& DE::Physics::SceneConstants::getGravity() const {

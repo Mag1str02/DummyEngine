@@ -93,7 +93,7 @@ namespace DE {
         GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
         glUniformMatrix4fv(pos, 1, GL_FALSE, glm::value_ptr(value));
     }
-    void GLShader::SetUnifromBlock(const std::string& uniform_name, uint32_t id) const {
+    void GLShader::SetUniformBlock(const std::string& uniform_name, uint32_t id) const {
         GLint pos = glGetUniformBlockIndex(m_ShaderId, uniform_name.c_str());
         glUniformBlockBinding(m_ShaderId, pos, id);
         glCheckError();

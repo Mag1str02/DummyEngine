@@ -3,6 +3,7 @@
 #include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"
+#include "DummyEngine/Core/Physics/PhysicsComponent.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"
 #include "DummyEngine/Core/Scene/SceneRenderData.h"
@@ -370,6 +371,13 @@ namespace DE {
         }
     }
 
+    template <> void SceneLoader::LoadComponent<Physics::PhysicsComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
+        Physics::PhysicsComponent component{Vec3(0, 0, 0), Vec3(0, 0, 0), Vec3(0, 0, 0), n_Component["Mass"].as<double>(),
+            n_Component["Collidable"].as<bool>(), n_Component["Gravity"].as<bool>()};
+        entity.AddComponent<Physics::PhysicsComponent>(component);
+        LOG_INFO("SceneLoader", "Loaded PhysicsComponent");
+    }
+
     Entity SceneLoader::LoadEntity(Ref<Scene> scene, YAML::Node n_Entity) {
         Entity entity = scene->CreateEmptyEntity();
 
@@ -382,6 +390,7 @@ namespace DE {
         if (n_Entity["LightSource"]) LoadComponent<LightSource>(scene, n_Entity["LightSource"], entity);
         if (n_Entity["SkyBox"]) LoadComponent<SkyBox>(scene, n_Entity["SkyBox"], entity);
         if (n_Entity["Script"]) LoadComponent<ScriptComponent>(scene, n_Entity["Script"], entity);
+        if (n_Entity["Physics"]) LoadComponent<Physics::PhysicsComponent>(scene, n_Entity["Physics"], entity);
 
         if (entity.Has<RenderMeshComponent>() && entity.Has<ShaderComponent>()) {
             UUID mesh_id   = entity.Get<RenderMeshComponent>().id;

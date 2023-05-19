@@ -56,6 +56,10 @@ namespace DE {
             m_SceneData.m_Scene->Render();
         }
 
+        if (m_SceneData.m_PhysicsSolver) {
+            m_SceneData.m_PhysicsSolver->OnUpdate(dt);
+        }
+
         m_SceneData.m_FrameBuffer->UnBind();
     }
     void EditorLayer::OnImGuiRender() {
@@ -168,6 +172,9 @@ namespace DE {
         ScriptManager::LoadScripts(m_SceneData.m_Assets.scripts);
 
         m_SceneData.m_Scene = SceneLoader::Instantiate(data);
+
+        m_SceneData.m_PhysicsSolver = CreateRef<Physics::Solver>();
+        m_SceneData.m_PhysicsSolver->LoadScene(m_SceneData.m_Scene);
 
         PrepareScene();
         ScriptManager::AttachScripts(m_SceneData.m_Scene);
