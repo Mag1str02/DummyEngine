@@ -159,5 +159,13 @@ namespace DE {
             }
             ImGui::NextColumn();
         }
+        void EditTexture(const std::string& name, Ref<Texture> texture, const ImVec2 tex_size) {
+            ImGui::SetCursorPosX(ImGuiUtils::Constants::DefaultLeftPadding);
+            ImGui::TextUnformatted(name.c_str());
+            ImGui::NextColumn();
+            ImGui::SetNextItemWidth(ImGuiUtils::Constants::DefaultRightPadding);
+            ImGui::Image(reinterpret_cast<void*>(texture->RendererId()), tex_size);
+            ImGui::NextColumn();
+        }
     }  // namespace ImGuiUtils
 }  // namespace DE

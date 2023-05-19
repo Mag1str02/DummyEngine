@@ -5,23 +5,59 @@
 #include "DummyEngine/Core/Scene/Scene.h"
 
 namespace DE {
+    SINGLETON_BASE(ScriptEngine);
+
+    ScriptComponent::ScriptComponent(U32 id) : m_ID(id) {
+        ScriptEngine::IncreaseRefCount(m_ID);
+    }
+    ScriptComponent::ScriptComponent(const ScriptComponent& other) {
+        m_ID = other.m_ID;
+        if (other.m_ID != UINT32_MAX) {
+            ScriptEngine::IncreaseRefCount(m_ID);
+        }
+    }
+    ScriptComponent::ScriptComponent(ScriptComponent&& other) {
+        m_ID       = other.m_ID;
+        other.m_ID = UINT32_MAX;
+    }
+    ScriptComponent& ScriptComponent::operator=(const ScriptComponent& other) {
+        if (&other != this) {
+            if (m_ID != UINT32_MAX) {
+                ScriptEngine::DecreaseRefCount(m_ID);
+            }
+            m_ID = other.m_ID;
+            if (other.m_ID != UINT32_MAX) {
+                ScriptEngine::IncreaseRefCount(m_ID);
+            }
+        }
+        return *this;
+    }
+    ScriptComponent& ScriptComponent::operator=(ScriptComponent&& other) {
+        if (&other != this) {
+            if (m_ID != UINT32_MAX) {
+                ScriptEngine::DecreaseRefCount(m_ID);
+            }
+            m_ID       = other.m_ID;
+            other.m_ID = UINT32_MAX;
+        }
+        return *this;
+    }
+    ScriptComponent::~ScriptComponent() {
+        if (m_ID != UINT32_MAX) {
+            ScriptEngine::DecreaseRefCount(m_ID);
+        }
+    }
     UUID ScriptComponent::ID() const {
-        return ScriptEngine::GetUUID(*this);
+        return ScriptEngine::Get().m_ProxyManager.GetProxy(m_ID).m_ScriptID;
     }
     bool ScriptComponent::Valid() const {
-        return ScriptEngine::Valid(*this);
-    }
-    bool ScriptComponent::Loaded() const {
-        return ScriptEngine::Loaded(*this);
-    }
-    void ScriptComponent::Destroy() {
-        ScriptEngine::Destroy(*this);
+        return m_ID != UINT32_MAX && ScriptEngine::Get().m_ProxyManager.GetProxy(m_ID).m_Script;
     }
     Script& ScriptComponent::operator*() {
-        return *ScriptEngine::GetScript(*this);
+        return *ScriptEngine::Get().m_ProxyManager.GetProxy(m_ID).m_Script;
     }
     Script* ScriptComponent::operator->() {
-        return ScriptEngine::GetScript(*this);
+        return ScriptEngine::Get().m_ProxyManager.GetProxy(m_ID).m_Script;
     }
 
     bool ScriptProxyManager::Iterator::operator==(const Iterator& other) const {
@@ -64,11 +100,7 @@ namespace DE {
     void ScriptProxyManager::Clear() {
         m_States.clear();
         m_Proxys.clear();
-        m_Generations.clear();
         m_States.clear();
-    }
-    bool ScriptProxyManager::Valid(U32 id, U32 gen) {
-        return id < m_Proxys.size() && m_States[id] && m_Generations[id] == gen;
     }
     void ScriptProxyManager::Destroy(U32 id) {
         m_AvailableIds.push_back(id);
@@ -82,27 +114,25 @@ namespace DE {
     ScriptProxy& ScriptProxyManager::GetProxy(U32 id) {
         return m_Proxys[id];
     }
-    std::pair<U32, U32> ScriptProxyManager::CreateProxy() {
+    U32 ScriptProxyManager::CreateProxy() {
         ExtendIfRequired();
         U32 id = m_AvailableIds.front();
         m_AvailableIds.pop_front();
-        m_States[id]          = true;
-        m_Proxys[id].m_ID     = UUID();
-        m_Proxys[id].m_Script = nullptr;
+        m_States[id]            = true;
+        m_Proxys[id].m_ScriptID = UUID();
+        m_Proxys[id].m_Script   = nullptr;
         // LOG_INFO("ScriptProxyManager", "Created handle (", id, ")");
-        return {id, ++m_Generations[id]};
+        return id;
     }
 
     void ScriptProxyManager::ExtendIfRequired() {
         if (m_AvailableIds.empty()) {
             m_AvailableIds.push_back(m_Proxys.size());
-            m_Proxys.push_back({nullptr, UUID()});
+            m_Proxys.push_back({nullptr, 0, UUID()});
             m_States.push_back(false);
-            m_Generations.push_back(0);
         }
     }
 
-    SINGLETON_BASE(ScriptEngine);
     S_INITIALIZE() {
         LOG_INFO("ScriptEngine", "ScriptEngine initialized");
         return Unit();
@@ -131,7 +161,7 @@ namespace DE {
             if (m_ScriptClasses[id].Valid()) {
                 LOG_INFO("ScriptEngine", "Script (", name, "|", id, ") found in library (", lib->GetName(), ")");
                 for (auto& instance : m_ProxyManager) {
-                    if (instance.m_ID == id) {
+                    if (instance.m_ScriptID == id) {
                         instance.m_Script = m_ScriptClasses[id].Create();
                         LOG_INFO("ScriptEngine", "Created instance of (", name, "|", id, ")");
                     }
@@ -149,7 +179,7 @@ namespace DE {
         }
         if (m_ScriptClasses[id].Valid()) {
             for (auto& instance : m_ProxyManager) {
-                if (instance.m_ID == id) {
+                if (instance.m_ScriptID == id) {
                     m_ScriptClasses[id].Delete(instance.m_Script);
                     instance.m_Script = nullptr;
                     LOG_INFO("ScriptEngine", "Deleted instance of (", m_ScriptClasses[id].GetName(), "|", id, ")");
@@ -166,9 +196,10 @@ namespace DE {
     S_METHOD_IMPL(Unit, ClearScripts, (), ()) {
         for (auto& instance : m_ProxyManager) {
             if (instance.m_Script) {
-                m_ScriptClasses[instance.m_ID].Delete(instance.m_Script);
+                DE_ASSERT(m_ScriptClasses.contains(instance.m_ScriptID), "Internal state broken");
+                m_ScriptClasses[instance.m_ScriptID].Delete(instance.m_Script);
                 instance.m_Script = nullptr;
-                LOG_INFO("ScriptEngine", "Deleted instance of (", m_ScriptClasses[instance.m_ID].GetName(), "|", instance.m_ID, ")");
+                LOG_INFO("ScriptEngine", "Deleted instance of (", m_ScriptClasses[instance.m_ScriptID].GetName(), "|", instance.m_ScriptID, ")");
             }
         }
         m_ScriptClasses.clear();
@@ -210,11 +241,12 @@ namespace DE {
         //*Invalidate Instances
         {
             for (auto& instance : m_ProxyManager) {
-                if (!m_ScriptClasses[instance.m_ID].Valid()) {
+                if (m_ScriptClasses.contains(instance.m_ScriptID) && !m_ScriptClasses[instance.m_ScriptID].Valid()) {
                     if (instance.m_Script) {
-                        m_ScriptClasses[instance.m_ID].Delete(instance.m_Script);
+                        m_ScriptClasses[instance.m_ScriptID].Delete(instance.m_Script);
                         instance.m_Script = nullptr;
-                        LOG_INFO("ScriptEngine", "Deleted instance of (", m_ScriptClasses[instance.m_ID].GetName(), "|", instance.m_ID, ")");
+                        LOG_INFO(
+                            "ScriptEngine", "Deleted instance of (", m_ScriptClasses[instance.m_ScriptID].GetName(), "|", instance.m_ScriptID, ")");
                     }
                 }
             }
@@ -238,9 +270,10 @@ namespace DE {
         }
         for (auto& instance : m_ProxyManager) {
             if (instance.m_Script) {
-                m_ScriptClasses[instance.m_ID].Delete(instance.m_Script);
+                DE_ASSERT(m_ScriptClasses.contains(instance.m_ScriptID), "Internal state broken");
+                m_ScriptClasses[instance.m_ScriptID].Delete(instance.m_Script);
                 instance.m_Script = nullptr;
-                LOG_INFO("ScriptEngine", "Deleted instance of (", m_ScriptClasses[instance.m_ID].GetName(), "|", instance.m_ID, ")");
+                LOG_INFO("ScriptEngine", "Deleted instance of (", m_ScriptClasses[instance.m_ScriptID].GetName(), "|", instance.m_ScriptID, ")");
             }
         }
         m_Libraries.clear();
@@ -249,10 +282,10 @@ namespace DE {
     }
 
     S_METHOD_IMPL(ScriptComponent, CreateScript, (UUID id), (id)) {
-        auto [p_id, gen]      = m_ProxyManager.CreateProxy();
+        auto            p_id  = m_ProxyManager.CreateProxy();
         auto&           proxy = m_ProxyManager.GetProxy(p_id);
-        ScriptComponent res(p_id, gen);
-        proxy.m_ID = id;
+        ScriptComponent res(p_id);
+        proxy.m_ScriptID = id;
         if (!m_ScriptClasses.contains(id)) {
             LOG_WARNING("ScriptEngine", "Creating ScriptComponent of unknown ScriptClass (", id, ")");
         } else {
@@ -265,29 +298,29 @@ namespace DE {
         }
         return res;
     }
-    S_METHOD_IMPL(Script*, GetScript, (const ScriptComponent& component), (component)) {
-        return m_ProxyManager.GetProxy(component.m_ID).m_Script;
+    S_METHOD_IMPL(Unit, IncreaseRefCount, (U32 id), (id)) {
+        auto& proxy = m_ProxyManager.GetProxy(id);
+        ++proxy.m_RefCount;
+        return Unit();
     }
-    S_METHOD_IMPL(UUID, GetUUID, (const ScriptComponent& component), (component)) {
-        return m_ProxyManager.GetProxy(component.m_ID).m_ID;
-    }
-    S_METHOD_IMPL(bool, Valid, (const ScriptComponent& component), (component)) {
-        return m_ProxyManager.Valid(component.m_ID, component.m_Gen);
-    }
-    S_METHOD_IMPL(bool, Loaded, (const ScriptComponent& component), (component)) {
-        return m_ProxyManager.Valid(component.m_ID, component.m_Gen) && m_ProxyManager.GetProxy(component.m_ID).m_Script;
-    }
-    S_METHOD_IMPL(Unit, Destroy, (const ScriptComponent& component), (component)) {
-        if (m_ProxyManager.Valid(component.m_ID, component.m_Gen)) {
-            ScriptProxy& proxy = m_ProxyManager.GetProxy(component.m_ID);
-            if (proxy.m_Script) {
-                m_ScriptClasses[proxy.m_ID].Delete(proxy.m_Script);
-                proxy.m_Script = nullptr;
-                LOG_INFO("ScriptEngine", "Deleted instance of (", m_ScriptClasses[proxy.m_ID].GetName(), "|", proxy.m_ID, ")");
-            }
-            m_ProxyManager.Destroy(component.m_ID);
+    S_METHOD_IMPL(Unit, DecreaseRefCount, (U32 id), (id)) {
+        auto& proxy = m_ProxyManager.GetProxy(id);
+        DE_ASSERT(proxy.m_RefCount != 0, "Ref Counter error");
+        --proxy.m_RefCount;
+        if (proxy.m_RefCount == 0) {
+            Destroy(id);
         }
         return Unit();
+    }
+    void ScriptEngine::Destroy(U32 id) {
+        ScriptProxy& proxy = m_ProxyManager.GetProxy(id);
+        if (proxy.m_Script) {
+            DE_ASSERT(m_ScriptClasses.contains(proxy.m_ScriptID), "Internal state broken");
+            m_ScriptClasses[proxy.m_ScriptID].Delete(proxy.m_Script);
+            proxy.m_Script = nullptr;
+            LOG_INFO("ScriptEngine", "Deleted instance of (", m_ScriptClasses[proxy.m_ScriptID].GetName(), "|", proxy.m_ScriptID, ")");
+        }
+        m_ProxyManager.Destroy(id);
     }
 
     void ScriptEngine::UpdateScriptClasses(Ref<SharedObject> library) {
@@ -299,9 +332,9 @@ namespace DE {
             }
         }
         for (auto& instance : m_ProxyManager) {
-            if (!instance.m_Script && m_ScriptClasses.contains(instance.m_ID) && m_ScriptClasses[instance.m_ID].Valid()) {
-                instance.m_Script = m_ScriptClasses[instance.m_ID].Create();
-                LOG_INFO("ScriptEngine", "Created instance of (", m_ScriptClasses[instance.m_ID].GetName(), "|", instance.m_ID, ")");
+            if (!instance.m_Script && m_ScriptClasses.contains(instance.m_ScriptID) && m_ScriptClasses[instance.m_ScriptID].Valid()) {
+                instance.m_Script = m_ScriptClasses[instance.m_ScriptID].Create();
+                LOG_INFO("ScriptEngine", "Created instance of (", m_ScriptClasses[instance.m_ScriptID].GetName(), "|", instance.m_ScriptID, ")");
             }
         }
     }

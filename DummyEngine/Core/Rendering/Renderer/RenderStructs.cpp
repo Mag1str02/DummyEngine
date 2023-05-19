@@ -63,6 +63,9 @@ namespace DE {
         m_Mesh->m_Instances.pop_back();
         m_Mesh = nullptr;
     }
+    Ref<RenderMesh> RenderMeshInstance::GetMesh() {
+        return m_Mesh;
+    }
 
     RenderMesh::RenderMesh(Ref<RenderMeshData> data) : m_InstanceBuffer(nullptr) {
         FillData(data);
@@ -74,6 +77,9 @@ namespace DE {
             res->m_SubMeshes[i] = m_SubMeshes[i].Copy();
         }
         return res;
+    }
+    std::vector<RenderSubMesh>& RenderMesh::GetSubMeshes() {
+        return m_SubMeshes;
     }
     void RenderMesh::SetInstanceBuffer(const BufferLayout& layout, U32 size) {
         m_InstanceBuffer = VertexBuffer::Create(layout, size, BufferUsage::Dynamic);

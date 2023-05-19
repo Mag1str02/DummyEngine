@@ -65,7 +65,6 @@ namespace DE {
             m_EntityByID[id] = entity;
         });
         m_Storage->SetRemoveHandler<IDComponent>([this](Entity entity) { m_EntityByID.erase(entity.Get<IDComponent>()); });
-        m_Storage->SetRemoveHandler<ScriptComponent>([this](Entity entity) { entity.Get<ScriptComponent>().Destroy(); });
     }
 
     Scene::~Scene() {

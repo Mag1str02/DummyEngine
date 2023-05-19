@@ -2,8 +2,6 @@
 
 #define MAX_LIGHT_SOURCES 128
 
-const float m_Shininess = 128;
-
 struct Material
 {
     vec3      m_Ambient;
@@ -47,7 +45,7 @@ vec3 DirectionalLightImpact(LightSource direction_light, vec3 v_Normal, vec3 vie
     vec3 halfway_ray          = normalize(light_ray + view_direction);
 
     float bounce_angle_cos = max(dot(v_Normal, light_ray), 0.0);
-    float spec             = pow(max(dot(v_Normal, halfway_ray), 0.0), m_Shininess);
+    float spec             = pow(max(dot(v_Normal, halfway_ray), 0.0), u_Material.m_Shininess);
 
     vec3 ambient  = direction_light.m_Ambient * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)) * u_Material.m_Ambient;
     vec3 diffuse  = bounce_angle_cos * direction_light.m_Diffuse * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)) * u_Material.m_Diffuse;
@@ -62,13 +60,13 @@ vec3 PointLightImpact(LightSource point_light, vec3 v_Normal, vec3 view_directio
 
     float dist             = length(light_ray);
     float bounce_angle_cos = max(dot(v_Normal, light_ray), 0.0);
-    float spec             = pow(max(dot(v_Normal, halfway_ray), 0.0), m_Shininess);
+    float spec             = pow(max(dot(v_Normal, halfway_ray), 0.0),  u_Material.m_Shininess);
 
     float attenuation = 1.0 / (point_light.m_CLQ.x + point_light.m_CLQ.y * dist + point_light.m_CLQ.z * (dist * dist));
 
     vec3 ambient  = point_light.m_Ambient * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords));
-    vec3 diffuse  = bounce_angle_cos * point_light.m_Diffuse * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords));
-    vec3 specular = spec * point_light.m_Specular * vec3(texture(u_Material.m_SpecularMap, vs_in.TexCoords));
+    vec3 diffuse  = bounce_angle_cos * point_light.m_Diffuse * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords))* u_Material.m_Diffuse;
+    vec3 specular = spec * point_light.m_Specular * vec3(texture(u_Material.m_SpecularMap, vs_in.TexCoords)) * u_Material.m_Specular;
 
     return (ambient + diffuse + specular) * attenuation;
 }

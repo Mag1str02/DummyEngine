@@ -10,24 +10,29 @@
 namespace DE {
     class ScriptComponent {
     public:
-        ScriptComponent(U32 id, U32 gen) : m_ID(id), m_Gen(gen) {}
+        ScriptComponent() = default;
+        ScriptComponent(const ScriptComponent& other);
+        ScriptComponent(ScriptComponent&& other);
+        ScriptComponent& operator=(const ScriptComponent& other);
+        ScriptComponent& operator=(ScriptComponent&& other);
+        ~ScriptComponent();
+
         UUID    ID() const;
         bool    Valid() const;
-        bool    Loaded() const;
-        void    Destroy();
         Script& operator*();
         Script* operator->();
 
     private:
+        ScriptComponent(U32 id);
         friend class ScriptEngine;
 
-        U32 m_ID  = 0;
-        U32 m_Gen = 0;
+        U32 m_ID = UINT32_MAX;
     };
 
     struct ScriptProxy {
-        Script* m_Script = nullptr;
-        UUID    m_ID;
+        Script* m_Script   = nullptr;
+        U32     m_RefCount = 0;
+        UUID    m_ScriptID;
     };
 
     class ScriptProxyManager {
@@ -54,18 +59,16 @@ namespace DE {
         Iterator end();
 
         void Clear();
-        bool Valid(U32 id, U32 gen);
         void Destroy(U32 id);
         void Destroy(Iterator it);
 
-        ScriptProxy&        GetProxy(U32 id);
-        std::pair<U32, U32> CreateProxy();
+        ScriptProxy& GetProxy(U32 id);
+        U32          CreateProxy();
 
     private:
         void ExtendIfRequired();
 
         std::vector<ScriptProxy> m_Proxys;
-        std::vector<U32>         m_Generations;
         std::deque<U32>          m_AvailableIds;
         std::vector<bool>        m_States;
     };
@@ -84,13 +87,14 @@ namespace DE {
         S_METHOD_DEF(Unit, ClearLibraries, ());
 
         S_METHOD_DEF(ScriptComponent, CreateScript, (UUID id));
-        S_METHOD_DEF(Script*, GetScript, (const ScriptComponent& component));
-        S_METHOD_DEF(UUID, GetUUID, (const ScriptComponent& component));
-        S_METHOD_DEF(bool, Valid, (const ScriptComponent& component));
-        S_METHOD_DEF(bool, Loaded, (const ScriptComponent& component));
-        S_METHOD_DEF(Unit, Destroy, (const ScriptComponent& component));
 
     private:
+        S_METHOD_DEF(Unit, IncreaseRefCount, (U32 id));
+        S_METHOD_DEF(Unit, DecreaseRefCount, (U32 id));
+        void Destroy(U32 id);
+
+        friend class ScriptComponent;
+
         void UpdateScriptClasses(Ref<SharedObject> library);
 
         std::vector<Ref<SharedObject>>        m_Libraries;
