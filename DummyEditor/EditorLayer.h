@@ -102,9 +102,9 @@ namespace DE {
             bool m_InspectorEnabled      = true;
             bool m_SceneHierarchyEnabled = true;
         };
-        SceneScriptState m_SceneScriptState;
-        InputState       m_InputState;
-        SceneState       m_SceneState;
+        SceneScriptState m_SceneScriptState = SceneScriptState::Uncompiled;
+        InputState       m_InputState       = InputState::NonSpecified;
+        SceneState       m_SceneState       = SceneState::None;
         PanelsState      m_PanelState;
 
         ImGuiManager        m_ImGuiManager;

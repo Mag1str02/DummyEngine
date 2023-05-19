@@ -93,7 +93,7 @@ namespace DE {
     S_METHOD_IMPL(Unit, AttachScripts, (Ref<Scene> scene), (scene)) {
         for (auto entity : scene->View<ScriptComponent>()) {
             auto& script_component = entity.Get<ScriptComponent>();
-            if (script_component.Loaded()) {
+            if (script_component.Valid()) {
                 script_component->AttachToScene(scene, entity);
             }
         }
@@ -108,7 +108,7 @@ namespace DE {
         ScriptStates states;
         for (auto entity : scene->View<ScriptComponent>()) {
             auto& script_component = entity.Get<ScriptComponent>();
-            if (script_component.Loaded()) {
+            if (script_component.Valid()) {
                 for (auto [name, field] : *script_component) {
                     states[entity][name.get()] = Script::Field(field.GetType(), Clone(field));
                 }
@@ -121,7 +121,7 @@ namespace DE {
             auto        entity = it->first;
             const auto& state  = it->second;
             auto&       script = entity.Get<ScriptComponent>();
-            if (script.Loaded() && !script->AttachedToScene()) {
+            if (script.Valid() && !script->AttachedToScene()) {
                 for (const auto& [name, field] : state) {
                     Restore(script, name, field);
                     Delete(field);

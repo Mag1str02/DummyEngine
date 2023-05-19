@@ -40,7 +40,7 @@ namespace DE {
     template <> void InspectorPanel::DrawComponentWidget<TagComponent>(Entity entity) {
         if (m_Entity.Has<TagComponent>()) {
             auto& component = m_Entity.Get<TagComponent>();
-            if (ImGui::CollapsingHeader(ICON_MD_VIEW_IN_AR "  Tag", ImGuiTreeNodeFlags_DefaultOpen)) {
+            if (ImGui::CollapsingHeader(ICON_MD_BADGE "  Tag", ImGuiTreeNodeFlags_DefaultOpen)) {
                 ImGui::Columns(2);
                 ImGuiUtils::EditProperty("Tag", component.tag);
                 ImGui::Columns(1);
@@ -52,7 +52,7 @@ namespace DE {
             auto& component = m_Entity.Get<ScriptComponent>();
             if (ImGui::CollapsingHeader(ICON_MD_DESCRIPTION "  Script", ImGuiTreeNodeFlags_DefaultOpen)) {
                 ImGui::Columns(2);
-                if (component.Loaded()) {
+                if (component.Valid()) {
                     auto scene = component->GetScene();
                     for (auto [name, field] : *component) {
                         switch (field.GetType()) {
@@ -133,6 +133,39 @@ namespace DE {
                     ImGuiUtils::EditProperty("Outer Cone", source.outer_cone_cos);
                 }
                 ImGui::Columns(1);
+            }
+        }
+    }
+    template <> void InspectorPanel::DrawComponentWidget<RenderMeshComponent>(Entity entity) {
+        if (m_Entity.Has<RenderMeshComponent>()) {
+            if (ImGui::CollapsingHeader(ICON_MD_TOKEN "  RenderMesh", ImGuiTreeNodeFlags_DefaultOpen)) {
+                auto& meshes = m_Entity.Get<RenderMeshComponent>().mesh_instance->GetMesh()->GetSubMeshes();
+                int  cnt    = 0;
+                for (auto& mesh : meshes) {
+                    std::string name = StrCat("Mesh ", cnt);
+                    if (ImGui::TreeNode(name.c_str())) {
+                        auto& material     = mesh.material;
+                        auto  specular_map = (material.specular_map ? material.specular_map : Renderer::GetDefaultTexture());
+                        auto  diffuse_map  = (material.diffuse_map ? material.diffuse_map : Renderer::GetDefaultTexture());
+                        auto  normal_map   = (material.normal_map ? material.normal_map : Renderer::GetDefaultNormalTexture());
+                        ImGui::Separator();
+                        ImGui::Columns(2);
+                        ImGuiUtils::EditTexture("SpecularMap", specular_map);
+                        ImGui::Separator();
+                        ImGuiUtils::EditTexture("Diffuse", diffuse_map);
+                        ImGui::Separator();
+                        ImGuiUtils::EditTexture("NormalMap", normal_map);
+                        ImGui::Separator();
+                        ImGuiUtils::EditProperty("AmbientColor", material.ambient_color, ImGuiUtils::PropertyType::Color);
+                        ImGuiUtils::EditProperty("SpecularColor", material.specular_color, ImGuiUtils::PropertyType::Color);
+                        ImGuiUtils::EditProperty("DiffuseColor", material.diffuse_color, ImGuiUtils::PropertyType::Color);
+                        ImGuiUtils::EditProperty("Shininess", material.shininess);
+                        ImGui::Columns(1);
+                        ImGui::Separator();
+                        ImGui::TreePop();
+                    }
+                    ++cnt;
+                }
             }
         }
     }
