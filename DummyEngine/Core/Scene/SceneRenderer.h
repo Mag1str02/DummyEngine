@@ -16,22 +16,16 @@ namespace DE {
         void             OnViewPortResize(U32 x, U32 y);
         Ref<FrameBuffer> GetFrameBuffer();
 
-        void RequestShader(UUID shader_id);
-        void AddVPEntity(const Entity& entity);
-
+        void                    RequestShader(UUID shader_id);
         Ref<RenderMeshInstance> GetRenderMeshInstance(UUID mesh_id, UUID shader_ids);
 
     private:
-        void UpdateLights();
-        void UpdateVP();
-
-        void SetVPEntity(const Entity& entity);
+        void UpdateShaders(const FPSCamera& camera);
         void CreateInstancedMesh(UUID mesh_id, UUID shader_id);
 
         Scene* m_Scene;
 
         Ref<UniformBuffer> m_Lights;
-        Ref<UniformBuffer> m_VP;
         Ref<FrameBuffer>   m_FrameBuffer;
 
         std::unordered_map<UUID, Ref<Shader>>                                                   m_Shaders;

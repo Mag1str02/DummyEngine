@@ -2,6 +2,8 @@
 
 #define MAX_LIGHT_SOURCES 128
 
+const float m_Shininess = 128;
+
 struct Material
 {
     vec3      m_Ambient;
@@ -41,11 +43,11 @@ layout(std140) uniform ub_Lights { LightSource lights[100]; };
 
 vec3 DirectionalLightImpact(LightSource direction_light, vec3 v_Normal, vec3 view_direction)
 {
-    vec3 normalized_light_ray = normalize(-direction_light.m_Direction);
+    vec3 light_ray = normalize(-direction_light.m_Direction);
+    vec3 halfway_ray          = normalize(light_ray + view_direction);
 
-    float bounce_angle_cos = max(dot(v_Normal, normalized_light_ray), 0.0);
-    vec3  reflected_ray    = reflect(-normalized_light_ray, v_Normal);
-    float spec             = pow(max(dot(view_direction, reflected_ray), 0.0), u_Material.m_Shininess);
+    float bounce_angle_cos = max(dot(v_Normal, light_ray), 0.0);
+    float spec             = pow(max(dot(v_Normal, halfway_ray), 0.0), m_Shininess);
 
     vec3 ambient  = direction_light.m_Ambient * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)) * u_Material.m_Ambient;
     vec3 diffuse  = bounce_angle_cos * direction_light.m_Diffuse * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)) * u_Material.m_Diffuse;
@@ -55,13 +57,12 @@ vec3 DirectionalLightImpact(LightSource direction_light, vec3 v_Normal, vec3 vie
 }
 vec3 PointLightImpact(LightSource point_light, vec3 v_Normal, vec3 view_direction, vec3 v_FragPos)
 {
-    vec3 light_ray            = point_light.m_Position - v_FragPos;
-    vec3 normalized_light_ray = normalize(light_ray);
-    vec3 reflected_ray        = reflect(-normalized_light_ray, v_Normal);
+    vec3 light_ray            = normalize(point_light.m_Position - v_FragPos);
+    vec3 halfway_ray          = normalize(light_ray + view_direction);
 
     float dist             = length(light_ray);
-    float bounce_angle_cos = max(dot(v_Normal, normalized_light_ray), 0.0);
-    float spec             = pow(max(dot(view_direction, reflected_ray), 0.0), 32);
+    float bounce_angle_cos = max(dot(v_Normal, light_ray), 0.0);
+    float spec             = pow(max(dot(v_Normal, halfway_ray), 0.0), m_Shininess);
 
     float attenuation = 1.0 / (point_light.m_CLQ.x + point_light.m_CLQ.y * dist + point_light.m_CLQ.z * (dist * dist));
 
