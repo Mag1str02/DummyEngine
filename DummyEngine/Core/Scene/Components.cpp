@@ -6,4 +6,13 @@ namespace DE {
         return glm::translate(glm::mat4(1.0f), translation + translation_offset) * glm::toMat4(glm::quat(glm::radians(rotation + rotation_offet))) *
                glm::scale(glm::mat4(1.0f), scale * scale_offset);
     }
+    Mat4 TransformComponent::GetTranslation() const {
+        return glm::translate(glm::mat4(1.0f), translation + translation_offset);
+    }
+    Mat4 TransformComponent::GetRotation() const {
+        return glm::toMat4(glm::quat(glm::radians(rotation + rotation_offet)));
+    }
+    Mat4 TransformComponent::GetScale() const {
+        return glm::scale(glm::mat4(1.0f), scale * scale_offset);
+    }
 }  // namespace DE

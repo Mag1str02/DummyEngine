@@ -41,6 +41,9 @@ namespace DE {
         TransformComponent() = default;
 
         Mat4 GetTransform() const;
+        Mat4 GetTranslation() const;
+        Mat4 GetRotation() const;
+        Mat4 GetScale() const;
     };
     struct ShaderComponent {
         UUID id;

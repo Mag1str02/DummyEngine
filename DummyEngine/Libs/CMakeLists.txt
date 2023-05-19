@@ -52,5 +52,4 @@ target_link_libraries(Dependencies
     PUBLIC glfw
     PUBLIC assimp
     PUBLIC yaml-cpp
-    PUBLIC dbghelp
 )

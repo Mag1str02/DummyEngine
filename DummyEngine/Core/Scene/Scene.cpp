@@ -59,7 +59,6 @@ namespace DE {
     }
 
     Scene::Scene() : m_Storage(CreateRef<Storage>()), m_Renderer(CreateRef<SceneRenderer>(this)), m_Hierarchy("Scene") {
-        m_Storage->SetAddHandler<FPSCamera>([this](Entity entity) { m_Renderer->AddVPEntity(entity); });
         m_Storage->SetAddHandler<IDComponent>([this](Entity entity) {
             auto id = entity.Get<IDComponent>();
             DE_ASSERT(m_EntityByID.find(id) == m_EntityByID.end(), "UUID collision occured (", id.Get(), ")");
