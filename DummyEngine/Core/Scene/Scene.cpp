@@ -6,105 +6,31 @@
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/Scene/Components.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"
-#include "DummyEngine/Core/Scene/SceneRenderData.h"
+#include "DummyEngine/Core/Scene/SceneRenderer.h"
 #include "DummyEngine/Core/Scripting/Script.h"
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
 
 namespace DE {
-
-    Scene::Scene(const std::string& name) :
-        m_Name(name),
-        m_Storage(CreateRef<Storage>()),
-        m_RenderData(CreateRef<SceneRenderData>(this)),
-        m_HierarchyRoot(CreateRef<SceneHierarchyNode>()) {
-        m_Storage->SetAddHandler<FPSCamera>([this](Entity entity) { m_RenderData->AddVPEntity(entity); });
-        m_Storage->SetAddHandler<TagComponent>([this](Entity entity) {
-            auto& name = entity.Get<TagComponent>();
-            DE_ASSERT(m_EntityByTag.find(name) == m_EntityByTag.end(), "Name collision occured (", name.Get(), ")");
-            m_EntityByTag[name] = entity;
-        });
-        m_Storage->SetAddHandler<IDComponent>([this](Entity entity) {
-            auto id = entity.Get<IDComponent>();
-            DE_ASSERT(m_EntityByID.find(id) == m_EntityByID.end(), "UUID collision occured (", id.Get(), ")");
-            m_EntityByID[id] = entity;
-        });
-        m_Storage->SetRemoveHandler<TagComponent>([this](Entity entity) { m_EntityByTag.erase(entity.Get<TagComponent>()); });
-        m_Storage->SetRemoveHandler<IDComponent>([this](Entity entity) { m_EntityByID.erase(entity.Get<IDComponent>()); });
-        m_Storage->SetRemoveHandler<ScriptComponent>([this](Entity entity) { entity.Get<ScriptComponent>().Destroy(); });
-        LOG_INFO("Scene", "Scene (", name, ") was created");
+    void Scene::OnRuntimeStart() {
+        for (auto e : m_Storage->View<ScriptComponent>()) {
+            auto& component = e.Get<ScriptComponent>();
+            if (component.Valid()) {
+                component->OnRuntimeStart();
+            }
+        }
     }
-
-    Scene::~Scene() {
-        m_Storage->Destruct();
-        m_Storage = nullptr;
-        LOG_INFO("Scene", "Scene (", m_Name, ") was destroyed");
+    void Scene::OnRuntimeStop() {
+        for (auto e : m_Storage->View<ScriptComponent>()) {
+            auto& component = e.Get<ScriptComponent>();
+            if (component.Valid()) {
+                component->OnRuntimeStop();
+            }
+        }
     }
-
-    Entity Scene::CreateEmptyEntity() {
-        return m_Storage->CreateEntity();
-    }
-    Entity Scene::CreateHiddenEntity(const std::string& name) {
-        Entity new_entity = m_Storage->CreateEntity();
-        new_entity.AddComponent(TagComponent(GenAvilableEntityName(name)));
-        new_entity.AddComponent(IDComponent(UUID::Generate()));
-        return new_entity;
-    }
-    Entity Scene::CreateEntity(const std::string& name) {
-        Entity new_entity = m_Storage->CreateEntity();
-        new_entity.AddComponent(TagComponent(GenAvilableEntityName(name)));
-        new_entity.AddComponent(IDComponent(UUID::Generate()));
-        return new_entity;
-    }
-    Entity Scene::CloneEntity(const std::string& entity_to_clone, const std::string& new_name) {
-        DE_ASSERT(false, "Clone of entity not implemented yet.");
-        return m_Storage->CreateEntity();
-    }
-    bool Scene::ExistsEntityWithTag(const TagComponent& name) {
-        return m_EntityByTag.contains(name);
-    }
-    bool Scene::ExistsEntityWithID(UUID id) {
-        return m_EntityByID.contains(id);
-    }
-
-    Entity Scene::GetByID(UUID uuid) {
-        return (m_EntityByID.contains(uuid) ? m_EntityByID.at(uuid) : Entity());
-    }
-    Entity Scene::GetByTag(const std::string& name) {
-        return (m_EntityByTag.contains(name) ? m_EntityByTag.at(name) : Entity());
-    }
-    const std::string& Scene::GetName() const {
-        return m_Name;
-    }
-
-    Ref<SceneHierarchyNode> Scene::GetHierarchy() {
-        return m_HierarchyRoot;
-    }
-
-    void Scene::OnUpdate(double dt) {
+    void Scene::OnUpdate(float dt) {
         DE_PROFILE_SCOPE("Scene OnUpdate");
 
         m_Storage->UpdateSystems(dt);
-        UpdateScripts(dt);
-    }
-
-    void Scene::OnViewPortResize(uint32_t x, uint32_t y) {
-        double aspect  = double(x) / double(y);
-        auto   cameras = m_Storage->View<FPSCamera>();
-        for (auto e : cameras) {
-            e.Get<FPSCamera>().SetAspect(aspect);
-        }
-    }
-    void Scene::Render() {
-        m_RenderData->SetCamera(GetCamera());
-        m_RenderData->Render();
-    }
-
-    Entity Scene::GetCamera() {
-        auto cameras = m_Storage->View<FPSCamera>();
-        DE_ASSERT(!cameras.Empty(), "No available camera in scene.");
-        return *cameras.begin();
-    }
-    void Scene::UpdateScripts(float dt) {
         for (auto e : m_Storage->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
@@ -112,13 +38,68 @@ namespace DE {
             }
         }
     }
-
-    std::string Scene::GenAvilableEntityName(const std::string& prefered) {
-        std::string name = prefered;
-        uint32_t    cnt  = 0;
-        while (ExistsEntityWithTag(name)) {
-            name = StrCat(prefered, "(", ++cnt, ")");
+    void Scene::OnRender(Entity camera) {
+        if (!camera.Valid()) {
+            camera = m_Camera;
         }
-        return name;
+        if (!camera.Has<FPSCamera>()) {
+            LOG_WARNING("Scene", "Specified camera entity has no camera component");
+            return;
+        }
+        m_Renderer->Render(camera);
+    }
+
+    void Scene::OnViewPortResize(U32 x, U32 y) {
+        double aspect  = double(x) / double(y);
+        auto   cameras = m_Storage->View<FPSCamera>();
+        for (auto e : cameras) {
+            e.Get<FPSCamera>().SetAspect(aspect);
+        }
+        m_Renderer->OnViewPortResize(x, y);
+    }
+
+    Scene::Scene() : m_Storage(CreateRef<Storage>()), m_Renderer(CreateRef<SceneRenderer>(this)), m_Hierarchy("Scene") {
+        m_Storage->SetAddHandler<IDComponent>([this](Entity entity) {
+            auto id = entity.Get<IDComponent>();
+            DE_ASSERT(m_EntityByID.find(id) == m_EntityByID.end(), "UUID collision occured (", id.Get(), ")");
+            m_EntityByID[id] = entity;
+        });
+        m_Storage->SetRemoveHandler<IDComponent>([this](Entity entity) { m_EntityByID.erase(entity.Get<IDComponent>()); });
+    }
+
+    Scene::~Scene() {
+        m_Storage->Destruct();
+        m_Storage = nullptr;
+    }
+
+    Entity Scene::CreateEmptyEntity() {
+        return m_Storage->CreateEntity();
+    }
+    Entity Scene::CreateEntity(const std::string& name, bool visisble) {
+        Entity new_entity = m_Storage->CreateEntity();
+        new_entity.AddComponent(TagComponent(name));
+        new_entity.AddComponent(IDComponent(UUID::Generate()));
+        if (visisble) {
+            m_Hierarchy.AddEntity(new_entity);
+        }
+        return new_entity;
+    }
+    Entity Scene::CloneEntity(Entity entity) {
+        DE_ASSERT(false, "Clone of entity not implemented yet.");
+        return CreateEntity("Entity", false);
+    }
+
+    Entity Scene::GetByID(UUID uuid) {
+        return (m_EntityByID.contains(uuid) ? m_EntityByID.at(uuid) : Entity());
+    }
+    SceneHierarchy::Node Scene::GetHierarchyRoot() {
+        return m_Hierarchy.GetRoot();
+    }
+    void Scene::SetCamera(Entity entity) {
+        DE_ASSERT(entity.Has<FPSCamera>(), "SetCamera on entity withour camera");
+        m_Camera = entity;
+    }
+    bool Scene::HasCamera() {
+        return m_Camera.Valid();
     }
 }  // namespace DE

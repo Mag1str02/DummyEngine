@@ -8,11 +8,12 @@
 #include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
 
 namespace DE {
-    Scope<FrameStatistics> Renderer::m_FrameStatistics = nullptr;
-    Scope<RenderAPI>       Renderer::m_RenderAPI       = nullptr;
-    Ref<Texture>           Renderer::m_DefaultTexture  = nullptr;
-    Ref<VertexArray>       Renderer::m_FullScreenQuad  = nullptr;
-    Ref<VertexArray>       Renderer::m_Cube            = nullptr;
+    Scope<FrameStatistics> Renderer::m_FrameStatistics      = nullptr;
+    Scope<RenderAPI>       Renderer::m_RenderAPI            = nullptr;
+    Ref<Texture>           Renderer::m_DefaultTexture       = nullptr;
+    Ref<Texture>           Renderer::m_DefaultNormalTexture = nullptr;
+    Ref<VertexArray>       Renderer::m_FullScreenQuad       = nullptr;
+    Ref<VertexArray>       Renderer::m_Cube                 = nullptr;
 
     void FrameStatistics::Reset() {
         m_DrawCallsAmount = 0;
@@ -38,6 +39,7 @@ namespace DE {
         m_RenderAPI->SetDefaultState();
 
         GenDefaultTexture();
+        GenDefaultNormalTexture();
         GenFullScreenQuad();
         GenCube();
 
@@ -45,20 +47,14 @@ namespace DE {
     }
     void Renderer::Terminate() {}
 
-    void Renderer::OnWindowResize(uint32_t width, uint32_t height) {
-        DE_PROFILE_SCOPE("On Window Resize");
-
+    void Renderer::OnWindowResize(U32 width, U32 height) {
         m_RenderAPI->SetViewport(0, 0, width, height);
     }
 
     void Renderer::BeginFrame() {
-        DE_PROFILE_SCOPE("Renderer BeginFrame");
-
         m_FrameStatistics->Reset();
     }
-    void Renderer::EndFrame() {
-        DE_PROFILE_SCOPE("Renderer EndFrame");
-    }
+    void Renderer::EndFrame() {}
 
     void Renderer::Clear() {
         m_RenderAPI->Clear();
@@ -98,10 +94,13 @@ namespace DE {
         }
     }
     void Renderer::Submit(Ref<CubeMap> cube_map, Ref<Shader> shader, const Mat4& trasform) {
-        cube_map->Bind();
+        cube_map->Bind(1);
         shader->Bind();
+        shader->SetInt("u_SkyBox", 1);
         shader->SetMat4("u_Transform", trasform);
+        m_RenderAPI->Disable(RenderSetting::DepthMask);
         m_RenderAPI->DrawIndexed(GetCube());
+        m_RenderAPI->Enable(RenderSetting::DepthMask);
 
         ++m_FrameStatistics->m_DrawCallsAmount;
         ++m_FrameStatistics->m_DrawnInstances;
@@ -120,9 +119,15 @@ namespace DE {
     void Renderer::SetClearColor(float r, float g, float b, float a) {
         m_RenderAPI->SetClearColor(Vec4(r, g, b, a));
     }
+    void Renderer::SetDefaultFrameBuffer() {
+        m_RenderAPI->SetDefaultFrameBuffer();
+    }
 
     Ref<Texture> Renderer::GetDefaultTexture() {
         return m_DefaultTexture;
+    }
+    Ref<Texture> Renderer::GetDefaultNormalTexture() {
+        return m_DefaultNormalTexture;
     }
     Ref<VertexArray> Renderer::GetFullScreenQuad() {
         return m_FullScreenQuad;
@@ -143,16 +148,16 @@ namespace DE {
     // TODO: Think to move somewhere else...
 
     void Renderer::GenDefaultTexture() {
-        uint32_t             width  = 1;
-        uint32_t             height = 1;
-        TextureFormat        format = TextureFormat::RGBA;
-        std::vector<uint8_t> data(4, 255);
+        U32             width  = 1;
+        U32             height = 1;
+        TextureFormat   format = TextureFormat::RGBA;
+        std::vector<U8> data(4, 255);
 
         TextureData tex_data(&data[0], width, height, format);
         m_DefaultTexture = Texture::Create(tex_data);
     }
     void Renderer::GenFullScreenQuad() {
-        uint32_t indices[] = {
+        U32 indices[] = {
             0,
             1,
             2,  //
@@ -189,8 +194,17 @@ namespace DE {
         m_FullScreenQuad->SetIndexBuffer(ib);
         m_FullScreenQuad->AddVertexBuffer(vb);
     }
+    void Renderer::GenDefaultNormalTexture() {
+        U32             width  = 1;
+        U32             height = 1;
+        TextureFormat   format = TextureFormat::RGBA;
+        std::vector<U8> data   = {128, 128, 255, 255};
+
+        TextureData tex_data(&data[0], width, height, format);
+        m_DefaultNormalTexture = Texture::Create(tex_data);
+    }
     void Renderer::GenCube() {
-        uint32_t indices[] = {
+        U32 indices[] = {
             0, 1, 2,  //
             2, 3, 0,  //
 

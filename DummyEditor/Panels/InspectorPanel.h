@@ -1,18 +1,23 @@
 #pragma once
 
-#include "DummyEditor/DummyEngineInclude.h"
+#include "DummyEditor/ImGuiUtils/ImGuiPanel.h"
 
 namespace DE {
     class InspectorPanel : public ImGuiPanel {
     public:
         InspectorPanel() : ImGuiPanel("Inspector") {}
-        virtual void View() override;
+        virtual void OnImGui() override;
 
+        void AddComponent();
         void SetActiveEntity(Entity entity);
         void SetScene(WeakRef<Scene> scene);
 
     private:
+        template <typename Component> void DrawComponentWidget(Entity entity);
+
         Entity         m_Entity;
         WeakRef<Scene> m_Scene;
+
+        float m_SliderSensitivity = 0.1;
     };
 }  // namespace DE

@@ -66,20 +66,11 @@ Scene:
         UUID: 24116af57b6022cd2464fbf641ae946a
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
-    Scripts: ~
+    Scripts:
+      SkyContoller:
+        Path: Assets\Scripts\Sky\SkyController.cpp
+        UUID: 15fa3d63323b421ce0329ae14b5d2111
   Hierarchy:
-    - Entity:
-        Tag: skybox
-        UUID: 8952b3e3f10f491222a7c60918c65cf9
-        Transformation:
-          Translation: [0, 0, 0]
-          TranslationOffset: [0, 0, 0]
-          Rotation: [-180, 0, 0]
-          RotationOffset: [0, 0, 0]
-          Scale: [1, 1, 1]
-          ScaleOffset: [1, 1, 1]
-        Shader: f1e74e1b9ab55315492a3d5ee699e18b
-        SkyBox: 8911b8a8458923946819fb45fbb794fd
     - Node:
         Name: Arches
         Childs:
@@ -336,177 +327,8 @@ Scene:
               RenderModel: 40fb5568addff10da5c21859fe9d3c3a
               Shader: 24116af57b6022cd2464fbf641ae946a
     - Node:
-        Name: Lights
+        Name: Enviroment
         Childs:
-          - Entity:
-              Tag: sun_9
-              UUID: 7a8b7f4299c08f63efcee089d9b63fa0
-              LightSource:
-                Type: Point
-                Ambient: [0.00951558072, 0, 0.323529422]
-                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-                Specular: [0.113042593, 0.0496203378, 0.289215684]
-                Direction: [0, -0.44721359, 0.89442718]
-                Position: [675, 0, 50]
-                CLQ: [1, 0.00700000022, 0.000199999995]
-                InnerCone: 0
-                OuterCone: 0
-          - Entity:
-              Tag: sun_8
-              UUID: 3343a4f27eb985828a8e29806a60cb97
-              LightSource:
-                Type: Point
-                Ambient: [0.00951558072, 0, 0.323529422]
-                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-                Specular: [0.113042593, 0.0496203378, 0.289215684]
-                Direction: [0, -0.44721359, 0.89442718]
-                Position: [600, 0, 50]
-                CLQ: [1, 0.00700000022, 0.000199999995]
-                InnerCone: 0
-                OuterCone: 0
-          - Entity:
-              Tag: sun_7
-              UUID: 534873161b1085e86accf5528579fd7e
-              LightSource:
-                Type: Point
-                Ambient: [0.00951558072, 0, 0.323529422]
-                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-                Specular: [0.113042593, 0.0496203378, 0.289215684]
-                Direction: [0, -0.44721359, 0.89442718]
-                Position: [525, 0, 50]
-                CLQ: [1, 0.00700000022, 0.000199999995]
-                InnerCone: 0
-                OuterCone: 0
-          - Entity:
-              Tag: sun_5
-              UUID: 63c20eeb7dfe8e56b096524fc8fb2b16
-              LightSource:
-                Type: Point
-                Ambient: [0.00951558072, 0, 0.323529422]
-                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-                Specular: [0.113042593, 0.0496203378, 0.289215684]
-                Direction: [0, -0.44721359, 0.89442718]
-                Position: [375, 0, 50]
-                CLQ: [1, 0.00700000022, 0.000199999995]
-                InnerCone: 0
-                OuterCone: 0
-          - Entity:
-              Tag: sun_6
-              UUID: 416759e3dc1f94896b16b51192f5a31a
-              LightSource:
-                Type: Point
-                Ambient: [0.00951558072, 0, 0.323529422]
-                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-                Specular: [0.113042593, 0.0496203378, 0.289215684]
-                Direction: [0, -0.44721359, 0.89442718]
-                Position: [450, 0, 50]
-                CLQ: [1, 0.00700000022, 0.000199999995]
-                InnerCone: 0
-                OuterCone: 0
-          - Entity:
-              Tag: sun_4
-              UUID: 18dc5de2cb1c3fd0789003351c807046
-              LightSource:
-                Type: Point
-                Ambient: [0.00951558072, 0, 0.323529422]
-                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-                Specular: [0.113042593, 0.0496203378, 0.289215684]
-                Direction: [0, -0.44721359, 0.89442718]
-                Position: [300, 0, 50]
-                CLQ: [1, 0.00700000022, 0.000199999995]
-                InnerCone: 0
-                OuterCone: 0
-          - Entity:
-              Tag: sun_3
-              UUID: 369644edcf9c325907dec37699a73367
-              LightSource:
-                Type: Point
-                Ambient: [0.00951558072, 0, 0.323529422]
-                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-                Specular: [0.113042593, 0.0496203378, 0.289215684]
-                Direction: [0, -0.44721359, 0.89442718]
-                Position: [225, 0, 50]
-                CLQ: [1, 0.00700000022, 0.000199999995]
-                InnerCone: 0
-                OuterCone: 0
-          - Entity:
-              Tag: sun_2
-              UUID: f877ea7ed96bc9023664d5d7c18f8f65
-              LightSource:
-                Type: Point
-                Ambient: [0.00951558072, 0, 0.323529422]
-                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-                Specular: [0.113042593, 0.0496203378, 0.289215684]
-                Direction: [0, -0.44721359, 0.89442718]
-                Position: [150, 0, 50]
-                CLQ: [1, 0.00700000022, 0.000199999995]
-                InnerCone: 0
-                OuterCone: 0
-          - Entity:
-              Tag: sun_12
-              UUID: a923e0db91c97b249165a05f6879ce96
-              LightSource:
-                Type: Point
-                Ambient: [0.00951558072, 0, 0.323529422]
-                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-                Specular: [0.113042593, 0.0496203378, 0.289215684]
-                Direction: [0, -0.44721359, 0.89442718]
-                Position: [-150, 0, 50]
-                CLQ: [1, 0.00700000022, 0.000199999995]
-                InnerCone: 0
-                OuterCone: 0
-          - Entity:
-              Tag: sun_11
-              UUID: cb9024d5e25a0f11f191e17b80bd719d
-              LightSource:
-                Type: Point
-                Ambient: [0.00951558072, 0, 0.323529422]
-                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-                Specular: [0.113042593, 0.0496203378, 0.289215684]
-                Direction: [0, -0.44721359, 0.89442718]
-                Position: [-75, 0, 50]
-                CLQ: [1, 0.00700000022, 0.000199999995]
-                InnerCone: 0
-                OuterCone: 0
-          - Entity:
-              Tag: sun_1
-              UUID: 590eb57b53613ac2a674e9a7a3817be1
-              LightSource:
-                Type: Point
-                Ambient: [0.00951558072, 0, 0.323529422]
-                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-                Specular: [0.113042593, 0.0496203378, 0.289215684]
-                Direction: [0, -0.44721359, 0.89442718]
-                Position: [75, 0, 50]
-                CLQ: [1, 0.00700000022, 0.000199999995]
-                InnerCone: 0
-                OuterCone: 0
-          - Entity:
-              Tag: sun_10
-              UUID: 895312c3fb5527aaa4fc3335bdf5bcb4
-              LightSource:
-                Type: Point
-                Ambient: [0.00951558072, 0, 0.323529422]
-                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-                Specular: [0.113042593, 0.0496203378, 0.289215684]
-                Direction: [0, -0.44721359, 0.89442718]
-                Position: [750, 0, 50]
-                CLQ: [1, 0.00700000022, 0.000199999995]
-                InnerCone: 0
-                OuterCone: 0
-          - Entity:
-              Tag: sun_0
-              UUID: d41b36a484ef0c66d5982cdfbff1da43
-              LightSource:
-                Type: Point
-                Ambient: [0.00951558072, 0, 0.323529422]
-                Diffuse: [0.00682429783, 0.0268957801, 0.34803921]
-                Specular: [0.113042593, 0.0496203378, 0.289215684]
-                Direction: [0, -0.44721359, 0.89442718]
-                Position: [0, 0, 50]
-                CLQ: [1, 0.00700000022, 0.000199999995]
-                InnerCone: 0
-                OuterCone: 0
           - Entity:
               Tag: sun
               UUID: 4c84709484f950496a723680ffa3dd15
@@ -520,6 +342,22 @@ Scene:
                 CLQ: [0.5, 0.00700000022, 0.000199999995]
                 InnerCone: 0
                 OuterCone: 0
+          - Entity:
+              Tag: skybox
+              UUID: 8952b3e3f10f491222a7c60918c65cf9
+              Transformation:
+                Translation: [-289.63269, 41.4955139, 111.974434]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [279.864075, 199.726501, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              Shader: f1e74e1b9ab55315492a3d5ee699e18b
+              SkyBox: 8911b8a8458923946819fb45fbb794fd
+              Script:
+                UUID: 15fa3d63323b421ce0329ae14b5d2111
+                Fields:
+                  RotationSpeed: [5, 10, 0]
     - Node:
         Name: Objects
         Childs:

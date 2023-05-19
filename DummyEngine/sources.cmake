@@ -11,8 +11,6 @@ Utils/Types/UUID.cpp
 
 Core/Application/Application.cpp
 Core/Application/ImGuiLayer.cpp
-Core/Application/ImGuiPanel.cpp
-Core/Application/ImGuiPanelStack.cpp
 Core/Application/Window.cpp
 Core/Application/Input.cpp
 Core/Application/Initializer.cpp
@@ -23,7 +21,7 @@ Core/ECS/ECS.cpp
 Core/Scene/Components.cpp
 Core/Scene/Scene.cpp
 Core/Scene/SceneHierarchy.cpp
-Core/Scene/SceneRenderData.cpp
+Core/Scene/SceneRenderer.cpp
 
 Core/Objects/LightSources/LightSource.cpp
 Core/Objects/Cameras/FPSCamera.cpp

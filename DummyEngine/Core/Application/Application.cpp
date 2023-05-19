@@ -51,6 +51,7 @@ namespace DE {
 
             Renderer::BeginFrame();
             Input::NewFrame();
+
             m_Window->OnUpdate();
             {
                 DE_PROFILE_SCOPE("Layers OnUpdate");
@@ -61,7 +62,7 @@ namespace DE {
             }
             {
                 DE_PROFILE_SCOPE("Layers OnImGuiRender");
-
+                Renderer::SetDefaultFrameBuffer();
                 m_ImGuiLayer->BeginFrame();
                 for (auto layer : m_Layers) {
                     layer->OnImGuiRender();

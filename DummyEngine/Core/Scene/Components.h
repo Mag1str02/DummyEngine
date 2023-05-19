@@ -20,23 +20,17 @@ namespace DE {
         UUID m_ID;
     };
 
-    class TagComponent {
-    public:
+    struct TagComponent {
         TagComponent() = default;
-        TagComponent(const std::string& tag) : m_Tag(tag) {}
-        TagComponent(const TagComponent&) = default;
+        TagComponent(const std::string& tag) : tag(tag) {}
+        operator std::string() const { return tag; }
 
-        const std::string& Get() const { return m_Tag; }
+        bool operator==(const TagComponent& other) const { return tag == other.tag; }
+        bool operator!=(const TagComponent& other) const { return tag != other.tag; }
+        bool operator<(const TagComponent& other) const { return tag < other.tag; }
+        bool operator>(const TagComponent& other) const { return tag > other.tag; }
 
-        operator std::string() const { return m_Tag; }
-
-        bool operator==(const TagComponent& other) const { return m_Tag == other.m_Tag; }
-        bool operator!=(const TagComponent& other) const { return m_Tag != other.m_Tag; }
-        bool operator<(const TagComponent& other) const { return m_Tag < other.m_Tag; }
-        bool operator>(const TagComponent& other) const { return m_Tag > other.m_Tag; }
-
-    private:
-        std::string m_Tag;
+        std::string tag;
     };
 
     struct TransformComponent {
@@ -47,6 +41,9 @@ namespace DE {
         TransformComponent() = default;
 
         Mat4 GetTransform() const;
+        Mat4 GetTranslation() const;
+        Mat4 GetRotation() const;
+        Mat4 GetScale() const;
     };
     struct ShaderComponent {
         UUID id;
@@ -69,7 +66,7 @@ namespace std {
     template <typename T> struct hash;
 
     template <> struct hash<DE::TagComponent> {
-        std::size_t operator()(const DE::TagComponent& tag) const { return std::hash<std::string>()(tag.Get()); }
+        std::size_t operator()(const DE::TagComponent& tag) const { return std::hash<std::string>()(tag); }
     };
 
 }  // namespace std

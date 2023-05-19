@@ -14,9 +14,6 @@ namespace DE {
 
         void BeginFrame();
         void EndFrame();
-
-    private:
-        void SetDarkThemeColors();
     };
 
 }  // namespace DE

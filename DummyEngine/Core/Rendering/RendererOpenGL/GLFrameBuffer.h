@@ -23,9 +23,11 @@ namespace DE {
         virtual void AddColorAttachment(TextureFormat format) override;
         virtual void SetDepthAttachment(TextureFormat format) override;
 
-        virtual void Resize(uint32_t width, uint32_t height) override;
+        virtual void Resize(U32 width, U32 height) override;
+        virtual U32  GetWidth() const override;
+        virtual U32  GetHeight() const override;
 
-        virtual Ref<Texture> GetColorAttachment(uint32_t attachment_id) override;
+        virtual Ref<Texture> GetColorAttachment(U32 attachment_id) override;
         virtual Ref<Texture> GetDepthAttachment() override;
 
         virtual const FrameBufferProperties& GetProperties() const override;

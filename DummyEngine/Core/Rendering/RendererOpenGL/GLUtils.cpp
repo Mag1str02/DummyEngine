@@ -5,16 +5,18 @@
 namespace DE {
     GLenum TextureFormatToGLTextureFormat(TextureFormat format) {
         switch (format) {
+            case TextureFormat::None: return GL_RED;
             case TextureFormat::RED: return GL_RED;
+            case TextureFormat::RA: return GL_RG;
             case TextureFormat::RGB: return GL_RGB;
             case TextureFormat::RGBA: return GL_RGBA;
-            case TextureFormat::None: return GL_RED;
             default: return GL_RED;
         }
     }
     GLenum TextureFormatToGLTextureInternalFormat(TextureFormat format) {
         switch (format) {
             case TextureFormat::RED: return GL_R8;
+            case TextureFormat::RA: return GL_RG8;
             case TextureFormat::RGB: return GL_RGB8;
             case TextureFormat::RGBA: return GL_RGBA8;
             case TextureFormat::DepthStencil: return GL_DEPTH24_STENCIL8;

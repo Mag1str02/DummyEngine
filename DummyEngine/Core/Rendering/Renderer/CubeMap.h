@@ -6,9 +6,9 @@
 namespace DE {
     class CubeMap {
     public:
-        virtual ~CubeMap() = default;
+        virtual ~CubeMap()                = default;
+        virtual void Bind(U32 slot) const = 0;
 
-        virtual void        Bind() const = 0;
         static Ref<CubeMap> Create(const Ref<TextureData> texture_data);
     };
 }  // namespace DE

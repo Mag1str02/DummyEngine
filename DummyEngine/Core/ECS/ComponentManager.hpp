@@ -2,15 +2,15 @@
 
 namespace DE {
 #ifdef ECS_IMPLEMENTATION
-    bool Signature::Get(uint64_t id) const {
+    bool Signature::Get(U64 id) const {
         return (m_Data.size() <= (id >> 6) ? false : (m_Data[id >> 6] >> (id & 63)) & 1);
     }
-    void Signature::Set(uint64_t id, bool value) {
+    void Signature::Set(U64 id, bool value) {
         if (m_Data.size() <= id >> 6) {
             m_Data.resize((id >> 6) + 1);
         }
         m_Data[id >> 6] &= ~(1 << (id & 63));
-        m_Data[id >> 6] |= ((uint64_t)value << (id & 63));
+        m_Data[id >> 6] |= ((U64)value << (id & 63));
     }
     bool Signature::Matches(const Signature& required) const {
         size_t i;
@@ -29,7 +29,7 @@ namespace DE {
     }
 
     ComponentManager::ComponentManager(Storage* storage) : m_Storage(storage) {}
-    void ComponentManager::Destroy(uint32_t entity_id) {
+    void ComponentManager::Destroy(U32 entity_id) {
         Entity e = m_Storage->GetEntity(entity_id);
         for (const auto& [id, array] : m_ComponentArrays) {
             if (array->HasComponent(entity_id)) {
@@ -39,13 +39,13 @@ namespace DE {
         }
         m_Signatures[entity_id] = Signature();
     }
-    bool ComponentManager::Matches(uint32_t id, const Signature& signature) const {
+    bool ComponentManager::Matches(U32 id, const Signature& signature) const {
         if (m_Signatures.size() <= id) {
             return false;
         }
         return m_Signatures.at(id).Matches(signature);
     }
-    void ComponentManager::ValidateSignature(uint32_t entity_id) {
+    void ComponentManager::ValidateSignature(U32 entity_id) {
         while (m_Signatures.size() < entity_id + 1) {
             m_Signatures.push_back(Signature());
         }
@@ -62,7 +62,7 @@ namespace DE {
         m_RemoveHandlers[INDEX(ComponentType)] = func;
     }
 
-    template <typename ComponentType> ComponentType* ComponentManager::AddComponent(uint32_t entity_id, const ComponentType& component) {
+    template <typename ComponentType> ComponentType* ComponentManager::AddComponent(U32 entity_id, const ComponentType& component) {
         RegisterComponent<ComponentType>();
         ValidateSignature(entity_id);
         m_Signatures[entity_id].Set(m_ComponentId[INDEX(ComponentType)], true);
@@ -71,14 +71,14 @@ namespace DE {
         m_AddHandlers[INDEX(ComponentType)](m_Storage->GetEntity(entity_id));
         return c;
     }
-    template <typename ComponentType> ComponentType* ComponentManager::GetComponent(uint32_t entity_id) {
+    template <typename ComponentType> ComponentType* ComponentManager::GetComponent(U32 entity_id) {
         ValidateSignature(entity_id);
         if (!HasComponent<ComponentType>(entity_id)) {
             return nullptr;
         }
         return reinterpret_cast<ComponentType*>(m_ComponentArrays[INDEX(ComponentType)]->GetComponent(entity_id));
     }
-    template <typename ComponentType> void ComponentManager::RemoveComponent(uint32_t entity_id) {
+    template <typename ComponentType> void ComponentManager::RemoveComponent(U32 entity_id) {
         ValidateSignature(entity_id);
         if (HasComponent<ComponentType>(entity_id)) {
             m_RemoveHandlers[INDEX(ComponentType)](m_Storage->GetEntity(entity_id));
@@ -86,7 +86,7 @@ namespace DE {
             m_ComponentArrays[INDEX(ComponentType)]->RemoveComponent(entity_id);
         }
     }
-    template <typename ComponentType> bool ComponentManager::HasComponent(uint32_t entity_id) const {
+    template <typename ComponentType> bool ComponentManager::HasComponent(U32 entity_id) const {
         if (m_Signatures.size() < entity_id + 1 || m_ComponentId.find(INDEX(ComponentType)) == m_ComponentId.end()) {
             return false;
         }

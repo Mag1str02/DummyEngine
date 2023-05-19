@@ -16,35 +16,18 @@ namespace DE {
         std::vector<ShaderAsset>     shaders;
     };
 
-    struct SceneSerializationData {
+    struct SceneFileData {
         SceneAssets assets;
-        YAML::Node  hierarchy_node;
+        YAML::Node  hierarchy;
         std::string name;
     };
 
     class SceneLoader {
     public:
-        static void                   Save(Ref<Scene> scene, const SceneAssets& assets, const Path& path);
-        static Ref<Scene>             Instantiate(const SceneSerializationData& data);
-        static SceneSerializationData LoadSerializationData(const Path& path);
-
-    private:
-        template <typename ComponentType> static void SaveComponent(YAML::Node& n_Entity, Entity entity);
-        template <typename ComponentType> static void LoadComponent(Ref<Scene> scene, YAML::Node n_Component, Entity& entity);
-
-        static YAML::Node SaveModels(const SceneAssets& assets);
-        static YAML::Node SaveScripts(const SceneAssets& assets);
-        static YAML::Node SaveTextures(const SceneAssets& assets);
-        static YAML::Node SaveShaders(const SceneAssets& assets);
-        static YAML::Node SaveAssets(const SceneAssets& assets);
-        static YAML::Node SaveNode(Ref<SceneHierarchyNode> node);
-        static YAML::Node SaveHierarchy(Ref<Scene> scene);
-        static void       SaveEntity(YAML::Node& n_Entities, Entity entity);
-
-        static void   LoadHierarchyNode(Ref<Scene> scene, YAML::Node n_Array, Ref<SceneHierarchyNode> load_to);
-        static Entity LoadEntity(Ref<Scene> scene, YAML::Node n_Entity);
-
-        static void SLoadAssets(SceneAssets& data, const YAML::Node& assets);
+        static std::optional<SceneFileData> LoadScene(const Path& path);
+        static bool                         SaveScene(const SceneFileData& data, const Path& path);
+        static Ref<Scene>                   Serialize(const YAML::Node& hierarchy);
+        static YAML::Node                   Deserialize(Ref<Scene> scene);
     };
 
 }  // namespace DE

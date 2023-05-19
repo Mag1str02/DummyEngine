@@ -9,8 +9,7 @@ namespace DE {
     public:
         GLCubeMap(const Ref<TextureData> data);
         virtual ~GLCubeMap();
-
-        virtual void Bind() const override;
+        virtual void Bind(U32 slot) const override;
 
         GLCubeMap()                                  = delete;
         GLCubeMap(const GLCubeMap& other)            = delete;

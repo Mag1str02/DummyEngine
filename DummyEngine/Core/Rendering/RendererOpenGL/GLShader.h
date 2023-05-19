@@ -2,19 +2,21 @@
 
 #include <glad/glad.h>
 
-#include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
-#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 #include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
+#include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
 
-namespace DE {
+namespace DE
+{
     namespace fs = std::filesystem;
 
-    class GLShader : public Shader {
+    class GLShader : public Shader
+    {
     public:
-        GLShader()                               = delete;
-        GLShader(const Shader& other)            = delete;
-        GLShader(Shader&& other)                 = delete;
-        GLShader& operator=(Shader&& other)      = delete;
+        GLShader()                    = delete;
+        GLShader(const Shader& other) = delete;
+        GLShader(Shader&& other)      = delete;
+        GLShader& operator=(Shader&& other) = delete;
         GLShader& operator=(const Shader& other) = delete;
 
         GLShader(const std::vector<ShaderPart>& shader_parts);
@@ -36,7 +38,7 @@ namespace DE {
         virtual void SetInt4(const std::string& uniform_name, int x, int y, int z, int w) const override;
         virtual void SetMat4(const std::string& uniform_name, Mat4 value) const override;
         virtual void SetMaterial(const std::string& uniform_name, const Material& mat) const override;
-        virtual void SetUniformBlock(const std::string& uniform_name, uint32_t id) const override;
+        virtual void SetUnifromBlock(const std::string& uniform_name, U32 id) const override;
 
     private:
         static std::string ReadPartFromFile(const Path& path_to_file);

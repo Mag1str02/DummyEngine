@@ -10,8 +10,11 @@ namespace DE {
     ModelLoader::LoaderState ModelLoader::m_State;
 
     Ref<RenderMeshData> ModelLoader::Load(const RenderMeshAsset::LoadingProperties& properties) {
-        const aiScene* scene =
-            m_State.m_Importer.ReadFile(properties.path.string(), aiProcess_Triangulate | (properties.flip_uvs ? aiProcess_FlipUVs : 0));
+        unsigned int flags = aiProcess_Triangulate | aiProcess_CalcTangentSpace;
+        if (properties.flip_uvs) {
+            flags |= aiProcess_FlipUVs;
+        }
+        const aiScene* scene = m_State.m_Importer.ReadFile(properties.path.string(), flags);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
             LOG_ERROR("ModelLoader",
@@ -72,7 +75,11 @@ namespace DE {
                 vertex.normal.y = mesh->mNormals[i].y;
                 vertex.normal.z = mesh->mNormals[i].z;
             }
-
+            if (mesh->mTangents) {
+                vertex.tangent.x = mesh->mTangents[i].x;
+                vertex.tangent.y = mesh->mTangents[i].y;
+                vertex.tangent.z = mesh->mTangents[i].z;
+            }
             if (mesh->mTextureCoords[0]) {
                 vertex.tex_coords.x = mesh->mTextureCoords[0][i].x;
                 vertex.tex_coords.y = mesh->mTextureCoords[0][i].y;
@@ -87,11 +94,12 @@ namespace DE {
         }
         if (mesh->mMaterialIndex >= 0) {
             aiMaterial* material                 = scene->mMaterials[mesh->mMaterialIndex];
-            current_mesh.material.diffuse_color  = GetColor(material, ColorType::diffuse);
-            current_mesh.material.ambient_color  = GetColor(material, ColorType::ambient);
-            current_mesh.material.specular_color = GetColor(material, ColorType::specular);
+            current_mesh.material.diffuse_color  = GetColor(material, ColorType::Diffuse);
+            current_mesh.material.ambient_color  = GetColor(material, ColorType::Ambient);
+            current_mesh.material.specular_color = GetColor(material, ColorType::Specular);
             current_mesh.material.diffuse_map    = GetTexture(material, aiTextureType_DIFFUSE);
             current_mesh.material.specular_map   = GetTexture(material, aiTextureType_SPECULAR);
+            current_mesh.material.normal_map     = GetTexture(material, aiTextureType_NORMALS);
             aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &current_mesh.material.shininess);
         }
         ++m_State.m_CurrentMeshId;
@@ -99,9 +107,9 @@ namespace DE {
     Vec3 ModelLoader::GetColor(aiMaterial* mat, ColorType type) {
         aiColor3D color(0.f, 0.f, 0.f);
         switch (type) {
-            case ColorType::diffuse: mat->Get(AI_MATKEY_COLOR_DIFFUSE, color); break;
-            case ColorType::specular: mat->Get(AI_MATKEY_COLOR_SPECULAR, color); break;
-            case ColorType::ambient: mat->Get(AI_MATKEY_COLOR_AMBIENT, color); break;
+            case ColorType::Diffuse: mat->Get(AI_MATKEY_COLOR_DIFFUSE, color); break;
+            case ColorType::Specular: mat->Get(AI_MATKEY_COLOR_SPECULAR, color); break;
+            case ColorType::Ambient: mat->Get(AI_MATKEY_COLOR_AMBIENT, color); break;
             default: break;
         }
         Vec3 res(color.r, color.g, color.b);

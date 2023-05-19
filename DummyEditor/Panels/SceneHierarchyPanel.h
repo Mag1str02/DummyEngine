@@ -1,25 +1,29 @@
 #pragma once
 
-#include "DummyEditor/DummyEngineInclude.h"
+#include "DummyEditor/ImGuiUtils/ImGuiPanel.h"
 
 namespace DE {
     class SceneHierarchyPanel : public ImGuiPanel {
     public:
         SceneHierarchyPanel() : ImGuiPanel("Scene Hierarchy") {}
-        virtual void View() override;
+        virtual void OnImGui() override;
 
-        void   SetActiveScene(Ref<Scene> scene);
-        void   UnSelect();
+        void   SetActiveScene(WeakRef<Scene> scene);
         Entity GetActiveEntity();
 
     private:
-        void ShowNode(Ref<SceneHierarchyNode> node);
-        void DragTarget(Ref<SceneHierarchyNode> node);
-        void DropTarget(Ref<SceneHierarchyNode> node);
+        void        ShowNodeContextMenu(SceneHierarchy::Node node);
+        void        ShowNode(SceneHierarchy::Node node);
+        void        DragTarget(SceneHierarchy::Node node);
+        void        DropTarget(SceneHierarchy::Node node);
+        bool        PossibleDND(SceneHierarchy::Node from, SceneHierarchy::Node to);
+        std::string GetDNDText(SceneHierarchy::Node from, SceneHierarchy::Node to);
 
-        Ref<Scene>              m_Scene;
-        Ref<SceneHierarchyNode> m_SelectedNode;
-        SceneHierarchyNode*     m_From;
-        Ref<SceneHierarchyNode> m_To;
+        WeakRef<Scene>       m_Scene;
+        SceneHierarchy::Node m_SelectedNode;
+        SceneHierarchy::Node m_From;
+        SceneHierarchy::Node m_To;
+        SceneHierarchy::Node m_Rename;
+        bool                 m_WasTarget;
     };
 }  // namespace DE

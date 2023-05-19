@@ -12,16 +12,16 @@ namespace DE {
         virtual void Bind() const   = 0;
         virtual void UnBind() const = 0;
 
-        virtual LocalBufferNode at(uint32_t index) = 0;
+        virtual LocalBufferNode at(U32 index) = 0;
 
-        virtual void SetData(const void* data, uint32_t size) = 0;
+        virtual void SetData(const void* data, U32 size) = 0;
         virtual void PushData()                               = 0;
 
         virtual const BufferLayout& GetLayout() const = 0;
-        virtual uint32_t            Size() const      = 0;
+        virtual U32            Size() const      = 0;
 
-        static Ref<VertexBuffer> Create(const BufferLayout& layout, uint32_t size, BufferUsage usage = BufferUsage::Static);
-        static Ref<VertexBuffer> Create(const BufferLayout& layout, uint32_t size, const void* data, BufferUsage usage = BufferUsage::Static);
+        static Ref<VertexBuffer> Create(const BufferLayout& layout, U32 size, BufferUsage usage = BufferUsage::Static);
+        static Ref<VertexBuffer> Create(const BufferLayout& layout, U32 size, const void* data, BufferUsage usage = BufferUsage::Static);
     };
 
     class IndexBuffer {
@@ -31,9 +31,9 @@ namespace DE {
         virtual void Bind() const   = 0;
         virtual void UnBind() const = 0;
 
-        virtual uint32_t IndicesAmount() const = 0;
+        virtual U32 IndicesAmount() const = 0;
 
-        static Ref<IndexBuffer> Create(const uint32_t* indices, uint32_t count);
+        static Ref<IndexBuffer> Create(const U32* indices, U32 count);
     };
 
 }  // namespace DE

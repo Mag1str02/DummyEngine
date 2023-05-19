@@ -14,7 +14,7 @@ namespace DE {
         static Ref<RenderMeshData> Load(const RenderMeshAsset::LoadingProperties& props);
 
     private:
-        enum ColorType { none, diffuse, specular, ambient };
+        enum ColorType { None = 0, Diffuse, Specular, Ambient };
 
         struct LoaderState {
             size_t m_VerticesAmount;

@@ -4,9 +4,9 @@ namespace DE {
     class ScriptManager : public Singleton<ScriptManager> {
         SINGLETON(ScriptManager)
     public:
-        S_METHOD_DEF(Unit, LoadScripts, (const std::vector<ScriptAsset>& scripts));
+        S_METHOD_DEF(bool, LoadScripts, (const std::vector<ScriptAsset>& scripts));
         S_METHOD_DEF(Unit, UnloadScripts, (const std::vector<ScriptAsset>& scripts));
-        S_METHOD_DEF(Unit, ReloadScripts, (const std::vector<ScriptAsset>& scripts, Ref<Scene> scene));
+        S_METHOD_DEF(bool, ReloadScripts, (const std::vector<ScriptAsset>& scripts, Ref<Scene> scene));
         S_METHOD_DEF(Unit, AttachScripts, (Ref<Scene> scene));
         S_METHOD_DEF(UUID, EditorScript, (const std::string& name));
 
@@ -23,8 +23,8 @@ namespace DE {
         void LoadEditorLibrary();
         void LoadEditorScripts();
 
-        std::vector<uint32_t>      RecompilationList(const std::vector<ScriptAsset>& scripts);
-        std::optional<Path>        CompileSelected(const std::vector<ScriptAsset>& scripts, const std::vector<uint32_t> ids);
+        std::vector<U32>           RecompilationList(const std::vector<ScriptAsset>& scripts);
+        std::optional<Path>        CompileSelected(const std::vector<ScriptAsset>& scripts, const std::vector<U32> ids);
         std::optional<std::string> LinkLibrary(const std::vector<ScriptAsset>& scripts);
         bool                       SwapLibrary(const std::string& name);
         bool                       NeedToCompile(const Path& path);

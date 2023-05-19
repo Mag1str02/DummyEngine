@@ -6,10 +6,8 @@ namespace DE {
     class SceneLoader;
 
     class FPSCamera {
-    private:
-        friend class InspectorPanel;
-        friend class SceneLoader;
-
+        // TODO: Rework when render graph implemented
+    public:
         float m_FOV       = Constants::DefaultCameraFOV;
         float m_Aspect    = Constants::DefaultCameraAspect;
         float m_NearPlane = Constants::DefaultCameraNearPlane;
@@ -21,7 +19,6 @@ namespace DE {
         Vec3 m_Right;
         Vec3 m_Up;
 
-    public:
         FPSCamera();
         FPSCamera(Vec3 camera_position);
         FPSCamera(Vec3 camera_position, Vec3 camera_direction);

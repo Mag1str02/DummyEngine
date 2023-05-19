@@ -16,6 +16,7 @@ namespace DE {
             case ScriptFieldType::Vec2: return "Vec2";
             case ScriptFieldType::Vec3: return "Vec3";
             case ScriptFieldType::Vec4: return "Vec4";
+            case ScriptFieldType::Entity: return "Entity";
             default: return "Unknown";
         }
     }
@@ -34,16 +35,28 @@ namespace DE {
     template <> ScriptFieldType TypeToScriptFieldType<std::string>() {
         return ScriptFieldType::String;
     }
-    template <> ScriptFieldType TypeToScriptFieldType<int32_t>() {
+    template <> ScriptFieldType TypeToScriptFieldType<S8>() {
+        return ScriptFieldType::S8;
+    }
+    template <> ScriptFieldType TypeToScriptFieldType<S16>() {
+        return ScriptFieldType::S16;
+    }
+    template <> ScriptFieldType TypeToScriptFieldType<S32>() {
         return ScriptFieldType::S32;
     }
-    template <> ScriptFieldType TypeToScriptFieldType<int64_t>() {
+    template <> ScriptFieldType TypeToScriptFieldType<S64>() {
         return ScriptFieldType::S64;
     }
-    template <> ScriptFieldType TypeToScriptFieldType<uint32_t>() {
+    template <> ScriptFieldType TypeToScriptFieldType<U8>() {
+        return ScriptFieldType::U8;
+    }
+    template <> ScriptFieldType TypeToScriptFieldType<U16>() {
+        return ScriptFieldType::U16;
+    }
+    template <> ScriptFieldType TypeToScriptFieldType<U32>() {
         return ScriptFieldType::U32;
     }
-    template <> ScriptFieldType TypeToScriptFieldType<uint64_t>() {
+    template <> ScriptFieldType TypeToScriptFieldType<U64>() {
         return ScriptFieldType::U64;
     }
     template <> ScriptFieldType TypeToScriptFieldType<Vec2>() {
@@ -54,6 +67,9 @@ namespace DE {
     }
     template <> ScriptFieldType TypeToScriptFieldType<Vec4>() {
         return ScriptFieldType::Vec4;
+    }
+    template <> ScriptFieldType TypeToScriptFieldType<Entity>() {
+        return ScriptFieldType::Entity;
     }
 
     bool Script::FieldIterator::operator==(const FieldIterator& other) const {
@@ -88,6 +104,7 @@ namespace DE {
     void Script::AttachToScene(WeakRef<Scene> scene, Entity entity) {
         m_Scene  = scene;
         m_Entity = entity;
+        OnAttach();
     }
 
     ScriptFieldType Script::GetFieldType(const std::string& name) const {
@@ -102,10 +119,7 @@ namespace DE {
     bool Script::AttachedToScene() const {
         return !m_Scene.expired() && m_Entity.Valid();
     }
-    Entity Script::GetEntityByName(const std::string& name) const {
-        auto scene = m_Scene.lock();
-        DE_ASSERT(scene, "Using invalid scene in script");
-        return scene->GetByTag(name);
-    };
-
+    Ref<Scene> Script::GetScene() const {
+        return m_Scene.lock();
+    }
 }  // namespace DE

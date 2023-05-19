@@ -9,8 +9,8 @@
 
 namespace DE {
     struct FrameStatistics {
-        uint32_t m_DrawCallsAmount;
-        uint32_t m_DrawnInstances;
+        U32 m_DrawCallsAmount;
+        U32 m_DrawnInstances;
 
         void Reset();
     };
@@ -20,7 +20,7 @@ namespace DE {
         static void Initialize();
         static void Terminate();
 
-        static void OnWindowResize(uint32_t width, uint32_t height);
+        static void OnWindowResize(U32 width, U32 height);
 
         static void BeginFrame();
         static void EndFrame();
@@ -35,9 +35,11 @@ namespace DE {
         static void Disable(RenderSetting setting);
         static void SetClearColor(Vec4 color);
         static void SetClearColor(float r, float g, float b, float a);
+        static void SetDefaultFrameBuffer();
 
         // TMP
         static Ref<Texture>     GetDefaultTexture();
+        static Ref<Texture>     GetDefaultNormalTexture();
         static Ref<VertexArray> GetFullScreenQuad();
         static Ref<VertexArray> GetCube();
 
@@ -49,12 +51,14 @@ namespace DE {
         // TODO: Delete this
 
         static void GenDefaultTexture();
+        static void GenDefaultNormalTexture();
         static void GenFullScreenQuad();
         static void GenCube();
 
         static Scope<FrameStatistics> m_FrameStatistics;
         static Scope<RenderAPI>       m_RenderAPI;
         static Ref<Texture>           m_DefaultTexture;
+        static Ref<Texture>           m_DefaultNormalTexture;
         static Ref<VertexArray>       m_FullScreenQuad;
         static Ref<VertexArray>       m_Cube;
     };

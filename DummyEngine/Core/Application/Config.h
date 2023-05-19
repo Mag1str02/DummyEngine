@@ -19,9 +19,10 @@ namespace DE {
 #define DE_CFG_SHADER_PATH 5
 #define DE_CFG_TEXTURE_PATH 6
 #define DE_CFG_SCRIPT_PATH 7
+#define DE_CFG_FONT_PATH 8
 
-#define DE_CFG_CACHE_PATH 8
-#define DE_CFG_SCRIPT_CACHE_PATH 9
+#define DE_CFG_CACHE_PATH 9
+#define DE_CFG_SCRIPT_CACHE_PATH 10
 
 #define DE_CFG_RENDER_API 1
 
@@ -29,9 +30,9 @@ namespace DE {
 
     class Config {
     public:
-        static uint32_t GetI(uint32_t setting);
-        static float    GetF(uint32_t setting);
-        static Path     GetPath(uint32_t setting);
+        static U32 GetI(U32 setting);
+        static float    GetF(U32 setting);
+        static Path     GetPath(U32 setting);
 
         static API GetRenderAPI();
 
@@ -40,9 +41,9 @@ namespace DE {
 
     private:
         struct Configs {
-            uint32_t c_MaxShaderCompileErrorLen = 512;
-            uint32_t c_MaxInputFrameAmount      = 100;
-            uint32_t c_MaxMessageTypeLength     = 7;
+            U32 c_MaxShaderCompileErrorLen = 512;
+            U32 c_MaxInputFrameAmount      = 100;
+            U32 c_MaxMessageTypeLength     = 7;
 
             float c_DefaultCameraFOV       = 90.0f;
             float c_DefaultCameraAspect    = 16.0f / 9.0f;
@@ -58,6 +59,7 @@ namespace DE {
             Path c_CachePath;
             Path c_ScriptPath;
             Path c_ScriptCachePath;
+            Path c_FontPath;
 
             API c_RenderAPI;
         };

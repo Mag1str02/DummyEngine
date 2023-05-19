@@ -5,7 +5,6 @@ using namespace DE;
 class SquareMovement : public Script {
     SCRIPT(SquareMovement)
 public:
-    virtual void OnCreate() override {}
     virtual void OnUpdate(float dt) override {
         current_time += dt;
         float persent  = ((current_time + offset) - cycle_time * (int)((current_time + offset) / cycle_time)) / cycle_time;
@@ -20,8 +19,6 @@ public:
             position = Vec3(left_back.x, height, right_front.y) + Smouth(4.0f * (persent - 0.75f)) * Vec3(0, 0, left_back.y - right_front.y);
         }
     }
-
-    virtual void OnDestroy() override {}
 
 private:
     float Smouth(float delta) const { return (std::sin((delta * 2 - 1) * 3.1415926 / 2) + 1) / 2; }

@@ -5,7 +5,7 @@
 
 namespace DE {
 
-    uint32_t HexCharToInt(char a) {
+    U32 HexCharToInt(char a) {
         if (a >= 'a') {
             return a - 'a' + 10;
         }
@@ -14,15 +14,15 @@ namespace DE {
         }
         return a - '0';
     }
-    uint64_t StrToHex(std::string_view string) {
-        uint64_t res = 0;
+    U64 StrToHex(std::string_view string) {
+        U64 res = 0;
         for (size_t i = 0; i < string.size(); ++i) {
             res <<= 4;
             res += HexCharToInt(string[i]);
         }
         return res;
     }
-    std::string HexToStr(uint64_t a) {
+    std::string HexToStr(U64 a) {
         std::stringstream res;
         res << std::setfill('0') << std::setw(16) << std::hex << a;
         return res.str();

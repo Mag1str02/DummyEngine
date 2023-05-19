@@ -2,7 +2,7 @@
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
-    enum class TextureFormat { None = 0, RED, RGB, RGBA, DepthStencil };
+    enum class TextureFormat { None = 0, RED, RA, RGB, RGBA, DepthStencil };
     enum CubeSide {
         Right  = 0,
         Left   = 1,
@@ -12,7 +12,7 @@ namespace DE {
         Front  = 4,
     };
     std::string TextureFormatToStr(TextureFormat format);
-    uint32_t    PixelSize(TextureFormat format);
+    U32         PixelSize(TextureFormat format);
 
     struct ShaderPart {
         ShaderPartType type;
@@ -25,22 +25,22 @@ namespace DE {
     class TextureData {
     public:
         TextureData();
-        TextureData(const uint8_t* data, uint32_t width, uint32_t height, TextureFormat format);
+        TextureData(const U8* data, U32 width, U32 height, TextureFormat format);
         ~TextureData();
 
-        void SetData(const uint8_t* data, uint32_t width, uint32_t height, TextureFormat format);
+        void SetData(const U8* data, U32 width, U32 height, TextureFormat format);
 
-        uint32_t       Width() const { return m_Width; }
-        uint32_t       Height() const { return m_Height; }
-        TextureFormat  Format() const { return m_Format; }
-        uint32_t       Channels() const { return PixelSize(m_Format); }
-        uint8_t*       Data() { return m_Data; }
-        const uint8_t* Data() const { return m_Data; }
+        U32           Width() const { return m_Width; }
+        U32           Height() const { return m_Height; }
+        TextureFormat Format() const { return m_Format; }
+        U32           Channels() const { return PixelSize(m_Format); }
+        U8*           Data() { return m_Data; }
+        const U8*     Data() const { return m_Data; }
 
     private:
-        uint8_t*      m_Data;
-        uint32_t      m_Width;
-        uint32_t      m_Height;
+        U8*           m_Data;
+        U32           m_Width;
+        U32           m_Height;
         TextureFormat m_Format;
     };
 
@@ -51,11 +51,12 @@ namespace DE {
         float            shininess;
         Ref<TextureData> specular_map;
         Ref<TextureData> diffuse_map;
+        Ref<TextureData> normal_map;
     };
 
     struct RenderSubMeshData {
         std::vector<Vertex3D> vertices;
-        std::vector<uint32_t> indices;
+        std::vector<U32>      indices;
         MaterialData          material;
 
         RenderSubMeshData& operator+=(const RenderSubMeshData& other);

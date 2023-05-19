@@ -3,7 +3,7 @@
 namespace DE {
     //*~~~LocalBufferNode~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    LocalBufferNode::LocalBufferNode(LocalBuffer* buffer, uint8_t* pointer) : m_Buffer(buffer), m_Pointer(pointer) {}
+    LocalBufferNode::LocalBufferNode(LocalBuffer* buffer, U8* pointer) : m_Buffer(buffer), m_Pointer(pointer) {}
     LocalBufferNode& LocalBufferNode::operator=(const LocalBufferNode& other) {
         DE_ASSERT(m_Buffer == other.m_Buffer, "Trying to assign LocalBufferNodes from diffrent LocalBuffers");
         std::memcpy(m_Pointer, other.m_Pointer, m_Buffer->m_Layout.GetStride());
@@ -18,22 +18,22 @@ namespace DE {
             delete[] m_Data;
         }
     }
-    LocalBufferNode LocalBuffer::at(uint32_t index) {
+    LocalBufferNode LocalBuffer::at(U32 index) {
         return LocalBufferNode(this, m_Data + index * m_Layout.GetStride());
     }
-    void LocalBuffer::SetData(const void* data, uint32_t size) {
+    void LocalBuffer::SetData(const void* data, U32 size) {
         DE_ASSERT(m_Size == size, "Wrong data size (", size, ") expected (", m_Size, ")");
         memcpy(m_Data, data, m_Size);
     }
-    void LocalBuffer::Allocate(const BufferLayout& layout, uint32_t size) {
+    void LocalBuffer::Allocate(const BufferLayout& layout, U32 size) {
         m_Layout = layout;
         Allocate(size * m_Layout.GetStride());
     }
-    void LocalBuffer::Allocate(uint32_t size) {
+    void LocalBuffer::Allocate(U32 size) {
         if (m_Data) {
             delete[] m_Data;
         }
-        m_Data = (uint8_t*)malloc(size);
+        m_Data = (U8*)malloc(size);
         m_Size = size;
     }
 

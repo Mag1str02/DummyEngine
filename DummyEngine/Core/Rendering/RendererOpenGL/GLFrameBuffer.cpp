@@ -19,8 +19,6 @@ namespace DE {
     }
 
     void GLFrameBuffer::Rebuild() {
-        DE_PROFILE_SCOPE("FrameBuffer Rebuild");
-
         if (m_BufferId) {
             glDeleteFramebuffers(1, &m_BufferId);
             m_DepthAttachment.m_Texture = nullptr;
@@ -67,12 +65,10 @@ namespace DE {
         glCreateFramebuffers(1, &m_BufferId);
     }
     GLFrameBuffer::~GLFrameBuffer() {
-        glDeleteBuffers(1, &m_BufferId);
+        glDeleteFramebuffers(1, &m_BufferId);
     }
 
     void GLFrameBuffer::Bind() {
-        DE_PROFILE_SCOPE("FrameBuffer Bind");
-
         glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
     }
     void GLFrameBuffer::UnBind() {
@@ -104,17 +100,21 @@ namespace DE {
                                0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-    void GLFrameBuffer::Resize(uint32_t width, uint32_t height) {
-        DE_PROFILE_SCOPE("FrameBuffer Resize");
-
+    void GLFrameBuffer::Resize(U32 width, U32 height) {
         if ((m_Properties.width != width || m_Properties.height != height) && 0 < width && 0 < height) {
             m_Properties.width  = width;
             m_Properties.height = height;
             Rebuild();
         }
     }
+    U32 GLFrameBuffer::GetWidth() const {
+        return m_Properties.width;
+    }
+    U32 GLFrameBuffer::GetHeight() const {
+        return m_Properties.height;
+    }
 
-    Ref<Texture> GLFrameBuffer::GetColorAttachment(uint32_t attachment_id = 0) {
+    Ref<Texture> GLFrameBuffer::GetColorAttachment(U32 attachment_id = 0) {
         DE_ASSERT(
             0 <= attachment_id && attachment_id < m_ColorAttachments.size(), "Color attachment with index (", attachment_id, ") does not exist");
         return m_ColorAttachments[attachment_id].m_Texture;

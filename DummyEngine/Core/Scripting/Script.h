@@ -12,17 +12,22 @@ namespace DE {
         Double,
         Bool,
         String,
+        S8,
+        S16,
         S32,
         S64,
+        U8,
+        U16,
         U32,
         U64,
         Vec2,
         Vec3,
         Vec4,
+        Entity,
     };
     struct ScriptClassField {
         ScriptFieldType type;
-        uint32_t        offset;
+        U32             offset;
     };
 
     class Script {
@@ -66,9 +71,11 @@ namespace DE {
         Script& operator=(const Script&) = delete;
         Script& operator=(Script&&)      = delete;
 
-        virtual void OnCreate() {}
+        virtual void OnAttach() {}
+        virtual void OnRuntimeStart() {}
         virtual void OnUpdate(float dt) {}
-        virtual void OnDestroy() {}
+        virtual void OnRuntimeStop() {}
+        virtual void OnDetach() {}
 
         FieldIterator begin();
         FieldIterator end();
@@ -78,6 +85,7 @@ namespace DE {
         bool                     HasField(const std::string& name) const;
         void                     AttachToScene(WeakRef<Scene> scene, Entity entity);
         bool                     AttachedToScene() const;
+        Ref<Scene>               GetScene() const;
 
     protected:
         virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const = 0;
@@ -86,7 +94,6 @@ namespace DE {
         template <typename T> T&   Get();
         template <typename T> bool Has();
         template <typename T> void Remove();
-        Entity                     GetEntityByName(const std::string& name) const;
 
         WeakRef<Scene> m_Scene;
         Entity         m_Entity;
@@ -94,7 +101,7 @@ namespace DE {
     std::string                           ScriptFieldTypeToString(ScriptFieldType type);
     template <typename T> ScriptFieldType TypeToScriptFieldType();
 
-    template <typename T, typename U> constexpr uint32_t OffsetOf(U T::*member) {
+    template <typename T, typename U> constexpr U32 OffsetOf(U T::*member) {
         return (char*)&((T*)nullptr->*member) - (char*)nullptr;
     }
 
@@ -143,21 +150,29 @@ namespace DE {
         m_Entity.Remove<T>();
     }
 
-#define FIELD(field)                                                                              \
-    {                                                                                             \
-#field, { TypeToScriptFieldType<decltype(field)>(), OffsetOf(&CurrentScriptType::field) } \
+#define FIELD(field)                                                                      \
+    {                                                                                     \
+        #field, {                                                                         \
+            TypeToScriptFieldType<decltype(field)>(), OffsetOf(&CurrentScriptType::field) \
+        }                                                                                 \
     }
 
-#define SCRIPT(type)                                                              \
-    static const std::unordered_map<std::string, ScriptClassField> s_ClassFields; \
-                                                                                  \
-protected:                                                                        \
-    virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const override { return s_ClassFields; }
+#define SCRIPT(type)                                                                                   \
+    static const std::unordered_map<std::string, ScriptClassField> s_ClassFields;                      \
+                                                                                                       \
+protected:                                                                                             \
+    virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const override { \
+        return s_ClassFields;                                                                          \
+    }
 
-#define SCRIPT_BASE(type, ...)                                                                    \
-    using CurrentScriptType                                                     = type;           \
-    const std::unordered_map<std::string, ScriptClassField> type::s_ClassFields = {__VA_ARGS__};  \
-    DE_SCRIPT_API Script*                                   type##Create() { return new type(); } \
-    DE_SCRIPT_API void                                      type##Delete(Script* script) { delete script; }
+#define SCRIPT_BASE(type, ...)                                                                   \
+    using CurrentScriptType                                                     = type;          \
+    const std::unordered_map<std::string, ScriptClassField> type::s_ClassFields = {__VA_ARGS__}; \
+    DE_SCRIPT_API Script*                                   type##Create() {                     \
+        return new type();                                     \
+    }                                                                                            \
+    DE_SCRIPT_API void type##Delete(Script* script) {                                            \
+        delete script;                                                                           \
+    }
 
 }  // namespace DE

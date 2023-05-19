@@ -1,28 +1,36 @@
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLVertexArray.h"
 
-namespace DE {
+namespace DE
+{
 
-    GLVertexArray::GLVertexArray() : m_CurrentAtributeId(0) {
+    GLVertexArray::GLVertexArray() : m_CurrentAtributeId(0)
+    {
         glCreateVertexArrays(1, &m_ArrayId);
     }
-    GLVertexArray::~GLVertexArray() {
+    GLVertexArray::~GLVertexArray()
+    {
         glDeleteVertexArrays(1, &m_ArrayId);
     }
 
-    void GLVertexArray::Bind() const {
+    void GLVertexArray::Bind() const
+    {
         glBindVertexArray(m_ArrayId);
     }
-    void GLVertexArray::UnBind() const {
+    void GLVertexArray::UnBind() const
+    {
         glBindVertexArray(0);
     }
 
-    void GLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertex_buffer) {
+    void GLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertex_buffer)
+    {
         glBindVertexArray(m_ArrayId);
         vertex_buffer->Bind();
 
         const auto& layout = vertex_buffer->GetLayout();
-        for (const auto& element : layout) {
-            switch (element.type) {
+        for (const auto& element : layout)
+        {
+            switch (element.type)
+            {
                 case BufferElementType::Float:
                 case BufferElementType::Float2:
                 case BufferElementType::Float3:
@@ -50,8 +58,9 @@ namespace DE {
                     break;
                 }
                 case BufferElementType::Mat4: {
-                    uint32_t count = element.ComponentCount();
-                    for (uint8_t i = 0; i < count; ++i) {
+                    U32 count = element.ComponentCount();
+                    for (U8 i = 0; i < count; ++i)
+                    {
                         glEnableVertexAttribArray(m_CurrentAtributeId);
                         glVertexAttribPointer(m_CurrentAtributeId,
                                               count,
@@ -70,17 +79,20 @@ namespace DE {
         m_VertexBuffers.push_back(vertex_buffer);
     }
 
-    void GLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& index_buffer) {
+    void GLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& index_buffer)
+    {
         glBindVertexArray(m_ArrayId);
         index_buffer->Bind();
 
         m_IndexBuffer = index_buffer;
     }
 
-    const std::vector<Ref<VertexBuffer>>& GLVertexArray::GetVertexBuffers() const {
+    const std::vector<Ref<VertexBuffer>>& GLVertexArray::GetVertexBuffers() const
+    {
         return m_VertexBuffers;
     }
-    const Ref<IndexBuffer>& GLVertexArray::GetIndexBuffer() const {
+    const Ref<IndexBuffer>& GLVertexArray::GetIndexBuffer() const
+    {
         return m_IndexBuffer;
     }
 }  // namespace DE

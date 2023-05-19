@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base/STDIncludes.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
 namespace DE {
     namespace Constants {
@@ -9,7 +9,7 @@ namespace DE {
         const float DefaultCameraNearPlane = 0.1f;
         const float DefaultCameraFarPlane  = 2'000'000.0f;
 
-        const uint32_t MaxMessageTypeLength = 10;
-        const uint32_t MaxAuthorLength      = 20;
+        const U32 MaxMessageTypeLength = 10;
+        const U32 MaxAuthorLength      = 20;
     }  // namespace Constants
 }  // namespace DE

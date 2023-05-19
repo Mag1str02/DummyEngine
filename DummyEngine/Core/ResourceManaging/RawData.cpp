@@ -7,14 +7,16 @@ namespace DE {
             case TextureFormat::RGB: return "RGB";
             case TextureFormat::RGBA: return "RGBA";
             case TextureFormat::None: return "None";
+            case TextureFormat::RA: return "RA";
             case TextureFormat::DepthStencil: return "DepthStencil";
             default: return "Unknown";
         }
     }
-    uint32_t PixelSize(TextureFormat format) {
+    U32 PixelSize(TextureFormat format) {
         switch (format) {
             case TextureFormat::RGBA: return 4;
             case TextureFormat::RGB: return 3;
+            case TextureFormat::RA: return 2;
             case TextureFormat::RED: return 1;
             default: return 0;
         }
@@ -37,20 +39,20 @@ namespace DE {
 
     TextureData::TextureData() : m_Data(nullptr), m_Width(0), m_Height(0), m_Format(TextureFormat::None) {}
 
-    TextureData::TextureData(const uint8_t* data, uint32_t width, uint32_t height, TextureFormat format) : m_Data(nullptr) {
+    TextureData::TextureData(const U8* data, U32 width, U32 height, TextureFormat format) : m_Data(nullptr) {
         SetData(data, width, height, format);
     }
     TextureData::~TextureData() {
         delete[] m_Data;
     }
-    void TextureData::SetData(const uint8_t* data, uint32_t width, uint32_t height, TextureFormat format) {
+    void TextureData::SetData(const U8* data, U32 width, U32 height, TextureFormat format) {
         if (data) {
             delete[] m_Data;
         }
         m_Width  = width;
         m_Height = height;
         m_Format = format;
-        m_Data   = (uint8_t*)malloc(width * height * PixelSize(format));
+        m_Data   = (U8*)malloc(width * height * PixelSize(format));
         std::memcpy(m_Data, data, width * height * PixelSize(format));
     }
 
