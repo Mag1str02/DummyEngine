@@ -34,6 +34,7 @@ namespace DE {
         void UnBind();
 
         template <typename Type> Type& at(U32 index);
+        Ref<RenderMesh>                GetMesh();
 
     private:
         U32             m_Index;
@@ -43,7 +44,8 @@ namespace DE {
     public:
         RenderMesh() : m_InstanceBuffer(nullptr) {}
         RenderMesh(Ref<RenderMeshData> data);
-        Ref<RenderMesh> Copy() const;
+        Ref<RenderMesh>            Copy() const;
+        std::vector<RenderSubMesh>& GetSubMeshes();
 
         void UpdateInstanceBuffer();
         void SetInstanceBuffer(const BufferLayout& layout, U32 size);
