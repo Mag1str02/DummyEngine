@@ -1,16 +1,29 @@
 #version 460 core
 
+const vec3 kDefaultReflectivity = vec3(0.04);
+const float kPI = 3.1415926;
+
 #define MAX_LIGHT_SOURCES 128
 
+struct MaterialPrecalc{
+    float metallic;
+    float roughness;
+    float ao;
+    vec3 albedo;
+    vec3 base_reflectivity;
+    vec3 n_view;
+    vec3 n_normal;
+};
+
 struct Material
-{
+{   
     vec3      m_Ambient;
-    vec3      m_Diffuse;
-    vec3      m_Specular;
+    vec3      m_Albedo;
+    vec3      m_ORM;
     float     m_Shininess;
-    sampler2D m_DiffuseMap;
-    sampler2D m_SpecularMap;
+    sampler2D m_AlbedoMap;
     sampler2D m_NormalMap;
+    sampler2D m_ORMMap;
 };
 
 struct LightSource
@@ -40,76 +53,89 @@ out vec4 f_FragColor;
 uniform int      u_LightAmount;
 uniform Material u_Material;
 
-vec3 DirectionalLightImpact(LightSource direction_light, vec3 v_Normal, vec3 view_direction)
-{
-    vec3 light_ray = normalize(-direction_light.m_Direction);
-    vec3 halfway_ray          = normalize(light_ray + view_direction);
+vec3  FresnelSchlick(float angle_cos, vec3 base_reflectivity);
+float DistributionGGX(vec3 n_normal, vec3 n_halfway, float roughness);
+float GeometrySchlickGGX(float angle_cos, float roughness);
+float GeometrySmith(vec3 n_normal, vec3 n_view, vec3 n_light, float roughness);
+vec3  CalcLightImpact(LightSource source, MaterialPrecalc mp);
 
-    float bounce_angle_cos = max(dot(v_Normal, light_ray), 0.0);
-    float spec             = pow(max(dot(v_Normal, halfway_ray), 0.0),  u_Material.m_Shininess);
-
-    vec3 ambient  = direction_light.m_Ambient * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)) * u_Material.m_Ambient;
-    vec3 diffuse  = bounce_angle_cos * direction_light.m_Diffuse * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)) * u_Material.m_Diffuse;
-    vec3 specular = spec * direction_light.m_Specular * vec3(texture(u_Material.m_SpecularMap, vs_in.TexCoords)) * u_Material.m_Specular;
-
-    return ambient + diffuse + specular;
-}
-vec3 PointLightImpact(LightSource point_light, vec3 v_Normal, vec3 view_direction, vec3 v_FragPos)
-{
-    vec3 light_ray            = normalize(point_light.m_Position - v_FragPos);
-    vec3 halfway_ray          = normalize(light_ray + view_direction);
-
-    float dist             = length(light_ray);
-    float bounce_angle_cos = max(dot(v_Normal, light_ray), 0.0);
-    float spec             = pow(max(dot(v_Normal, halfway_ray), 0.0),  u_Material.m_Shininess);
-
-    float attenuation = 1.0 / (point_light.m_CLQ.x + point_light.m_CLQ.y * dist + point_light.m_CLQ.z * (dist * dist));
-
-    vec3 ambient  = point_light.m_Ambient * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords));
-    vec3 diffuse  = bounce_angle_cos * point_light.m_Diffuse * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)) * u_Material.m_Diffuse;
-    vec3 specular = spec * point_light.m_Specular * vec3(texture(u_Material.m_SpecularMap, vs_in.TexCoords)) * u_Material.m_Specular;
-
-    return (ambient + diffuse + specular) * attenuation;
-}
-vec3 SpotLightImpact(LightSource spot_light, vec3 v_Normal, vec3 view_direction, vec3 v_FragPos)
-{
-    vec3 point_light_result = PointLightImpact(spot_light, v_Normal, view_direction, v_FragPos);
-
-    vec3 light_ray            = spot_light.m_Position - v_FragPos;
-    vec3 normalized_light_ray = normalize(light_ray);
-
-    float angle_coef      = 0.0;
-    float light_angle_cos = dot(-normalized_light_ray, normalize(spot_light.m_Direction));
-    if (spot_light.m_ConesAndType.x < light_angle_cos)
-    {
-        angle_coef = (light_angle_cos - spot_light.m_ConesAndType.x) / (spot_light.m_ConesAndType.y - spot_light.m_ConesAndType.x);
-    }
-    if (spot_light.m_ConesAndType.y < light_angle_cos)
-    {
-        angle_coef = 1.0;
-    }
-
-    return point_light_result * angle_coef;
-}
 
 void main()
 {
-    if (vec4(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)).a < 0.000000001) discard;
-
-    vec3 normal = texture(u_Material.m_NormalMap, vs_in.TexCoords).rgb;
-    normal = normal * 2.0 - 1.0;   
-    normal = normalize(vs_in.TBNMatrix * normal);
-
-    vec3 view_direction    = normalize(vs_in.CameraPos - vs_in.FragPos);
-
     vec3 result = vec3(0.0);
+    MaterialPrecalc mp;
 
-    for (int i = 0; i < u_LightAmount; ++i)
-    {
-        if (lights[i].m_ConesAndType.z == 1) result += DirectionalLightImpact(lights[i], normal, view_direction);
-        if (lights[i].m_ConesAndType.z == 2) result += PointLightImpact(lights[i], normal, view_direction, vs_in.FragPos);
-        if (lights[i].m_ConesAndType.z == 3) result += SpotLightImpact(lights[i], normal, view_direction, vs_in.FragPos);
-    }
+    mp.albedo = vec3(texture(u_Material.m_AlbedoMap, vs_in.TexCoords)) * u_Material.m_Albedo;
+    mp.ao = vec3(texture(u_Material.m_ORMMap, vs_in.TexCoords)).x * u_Material.m_ORM.x;
+    mp.roughness = vec3(texture(u_Material.m_ORMMap, vs_in.TexCoords)).y * u_Material.m_ORM.y;
+    mp.metallic = vec3(texture(u_Material.m_ORMMap, vs_in.TexCoords)).z * u_Material.m_ORM.z;
+    mp.base_reflectivity = mix(kDefaultReflectivity,  mp.albedo, mp.metallic); 
+    mp.n_view  = normalize(vs_in.CameraPos - vs_in.FragPos);
+    mp.n_normal = texture(u_Material.m_NormalMap, vs_in.TexCoords).rgb;
+    mp.n_normal = mp.n_normal * 2.0 - 1.0;   
+    mp.n_normal = normalize(vs_in.TBNMatrix * mp.n_normal);
+
+    for (int i = 0; i < u_LightAmount; ++i){  
+        result += CalcLightImpact(lights[i], mp);
+    } 
+    vec3 ambient = u_Material.m_Ambient * mp.albedo * mp.ao;
+    result += ambient; 
+    
+    result = result / (result + vec3(1.0));
+    result = pow(result, vec3(1.0/2.2));  
 
     f_FragColor = vec4(result, 1.0);
+}
+
+vec3 CalcLightImpact(LightSource source, MaterialPrecalc mp){
+    float attenuation;
+    vec3 n_light;
+    if(source.m_ConesAndType.z == 1){
+        attenuation = 1;
+        n_light = normalize(source.m_Direction);
+    }else{ 
+        float dist = length(source.m_Position - vs_in.FragPos);
+        attenuation =  1.0 / (source.m_CLQ.x + source.m_CLQ.y * dist + source.m_CLQ.z * (dist * dist));
+        n_light = normalize(source.m_Position - vs_in.FragPos);
+    }
+    vec3 n_halfway = normalize(n_light + mp.n_view);
+    vec3 radiance = source.m_Diffuse * attenuation;
+    float D = DistributionGGX(mp.n_normal, n_halfway, mp.roughness);
+    float G = GeometrySmith(mp.n_normal, mp.n_view, n_light, mp.roughness);
+    vec3 k_s =  FresnelSchlick(dot(n_halfway, mp.n_view), mp.base_reflectivity);
+    vec3 k_d =  (vec3(1.0) - k_s) * (1.0 - mp.metallic);
+    float nl_angle = max(dot(mp.n_normal, n_light), 0.0);
+    float nv_angle = max(dot(mp.n_normal, mp.n_view), 0.0);
+    
+    vec3 specular = k_s * G * D/ (4.0 * nl_angle * nv_angle + 0.0001);
+    vec3 diffuse = k_d * mp.albedo / kPI;
+    vec3 L = (diffuse + specular) * radiance * nl_angle;
+    return L;
+}
+vec3 FresnelSchlick(float angle_cos, vec3 base_reflectivity)
+{
+    return base_reflectivity + (1.0 - base_reflectivity) * pow(clamp(1.0 - angle_cos, 0.0, 1.0), 5.0);
+}
+float DistributionGGX(vec3 n_normal, vec3 n_halfway, float roughness)
+{
+    float a      = roughness*roughness;
+    float cos_angle  = max(dot(n_normal, n_halfway), 0.0);
+    a = a*a;
+    cos_angle = cos_angle * cos_angle;
+	
+    float t = cos_angle * (a - 1.0) + 1.0;
+    return a / (t * t * kPI);
+}
+float GeometrySchlickGGX(float angle_cos, float roughness)
+{
+    float a = (roughness + 1.0);
+    float k = a * a / 8.0;
+
+    return angle_cos / (angle_cos * (1.0 - k) + k);
+}
+float GeometrySmith(vec3 n_normal, vec3 n_view, vec3 n_light, float roughness)
+{	
+    float nv_angle = max(dot(n_normal, n_view), 0.0);
+    float nl_angle = max(dot(n_normal, n_light), 0.0);
+    return GeometrySchlickGGX(nv_angle, roughness) * GeometrySchlickGGX(nl_angle, roughness);
 }

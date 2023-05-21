@@ -139,27 +139,40 @@ namespace DE {
     template <> void InspectorPanel::DrawComponentWidget<RenderMeshComponent>(Entity entity) {
         if (m_Entity.Has<RenderMeshComponent>()) {
             if (ImGui::CollapsingHeader(ICON_MD_TOKEN "  RenderMesh", ImGuiTreeNodeFlags_DefaultOpen)) {
-                auto& meshes = m_Entity.Get<RenderMeshComponent>().mesh_instance->GetMesh()->GetSubMeshes();
-                int  cnt    = 0;
+                auto& meshes        = m_Entity.Get<RenderMeshComponent>().mesh_instance->GetMesh()->GetSubMeshes();
+                auto& material      = meshes.front().material;
+                float max_orm       = 1;
+                float min_orm       = 0;
+                float min_shininess = 0;
+                float orm_speed     = 0.01;
+                ImGui::Columns(2);
+                ImGuiUtils::EditProperty("AmbientColor", material.ambient, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("AlbedoColor", material.albedo_color, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("AmbientOcclusion", ImGuiDataType_Float, &material.orm.r, orm_speed, &min_orm, &max_orm);
+                ImGuiUtils::EditProperty("Roughness", ImGuiDataType_Float, &material.orm.g, orm_speed, &min_orm, &max_orm);
+                ImGuiUtils::EditProperty("Metallic", ImGuiDataType_Float, &material.orm.b, orm_speed, &min_orm, &max_orm);
+                ImGuiUtils::EditProperty("Shininess", ImGuiDataType_Float, &material.shininess, 1.0f, &min_shininess, nullptr);
+                ImGui::Columns(1);
+                ImGui::Separator();
+                int cnt = 0;
                 for (auto& mesh : meshes) {
-                    std::string name = StrCat("Mesh ", cnt);
+                    mesh.material.ambient      = material.ambient;
+                    mesh.material.albedo_color = material.albedo_color;
+                    mesh.material.orm          = material.orm;
+                    mesh.material.shininess    = material.shininess;
+                    std::string name           = StrCat("Mesh ", cnt);
                     if (ImGui::TreeNode(name.c_str())) {
-                        auto& material     = mesh.material;
-                        auto  specular_map = (material.specular_map ? material.specular_map : Renderer::GetDefaultTexture());
-                        auto  diffuse_map  = (material.diffuse_map ? material.diffuse_map : Renderer::GetDefaultTexture());
-                        auto  normal_map   = (material.normal_map ? material.normal_map : Renderer::GetDefaultNormalTexture());
+                        auto& material   = mesh.material;
+                        auto  albedo_map = (material.albedo_map ? material.albedo_map : Renderer::GetDefaultTexture());
+                        auto  normal_map = (material.normal_map ? material.normal_map : Renderer::GetDefaultNormalTexture());
+                        auto  orm_map    = (material.orm_map ? material.orm_map : Renderer::GetDefaultTexture());
                         ImGui::Separator();
                         ImGui::Columns(2);
-                        ImGuiUtils::EditTexture("SpecularMap", specular_map);
-                        ImGui::Separator();
-                        ImGuiUtils::EditTexture("Diffuse", diffuse_map);
+                        ImGuiUtils::EditTexture("AlbedoMap", albedo_map);
                         ImGui::Separator();
                         ImGuiUtils::EditTexture("NormalMap", normal_map);
                         ImGui::Separator();
-                        ImGuiUtils::EditProperty("AmbientColor", material.ambient_color, ImGuiUtils::PropertyType::Color);
-                        ImGuiUtils::EditProperty("SpecularColor", material.specular_color, ImGuiUtils::PropertyType::Color);
-                        ImGuiUtils::EditProperty("DiffuseColor", material.diffuse_color, ImGuiUtils::PropertyType::Color);
-                        ImGuiUtils::EditProperty("Shininess", material.shininess);
+                        ImGuiUtils::EditTexture("OrmMap", orm_map);
                         ImGui::Columns(1);
                         ImGui::Separator();
                         ImGui::TreePop();

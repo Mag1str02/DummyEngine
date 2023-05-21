@@ -5,7 +5,6 @@
 namespace DE {
     GLenum TextureFormatToGLTextureFormat(TextureFormat format) {
         switch (format) {
-            case TextureFormat::None: return GL_RED;
             case TextureFormat::RED: return GL_RED;
             case TextureFormat::RA: return GL_RG;
             case TextureFormat::RGB: return GL_RGB;

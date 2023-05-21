@@ -73,7 +73,7 @@ namespace DE {
         if (mesh->m_InstanceBuffer) {
             shader->SetInt("u_Instanced", 1);
             for (const auto& sub_mesh : mesh->m_SubMeshes) {
-                shader->SetMaterial("u_Material", sub_mesh.material);
+                sub_mesh.material.Apply(shader);
                 sub_mesh.vertex_array->Bind();
                 m_RenderAPI->DrawInstanced(sub_mesh.vertex_array, mesh->m_Instances.size());
 
@@ -84,7 +84,7 @@ namespace DE {
             shader->SetInt("u_Instanced", 0);
             shader->SetMat4("u_Transform", trasform);
             for (const auto& sub_mesh : mesh->m_SubMeshes) {
-                shader->SetMaterial("u_Material", sub_mesh.material);
+                sub_mesh.material.Apply(shader);
                 sub_mesh.vertex_array->Bind();
                 m_RenderAPI->DrawInstanced(sub_mesh.vertex_array, 1);
 

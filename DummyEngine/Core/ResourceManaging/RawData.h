@@ -45,13 +45,12 @@ namespace DE {
     };
 
     struct MaterialData {
-        Vec3             ambient_color;
-        Vec3             diffuse_color;
-        Vec3             specular_color;
         float            shininess;
-        Ref<TextureData> specular_map;
-        Ref<TextureData> diffuse_map;
+        Vec3             albedo_color = Vec3(1.0f);
+        Vec3             orm          = Vec3(1.0f);
+        Ref<TextureData> albedo_map;
         Ref<TextureData> normal_map;
+        Ref<TextureData> orm_map;
     };
 
     struct RenderSubMeshData {
