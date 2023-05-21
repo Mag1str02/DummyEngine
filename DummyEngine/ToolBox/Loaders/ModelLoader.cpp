@@ -93,13 +93,11 @@ namespace DE {
             }
         }
         if (mesh->mMaterialIndex >= 0) {
-            aiMaterial* material                 = scene->mMaterials[mesh->mMaterialIndex];
-            current_mesh.material.diffuse_color  = GetColor(material, ColorType::Diffuse);
-            current_mesh.material.ambient_color  = GetColor(material, ColorType::Ambient);
-            current_mesh.material.specular_color = GetColor(material, ColorType::Specular);
-            current_mesh.material.diffuse_map    = GetTexture(material, aiTextureType_DIFFUSE);
-            current_mesh.material.specular_map   = GetTexture(material, aiTextureType_SPECULAR);
-            current_mesh.material.normal_map     = GetTexture(material, aiTextureType_NORMALS);
+            aiMaterial* material               = scene->mMaterials[mesh->mMaterialIndex];
+            current_mesh.material.albedo_color = GetColor(material, ColorType::Albedo);
+            current_mesh.material.albedo_map   = GetTexture(material, aiTextureType_BASE_COLOR);
+            current_mesh.material.normal_map   = GetTexture(material, aiTextureType_NORMALS);
+            current_mesh.material.orm_map      = GetTexture(material, aiTextureType_DIFFUSE_ROUGHNESS);
             aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &current_mesh.material.shininess);
         }
         ++m_State.m_CurrentMeshId;
@@ -109,7 +107,7 @@ namespace DE {
         switch (type) {
             case ColorType::Diffuse: mat->Get(AI_MATKEY_COLOR_DIFFUSE, color); break;
             case ColorType::Specular: mat->Get(AI_MATKEY_COLOR_SPECULAR, color); break;
-            case ColorType::Ambient: mat->Get(AI_MATKEY_COLOR_AMBIENT, color); break;
+            case ColorType::Albedo: mat->Get(AI_MATKEY_COLOR_DIFFUSE, color); break;
             default: break;
         }
         Vec3 res(color.r, color.g, color.b);

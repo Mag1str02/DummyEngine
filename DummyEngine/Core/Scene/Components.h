@@ -2,6 +2,7 @@
 
 #include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
+#include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {

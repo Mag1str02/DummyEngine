@@ -3,6 +3,38 @@
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
 namespace DE {
+
+    void Material::Apply(Ref<Shader> shader, const std::string& uniform_name) const {
+        switch (type) {
+            case Type::PBR: {
+                shader->SetFloat3(uniform_name + ".m_Ambient", ambient);
+                shader->SetFloat3(uniform_name + ".m_Albedo", albedo_color);
+                shader->SetFloat3(uniform_name + ".m_ORM", orm);
+                shader->SetFloat(uniform_name + ".m_Shininess", shininess);
+
+                if (albedo_map) {
+                    albedo_map->Bind(1);
+                } else {
+                    Renderer::GetDefaultTexture()->Bind(1);
+                }
+                if (normal_map) {
+                    normal_map->Bind(2);
+                } else {
+                    Renderer::GetDefaultNormalTexture()->Bind(2);
+                }
+                if (orm_map) {
+                    orm_map->Bind(3);
+                } else {
+                    Renderer::GetDefaultTexture()->Bind(3);
+                }
+                shader->SetInt(uniform_name + ".m_AlbedoMap", 1);
+                shader->SetInt(uniform_name + ".m_NormalMap", 2);
+                shader->SetInt(uniform_name + ".m_ORMMap", 3);
+            } break;
+            case Type::None: LOG_WARNING("Material", "Material was not applyed because has type None"); break;
+            default: DE_ASSERT(false, "Unsupported material type"); break;
+        }
+    }
     Ref<Texture> SetupTexture(Ref<TextureData> texture_data) {
         if (texture_data) {
             return Texture::Create(*texture_data);
@@ -17,15 +49,16 @@ namespace DE {
 
         Ref<VertexBuffer> vertex_buffer = VertexBuffer::Create(layout, data.vertices.size(), &data.vertices[0]);
         Ref<IndexBuffer>  index_buffer  = IndexBuffer::Create(&data.indices[0], data.indices.size());
+        
+        material.ambient                = Vec3(1.0);
+        material.albedo_color           = data.material.albedo_color;
+        material.orm                    = data.material.orm;
+        material.shininess              = data.material.shininess;
+        material.type                   = Material::Type::PBR;
 
-        material.ambient_color  = data.material.ambient_color;
-        material.specular_color = data.material.specular_color;
-        material.diffuse_color  = data.material.diffuse_color;
-        material.shininess      = data.material.shininess;
-
-        material.specular_map = SetupTexture(data.material.specular_map);
-        material.diffuse_map  = SetupTexture(data.material.diffuse_map);
-        material.normal_map   = SetupTexture(data.material.normal_map);
+        material.albedo_map = SetupTexture(data.material.albedo_map);
+        material.normal_map = SetupTexture(data.material.normal_map);
+        material.orm_map    = SetupTexture(data.material.orm_map);
 
         vertex_array->AddVertexBuffer(vertex_buffer);
         vertex_array->SetIndexBuffer(index_buffer);
