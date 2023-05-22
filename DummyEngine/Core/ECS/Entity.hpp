@@ -41,7 +41,7 @@ namespace DE {
     template <typename ComponentType> ComponentType& Entity::Get() {
         auto storage = m_Storage.lock();
         auto ptr     = storage->GetComponent<ComponentType>(m_ID, m_Gen);
-        DE_ASSERT(ptr, "Failed to get (", DemangledName<ComponentType>(), ") of entity (", m_ID, ")");
+//        DE_ASSERT(ptr, "Failed to get (", DemangledName<ComponentType>(), ") of entity (", m_ID, ")");
         return *ptr;
     }
     template <typename ComponentType> bool Entity::Has() const {

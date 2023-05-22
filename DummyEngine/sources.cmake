@@ -76,6 +76,11 @@ endif()
 if(${CMAKE_PLATFORM} STREQUAL "LINUX")
 set(PLATFORM_SOURCES)
 endif()
-if(${CMAKE_PLATFORM} STREQUAL "MACOS")
-set(PLATFORM_SOURCES)
+if(${CMAKE_PLATFORM} STREQUAL "APPLE")
+set(PLATFORM_SOURCES
+    Platform/Macos/Core/Application/FileSystem.cpp
+    Platform/Macos/Utils/Debug/StackTrace.cpp
+    Platform/Macos/Utils/Debug/Demangler.cpp
+    Platform/Macos/Core/Scripting/SharedObject.cpp
+)
 endif()

@@ -8,7 +8,7 @@ include(sources.cmake)
 add_executable(DummyEditor 
     ${EDITOR_SOURCES}    
     ${PLATFORM_SOURCES}
-)
+        Platform/Macos/Scripting/Compiler.cpp)
 add_library(DummyEditorScripts SHARED 
     Scripts/EditorCameraController.cpp
 )

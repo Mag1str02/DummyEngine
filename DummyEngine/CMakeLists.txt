@@ -8,7 +8,7 @@ add_subdirectory(Libs)
 add_library(DummyEngineLib SHARED
    ${ENGINE_SOURCES}
    ${PLATFORM_SOURCES}
-)
+        Platform/Macos/Utils/Debug/Demangler.h Platform/Macos/Utils/Debug/Demangler.cpp Platform/Macos/Core/Application/FileSystem.cpp Platform/Macos/Core/Scripting/SharedObject.cpp Platform/Macos/Utils/Debug/StackTrace.cpp)
 
 target_compile_definitions(DummyEngineLib PUBLIC 
     DE_ENABLE_PROFILER=1

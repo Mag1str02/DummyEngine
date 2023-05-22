@@ -57,13 +57,11 @@ namespace DE {
 
         Ref<CubeMap> map = nullptr;
     };
-}  // namespace DE
 
-namespace std {
     template <typename T> struct hash;
 
     template <> struct hash<DE::TagComponent> {
         std::size_t operator()(const DE::TagComponent& tag) const { return std::hash<std::string>()(tag); }
     };
 
-}  // namespace std
+} // namespace DE

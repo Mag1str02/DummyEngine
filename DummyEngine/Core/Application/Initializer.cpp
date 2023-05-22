@@ -43,6 +43,7 @@ namespace DE {
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
             ImGui::g_ImGuiFailAssert                                    = FailAssert;
             ImGui::g_ExternalSettings.DragAndDropTooltipAlphaMultiplyer = 1.0;
             LOG_INFO("Initializer", "Initialized GLFW");

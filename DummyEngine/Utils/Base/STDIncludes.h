@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <chrono>
 #include <cstdint>
 #include <cstdlib>
@@ -18,6 +19,7 @@
 #include <stack>
 #include <string>
 #include <string_view>
+#include <sstream>
 #include <typeindex>
 #include <unordered_map>
 #include <unordered_set>
