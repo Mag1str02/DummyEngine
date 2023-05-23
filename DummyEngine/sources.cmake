@@ -36,6 +36,7 @@ Core/Rendering/Renderer/VertexBuffer.cpp
 Core/Rendering/Renderer/Renderer.cpp
 Core/Rendering/Renderer/RenderStructs.cpp
 Core/Rendering/Renderer/Shader.cpp
+Core/Rendering/Renderer/SkyBox.cpp
 Core/Rendering/Renderer/Texture.cpp
 Core/Rendering/Renderer/UniformBuffer.cpp
 
@@ -50,6 +51,8 @@ Core/Rendering/RendererOpenGL/GLTexture.cpp
 Core/Rendering/RendererOpenGL/GLUniformBuffer.cpp
 Core/Rendering/RendererOpenGL/GLRenderAPI.cpp
 Core/Rendering/RendererOpenGL/GLDebug.cpp
+
+# Core/Rendering/Shaders/ShaderSources.cpp
 
 Core/ResourceManaging/AssetManager.cpp
 Core/ResourceManaging/RawData.cpp

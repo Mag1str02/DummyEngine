@@ -3,6 +3,7 @@
 #include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"
+#include "DummyEngine/Core/ResourceManaging/AssetManager.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"
 #include "DummyEngine/Core/Scene/SceneRenderer.h"
@@ -124,9 +125,11 @@ namespace DE {
             n_Entity["LightSource"]["OuterCone"] = entity.Get<LightSource>().outer_cone_cos;
         }
     }
-    template <> void SaveComponent<SkyBox>(YAML::Node& n_Entity, Entity entity) {
-        if (entity.Has<SkyBox>()) {
-            n_Entity["SkyBox"] = entity.Get<SkyBox>().id.Hex();
+    template <> void SaveComponent<SkyBoxComponent>(YAML::Node& n_Entity, Entity entity) {
+        if (entity.Has<SkyBoxComponent>()) {
+            auto skybox                = entity.Get<SkyBoxComponent>();
+            n_Entity["SkyBox"]["Type"] = (skybox.type == SkyBoxComponent::TexType::CubeMap ? "CubeMap" : "Equirectangular");
+            n_Entity["SkyBox"]["UUID"] = skybox.id.Hex();
         }
     }
     template <> void SaveComponent<ScriptComponent>(YAML::Node& n_Entity, Entity entity) {
@@ -147,7 +150,7 @@ namespace DE {
         SaveComponent<ShaderComponent>(n_Entity, entity);
         SaveComponent<FPSCamera>(n_Entity, entity);
         SaveComponent<LightSource>(n_Entity, entity);
-        SaveComponent<SkyBox>(n_Entity, entity);
+        SaveComponent<SkyBoxComponent>(n_Entity, entity);
         SaveComponent<ScriptComponent>(n_Entity, entity);
     }
     YAML::Node SaveNode(SceneHierarchy::Node node) {
@@ -338,12 +341,26 @@ namespace DE {
 
         entity.AddComponent<LightSource>(light_source);
     }
-    template <> void LoadComponent<SkyBox>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
-        UUID id = n_Component.as<std::string>();
-        if (!ResourceManager::HasCubeMap(id) && !ResourceManager::LoadCubeMap(id)) {
-            LOG_WARNING("SceneLoader", "CubeMap (", id, ") not found in ResourceManager");
+    template <> void LoadComponent<SkyBoxComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
+        UUID                     id = n_Component["UUID"].as<std::string>();
+        SkyBoxComponent::TexType type =
+            (n_Component["Type"].as<std::string>() == "CubeMap" ? SkyBoxComponent::TexType::CubeMap : SkyBoxComponent::TexType::Equirectangular);
+        if (type == SkyBoxComponent::TexType::CubeMap) {
+            if (!ResourceManager::HasCubeMap(id) && !ResourceManager::LoadCubeMap(id)) {
+                LOG_WARNING("SceneLoader", "CubeMap (", id, ") not found in ResourceManager");
+            } else {
+                Ref<SkyBox> skybox = CreateRef<SkyBox>(ResourceManager::GetCubeMap(id).value());
+                entity.AddComponent<SkyBoxComponent>({type, id, skybox});
+            }
         } else {
-            entity.AddComponent<SkyBox>({id, ResourceManager::GetCubeMap(id).value()});
+            auto asset = AssetManager::GetTextureAsset(id);
+            if (!asset.has_value()) {
+                LOG_WARNING("SceneLoader", "CubeMap (", id, ") not found in ResourceManager");
+            } else {
+                auto        asset  = AssetManager::GetTextureAsset(id);
+                Ref<SkyBox> skybox = CreateRef<SkyBox>(TextureLoader::Load(asset.value().loading_props));
+                entity.AddComponent<SkyBoxComponent>({type, id, skybox});
+            }
         }
     }
     template <> void LoadComponent<ScriptComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
@@ -370,7 +387,7 @@ namespace DE {
         if (n_Entity["Shader"]) LoadComponent<ShaderComponent>(scene, n_Entity["Shader"], entity);
         if (n_Entity["FPSCamera"]) LoadComponent<FPSCamera>(scene, n_Entity["FPSCamera"], entity);
         if (n_Entity["LightSource"]) LoadComponent<LightSource>(scene, n_Entity["LightSource"], entity);
-        if (n_Entity["SkyBox"]) LoadComponent<SkyBox>(scene, n_Entity["SkyBox"], entity);
+        if (n_Entity["SkyBox"]) LoadComponent<SkyBoxComponent>(scene, n_Entity["SkyBox"], entity);
         if (n_Entity["Script"]) LoadComponent<ScriptComponent>(scene, n_Entity["Script"], entity);
 
         if (entity.Has<RenderMeshComponent>() && entity.Has<ShaderComponent>()) {
@@ -457,8 +474,8 @@ namespace DE {
             result.name      = n_Scene["Name"].as<std::string>();
             LOG_INFO("SceneLoader", "Loaded SceneData for (", RelativeToExecutable(path), ")");
             return result;
-        } catch (...) {
-            LOG_ERROR("SceneLoader", "Failed to load SceneData for (", path.string(), ")");
+        } catch (const std::exception& e) {
+            LOG_ERROR("SceneLoader", "Failed to load SceneData for (", path.string(), ") because of exception (", e.what(), ")");
             return {};
         }
     }
@@ -468,8 +485,8 @@ namespace DE {
             LoadHierarchyNode(scene, hierarchy, scene->GetHierarchyRoot());
             LOG_INFO("SceneLoader", "Serialized scene");
             return scene;
-        } catch (...) {
-            LOG_ERROR("SceneLoader", "Failed to serialize scene");
+        } catch (const std::exception& e) {
+            LOG_ERROR("SceneLoader", "Failed to serialize scene because of exception (", e.what(), ")");
             return nullptr;
         }
     }

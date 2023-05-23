@@ -2,6 +2,16 @@ Scene:
   Name: Scene
   Assets:
     Models:
+      Cerberus:
+        Path: Assets\Models\Cerberus\Cerberus_LP.obj
+        Compress: false
+        FlipUV: true
+        UUID: 5c7dfba9096b1d2077cf3bab45ecdc1e
+      Sphere:
+        Path: Assets\Models\Sphere\sphere.obj
+        Compress: true
+        FlipUV: true
+        UUID: 5c7dfba9096b1d2047cf3bab45ecdc1e
       BackpackModel:
         Path: Assets\Models\Backpack\backpack.obj
         Compress: true
@@ -60,7 +70,7 @@ Scene:
               Tag: Sun
               UUID: 4c84709484f950496a723680ffa3dd15
               Transformation:
-                Translation: [0, 30, -2.11851883]
+                Translation: [0, 30.0000019, 57.7448082]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -74,7 +84,7 @@ Scene:
                 Diffuse: [1, 1, 1]
                 Specular: [1, 1, 1]
                 Direction: [1, 0, 0]
-                Position: [0, 30, -2.11851883]
+                Position: [0, 30.0000019, 57.7448082]
                 CLQ: [0.100000001, 0.00100000005, 0]
                 InnerCone: 0
                 OuterCone: 0
@@ -87,6 +97,30 @@ Scene:
     - Node:
         Name: Objects
         Childs:
+          - Entity:
+              Tag: Cerberus
+              UUID: 855d5d57284a11cc6211f81f0c4cc63a
+              Transformation:
+                Translation: [0, 25, 26]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [90, 0, 0]
+                RotationOffset: [-90, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 5c7dfba9096b1d2077cf3bab45ecdc1e
+              Shader: 24116af57b6022cd2464fbf641ae946a
+          - Entity:
+              Tag: Sphere
+              UUID: 855d5d57284a11cc6621f81f0c4cc63a
+              Transformation:
+                Translation: [0, 10, 26]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [-90, 0, 0]
+                Scale: [10, 10, 10]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 5c7dfba9096b1d2047cf3bab45ecdc1e
+              Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: CarPhong
               UUID: 855d5d57284a11cc6634f81f0c4cc63a

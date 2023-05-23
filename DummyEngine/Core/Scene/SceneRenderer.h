@@ -20,7 +20,7 @@ namespace DE {
         Ref<RenderMeshInstance> GetRenderMeshInstance(UUID mesh_id, UUID shader_ids);
 
     private:
-        void UpdateShaders(const FPSCamera& camera);
+        void UpdateShaders(const FPSCamera& camera, Entity skybox);
         void CreateInstancedMesh(UUID mesh_id, UUID shader_id);
 
         Scene* m_Scene;

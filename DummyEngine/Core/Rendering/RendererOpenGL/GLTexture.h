@@ -17,7 +17,7 @@ namespace DE
         GLTexture& operator=(const GLTexture& other) = delete;
         GLTexture& operator=(GLTexture&& other) = delete;
 
-        GLTexture(U32 width, U32 height, TextureFormat format);
+        GLTexture(U32 width, U32 height, TextureChannels format);
         GLTexture(const TextureData& data);
 
         virtual ~GLTexture();

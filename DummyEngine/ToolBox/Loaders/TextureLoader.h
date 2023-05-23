@@ -10,6 +10,6 @@ namespace DE {
     class TextureLoader {
     public:
         static Ref<TextureData> Load(const TextureAsset::LoadingProperties& props);
-        static void             Save(const Path& path, const Ref<TextureData> data);
+        // static void             Save(const Path& path, const Ref<TextureData> data);
     };
 }  // namespace DE

@@ -1,6 +1,6 @@
 #version 460 core
 
-const vec3 kDefaultReflectivity = vec3(0.04);
+const vec3 kDefaultReflectivity = vec3(0.01);
 const float kPI = 3.1415926;
 
 #define MAX_LIGHT_SOURCES 128
@@ -52,8 +52,12 @@ out vec4 f_FragColor;
 
 uniform int      u_LightAmount;
 uniform Material u_Material;
+uniform samplerCube u_IrradianceMap;
+uniform samplerCube u_RadianceMap;
+uniform mat4        u_EnvRotation;
 
 vec3  FresnelSchlick(float angle_cos, vec3 base_reflectivity);
+vec3  FresnelSchlickWithRoughness(float angle_cos, vec3 base_reflectivity, float roughness);
 float DistributionGGX(vec3 n_normal, vec3 n_halfway, float roughness);
 float GeometrySchlickGGX(float angle_cos, float roughness);
 float GeometrySmith(vec3 n_normal, vec3 n_view, vec3 n_light, float roughness);
@@ -66,9 +70,9 @@ void main()
     MaterialPrecalc mp;
 
     mp.albedo = vec3(texture(u_Material.m_AlbedoMap, vs_in.TexCoords)) * u_Material.m_Albedo;
-    mp.ao = vec3(texture(u_Material.m_ORMMap, vs_in.TexCoords)).x * u_Material.m_ORM.x;
+    mp.ao =  (1 - u_Material.m_ORM.x) + vec3(texture(u_Material.m_ORMMap, vs_in.TexCoords)).x * u_Material.m_ORM.x;
     mp.roughness = vec3(texture(u_Material.m_ORMMap, vs_in.TexCoords)).y * u_Material.m_ORM.y;
-    mp.metallic = vec3(texture(u_Material.m_ORMMap, vs_in.TexCoords)).z * u_Material.m_ORM.z;
+    mp.metallic =  vec3(texture(u_Material.m_ORMMap, vs_in.TexCoords)).z * u_Material.m_ORM.z;
     mp.base_reflectivity = mix(kDefaultReflectivity,  mp.albedo, mp.metallic); 
     mp.n_view  = normalize(vs_in.CameraPos - vs_in.FragPos);
     mp.n_normal = texture(u_Material.m_NormalMap, vs_in.TexCoords).rgb;
@@ -78,9 +82,13 @@ void main()
     for (int i = 0; i < u_LightAmount; ++i){  
         result += CalcLightImpact(lights[i], mp);
     } 
-    vec3 ambient = u_Material.m_Ambient * mp.albedo * mp.ao;
-    result += ambient; 
-    
+    vec3 kS = FresnelSchlickWithRoughness(max(dot(mp.n_normal, mp.n_view), 0.0), mp.base_reflectivity, mp.roughness);
+    vec3 kD = (1.0 - kS) * (1.0 - mp.metallic);
+    vec3 irradiance = texture(u_IrradianceMap, mat3(u_EnvRotation) * mp.n_normal).rgb;
+    vec3 diffuse    = irradiance * mp.albedo;
+    vec3 ambient    = (kD * diffuse) * mp.ao; 
+    result += u_Material.m_Ambient * ambient; 
+
     result = result / (result + vec3(1.0));
     result = pow(result, vec3(1.0/2.2));  
 
@@ -116,6 +124,10 @@ vec3 FresnelSchlick(float angle_cos, vec3 base_reflectivity)
 {
     return base_reflectivity + (1.0 - base_reflectivity) * pow(clamp(1.0 - angle_cos, 0.0, 1.0), 5.0);
 }
+vec3 FresnelSchlickWithRoughness(float angle_cos, vec3 base_reflectivity, float roughness)
+{
+    return base_reflectivity + (max(vec3(1.0 - roughness), base_reflectivity) - base_reflectivity) * pow(clamp(1.0 - angle_cos, 0.0, 1.0), 5.0);
+}  
 float DistributionGGX(vec3 n_normal, vec3 n_halfway, float roughness)
 {
     float a      = roughness*roughness;
