@@ -20,6 +20,7 @@
 #include <stack>
 #include <string>
 #include <string_view>
+#include <sstream>
 #include <typeindex>
 #include <unordered_map>
 #include <unordered_set>

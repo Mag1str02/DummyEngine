@@ -71,13 +71,11 @@ namespace DE {
         Ref<SkyBox> map;
         SkyBox*     operator->() { return map.get(); }
     };
-}  // namespace DE
 
-namespace std {
     template <typename T> struct hash;
 
     template <> struct hash<DE::TagComponent> {
         std::size_t operator()(const DE::TagComponent& tag) const { return std::hash<std::string>()(tag); }
     };
 
-}  // namespace std
+}  // namespace DE

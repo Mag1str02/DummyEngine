@@ -63,8 +63,7 @@ namespace DE {
 namespace std {
     template <> struct hash<DE::Entity> {
         std::size_t operator()(const DE::Entity& entity) const {
-            return hash<U64>()(((U64)entity.m_ID << 32) + entity.m_Gen) ^
-                   hash<U64>()(reinterpret_cast<U64>(entity.m_Storage.lock().get()));
+            return hash<U64>()(((U64)entity.m_ID << 32) + entity.m_Gen) ^ hash<U64>()(reinterpret_cast<U64>(entity.m_Storage.lock().get()));
         }
     };
 }  // namespace std

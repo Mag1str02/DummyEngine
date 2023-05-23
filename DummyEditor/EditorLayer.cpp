@@ -190,10 +190,10 @@ namespace DE {
     }
 
     Path EditorLayer::OpenSceneDialog() {
-        return FileSystem::OpenFileDialog("Dummy Engine Scene (*.yml)", "*.yml");
+        return FileSystem::OpenFileDialog("Dummy Engine Scene (*.yml)", "yml");
     }
     Path EditorLayer::SaveSceneDialog() {
-        return FileSystem::SaveFileDialog("Dummy Engine Scene (*.yml)", "*.yml");
+        return FileSystem::SaveFileDialog("Dummy Engine Scene (*.yml)", "yml");
     }
     void EditorLayer::OpenScene(const Path& scene_path) {
         if (scene_path.empty()) {

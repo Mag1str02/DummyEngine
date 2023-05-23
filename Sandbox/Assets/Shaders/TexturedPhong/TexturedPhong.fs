@@ -1,4 +1,4 @@
-#version 460 core
+#version 410 core
 
 #define MAX_LIGHT_SOURCES 128
 

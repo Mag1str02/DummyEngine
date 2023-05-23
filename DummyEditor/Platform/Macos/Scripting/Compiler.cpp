@@ -17,8 +17,10 @@ namespace DE
             FileSystem::CreateDirectory(directory);
 
             std::string compile_command;
+            compile_command.append("export MACOSX_DEPLOYMENT_TARGET=\"12.5\" && ");
             compile_command.append(GetCompiler());
-            compile_command.append(" -c");
+            compile_command.append(" -c -std=c++20 -mmacosx-version-min=12.5");
+            compile_command.append(AddDefines());
             compile_command.append(AddIncludeDirArguments());
             compile_command.append(AddSourceArgument(source));
             compile_command.append(AddDestinationArgument(source, destination));
@@ -44,8 +46,10 @@ namespace DE
             FileSystem::CreateDirectory(destination);
 
             std::string link_command;
+            link_command.append("export MACOSX_DEPLOYMENT_TARGET=\"12.5\" && ");
             link_command.append(GetCompiler());
             link_command.append(" -shared");
+            link_command.append(" -mmacosx-version-min=12.5");
             link_command.append(AddLinkArgs());
             link_command.append(AddSourcesArguments(sources));
             link_command.append(AddPathDLL(destination, library_name));
@@ -59,6 +63,8 @@ namespace DE
         void DeleteIncludeDir(const Path& dir) { m_IncludeDirs.erase(dir); }
         void AddLinkLibrary(const Path& library) { m_Libraries.insert(library); }
         void DeleteLinkLibrary(const Path& library) { m_Libraries.erase(library); }
+        void AddDefine(const std::string& define) { m_Defines.insert(define); }
+        void DeleteDefine(const std::string& define) { m_Defines.erase(define); }
 
     private:
         std::string GetCompiler()
@@ -109,6 +115,14 @@ namespace DE
             }
             return res;
         }
+        std::string AddDefines() {
+            std::string res;
+            for (const auto& def : m_Defines) {
+                res.append(" -D");
+                res.append(def);
+            }
+            return res;
+        }
         std::string AddPathDLL(const Path& destination, const std::string& library_name)
         {
             return " -o " + destination.string() + "/" + library_name + ".dll";
@@ -116,19 +130,24 @@ namespace DE
 
         std::unordered_set<Path> m_IncludeDirs;
         std::unordered_set<Path> m_Libraries;
+        std::unordered_set<std::string> m_Defines;
     };
 
     Scope<CompilerImpl> Compiler::m_Impl;
 
-    void Compiler::StartUp()
+    void Compiler::Initialize()
     {
         DE_ASSERT(!m_Impl, "Compiler already started.");
         m_Impl = CreateScope<CompilerImpl>();
-        AddIncludeDir("../src");
-        AddIncludeDir("../src/DummyEngine/Libs/GLM");
+        AddIncludeDir("..");
+        AddIncludeDir("../DummyEngine/Libs/GLM");
         AddLinkLibrary("DummyEngineLib");
+        AddDefine("DE_PLATFORM_MACOS");
+        AddDefine("DE_ENABLE_LOGGING=" + std::to_string(DE_ENABLE_LOGGING));
+        AddDefine("DE_ENABLE_ASSERTS=" + std::to_string(DE_ENABLE_ASSERTS));
+        AddDefine("DE_ENABLE_PROFILER=" + std::to_string(DE_ENABLE_PROFILER));
     }
-    void Compiler::ShutDown() { m_Impl = nullptr; }
+    void Compiler::Terminate() { m_Impl = nullptr; }
 
     bool Compiler::Compile(const Path& source, const Path& destination) { return m_Impl->Compile(source, destination); }
     bool Compiler::Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name)
@@ -139,5 +158,8 @@ namespace DE
     void Compiler::DeleteIncludeDir(const Path& dir) { m_Impl->DeleteIncludeDir(dir); }
     void Compiler::AddLinkLibrary(const Path& library) { m_Impl->AddLinkLibrary(library); }
     void Compiler::DeleteLinkLibrary(const Path& library) { m_Impl->DeleteLinkLibrary(library); }
+    void Compiler::AddDefine(const std::string& source) {
+        m_Impl->AddDefine(source);
+    }
 
 };  // namespace DE

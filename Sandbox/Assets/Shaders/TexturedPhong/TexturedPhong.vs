@@ -1,4 +1,4 @@
-#version 460 core
+#version 410 core
 
 struct VP{
     mat4 view;

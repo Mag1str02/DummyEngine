@@ -1,4 +1,5 @@
 #pragma once
+#include "DummyEngine/Utils/Types/Types.h"
 
 #ifdef __GNUC__
 #define DE_COMPILER_GCC_VERSION_MAJOR __GNUC__
@@ -25,10 +26,15 @@
 #define DE_SCRIPT_API extern "C"
 #endif
 
+#if DE_PLATFORM_MACOS
+#define DE_SCRIPT_API extern "C"
+#undef DE_COMPILER_PATH_HASH
+#endif
+
 namespace std {
 #ifndef DE_COMPILER_PATH_HASH
-    template <> struct hash<::DE::Path> {
-        std::size_t operator()(const ::DE::Path& path) const { return hash_value(path); }
+    template <> struct hash<DE::Path> {
+        std::size_t operator()(const DE::Path& path) const { return hash_value(path); }
     };
 #endif
 }  // namespace std
