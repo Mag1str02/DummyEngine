@@ -15,17 +15,17 @@ namespace DE {
                 if (albedo_map) {
                     albedo_map->Bind(1);
                 } else {
-                    Renderer::GetDefaultTexture()->Bind(1);
+                    Renderer::GetTexture(Renderer::Textures::White)->Bind(1);
                 }
                 if (normal_map) {
                     normal_map->Bind(2);
                 } else {
-                    Renderer::GetDefaultNormalTexture()->Bind(2);
+                    Renderer::GetTexture(Renderer::Textures::Normal)->Bind(2);
                 }
                 if (orm_map) {
                     orm_map->Bind(3);
                 } else {
-                    Renderer::GetDefaultTexture()->Bind(3);
+                    Renderer::GetTexture(Renderer::Textures::White)->Bind(3);
                 }
                 shader->SetInt(uniform_name + ".m_AlbedoMap", 1);
                 shader->SetInt(uniform_name + ".m_NormalMap", 2);
@@ -49,12 +49,12 @@ namespace DE {
 
         Ref<VertexBuffer> vertex_buffer = VertexBuffer::Create(layout, data.vertices.size(), &data.vertices[0]);
         Ref<IndexBuffer>  index_buffer  = IndexBuffer::Create(&data.indices[0], data.indices.size());
-        
-        material.ambient                = Vec3(1.0);
-        material.albedo_color           = data.material.albedo_color;
-        material.orm                    = data.material.orm;
-        material.shininess              = data.material.shininess;
-        material.type                   = Material::Type::PBR;
+
+        material.ambient      = Vec3(1.0);
+        material.albedo_color = data.material.albedo_color;
+        material.orm          = data.material.orm;
+        material.shininess    = data.material.shininess;
+        material.type         = Material::Type::PBR;
 
         material.albedo_map = SetupTexture(data.material.albedo_map);
         material.normal_map = SetupTexture(data.material.normal_map);

@@ -4,7 +4,7 @@
 
 namespace DE {
 
-    GLTexture::GLTexture(uint32_t width, uint32_t height, TextureFormat format) :
+    GLTexture::GLTexture(uint32_t width, uint32_t height, TextureChannels format) :
         m_Width(width),
         m_Height(height),
         m_InternalFormat(TextureFormatToGLTextureInternalFormat(format)),
@@ -24,8 +24,8 @@ namespace DE {
     GLTexture::GLTexture(const TextureData& data) :
         m_Width(data.Width()),
         m_Height(data.Height()),
-        m_InternalFormat(TextureFormatToGLTextureInternalFormat(data.Format())),
-        m_Format(TextureFormatToGLTextureFormat(data.Format())) {
+        m_InternalFormat(TextureFormatToGLTextureInternalFormat(data.Channels())),
+        m_Format(TextureFormatToGLTextureFormat(data.Channels())) {
         glGenTextures(1, &m_TextureId);
         glBindTexture(GL_TEXTURE_2D, m_TextureId);
 

@@ -95,9 +95,9 @@ namespace DE {
         if (mesh->mMaterialIndex >= 0) {
             aiMaterial* material               = scene->mMaterials[mesh->mMaterialIndex];
             current_mesh.material.albedo_color = GetColor(material, ColorType::Albedo);
-            current_mesh.material.albedo_map   = GetTexture(material, aiTextureType_BASE_COLOR);
+            current_mesh.material.albedo_map   = GetTexture(material, aiTextureType_DIFFUSE);
             current_mesh.material.normal_map   = GetTexture(material, aiTextureType_NORMALS);
-            current_mesh.material.orm_map      = GetTexture(material, aiTextureType_DIFFUSE_ROUGHNESS);
+            current_mesh.material.orm_map      = GetTexture(material, aiTextureType_METALNESS);
             aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &current_mesh.material.shininess);
         }
         ++m_State.m_CurrentMeshId;

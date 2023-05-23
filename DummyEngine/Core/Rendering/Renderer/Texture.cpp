@@ -4,7 +4,7 @@
 
 namespace DE
 {
-    Ref<Texture> Texture::Create(U32 widht, U32 height, TextureFormat format)
+    Ref<Texture> Texture::Create(U32 widht, U32 height, TextureChannels format)
     {
         switch (Renderer::CurrentAPI())
         {

@@ -1,21 +1,20 @@
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLFrameBuffer.h"
 
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLCubeMap.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLTexture.h"
 
 namespace DE {
-    bool IsColorFormat(TextureFormat format) {
+    bool IsColorFormat(TextureChannels format) {
         switch (format) {
-            case TextureFormat::RED: return true;
-            case TextureFormat::RGB: return true;
-            case TextureFormat::RGBA: return true;
+            case TextureChannels::RED: return true;
+            case TextureChannels::RGB: return true;
+            case TextureChannels::RGBA: return true;
             default: return false;
         }
     }
-    bool IsDepthFormat(TextureFormat format)
-    {
-        switch (format)
-        {
-            case TextureFormat::Depth: return true;
+    bool IsDepthFormat(TextureChannels format) {
+        switch (format) {
+            case TextureChannels::Depth: return true;
             default: return false;
         }
     }
@@ -72,7 +71,7 @@ namespace DE {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
-    void GLFrameBuffer::AddColorAttachment(TextureFormat format) {
+    void GLFrameBuffer::AddColorAttachment(TextureChannels format) {
         // TODO: Switch 8 to GPU capabilities.
         DE_ASSERT(m_ColorAttachments.size() <= 8, "No available color attachment slot");
         glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
@@ -85,8 +84,17 @@ namespace DE {
                                0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-    void GLFrameBuffer::SetDepthAttachment(TextureFormat format)
-    {
+    void GLFrameBuffer::AddColorAttachment(Ref<CubeMap> map, U32 side) {
+        // TODO: Rework
+        glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
+        m_ColorAttachments.push_back({nullptr, TextureChannels::None});
+        glFramebufferTexture2D(GL_FRAMEBUFFER,
+                               GL_COLOR_ATTACHMENT0 + m_ColorAttachments.size() - 1,
+                               GL_TEXTURE_CUBE_MAP_POSITIVE_X + side,
+                               std::dynamic_pointer_cast<GLCubeMap>(map)->m_MapId,
+                               0);
+    }
+    void GLFrameBuffer::SetDepthAttachment(TextureChannels format) {
         glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
         m_DepthAttachment.m_Format  = format;
         m_DepthAttachment.m_Texture = Texture::Create(m_Properties.width, m_Properties.height, format);

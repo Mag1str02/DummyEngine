@@ -163,9 +163,9 @@ namespace DE {
                     std::string name           = StrCat("Mesh ", cnt);
                     if (ImGui::TreeNode(name.c_str())) {
                         auto& material   = mesh.material;
-                        auto  albedo_map = (material.albedo_map ? material.albedo_map : Renderer::GetDefaultTexture());
-                        auto  normal_map = (material.normal_map ? material.normal_map : Renderer::GetDefaultNormalTexture());
-                        auto  orm_map    = (material.orm_map ? material.orm_map : Renderer::GetDefaultTexture());
+                        auto  albedo_map = (material.albedo_map ? material.albedo_map : Renderer::GetTexture(Renderer::Textures::White));
+                        auto  normal_map = (material.normal_map ? material.normal_map : Renderer::GetTexture(Renderer::Textures::Normal));
+                        auto  orm_map    = (material.orm_map ? material.orm_map : Renderer::GetTexture(Renderer::Textures::White));
                         ImGui::Separator();
                         ImGui::Columns(2);
                         ImGuiUtils::EditTexture("AlbedoMap", albedo_map);
@@ -195,7 +195,7 @@ namespace DE {
                     DrawComponentWidget<FPSCamera>(m_Entity);
                     DrawComponentWidget<LightSource>(m_Entity);
                     DrawComponentWidget<RenderMeshComponent>(m_Entity);
-                    DrawComponentWidget<SkyBox>(m_Entity);
+                    DrawComponentWidget<SkyBoxComponent>(m_Entity);
                     AddComponent();
                 }
             }

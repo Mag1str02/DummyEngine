@@ -10,5 +10,6 @@ namespace DE {
         virtual void Bind(U32 slot) const = 0;
 
         static Ref<CubeMap> Create(const Ref<TextureData> texture_data);
+        static Ref<CubeMap> Create(U32 size, TextureFormat format, TextureChannels channels);
     };
 }  // namespace DE

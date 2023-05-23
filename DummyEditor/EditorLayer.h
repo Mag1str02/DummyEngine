@@ -94,6 +94,7 @@ namespace DE {
 
         void ProcessControlls(float dt);
 
+        void LoadEditorResources();
         void LoadIcons();
 
         struct PanelsState {

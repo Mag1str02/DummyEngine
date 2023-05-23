@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
 #include "DummyEngine/Core/Rendering/Renderer/Texture.h"
 #include "DummyEngine/Utils/Base.h"
 
@@ -10,8 +11,8 @@ namespace DE {
     };
 
     struct FrameBufferAttchment {
-        Ref<Texture>  m_Texture;
-        TextureFormat m_Format;
+        Ref<Texture>    m_Texture;
+        TextureChannels m_Format;
     };
 
     class FrameBuffer {
@@ -23,8 +24,9 @@ namespace DE {
         virtual U32  GetWidth() const              = 0;
         virtual U32  GetHeight() const             = 0;
 
-        virtual void AddColorAttachment(TextureFormat format) = 0;
-        virtual void SetDepthAttachment(TextureFormat format) = 0;
+        virtual void AddColorAttachment(TextureChannels format) = 0;
+        virtual void AddColorAttachment(Ref<CubeMap>, U32 side) = 0;
+        virtual void SetDepthAttachment(TextureChannels format) = 0;
 
         virtual Ref<Texture> GetColorAttachment(U32 attachment_id) = 0;
         virtual Ref<Texture> GetDepthAttachment()                  = 0;

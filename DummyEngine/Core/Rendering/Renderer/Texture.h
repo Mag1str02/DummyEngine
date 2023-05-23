@@ -18,7 +18,7 @@ namespace DE
 
         virtual void Bind(U32 slot) const = 0;
 
-        static Ref<Texture> Create(U32 widht, U32 height, TextureFormat format = TextureFormat::RGBA);
+        static Ref<Texture> Create(U32 widht, U32 height, TextureChannels format = TextureChannels::RGBA);
         static Ref<Texture> Create(const TextureData& texture_data);
     };
 }  // namespace DE

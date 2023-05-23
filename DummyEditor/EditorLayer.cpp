@@ -320,6 +320,7 @@ namespace DE {
         }
     }
 
+    void EditorLayer::LoadEditorResources() {}
     void EditorLayer::LoadIcons() {
         auto play_data          = TextureLoader::Load({Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Editor/Icons/PlayButton.png"});
         auto pause_data         = TextureLoader::Load({Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Editor/Icons/PauseButton.png"});
