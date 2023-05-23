@@ -104,7 +104,7 @@ namespace DE {
         };
         SceneScriptState m_SceneScriptState;
         InputState       m_InputState;
-        SceneState       m_SceneState;
+        SceneState       m_SceneState         = SceneState::None;
         PanelsState      m_PanelState;
 
         ImGuiManager        m_ImGuiManager;

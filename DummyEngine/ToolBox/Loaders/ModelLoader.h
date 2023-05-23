@@ -36,4 +36,5 @@ namespace DE {
         static Ref<TextureData> GetTexture(aiMaterial* mat, aiTextureType type);
         static void             ReadModelProperties(aiNode* node, const aiScene* scene);
     };
+
 }  // namespace DE

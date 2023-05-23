@@ -1,5 +1,4 @@
-
-#version 460 core
+#version 410 core
 layout (location = 0) in vec2 i_Pos;
 layout (location = 1) in vec2 i_TexCoords;
 

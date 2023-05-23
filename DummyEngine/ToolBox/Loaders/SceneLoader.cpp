@@ -457,8 +457,8 @@ namespace DE {
             result.name      = n_Scene["Name"].as<std::string>();
             LOG_INFO("SceneLoader", "Loaded SceneData for (", RelativeToExecutable(path), ")");
             return result;
-        } catch (...) {
-            LOG_ERROR("SceneLoader", "Failed to load SceneData for (", path.string(), ")");
+        } catch (const std::exception& e) {
+            LOG_ERROR("SceneLoader", "Failed to load SceneData for (", path.string(), "): ", e.what());
             return {};
         }
     }
