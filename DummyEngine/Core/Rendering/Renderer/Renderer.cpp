@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 
 #include "DummyEngine/Core/Application/Config.h"
+#include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLRenderAPI.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
@@ -53,7 +54,6 @@ namespace DE {
     S_METHOD_IMPL(Unit, Submit, (Ref<VertexArray> vertex_array, Ref<Shader> shader, const Mat4& transform), (vertex_array, shader, transform)) {
         shader->Bind();
         shader->SetMat4("u_Transform", transform);
-        vertex_array->Bind();
         m_RenderAPI->DrawIndexed(vertex_array);
 
         ++m_FrameStatistics.m_DrawCallsAmount;
@@ -94,6 +94,7 @@ namespace DE {
         shader->SetMat4("u_Transform", transform);
         shader->SetMat4("u_Projection", camera.GetProjectionMatrix());
         shader->SetMat4("u_View", camera.GetViewMatrix());
+        shader->SetFloat("u_SkyBoxLOD", cube_map->GetLOD());
         m_RenderAPI->Disable(RenderSetting::DepthMask);
         m_RenderAPI->DrawIndexed(m_Resources.cube);
         m_RenderAPI->Enable(RenderSetting::DepthMask);
@@ -129,6 +130,8 @@ namespace DE {
             case Shaders::EquirectangularToCubeMap: return m_Resources.equirectangular_to_cubemap;
             case Shaders::Skybox: return m_Resources.skybox;
             case Shaders::Convolution: return m_Resources.convolution;
+            case Shaders::PreFileterConvolution: return m_Resources.pre_filter_convolution;
+            case Shaders::BRDFConvolution: return m_Resources.brdf_convolution;
             case Shaders::Last:
             case Shaders::None: return nullptr;
             default: DE_ASSERT(false, "Wrong Renderer shader requested"); break;
@@ -139,6 +142,7 @@ namespace DE {
         switch (texture) {
             case Textures::White: return m_Resources.white;
             case Textures::Normal: return m_Resources.normal;
+            case Textures::BRDF: return m_Resources.brdf;
             case Textures::Last:
             case Textures::None: return nullptr;
             default: DE_ASSERT(false, "Wrong Renderer texture requested"); break;
@@ -234,9 +238,9 @@ namespace DE {
         //*ScreenQuad
         {
             U32 indices[] = {
-                0,
-                1,
                 2,
+                1,
+                0,
                 0,
                 2,
                 3,
@@ -297,6 +301,36 @@ namespace DE {
             };
 
             m_Resources.convolution = Shader::Create(parts);
+        }
+        {
+            std::vector<ShaderPart> parts = {
+                {  ShaderPartType::Vertex,            shaders / "Vertex/CubeMap.vs"},
+                {ShaderPartType::Fragment, shaders / "Fragment/CubeMapPrefilter.fs"},
+            };
+
+            m_Resources.pre_filter_convolution = Shader::Create(parts);
+        }
+        {
+            std::vector<ShaderPart> parts = {
+                {  ShaderPartType::Vertex,          shaders / "Vertex/Square2D.vs"},
+                {ShaderPartType::Fragment, shaders / "Fragment/BRDFConvolution.fs"},
+            };
+
+            m_Resources.brdf_convolution = Shader::Create(parts);
+        }
+
+        {
+            const size_t     sz          = 1024;
+            Ref<Shader>      brdf_shader = Renderer::GetShader(Renderer::Shaders::BRDFConvolution);
+            Ref<FrameBuffer> buffer      = FrameBuffer::Create({sz, sz});
+            Ref<VertexArray> quad        = Renderer::GetVertexArray(Renderer::VertexArrays::ScreenQuad);
+            buffer->Bind();
+            buffer->SetDepthAttachment(TextureChannels::Depth);
+            buffer->AddColorAttachment(TextureChannels::RG);
+            Renderer::SetViewport(sz, sz);
+            Renderer::Clear();
+            Renderer::Submit(quad, brdf_shader);
+            m_Resources.brdf = buffer->GetColorAttachment(0);
         }
     }
 

@@ -1,4 +1,4 @@
-#version 460 core
+#version 410 core
 
 struct VP{
     mat4 view;
@@ -10,7 +10,6 @@ layout(location = 1) in vec3 i_Normal;
 layout(location = 2) in vec3 i_Tangent;
 layout(location = 3) in vec2 i_TexCoords;
 layout(location = 4) in mat4 i_Transform;
-// layout(std140) uniform ub_VP { VP vp[32]; };
 
 uniform VP u_Camera;
 

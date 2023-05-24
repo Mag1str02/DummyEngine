@@ -20,9 +20,9 @@ namespace DE {
         }
         return nullptr;
     }
-    Ref<CubeMap> CubeMap::Create(U32 size, TextureFormat format, TextureChannels channels) {
+    Ref<CubeMap> CubeMap::Create(U32 size, TextureFormat format, TextureChannels channels, bool gen_mipmap) {
         switch (Renderer::CurrentAPI()) {
-            case API::OpenGL: return CreateRef<GLCubeMap>(size, format, channels);
+            case API::OpenGL: return CreateRef<GLCubeMap>(size, format, channels, gen_mipmap);
             case API::Vulkan: {
                 DE_ASSERT(false, "Attempt to create CubeMap on VulkanAPI which is currently unsupported.");
                 return nullptr;

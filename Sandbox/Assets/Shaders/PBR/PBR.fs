@@ -1,7 +1,8 @@
-#version 460 core
+#version 410 core
 
-const vec3 kDefaultReflectivity = vec3(0.01);
+const float kMaxPrefilterLOD = 9;
 const float kPI = 3.1415926;
+const vec3  kDefaultReflectivity = vec3(0.04);
 
 #define MAX_LIGHT_SOURCES 128
 
@@ -53,7 +54,8 @@ out vec4 f_FragColor;
 uniform int      u_LightAmount;
 uniform Material u_Material;
 uniform samplerCube u_IrradianceMap;
-uniform samplerCube u_RadianceMap;
+uniform samplerCube u_PrefilterMap;
+uniform sampler2D   u_BRDF;
 uniform mat4        u_EnvRotation;
 
 vec3  FresnelSchlick(float angle_cos, vec3 base_reflectivity);
@@ -82,15 +84,27 @@ void main()
     for (int i = 0; i < u_LightAmount; ++i){  
         result += CalcLightImpact(lights[i], mp);
     } 
+    vec3 env_n = mat3(u_EnvRotation) * mp.n_normal;
+    vec3 ray = mat3(u_EnvRotation) * normalize(reflect(-mp.n_view, mp.n_normal));
     vec3 kS = FresnelSchlickWithRoughness(max(dot(mp.n_normal, mp.n_view), 0.0), mp.base_reflectivity, mp.roughness);
     vec3 kD = (1.0 - kS) * (1.0 - mp.metallic);
-    vec3 irradiance = texture(u_IrradianceMap, mat3(u_EnvRotation) * mp.n_normal).rgb;
+    vec3 irradiance = texture(u_IrradianceMap, env_n).rgb;
     vec3 diffuse    = irradiance * mp.albedo;
-    vec3 ambient    = (kD * diffuse) * mp.ao; 
+
+    vec3 prefiltered_color = textureLod(u_PrefilterMap, ray,  mp.roughness * kMaxPrefilterLOD).rgb;  
+    vec2 brdf  = texture(u_BRDF, vec2(max(dot(mp.n_normal, mp.n_view), 0.0), mp.roughness)).rg; 
+    vec3 specular = prefiltered_color * (kS * brdf.x + brdf.y);
+
+    vec3 ambient    = (specular + kD * diffuse) * mp.ao; 
     result += u_Material.m_Ambient * ambient; 
 
-    result = result / (result + vec3(1.0));
-    result = pow(result, vec3(1.0/2.2));  
+    // vec3 a = vec3()
+    // result = result / (result + vec3(0.2));
+    // result = pow(result, vec3(3));  
+    // result *= vec3(1.728); 
+    // result = result / (result + vec3(1));
+    // result = pow(result, vec3(0.9));  
+    // result *= vec3(1.5);
 
     f_FragColor = vec4(result, 1.0);
 }

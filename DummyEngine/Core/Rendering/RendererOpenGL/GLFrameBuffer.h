@@ -21,8 +21,9 @@ namespace DE {
         virtual void UnBind() override;
 
         virtual void AddColorAttachment(TextureChannels format) override;
-        virtual void AddColorAttachment(Ref<CubeMap> map, U32 side) override;
+        virtual void AddColorAttachment(Ref<CubeMap> map, U32 side, U32 lod = 0) override;
         virtual void SetDepthAttachment(TextureChannels format) override;
+        virtual bool Valid() const override;
 
         virtual void Resize(U32 width, U32 height) override;
         virtual U32  GetWidth() const override;
