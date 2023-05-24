@@ -26,11 +26,9 @@ namespace DE
         nfdchar_t *outPath;
         nfdfilteritem_t filterItem[1] = { { description.c_str(), filter.c_str() } };
         nfdresult_t result = NFD_SaveDialog(&outPath, filterItem, 1, nullptr, nullptr);
-        std::cout << "ddd\n";
         if (result == NFD_OKAY)
         {
             std::string s(outPath);
-            std::cout << s << "\n";
             path = Path(s);
             NFD_FreePath(outPath);
         }

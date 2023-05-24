@@ -2,6 +2,11 @@
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
+    enum class MaterialType {
+        None = 0,
+        Phong,
+        PBR,
+    };
     enum class TextureChannels { None = 0, RED, RG, RGB, RGBA, Depth };
     enum class TextureFormat {
         None = 0,
@@ -54,10 +59,18 @@ namespace DE {
     };
 
     struct MaterialData {
-        float            shininess;
-        Vec3             albedo_color = Vec3(1.0f);
-        Vec3             orm          = Vec3(1.0f);
+        MaterialType type = MaterialType::PBR;
+        float        shininess;
+
+        Vec3 albedo   = Vec3(1.0f);
+        Vec3 diffuse  = Vec3(1.0f);
+        Vec3 specular = Vec3(1.0f);
+        Vec3 orm      = Vec3(1.0f);
+        Vec3 ambient  = Vec3(1.0f);
+
         Ref<TextureData> albedo_map;
+        Ref<TextureData> diffuse_map;
+        Ref<TextureData> specular_map;
         Ref<TextureData> normal_map;
         Ref<TextureData> orm_map;
     };

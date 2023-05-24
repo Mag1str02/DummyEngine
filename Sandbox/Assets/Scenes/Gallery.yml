@@ -12,11 +12,6 @@ Scene:
         Compress: true
         FlipUV: false
         UUID: 5c7dfba9096b1d2047cf3bab45ecda0e
-      BladeModel:
-        Path: Assets\Models\Blade\murasama.obj
-        Compress: true
-        FlipUV: true
-        UUID: ffb3be77b1129d3d3caf984afff447ea
       CarModel:
         Path: Assets\Models\Car\Car.obj
         Compress: true
@@ -27,41 +22,12 @@ Scene:
         Compress: true
         FlipUV: false
         UUID: 02afee3bc1cb75b7d8b882a8667faa84
-      LuffyModel:
-        Path: Assets\Models\Luffy\luffy.obj
-        Compress: false
-        FlipUV: false
-        UUID: 1a6a97a730560ec5f25e5377a405f4f3
-      NissanModel:
-        Path: Assets\Models\Nissan\Nissan.obj
-        Compress: false
-        FlipUV: false
-        UUID: 2ee4a30ae2b10b69946a0321363e4ac3
-      RaidenModel:
-        Path: Assets\Models\Raiden\Raiden.obj
-        Compress: false
-        FlipUV: true
-        UUID: 8c7bb8250c699ac386ec29d1801f71af
-      SamModel:
-        Path: Assets\Models\Sam\Sam.obj
-        Compress: false
-        FlipUV: true
-        UUID: 5007ca2acd611eaaebcb40339ffadc89
-      TreeModel:
-        Path: Assets\Models\Tree\Tree.obj
-        Compress: false
-        FlipUV: false
-        UUID: 00467871a547b558a7ed439728f2664b
     Textures:
       Sky:
         Path: Assets\Textures\Skyboxes\Space.png
         FlipUV: false
         UUID: 8911b8a8458923946819fb45fbb794fd
     Shaders:
-      SkyBox:
-        UUID: f1e74e1b9ab55315492a3d5ee699e18b
-        Vertex: Assets\Shaders\SkyBox\SkyBox.vs
-        Fragment: Assets\Shaders\SkyBox\SkyBox.fs
       TexturedPhong:
         UUID: 24116af57b6022cd2464fbf641ae946a
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
@@ -352,8 +318,9 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [1, 1, 1]
                 ScaleOffset: [1, 1, 1]
-              Shader: f1e74e1b9ab55315492a3d5ee699e18b
-              SkyBox: 8911b8a8458923946819fb45fbb794fd
+              SkyBox: 
+                Type: CubeMap
+                UUID: 8911b8a8458923946819fb45fbb794fd
               Script:
                 UUID: 15fa3d63323b421ce0329ae14b5d2111
                 Fields:
@@ -361,66 +328,6 @@ Scene:
     - Node:
         Name: Objects
         Childs:
-          - Entity:
-              Tag: Sam
-              UUID: 90b599ad9e22fa9eac9c0f01afbd8cc2
-              Transformation:
-                Translation: [150, 1, 0]
-                TranslationOffset: [0, 0, 0]
-                Rotation: [0, 0, 0]
-                RotationOffset: [0, 0, 0]
-                Scale: [1, 1, 1]
-                ScaleOffset: [0.100000001, 0.100000001, 0.100000001]
-              RenderModel: 5007ca2acd611eaaebcb40339ffadc89
-              Shader: 24116af57b6022cd2464fbf641ae946a
-          - Entity:
-              Tag: Tree
-              UUID: 590654ecccb27b24293ff4407cccd5ff
-              Transformation:
-                Translation: [-150, 0, 0]
-                TranslationOffset: [0, 0, 0]
-                Rotation: [0, 0, 0]
-                RotationOffset: [0, 0, 0]
-                Scale: [1, 1, 1]
-                ScaleOffset: [1, 1, 1]
-              RenderModel: 00467871a547b558a7ed439728f2664b
-              Shader: 24116af57b6022cd2464fbf641ae946a
-          - Entity:
-              Tag: Raiden
-              UUID: 7781ead76c70a7a72bbf37da3bfd7b34
-              Transformation:
-                Translation: [225, 1, 0]
-                TranslationOffset: [0, 0, 0]
-                Rotation: [0, 0, 0]
-                RotationOffset: [0, 0, 0]
-                Scale: [1, 1, 1]
-                ScaleOffset: [0.100000001, 0.100000001, 0.100000001]
-              RenderModel: 8c7bb8250c699ac386ec29d1801f71af
-              Shader: 24116af57b6022cd2464fbf641ae946a
-          - Entity:
-              Tag: Nissan
-              UUID: 843e3e3005f5ea74a209f97bad23fb60
-              Transformation:
-                Translation: [-300, 1, 0]
-                TranslationOffset: [0, 0, 0]
-                Rotation: [0, 0, 0]
-                RotationOffset: [0, 0, 0]
-                Scale: [1, 1, 1]
-                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 2ee4a30ae2b10b69946a0321363e4ac3
-              Shader: 24116af57b6022cd2464fbf641ae946a
-          - Entity:
-              Tag: Luffy
-              UUID: afd59bbf68b330fba87e08780a5a8f99
-              Transformation:
-                Translation: [-75, 15, 0]
-                TranslationOffset: [0, 0, 10]
-                Rotation: [0, 0, 0]
-                RotationOffset: [0, 0, 0]
-                Scale: [1, 1, 1]
-                ScaleOffset: [3, 3, 3]
-              RenderModel: 1a6a97a730560ec5f25e5377a405f4f3
-              Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Car
               UUID: 855d5d57284a11cc6634f81f0c4cc63a
@@ -432,18 +339,6 @@ Scene:
                 Scale: [1, 1, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
               RenderModel: 9de192d9f46df53b5ff89998f688618e
-              Shader: 24116af57b6022cd2464fbf641ae946a
-          - Entity:
-              Tag: Blade
-              UUID: a0fb9c4d5af11188fb5fe451c05be719
-              Transformation:
-                Translation: [75, 15, 0]
-                TranslationOffset: [0, -7, 0]
-                Rotation: [0, 0, 0]
-                RotationOffset: [-90, 90, 0]
-                Scale: [2, 2, 2]
-                ScaleOffset: [10, 10, 10]
-              RenderModel: ffb3be77b1129d3d3caf984afff447ea
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Backpack

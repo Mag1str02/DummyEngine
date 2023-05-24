@@ -139,42 +139,14 @@ namespace DE {
     template <> void InspectorPanel::DrawComponentWidget<RenderMeshComponent>(Entity entity) {
         if (m_Entity.Has<RenderMeshComponent>()) {
             if (ImGui::CollapsingHeader(ICON_MD_TOKEN "  RenderMesh", ImGuiTreeNodeFlags_DefaultOpen)) {
-                auto& meshes        = m_Entity.Get<RenderMeshComponent>().mesh_instance->GetMesh()->GetSubMeshes();
-                auto& material      = meshes.front().material;
-                float max_orm       = 1;
-                float min_orm       = 0;
-                float min_shininess = 0;
-                float orm_speed     = 0.01;
-                ImGui::Columns(2);
-                ImGuiUtils::EditProperty("AmbientColor", material.ambient, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("AlbedoColor", material.albedo_color, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("AmbientOcclusion", ImGuiDataType_Float, &material.orm.r, orm_speed, &min_orm, &max_orm);
-                ImGuiUtils::EditProperty("Roughness", ImGuiDataType_Float, &material.orm.g, orm_speed, &min_orm, &max_orm);
-                ImGuiUtils::EditProperty("Metallic", ImGuiDataType_Float, &material.orm.b, orm_speed, &min_orm, &max_orm);
-                ImGuiUtils::EditProperty("Shininess", ImGuiDataType_Float, &material.shininess, 1.0f, &min_shininess, nullptr);
-                ImGui::Columns(1);
-                ImGui::Separator();
-                int cnt = 0;
+                auto& meshes = m_Entity.Get<RenderMeshComponent>().mesh_instance->GetMesh()->GetSubMeshes();
+                int   cnt    = 0;
                 for (auto& mesh : meshes) {
-                    mesh.material.ambient      = material.ambient;
-                    mesh.material.albedo_color = material.albedo_color;
-                    mesh.material.orm          = material.orm;
-                    mesh.material.shininess    = material.shininess;
-                    std::string name           = StrCat("Mesh ", cnt);
+                    std::string name = StrCat("Mesh ", cnt);
                     if (ImGui::TreeNode(name.c_str())) {
-                        auto& material   = mesh.material;
-                        auto  albedo_map = (material.albedo_map ? material.albedo_map : Renderer::GetTexture(Renderer::Textures::White));
-                        auto  normal_map = (material.normal_map ? material.normal_map : Renderer::GetTexture(Renderer::Textures::Normal));
-                        auto  orm_map    = (material.orm_map ? material.orm_map : Renderer::GetTexture(Renderer::Textures::White));
-                        ImGui::Separator();
                         ImGui::Columns(2);
-                        ImGuiUtils::EditTexture("AlbedoMap", albedo_map);
-                        ImGui::Separator();
-                        ImGuiUtils::EditTexture("NormalMap", normal_map);
-                        ImGui::Separator();
-                        ImGuiUtils::EditTexture("OrmMap", orm_map);
+                        ImGuiUtils::EditProperty(mesh.material);
                         ImGui::Columns(1);
-                        ImGui::Separator();
                         ImGui::TreePop();
                     }
                     ++cnt;

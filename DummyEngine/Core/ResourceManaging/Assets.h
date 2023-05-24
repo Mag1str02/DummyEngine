@@ -16,9 +16,10 @@ namespace DE {
     };
     struct RenderMeshAsset {
         struct LoadingProperties {
-            Path path;
-            bool flip_uvs;
-            bool compress;
+            Path         path;
+            bool         flip_uvs;
+            bool         compress;
+            MaterialType mat_type = MaterialType::None;
         };
         LoadingProperties loading_props;
         UUID              id;

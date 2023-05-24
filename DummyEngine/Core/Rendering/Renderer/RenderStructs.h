@@ -8,17 +8,23 @@
 namespace DE {
 
     struct Material {
-        enum class Type { None = 0, PBR };
-        Type         type;
-        Vec3         ambient;
-        Vec3         albedo_color;
-        Vec3         orm;
+        MaterialType type = MaterialType::None;
         float        shininess;
+
+        Vec3 albedo   = Vec3(1.0f);
+        Vec3 orm      = Vec3(1.0f);
+        Vec3 diffuse  = Vec3(1.0f);
+        Vec3 specular = Vec3(1.0f);
+        Vec3 ambient  = Vec3(1.0f);
+
         Ref<Texture> albedo_map;
         Ref<Texture> normal_map;
         Ref<Texture> orm_map;
+        Ref<Texture> diffuse_map;
+        Ref<Texture> specular_map;
 
         void Apply(Ref<Shader> shader, const std::string& uniform_name = "u_Material") const;
+        void FillData(const MaterialData& material);
     };
 
     struct RenderSubMesh {

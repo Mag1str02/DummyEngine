@@ -11,6 +11,7 @@ Scene:
         Path: Assets\Models\Sponza\sponza.obj
         Compress: false
         FlipUV: true
+        MatType: Phong
         UUID: 70c19b08ddaef2bceb1ef82f6b6f6817
     Textures:
       Sky:
@@ -22,10 +23,6 @@ Scene:
         UUID: 24116af57b6022cd2464fbf641ae946a
         Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
         Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
-      SkyBox:
-        UUID: f1e74e1b9ab55315492a3d5ee699e18b
-        Vertex: Assets\Shaders\SkyBox\SkyBox.vs
-        Fragment: Assets\Shaders\SkyBox\SkyBox.fs
     Scripts:
       SquareMovement:
         Path: Assets\Scripts\BasicScripts\SquareMovement.cpp
@@ -174,5 +171,6 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [1, 1, 1]
                 ScaleOffset: [1, 1, 1]
-              Shader: f1e74e1b9ab55315492a3d5ee699e18b
-              SkyBox: 8911b8a8458923946819fb45fbb794fd
+              SkyBox: 
+                Type: CubeMap
+                UUID: 8911b8a8458923946819fb45fbb794fd
