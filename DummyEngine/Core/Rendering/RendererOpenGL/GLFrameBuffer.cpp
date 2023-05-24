@@ -82,9 +82,8 @@ namespace DE {
                                GL_TEXTURE_2D,
                                std::dynamic_pointer_cast<GLTexture>(m_ColorAttachments.back().m_Texture)->m_TextureId,
                                0);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-    void GLFrameBuffer::AddColorAttachment(Ref<CubeMap> map, U32 side) {
+    void GLFrameBuffer::AddColorAttachment(Ref<CubeMap> map, U32 side, U32 lod) {
         // TODO: Rework
         glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
         m_ColorAttachments.push_back({nullptr, TextureChannels::None});
@@ -92,7 +91,7 @@ namespace DE {
                                GL_COLOR_ATTACHMENT0 + m_ColorAttachments.size() - 1,
                                GL_TEXTURE_CUBE_MAP_POSITIVE_X + side,
                                std::dynamic_pointer_cast<GLCubeMap>(map)->m_MapId,
-                               0);
+                               lod);
     }
     void GLFrameBuffer::SetDepthAttachment(TextureChannels format) {
         glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
@@ -100,6 +99,10 @@ namespace DE {
         m_DepthAttachment.m_Texture = Texture::Create(m_Properties.width, m_Properties.height, format);
         glFramebufferTexture2D(
             GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, std::dynamic_pointer_cast<GLTexture>(m_DepthAttachment.m_Texture)->m_TextureId, 0);
+    }
+    bool GLFrameBuffer::Valid() const {
+        glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
+        return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
     }
     void GLFrameBuffer::Resize(U32 width, U32 height) {
         if ((m_Properties.width != width || m_Properties.height != height) && 0 < width && 0 < height) {

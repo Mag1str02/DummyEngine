@@ -11,6 +11,7 @@ namespace DE {
             case TextureChannels::None: return "None";
             default: DE_ASSERT(false, "Unsupported texture channels"); break;
         }
+        return "None";
     }
     U32 ChannelAmount(TextureChannels format) {
         switch (format) {
@@ -21,6 +22,7 @@ namespace DE {
             case TextureChannels::None: return 0;
             default: DE_ASSERT(false, "Unsupported texture format"); break;
         }
+        return 0;
     }
     U32 FormatSize(TextureFormat format) {
         switch (format) {
@@ -29,6 +31,7 @@ namespace DE {
             case TextureFormat::None: return 0;
             default: DE_ASSERT(false, "Unsupported texture format"); break;
         }
+        return 0;
     }
 
     std::string ShaderPartTypeToString(ShaderPartType type) {
@@ -39,6 +42,7 @@ namespace DE {
             case ShaderPartType::None: return "None";
             default: DE_ASSERT(false, "Unsupported shader part type"); break;
         }
+        return "None";
     }
     ShaderPartType StringToShaderPartType(const std::string& type) {
         if (type == "Vertex") return ShaderPartType::Vertex;

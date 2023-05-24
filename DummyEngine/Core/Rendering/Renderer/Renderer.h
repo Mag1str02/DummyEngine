@@ -18,7 +18,9 @@ namespace DE {
             None = 0,
             Skybox,
             Convolution,
+            PreFileterConvolution,
             EquirectangularToCubeMap,
+            BRDFConvolution,
 
             Last,
         };
@@ -26,6 +28,7 @@ namespace DE {
             None = 0,
             White,
             Normal,
+            BRDF,
 
             Last,
         };
@@ -72,6 +75,7 @@ namespace DE {
         struct Resources {
             Ref<Texture> white;
             Ref<Texture> normal;
+            Ref<Texture> brdf;
 
             Ref<VertexArray> screen_quad;
             Ref<VertexArray> cube;
@@ -79,6 +83,8 @@ namespace DE {
             Ref<Shader> equirectangular_to_cubemap;
             Ref<Shader> skybox;
             Ref<Shader> convolution;
+            Ref<Shader> pre_filter_convolution;
+            Ref<Shader> brdf_convolution;
         };
 
         Scope<RenderAPI> m_RenderAPI;

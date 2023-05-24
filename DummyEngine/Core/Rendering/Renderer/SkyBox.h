@@ -21,6 +21,6 @@ namespace DE {
 
         Ref<CubeMap> m_Raw;
         Ref<CubeMap> m_Irradiance;
-        Ref<CubeMap> m_Radiance;
+        Ref<CubeMap> m_Prefilter;
     };
 }  // namespace DE

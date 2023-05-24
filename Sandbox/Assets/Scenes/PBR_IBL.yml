@@ -22,6 +22,11 @@ Scene:
         Compress: false
         FlipUV: true
         UUID: 02afee3bc1cb75bacdb882a8667faa21
+      Car:
+        Path: Assets\Models\Car\Car.obj
+        Compress: false
+        FlipUV: true
+        UUID: 02afee3bc1cb75bacdb882a8667faaac
     Textures:
       Sky:
         Path: Assets\Textures\Skyboxes\Sky.png
@@ -30,7 +35,7 @@ Scene:
       Space:
         Path: Assets\Textures\Skyboxes\Space.png
         FlipUV: false
-        UUID: 8911b8a8458923946819fb45fbb782fd
+        UUID: 8911b8a8458923946819fb45fbb214fd
     Shaders:
       PBR:
         UUID: 24116af57b6022cd2464fbf641ae946a
@@ -55,7 +60,7 @@ Scene:
               Tag: Sun
               UUID: 4c84709484f950496a723680ffa3dd15
               Transformation:
-                Translation: [0, 30, 28.2217865]
+                Translation: [0, 26.7007236, 52.8515663]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -66,11 +71,11 @@ Scene:
               LightSource:
                 Type: Point
                 Ambient: [0.0599078536, 0.0599078536, 0.0599078536]
-                Diffuse: [0, 0, 0]
+                Diffuse: [1, 1, 1]
                 Specular: [1, 1, 1]
                 Direction: [1, 0, 0]
-                Position: [0, 30, 28.1573334]
-                CLQ: [0.100000001, 0.00100000005, 0]
+                Position: [0, 26.7144432, 52.8812943]
+                CLQ: [0, 0, 0.00100000005]
                 InnerCone: 0
                 OuterCone: 0
               Script:
@@ -78,7 +83,7 @@ Scene:
                 Fields:
                   Speed: 1
                   PosB: [0, 30, 60]
-                  PosA: [0, 30, -5]
+                  PosA: [0, 0, -5]
           - Entity:
               Tag: Sky
               UUID: ed39f278255d3fc7823454ad61d716e5
@@ -91,7 +96,7 @@ Scene:
                 ScaleOffset: [1, 1, 1]
               SkyBox:
                 Type: CubeMap
-                UUID: 8911b8a8458923946819fb45fbb782fd
+                UUID: 8911b8a8458923946819fb45fbb794fd
     - Node:
         Name: Objects
         Childs:
@@ -99,7 +104,7 @@ Scene:
               Tag: Sphere
               UUID: 855d5d57284a11cc6621f81f0c4cc63a
               Transformation:
-                Translation: [0, 10, 26]
+                Translation: [-28, 10, 26]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [-90, 0, 0]
@@ -130,4 +135,16 @@ Scene:
                 Scale: [1, 1, 1]
                 ScaleOffset: [1, 1, 1]
               RenderModel: 02afee3bc1cb75bacdb882a8667faa21
+              Shader: 24116af57b6022cd2464fbf641ae946a
+          - Entity:
+              Tag: CarPBR
+              UUID: 0f376f48dce7bec0ea07c216a8a852b2
+              Transformation:
+                Translation: [-5, 4, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [-90, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 02afee3bc1cb75bacdb882a8667faaac
               Shader: 24116af57b6022cd2464fbf641ae946a

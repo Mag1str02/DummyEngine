@@ -43,12 +43,13 @@ namespace DE {
         }
         glCheckError();
     }
-    GLCubeMap::GLCubeMap(U32 size, TextureFormat format, TextureChannels channels) {
+    GLCubeMap::GLCubeMap(U32 size, TextureFormat format, TextureChannels channels, bool gen_mipmap) {
         glGenTextures(1, &m_MapId);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_MapId);
 
         // TODO: move somewhere else...
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, (gen_mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR));
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -65,12 +66,18 @@ namespace DE {
                          GL_UNSIGNED_BYTE,
                          nullptr);
         }
+        if (gen_mipmap) {
+            glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+        }
         glCheckError();
     }
     GLCubeMap::~GLCubeMap() {
         glDeleteTextures(1, &m_MapId);
     }
 
+    float& GLCubeMap::GetLOD() {
+        return m_LOD;
+    }
     void GLCubeMap::Bind(U32 slot) const {
         glActiveTexture(GL_TEXTURE0 + slot);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_MapId);
