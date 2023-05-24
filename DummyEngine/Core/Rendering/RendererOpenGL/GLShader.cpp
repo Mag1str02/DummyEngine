@@ -94,7 +94,7 @@ namespace DE {
         glUniformMatrix4fv(pos, 1, GL_FALSE, glm::value_ptr(value));
     }
     void GLShader::SetUnifromBlock(const std::string& uniform_name, U32 id) const {
-        GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
+        GLint pos = glGetUniformBlockIndex(m_ShaderId, uniform_name.c_str());
         glUniformBlockBinding(m_ShaderId, pos, id);
         glCheckError();
     }

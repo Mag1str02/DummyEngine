@@ -193,7 +193,6 @@ namespace DE {
         return FileSystem::OpenFileDialog("Dummy Engine Scene (*.yml)", "yml");
     }
     Path EditorLayer::SaveSceneDialog() {
-        std::cout << "G\n";
         return FileSystem::SaveFileDialog("Dummy Engine Scene (*.yml)", "yml");
     }
     void EditorLayer::OpenScene(const Path& scene_path) {
