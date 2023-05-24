@@ -37,12 +37,7 @@ namespace DE {
             if (vec.w > max) vec.z = min;
         }
 
-        void EditProperty(std::string   name,
-                          ImGuiDataType type,
-                          void*         value,
-                          float         speed,
-                          const void*   min,
-                          const void*   max) {
+        void EditProperty(std::string name, ImGuiDataType type, void* value, float speed, const void* min, const void* max) {
             ImGui::SetCursorPosX(Constants::DefaultLeftPadding);
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
@@ -163,6 +158,63 @@ namespace DE {
                 ImGui::EndCombo();
             }
             ImGui::NextColumn();
+        }
+        void EditProperty(Material& mat) {
+            const char* mat_types[]   = {"Unknown", "Phong", "PBR"};
+            float       max_orm       = 1;
+            float       min_orm       = 0;
+            float       min_shininess = 0;
+            float       orm_speed     = 0.01;
+
+            ImGui::Separator();
+            ImGui::SetCursorPosX(ImGuiUtils::Constants::DefaultLeftPadding);
+            ImGui::Text("Type");
+            ImGui::NextColumn();
+            ImGui::SetNextItemWidth(-1);
+            ImGui::Combo("##Material Type", (int*)&mat.type, mat_types, IM_ARRAYSIZE(mat_types));
+            ImGui::NextColumn();
+            ImGui::Separator();
+            switch (mat.type) {
+                case MaterialType::PBR: {
+                    auto albedo_map = (mat.albedo_map ? mat.albedo_map : Renderer::GetTexture(Renderer::Textures::White));
+                    auto normal_map = (mat.normal_map ? mat.normal_map : Renderer::GetTexture(Renderer::Textures::Normal));
+                    auto orm_map    = (mat.orm_map ? mat.orm_map : Renderer::GetTexture(Renderer::Textures::White));
+
+                    ImGuiUtils::EditProperty("AmbientColor", mat.ambient, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("AlbedoColor", mat.albedo, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("AmbientOcclusion", ImGuiDataType_Float, &mat.orm.r, orm_speed, &min_orm, &max_orm);
+                    ImGuiUtils::EditProperty("Roughness", ImGuiDataType_Float, &mat.orm.g, orm_speed, &min_orm, &max_orm);
+                    ImGuiUtils::EditProperty("Metallic", ImGuiDataType_Float, &mat.orm.b, orm_speed, &min_orm, &max_orm);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("AlbedoMap", albedo_map);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("OrmMap", orm_map);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("NormalMap", normal_map);
+                    ImGui::Separator();
+                    break;
+                }
+                case MaterialType::Phong: {
+                    auto normal_map   = (mat.normal_map ? mat.normal_map : Renderer::GetTexture(Renderer::Textures::Normal));
+                    auto diffuse_map  = (mat.diffuse_map ? mat.diffuse_map : Renderer::GetTexture(Renderer::Textures::White));
+                    auto specular_map = (mat.specular_map ? mat.specular_map : Renderer::GetTexture(Renderer::Textures::White));
+
+                    ImGuiUtils::EditProperty("AmbientColor", mat.ambient, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("DiffuseColor", mat.diffuse, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("Specular", mat.specular, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("Shininess", ImGuiDataType_Float, &mat.shininess, orm_speed, &min_shininess, nullptr);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("DiffuseMap", diffuse_map);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("SpecularMap", specular_map);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("NormalMap", normal_map);
+                    ImGui::Separator();
+                    break;
+                }
+
+                default: break;
+            }
         }
         void EditTexture(const std::string& name, Ref<Texture> texture, const ImVec2 tex_size) {
             ImGui::SetCursorPosX(ImGuiUtils::Constants::DefaultLeftPadding);

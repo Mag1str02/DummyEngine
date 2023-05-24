@@ -7,26 +7,31 @@ Scene:
         Compress: true
         FlipUV: true
         UUID: 5c7dfba9096b1d2047cf3bab45ecdc1e
+        MatType: PBR
       CubeModel:
         Path: Assets\Models\Cube\cube.obj
         Compress: true
         FlipUV: false
         UUID: 02afee3bc1cb75b7d8b882a8667faa84
+        MatType: PBR
       SkullModel:
         Path: Assets\Models\Skull\scene.gltf
         Compress: false
         FlipUV: true
         UUID: 02afee3bc1cb75bacdb882a8667faa84
+        MatType: PBR
       Samurai:
         Path: Assets\Models\Samurai\scene.gltf
         Compress: false
         FlipUV: true
         UUID: 02afee3bc1cb75bacdb882a8667faa21
+        MatType: PBR
       Car:
         Path: Assets\Models\Car\Car.obj
         Compress: false
         FlipUV: true
         UUID: 02afee3bc1cb75bacdb882a8667faaac
+        MatType: PBR
     Textures:
       Sky:
         Path: Assets\Textures\Skyboxes\Sky.png
@@ -74,7 +79,7 @@ Scene:
                 Diffuse: [1, 1, 1]
                 Specular: [1, 1, 1]
                 Direction: [1, 0, 0]
-                Position: [0, 26.7144432, 52.8812943]
+                Position: [0, 26.7007236, 52.8515663]
                 CLQ: [0, 0, 0.00100000005]
                 InnerCone: 0
                 OuterCone: 0

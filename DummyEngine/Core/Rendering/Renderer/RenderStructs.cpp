@@ -6,12 +6,7 @@ namespace DE {
 
     void Material::Apply(Ref<Shader> shader, const std::string& uniform_name) const {
         switch (type) {
-            case Type::PBR: {
-                shader->SetFloat3(uniform_name + ".m_Ambient", ambient);
-                shader->SetFloat3(uniform_name + ".m_Albedo", albedo_color);
-                shader->SetFloat3(uniform_name + ".m_ORM", orm);
-                shader->SetFloat(uniform_name + ".m_Shininess", shininess);
-
+            case MaterialType::PBR: {
                 if (albedo_map) {
                     albedo_map->Bind(1);
                 } else {
@@ -30,8 +25,76 @@ namespace DE {
                 shader->SetInt(uniform_name + ".m_AlbedoMap", 1);
                 shader->SetInt(uniform_name + ".m_NormalMap", 2);
                 shader->SetInt(uniform_name + ".m_ORMMap", 3);
-            } break;
-            case Type::None: LOG_WARNING("Material", "Material was not applyed because has type None"); break;
+                shader->SetFloat3(uniform_name + ".m_Ambient", ambient);
+                shader->SetFloat3(uniform_name + ".m_Albedo", albedo);
+                shader->SetFloat3(uniform_name + ".m_ORM", orm);
+                break;
+            }
+            case MaterialType::Phong: {
+                if (diffuse_map) {
+                    diffuse_map->Bind(1);
+                } else {
+                    Renderer::GetTexture(Renderer::Textures::White)->Bind(1);
+                }
+                if (normal_map) {
+                    normal_map->Bind(2);
+                } else {
+                    Renderer::GetTexture(Renderer::Textures::Normal)->Bind(2);
+                }
+                if (specular_map) {
+                    specular_map->Bind(3);
+                } else {
+                    Renderer::GetTexture(Renderer::Textures::White)->Bind(3);
+                }
+
+                shader->SetInt(uniform_name + ".m_DiffuseMap", 1);
+                shader->SetInt(uniform_name + ".m_NormalMap", 2);
+                shader->SetInt(uniform_name + ".m_SpecularMap", 3);
+                shader->SetFloat3(uniform_name + ".m_Ambient", ambient);
+                shader->SetFloat3(uniform_name + ".m_Diffuse", diffuse);
+                shader->SetFloat3(uniform_name + ".m_Specular", specular);
+                shader->SetFloat(uniform_name + ".m_Shininess", shininess);
+                break;
+            }
+            case MaterialType::None: {
+                if (diffuse_map) {
+                    diffuse_map->Bind(1);
+                } else {
+                    Renderer::GetTexture(Renderer::Textures::White)->Bind(1);
+                }
+                if (normal_map) {
+                    normal_map->Bind(2);
+                } else {
+                    Renderer::GetTexture(Renderer::Textures::Normal)->Bind(2);
+                }
+                if (specular_map) {
+                    specular_map->Bind(3);
+                } else {
+                    Renderer::GetTexture(Renderer::Textures::White)->Bind(3);
+                }
+                if (albedo_map) {
+                    albedo_map->Bind(4);
+                } else {
+                    Renderer::GetTexture(Renderer::Textures::White)->Bind(4);
+                }
+                if (orm_map) {
+                    orm_map->Bind(5);
+                } else {
+                    Renderer::GetTexture(Renderer::Textures::White)->Bind(5);
+                }
+                shader->SetInt(uniform_name + ".m_DiffuseMap", 1);
+                shader->SetInt(uniform_name + ".m_NormalMap", 2);
+                shader->SetInt(uniform_name + ".m_SpecularMap", 3);
+                shader->SetInt(uniform_name + ".m_AlbedoMap", 4);
+                shader->SetInt(uniform_name + ".m_ORMMap", 5);
+                shader->SetFloat3(uniform_name + ".m_Albedo", albedo);
+                shader->SetFloat3(uniform_name + ".m_ORM", orm);
+                shader->SetFloat3(uniform_name + ".m_Ambient", ambient);
+                shader->SetFloat3(uniform_name + ".m_Diffuse", diffuse);
+                shader->SetFloat3(uniform_name + ".m_Specular", specular);
+                shader->SetFloat(uniform_name + ".m_Shininess", shininess);
+                break;
+            }
             default: DE_ASSERT(false, "Unsupported material type"); break;
         }
     }
@@ -41,6 +104,22 @@ namespace DE {
         }
         return nullptr;
     }
+    void Material::FillData(const MaterialData& material) {
+        type      = material.type;
+        shininess = material.shininess;
+
+        ambient  = material.ambient;
+        albedo   = material.albedo;
+        diffuse  = material.diffuse;
+        specular = material.specular;
+        orm      = material.orm;
+
+        albedo_map   = SetupTexture(material.albedo_map);
+        normal_map   = SetupTexture(material.normal_map);
+        orm_map      = SetupTexture(material.orm_map);
+        diffuse_map  = SetupTexture(material.diffuse_map);
+        specular_map = SetupTexture(material.specular_map);
+    }
 
     void RenderSubMesh::FillData(const RenderSubMeshData& data) {
         BufferLayout layout({BufferElementType::Float3, BufferElementType::Float3, BufferElementType::Float3, BufferElementType::Float2});
@@ -49,16 +128,7 @@ namespace DE {
 
         Ref<VertexBuffer> vertex_buffer = VertexBuffer::Create(layout, data.vertices.size(), &data.vertices[0]);
         Ref<IndexBuffer>  index_buffer  = IndexBuffer::Create(&data.indices[0], data.indices.size());
-
-        material.ambient      = Vec3(1.0);
-        material.albedo_color = data.material.albedo_color;
-        material.orm          = data.material.orm;
-        material.shininess    = data.material.shininess;
-        material.type         = Material::Type::PBR;
-
-        material.albedo_map = SetupTexture(data.material.albedo_map);
-        material.normal_map = SetupTexture(data.material.normal_map);
-        material.orm_map    = SetupTexture(data.material.orm_map);
+        material.FillData(data.material);
 
         vertex_array->AddVertexBuffer(vertex_buffer);
         vertex_array->SetIndexBuffer(index_buffer);

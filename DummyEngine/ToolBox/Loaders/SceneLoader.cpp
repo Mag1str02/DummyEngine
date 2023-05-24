@@ -195,6 +195,12 @@ namespace DE {
             n_Model["Compress"]  = model.loading_props.compress;
             n_Model["FlipUV"]    = model.loading_props.flip_uvs;
             n_Model["UUID"]      = model.id.Hex();
+            if (model.loading_props.mat_type == MaterialType::PBR) {
+                n_Model["MatType"] = "PBR";
+            }
+            if (model.loading_props.mat_type == MaterialType::Phong) {
+                n_Model["MatType"] = "Phong";
+            }
         }
         return n_Models;
     }
@@ -429,7 +435,14 @@ namespace DE {
                 asset.id                     = node.second["UUID"].as<std::string>();
                 asset.loading_props.compress = node.second["Compress"].as<bool>();
                 asset.loading_props.flip_uvs = node.second["FlipUV"].as<bool>();
-                asset.loading_props.path     = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
+                std::string type             = (node.second["MatType"] ? node.second["MatType"].as<std::string>() : "");
+                if (type == "PBR") {
+                    asset.loading_props.mat_type = MaterialType::PBR;
+                }
+                if (type == "Phong") {
+                    asset.loading_props.mat_type = MaterialType::Phong;
+                }
+                asset.loading_props.path = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
                 data.render_meshes.emplace_back(std::move(asset));
             }
         }
