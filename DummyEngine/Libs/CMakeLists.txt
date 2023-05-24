@@ -25,17 +25,15 @@ set(IMGUI_SOURCES
 	ImGui/imgui_draw.cpp
 	ImGui/misc/cpp/imgui_stdlib.cpp
 )
-add_library(imgui
+add_library(ImGui
    ${IMGUI_SOURCES}
    ${IMGUI_INCLUDES}
 )
-target_include_directories(imgui
+target_include_directories(ImGui
     PUBLIC ImGui
     PUBLIC ImGui/backends
 )
-target_link_libraries(imgui PUBLIC glad glfw)
-
-
+target_link_libraries(ImGui PUBLIC glad glfw)
 
 add_library(Dependencies STBImplementation.cpp)
 target_include_directories(Dependencies
@@ -49,7 +47,7 @@ target_include_directories(Dependencies
     PUBLIC .
 )
 target_link_libraries(Dependencies
-    PUBLIC imgui
+    PUBLIC ImGui
     PUBLIC glad
     PUBLIC glfw
     PUBLIC assimp
