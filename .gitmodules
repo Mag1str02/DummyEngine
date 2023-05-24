@@ -19,3 +19,6 @@
 [submodule "DummyEngine/Libs/IMGUI"]
 	path = DummyEngine/Libs/IMGUI
 	url = https://github.com/Mag1str02/DummyEngine_ImGui
+[submodule "DummyEngine/Libs/NFD"]
+	path = DummyEngine/Libs/NFD
+	url = https://github.com/btzy/nativefiledialog-extended.git
