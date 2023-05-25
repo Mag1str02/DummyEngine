@@ -88,7 +88,6 @@ namespace DE {
             if (ImGui::CollapsingHeader(ICON_MD_VIDEOCAM "  FPSCamera", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto& camera = m_Entity.Get<FPSCamera>();
                 ImGui::Columns(2);
-
                 ImGuiUtils::EditProperty("Position", camera.m_Position);
                 ImGuiUtils::EditProperty("NearPlane", camera.m_NearPlane);
                 ImGuiUtils::EditProperty("FarPlane", camera.m_FarPlane);

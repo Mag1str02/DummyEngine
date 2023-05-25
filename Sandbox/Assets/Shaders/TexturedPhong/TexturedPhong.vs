@@ -5,10 +5,15 @@ struct VP{
     mat4 projection;
 };
 
-layout(location = 0) in vec3 i_Pos;
-layout(location = 1) in vec3 i_Normal;
-layout(location = 3) in vec2 i_TexCoords;
-layout(location = 4) in mat4 i_Transform;
+layout(location = 0) in vec3  i_Pos;
+layout(location = 1) in vec3  i_Normal;
+layout(location = 2) in vec3  i_Tangent;
+layout(location = 3) in vec2  i_TexCoords;
+layout(location = 4) in ivec4 i_BoneIDs1;
+layout(location = 5) in ivec4 i_BoneIDs2;
+layout(location = 6) in vec4  i_BoneWeights1;
+layout(location = 7) in vec4  i_BoneWeights2;
+layout(location = 8) in mat4  i_Transform;
 
 out VS_OUT
 {

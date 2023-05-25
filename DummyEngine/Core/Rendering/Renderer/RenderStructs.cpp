@@ -122,7 +122,14 @@ namespace DE {
     }
 
     void RenderSubMesh::FillData(const RenderSubMeshData& data) {
-        BufferLayout layout({BufferElementType::Float3, BufferElementType::Float3, BufferElementType::Float3, BufferElementType::Float2});
+        BufferLayout layout({BufferElementType::Float3,
+                             BufferElementType::Float3,
+                             BufferElementType::Float3,
+                             BufferElementType::Float2,
+                             BufferElementType::Int4,
+                             BufferElementType::Int4,
+                             BufferElementType::Float4,
+                             BufferElementType::Float4});
 
         vertex_array = VertexArray::Create();
 
@@ -176,6 +183,7 @@ namespace DE {
     Ref<RenderMesh> RenderMesh::Copy() const {
         Ref<RenderMesh> res = CreateRef<RenderMesh>();
         res->m_SubMeshes.resize(m_SubMeshes.size());
+        res->p_Animator = p_Animator;
         for (size_t i = 0; i < m_SubMeshes.size(); ++i) {
             res->m_SubMeshes[i] = m_SubMeshes[i].Copy();
         }
@@ -192,6 +200,9 @@ namespace DE {
     }
     void RenderMesh::FillData(Ref<RenderMeshData> data) {
         m_SubMeshes.resize(data->meshes.size());
+        if (data->animation) {
+            p_Animator = CreateRef<Animator>(data->animation);
+        }
         for (size_t i = 0; i < data->meshes.size(); ++i) {
             m_SubMeshes[i].FillData(data->meshes[i]);
             if (m_InstanceBuffer) {

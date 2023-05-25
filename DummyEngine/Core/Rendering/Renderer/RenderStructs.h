@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DummyEngine/Core/Animations/Animator.h"
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 #include "DummyEngine/Core/Rendering/Renderer/Texture.h"
 #include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
@@ -59,9 +60,10 @@ namespace DE {
         Ref<RenderMesh>             Copy() const;
         std::vector<RenderSubMesh>& GetSubMeshes();
 
-        void UpdateInstanceBuffer();
-        void SetInstanceBuffer(const BufferLayout& layout, U32 size);
-        void FillData(Ref<RenderMeshData> data);
+        void          UpdateInstanceBuffer();
+        void          SetInstanceBuffer(const BufferLayout& layout, U32 size);
+        void          FillData(Ref<RenderMeshData> data);
+        Ref<Animator> p_Animator;
 
     private:
         friend class Renderer;

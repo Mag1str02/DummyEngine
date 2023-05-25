@@ -1,0 +1,11 @@
+Model Information:
+* title:	Mira
+* source:	https://sketchfab.com/3d-models/mira-573a125189704a7685389ca6a13d7350
+* author:	Korpusenko (https://sketchfab.com/Korpusenko)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Mira" (https://sketchfab.com/3d-models/mira-573a125189704a7685389ca6a13d7350) by Korpusenko (https://sketchfab.com/Korpusenko) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

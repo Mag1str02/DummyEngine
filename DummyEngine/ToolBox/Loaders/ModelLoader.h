@@ -29,13 +29,20 @@ namespace DE {
             Assimp::Importer                           m_Importer;
         };
 
-        static LoaderState      m_State;
+        static LoaderState m_State;
+
+        static void LoadBone(Bone& bone, aiNodeAnim* node);
+        static void ReadWeights(aiMesh* mesh);
+        static void ReadBones(Animation& animation, const aiAnimation* anim);
+        static void ReadAnimationNode(Animation::Node& node, const aiNode* src);
+        static void ReadAnimation(Animation& animation, const aiScene* scene);
+
         static MaterialData     LoadMaterial(aiMaterial* mat);
         static void             ProcessNode(aiNode* node, const aiScene* scene);
         static void             ProcessMesh(aiMesh* mesh, const aiScene* scene);
         static Vec3             GetColor(aiMaterial* mat, ColorType type);
         static Ref<TextureData> GetTexture(aiMaterial* mat, aiTextureType type);
         static void             ReadModelProperties(aiNode* node, const aiScene* scene);
-    };
 
+    };  // namespace DE
 }  // namespace DE

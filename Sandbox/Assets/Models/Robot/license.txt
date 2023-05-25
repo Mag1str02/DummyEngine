@@ -1,0 +1,11 @@
+Model Information:
+* title:	Character animated
+* source:	https://sketchfab.com/3d-models/character-animated-5db0241c92644179b33b87a0eaf61f63
+* author:	sikoro (https://sketchfab.com/sikorodz05)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Character animated" (https://sketchfab.com/3d-models/character-animated-5db0241c92644179b33b87a0eaf61f63) by sikoro (https://sketchfab.com/sikorodz05) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

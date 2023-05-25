@@ -54,6 +54,12 @@ namespace DE {
 
         for (auto& [ids, target] : m_InstancedMeshes) {
             target.first->UpdateInstanceBuffer();
+            int res = (target.first->p_Animator ? 1 : 0);
+            target.second->Bind();
+            target.second->SetInt("u_Animated", res);
+            if (target.first->p_Animator) {
+                target.first->p_Animator->SetMatricies(target.second);
+            }
             Renderer::Submit(target.first, target.second);
         }
         m_FrameBuffer->UnBind();

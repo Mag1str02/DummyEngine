@@ -17,6 +17,12 @@ namespace DE {
         virtual std::string GetName() const override { return "TransformSyncSystem"; }
         void                Update(float dt) override;
     };
+    class AnimationSystem : public System {
+    public:
+        AnimationSystem() = default;
+        virtual std::string GetName() const override { return "AnimationSystem"; }
+        void                Update(float dt) override;
+    };
 
     class EditorLayer : public DE::Layer {
     public:
