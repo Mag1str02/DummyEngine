@@ -7,7 +7,12 @@ Utils/Helpers/Conversions.cpp
 Utils/Helpers/Random.cpp
 Utils/Helpers/Timer.cpp
 Utils/Helpers/StringOperations.cpp
+Utils/Types/Types.cpp
 Utils/Types/UUID.cpp
+
+Core/Animations/Animation.cpp
+Core/Animations/Animator.cpp
+Core/Animations/Bone.cpp
 
 Core/Application/Application.cpp
 Core/Application/ImGuiLayer.cpp

@@ -18,12 +18,28 @@ namespace DE {
                 component->OnRuntimeStart();
             }
         }
+        std::unordered_set<Ref<RenderMesh>> meshes;
+        for (auto e : m_Storage->View<RenderMeshComponent>()) {
+            auto mesh = e.Get<RenderMeshComponent>()->GetMesh();
+            if (mesh->p_Animator && !meshes.contains(mesh)) {
+                meshes.insert(mesh);
+                mesh->p_Animator->SetTime(0);
+            }
+        }
     }
     void Scene::OnRuntimeStop() {
         for (auto e : m_Storage->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
                 component->OnRuntimeStop();
+            }
+        }
+        std::unordered_set<Ref<RenderMesh>> meshes;
+        for (auto e : m_Storage->View<RenderMeshComponent>()) {
+            auto mesh = e.Get<RenderMeshComponent>()->GetMesh();
+            if (mesh->p_Animator && !meshes.contains(mesh)) {
+                meshes.insert(mesh);
+                mesh->p_Animator->SetTime(0);
             }
         }
     }
@@ -35,6 +51,14 @@ namespace DE {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
                 component->OnUpdate(dt);
+            }
+        }
+        std::unordered_set<Ref<RenderMesh>> meshes;
+        for (auto e : m_Storage->View<RenderMeshComponent>()) {
+            auto mesh = e.Get<RenderMeshComponent>()->GetMesh();
+            if (mesh->p_Animator && !meshes.contains(mesh)) {
+                meshes.insert(mesh);
+                mesh->p_Animator->UpdateAnimation(dt);
             }
         }
     }

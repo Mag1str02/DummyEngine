@@ -71,7 +71,6 @@ namespace DE {
         Ref<SkyBox> map;
         SkyBox*     operator->() { return map.get(); }
     };
-
     template <typename T> struct hash;
 
     template <> struct hash<DE::TagComponent> {

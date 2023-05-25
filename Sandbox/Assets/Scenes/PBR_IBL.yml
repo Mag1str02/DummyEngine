@@ -32,6 +32,30 @@ Scene:
         FlipUV: true
         UUID: 02afee3bc1cb75bacdb882a8667faaac
         MatType: PBR
+      Pilot:
+        Path: Assets\Models\Pilot\scene.gltf
+        Compress: false
+        FlipUV: true
+        UUID: 02afee3bc1cb75bacdb882a8667fbbbc
+        MatType: PBR
+      Robot:
+        Path: Assets\Models\Robot\scene.gltf
+        Compress: false
+        FlipUV: true
+        UUID: 02afee3bc1cb75bacdb882a8997fbbbc
+        MatType: PBR
+      Mira:
+        Path: Assets\Models\Mira\scene.gltf
+        Compress: false
+        FlipUV: true
+        UUID: 02afee3bc1cb21bacdb882a8997fbbbc
+        MatType: PBR
+      Warrior:
+        Path: Assets\Models\Warrior\scene.gltf
+        Compress: false
+        FlipUV: true
+        UUID: 02afee3bc1cb21bacdb882a8227fbbbc
+        MatType: PBR
     Textures:
       Sky:
         Path: Assets\Textures\Skyboxes\Sky.png
@@ -65,11 +89,11 @@ Scene:
               Tag: Sun
               UUID: 4c84709484f950496a723680ffa3dd15
               Transformation:
-                Translation: [0, 26.7007236, 52.8515663]
+                Translation: [0, 23.7407513, 46.4382935]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
-                Scale: [1, 1, 1]
+                Scale: [0.100000001, 0.100000001, 0.100000001]
                 ScaleOffset: [1, 1, 1]
               RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
               Shader: 24116af57b6022cd2464fbf641ae946a
@@ -79,7 +103,7 @@ Scene:
                 Diffuse: [1, 1, 1]
                 Specular: [1, 1, 1]
                 Direction: [1, 0, 0]
-                Position: [0, 26.7007236, 52.8515663]
+                Position: [0, 23.7626839, 46.485817]
                 CLQ: [0, 0, 0.00100000005]
                 InnerCone: 0
                 OuterCone: 0
@@ -145,11 +169,59 @@ Scene:
               Tag: CarPBR
               UUID: 0f376f48dce7bec0ea07c216a8a852b2
               Transformation:
-                Translation: [-5, 4, 0]
+                Translation: [-14, 4, 0]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [-90, 0, 0]
                 Scale: [1, 1, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
               RenderModel: 02afee3bc1cb75bacdb882a8667faaac
+              Shader: 24116af57b6022cd2464fbf641ae946a
+          - Entity:
+              Tag: Pilot
+              UUID: 0f376f48dce7bec0ea07c326a8a852b2
+              Transformation:
+                Translation: [-27, 3, 12]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [10, 10, 10]
+              RenderModel: 02afee3bc1cb75bacdb882a8667fbbbc
+              Shader: 24116af57b6022cd2464fbf641ae946a
+          - Entity:
+              Tag: Robot
+              UUID: 0f376f48dce7bec0ea07c326abc852b2
+              Transformation:
+                Translation: [-27, 3, 50]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [10, 10, 10]
+              RenderModel: 02afee3bc1cb75bacdb882a8997fbbbc
+              Shader: 24116af57b6022cd2464fbf641ae946a
+          - Entity:
+              Tag: Mira
+              UUID: 0f376f48dab7bec0ea07c326abc852b2
+              Transformation:
+                Translation: [-6, 3, 50]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 250, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 02afee3bc1cb21bacdb882a8997fbbbc
+              Shader: 24116af57b6022cd2464fbf641ae946a
+          - Entity:
+              Tag: Colt
+              UUID: 0f376f48dab7bec0ea07c326ade852b2
+              Transformation:
+                Translation: [-47, 11, 18]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [10, 10, 10]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 02afee3bc1cb21bacdb882a8227fbbbc
               Shader: 24116af57b6022cd2464fbf641ae946a

@@ -77,6 +77,7 @@ namespace DE {
             EditProperty(name, ImGuiDataType_S64, &value);
         }
         void EditProperty(const std::string& name, bool& value, PropertyType property_type) {
+            ImGui::SetCursorPosX(Constants::DefaultLeftPadding);
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
             ImGui::SetNextItemWidth(-1);

@@ -1,4 +1,5 @@
 #pragma once
+#include "DummyEngine/Core/Animations/Animation.h"
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
@@ -83,6 +84,7 @@ namespace DE {
         RenderSubMeshData& operator+=(const RenderSubMeshData& other);
     };
     struct RenderMeshData {
+        Ref<Animation>                 animation;
         std::vector<RenderSubMeshData> meshes;
 
         void Compress();

@@ -13,10 +13,10 @@ Scene:
         FlipUV: false
         UUID: 8911b8a8458923946819fb45fbb794fd
     Shaders:
-      TexturedPhong:
+      PBR:
         UUID: 24116af57b6022cd2464fbf641ae946a
-        Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
-        Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
+        Vertex: Assets\Shaders\PBR\PBR.vs
+        Fragment: Assets\Shaders\PBR\PBR.fs
     Scripts:
       GateController:
         Path: Assets\Scripts\Gate\GateController.cpp
