@@ -47,6 +47,9 @@ namespace DE {
         DE_PROFILE_SCOPE("Scene OnUpdate");
 
         m_Storage->UpdateSystems(dt);
+        if (m_PhysicsSolver) {
+            m_PhysicsSolver->OnUpdate(dt);
+        }
         for (auto e : m_Storage->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
@@ -88,6 +91,7 @@ namespace DE {
             DE_ASSERT(m_EntityByID.find(id) == m_EntityByID.end(), "UUID collision occured (", id.Get(), ")");
             m_EntityByID[id] = entity;
         });
+        m_PhysicsSolver = CreateRef<Physics::Solver>();
         m_Storage->SetRemoveHandler<IDComponent>([this](Entity entity) { m_EntityByID.erase(entity.Get<IDComponent>()); });
     }
 
@@ -125,5 +129,8 @@ namespace DE {
     }
     bool Scene::HasCamera() {
         return m_Camera.Valid();
+    }
+    void Scene::LoadPhysics(Ref<Scene>& scene) {
+        m_PhysicsSolver->LoadScene(scene);
     }
 }  // namespace DE

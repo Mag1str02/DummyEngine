@@ -58,7 +58,11 @@ Core/Rendering/RendererOpenGL/GLUniformBuffer.cpp
 Core/Rendering/RendererOpenGL/GLRenderAPI.cpp
 Core/Rendering/RendererOpenGL/GLDebug.cpp
 
-# Core/Rendering/Shaders/ShaderSources.cpp
+Core/Physics/SceneConstants.cpp
+Core/Physics/ForceQueue.cpp
+Core/Physics/Solver.cpp
+Core/Physics/ConvexCollider.cpp
+Core/Physics/Utils.cpp
 
 Core/ResourceManaging/AssetManager.cpp
 Core/ResourceManaging/RawData.cpp

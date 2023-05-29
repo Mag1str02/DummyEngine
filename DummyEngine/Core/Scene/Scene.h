@@ -2,6 +2,7 @@
 
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
+#include "DummyEngine/Core/Physics/Solver.hpp"
 #include "DummyEngine/Core/Scene/Components.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"
 
@@ -9,8 +10,11 @@ namespace DE {
     class Entity;
     class SceneRenderer;
     class ScripyEngine;
+    namespace Physics {
+        class Solver;
+    }
 
-    class Scene {
+    class Scene{
     public:
         Scene();
         ~Scene();
@@ -27,6 +31,8 @@ namespace DE {
         Entity GetByID(UUID uuid);
         void   SetCamera(Entity entity);
         bool   HasCamera();
+
+        void LoadPhysics(Ref<Scene> &scene);
 
         Ref<SceneRenderer>   GetRenderer() { return m_Renderer; }
         SceneHierarchy::Node GetHierarchyRoot();
@@ -49,5 +55,6 @@ namespace DE {
         Ref<SceneRenderer>               m_Renderer;
         SceneHierarchy                   m_Hierarchy;
         std::unordered_map<UUID, Entity> m_EntityByID;
+        Ref<Physics::Solver>             m_PhysicsSolver;
     };
 }  // namespace DE
