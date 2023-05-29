@@ -1,7 +1,9 @@
 #pragma once
 
 #include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
+#include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
+#include "DummyEngine/Core/Rendering/Renderer/SkyBox.h"
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
@@ -49,24 +51,31 @@ namespace DE {
         UUID id;
 
         Ref<Shader> shader;
+        Shader*     operator->() { return shader.get(); }
     };
     struct RenderMeshComponent {
         UUID id;
 
         Ref<RenderMeshInstance> mesh_instance = nullptr;
+        RenderMeshInstance*     operator->() { return mesh_instance.get(); }
     };
-    struct SkyBox {
-        UUID id;
 
-        Ref<CubeMap> map = nullptr;
+    struct SkyBoxComponent {
+        enum class TexType {
+            CubeMap = 0,
+            Equirectangular,
+        };
+        TexType type;
+        UUID    id;
+
+        Ref<SkyBox> map;
+        SkyBox*     operator->() { return map.get(); }
     };
-}  // namespace DE
 
-namespace std {
     template <typename T> struct hash;
 
     template <> struct hash<DE::TagComponent> {
         std::size_t operator()(const DE::TagComponent& tag) const { return std::hash<std::string>()(tag); }
     };
 
-}  // namespace std
+}  // namespace DE

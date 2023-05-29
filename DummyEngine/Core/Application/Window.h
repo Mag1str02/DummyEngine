@@ -1,9 +1,5 @@
 #pragma once
-
-// clang-format off
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
-// clang-format on
 
 #include "DummyEngine/Core/Application/Event.h"
 #include "DummyEngine/Core/Rendering/Renderer/Context.h"
@@ -34,6 +30,7 @@ namespace DE {
         void OnUpdate();
         void SetEventCallback(EventCallback<Event> callback);
 
+        void SetIcon(Path path);
         void FullScreen(U32 monitor_id);
         void Windowed(U32 width = 1280, U32 height = 720, U32 x_pos = 100, U32 y_pos = 100);
 

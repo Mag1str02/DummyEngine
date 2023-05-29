@@ -24,7 +24,7 @@ namespace DE {
         ImGui::StyleColorsDark();
 
         ImGui_ImplGlfw_InitForOpenGL(Application::Get().m_Window->m_Window, true);
-        ImGui_ImplOpenGL3_Init("#version 460");
+        ImGui_ImplOpenGL3_Init("#version 410");
     }
 
     void ImGuiLayer::OnDetach() {

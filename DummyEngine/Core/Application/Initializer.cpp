@@ -15,7 +15,10 @@
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
-
+    void error_callback(int error, const char* description) {
+        fprintf(stderr, "Error: %s\n", description);
+        fflush(stderr);
+    }
     void Initializer::Initialize() {
         PreInitialize();
         DepInitialize();
@@ -40,8 +43,10 @@ namespace DE {
             if (!glfwInit()) {
                 DE_ASSERT(false, "Failed to initialize GLFW");
             }
+            glfwSetErrorCallback(error_callback);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             ImGui::g_ImGuiFailAssert                                    = FailAssert;
             ImGui::g_ExternalSettings.DragAndDropTooltipAlphaMultiplyer = 1.0;

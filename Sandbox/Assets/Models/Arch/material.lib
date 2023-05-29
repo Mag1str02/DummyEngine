@@ -10,5 +10,5 @@ newmtl dungeon_arch_mat
 	illum 2
 	Ks 0.2 0.2 0.2
 	Ns 20
-	map_Kd textures\arch_col.tga.png
-	map_Ks textures\arch_rough.tga.png
+	map_Kd textures/arch_col.tga.png
+	map_Ks textures/arch_rough.tga.png

@@ -9,7 +9,25 @@ namespace DE {
 
     ModelLoader::LoaderState ModelLoader::m_State;
 
+    MaterialData ModelLoader::LoadMaterial(aiMaterial* mat) {
+        MaterialData material;
+        material.diffuse  = GetColor(mat, ColorType::Diffuse);
+        material.specular = GetColor(mat, ColorType::Specular);
+        material.ambient  = GetColor(mat, ColorType::Ambient);
+        material.albedo   = GetColor(mat, ColorType::Albedo);
+        material.orm      = GetColor(mat, ColorType::ORM);
+        aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &material.shininess);
+
+        material.albedo_map   = GetTexture(mat, aiTextureType_DIFFUSE);
+        material.normal_map   = GetTexture(mat, aiTextureType_NORMALS);
+        material.orm_map      = GetTexture(mat, aiTextureType_METALNESS);
+        material.diffuse_map  = GetTexture(mat, aiTextureType_DIFFUSE);
+        material.specular_map = GetTexture(mat, aiTextureType_SPECULAR);
+        return material;
+    }
+
     Ref<RenderMeshData> ModelLoader::Load(const RenderMeshAsset::LoadingProperties& properties) {
+        m_State.m_Props    = properties;
         unsigned int flags = aiProcess_Triangulate | aiProcess_CalcTangentSpace;
         if (properties.flip_uvs) {
             flags |= aiProcess_FlipUVs;
@@ -93,23 +111,22 @@ namespace DE {
             }
         }
         if (mesh->mMaterialIndex >= 0) {
-            aiMaterial* material                 = scene->mMaterials[mesh->mMaterialIndex];
-            current_mesh.material.diffuse_color  = GetColor(material, ColorType::Diffuse);
-            current_mesh.material.ambient_color  = GetColor(material, ColorType::Ambient);
-            current_mesh.material.specular_color = GetColor(material, ColorType::Specular);
-            current_mesh.material.diffuse_map    = GetTexture(material, aiTextureType_DIFFUSE);
-            current_mesh.material.specular_map   = GetTexture(material, aiTextureType_SPECULAR);
-            current_mesh.material.normal_map     = GetTexture(material, aiTextureType_NORMALS);
-            aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &current_mesh.material.shininess);
+            aiMaterial* material       = scene->mMaterials[mesh->mMaterialIndex];
+            current_mesh.material      = LoadMaterial(material);
+            current_mesh.material.type = m_State.m_Props.mat_type;
         }
         ++m_State.m_CurrentMeshId;
     }
     Vec3 ModelLoader::GetColor(aiMaterial* mat, ColorType type) {
-        aiColor3D color(0.f, 0.f, 0.f);
+        aiColor3D color(1.f, 1.f, 1.f);
         switch (type) {
             case ColorType::Diffuse: mat->Get(AI_MATKEY_COLOR_DIFFUSE, color); break;
             case ColorType::Specular: mat->Get(AI_MATKEY_COLOR_SPECULAR, color); break;
-            case ColorType::Ambient: mat->Get(AI_MATKEY_COLOR_AMBIENT, color); break;
+            // case ColorType::Ambient: mat->Get(AI_MATKEY_COLOR_AMBIENT, color); break;
+            case ColorType::ORM:
+                mat->Get(AI_MATKEY_ROUGHNESS_FACTOR, color.g);
+                mat->Get(AI_MATKEY_METALLIC_FACTOR, color.b);
+                break;
             default: break;
         }
         Vec3 res(color.r, color.g, color.b);

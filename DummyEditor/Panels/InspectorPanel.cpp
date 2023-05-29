@@ -140,28 +140,13 @@ namespace DE {
         if (m_Entity.Has<RenderMeshComponent>()) {
             if (ImGui::CollapsingHeader(ICON_MD_TOKEN "  RenderMesh", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto& meshes = m_Entity.Get<RenderMeshComponent>().mesh_instance->GetMesh()->GetSubMeshes();
-                int  cnt    = 0;
+                int   cnt    = 0;
                 for (auto& mesh : meshes) {
                     std::string name = StrCat("Mesh ", cnt);
                     if (ImGui::TreeNode(name.c_str())) {
-                        auto& material     = mesh.material;
-                        auto  specular_map = (material.specular_map ? material.specular_map : Renderer::GetDefaultTexture());
-                        auto  diffuse_map  = (material.diffuse_map ? material.diffuse_map : Renderer::GetDefaultTexture());
-                        auto  normal_map   = (material.normal_map ? material.normal_map : Renderer::GetDefaultNormalTexture());
-                        ImGui::Separator();
                         ImGui::Columns(2);
-                        ImGuiUtils::EditTexture("SpecularMap", specular_map);
-                        ImGui::Separator();
-                        ImGuiUtils::EditTexture("Diffuse", diffuse_map);
-                        ImGui::Separator();
-                        ImGuiUtils::EditTexture("NormalMap", normal_map);
-                        ImGui::Separator();
-                        ImGuiUtils::EditProperty("AmbientColor", material.ambient_color, ImGuiUtils::PropertyType::Color);
-                        ImGuiUtils::EditProperty("SpecularColor", material.specular_color, ImGuiUtils::PropertyType::Color);
-                        ImGuiUtils::EditProperty("DiffuseColor", material.diffuse_color, ImGuiUtils::PropertyType::Color);
-                        ImGuiUtils::EditProperty("Shininess", material.shininess);
+                        ImGuiUtils::EditProperty(mesh.material);
                         ImGui::Columns(1);
-                        ImGui::Separator();
                         ImGui::TreePop();
                     }
                     ++cnt;
@@ -182,7 +167,7 @@ namespace DE {
                     DrawComponentWidget<FPSCamera>(m_Entity);
                     DrawComponentWidget<LightSource>(m_Entity);
                     DrawComponentWidget<RenderMeshComponent>(m_Entity);
-                    DrawComponentWidget<SkyBox>(m_Entity);
+                    DrawComponentWidget<SkyBoxComponent>(m_Entity);
                     AddComponent();
                 }
             }

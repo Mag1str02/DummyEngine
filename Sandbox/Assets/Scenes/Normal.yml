@@ -2,6 +2,11 @@ Scene:
   Name: Scene
   Assets:
     Models:
+      Sphere:
+        Path: Assets\Models\Sphere\sphere.obj
+        Compress: true
+        FlipUV: true
+        UUID: 5c7dfba9096b1d2047cf3bab45ecdc1e
       BackpackModel:
         Path: Assets\Models\Backpack\backpack.obj
         Compress: true
@@ -33,10 +38,6 @@ Scene:
         FlipUV: false
         UUID: 8911b8a8458923946819fb45fbb794fd
     Shaders:
-      SkyBox:
-        UUID: f1e74e1b9ab55315492a3d5ee699e18b
-        Vertex: Assets\Shaders\SkyBox\SkyBox.vs
-        Fragment: Assets\Shaders\SkyBox\SkyBox.fs
       PBR:
         UUID: 24116af57b6022cd2464fbf641ae946a
         Vertex: Assets\Shaders\PBR\PBR.vs
@@ -60,7 +61,7 @@ Scene:
               Tag: Sun
               UUID: 4c84709484f950496a723680ffa3dd15
               Transformation:
-                Translation: [0, 30, -2.11851883]
+                Translation: [0, 30.0000019, 57.7448082]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -71,11 +72,11 @@ Scene:
               LightSource:
                 Type: Point
                 Ambient: [0.0599078536, 0.0599078536, 0.0599078536]
-                Diffuse: [1, 0.00460827351, 0.00460827351]
+                Diffuse: [1, 1, 1]
                 Specular: [1, 1, 1]
                 Direction: [1, 0, 0]
-                Position: [0, 30, -2.10308766]
-                CLQ: [0.5, 0.0199999996, 0]
+                Position: [0, 30.0000019, 57.7448082]
+                CLQ: [0.100000001, 0.00100000005, 0]
                 InnerCone: 0
                 OuterCone: 0
               Script:

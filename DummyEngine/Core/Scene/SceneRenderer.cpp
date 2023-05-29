@@ -23,8 +23,8 @@ namespace DE {
                                                BufferElementType::Float3},
                                          MAX_LIGHTS_IN_SCENE);
         m_FrameBuffer = FrameBuffer::Create({1920, 1080});
-        m_FrameBuffer->AddColorAttachment(TextureFormat::RGBA);
-        m_FrameBuffer->SetDepthAttachment(TextureFormat::DepthStencil);
+        m_FrameBuffer->AddColorAttachment(TextureChannels::RGBA);
+        m_FrameBuffer->SetDepthAttachment(TextureChannels::Depth);
     }
     void SceneRenderer::OnViewPortResize(U32 x, U32 y) {
         m_FrameBuffer->Resize(x, y);
@@ -34,18 +34,22 @@ namespace DE {
         auto& scene_camera = camera.Get<FPSCamera>();
         m_FrameBuffer->Bind();
         m_Lights->Bind(LIGHT_UB_ID);
-        Renderer::OnWindowResize(m_FrameBuffer->GetWidth(), m_FrameBuffer->GetHeight());
+        Renderer::SetViewport(m_FrameBuffer->GetWidth(), m_FrameBuffer->GetHeight());
         Renderer::Clear();
 
-        UpdateShaders(scene_camera);
-        auto skyboxes = m_Scene->m_Storage->View<SkyBox, ShaderComponent>();
+        Entity skybox;
+        auto   skyboxes = m_Scene->m_Storage->View<SkyBoxComponent>();
         if (!skyboxes.Empty()) {
-            auto e         = *skyboxes.begin();
+            skybox = *skyboxes.begin();
+        }
+        UpdateShaders(scene_camera, skybox);
+
+        if (skybox.Valid()) {
             Mat4 transform = Mat4(1.0);
-            if (e.Has<TransformComponent>()) {
-                transform = e.Get<TransformComponent>().GetRotation();
+            if (skybox.Has<TransformComponent>()) {
+                transform = skybox.Get<TransformComponent>().GetRotation();
             }
-            Renderer::Submit(e.Get<SkyBox>().map, e.Get<ShaderComponent>().shader, transform);
+            Renderer::Submit(skybox.Get<SkyBoxComponent>()->GetMap(), scene_camera, transform);
         }
 
         for (auto& [ids, target] : m_InstancedMeshes) {
@@ -55,7 +59,7 @@ namespace DE {
         m_FrameBuffer->UnBind();
     }
 
-    void SceneRenderer::UpdateShaders(const FPSCamera& camera) {
+    void SceneRenderer::UpdateShaders(const FPSCamera& camera, Entity skybox) {
         DE_PROFILE_SCOPE("UpdateShaders");
 
         int cnt_light_sources = 0;
@@ -74,6 +78,15 @@ namespace DE {
         m_Lights->PushData();
         for (auto [id, shader] : m_Shaders) {
             shader->Bind();
+            if (skybox.Valid() && skybox.Has<SkyBoxComponent>()) {
+                skybox.Get<SkyBoxComponent>()->ApplyIBL(shader);
+                if (skybox.Has<TransformComponent>()) {
+                    auto& transform   = skybox.Get<TransformComponent>();
+                    Vec3  rotation    = -(transform.rotation + transform.rotation_offet);
+                    Mat4  mt_rotation = glm::toMat4(glm::quat(glm::radians(rotation)));
+                    shader->SetMat4("u_EnvRotation", mt_rotation);
+                }
+            }
             shader->SetInt("u_LightAmount", cnt_light_sources);
             shader->SetMat4("u_Camera.view", camera.GetViewMatrix());
             shader->SetMat4("u_Camera.projection", camera.GetProjectionMatrix());

@@ -5,7 +5,6 @@
 
 // clang-format off
 #include <windows.h>
-#include <dbghelp.h>
 #include <intrin.h>
 // clang-format on
 

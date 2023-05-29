@@ -37,17 +37,18 @@ namespace DE {
             Pos,
         };
 
-        void EditProperty(std::string name, ImGuiDataType type, void* value, PropertyType property_type = PropertyType::None);
-        void EditProperty(const std::string& name, float& value, PropertyType property_type = PropertyType::None);
-        void EditProperty(const std::string& name, double& value, PropertyType property_type = PropertyType::None);
-        void EditProperty(const std::string& name, U8& value, PropertyType property_type = PropertyType::None);
-        void EditProperty(const std::string& name, S8& value, PropertyType property_type = PropertyType::None);
-        void EditProperty(const std::string& name, U16& value, PropertyType property_type = PropertyType::None);
-        void EditProperty(const std::string& name, S16& value, PropertyType property_type = PropertyType::None);
-        void EditProperty(const std::string& name, U32& value, PropertyType property_type = PropertyType::None);
-        void EditProperty(const std::string& name, S32& value, PropertyType property_type = PropertyType::None);
-        void EditProperty(const std::string& name, U64& value, PropertyType property_type = PropertyType::None);
-        void EditProperty(const std::string& name, S64& value, PropertyType property_type = PropertyType::None);
+        void EditProperty(
+            std::string name, ImGuiDataType type, void* value, float speed = 1.0f, const void* min = nullptr, const void* max = nullptr);
+        void EditProperty(const std::string& name, float& value);
+        void EditProperty(const std::string& name, double& value);
+        void EditProperty(const std::string& name, U8& value);
+        void EditProperty(const std::string& name, S8& value);
+        void EditProperty(const std::string& name, U16& value);
+        void EditProperty(const std::string& name, S16& value);
+        void EditProperty(const std::string& name, U32& value);
+        void EditProperty(const std::string& name, S32& value);
+        void EditProperty(const std::string& name, U64& value);
+        void EditProperty(const std::string& name, S64& value);
         void EditProperty(const std::string& name, bool& vec, PropertyType property_type = PropertyType::None);
         void EditProperty(std::string name, std::string& vec, PropertyType property_type = PropertyType::None);
         void EditProperty(std::string name, Vec2& vec, PropertyType property_type = PropertyType::None);
@@ -55,6 +56,7 @@ namespace DE {
         void EditProperty(std::string name, Vec4& vec, PropertyType property_type = PropertyType::None);
         void EditProperty(const std::string& name, ImVec4& vec, PropertyType property_type = PropertyType::None);
         void EditProperty(const std::string& name, Entity& entity, Ref<Scene> scene);
+        void EditProperty( Material& mat);
 
         void EditTexture(const std::string& name, Ref<Texture> texture, const ImVec2 tex_size = {128, 128});
     }  // namespace ImGuiUtils

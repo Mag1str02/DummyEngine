@@ -1,0 +1,155 @@
+Scene:
+  Name: Scene
+  Assets:
+    Models:
+      Sphere:
+        Path: Assets\Models\Sphere\sphere.obj
+        Compress: true
+        FlipUV: true
+        UUID: 5c7dfba9096b1d2047cf3bab45ecdc1e
+        MatType: PBR
+      CubeModel:
+        Path: Assets\Models\Cube\cube.obj
+        Compress: true
+        FlipUV: false
+        UUID: 02afee3bc1cb75b7d8b882a8667faa84
+        MatType: PBR
+      SkullModel:
+        Path: Assets\Models\Skull\scene.gltf
+        Compress: false
+        FlipUV: true
+        UUID: 02afee3bc1cb75bacdb882a8667faa84
+        MatType: PBR
+      Samurai:
+        Path: Assets\Models\Samurai\scene.gltf
+        Compress: false
+        FlipUV: true
+        UUID: 02afee3bc1cb75bacdb882a8667faa21
+        MatType: PBR
+      Car:
+        Path: Assets\Models\Car\Car.obj
+        Compress: false
+        FlipUV: true
+        UUID: 02afee3bc1cb75bacdb882a8667faaac
+        MatType: PBR
+    Textures:
+      Sky:
+        Path: Assets\Textures\Skyboxes\Sky.png
+        FlipUV: false
+        UUID: 8911b8a8458923946819fb45fbb794fd
+      Space:
+        Path: Assets\Textures\Skyboxes\Space.png
+        FlipUV: false
+        UUID: 8911b8a8458923946819fb45fbb214fd
+    Shaders:
+      PBR:
+        UUID: 24116af57b6022cd2464fbf641ae946a
+        Vertex: Assets\Shaders\PBR\PBR.vs
+        Fragment: Assets\Shaders\PBR\PBR.fs
+      TexturedPhong:
+        UUID: 24116af57b632acd2464fbf641ae946a
+        Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
+        Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
+    Scripts:
+      SkyContoller:
+        Path: Assets\Scripts\Sky\SkyController.cpp
+        UUID: 15fa3d63323b421ce0329ae14b5d2111
+      SinMovement:
+        Path: Assets\Scripts\Gate\SinMovement.cpp
+        UUID: b54e9fbf43a0fd9437c0f2c1f19082ce
+  Hierarchy:
+    - Node:
+        Name: Enviroment
+        Childs:
+          - Entity:
+              Tag: Sun
+              UUID: 4c84709484f950496a723680ffa3dd15
+              Transformation:
+                Translation: [0, 26.7007236, 52.8515663]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+              Shader: 24116af57b6022cd2464fbf641ae946a
+              LightSource:
+                Type: Point
+                Ambient: [0.0599078536, 0.0599078536, 0.0599078536]
+                Diffuse: [1, 1, 1]
+                Specular: [1, 1, 1]
+                Direction: [1, 0, 0]
+                Position: [0, 26.7007236, 52.8515663]
+                CLQ: [0, 0, 0.00100000005]
+                InnerCone: 0
+                OuterCone: 0
+              Script:
+                UUID: b54e9fbf43a0fd9437c0f2c1f19082ce
+                Fields:
+                  Speed: 1
+                  PosB: [0, 30, 60]
+                  PosA: [0, 0, -5]
+          - Entity:
+              Tag: Sky
+              UUID: ed39f278255d3fc7823454ad61d716e5
+              Transformation:
+                Translation: [16.9514027, 36.2624664, -97.3881531]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [180, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              SkyBox:
+                Type: CubeMap
+                UUID: 8911b8a8458923946819fb45fbb794fd
+    - Node:
+        Name: Objects
+        Childs:
+          - Entity:
+              Tag: Sphere
+              UUID: 855d5d57284a11cc6621f81f0c4cc63a
+              Transformation:
+                Translation: [-28, 10, 26]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [-90, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 5c7dfba9096b1d2047cf3bab45ecdc1e
+              Shader: 24116af57b6022cd2464fbf641ae946a
+          - Entity:
+              Tag: SkullPBR
+              UUID: 855d5d57284923cc6634f81f0c4cc621
+              Transformation:
+                Translation: [10, 7, 20]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [95, 0, 0]
+                RotationOffset: [-90, 0, 0]
+                Scale: [100, 100, 100]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 02afee3bc1cb75bacdb882a8667faa84
+              Shader: 24116af57b6022cd2464fbf641ae946a
+          - Entity:
+              Tag: SamuraiPBR
+              UUID: 0f376f48dce7bec0ea07c156a8a852b2
+              Transformation:
+                Translation: [10, 12, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [330, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              RenderModel: 02afee3bc1cb75bacdb882a8667faa21
+              Shader: 24116af57b6022cd2464fbf641ae946a
+          - Entity:
+              Tag: CarPBR
+              UUID: 0f376f48dce7bec0ea07c216a8a852b2
+              Transformation:
+                Translation: [-5, 4, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [-90, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
+              RenderModel: 02afee3bc1cb75bacdb882a8667faaac
+              Shader: 24116af57b6022cd2464fbf641ae946a

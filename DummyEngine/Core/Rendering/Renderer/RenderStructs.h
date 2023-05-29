@@ -1,18 +1,30 @@
 #pragma once
 
+#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 #include "DummyEngine/Core/Rendering/Renderer/Texture.h"
 #include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
+
     struct Material {
-        Vec3         ambient_color;
-        Vec3         diffuse_color;
-        Vec3         specular_color;
+        MaterialType type = MaterialType::None;
         float        shininess;
-        Ref<Texture> specular_map;
-        Ref<Texture> diffuse_map;
+
+        Vec3 albedo   = Vec3(1.0f);
+        Vec3 orm      = Vec3(1.0f);
+        Vec3 diffuse  = Vec3(1.0f);
+        Vec3 specular = Vec3(1.0f);
+        Vec3 ambient  = Vec3(1.0f);
+
+        Ref<Texture> albedo_map;
         Ref<Texture> normal_map;
+        Ref<Texture> orm_map;
+        Ref<Texture> diffuse_map;
+        Ref<Texture> specular_map;
+
+        void Apply(Ref<Shader> shader, const std::string& uniform_name = "u_Material") const;
+        void FillData(const MaterialData& material);
     };
 
     struct RenderSubMesh {
@@ -44,7 +56,7 @@ namespace DE {
     public:
         RenderMesh() : m_InstanceBuffer(nullptr) {}
         RenderMesh(Ref<RenderMeshData> data);
-        Ref<RenderMesh>            Copy() const;
+        Ref<RenderMesh>             Copy() const;
         std::vector<RenderSubMesh>& GetSubMeshes();
 
         void UpdateInstanceBuffer();

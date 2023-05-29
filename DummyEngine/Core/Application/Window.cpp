@@ -1,5 +1,7 @@
 #include "DummyEngine/Core/Application/Window.h"
 
+#include <stb_image.h>
+
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
@@ -14,7 +16,7 @@ namespace DE {
 
     Window::Window(const WindowState& state) : m_State(state) {
         m_Window = glfwCreateWindow(1280, 720, m_State.name.c_str(), NULL, NULL);
-        glfwSwapInterval(0);
+        // glfwSwapInterval(0);
         DE_ASSERT(m_Window, "Failed to create GLFW Window (", m_State.name, ")");
         LOG_INFO("Window", "Window created: ", m_State.name);
 
@@ -29,6 +31,17 @@ namespace DE {
         glfwDestroyWindow(m_Window);
     }
 
+    void Window::SetIcon(Path path) {
+        GLFWimage icon;
+        icon.pixels = stbi_load(path.string().c_str(), &icon.width, &icon.height, 0, 4);
+
+        if (!icon.pixels) {
+            LOG_WARNING("Window", "Failed to set window icon (", path, ")");
+            return;
+        }
+        glfwSetWindowIcon(m_Window, 1, &icon);
+        stbi_image_free(icon.pixels);
+    }
     void Window::FullScreen(U32 id) {
         m_State.mode = WindowMode::FullScreen;
 

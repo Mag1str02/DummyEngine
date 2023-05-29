@@ -1,66 +1,95 @@
 #pragma once
 
+#include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
 #include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
 #include "DummyEngine/Core/Rendering/Renderer/RenderAPI.h"
+#include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 #include "DummyEngine/Core/Rendering/Renderer/Texture.h"
 #include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
-    struct FrameStatistics {
-        U32 m_DrawCallsAmount;
-        U32 m_DrawnInstances;
 
-        void Reset();
-    };
-
-    class Renderer {
+    class Renderer : public Singleton<Renderer> {
+        SINGLETON(Renderer)
     public:
-        static void Initialize();
-        static void Terminate();
+        enum class Shaders {
+            None = 0,
+            Skybox,
+            Convolution,
+            PreFileterConvolution,
+            EquirectangularToCubeMap,
+            BRDFConvolution,
 
-        static void OnWindowResize(U32 width, U32 height);
+            Last,
+        };
+        enum class Textures {
+            None = 0,
+            White,
+            Normal,
+            BRDF,
 
-        static void BeginFrame();
-        static void EndFrame();
+            Last,
+        };
+        enum class VertexArrays {
+            None = 0,
+            ScreenQuad,
+            Cube,
 
-        static void Clear();
+            Last,
+        };
+        struct Statistics {
+            U32 m_DrawCallsAmount;
+            U32 m_DrawnInstances;
 
-        static void Submit(const Ref<VertexArray>& mesh, Ref<Shader> shader, const Mat4& trasform = Mat4(1.0f));
-        static void Submit(Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& trasform = Mat4(1.0f));
-        static void Submit(Ref<CubeMap> cube_map, Ref<Shader> shader, const Mat4& trasform = Mat4(1.0f));
+            void Reset();
+        };
 
-        static void Enable(RenderSetting setting);
-        static void Disable(RenderSetting setting);
-        static void SetClearColor(Vec4 color);
-        static void SetClearColor(float r, float g, float b, float a);
-        static void SetDefaultFrameBuffer();
+        S_METHOD_DEF(Unit, SetViewport, (U32 width, U32 height));
+        S_METHOD_DEF(Unit, BeginFrame, ());
+        S_METHOD_DEF(Unit, EndFrame, ());
+        S_METHOD_DEF(Unit, Clear, ());
 
-        // TMP
-        static Ref<Texture>     GetDefaultTexture();
-        static Ref<Texture>     GetDefaultNormalTexture();
-        static Ref<VertexArray> GetFullScreenQuad();
-        static Ref<VertexArray> GetCube();
+        S_METHOD_DEF(Unit, Submit, (Ref<VertexArray> vertex_array, Ref<Shader> shader, const Mat4& transform = Mat4(1.0f)));
+        S_METHOD_DEF(Unit, Submit, (Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& transform = Mat4(1.0f)));
+        S_METHOD_DEF(Unit, Submit, (Ref<CubeMap> cube_map, const FPSCamera& camera, const Mat4& transform = Mat4(1.0f)));
 
-        static API             CurrentAPI();
-        static FrameStatistics GetStatistics();
-        static RenderAPI&      GetRenderAPI();
+        S_METHOD_DEF(Unit, Enable, (RenderSetting setting));
+        S_METHOD_DEF(Unit, Disable, (RenderSetting setting));
+        S_METHOD_DEF(Unit, SetClearColor, (Vec4 color));
+        S_METHOD_DEF(Unit, SetClearColor, (float r, float g, float b, float a));
+        S_METHOD_DEF(Unit, SetDefaultFrameBuffer, ());
+
+        S_METHOD_DEF(Ref<Shader>, GetShader, (Shaders shader));
+        S_METHOD_DEF(Ref<Texture>, GetTexture, (Textures texture));
+        S_METHOD_DEF(Ref<VertexArray>, GetVertexArray, (VertexArrays vao));
+
+        S_METHOD_DEF(API, CurrentAPI, ());
+        S_METHOD_DEF(Statistics, GetStatistics, ());
+        S_METHOD_DEF(RenderAPI&, GetRenderAPI, ());
 
     private:
-        // TODO: Delete this
+        void GenResources();
 
-        static void GenDefaultTexture();
-        static void GenDefaultNormalTexture();
-        static void GenFullScreenQuad();
-        static void GenCube();
+        struct Resources {
+            Ref<Texture> white;
+            Ref<Texture> normal;
+            Ref<Texture> brdf;
 
-        static Scope<FrameStatistics> m_FrameStatistics;
-        static Scope<RenderAPI>       m_RenderAPI;
-        static Ref<Texture>           m_DefaultTexture;
-        static Ref<Texture>           m_DefaultNormalTexture;
-        static Ref<VertexArray>       m_FullScreenQuad;
-        static Ref<VertexArray>       m_Cube;
+            Ref<VertexArray> screen_quad;
+            Ref<VertexArray> cube;
+
+            Ref<Shader> equirectangular_to_cubemap;
+            Ref<Shader> skybox;
+            Ref<Shader> convolution;
+            Ref<Shader> pre_filter_convolution;
+            Ref<Shader> brdf_convolution;
+        };
+
+        Scope<RenderAPI> m_RenderAPI;
+        Statistics       m_FrameStatistics;
+        Resources        m_Resources;
     };
 
 }  // namespace DE

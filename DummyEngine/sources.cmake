@@ -15,6 +15,7 @@ Core/Application/Window.cpp
 Core/Application/Input.cpp
 Core/Application/Initializer.cpp
 Core/Application/Config.cpp
+Core/Application/FileSystem.cpp
 
 Core/ECS/ECS.cpp
 
@@ -36,6 +37,7 @@ Core/Rendering/Renderer/VertexBuffer.cpp
 Core/Rendering/Renderer/Renderer.cpp
 Core/Rendering/Renderer/RenderStructs.cpp
 Core/Rendering/Renderer/Shader.cpp
+Core/Rendering/Renderer/SkyBox.cpp
 Core/Rendering/Renderer/Texture.cpp
 Core/Rendering/Renderer/UniformBuffer.cpp
 
@@ -57,6 +59,8 @@ Core/Physics/Solver.cpp
 Core/Physics/ConvexCollider.cpp
 Core/Physics/Utils.cpp
 
+# Core/Rendering/Shaders/ShaderSources.cpp
+
 Core/ResourceManaging/AssetManager.cpp
 Core/ResourceManaging/RawData.cpp
 Core/ResourceManaging/ResourceManager.cpp
@@ -73,15 +77,22 @@ ToolBox/Editors/TextureEditor.cpp
 
 if( ${CMAKE_PLATFORM} STREQUAL "WINDOWS")
 set(PLATFORM_SOURCES
-    Platform/Windows/Core/Application/FileSystem.cpp
     Platform/Windows/Utils/Debug/StackTrace.cpp
     Platform/Windows/Utils/Debug/Demangler.cpp
     Platform/Windows/Core/Scripting/SharedObject.cpp
 )
 endif()
 if(${CMAKE_PLATFORM} STREQUAL "LINUX")
-set(PLATFORM_SOURCES)
+set(PLATFORM_SOURCES
+Platform/Linux/Utils/Debug/StackTrace.cpp
+Platform/Linux/Utils/Debug/Demangler.cpp
+Platform/Linux/Core/Scripting/SharedObject.cpp
+)
 endif()
 if(${CMAKE_PLATFORM} STREQUAL "MACOS")
-set(PLATFORM_SOURCES)
+set(PLATFORM_SOURCES
+    Platform/Macos/Utils/Debug/StackTrace.cpp
+    Platform/Macos/Utils/Debug/Demangler.cpp
+    Platform/Macos/Core/Scripting/SharedObject.cpp
+)
 endif()

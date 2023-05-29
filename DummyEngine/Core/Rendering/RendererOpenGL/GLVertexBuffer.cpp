@@ -17,7 +17,7 @@ namespace DE {
         if (m_Usage == BufferUsage::Dynamic) {
             m_LocalBuffer.Allocate(m_Layout, size);
         }
-        glCreateBuffers(1, &m_BufferId);
+        glGenBuffers(1, &m_BufferId);
         glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
         glBufferData(GL_ARRAY_BUFFER, m_Size, nullptr, BufferUsafeToGLBufferUsage(usage));
     }
@@ -31,7 +31,7 @@ namespace DE {
             m_LocalBuffer.SetData(data, m_Size);
         }
 
-        glCreateBuffers(1, &m_BufferId);
+        glGenBuffers(1, &m_BufferId);
         glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
         glBufferData(GL_ARRAY_BUFFER, m_Size, data, BufferUsafeToGLBufferUsage(usage));
     }
@@ -78,7 +78,7 @@ namespace DE {
     //*----------------------------------------------------------------------------------
 
     GLIndexBuffer::GLIndexBuffer(const U32* indices, U32 indices_amount) : _indices_amount(indices_amount) {
-        glCreateBuffers(1, &m_BufferId);
+        glGenBuffers(1, &m_BufferId);
         glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
         glBufferData(GL_ARRAY_BUFFER, indices_amount * sizeof(U32), indices, GL_STATIC_DRAW);
     }

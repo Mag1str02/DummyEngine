@@ -5,7 +5,7 @@ namespace DE
 
     GLVertexArray::GLVertexArray() : m_CurrentAtributeId(0)
     {
-        glCreateVertexArrays(1, &m_ArrayId);
+        glGenVertexArrays(1, &m_ArrayId);
     }
     GLVertexArray::~GLVertexArray()
     {

@@ -9,10 +9,12 @@ public:
         DE_PROFILE_SCOPE("GateContoller");
         m_Open = false;
         if (Controller.Valid()) {
-            const auto& controller_pos = Controller.Get<TransformComponent>().translation;
-            const auto& my_pos         = Get<TransformComponent>().translation;
-            float       dist           = glm::length(Vec2(my_pos.x - controller_pos.x, my_pos.z - controller_pos.z));
-            m_Open                     = (dist < Distance);
+            if (Controller.Has<TransformComponent>()) {
+                const auto& controller_pos = Controller.Get<TransformComponent>().translation;
+                const auto& my_pos         = Get<TransformComponent>().translation;
+                float       dist           = glm::length(Vec2(my_pos.x - controller_pos.x, my_pos.z - controller_pos.z));
+                m_Open                     = (dist < Distance);
+            }
         }
         Move();
     }

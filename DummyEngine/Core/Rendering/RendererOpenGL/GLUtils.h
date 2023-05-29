@@ -10,7 +10,7 @@ namespace DE {
 
     enum class RenderPrimitive;
 
-    GLenum TextureFormatToGLTextureFormat(TextureFormat format);
-    GLenum TextureFormatToGLTextureInternalFormat(TextureFormat format);
+    GLenum TextureFormatToGLTextureFormat(TextureChannels format);
+    GLenum TextureFormatToGLTextureInternalFormat(TextureChannels format);
     GLenum RenderPrimitiveToGL(RenderPrimitive primitive);
 }  // namespace DE
