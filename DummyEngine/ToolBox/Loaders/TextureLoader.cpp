@@ -44,10 +44,6 @@ namespace DE {
                 channels_s = "RG";
                 channels   = TextureChannels::RG;
                 break;
-            case 2:
-                format_s = "RA";
-                format   = TextureFormat::RA;
-                break;
             case 3:
                 channels_s = "RGB";
                 channels   = TextureChannels::RGB;
