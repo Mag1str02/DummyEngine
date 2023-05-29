@@ -22,3 +22,6 @@
 [submodule "DummyEngine/Libs/NFD"]
 	path = DummyEngine/Libs/NFD
 	url = https://github.com/btzy/nativefiledialog-extended.git
+[submodule "DummyEngine/Libs/openAL"]
+	path = DummyEngine/Libs/openAL
+	url = https://github.com/kcat/openal-soft.git
