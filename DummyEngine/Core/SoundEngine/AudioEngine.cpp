@@ -5,13 +5,15 @@ namespace DE {
     S_INITIALIZE() {
         openAL_device = alcOpenDevice(nullptr);
 
-        ALCcontext* tmp;
-        if (!alcCall(alcCreateContext, tmp, openAL_device, openAL_device, nullptr)) {
-            std::cerr << "Couldn't create audio context";
+//        openAL_context = alcCreateContext(openAL_device, nullptr);
+        if(!alcCall(alcCreateContext, openAL_context, openAL_device, openAL_device, nullptr) || !openAL_context)
+        {
+            std::cerr << "ERROR: Could not create audio context" << std::endl;
+
         }
-        openAL_context = tmp;
 
         is_made_current = false;
+//        is_made_current = alcMakeContextCurrent(openAL_context);
         if (!alcCall(alcMakeContextCurrent, is_made_current, openAL_device, openAL_context) || is_made_current != ALC_TRUE) {
             std::cerr << "Couldn't make context current";
         }
@@ -21,13 +23,16 @@ namespace DE {
     S_TERMINATE() {
         if(!alcCall(alcMakeContextCurrent, is_made_current, openAL_device, nullptr))
         {
-            /* what can you do? */
+
         }
+//        is_made_current = alcMakeContextCurrent(nullptr);
+
 
         if(!alcCall(alcDestroyContext, openAL_device, openAL_context))
         {
-            /* not much you can do */
+
         }
+//        alcDestroyContext(openAL_context);
         return Unit();
     }
 }
