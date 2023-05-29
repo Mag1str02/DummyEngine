@@ -1,6 +1,7 @@
 #include "Solver.hpp"
 
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
+#include "Utils.cpp"
 #include "PhysicsComponent.h"
 void DE::Physics::Solver::LoadScene(const DE::Ref<DE::Scene>& scene) {
     _scene     = scene;
@@ -68,9 +69,6 @@ double DE::Physics::Solver::NextInteraction(double dt) {
 
                 bool warmStart = mem.find({lhs, rhs}) != mem.end();
 
-                auto lhs_phys = _scene->GetByID(lhs).GetComponent<PhysicsComponent>();
-                auto rhs_phys = _scene->GetByID(rhs).GetComponent<PhysicsComponent>();
-
                 // Calc collision point
                 int  lhs_cnt = 0, rhs_cnt = 0;
                 auto lhs_pt = lhsCollider->GetCollisionPoint(collisionNormal, lhs_cnt);
@@ -79,57 +77,60 @@ double DE::Physics::Solver::NextInteraction(double dt) {
                 LOG_DEBUG("LHS_PT", LOG_VEC(lhs_pt));
                 LOG_DEBUG("RHS_PT", LOG_VEC(rhs_pt));
                 float lhs_area = 0, rhs_area = 0;
-                auto  rhs_center = lhsCollider->GetCollisionCenter(collisionNormal, rhs_pt, rhs_area);
-                auto  lhs_center = rhsCollider->GetCollisionCenter(-collisionNormal, lhs_pt, lhs_area);
+                auto  rhs_pts = lhsCollider->GetCollisionCenter(collisionNormal, rhs_pt, rhs_area);
+                auto  lhs_pts = rhsCollider->GetCollisionCenter(-collisionNormal, lhs_pt, lhs_area);
 
-                LOG_DEBUG("LHS_CENTER", LOG_VEC(lhs_center));
-                LOG_DEBUG("RHS_CENTER", LOG_VEC(rhs_center));
-                auto collision_pt = lhs_center;
+                auto collision_pts = lhs_pts;
+                Plane dst_pl(collisionNormal, rhs_pt);
                 if (lhs_area < 0 || rhs_area < lhs_area) {
-                    collision_pt = rhs_center;
+                    collision_pts = rhs_pts;
+                    dst_pl = Plane(-collisionNormal, lhs_pt);
                 }
+                for(const auto &collision_pt: collision_pts) {
+                    LOG_DEBUG("CollisionPT", LOG_VEC(collision_pt));
+                    float penetration = abs(dst_pl.distance(collision_pt));
 
-                auto list_iterator = mem[{lhs, rhs}].begin();
-                if (warmStart) {
-                    for(; list_iterator < mem[{lhs, rhs}].end(); list_iterator++) {
-                        if (glm::length(cl.lhs_pt - lhs_center) < 0.01 && glm::length(cl.rhs_pt - rhs_center) < 0.01) {
-                            warmStart = false;
+                    auto collisionNormal_n = glm::normalize(collisionNormal);
+                    LOG_DEBUG("CollisionNormal", LOG_VEC(collisionNormal_n));
+                    auto lhs_com = lhsCollider->TransformPoint(lhsCollider->GetCenterOfMass());
+                    auto rhs_com = rhsCollider->TransformPoint(rhsCollider->GetCenterOfMass());
+
+                    auto lhs_r = collision_pt - lhs_com;
+                    auto rhs_r = collision_pt - rhs_com;
+                    LOG_DEBUG("lhs_r", LOG_VEC(lhs_r));
+                    LOG_DEBUG("rhs_r", LOG_VEC(rhs_r));
+
+                    Vec3 tangent   = glm::normalize(glm::cross(collisionNormal_n, Vec3(rand(), rand(), rand()) + Vec3(1)));
+                    Vec3 tangent_b = glm::normalize(glm::cross(collisionNormal_n, tangent));
+
+                    auto list_iterator = mem[{lhs, rhs}].begin();
+                    if (warmStart) {
+                        for (; list_iterator != mem[{lhs, rhs}].end(); list_iterator++) {
+                            Collision& cl = *list_iterator;
+                            if (glm::length(cl.lhs_pt - collision_pt) < 0.002 && glm::length(cl.rhs_pt - collision_pt) < 0.002) {
+                                break;
+                            }
                         }
+                    } else {
+                        list_iterator = mem[{lhs, rhs}].end();
+                    }
+
+                    if (!warmStart || list_iterator == mem[{lhs, rhs}].end()) {
+                        Collision col{lhs, rhs, collision_pt, collisionNormal_n, penetration, collision_pt, collision_pt, lhs_r, rhs_r};
+                        col.jN  = InitJacobian(col, collisionNormal_n, delta, true);
+                        col.jT  = InitJacobian(col, tangent, delta, false);
+                        col.jTb = InitJacobian(col, tangent_b, delta, false);
+                        mem[{lhs, rhs}].push_back(col);
+                        list_iterator = mem[{lhs, rhs}].end();
+                        list_iterator--;
+                    }
+                    Collision& col = *list_iterator;
+                    for (int i = 0; i < 30; i++) {
+                        Resolve(col.jN, col, delta, true, nullptr);
+                        Resolve(col.jT, col, delta, false, &col.jN);
+                        Resolve(col.jTb, col, delta, false, &col.jN);
                     }
                 }
-
-                LOG_DEBUG("CollisionPT", LOG_VEC(collision_pt));
-                float penetration = glm::length(collisionNormal);
-
-                collisionNormal = glm::normalize(collisionNormal);
-                LOG_DEBUG("CollisionNormal", LOG_VEC(collisionNormal));
-                auto lhs_com = lhsCollider->TransformPoint(lhsCollider->GetCenterOfMass());
-                auto rhs_com = rhsCollider->TransformPoint(rhsCollider->GetCenterOfMass());
-
-                auto lhs_r = collision_pt - lhs_com;
-                auto rhs_r = collision_pt - rhs_com;
-                LOG_DEBUG("lhs_r", LOG_VEC(lhs_r));
-                LOG_DEBUG("rhs_r", LOG_VEC(rhs_r));
-
-                Vec3 tangent = glm::normalize(glm::cross(collisionNormal, Vec3(1)));
-                Vec3  tangent_b = glm::normalize(glm::cross(collisionNormal, tangent));
-
-                if (!warmStart) {
-                    Collision col{
-                        lhs, rhs, collision_pt, collisionNormal, penetration, lhs_center, rhs_center, lhs_r, rhs_r
-                    };
-                    col.jN = InitJacobian(col, collisionNormal, delta, true);
-                    col.jT = InitJacobian(col, tangent, delta, false);
-                    col.jTb = InitJacobian(col, tangent_b, delta, false);
-                    mem[{lhs, rhs}] = col;
-                }
-                Collision col = mem[{lhs, rhs}];
-                for(int i = 0; i < 20; i++) {
-                    Resolve(col.jN, col, delta, true, nullptr);
-                    Resolve(col.jT, col, delta, false, &col.jN);
-                    Resolve(col.jTb, col, delta, false, &col.jN);
-                }
-                mem[{lhs, rhs}] = col;
             }
         }
 
@@ -158,13 +159,13 @@ DE::Physics::Jacobian DE::Physics::Solver::InitJacobian(DE::Physics::Collision& 
 
     if (is_normal) {
         float beta = .25f;
-        float rest = 0.01f;
+        float rest = 0.00f;
 
         Vec3 relativeVel =
             - lhs_phys->speed - glm::cross(lhs_phys->rot_speed, collision.lhs_r)
             + rhs_phys->speed + glm::cross(rhs_phys->rot_speed, collision.rhs_r);
         float closingVel = glm::dot(relativeVel, dir);
-        j.m_bias = -(beta / dt) * std::max(.0f, collision.penetration - 0.01f) + rest * closingVel;
+        j.m_bias = -(beta / dt) * std::max(.0f, collision.penetration - 0.001f) + rest * closingVel;
     }
 
     float inv_mass = lhs_phys->inv_mass + rhs_phys->inv_mass
@@ -190,7 +191,7 @@ void DE::Physics::Solver::Resolve(DE::Physics::Jacobian &j, DE::Physics::Collisi
     if (is_normal) {
         j.m_totalLambda = std::max(.0f, j.m_totalLambda + lambda);
     } else {
-        float friction = 0.7f;
+        float friction = 0.25f;
         float maxFriction = friction * jn->m_totalLambda;
         j.m_totalLambda = std::max(-maxFriction, std::min(maxFriction, j.m_totalLambda + lambda));
     }
@@ -200,8 +201,4 @@ void DE::Physics::Solver::Resolve(DE::Physics::Jacobian &j, DE::Physics::Collisi
     lhs_phys->rot_speed += lhs_phys->inv_inertia * j.m_wa * lambda;
     rhs_phys->speed += rhs_phys->inv_mass * j.m_vb * lambda;
     rhs_phys->rot_speed += rhs_phys->inv_inertia * j.m_wb * lambda;
-}
-
-void DE::Physics::Solver::ResolveCollision(DE::Physics::Collision& col, float dt) {
-
 }
