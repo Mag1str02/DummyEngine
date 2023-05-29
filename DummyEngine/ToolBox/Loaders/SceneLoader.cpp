@@ -301,6 +301,9 @@ namespace DE {
         if (!ResourceManager::HasRenderMesh(id) && !ResourceManager::LoadRenderMesh(id)) {
             LOG_WARNING("SceneLoader", "RenderMesh (", id, ") not found in ResourceManager");
         }
+        if (ResourceManager::LoadHitBox(id)) {
+            LOG_INFO("SceneLoader", "HitBox (", id, ") loaded in ResourceManager");
+        }
         entity.AddComponent<RenderMeshComponent>({id, nullptr});
     }
     template <> void LoadComponent<ShaderComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
@@ -362,8 +365,10 @@ namespace DE {
     }
 
     template <> void LoadComponent<Physics::PhysicsComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
-        Physics::PhysicsComponent component{Vec3(0, 0, 0), Vec3(0, 0, 0), Vec3(0, 0, 0), n_Component["Mass"].as<double>(),
-            n_Component["Collidable"].as<bool>(), n_Component["Gravity"].as<bool>()};
+        LOG_INFO("SceneLoader", "Loading PhysicsComponent");
+        Physics::PhysicsComponent component{Vec3(0, 0, 0), Vec3(0, 0, 0),
+               n_Component["InvMass"].as<float>(), n_Component["InvInertia"].as<float>(),
+            n_Component["Collidable"].as<bool>(), n_Component["Gravity"].as<bool>(), Vec3(0, 0, 0), Vec3(0, 0, 0)};
         entity.AddComponent<Physics::PhysicsComponent>(component);
         LOG_INFO("SceneLoader", "Loaded PhysicsComponent");
     }
@@ -393,6 +398,7 @@ namespace DE {
     void LoadHierarchyNode(Ref<Scene> scene, YAML::Node n_Array, SceneHierarchy::Node load_to) {
         for (const auto& node : n_Array) {
             if (node["Entity"]) {
+                LOG_DEBUG("Loader", "loading entity");
                 Entity entity = LoadEntity(scene, node["Entity"]);
                 load_to.AddEntity(entity);
             }
@@ -477,6 +483,9 @@ namespace DE {
             LoadHierarchyNode(scene, hierarchy, scene->GetHierarchyRoot());
             LOG_INFO("SceneLoader", "Serialized scene");
             return scene;
+        } catch (const std::exception &e) {
+            LOG_ERROR("SceneLoader", "Failed to serialize scene", e.what());
+            return nullptr;
         } catch (...) {
             LOG_ERROR("SceneLoader", "Failed to serialize scene");
             return nullptr;

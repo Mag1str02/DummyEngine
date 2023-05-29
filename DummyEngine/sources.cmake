@@ -54,6 +54,8 @@ Core/Rendering/RendererOpenGL/GLDebug.cpp
 Core/Physics/SceneConstants.cpp
 Core/Physics/ForceQueue.cpp
 Core/Physics/Solver.cpp
+Core/Physics/ConvexCollider.cpp
+Core/Physics/Utils.cpp
 
 Core/ResourceManaging/AssetManager.cpp
 Core/ResourceManaging/RawData.cpp

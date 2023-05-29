@@ -49,6 +49,40 @@ Scene:
                   Distance: 5
                   Speed: 0.00999999978
           - Entity:
+              Tag: cube2
+              UUID: 214ec18617d03032346bb9b0b1227d12
+              Transformation:
+                Translation: [ 5, -6, 0 ]
+                TranslationOffset: [ 0, 0, 0 ]
+                Rotation: [ 0, 0, 0 ]
+                RotationOffset: [ 0, 0, 0 ]
+                Scale: [ 1, 1, 1 ]
+                ScaleOffset: [ 1, 1, 1 ]
+              RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+              Shader: 24116af57b6022cd2464fbf641ae946a
+              Physics:
+                InvMass: 0.1
+                InvInertia: 0.6
+                Collidable: true
+                Gravity: true
+          - Entity:
+              Tag: cube
+              UUID: 214ec18617d03032346bb9b0b1227d11
+              Transformation:
+                Translation: [ 0, -6, 0 ]
+                TranslationOffset: [ 0, 0, 0 ]
+                Rotation: [ 0, 0, 0 ]
+                RotationOffset: [ 0, 0, 0 ]
+                Scale: [ 1, 1, 1 ]
+                ScaleOffset: [ 1, 1, 1 ]
+              RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+              Shader: 24116af57b6022cd2464fbf641ae946a
+              Physics:
+                InvMass: 0.1
+                InvInertia: 0.6
+                Collidable: true
+                Gravity: true
+          - Entity:
               Tag: WallTop
               UUID: 9a7a30b9569eb870e6815d3662321c4c
               Transformation:
@@ -147,6 +181,11 @@ Scene:
                 ScaleOffset: [1, 1, 1]
               RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
               Shader: 24116af57b6022cd2464fbf641ae946a
+              Physics:
+                InvMass: 0
+                InvInertia: 0
+                Collidable: true
+                Gravity: false
     - Entity:
         Tag: Player
         UUID: 091bb46fc39a4c4e97c5cdecb95de497

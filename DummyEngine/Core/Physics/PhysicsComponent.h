@@ -2,11 +2,14 @@
 
 namespace DE::Physics {
     struct PhysicsComponent {
-        Vec3 center_of_mass;
         Vec3 speed;
         Vec3 rot_speed;
-        double mass;
+        float inv_mass;
+        float inv_inertia;
         bool collidable;
         bool gravity;
+
+        Vec3 force;
+        Vec3 torque;
     };
 }
