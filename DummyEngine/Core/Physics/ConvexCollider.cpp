@@ -178,7 +178,7 @@ DE::Vec3 DE::Physics::ConvexCollider::TransformPoint(const DE::Vec3& vec) const 
     return cpt;
 }
 
-DE::Vec3 DE::Physics::ConvexCollider::GetCollisionCenter(const DE::Vec3& collisionNormal, const DE::Vec3& planePt, float& area) const {
+std::vector<DE::Vec3> DE::Physics::ConvexCollider::GetCollisionCenter(const DE::Vec3& collisionNormal, const DE::Vec3& planePt, float& area) const {
     Plane pl(collisionNormal, planePt);
     std::vector<bool> side(_hitbox->_size, false);
     std::vector<Vec3> pts_res;
@@ -229,11 +229,9 @@ DE::Vec3 DE::Physics::ConvexCollider::GetCollisionCenter(const DE::Vec3& collisi
     }
     if(pts_res.empty()) {
         area = -1;
-        return Vec3(0);
     }
-    center /= pts_res.size();
     if (calc_area) {
         area = (y_max - y_min) * (x_max - x_min); // we dont want real area, simple aabb's area should help a lot
     }
-    return center;
+    return pts_res;
 }

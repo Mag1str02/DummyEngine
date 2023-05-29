@@ -38,7 +38,6 @@ namespace DE::Physics {
         double NextInteraction(double dt);
         Jacobian InitJacobian(Collision &collision, Vec3 dir, float dt, bool is_normal);
         void Resolve(Jacobian &j, Collision &collision, float dt, bool is_normal, Jacobian *jn);
-        void ResolveCollision(Collision &col, float dt);
 
         std::map<std::pair<UUID, UUID>, std::list<Collision>> mem;
 

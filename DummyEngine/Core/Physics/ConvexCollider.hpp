@@ -29,7 +29,7 @@ namespace DE::Physics {
         Vec3 TransformPoint(const Vec3 &vec) const;
         Vec3 Collide(const ConvexCollider &oth) const;
         Vec3 GetCollisionPoint(const Vec3 &collisionNormal, int &cnt) const;
-        Vec3 GetCollisionCenter(const Vec3 &collisionNormal, const Vec3 &planePt, float &area) const;
+        std::vector<Vec3> GetCollisionCenter(const Vec3 &collisionNormal, const Vec3 &planePt, float &area) const;
         Vec3 Normalize(const Vec3 &vec) const;
 
         Vec3 GetCenterOfMass() const;
