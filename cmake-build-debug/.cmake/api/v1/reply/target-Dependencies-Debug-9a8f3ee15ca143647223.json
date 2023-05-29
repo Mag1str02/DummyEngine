@@ -1,0 +1,296 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "D:/Kursach/DummyEngine/Sandbox/libDependenciesd.dll"
+		},
+		{
+			"path" : "DummyEngine/Libs/libDependenciesd.dll.a"
+		},
+		{
+			"path" : "D:/Kursach/DummyEngine/Sandbox/libDependenciesd.pdb"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"target_link_libraries",
+			"TARGET_LINK_LIBRARIES",
+			"add_compile_definitions",
+			"include",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"DummyEngine/Libs/CMakeLists.txt",
+			"DummyEngine/Libs/ASSIMP/code/CMakeLists.txt",
+			"platform.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 38,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 49,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1227,
+				"parent" : 3
+			},
+			{
+				"file" : 3
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 7,
+				"parent" : 5
+			},
+			{
+				"file" : 2,
+				"parent" : 6
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 3,
+				"parent" : 7
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 39,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -fdiagnostics-color=always"
+				},
+				{
+					"fragment" : "-std=gnu++20"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 8,
+					"define" : "DE_PLATFORM_WINDOWS"
+				},
+				{
+					"define" : "Dependencies_EXPORTS"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "GLFW_DLL"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 9,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/GLFW/include"
+				},
+				{
+					"backtrace" : 9,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/GLAD/include"
+				},
+				{
+					"backtrace" : 9,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/GLM"
+				},
+				{
+					"backtrace" : 9,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/include"
+				},
+				{
+					"backtrace" : 9,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/STB_IMAGE"
+				},
+				{
+					"backtrace" : 9,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/YAML/include"
+				},
+				{
+					"backtrace" : 9,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/openAL/include"
+				},
+				{
+					"backtrace" : 9,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ImGui"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ImGui/backends"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/code/../include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "D:/Kursach/DummyEngine/cmake-build-debug/DummyEngine/Libs/ASSIMP/code/../include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/openAL/include/AL"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "20"
+			},
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "zlibstatic::@570a3b7a4255d4274dd9"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "assimp::@4a6bd80bded065b6d16c"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "imgui::@c653828e0d0905eb5a41"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "glfw::@a8fb36957d0a2d24fdb9"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "glad::@e2d5ebd403d585ca81e5"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "yaml-cpp::@45564a42d59cc073b68e"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "OpenAL::@4840d98eff0a14d374ed"
+		}
+	],
+	"id" : "Dependencies::@c653828e0d0905eb5a41",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "DummyEngine\\Libs\\libimguid.dll.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "DummyEngine\\Libs\\GLAD\\libgladd.dll.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "DummyEngine\\Libs\\GLFW\\src\\libglfw3ddll.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "DummyEngine\\Libs\\ASSIMP\\lib\\libassimpd.dll.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "DummyEngine\\Libs\\YAML\\libyaml-cppd.dll.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-ldbghelp",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "DummyEngine\\Libs\\openAL\\libOpenAL32d.dll.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "DummyEngine\\Libs\\ASSIMP\\contrib\\zlib\\libzlibstaticd.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "Dependencies",
+	"nameOnDisk" : "libDependenciesd.dll",
+	"paths" : 
+	{
+		"build" : "DummyEngine/Libs",
+		"source" : "DummyEngine/Libs"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "DummyEngine/Libs/STBImplementation.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

@@ -1,0 +1,1529 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "D:/Kursach/DummyEngine/Sandbox/unit.exe"
+		},
+		{
+			"path" : "D:/Kursach/DummyEngine/Sandbox/unit.pdb"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"LINK_DIRECTORIES",
+			"target_link_libraries",
+			"TARGET_LINK_LIBRARIES",
+			"ADD_DEFINITIONS",
+			"add_definitions",
+			"add_compile_definitions",
+			"include",
+			"INCLUDE_DIRECTORIES",
+			"target_sources"
+		],
+		"files" : 
+		[
+			"DummyEngine/Libs/ASSIMP/test/CMakeLists.txt",
+			"DummyEngine/Libs/ASSIMP/code/CMakeLists.txt",
+			"DummyEngine/Libs/ASSIMP/CMakeLists.txt",
+			"platform.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 209,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 60,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 265,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 1227,
+				"parent" : 4
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 4,
+				"file" : 2,
+				"line" : 599,
+				"parent" : 6
+			},
+			{
+				"command" : 4,
+				"file" : 2,
+				"line" : 45,
+				"parent" : 6
+			},
+			{
+				"command" : 4,
+				"file" : 2,
+				"line" : 44,
+				"parent" : 6
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 248,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 249,
+				"parent" : 0
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 7,
+				"file" : 4,
+				"line" : 7,
+				"parent" : 12
+			},
+			{
+				"file" : 3,
+				"parent" : 13
+			},
+			{
+				"command" : 6,
+				"file" : 3,
+				"line" : 3,
+				"parent" : 14
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 235,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 238,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 2,
+				"line" : 139,
+				"parent" : 6
+			},
+			{
+				"command" : 8,
+				"file" : 2,
+				"line" : 231,
+				"parent" : 6
+			},
+			{
+				"command" : 8,
+				"file" : 2,
+				"line" : 515,
+				"parent" : 6
+			},
+			{
+				"command" : 8,
+				"file" : 0,
+				"line" : 40,
+				"parent" : 0
+			},
+			{
+				"command" : 8,
+				"file" : 0,
+				"line" : 47,
+				"parent" : 0
+			},
+			{
+				"command" : 8,
+				"file" : 0,
+				"line" : 234,
+				"parent" : 0
+			},
+			{
+				"command" : 9,
+				"file" : 0,
+				"line" : 226,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-fno-strict-aliasing -fPIC  -O3 -DNDEBUG -fdiagnostics-color=always"
+				},
+				{
+					"fragment" : "-std=gnu99"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 7,
+					"define" : "ASSIMP_BUILD_NO_C4D_IMPORTER"
+				},
+				{
+					"backtrace" : 8,
+					"define" : "ASSIMP_BUILD_NO_M3D_EXPORTER"
+				},
+				{
+					"backtrace" : 9,
+					"define" : "ASSIMP_BUILD_NO_M3D_IMPORTER"
+				},
+				{
+					"backtrace" : 10,
+					"define" : "ASSIMP_TEST_MODELS_DIR=\"D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/test/models\""
+				},
+				{
+					"backtrace" : 11,
+					"define" : "ASSIMP_TEST_MODELS_NONBSD_DIR=\"D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/test/models-nonbsd\""
+				},
+				{
+					"backtrace" : 15,
+					"define" : "DE_PLATFORM_WINDOWS"
+				},
+				{
+					"backtrace" : 16,
+					"define" : "RAPIDJSON_HAS_STDSTRING=1"
+				},
+				{
+					"backtrace" : 17,
+					"define" : "RAPIDJSON_NOMEMBERITERATORCLASS"
+				},
+				{
+					"backtrace" : 18,
+					"define" : "WIN32_LEAN_AND_MEAN"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 19,
+					"path" : "D:/Kursach/DummyEngine/cmake-build-release/DummyEngine/Libs/ASSIMP/include"
+				},
+				{
+					"backtrace" : 19,
+					"path" : "D:/Kursach/DummyEngine/cmake-build-release/DummyEngine/Libs/ASSIMP"
+				},
+				{
+					"backtrace" : 19,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/include"
+				},
+				{
+					"backtrace" : 19,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/code"
+				},
+				{
+					"backtrace" : 19,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/."
+				},
+				{
+					"backtrace" : 20,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/contrib/zlib"
+				},
+				{
+					"backtrace" : 20,
+					"path" : "D:/Kursach/DummyEngine/cmake-build-release/DummyEngine/Libs/ASSIMP/contrib/zlib"
+				},
+				{
+					"backtrace" : 21,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/test/unit"
+				},
+				{
+					"backtrace" : 22,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/contrib/gtest/include"
+				},
+				{
+					"backtrace" : 22,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/contrib/gtest"
+				},
+				{
+					"backtrace" : 22,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/contrib/pugixml/src"
+				},
+				{
+					"backtrace" : 23,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/test/../contrib/rapidjson/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/code/../include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/Kursach/DummyEngine/cmake-build-release/DummyEngine/Libs/ASSIMP/code/../include"
+				}
+			],
+			"language" : "C",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "99"
+			},
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-fvisibility=hidden -fno-strict-aliasing -Wall -Wno-long-long -Wa,-mbig-obj -O3 -std=gnu++17  -O3 -DNDEBUG -fdiagnostics-color=always"
+				},
+				{
+					"fragment" : "-std=gnu++17"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 7,
+					"define" : "ASSIMP_BUILD_NO_C4D_IMPORTER"
+				},
+				{
+					"backtrace" : 8,
+					"define" : "ASSIMP_BUILD_NO_M3D_EXPORTER"
+				},
+				{
+					"backtrace" : 9,
+					"define" : "ASSIMP_BUILD_NO_M3D_IMPORTER"
+				},
+				{
+					"backtrace" : 10,
+					"define" : "ASSIMP_TEST_MODELS_DIR=\"D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/test/models\""
+				},
+				{
+					"backtrace" : 11,
+					"define" : "ASSIMP_TEST_MODELS_NONBSD_DIR=\"D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/test/models-nonbsd\""
+				},
+				{
+					"backtrace" : 15,
+					"define" : "DE_PLATFORM_WINDOWS"
+				},
+				{
+					"backtrace" : 16,
+					"define" : "RAPIDJSON_HAS_STDSTRING=1"
+				},
+				{
+					"backtrace" : 17,
+					"define" : "RAPIDJSON_NOMEMBERITERATORCLASS"
+				},
+				{
+					"backtrace" : 18,
+					"define" : "WIN32_LEAN_AND_MEAN"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 19,
+					"path" : "D:/Kursach/DummyEngine/cmake-build-release/DummyEngine/Libs/ASSIMP/include"
+				},
+				{
+					"backtrace" : 19,
+					"path" : "D:/Kursach/DummyEngine/cmake-build-release/DummyEngine/Libs/ASSIMP"
+				},
+				{
+					"backtrace" : 19,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/include"
+				},
+				{
+					"backtrace" : 19,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/code"
+				},
+				{
+					"backtrace" : 19,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/."
+				},
+				{
+					"backtrace" : 20,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/contrib/zlib"
+				},
+				{
+					"backtrace" : 20,
+					"path" : "D:/Kursach/DummyEngine/cmake-build-release/DummyEngine/Libs/ASSIMP/contrib/zlib"
+				},
+				{
+					"backtrace" : 21,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/test/unit"
+				},
+				{
+					"backtrace" : 22,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/contrib/gtest/include"
+				},
+				{
+					"backtrace" : 22,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/contrib/gtest"
+				},
+				{
+					"backtrace" : 22,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/contrib/pugixml/src"
+				},
+				{
+					"backtrace" : 23,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/test/../contrib/rapidjson/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/Kursach/DummyEngine/DummyEngine/Libs/ASSIMP/code/../include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/Kursach/DummyEngine/cmake-build-release/DummyEngine/Libs/ASSIMP/code/../include"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "17"
+			},
+			"sourceIndexes" : 
+			[
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				18,
+				19,
+				20,
+				21,
+				23,
+				25,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69,
+				70,
+				71,
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89,
+				90,
+				91,
+				92,
+				94,
+				95,
+				96,
+				97,
+				98,
+				99,
+				100,
+				101,
+				102,
+				103,
+				104,
+				105,
+				106,
+				107,
+				108,
+				109,
+				110,
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
+				121,
+				122,
+				123,
+				124,
+				125,
+				126
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "zlibstatic::@570a3b7a4255d4274dd9"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "assimp::@4a6bd80bded065b6d16c"
+		}
+	],
+	"id" : "unit::@78b419d0ee6024de9f99",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-fvisibility=hidden -fno-strict-aliasing -Wall -Wno-long-long -Wa,-mbig-obj -O3 -std=gnu++17  -O3 -DNDEBUG",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-LD:\\Kursach\\DummyEngine\\cmake-build-release\\DummyEngine\\Libs\\ASSIMP",
+				"role" : "libraryPath"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-L\\lib",
+				"role" : "libraryPath"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "DummyEngine\\Libs\\ASSIMP\\lib\\libassimp.dll.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "DummyEngine\\Libs\\ASSIMP\\contrib\\zlib\\libzlibstatic.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "unit",
+	"nameOnDisk" : "unit.exe",
+	"paths" : 
+	{
+		"build" : "DummyEngine/Libs/ASSIMP/test",
+		"source" : "DummyEngine/Libs/ASSIMP/test"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "UnitTests\\Compiler",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				1,
+				2,
+				3,
+				126
+			]
+		},
+		{
+			"name" : "UnitTests\\Common",
+			"sourceIndexes" : 
+			[
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42
+			]
+		},
+		{
+			"name" : "UnitTests\\ImportExport",
+			"sourceIndexes" : 
+			[
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69,
+				70,
+				71,
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89,
+				90,
+				91,
+				92,
+				93,
+				94,
+				95,
+				96,
+				97,
+				98
+			]
+		},
+		{
+			"name" : "UnitTests\\Material",
+			"sourceIndexes" : 
+			[
+				99
+			]
+		},
+		{
+			"name" : "UnitTests\\Math",
+			"sourceIndexes" : 
+			[
+				100,
+				101,
+				102
+			]
+		},
+		{
+			"name" : "UnitTests\\PostProcess",
+			"sourceIndexes" : 
+			[
+				103,
+				104,
+				105,
+				106,
+				107,
+				108,
+				109,
+				110,
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
+				121,
+				122,
+				123,
+				124,
+				125
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/CCompilerTest.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/Main.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/code/Common/Version.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/code/Common/Base64.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utSimd.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utIOSystem.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utIOStreamBuffer.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utIssues.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utAnim.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/AssimpAPITest.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/AssimpAPITest_aiMatrix3x3.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/AssimpAPITest_aiMatrix4x4.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/AssimpAPITest_aiQuaternion.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/AssimpAPITest_aiVector2D.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/AssimpAPITest_aiVector3D.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/MathTest.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/MathTest.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/RandomNumberGeneration.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utBatchLoader.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utDefaultIOStream.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utFastAtof.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utMetadata.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/SceneDiffer.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/SceneDiffer.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/UTLogStream.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/AbstractImportExportBase.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/TestIOSystem.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/TestModelFactory.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utTypes.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utVersion.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utProfiler.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utSharedPPData.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utStringUtils.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/Common/utMesh.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/Common/utStandardShapes.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/Common/uiScene.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/Common/utLineSplitter.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/Common/utSpatialSort.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/Common/utAssertHandler.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/Common/utXmlParser.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/Common/utBase64.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/Common/utHash.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/Common/utBaseProcess.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/Assxml/utAssxmlImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utLWSImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utLWOImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utSMDImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utglTFImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utglTF2ImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utHMPImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utIFCImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utFBXImporterExporter.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utImporter.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/utExporter.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ut3DImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ut3DSImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utACImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utAMFImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utASEImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utD3MFImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utQ3DImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utSTLImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utXImporterExporter.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utX3DImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utDXFImporterExporter.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utPMXImporter.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utPLYImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utObjImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utObjTools.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utOpenGEXImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utSIBImporter.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utBlenderIntermediate.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utBlendImportAreaLight.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utBlenderImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utBlendImportMaterials.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utBlenderWork.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utBVHImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utColladaExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utColladaImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utCSMImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utB3DImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utMDCImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utAssbinImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/utAssjsonImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/utCOBImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/utOgreImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/utQ3BSPFileImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/utOFFImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/utNFFImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/utXGLImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/utMD2Importer.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/utMD5Importer.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/utMDLImporter.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/MDL/MDLHL1TestFiles.h",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/MDL/utMDLImporter_HL1_ImportSettings.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/MDL/utMDLImporter_HL1_Materials.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/MDL/utMDLImporter_HL1_Nodes.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/RAW/utRAWImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/ImportExport/Terragen/utTerragenImportExport.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utMaterialSystem.cpp",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utMatrix3x3.cpp",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utMatrix4x4.cpp",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utVector3.cpp",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utImproveCacheLocality.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utFixInfacingNormals.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utGenNormals.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utTriangulate.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utTextureTransform.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utRemoveRedundantMaterials.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utRemoveVCProcess.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utScaleProcess.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utArmaturePopulate.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utJoinVertices.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utRemoveComments.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utRemoveComponent.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utVertexTriangleAdjacency.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utSplitLargeMeshes.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utFindDegenerates.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utFindInvalidData.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utLimitBoneWeights.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utPretransformVertices.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utScenePreprocessor.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utTargetAnimation.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utSortByPType.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utSceneCombiner.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/test/unit/utGenBoundingBoxesProcess.cpp",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 24,
+			"compileGroupIndex" : 1,
+			"path" : "DummyEngine/Libs/ASSIMP/contrib/gtest/src/gtest-all.cc",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "EXECUTABLE"
+}

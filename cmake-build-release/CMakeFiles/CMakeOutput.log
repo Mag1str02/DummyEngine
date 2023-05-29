@@ -1,0 +1,850 @@
+The system is: Windows - 10.0.19045 - AMD64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: C:/Users/stark/Downloads/mingw64/mingw64/bin/gcc.exe 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.exe"
+
+The C compiler identification is GNU, found in "D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/3.25.2/CompilerIdC/a.exe"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: C:/Users/stark/Downloads/mingw64/mingw64/bin/c++.exe 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.exe"
+
+The CXX compiler identification is GNU, found in "D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/3.25.2/CompilerIdCXX/a.exe"
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-ww0cy9
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_f6f38 && [1/2] Building C object CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.obj
+Using built-in specs.
+COLLECT_GCC=C:\Users\stark\Downloads\mingw64\mingw64\bin\gcc.exe
+OFFLOAD_TARGET_NAMES=nvptx-none
+Target: x86_64-w64-mingw32
+Configured with: ../configure --prefix=/R/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc --build=x86_64-w64-mingw32 --host=x86_64-w64-mingw32 --enable-offload-targets=nvptx-none --with-pkgversion='MinGW-W64 x86_64-ucrt-mcf-seh, built by Brecht Sanders' --with-tune=generic --enable-checking=release --enable-threads=mcf --disable-sjlj-exceptions --disable-libunwind-exceptions --disable-serial-configure --disable-bootstrap --enable-host-shared --enable-plugin --disable-default-ssp --disable-rpath --disable-libstdcxx-debug --disable-version-specific-runtime-libs --with-stabs --disable-symvers --enable-languages=c,c++,fortran,lto,objc,obj-c++ --disable-gold --disable-nls --disable-stage1-checking --disable-win32-registry --disable-multilib --enable-ld --enable-libquadmath --enable-libada --enable-libssp --enable-libstdcxx --enable-lto --enable-fully-dynamic-string --enable-libgomp --enable-graphite --enable-mingw-wildcard --enable-libstdcxx-time --enable-libstdcxx-pch --with-mpc=/d/Prog/winlibs64ucrt_stage/custombuilt --with-mpfr=/d/Prog/winlibs64ucrt_stage/custombuilt --with-gmp=/d/Prog/winlibs64ucrt_stage/custombuilt --with-isl=/d/Prog/winlibs64ucrt_stage/custombuilt --enable-libstdcxx-backtrace --enable-install-libiberty --enable-__cxa_atexit --without-included-gettext --with-diagnostics-color=auto --enable-clocale=generic --with-libiconv --with-system-zlib --with-build-sysroot=/R/winlibs64ucrt_stage/gcc-13.1.0/build_mingw/mingw-w64 CFLAGS='-I/d/Prog/winlibs64ucrt_stage/custombuilt/include/libdl-win32 -Wno-int-conversion' CXXFLAGS=-Wno-int-conversion LDFLAGS='-pthread -Wl,--dynamicbase -Wl,--high-entropy-va -Wl,--nxcompat -Wl,--tsaware'
+Thread model: mcf
+Supported LTO compression algorithms: zlib zstd
+gcc version 13.1.0 (MinGW-W64 x86_64-ucrt-mcf-seh, built by Brecht Sanders) 
+COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_f6f38.dir/'
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/cc1.exe -quiet -v -iprefix C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/ -U_REENTRANT C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/cmake/win/x64/share/cmake-3.25/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_f6f38.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -fdiagnostics-color=always -o C:\Users\stark\AppData\Local\Temp\ccJLvf6I.s
+GNU C17 (MinGW-W64 x86_64-ucrt-mcf-seh, built by Brecht Sanders) version 13.1.0 (x86_64-w64-mingw32)
+	compiled by GNU C version 13.1.0, GMP version 6.2.1, MPFR version 4.2.0, MPC version 1.3.1, isl version isl-0.26-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/include"
+ignoring nonexistent directory "R:/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc/include"
+ignoring nonexistent directory "/R/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc/include"
+ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed"
+ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include"
+ignoring nonexistent directory "/mingw/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include
+End of search list.
+Compiler executable checksum: f612cbecaf7ca937647cbe132409c258
+COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_f6f38.dir/'
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/bin/as.exe -v -o CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.obj C:\Users\stark\AppData\Local\Temp\ccJLvf6I.s
+GNU assembler version 2.40 (x86_64-w64-mingw32) using BFD version (Binutils for MinGW-W64 x86_64, built by Brecht Sanders) 2.40
+COMPILER_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/bin/
+LIBRARY_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../
+COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.'
+[2/2] Linking C executable cmTC_f6f38.exe
+Using built-in specs.
+COLLECT_GCC=C:\Users\stark\Downloads\mingw64\mingw64\bin\gcc.exe
+COLLECT_LTO_WRAPPER=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/lto-wrapper.exe
+OFFLOAD_TARGET_NAMES=nvptx-none
+Target: x86_64-w64-mingw32
+Configured with: ../configure --prefix=/R/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc --build=x86_64-w64-mingw32 --host=x86_64-w64-mingw32 --enable-offload-targets=nvptx-none --with-pkgversion='MinGW-W64 x86_64-ucrt-mcf-seh, built by Brecht Sanders' --with-tune=generic --enable-checking=release --enable-threads=mcf --disable-sjlj-exceptions --disable-libunwind-exceptions --disable-serial-configure --disable-bootstrap --enable-host-shared --enable-plugin --disable-default-ssp --disable-rpath --disable-libstdcxx-debug --disable-version-specific-runtime-libs --with-stabs --disable-symvers --enable-languages=c,c++,fortran,lto,objc,obj-c++ --disable-gold --disable-nls --disable-stage1-checking --disable-win32-registry --disable-multilib --enable-ld --enable-libquadmath --enable-libada --enable-libssp --enable-libstdcxx --enable-lto --enable-fully-dynamic-string --enable-libgomp --enable-graphite --enable-mingw-wildcard --enable-libstdcxx-time --enable-libstdcxx-pch --with-mpc=/d/Prog/winlibs64ucrt_stage/custombuilt --with-mpfr=/d/Prog/winlibs64ucrt_stage/custombuilt --with-gmp=/d/Prog/winlibs64ucrt_stage/custombuilt --with-isl=/d/Prog/winlibs64ucrt_stage/custombuilt --enable-libstdcxx-backtrace --enable-install-libiberty --enable-__cxa_atexit --without-included-gettext --with-diagnostics-color=auto --enable-clocale=generic --with-libiconv --with-system-zlib --with-build-sysroot=/R/winlibs64ucrt_stage/gcc-13.1.0/build_mingw/mingw-w64 CFLAGS='-I/d/Prog/winlibs64ucrt_stage/custombuilt/include/libdl-win32 -Wno-int-conversion' CXXFLAGS=-Wno-int-conversion LDFLAGS='-pthread -Wl,--dynamicbase -Wl,--high-entropy-va -Wl,--nxcompat -Wl,--tsaware'
+Thread model: mcf
+Supported LTO compression algorithms: zlib zstd
+gcc version 13.1.0 (MinGW-W64 x86_64-ucrt-mcf-seh, built by Brecht Sanders) 
+COMPILER_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/bin/
+LIBRARY_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_f6f38.exe' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_f6f38.'
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/collect2.exe -plugin C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/liblto_plugin.dll -plugin-opt=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\Users\stark\AppData\Local\Temp\cc31ZTCM.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_eh -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmcfgthread -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lntdll -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_eh -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmcfgthread -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lntdll -m i386pep -Bdynamic -o cmTC_f6f38.exe C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/crt2.o C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtbegin.o -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0 -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../.. CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.obj --out-implib libcmTC_f6f38.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 -lgcc -lgcc_eh -lmoldname -lmingwex -lmsvcrt -lkernel32 -lmcfgthread -lkernel32 -lntdll -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lgcc_eh -lmoldname -lmingwex -lmsvcrt -lkernel32 -lmcfgthread -lkernel32 -lntdll C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtend.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_f6f38.exe' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_f6f38.'
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include]
+    add: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include]
+    add: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed]
+    add: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include]
+  end of search list found
+  collapse include dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include]
+  collapse include dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include] ==> [C:/Users/stark/Downloads/mingw64/mingw64/include]
+  collapse include dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed]
+  collapse include dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include] ==> [C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/include]
+  implicit include dirs: [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include;C:/Users/stark/Downloads/mingw64/mingw64/include;C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed;C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld\.exe|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-ww0cy9]
+  ignore line: []
+  ignore line: [Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_f6f38 && [1/2] Building C object CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.obj]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=C:\Users\stark\Downloads\mingw64\mingw64\bin\gcc.exe]
+  ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
+  ignore line: [Target: x86_64-w64-mingw32]
+  ignore line: [Configured with: ../configure --prefix=/R/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc --build=x86_64-w64-mingw32 --host=x86_64-w64-mingw32 --enable-offload-targets=nvptx-none --with-pkgversion='MinGW-W64 x86_64-ucrt-mcf-seh, built by Brecht Sanders' --with-tune=generic --enable-checking=release --enable-threads=mcf --disable-sjlj-exceptions --disable-libunwind-exceptions --disable-serial-configure --disable-bootstrap --enable-host-shared --enable-plugin --disable-default-ssp --disable-rpath --disable-libstdcxx-debug --disable-version-specific-runtime-libs --with-stabs --disable-symvers --enable-languages=c,c++,fortran,lto,objc,obj-c++ --disable-gold --disable-nls --disable-stage1-checking --disable-win32-registry --disable-multilib --enable-ld --enable-libquadmath --enable-libada --enable-libssp --enable-libstdcxx --enable-lto --enable-fully-dynamic-string --enable-libgomp --enable-graphite --enable-mingw-wildcard --enable-libstdcxx-time --enable-libstdcxx-pch --with-mpc=/d/Prog/winlibs64ucrt_stage/custombuilt --with-mpfr=/d/Prog/winlibs64ucrt_stage/custombuilt --with-gmp=/d/Prog/winlibs64ucrt_stage/custombuilt --with-isl=/d/Prog/winlibs64ucrt_stage/custombuilt --enable-libstdcxx-backtrace --enable-install-libiberty --enable-__cxa_atexit --without-included-gettext --with-diagnostics-color=auto --enable-clocale=generic --with-libiconv --with-system-zlib --with-build-sysroot=/R/winlibs64ucrt_stage/gcc-13.1.0/build_mingw/mingw-w64 CFLAGS='-I/d/Prog/winlibs64ucrt_stage/custombuilt/include/libdl-win32 -Wno-int-conversion' CXXFLAGS=-Wno-int-conversion LDFLAGS='-pthread -Wl,--dynamicbase -Wl,--high-entropy-va -Wl,--nxcompat -Wl,--tsaware']
+  ignore line: [Thread model: mcf]
+  ignore line: [Supported LTO compression algorithms: zlib zstd]
+  ignore line: [gcc version 13.1.0 (MinGW-W64 x86_64-ucrt-mcf-seh  built by Brecht Sanders) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_f6f38.dir/']
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/cc1.exe -quiet -v -iprefix C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/ -U_REENTRANT C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/cmake/win/x64/share/cmake-3.25/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_f6f38.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -fdiagnostics-color=always -o C:\Users\stark\AppData\Local\Temp\ccJLvf6I.s]
+  ignore line: [GNU C17 (MinGW-W64 x86_64-ucrt-mcf-seh  built by Brecht Sanders) version 13.1.0 (x86_64-w64-mingw32)]
+  ignore line: [	compiled by GNU C version 13.1.0  GMP version 6.2.1  MPFR version 4.2.0  MPC version 1.3.1  isl version isl-0.26-GMP]
+  ignore line: []
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/include"]
+  ignore line: [ignoring nonexistent directory "R:/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc/include"]
+  ignore line: [ignoring nonexistent directory "/R/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc/include"]
+  ignore line: [ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed"]
+  ignore line: [ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include"]
+  ignore line: [ignoring nonexistent directory "/mingw/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include]
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include]
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed]
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include]
+  ignore line: [End of search list.]
+  ignore line: [Compiler executable checksum: f612cbecaf7ca937647cbe132409c258]
+  ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_f6f38.dir/']
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/bin/as.exe -v -o CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.obj C:\Users\stark\AppData\Local\Temp\ccJLvf6I.s]
+  ignore line: [GNU assembler version 2.40 (x86_64-w64-mingw32) using BFD version (Binutils for MinGW-W64 x86_64  built by Brecht Sanders) 2.40]
+  ignore line: [COMPILER_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/bin/]
+  ignore line: [LIBRARY_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../]
+  ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.obj' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.']
+  ignore line: [[2/2] Linking C executable cmTC_f6f38.exe]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=C:\Users\stark\Downloads\mingw64\mingw64\bin\gcc.exe]
+  ignore line: [COLLECT_LTO_WRAPPER=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/lto-wrapper.exe]
+  ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
+  ignore line: [Target: x86_64-w64-mingw32]
+  ignore line: [Configured with: ../configure --prefix=/R/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc --build=x86_64-w64-mingw32 --host=x86_64-w64-mingw32 --enable-offload-targets=nvptx-none --with-pkgversion='MinGW-W64 x86_64-ucrt-mcf-seh, built by Brecht Sanders' --with-tune=generic --enable-checking=release --enable-threads=mcf --disable-sjlj-exceptions --disable-libunwind-exceptions --disable-serial-configure --disable-bootstrap --enable-host-shared --enable-plugin --disable-default-ssp --disable-rpath --disable-libstdcxx-debug --disable-version-specific-runtime-libs --with-stabs --disable-symvers --enable-languages=c,c++,fortran,lto,objc,obj-c++ --disable-gold --disable-nls --disable-stage1-checking --disable-win32-registry --disable-multilib --enable-ld --enable-libquadmath --enable-libada --enable-libssp --enable-libstdcxx --enable-lto --enable-fully-dynamic-string --enable-libgomp --enable-graphite --enable-mingw-wildcard --enable-libstdcxx-time --enable-libstdcxx-pch --with-mpc=/d/Prog/winlibs64ucrt_stage/custombuilt --with-mpfr=/d/Prog/winlibs64ucrt_stage/custombuilt --with-gmp=/d/Prog/winlibs64ucrt_stage/custombuilt --with-isl=/d/Prog/winlibs64ucrt_stage/custombuilt --enable-libstdcxx-backtrace --enable-install-libiberty --enable-__cxa_atexit --without-included-gettext --with-diagnostics-color=auto --enable-clocale=generic --with-libiconv --with-system-zlib --with-build-sysroot=/R/winlibs64ucrt_stage/gcc-13.1.0/build_mingw/mingw-w64 CFLAGS='-I/d/Prog/winlibs64ucrt_stage/custombuilt/include/libdl-win32 -Wno-int-conversion' CXXFLAGS=-Wno-int-conversion LDFLAGS='-pthread -Wl,--dynamicbase -Wl,--high-entropy-va -Wl,--nxcompat -Wl,--tsaware']
+  ignore line: [Thread model: mcf]
+  ignore line: [Supported LTO compression algorithms: zlib zstd]
+  ignore line: [gcc version 13.1.0 (MinGW-W64 x86_64-ucrt-mcf-seh  built by Brecht Sanders) ]
+  ignore line: [COMPILER_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/bin/]
+  ignore line: [LIBRARY_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_f6f38.exe' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_f6f38.']
+  link line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/collect2.exe -plugin C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/liblto_plugin.dll -plugin-opt=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\Users\stark\AppData\Local\Temp\cc31ZTCM.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_eh -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmcfgthread -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lntdll -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_eh -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmcfgthread -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lntdll -m i386pep -Bdynamic -o cmTC_f6f38.exe C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/crt2.o C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtbegin.o -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0 -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../.. CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.obj --out-implib libcmTC_f6f38.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 -lgcc -lgcc_eh -lmoldname -lmingwex -lmsvcrt -lkernel32 -lmcfgthread -lkernel32 -lntdll -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc -lgcc_eh -lmoldname -lmingwex -lmsvcrt -lkernel32 -lmcfgthread -lkernel32 -lntdll C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtend.o]
+    arg [C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/collect2.exe] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/liblto_plugin.dll] ==> ignore
+    arg [-plugin-opt=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/lto-wrapper.exe] ==> ignore
+    arg [-plugin-opt=-fresolution=C:\Users\stark\AppData\Local\Temp\cc31ZTCM.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmingw32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_eh] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmoldname] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmingwex] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmsvcrt] ==> ignore
+    arg [-plugin-opt=-pass-through=-lkernel32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmcfgthread] ==> ignore
+    arg [-plugin-opt=-pass-through=-lkernel32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lntdll] ==> ignore
+    arg [-plugin-opt=-pass-through=-ladvapi32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lshell32] ==> ignore
+    arg [-plugin-opt=-pass-through=-luser32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lkernel32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmingw32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_eh] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmoldname] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmingwex] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmsvcrt] ==> ignore
+    arg [-plugin-opt=-pass-through=-lkernel32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmcfgthread] ==> ignore
+    arg [-plugin-opt=-pass-through=-lkernel32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lntdll] ==> ignore
+    arg [-m] ==> ignore
+    arg [i386pep] ==> ignore
+    arg [-Bdynamic] ==> search dynamic
+    arg [-o] ==> ignore
+    arg [cmTC_f6f38.exe] ==> ignore
+    arg [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/crt2.o] ==> obj [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/crt2.o]
+    arg [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtbegin.o] ==> obj [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtbegin.o]
+    arg [-LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0] ==> dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0]
+    arg [-LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc] ==> dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc]
+    arg [-LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib] ==> dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib]
+    arg [-LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib] ==> dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib]
+    arg [-LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib] ==> dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib]
+    arg [-LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../..] ==> dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../..]
+    arg [CMakeFiles/cmTC_f6f38.dir/CMakeCCompilerABI.c.obj] ==> ignore
+    arg [--out-implib] ==> ignore
+    arg [libcmTC_f6f38.dll.a] ==> ignore
+    arg [--major-image-version] ==> ignore
+    arg [0] ==> ignore
+    arg [--minor-image-version] ==> ignore
+    arg [0] ==> ignore
+    arg [-lmingw32] ==> lib [mingw32]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lgcc_eh] ==> lib [gcc_eh]
+    arg [-lmoldname] ==> lib [moldname]
+    arg [-lmingwex] ==> lib [mingwex]
+    arg [-lmsvcrt] ==> lib [msvcrt]
+    arg [-lkernel32] ==> lib [kernel32]
+    arg [-lmcfgthread] ==> lib [mcfgthread]
+    arg [-lkernel32] ==> lib [kernel32]
+    arg [-lntdll] ==> lib [ntdll]
+    arg [-ladvapi32] ==> lib [advapi32]
+    arg [-lshell32] ==> lib [shell32]
+    arg [-luser32] ==> lib [user32]
+    arg [-lkernel32] ==> lib [kernel32]
+    arg [-lmingw32] ==> lib [mingw32]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lgcc_eh] ==> lib [gcc_eh]
+    arg [-lmoldname] ==> lib [moldname]
+    arg [-lmingwex] ==> lib [mingwex]
+    arg [-lmsvcrt] ==> lib [msvcrt]
+    arg [-lkernel32] ==> lib [kernel32]
+    arg [-lmcfgthread] ==> lib [mcfgthread]
+    arg [-lkernel32] ==> lib [kernel32]
+    arg [-lntdll] ==> lib [ntdll]
+    arg [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtend.o] ==> obj [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtend.o]
+  remove lib [gcc_eh]
+  remove lib [msvcrt]
+  remove lib [gcc_eh]
+  remove lib [msvcrt]
+  collapse obj [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/crt2.o] ==> [C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/lib/crt2.o]
+  collapse obj [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtbegin.o] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/crtbegin.o]
+  collapse obj [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtend.o] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/crtend.o]
+  collapse library dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0]
+  collapse library dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc]
+  collapse library dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib] ==> [C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/lib]
+  collapse library dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib]
+  collapse library dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib] ==> [C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/lib]
+  collapse library dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../..] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib]
+  implicit libs: [mingw32;gcc;moldname;mingwex;kernel32;mcfgthread;kernel32;ntdll;advapi32;shell32;user32;kernel32;mingw32;gcc;moldname;mingwex;kernel32;mcfgthread;kernel32;ntdll]
+  implicit objs: [C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/lib/crt2.o;C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/crtbegin.o;C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/crtend.o]
+  implicit dirs: [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0;C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc;C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/lib;C:/Users/stark/Downloads/mingw64/mingw64/lib]
+  implicit fwks: []
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-4mhuat
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_11f8e && [1/2] Building CXX object CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.obj
+Using built-in specs.
+COLLECT_GCC=C:\Users\stark\Downloads\mingw64\mingw64\bin\c++.exe
+OFFLOAD_TARGET_NAMES=nvptx-none
+Target: x86_64-w64-mingw32
+Configured with: ../configure --prefix=/R/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc --build=x86_64-w64-mingw32 --host=x86_64-w64-mingw32 --enable-offload-targets=nvptx-none --with-pkgversion='MinGW-W64 x86_64-ucrt-mcf-seh, built by Brecht Sanders' --with-tune=generic --enable-checking=release --enable-threads=mcf --disable-sjlj-exceptions --disable-libunwind-exceptions --disable-serial-configure --disable-bootstrap --enable-host-shared --enable-plugin --disable-default-ssp --disable-rpath --disable-libstdcxx-debug --disable-version-specific-runtime-libs --with-stabs --disable-symvers --enable-languages=c,c++,fortran,lto,objc,obj-c++ --disable-gold --disable-nls --disable-stage1-checking --disable-win32-registry --disable-multilib --enable-ld --enable-libquadmath --enable-libada --enable-libssp --enable-libstdcxx --enable-lto --enable-fully-dynamic-string --enable-libgomp --enable-graphite --enable-mingw-wildcard --enable-libstdcxx-time --enable-libstdcxx-pch --with-mpc=/d/Prog/winlibs64ucrt_stage/custombuilt --with-mpfr=/d/Prog/winlibs64ucrt_stage/custombuilt --with-gmp=/d/Prog/winlibs64ucrt_stage/custombuilt --with-isl=/d/Prog/winlibs64ucrt_stage/custombuilt --enable-libstdcxx-backtrace --enable-install-libiberty --enable-__cxa_atexit --without-included-gettext --with-diagnostics-color=auto --enable-clocale=generic --with-libiconv --with-system-zlib --with-build-sysroot=/R/winlibs64ucrt_stage/gcc-13.1.0/build_mingw/mingw-w64 CFLAGS='-I/d/Prog/winlibs64ucrt_stage/custombuilt/include/libdl-win32 -Wno-int-conversion' CXXFLAGS=-Wno-int-conversion LDFLAGS='-pthread -Wl,--dynamicbase -Wl,--high-entropy-va -Wl,--nxcompat -Wl,--tsaware'
+Thread model: mcf
+Supported LTO compression algorithms: zlib zstd
+gcc version 13.1.0 (MinGW-W64 x86_64-ucrt-mcf-seh, built by Brecht Sanders) 
+COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_11f8e.dir/'
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/cc1plus.exe -quiet -v -iprefix C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/ -U_REENTRANT C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/cmake/win/x64/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_11f8e.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -fdiagnostics-color=always -o C:\Users\stark\AppData\Local\Temp\cchVEkz0.s
+GNU C++17 (MinGW-W64 x86_64-ucrt-mcf-seh, built by Brecht Sanders) version 13.1.0 (x86_64-w64-mingw32)
+	compiled by GNU C version 13.1.0, GMP version 6.2.1, MPFR version 4.2.0, MPC version 1.3.1, isl version isl-0.26-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0"
+ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0/x86_64-w64-mingw32"
+ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0/backward"
+ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/include"
+ignoring nonexistent directory "R:/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc/include"
+ignoring nonexistent directory "/R/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc/include"
+ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed"
+ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include"
+ignoring nonexistent directory "/mingw/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0/x86_64-w64-mingw32
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0/backward
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include
+End of search list.
+Compiler executable checksum: 650cd7d4b9eff51621e3c85b6891e55e
+COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_11f8e.dir/'
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/bin/as.exe -v -o CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.obj C:\Users\stark\AppData\Local\Temp\cchVEkz0.s
+GNU assembler version 2.40 (x86_64-w64-mingw32) using BFD version (Binutils for MinGW-W64 x86_64, built by Brecht Sanders) 2.40
+COMPILER_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/bin/
+LIBRARY_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../
+COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.'
+[2/2] Linking CXX executable cmTC_11f8e.exe
+Using built-in specs.
+COLLECT_GCC=C:\Users\stark\Downloads\mingw64\mingw64\bin\c++.exe
+COLLECT_LTO_WRAPPER=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/lto-wrapper.exe
+OFFLOAD_TARGET_NAMES=nvptx-none
+Target: x86_64-w64-mingw32
+Configured with: ../configure --prefix=/R/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc --build=x86_64-w64-mingw32 --host=x86_64-w64-mingw32 --enable-offload-targets=nvptx-none --with-pkgversion='MinGW-W64 x86_64-ucrt-mcf-seh, built by Brecht Sanders' --with-tune=generic --enable-checking=release --enable-threads=mcf --disable-sjlj-exceptions --disable-libunwind-exceptions --disable-serial-configure --disable-bootstrap --enable-host-shared --enable-plugin --disable-default-ssp --disable-rpath --disable-libstdcxx-debug --disable-version-specific-runtime-libs --with-stabs --disable-symvers --enable-languages=c,c++,fortran,lto,objc,obj-c++ --disable-gold --disable-nls --disable-stage1-checking --disable-win32-registry --disable-multilib --enable-ld --enable-libquadmath --enable-libada --enable-libssp --enable-libstdcxx --enable-lto --enable-fully-dynamic-string --enable-libgomp --enable-graphite --enable-mingw-wildcard --enable-libstdcxx-time --enable-libstdcxx-pch --with-mpc=/d/Prog/winlibs64ucrt_stage/custombuilt --with-mpfr=/d/Prog/winlibs64ucrt_stage/custombuilt --with-gmp=/d/Prog/winlibs64ucrt_stage/custombuilt --with-isl=/d/Prog/winlibs64ucrt_stage/custombuilt --enable-libstdcxx-backtrace --enable-install-libiberty --enable-__cxa_atexit --without-included-gettext --with-diagnostics-color=auto --enable-clocale=generic --with-libiconv --with-system-zlib --with-build-sysroot=/R/winlibs64ucrt_stage/gcc-13.1.0/build_mingw/mingw-w64 CFLAGS='-I/d/Prog/winlibs64ucrt_stage/custombuilt/include/libdl-win32 -Wno-int-conversion' CXXFLAGS=-Wno-int-conversion LDFLAGS='-pthread -Wl,--dynamicbase -Wl,--high-entropy-va -Wl,--nxcompat -Wl,--tsaware'
+Thread model: mcf
+Supported LTO compression algorithms: zlib zstd
+gcc version 13.1.0 (MinGW-W64 x86_64-ucrt-mcf-seh, built by Brecht Sanders) 
+COMPILER_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/bin/
+LIBRARY_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/;C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_11f8e.exe' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_11f8e.'
+ C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/collect2.exe -plugin C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/liblto_plugin.dll -plugin-opt=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\Users\stark\AppData\Local\Temp\ccdriY47.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmcfgthread -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lntdll -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmcfgthread -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lntdll -m i386pep -Bdynamic -o cmTC_11f8e.exe C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/crt2.o C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtbegin.o -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0 -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../.. CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.obj --out-implib libcmTC_11f8e.dll.a --major-image-version 0 --minor-image-version 0 -lstdc++ -lmingw32 -lgcc_s -lgcc -lmoldname -lmingwex -lmsvcrt -lkernel32 -lmcfgthread -lkernel32 -lntdll -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc_s -lgcc -lmoldname -lmingwex -lmsvcrt -lkernel32 -lmcfgthread -lkernel32 -lntdll C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtend.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_11f8e.exe' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_11f8e.'
+
+
+
+Parsed CXX implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0]
+    add: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0/x86_64-w64-mingw32]
+    add: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0/backward]
+    add: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include]
+    add: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include]
+    add: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed]
+    add: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include]
+  end of search list found
+  collapse include dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0] ==> [C:/Users/stark/Downloads/mingw64/mingw64/include/c++/13.1.0]
+  collapse include dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0/x86_64-w64-mingw32] ==> [C:/Users/stark/Downloads/mingw64/mingw64/include/c++/13.1.0/x86_64-w64-mingw32]
+  collapse include dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0/backward] ==> [C:/Users/stark/Downloads/mingw64/mingw64/include/c++/13.1.0/backward]
+  collapse include dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include]
+  collapse include dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include] ==> [C:/Users/stark/Downloads/mingw64/mingw64/include]
+  collapse include dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed]
+  collapse include dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include] ==> [C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/include]
+  implicit include dirs: [C:/Users/stark/Downloads/mingw64/mingw64/include/c++/13.1.0;C:/Users/stark/Downloads/mingw64/mingw64/include/c++/13.1.0/x86_64-w64-mingw32;C:/Users/stark/Downloads/mingw64/mingw64/include/c++/13.1.0/backward;C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include;C:/Users/stark/Downloads/mingw64/mingw64/include;C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed;C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/include]
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld\.exe|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-4mhuat]
+  ignore line: []
+  ignore line: [Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_11f8e && [1/2] Building CXX object CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.obj]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=C:\Users\stark\Downloads\mingw64\mingw64\bin\c++.exe]
+  ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
+  ignore line: [Target: x86_64-w64-mingw32]
+  ignore line: [Configured with: ../configure --prefix=/R/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc --build=x86_64-w64-mingw32 --host=x86_64-w64-mingw32 --enable-offload-targets=nvptx-none --with-pkgversion='MinGW-W64 x86_64-ucrt-mcf-seh, built by Brecht Sanders' --with-tune=generic --enable-checking=release --enable-threads=mcf --disable-sjlj-exceptions --disable-libunwind-exceptions --disable-serial-configure --disable-bootstrap --enable-host-shared --enable-plugin --disable-default-ssp --disable-rpath --disable-libstdcxx-debug --disable-version-specific-runtime-libs --with-stabs --disable-symvers --enable-languages=c,c++,fortran,lto,objc,obj-c++ --disable-gold --disable-nls --disable-stage1-checking --disable-win32-registry --disable-multilib --enable-ld --enable-libquadmath --enable-libada --enable-libssp --enable-libstdcxx --enable-lto --enable-fully-dynamic-string --enable-libgomp --enable-graphite --enable-mingw-wildcard --enable-libstdcxx-time --enable-libstdcxx-pch --with-mpc=/d/Prog/winlibs64ucrt_stage/custombuilt --with-mpfr=/d/Prog/winlibs64ucrt_stage/custombuilt --with-gmp=/d/Prog/winlibs64ucrt_stage/custombuilt --with-isl=/d/Prog/winlibs64ucrt_stage/custombuilt --enable-libstdcxx-backtrace --enable-install-libiberty --enable-__cxa_atexit --without-included-gettext --with-diagnostics-color=auto --enable-clocale=generic --with-libiconv --with-system-zlib --with-build-sysroot=/R/winlibs64ucrt_stage/gcc-13.1.0/build_mingw/mingw-w64 CFLAGS='-I/d/Prog/winlibs64ucrt_stage/custombuilt/include/libdl-win32 -Wno-int-conversion' CXXFLAGS=-Wno-int-conversion LDFLAGS='-pthread -Wl,--dynamicbase -Wl,--high-entropy-va -Wl,--nxcompat -Wl,--tsaware']
+  ignore line: [Thread model: mcf]
+  ignore line: [Supported LTO compression algorithms: zlib zstd]
+  ignore line: [gcc version 13.1.0 (MinGW-W64 x86_64-ucrt-mcf-seh  built by Brecht Sanders) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_11f8e.dir/']
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/cc1plus.exe -quiet -v -iprefix C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/ -U_REENTRANT C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/cmake/win/x64/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_11f8e.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -fdiagnostics-color=always -o C:\Users\stark\AppData\Local\Temp\cchVEkz0.s]
+  ignore line: [GNU C++17 (MinGW-W64 x86_64-ucrt-mcf-seh  built by Brecht Sanders) version 13.1.0 (x86_64-w64-mingw32)]
+  ignore line: [	compiled by GNU C version 13.1.0  GMP version 6.2.1  MPFR version 4.2.0  MPC version 1.3.1  isl version isl-0.26-GMP]
+  ignore line: []
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0"]
+  ignore line: [ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0/x86_64-w64-mingw32"]
+  ignore line: [ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0/backward"]
+  ignore line: [ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/include"]
+  ignore line: [ignoring nonexistent directory "R:/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc/include"]
+  ignore line: [ignoring nonexistent directory "/R/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc/include"]
+  ignore line: [ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed"]
+  ignore line: [ignoring duplicate directory "C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/../../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include"]
+  ignore line: [ignoring nonexistent directory "/mingw/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0]
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0/x86_64-w64-mingw32]
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include/c++/13.1.0/backward]
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include]
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include]
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed]
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include]
+  ignore line: [End of search list.]
+  ignore line: [Compiler executable checksum: 650cd7d4b9eff51621e3c85b6891e55e]
+  ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_11f8e.dir/']
+  ignore line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/bin/as.exe -v -o CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.obj C:\Users\stark\AppData\Local\Temp\cchVEkz0.s]
+  ignore line: [GNU assembler version 2.40 (x86_64-w64-mingw32) using BFD version (Binutils for MinGW-W64 x86_64  built by Brecht Sanders) 2.40]
+  ignore line: [COMPILER_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/bin/]
+  ignore line: [LIBRARY_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../]
+  ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.']
+  ignore line: [[2/2] Linking CXX executable cmTC_11f8e.exe]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=C:\Users\stark\Downloads\mingw64\mingw64\bin\c++.exe]
+  ignore line: [COLLECT_LTO_WRAPPER=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/lto-wrapper.exe]
+  ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
+  ignore line: [Target: x86_64-w64-mingw32]
+  ignore line: [Configured with: ../configure --prefix=/R/winlibs64ucrt_stage/inst_gcc-13.1.0/share/gcc --build=x86_64-w64-mingw32 --host=x86_64-w64-mingw32 --enable-offload-targets=nvptx-none --with-pkgversion='MinGW-W64 x86_64-ucrt-mcf-seh, built by Brecht Sanders' --with-tune=generic --enable-checking=release --enable-threads=mcf --disable-sjlj-exceptions --disable-libunwind-exceptions --disable-serial-configure --disable-bootstrap --enable-host-shared --enable-plugin --disable-default-ssp --disable-rpath --disable-libstdcxx-debug --disable-version-specific-runtime-libs --with-stabs --disable-symvers --enable-languages=c,c++,fortran,lto,objc,obj-c++ --disable-gold --disable-nls --disable-stage1-checking --disable-win32-registry --disable-multilib --enable-ld --enable-libquadmath --enable-libada --enable-libssp --enable-libstdcxx --enable-lto --enable-fully-dynamic-string --enable-libgomp --enable-graphite --enable-mingw-wildcard --enable-libstdcxx-time --enable-libstdcxx-pch --with-mpc=/d/Prog/winlibs64ucrt_stage/custombuilt --with-mpfr=/d/Prog/winlibs64ucrt_stage/custombuilt --with-gmp=/d/Prog/winlibs64ucrt_stage/custombuilt --with-isl=/d/Prog/winlibs64ucrt_stage/custombuilt --enable-libstdcxx-backtrace --enable-install-libiberty --enable-__cxa_atexit --without-included-gettext --with-diagnostics-color=auto --enable-clocale=generic --with-libiconv --with-system-zlib --with-build-sysroot=/R/winlibs64ucrt_stage/gcc-13.1.0/build_mingw/mingw-w64 CFLAGS='-I/d/Prog/winlibs64ucrt_stage/custombuilt/include/libdl-win32 -Wno-int-conversion' CXXFLAGS=-Wno-int-conversion LDFLAGS='-pthread -Wl,--dynamicbase -Wl,--high-entropy-va -Wl,--nxcompat -Wl,--tsaware']
+  ignore line: [Thread model: mcf]
+  ignore line: [Supported LTO compression algorithms: zlib zstd]
+  ignore line: [gcc version 13.1.0 (MinGW-W64 x86_64-ucrt-mcf-seh  built by Brecht Sanders) ]
+  ignore line: [COMPILER_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/bin/]
+  ignore line: [LIBRARY_PATH=C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/]
+  ignore line: [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_11f8e.exe' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_11f8e.']
+  link line: [ C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/collect2.exe -plugin C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/liblto_plugin.dll -plugin-opt=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/lto-wrapper.exe -plugin-opt=-fresolution=C:\Users\stark\AppData\Local\Temp\ccdriY47.res -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmcfgthread -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lntdll -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32 -plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lmcfgthread -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-lntdll -m i386pep -Bdynamic -o cmTC_11f8e.exe C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/crt2.o C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtbegin.o -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0 -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib -LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../.. CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.obj --out-implib libcmTC_11f8e.dll.a --major-image-version 0 --minor-image-version 0 -lstdc++ -lmingw32 -lgcc_s -lgcc -lmoldname -lmingwex -lmsvcrt -lkernel32 -lmcfgthread -lkernel32 -lntdll -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 -lgcc_s -lgcc -lmoldname -lmingwex -lmsvcrt -lkernel32 -lmcfgthread -lkernel32 -lntdll C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtend.o]
+    arg [C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/collect2.exe] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/liblto_plugin.dll] ==> ignore
+    arg [-plugin-opt=C:/Users/stark/Downloads/mingw64/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/13.1.0/lto-wrapper.exe] ==> ignore
+    arg [-plugin-opt=-fresolution=C:\Users\stark\AppData\Local\Temp\ccdriY47.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmingw32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmoldname] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmingwex] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmsvcrt] ==> ignore
+    arg [-plugin-opt=-pass-through=-lkernel32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmcfgthread] ==> ignore
+    arg [-plugin-opt=-pass-through=-lkernel32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lntdll] ==> ignore
+    arg [-plugin-opt=-pass-through=-ladvapi32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lshell32] ==> ignore
+    arg [-plugin-opt=-pass-through=-luser32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lkernel32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmingw32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmoldname] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmingwex] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmsvcrt] ==> ignore
+    arg [-plugin-opt=-pass-through=-lkernel32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lmcfgthread] ==> ignore
+    arg [-plugin-opt=-pass-through=-lkernel32] ==> ignore
+    arg [-plugin-opt=-pass-through=-lntdll] ==> ignore
+    arg [-m] ==> ignore
+    arg [i386pep] ==> ignore
+    arg [-Bdynamic] ==> search dynamic
+    arg [-o] ==> ignore
+    arg [cmTC_11f8e.exe] ==> ignore
+    arg [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/crt2.o] ==> obj [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/crt2.o]
+    arg [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtbegin.o] ==> obj [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtbegin.o]
+    arg [-LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0] ==> dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0]
+    arg [-LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc] ==> dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc]
+    arg [-LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib] ==> dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib]
+    arg [-LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib] ==> dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib]
+    arg [-LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib] ==> dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib]
+    arg [-LC:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../..] ==> dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../..]
+    arg [CMakeFiles/cmTC_11f8e.dir/CMakeCXXCompilerABI.cpp.obj] ==> ignore
+    arg [--out-implib] ==> ignore
+    arg [libcmTC_11f8e.dll.a] ==> ignore
+    arg [--major-image-version] ==> ignore
+    arg [0] ==> ignore
+    arg [--minor-image-version] ==> ignore
+    arg [0] ==> ignore
+    arg [-lstdc++] ==> lib [stdc++]
+    arg [-lmingw32] ==> lib [mingw32]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lmoldname] ==> lib [moldname]
+    arg [-lmingwex] ==> lib [mingwex]
+    arg [-lmsvcrt] ==> lib [msvcrt]
+    arg [-lkernel32] ==> lib [kernel32]
+    arg [-lmcfgthread] ==> lib [mcfgthread]
+    arg [-lkernel32] ==> lib [kernel32]
+    arg [-lntdll] ==> lib [ntdll]
+    arg [-ladvapi32] ==> lib [advapi32]
+    arg [-lshell32] ==> lib [shell32]
+    arg [-luser32] ==> lib [user32]
+    arg [-lkernel32] ==> lib [kernel32]
+    arg [-lmingw32] ==> lib [mingw32]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lmoldname] ==> lib [moldname]
+    arg [-lmingwex] ==> lib [mingwex]
+    arg [-lmsvcrt] ==> lib [msvcrt]
+    arg [-lkernel32] ==> lib [kernel32]
+    arg [-lmcfgthread] ==> lib [mcfgthread]
+    arg [-lkernel32] ==> lib [kernel32]
+    arg [-lntdll] ==> lib [ntdll]
+    arg [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtend.o] ==> obj [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtend.o]
+  remove lib [msvcrt]
+  remove lib [msvcrt]
+  collapse obj [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/crt2.o] ==> [C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/lib/crt2.o]
+  collapse obj [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtbegin.o] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/crtbegin.o]
+  collapse obj [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/crtend.o] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/crtend.o]
+  collapse library dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0]
+  collapse library dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc]
+  collapse library dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib] ==> [C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/lib]
+  collapse library dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../lib] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib]
+  collapse library dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib] ==> [C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/lib]
+  collapse library dir [C:/Users/stark/Downloads/mingw64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../..] ==> [C:/Users/stark/Downloads/mingw64/mingw64/lib]
+  implicit libs: [stdc++;mingw32;gcc_s;gcc;moldname;mingwex;kernel32;mcfgthread;kernel32;ntdll;advapi32;shell32;user32;kernel32;mingw32;gcc_s;gcc;moldname;mingwex;kernel32;mcfgthread;kernel32;ntdll]
+  implicit objs: [C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/lib/crt2.o;C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/crtbegin.o;C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/crtend.o]
+  implicit dirs: [C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0;C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc;C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/lib;C:/Users/stark/Downloads/mingw64/mingw64/lib]
+  implicit fwks: []
+
+
+Determining if the include file sys/types.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-53j4s3
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_91b6b && [1/2] Building C object CMakeFiles/cmTC_91b6b.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_91b6b.exe
+
+
+
+Determining if the include file stdint.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-qhq720
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_7678d && [1/2] Building C object CMakeFiles/cmTC_7678d.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_7678d.exe
+
+
+
+Determining if the include file stddef.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-al2h07
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_d3e67 && [1/2] Building C object CMakeFiles/cmTC_d3e67.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_d3e67.exe
+
+
+
+Determining size of off64_t passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-rwmvtp
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_3dad0 && [1/2] Building C object CMakeFiles/cmTC_3dad0.dir/OFF64_T.c.obj
+[2/2] Linking C executable cmTC_3dad0.exe
+
+
+
+Determining if the function fseeko exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-xfdjsp
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_bdf8f && [1/2] Building C object CMakeFiles/cmTC_bdf8f.dir/CheckFunctionExists.c.obj
+[2/2] Linking C executable cmTC_bdf8f.exe
+
+
+
+Determining if the include file unistd.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-9t08g0
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_0a972 && [1/2] Building C object CMakeFiles/cmTC_0a972.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_0a972.exe
+
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-0j7boi
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_5ac5f && [1/2] Building C object CMakeFiles/cmTC_5ac5f.dir/CheckFunctionExists.c.obj
+[2/2] Linking C executable cmTC_5ac5f.exe
+
+
+
+Determining if the include file dinput.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-vc3cwh
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_76b8c && [1/2] Building C object CMakeFiles/cmTC_76b8c.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_76b8c.exe
+
+
+
+Determining if the include file xinput.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-9xc0b2
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_44434 && [1/2] Building C object CMakeFiles/cmTC_44434.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_44434.exe
+
+
+
+Performing C SOURCE FILE Test _GLFW_HAS_DEP succeeded with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-b7qe89
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_430dd && [1/2] Building C object CMakeFiles/cmTC_430dd.dir/src.c.obj
+[2/2] Linking C executable cmTC_430dd.exe
+
+
+Source file was:
+int main(void) { return 0; }
+
+Performing C SOURCE FILE Test _GLFW_HAS_ASLR succeeded with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-iid400
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_8e7b1 && [1/2] Building C object CMakeFiles/cmTC_8e7b1.dir/src.c.obj
+[2/2] Linking C executable cmTC_8e7b1.exe
+
+
+Source file was:
+int main(void) { return 0; }
+
+Performing C SOURCE FILE Test _GLFW_HAS_64ASLR succeeded with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-17fcn6
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_c0476 && [1/2] Building C object CMakeFiles/cmTC_c0476.dir/src.c.obj
+[2/2] Linking C executable cmTC_c0476.exe
+
+
+Source file was:
+int main(void) { return 0; }
+
+Performing C++ SOURCE FILE Test HAVE___RESTRICT succeeded with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-afa1jp
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_34d64 && [1/2] Building CXX object CMakeFiles/cmTC_34d64.dir/src.cxx.obj
+[2/2] Linking CXX executable cmTC_34d64.exe
+
+
+Source file was:
+int *__restrict foo;
+int main() { return 0; }
+
+Performing C++ SOURCE FILE Test HAVE_LIBATOMIC succeeded with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-czxn4x
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_9ad65 && [1/2] Building CXX object CMakeFiles/cmTC_9ad65.dir/src.cxx.obj
+[2/2] Linking CXX executable cmTC_9ad65.exe
+
+
+Source file was:
+#include <atomic>
+std::atomic<int> foo{0};
+int main() { return foo.fetch_add(2); }
+
+Performing C++ SOURCE FILE Test HAVE_WNO_CXX20_ATTR_EXT succeeded with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-smxv90
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_d7f36 && [1/2] Building CXX object CMakeFiles/cmTC_d7f36.dir/src.cxx.obj
+[2/2] Linking CXX executable cmTC_d7f36.exe
+
+
+Source file was:
+int main() { return 0; }
+
+Performing C SOURCE FILE Test HAVE_FNO_MATH_ERRNO succeeded with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-bccdym
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_fbb01 && [1/2] Building C object CMakeFiles/cmTC_fbb01.dir/src.c.obj
+[2/2] Linking C executable cmTC_fbb01.exe
+
+
+Source file was:
+int main(void) { return 0; }
+
+Performing C SOURCE FILE Test HAVE_MSSE2_SWITCH succeeded with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-4ljkqz
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_10959 && [1/2] Building C object CMakeFiles/cmTC_10959.dir/src.c.obj
+[2/2] Linking C executable cmTC_10959.exe
+
+
+Source file was:
+int main(void) { return 0; }
+
+Determining if the include file xmmintrin.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-lfmvh4
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_3c1c3 && [1/2] Building C object CMakeFiles/cmTC_3c1c3.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_3c1c3.exe
+
+
+
+Determining if the include file emmintrin.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-bqfzu4
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_de067 && [1/2] Building C object CMakeFiles/cmTC_de067.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_de067.exe
+
+
+
+Determining if the include file pmmintrin.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-jws6sn
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_b9234 && [1/2] Building C object CMakeFiles/cmTC_b9234.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_b9234.exe
+
+
+
+Determining if the include file smmintrin.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-hhxpdx
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_bfed3 && [1/2] Building C object CMakeFiles/cmTC_bfed3.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_bfed3.exe
+
+
+
+Performing C SOURCE FILE Test HAVE_SSE_INTRINSICS succeeded with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-k0hfjy
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_e090f && [1/2] Building C object CMakeFiles/cmTC_e090f.dir/src.c.obj
+[2/2] Linking C executable cmTC_e090f.exe
+
+
+Source file was:
+#include <emmintrin.h>
+        int main() {_mm_pause(); return 0;}
+
+Determining if the include file malloc.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-keri20
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_268ae && [1/2] Building C object CMakeFiles/cmTC_268ae.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_268ae.exe
+
+
+
+Determining if the include file cpuid.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-82w9n6
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_ce19b && [1/2] Building C object CMakeFiles/cmTC_ce19b.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_ce19b.exe
+
+
+
+Determining if the include file intrin.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-eby1la
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_ce5ee && [1/2] Building C object CMakeFiles/cmTC_ce5ee.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_ce5ee.exe
+
+
+
+Determining if the include file guiddef.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-gtzumf
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_7ab77 && [1/2] Building C object CMakeFiles/cmTC_7ab77.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_7ab77.exe
+
+
+
+Determining if the function pow exists in the m passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-ic71qa
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_24e0a && [1/2] Building C object CMakeFiles/cmTC_24e0a.dir/CheckFunctionExists.c.obj
+<command-line>: warning: conflicting types for built-in function 'pow'; expected 'double(double,  double)' [-Wbuiltin-declaration-mismatch]
+D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-ic71qa/CheckFunctionExists.c:7:3: note: in expansion of macro 'CHECK_FUNCTION_EXISTS'
+    7 |   CHECK_FUNCTION_EXISTS(void);
+      |   ^~~~~~~~~~~~~~~~~~~~~
+D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-ic71qa/CheckFunctionExists.c:1:1: note: 'pow' is declared in header '<math.h>'
+  +++ |+#include <math.h>
+    1 | #ifdef CHECK_FUNCTION_EXISTS
+[2/2] Linking C executable cmTC_24e0a.exe
+
+
+
+Determining if the function dlopen exists in the dl passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-dx1gxq
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_92e17 && [1/2] Building C object CMakeFiles/cmTC_92e17.dir/CheckFunctionExists.c.obj
+[2/2] Linking C executable cmTC_92e17.exe
+
+
+
+Performing C SOURCE FILE Test HAVE_GCC_GET_CPUID succeeded with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-qcj586
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_79209 && [1/2] Building C object CMakeFiles/cmTC_79209.dir/src.c.obj
+[2/2] Linking C executable cmTC_79209.exe
+
+
+Source file was:
+#include <cpuid.h>
+        int main()
+        {
+            unsigned int eax, ebx, ecx, edx;
+            return __get_cpuid(0, &eax, &ebx, &ecx, &edx);
+        }
+
+Performing C SOURCE FILE Test HAVE_CPUID_INTRINSIC succeeded with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-nlxngp
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_c866b && [1/2] Building C object CMakeFiles/cmTC_c866b.dir/src.c.obj
+[2/2] Linking C executable cmTC_c866b.exe
+
+
+Source file was:
+#include <intrin.h>
+        int main()
+        {
+            int regs[4];
+            __cpuid(regs, 0);
+            return regs[0];
+        }
+
+Determining if the _aligned_malloc exist passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-novlyb
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_8373e && [1/2] Building C object CMakeFiles/cmTC_8373e.dir/CheckSymbolExists.c.obj
+[2/2] Linking C executable cmTC_8373e.exe
+
+
+File CheckSymbolExists.c:
+/* */
+#include <malloc.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef _aligned_malloc
+  return ((int*)(&_aligned_malloc))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the getopt exist passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-t4s052
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_363f9 && [1/2] Building C object CMakeFiles/cmTC_363f9.dir/CheckSymbolExists.c.obj
+[2/2] Linking C executable cmTC_363f9.exe
+
+
+File CheckSymbolExists.c:
+/* */
+#include <unistd.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef getopt
+  return ((int*)(&getopt))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the include file dsound.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-wmx3vo
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_5fb78 && [1/2] Building C object CMakeFiles/cmTC_5fb78.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_5fb78.exe
+
+
+
+Determining if the include file mmdeviceapi.h exists passed with the following output:
+Change Dir: D:/Kursach/DummyEngine/cmake-build-release/CMakeFiles/CMakeScratch/TryCompile-lclmrw
+
+Run Build Command(s):C:/Users/stark/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe cmTC_76c17 && [1/2] Building C object CMakeFiles/cmTC_76c17.dir/CheckIncludeFile.c.obj
+[2/2] Linking C executable cmTC_76c17.exe
+
+
+

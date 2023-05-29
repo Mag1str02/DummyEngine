@@ -5,8 +5,7 @@ add_subdirectory(ASSIMP)
 add_subdirectory(GLFW)
 add_subdirectory(GLAD)
 add_subdirectory(YAML)
-
-
+add_subdirectory(openAL)
 
 set(IMGUI_INCLUDES
 	ImGui/imgui.h
@@ -44,6 +43,7 @@ target_include_directories(Dependencies
     PUBLIC ASSIMP/include
     PUBLIC STB_IMAGE
     PUBLIC YAML/include
+	PUBLIC openAL/include
     PUBLIC .
 )
 target_link_libraries(Dependencies
@@ -53,4 +53,5 @@ target_link_libraries(Dependencies
     PUBLIC assimp
     PUBLIC yaml-cpp
     PUBLIC dbghelp
+	PUBLIC OpenAL
 )

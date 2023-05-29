@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "DummyEngine/Libs/YAML/util",
+		"source" : "DummyEngine/Libs/YAML/util"
+	}
+}

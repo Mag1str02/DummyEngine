@@ -1,0 +1,149 @@
+{
+	"kind" : "toolchains",
+	"toolchains" : 
+	[
+		{
+			"compiler" : 
+			{
+				"id" : "GNU",
+				"implicit" : 
+				{
+					"includeDirectories" : 
+					[
+						"C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include",
+						"C:/Users/stark/Downloads/mingw64/mingw64/include",
+						"C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed",
+						"C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/include"
+					],
+					"linkDirectories" : 
+					[
+						"C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0",
+						"C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc",
+						"C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/lib",
+						"C:/Users/stark/Downloads/mingw64/mingw64/lib"
+					],
+					"linkFrameworkDirectories" : [],
+					"linkLibraries" : 
+					[
+						"mingw32",
+						"gcc",
+						"moldname",
+						"mingwex",
+						"kernel32",
+						"mcfgthread",
+						"kernel32",
+						"ntdll",
+						"advapi32",
+						"shell32",
+						"user32",
+						"kernel32",
+						"mingw32",
+						"gcc",
+						"moldname",
+						"mingwex",
+						"kernel32",
+						"mcfgthread",
+						"kernel32",
+						"ntdll"
+					]
+				},
+				"path" : "C:/Users/stark/Downloads/mingw64/mingw64/bin/gcc.exe",
+				"version" : "13.1.0"
+			},
+			"language" : "C",
+			"sourceFileExtensions" : 
+			[
+				"c",
+				"m"
+			]
+		},
+		{
+			"compiler" : 
+			{
+				"id" : "GNU",
+				"implicit" : 
+				{
+					"includeDirectories" : 
+					[
+						"C:/Users/stark/Downloads/mingw64/mingw64/include/c++/13.1.0",
+						"C:/Users/stark/Downloads/mingw64/mingw64/include/c++/13.1.0/x86_64-w64-mingw32",
+						"C:/Users/stark/Downloads/mingw64/mingw64/include/c++/13.1.0/backward",
+						"C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include",
+						"C:/Users/stark/Downloads/mingw64/mingw64/include",
+						"C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed",
+						"C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/include"
+					],
+					"linkDirectories" : 
+					[
+						"C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0",
+						"C:/Users/stark/Downloads/mingw64/mingw64/lib/gcc",
+						"C:/Users/stark/Downloads/mingw64/mingw64/x86_64-w64-mingw32/lib",
+						"C:/Users/stark/Downloads/mingw64/mingw64/lib"
+					],
+					"linkFrameworkDirectories" : [],
+					"linkLibraries" : 
+					[
+						"stdc++",
+						"mingw32",
+						"gcc_s",
+						"gcc",
+						"moldname",
+						"mingwex",
+						"kernel32",
+						"mcfgthread",
+						"kernel32",
+						"ntdll",
+						"advapi32",
+						"shell32",
+						"user32",
+						"kernel32",
+						"mingw32",
+						"gcc_s",
+						"gcc",
+						"moldname",
+						"mingwex",
+						"kernel32",
+						"mcfgthread",
+						"kernel32",
+						"ntdll"
+					]
+				},
+				"path" : "C:/Users/stark/Downloads/mingw64/mingw64/bin/c++.exe",
+				"version" : "13.1.0"
+			},
+			"language" : "CXX",
+			"sourceFileExtensions" : 
+			[
+				"C",
+				"M",
+				"c++",
+				"cc",
+				"cpp",
+				"cxx",
+				"mm",
+				"mpp",
+				"CPP",
+				"ixx",
+				"cppm"
+			]
+		},
+		{
+			"compiler" : 
+			{
+				"implicit" : {},
+				"path" : "C:/Users/stark/Downloads/mingw64/mingw64/bin/windres.exe"
+			},
+			"language" : "RC",
+			"sourceFileExtensions" : 
+			[
+				"rc",
+				"RC"
+			]
+		}
+	],
+	"version" : 
+	{
+		"major" : 1,
+		"minor" : 0
+	}
+}

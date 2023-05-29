@@ -51,6 +51,10 @@ Core/Rendering/RendererOpenGL/GLUniformBuffer.cpp
 Core/Rendering/RendererOpenGL/GLRenderAPI.cpp
 Core/Rendering/RendererOpenGL/GLDebug.cpp
 
+Core/SoundEngine/AudioEngineFacade.cpp
+Core/SoundEngine/AudioFile.cpp
+Core/SoundEngine/AudioEngine.cpp
+
 Core/ResourceManaging/AssetManager.cpp
 Core/ResourceManaging/RawData.cpp
 Core/ResourceManaging/ResourceManager.cpp
