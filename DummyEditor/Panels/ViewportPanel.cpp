@@ -12,8 +12,8 @@ namespace DE {
                 auto buffer    = m_FrameBuffer.lock();
                 if (buffer) {
                     ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(0)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
-                    ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(1)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
-                    ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(2)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
+                    // ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(1)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
+                    // ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(2)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
                     ToolPanel();
                 }
             }
