@@ -132,6 +132,10 @@ namespace DE {
             case Shaders::Convolution: return m_Resources.convolution;
             case Shaders::PreFileterConvolution: return m_Resources.pre_filter_convolution;
             case Shaders::BRDFConvolution: return m_Resources.brdf_convolution;
+            case Shaders::BrightnessFilter: return m_Resources.brightness_filter;
+            case Shaders::TexturedQuad: return m_Resources.copy_texture;
+            case Shaders::GaussianBlur: return m_Resources.gaussian_blur;
+            case Shaders::Bloom: return m_Resources.bloom;
             case Shaders::Last:
             case Shaders::None: return nullptr;
             default: DE_ASSERT(false, "Wrong Renderer shader requested"); break;
@@ -317,6 +321,38 @@ namespace DE {
             };
 
             m_Resources.brdf_convolution = Shader::Create(parts);
+        }
+        {
+            std::vector<ShaderPart> parts = {
+                    {  ShaderPartType::Vertex,              shaders / "Vertex/Bloom.vs"},
+                    {ShaderPartType::Fragment, shaders / "Fragment/BrightnessFilter.fs"}
+            };
+
+            m_Resources.brightness_filter = Shader::Create(parts);
+        }
+        {
+            std::vector<ShaderPart> parts = {
+                    {  ShaderPartType::Vertex,   shaders / "Vertex/TexturedQuad.vs"},
+                    {ShaderPartType::Fragment, shaders / "Fragment/TexturedQuad.fs"}
+            };
+
+            m_Resources.copy_texture = Shader::Create(parts);
+        }
+        {
+            std::vector<ShaderPart> parts = {
+                    {  ShaderPartType::Vertex,   shaders / "Vertex/TexturedQuad.vs"},
+                    {ShaderPartType::Fragment, shaders / "Fragment/GaussianBlur.fs"}
+            };
+
+            m_Resources.gaussian_blur = Shader::Create(parts);
+        }
+        {
+            std::vector<ShaderPart> parts = {
+                    {  ShaderPartType::Vertex,   shaders / "Vertex/TexturedQuad.vs"},
+                    {ShaderPartType::Fragment, shaders / "Fragment/Bloom.fs"}
+            };
+
+            m_Resources.bloom = Shader::Create(parts);
         }
 
         {

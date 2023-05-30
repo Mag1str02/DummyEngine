@@ -21,6 +21,10 @@ namespace DE {
             PreFileterConvolution,
             EquirectangularToCubeMap,
             BRDFConvolution,
+            BrightnessFilter,
+            TexturedQuad,
+            GaussianBlur,
+            Bloom,
 
             Last,
         };
@@ -85,6 +89,10 @@ namespace DE {
             Ref<Shader> convolution;
             Ref<Shader> pre_filter_convolution;
             Ref<Shader> brdf_convolution;
+            Ref<Shader> brightness_filter;
+            Ref<Shader> gaussian_blur;
+            Ref<Shader> copy_texture;
+            Ref<Shader> bloom;
         };
 
         Scope<RenderAPI> m_RenderAPI;

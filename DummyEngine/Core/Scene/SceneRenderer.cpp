@@ -1,5 +1,7 @@
 #include "DummyEngine/Core/Scene/SceneRenderer.h"
 
+#include <glad/glad.h>
+
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
@@ -8,6 +10,61 @@
 #include "DummyEngine/Core/Scene/Components.h"
 
 namespace DE {
+    void SceneRenderer::Bloom(Ref<FrameBuffer> m_FrameBuffer) {
+        m_FrameBufferLight = FrameBuffer::Create({m_FrameBuffer->GetWidth(), m_FrameBuffer->GetHeight()});
+        m_FrameBufferLight->AddColorAttachment(TextureChannels::RGBA);
+        m_FrameBufferLight->AddColorAttachment(TextureChannels::RGBA);
+        m_FrameBufferLight->SetDepthAttachment(TextureChannels::Depth);
+
+        Ref<VertexArray> quad              = Renderer::GetVertexArray(Renderer::VertexArrays::ScreenQuad);
+        Ref<Shader>      brightness_filter = Renderer::GetShader(Renderer::Shaders::BrightnessFilter);
+        Ref<Shader>      copy_texture      = Renderer::GetShader(Renderer::Shaders::TexturedQuad);
+        Ref<Shader>      gaussian_blur     = Renderer::GetShader(Renderer::Shaders::GaussianBlur);
+        Ref<Shader>      bloom             = Renderer::GetShader(Renderer::Shaders::Bloom);
+
+        m_FrameBufferLight->Bind();
+        unsigned int attachments[2] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+        glDrawBuffers(2, attachments);
+        brightness_filter->Bind();
+        brightness_filter->SetInt("u_Texture", 1);
+        brightness_filter->SetFloat("u_BrightnessTreshold", 0.98);
+        m_FrameBuffer->GetColorAttachment(0)->Bind(1);
+        Renderer::Clear();
+        Renderer::Submit(quad, brightness_filter);
+        m_FrameBufferLight->UnBind();
+
+        m_FrameBuffer->Bind();
+        gaussian_blur->Bind();
+        gaussian_blur->SetInt("u_Texture", 1);
+        gaussian_blur->SetInt("u_Horizontal", 1);
+        m_FrameBufferLight->GetColorAttachment(1)->Bind(1);
+        Renderer::Clear();
+        Renderer::Submit(quad, gaussian_blur);
+
+        m_FrameBufferLight->Bind();
+        unsigned int attachment = GL_COLOR_ATTACHMENT1;
+        glDrawBuffers(1, &attachment);
+        gaussian_blur->Bind();
+        gaussian_blur->SetInt("u_Texture", 1);
+        gaussian_blur->SetInt("u_Horizontal", 0);
+        m_FrameBuffer->GetColorAttachment(0)->Bind(1);
+        Renderer::Clear();
+        Renderer::Submit(quad, gaussian_blur);
+
+        m_FrameBuffer->Bind();
+        unsigned int attachments2[3] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
+        glDrawBuffers(3, attachments2);
+        bloom->Bind();
+        bloom->SetInt("u_Texture", 1);
+        bloom->SetInt("u_BrighnessTexture", 2);
+        bloom->SetFloat("u_Exposure", 1);
+        m_FrameBufferLight->GetColorAttachment(0)->Bind(1);
+        m_FrameBufferLight->GetColorAttachment(1)->Bind(2);
+        Renderer::Clear();
+        Renderer::Submit(quad, bloom);
+        glDrawBuffers(1, attachments2);
+    }
+
     const U32 MAX_LIGHTS_IN_SCENE      = 1000;
     const U32 MAX_INSTANCES_PER_BUFFER = 1000;
 
@@ -23,6 +80,8 @@ namespace DE {
                                                BufferElementType::Float3},
                                          MAX_LIGHTS_IN_SCENE);
         m_FrameBuffer = FrameBuffer::Create({1920, 1080});
+        m_FrameBuffer->AddColorAttachment(TextureChannels::RGBA);
+        m_FrameBuffer->AddColorAttachment(TextureChannels::RGBA);
         m_FrameBuffer->AddColorAttachment(TextureChannels::RGBA);
         m_FrameBuffer->SetDepthAttachment(TextureChannels::Depth);
     }
@@ -63,6 +122,8 @@ namespace DE {
             Renderer::Submit(target.first, target.second);
         }
         m_FrameBuffer->UnBind();
+
+        Bloom(m_FrameBuffer);
     }
 
     void SceneRenderer::UpdateShaders(const FPSCamera& camera, Entity skybox) {

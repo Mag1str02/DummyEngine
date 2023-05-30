@@ -12,6 +12,7 @@ Sandbox/DummyEditor
 Sandbox/Logs/**
 Sandbox/Cache/**
 Sandbox/**.dll
+Sandbox/**.dylib
 Sandbox/**.so**
 Sandbox/*.yml
 
