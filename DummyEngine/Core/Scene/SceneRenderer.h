@@ -19,6 +19,9 @@ namespace DE {
         void                    RequestShader(UUID shader_id);
         Ref<RenderMeshInstance> GetRenderMeshInstance(UUID mesh_id, UUID shader_ids);
 
+        Ref<FrameBuffer> m_FrameBufferLight;
+        void             Bloom(Ref<FrameBuffer> m_FrameBuffer);
+
     private:
         void UpdateShaders(const FPSCamera& camera, Entity skybox);
         void CreateInstancedMesh(UUID mesh_id, UUID shader_id);

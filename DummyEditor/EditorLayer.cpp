@@ -171,6 +171,10 @@ namespace DE {
     EditorLayer::Resources& EditorLayer::GetResources() {
         return m_Resources;
     }
+    Ref<Scene> EditorLayer::GetScene() const {
+        return m_CurrentScene;
+    }
+
     //*___Helpers______________________________________________________________________________________________________________________________________________________________________________________
 
     void EditorLayer::ReloadScripts() {

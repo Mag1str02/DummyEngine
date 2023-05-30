@@ -19,6 +19,7 @@ namespace DE {
     public:
         virtual void Bind()   = 0;
         virtual void UnBind() = 0;
+        virtual void Rebuild() = 0;
 
         virtual void Resize(U32 width, U32 height) = 0;
         virtual U32  GetWidth() const              = 0;
