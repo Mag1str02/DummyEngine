@@ -19,6 +19,7 @@ namespace DE {
 
         virtual void Bind() override;
         virtual void UnBind() override;
+        virtual void Rebuild() override;
 
         virtual void AddColorAttachment(TextureChannels format) override;
         virtual void AddColorAttachment(Ref<CubeMap> map, U32 side, U32 lod = 0) override;
@@ -35,8 +36,6 @@ namespace DE {
         virtual const FrameBufferProperties& GetProperties() const override;
 
     private:
-        void Rebuild();
-
         GLuint                m_BufferId;
         FrameBufferProperties m_Properties;
 

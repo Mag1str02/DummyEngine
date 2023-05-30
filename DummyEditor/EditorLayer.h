@@ -74,6 +74,7 @@ namespace DE {
         SceneState       GetSceneState() const;
         InputState       GetInputState() const;
         Resources&       GetResources();
+        Ref<Scene>       GetScene() const;
 
     private:
         //*___Helpers__________________________________________________________________________________________________________________________________________________________________________________
