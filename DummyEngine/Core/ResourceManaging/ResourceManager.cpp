@@ -42,7 +42,6 @@ namespace DE {
         return true;
     }
     S_METHOD_IMPL(bool, LoadHitBox, (UUID id), (id)) {
-        LOG_DEBUG("ResourceManager", "HitBox (", id, ") trying to load");
         if (m_HitBoxes.contains(id)) {
             LOG_WARNING("ResourceManager", "HitBox (", id, ") was not loaded because already loaded");
             return false;

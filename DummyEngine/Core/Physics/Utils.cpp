@@ -1,5 +1,3 @@
-#pragma once
-
 #include "DummyEngine/Utils/Types/Types.h"
 namespace DE::Physics {
 
