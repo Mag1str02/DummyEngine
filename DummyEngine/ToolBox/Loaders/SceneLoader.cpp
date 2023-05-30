@@ -309,8 +309,8 @@ namespace DE {
         if (!ResourceManager::HasRenderMesh(id) && !ResourceManager::LoadRenderMesh(id)) {
             LOG_WARNING("SceneLoader", "RenderMesh (", id, ") not found in ResourceManager");
         }
-        if (ResourceManager::LoadHitBox(id)) {
-            LOG_INFO("SceneLoader", "HitBox (", id, ") loaded in ResourceManager");
+        if (!ResourceManager::HasHitBox(id) && !ResourceManager::LoadHitBox(id)) {
+            LOG_WARNING("SceneLoader", "Failed to load HitBox (", id, ")");
         }
         entity.AddComponent<RenderMeshComponent>({id, nullptr});
     }
@@ -412,6 +412,7 @@ namespace DE {
         if (n_Entity["LightSource"]) LoadComponent<LightSource>(scene, n_Entity["LightSource"], entity);
         if (n_Entity["SkyBox"]) LoadComponent<SkyBoxComponent>(scene, n_Entity["SkyBox"], entity);
         if (n_Entity["Script"]) LoadComponent<ScriptComponent>(scene, n_Entity["Script"], entity);
+        if (n_Entity["Physics"]) LoadComponent<Physics::PhysicsComponent>(scene, n_Entity["Physics"], entity);
 
         if (entity.Has<RenderMeshComponent>() && entity.Has<ShaderComponent>()) {
             UUID mesh_id   = entity.Get<RenderMeshComponent>().id;
@@ -424,7 +425,6 @@ namespace DE {
     void LoadHierarchyNode(Ref<Scene> scene, YAML::Node n_Array, SceneHierarchy::Node load_to) {
         for (const auto& node : n_Array) {
             if (node["Entity"]) {
-                LOG_DEBUG("Loader", "loading entity");
                 Entity entity = LoadEntity(scene, node["Entity"]);
                 load_to.AddEntity(entity);
             }

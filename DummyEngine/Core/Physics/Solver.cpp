@@ -1,8 +1,8 @@
 #include "Solver.hpp"
 
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
-#include "Utils.cpp"
 #include "PhysicsComponent.h"
+#include "Utils.cpp"
 void DE::Physics::Solver::LoadScene(const DE::Ref<DE::Scene>& scene) {
     _scene     = scene;
     _constants = CreateRef<SceneConstants>();
@@ -19,6 +19,9 @@ void DE::Physics::Solver::LoadScene(const DE::Ref<DE::Scene>& scene) {
 }
 
 void DE::Physics::Solver::OnUpdate(double dt) {
+    if (!_scene) {
+        return;
+    }
     double curr_dt = 0;
     while (curr_dt < dt) {
         curr_dt += NextInteraction(dt - curr_dt);
@@ -80,13 +83,13 @@ double DE::Physics::Solver::NextInteraction(double dt) {
                 auto  rhs_pts = lhsCollider->GetCollisionCenter(collisionNormal, rhs_pt, rhs_area);
                 auto  lhs_pts = rhsCollider->GetCollisionCenter(-collisionNormal, lhs_pt, lhs_area);
 
-                auto collision_pts = lhs_pts;
+                auto  collision_pts = lhs_pts;
                 Plane dst_pl(collisionNormal, rhs_pt);
                 if (lhs_area < 0 || rhs_area < lhs_area) {
                     collision_pts = rhs_pts;
-                    dst_pl = Plane(-collisionNormal, lhs_pt);
+                    dst_pl        = Plane(-collisionNormal, lhs_pt);
                 }
-                for(const auto &collision_pt: collision_pts) {
+                for (const auto& collision_pt : collision_pts) {
                     LOG_DEBUG("CollisionPT", LOG_VEC(collision_pt));
                     float penetration = abs(dst_pl.distance(collision_pt));
 
@@ -162,28 +165,25 @@ DE::Physics::Jacobian DE::Physics::Solver::InitJacobian(DE::Physics::Collision& 
         float rest = 0.00f;
 
         Vec3 relativeVel =
-            - lhs_phys->speed - glm::cross(lhs_phys->rot_speed, collision.lhs_r)
-            + rhs_phys->speed + glm::cross(rhs_phys->rot_speed, collision.rhs_r);
+            -lhs_phys->speed - glm::cross(lhs_phys->rot_speed, collision.lhs_r) + rhs_phys->speed + glm::cross(rhs_phys->rot_speed, collision.rhs_r);
         float closingVel = glm::dot(relativeVel, dir);
-        j.m_bias = -(beta / dt) * std::max(.0f, collision.penetration - 0.001f) + rest * closingVel;
+        j.m_bias         = -(beta / dt) * std::max(.0f, collision.penetration - 0.001f) + rest * closingVel;
     }
 
-    float inv_mass = lhs_phys->inv_mass + rhs_phys->inv_mass
-                     + glm::dot(j.m_wa, lhs_phys->inv_inertia * j.m_wa) + glm::dot(j.m_wb, rhs_phys->inv_inertia * j.m_wb);
+    float inv_mass =
+        lhs_phys->inv_mass + rhs_phys->inv_mass + glm::dot(j.m_wa, lhs_phys->inv_inertia * j.m_wa) + glm::dot(j.m_wb, rhs_phys->inv_inertia * j.m_wb);
     j.m_effective_mass = 1.f / inv_mass;
-    j.m_totalLambda = 0;
+    j.m_totalLambda    = 0;
     return j;
 }
-void DE::Physics::Solver::Resolve(DE::Physics::Jacobian &j, DE::Physics::Collision& collision, float dt, bool is_normal, DE::Physics::Jacobian *jn) {
+void DE::Physics::Solver::Resolve(DE::Physics::Jacobian& j, DE::Physics::Collision& collision, float dt, bool is_normal, DE::Physics::Jacobian* jn) {
     Vec3 dir = j.m_vb;
 
     auto lhs_phys = _scene->GetByID(collision.src).GetComponent<PhysicsComponent>();
     auto rhs_phys = _scene->GetByID(collision.dest).GetComponent<PhysicsComponent>();
 
-    float jv =  glm::dot(j.m_va, lhs_phys->speed) +
-                glm::dot(j.m_wa, lhs_phys->rot_speed) +
-                glm::dot(j.m_vb, rhs_phys->speed) +
-                glm::dot(j.m_wb, rhs_phys->rot_speed);
+    float jv = glm::dot(j.m_va, lhs_phys->speed) + glm::dot(j.m_wa, lhs_phys->rot_speed) + glm::dot(j.m_vb, rhs_phys->speed) +
+               glm::dot(j.m_wb, rhs_phys->rot_speed);
 
     float lambda = j.m_effective_mass * (-(jv + j.m_bias));
 
@@ -191,9 +191,9 @@ void DE::Physics::Solver::Resolve(DE::Physics::Jacobian &j, DE::Physics::Collisi
     if (is_normal) {
         j.m_totalLambda = std::max(.0f, j.m_totalLambda + lambda);
     } else {
-        float friction = 0.25f;
+        float friction    = 0.25f;
         float maxFriction = friction * jn->m_totalLambda;
-        j.m_totalLambda = std::max(-maxFriction, std::min(maxFriction, j.m_totalLambda + lambda));
+        j.m_totalLambda   = std::max(-maxFriction, std::min(maxFriction, j.m_totalLambda + lambda));
     }
     lambda = j.m_totalLambda - oldTotalLambda;
 
