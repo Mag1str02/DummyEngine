@@ -1,8 +1,8 @@
 #version 410 core
-// const int   kBlurWidth = 5;
-// const float kWeights[kBlurWidth] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);
-const int   kBlurWidth = 12;
-const float kWeights[kBlurWidth] = float[](0.14, 0.13, 0.12, 0.11, 0.1, 0.09, 0.08, 0.07, 0.06, 0.05, 0.03, 0.02);
+const int   kBlurWidth = 5;
+const float kWeights[kBlurWidth] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);
+// const int   kBlurWidth = 12;
+// const float kWeights[kBlurWidth] = float[](0.14, 0.13, 0.12, 0.11, 0.1, 0.09, 0.08, 0.07, 0.06, 0.05, 0.03, 0.02);
 // const int   kBlurWidth = 20;
 // const float kWeights[kBlurWidth] = float[] (0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05);
 

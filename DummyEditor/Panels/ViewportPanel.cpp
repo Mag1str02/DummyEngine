@@ -11,7 +11,7 @@ namespace DE {
                 m_ViewportSize = ImGui::GetContentRegionAvail();
                 auto buffer    = m_FrameBuffer.lock();
                 if (buffer) {
-                    ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(0)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
+                    ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(0)->GetRendererId()), m_ViewportSize, {0, 1}, {1, 0});
                     // ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(1)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
                     // ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(2)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
                     ToolPanel();
@@ -68,7 +68,7 @@ namespace DE {
         if (play) {
             ImGui::SetCursorPos(cursor_pos);
             cursor_pos.x += button_size.x + button_padding.x;
-            if (ImGui::ImageButton("Play", reinterpret_cast<void*>(resources.play_icon->RendererId()), button_size)) {
+            if (ImGui::ImageButton("Play", reinterpret_cast<void*>(resources.play_icon->GetRendererId()), button_size)) {
                 if (state == State::Editing) {
                     editor.ActionRunScene();
                 } else {
@@ -79,35 +79,35 @@ namespace DE {
         if (pause) {
             ImGui::SetCursorPos(cursor_pos);
             cursor_pos.x += button_size.x + button_padding.x;
-            if (ImGui::ImageButton("Pause", reinterpret_cast<void*>(resources.pause_icon->RendererId()), button_size)) {
+            if (ImGui::ImageButton("Pause", reinterpret_cast<void*>(resources.pause_icon->GetRendererId()), button_size)) {
                 editor.ActionPauseScene();
             }
         }
         if (step) {
             ImGui::SetCursorPos(cursor_pos);
             cursor_pos.x += button_size.x + button_padding.x;
-            if (ImGui::ImageButton("Step", reinterpret_cast<void*>(resources.step_icon->RendererId()), button_size)) {
+            if (ImGui::ImageButton("Step", reinterpret_cast<void*>(resources.step_icon->GetRendererId()), button_size)) {
                 editor.ActionStepScene();
             }
         }
         if (stop) {
             ImGui::SetCursorPos(cursor_pos);
             cursor_pos.x += button_size.x + button_padding.x;
-            if (ImGui::ImageButton("Stop", reinterpret_cast<void*>(resources.stop_icon->RendererId()), button_size)) {
+            if (ImGui::ImageButton("Stop", reinterpret_cast<void*>(resources.stop_icon->GetRendererId()), button_size)) {
                 editor.ActionStopScene();
             }
         }
         if (build) {
             ImGui::SetCursorPos(cursor_pos);
             cursor_pos.x += button_size.x + button_padding.x;
-            if (ImGui::ImageButton("Build", reinterpret_cast<void*>(resources.build_icon->RendererId()), button_size)) {
+            if (ImGui::ImageButton("Build", reinterpret_cast<void*>(resources.build_icon->GetRendererId()), button_size)) {
                 editor.ActionBuild();
             }
         }
         if (build_and_run) {
             ImGui::SetCursorPos(cursor_pos);
             cursor_pos.x += button_size.x + button_padding.x;
-            if (ImGui::ImageButton("BuildAndRun", reinterpret_cast<void*>(resources.build_and_run_icon->RendererId()), button_size)) {
+            if (ImGui::ImageButton("BuildAndRun", reinterpret_cast<void*>(resources.build_and_run_icon->GetRendererId()), button_size)) {
                 editor.ActionBuildAndRun();
             }
         }

@@ -8,9 +8,15 @@ namespace DE {
             if (ImGui::Begin("  Renderer")) {
                 auto scene = m_Scene.lock();
                 if (scene) {
-                    const float mix_exposure = 0;
-                    const float min_gamma    = 0.01;
+                    const float mix_exposure  = 0;
+                    const float min_gamma     = 0.01;
+                    const float min_threshold = 0.01;
 
+                    ImGui::Separator();
+                    ImGui::Columns(2);
+                    ImGuiUtils::EditProperty("Bloom", m_Bloom);
+                    ImGuiUtils::EditProperty("BrightnessTreshold", ImGuiDataType_Float, &m_BrightnessTreshold, 0.01, &min_threshold);
+                    ImGui::Columns(1);
                     ImGui::Separator();
                     ImGui::Columns(2);
                     ImGuiUtils::EditProperty("ToneMapping", m_GammaHDR);
@@ -19,9 +25,11 @@ namespace DE {
                     ImGui::Columns(1);
                     ImGui::Separator();
 
-                    scene->GetRenderer()->Gamma    = m_Gamma;
-                    scene->GetRenderer()->Exposure = m_Exposure;
-                    scene->GetRenderer()->GammaHDR = m_GammaHDR;
+                    scene->GetRenderer()->BrightnessTreshold = m_BrightnessTreshold;
+                    scene->GetRenderer()->Gamma              = m_Gamma;
+                    scene->GetRenderer()->Bloom              = m_Bloom;
+                    scene->GetRenderer()->Exposure           = m_Exposure;
+                    scene->GetRenderer()->GammaHDR           = m_GammaHDR;
                 }
             }
             ImGui::End();

@@ -71,9 +71,19 @@ namespace DE {
         glFramebufferTexture2D(
             GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, std::dynamic_pointer_cast<GLTexture>(m_DepthAttachment.m_Texture)->m_TextureId, 0);
     }
+    void GLFrameBuffer::SetColorAttachment(Ref<Texture> texture, U32 id) {
+        if (m_ColorAttachments.size() <= id) {
+            m_ColorAttachments.resize(id + 1);
+        }
+        m_ColorAttachments[id].m_Texture = texture;
+        glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
+        glFramebufferTexture2D(
+            GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + id, GL_TEXTURE_2D, std::dynamic_pointer_cast<GLTexture>(texture)->m_TextureId, 0);
+    }
     bool GLFrameBuffer::Valid() const {
         glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
-        return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+        GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        return status == GL_FRAMEBUFFER_COMPLETE;
     }
     void GLFrameBuffer::Resize(U32 width, U32 height) {
         if ((m_Properties.width != width || m_Properties.height != height) && 0 < width && 0 < height) {

@@ -13,8 +13,10 @@ namespace DE {
     private:
         WeakRef<Scene> m_Scene;
 
-        float m_Exposure = 1;
-        float m_Gamma    = 1;
-        bool  m_GammaHDR = true;
+        float m_Exposure           = 1;
+        float m_Gamma              = 1;
+        float m_BrightnessTreshold = 1;
+        bool  m_GammaHDR           = false;
+        bool  m_Bloom              = false;
     };
 }  // namespace DE

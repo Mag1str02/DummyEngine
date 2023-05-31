@@ -3,6 +3,7 @@
 #include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"
+#include "DummyEngine/Core/Physics/PhysicsComponent.h"
 #include "DummyEngine/Core/ResourceManaging/AssetManager.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"
@@ -520,8 +521,8 @@ namespace DE {
             LOG_ERROR("SceneLoader", "Failed to serialize scene because of exception (", e.what(), ")");
         } catch (...) {
             LOG_ERROR("SceneLoader", "Failed to serialize scene");
-            return nullptr;
         }
+        return nullptr;
     }
     YAML::Node SceneLoader::Deserialize(Ref<Scene> scene) {
         return SaveNode(scene->GetHierarchyRoot());
