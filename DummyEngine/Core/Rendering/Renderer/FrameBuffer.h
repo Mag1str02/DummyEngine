@@ -16,8 +16,8 @@ namespace DE {
 
     class FrameBuffer {
     public:
-        virtual void Bind()   = 0;
-        virtual void UnBind() = 0;
+        virtual void Bind()    = 0;
+        virtual void UnBind()  = 0;
         virtual void Rebuild() = 0;
 
         virtual void Resize(U32 width, U32 height) = 0;
@@ -26,6 +26,7 @@ namespace DE {
 
         virtual void AddColorAttachment(Texture::Format format, Texture::Channels channels) = 0;
         virtual void SetDepthAttachment(Texture::Format format)                             = 0;
+        virtual void SetColorAttachment(Ref<Texture> texture, U32 id)                       = 0;
         virtual void AddColorAttachment(Ref<CubeMap>, U32 side, U32 lod = 0)                = 0;
         virtual bool Valid() const                                                          = 0;
 

@@ -1,9 +1,8 @@
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
-#include <glad/glad.h>
-
 #include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
+#include "DummyEngine/Core/Rendering/RendererOpenGL/GLDebug.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLRenderAPI.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
@@ -103,30 +102,81 @@ namespace DE {
         ++m_FrameStatistics.m_DrawnInstances;
         return Unit();
     }
-    S_METHOD_IMPL(Unit, GammeHDRCorrecion, (Ref<FrameBuffer> buffer, float exposure, float gamma), (buffer, exposure, gamma)) {
-        Ref<FrameBuffer> result        = FrameBuffer::Create({buffer->GetWidth(), buffer->GetHeight()});
-        Ref<VertexArray> quad          = Renderer::GetVertexArray(Renderer::VertexArrays::ScreenQuad);
-        Ref<Shader>      gamma_hdr     = GetShader(Shaders::GammaHDR);
-        Ref<Shader>      textured_quad = GetShader(Shaders::TexturedQuad);
-        result->AddColorAttachment(Texture::Format::F32, Texture::Channels::RGBA);
-        result->SetDepthAttachment(Texture::Format::F32);
+
+    S_METHOD_IMPL(Unit, Bloom, (Ref<Texture> texture, float threshold), (texture, threshold)) {
+        Ref<FrameBuffer> result = FrameBuffer::Create({texture->GetWidth(), texture->GetHeight()});
+
+        m_Resources.brightness_filter->Bind();
+        m_Resources.brightness_filter->SetInt("u_Texture", 1);
+        m_Resources.brightness_filter->SetFloat("u_BrightnessTreshold", threshold);
+        texture->Bind(1);
+        result->AddColorAttachment(texture->GetFormat(), texture->GetChannels());
+        result->Bind();
+        SetViewport(texture->GetWidth(), texture->GetHeight());
+        Clear();
+        Submit(m_Resources.screen_quad, m_Resources.brightness_filter);
+
+        Ref<Texture> bright_pixels = result->GetColorAttachment(0);
+        GaussianBlur(bright_pixels);
+
+        Ref<Texture> bloomed = Texture::Create(texture->GetWidth(), texture->GetHeight(), texture->GetChannels(), texture->GetFormat());
+        result->SetColorAttachment(bloomed, 0);
+        result->Bind();
+        texture->Bind(1);
+        bright_pixels->Bind(2);
+        m_Resources.bloom->Bind();
+        m_Resources.bloom->SetInt("u_Texture", 1);
+        m_Resources.bloom->SetInt("u_BrighnessTexture", 2);
+        SetViewport(texture->GetWidth(), texture->GetHeight());
+        Clear();
+        Submit(m_Resources.screen_quad, m_Resources.bloom);
+
+        texture->Copy(result, 0);
+
+        return Unit();
+    }
+    S_METHOD_IMPL(Unit, GammeHDRCorrecion, (Ref<Texture> texture, float exposure, float gamma), (texture, exposure, gamma)) {
+        Ref<FrameBuffer> result = FrameBuffer::Create({texture->GetWidth(), texture->GetHeight()});
+        result->AddColorAttachment(texture->GetFormat(), texture->GetChannels());
 
         result->Bind();
-        gamma_hdr->Bind();
-        gamma_hdr->SetInt("u_Texture", 1);
-        gamma_hdr->SetFloat("u_Exposure", exposure);
-        gamma_hdr->SetFloat("u_Gamma", gamma);
-        buffer->GetColorAttachment(0)->Bind(1);
-        Renderer::Clear();
-        Renderer::Submit(quad, gamma_hdr);
+        m_Resources.gamma_hdr->Bind();
+        m_Resources.gamma_hdr->SetInt("u_Texture", 1);
+        m_Resources.gamma_hdr->SetFloat("u_Exposure", exposure);
+        m_Resources.gamma_hdr->SetFloat("u_Gamma", gamma);
+        texture->Bind(1);
+        SetViewport(texture->GetWidth(), texture->GetHeight());
+        Clear();
+        Submit(m_Resources.screen_quad, m_Resources.gamma_hdr);
 
-        buffer->Bind();
-        textured_quad->Bind();
-        textured_quad->SetInt("u_Texture", 1);
-        result->GetColorAttachment(0)->Bind(1);
-        Renderer::Clear();
-        Renderer::Submit(quad, gamma_hdr);
+        texture->Copy(result, 0);
 
+        return Unit();
+    }
+    S_METHOD_IMPL(Unit, GaussianBlur, (Ref<Texture> texture), (texture)) {
+        Ref<FrameBuffer> result = FrameBuffer::Create({texture->GetWidth(), texture->GetHeight()});
+        result->AddColorAttachment(texture->GetFormat(), texture->GetChannels());
+
+        result->Bind();
+        texture->Bind(1);
+        m_Resources.gaussian_blur->Bind();
+        m_Resources.gaussian_blur->SetInt("u_Texture", 1);
+        m_Resources.gaussian_blur->SetInt("u_Horizontal", 1);
+        SetViewport(texture->GetWidth(), texture->GetHeight());
+        Clear();
+        Submit(m_Resources.screen_quad, m_Resources.gaussian_blur);
+
+        Ref<Texture> horizontal = result->GetColorAttachment(0);
+
+        result->SetColorAttachment(texture, 0);
+        m_Resources.gaussian_blur->Bind();
+        m_Resources.gaussian_blur->SetInt("u_Texture", 1);
+        m_Resources.gaussian_blur->SetInt("u_Horizontal", 0);
+        horizontal->Bind(1);
+        result->Bind();
+        SetViewport(texture->GetWidth(), texture->GetHeight());
+        Clear();
+        Submit(m_Resources.screen_quad, m_Resources.gaussian_blur);
         return Unit();
     }
 
@@ -391,16 +441,14 @@ namespace DE {
             m_Resources.gamma_hdr = Shader::Create(parts);
         }
         {
-            const size_t     sz          = 1024;
-            Ref<Shader>      brdf_shader = Renderer::GetShader(Renderer::Shaders::BRDFConvolution);
-            Ref<FrameBuffer> buffer      = FrameBuffer::Create({sz, sz});
-            Ref<VertexArray> quad        = Renderer::GetVertexArray(Renderer::VertexArrays::ScreenQuad);
+            const size_t     sz     = 1024;
+            Ref<FrameBuffer> buffer = FrameBuffer::Create({sz, sz});
             buffer->Bind();
             buffer->SetDepthAttachment(Texture::Format::F32);
             buffer->AddColorAttachment(Texture::Format::U8, Texture::Channels::RG);
-            Renderer::SetViewport(sz, sz);
-            Renderer::Clear();
-            Renderer::Submit(quad, brdf_shader);
+            SetViewport(sz, sz);
+            Clear();
+            Submit(m_Resources.screen_quad, m_Resources.brdf_convolution);
             m_Resources.brdf = buffer->GetColorAttachment(0);
         }
     }

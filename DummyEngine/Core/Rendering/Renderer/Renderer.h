@@ -61,7 +61,9 @@ namespace DE {
         S_METHOD_DEF(Unit, Submit, (Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& transform = Mat4(1.0f)));
         S_METHOD_DEF(Unit, Submit, (Ref<CubeMap> cube_map, const FPSCamera& camera, const Mat4& transform = Mat4(1.0f)));
 
-        S_METHOD_DEF(Unit, GammeHDRCorrecion, (Ref<FrameBuffer> buffer, float exposure, float gamma));
+        S_METHOD_DEF(Unit, Bloom, (Ref<Texture> texture, float threshold));
+        S_METHOD_DEF(Unit, GammeHDRCorrecion, (Ref<Texture> texture, float exposure, float gamma));
+        S_METHOD_DEF(Unit, GaussianBlur, (Ref<Texture> texture));
 
         S_METHOD_DEF(Unit, Enable, (RenderSetting setting));
         S_METHOD_DEF(Unit, Disable, (RenderSetting setting));

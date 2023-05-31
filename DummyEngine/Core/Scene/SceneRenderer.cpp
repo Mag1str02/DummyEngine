@@ -1,7 +1,5 @@
 #include "DummyEngine/Core/Scene/SceneRenderer.h"
 
-#include <glad/glad.h>
-
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
@@ -10,61 +8,6 @@
 #include "DummyEngine/Core/Scene/Components.h"
 
 namespace DE {
-    // void SceneRenderer::Bloom(Ref<FrameBuffer> m_FrameBuffer) {
-    //     m_FrameBufferLight = FrameBuffer::Create({m_FrameBuffer->GetWidth(), m_FrameBuffer->GetHeight()});
-    //     m_FrameBufferLight->AddColorAttachment(TextureChannels::RGBA);
-    //     m_FrameBufferLight->AddColorAttachment(TextureChannels::RGBA);
-    //     m_FrameBufferLight->SetDepthAttachment(TextureChannels::Depth);
-
-    //     Ref<VertexArray> quad              = Renderer::GetVertexArray(Renderer::VertexArrays::ScreenQuad);
-    //     Ref<Shader>      brightness_filter = Renderer::GetShader(Renderer::Shaders::BrightnessFilter);
-    //     Ref<Shader>      copy_texture      = Renderer::GetShader(Renderer::Shaders::TexturedQuad);
-    //     Ref<Shader>      gaussian_blur     = Renderer::GetShader(Renderer::Shaders::GaussianBlur);
-    //     Ref<Shader>      bloom             = Renderer::GetShader(Renderer::Shaders::Bloom);
-
-    //     m_FrameBufferLight->Bind();
-    //     unsigned int attachments[2] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
-    //     glDrawBuffers(2, attachments);
-    //     brightness_filter->Bind();
-    //     brightness_filter->SetInt("u_Texture", 1);
-    //     brightness_filter->SetFloat("u_BrightnessTreshold", 0.98);
-    //     m_FrameBuffer->GetColorAttachment(0)->Bind(1);
-    //     Renderer::Clear();
-    //     Renderer::Submit(quad, brightness_filter);
-    //     m_FrameBufferLight->UnBind();
-
-    //     m_FrameBuffer->Bind();
-    //     gaussian_blur->Bind();
-    //     gaussian_blur->SetInt("u_Texture", 1);
-    //     gaussian_blur->SetInt("u_Horizontal", 1);
-    //     m_FrameBufferLight->GetColorAttachment(1)->Bind(1);
-    //     Renderer::Clear();
-    //     Renderer::Submit(quad, gaussian_blur);
-
-    //     m_FrameBufferLight->Bind();
-    //     unsigned int attachment = GL_COLOR_ATTACHMENT1;
-    //     glDrawBuffers(1, &attachment);
-    //     gaussian_blur->Bind();
-    //     gaussian_blur->SetInt("u_Texture", 1);
-    //     gaussian_blur->SetInt("u_Horizontal", 0);
-    //     m_FrameBuffer->GetColorAttachment(0)->Bind(1);
-    //     Renderer::Clear();
-    //     Renderer::Submit(quad, gaussian_blur);
-
-    //     m_FrameBuffer->Bind();
-    //     unsigned int attachments2[3] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
-    //     glDrawBuffers(3, attachments2);
-    //     bloom->Bind();
-    //     bloom->SetInt("u_Texture", 1);
-    //     bloom->SetInt("u_BrighnessTexture", 2);
-    //     bloom->SetFloat("u_Exposure", 1);
-    //     m_FrameBufferLight->GetColorAttachment(0)->Bind(1);
-    //     m_FrameBufferLight->GetColorAttachment(1)->Bind(2);
-    //     Renderer::Clear();
-    //     Renderer::Submit(quad, bloom);
-    //     glDrawBuffers(1, attachments2);
-    // }
-
     const U32 MAX_LIGHTS_IN_SCENE      = 1000;
     const U32 MAX_INSTANCES_PER_BUFFER = 1000;
 
@@ -88,36 +31,46 @@ namespace DE {
     }
     void SceneRenderer::Render(Entity camera) {
         DE_PROFILE_SCOPE("Scene Render");
-        auto& scene_camera = camera.Get<FPSCamera>();
-        m_FrameBuffer->Bind();
-        m_Lights->Bind(LIGHT_UB_ID);
-        Renderer::SetViewport(m_FrameBuffer->GetWidth(), m_FrameBuffer->GetHeight());
-        Renderer::Clear();
-
         Entity skybox;
-        auto   skyboxes = m_Scene->m_Storage->View<SkyBoxComponent>();
-        if (!skyboxes.Empty()) {
-            skybox = *skyboxes.begin();
-        }
-        UpdateShaders(scene_camera, skybox);
-
-        if (skybox.Valid()) {
-            Mat4 transform = Mat4(1.0);
-            if (skybox.Has<TransformComponent>()) {
-                transform = skybox.Get<TransformComponent>().GetRotation();
+        {
+            DE_PROFILE_SCOPE("Shader Update");
+            auto skyboxes = m_Scene->m_Storage->View<SkyBoxComponent>();
+            if (!skyboxes.Empty()) {
+                skybox = *skyboxes.begin();
             }
-            Renderer::Submit(skybox.Get<SkyBoxComponent>()->GetMap(), scene_camera, transform);
+            UpdateShaders(camera.Get<FPSCamera>(), skybox);
         }
+        {
+            DE_PROFILE_SCOPE("Mesh Rendering");
+            m_FrameBuffer->Bind();
+            m_Lights->Bind(LIGHT_UB_ID);
+            Renderer::SetViewport(m_FrameBuffer->GetWidth(), m_FrameBuffer->GetHeight());
+            Renderer::Clear();
 
-        for (auto& [ids, target] : m_InstancedMeshes) {
-            target.first->UpdateInstanceBuffer();
-            Renderer::Submit(target.first, target.second);
+            if (skybox.Valid()) {
+                Mat4 transform = Mat4(1.0);
+                if (skybox.Has<TransformComponent>()) {
+                    transform = skybox.Get<TransformComponent>().GetRotation();
+                }
+                Renderer::Submit(skybox.Get<SkyBoxComponent>()->GetMap(), camera.Get<FPSCamera>(), transform);
+            }
+
+            for (auto& [ids, target] : m_InstancedMeshes) {
+                target.first->UpdateInstanceBuffer();
+                Renderer::Submit(target.first, target.second);
+            }
+            m_FrameBuffer->UnBind();
         }
-        m_FrameBuffer->UnBind();
-
-        // Bloom(m_FrameBuffer);
-        if (GammaHDR) {
-            Renderer::GammeHDRCorrecion(m_FrameBuffer, Exposure, Gamma);
+        {
+            DE_PROFILE_SCOPE("Post-Processing");
+            if (Bloom) {
+                DE_PROFILE_SCOPE("Bloom");
+                Renderer::Bloom(m_FrameBuffer->GetColorAttachment(0), BrightnessTreshold);
+            }
+            if (GammaHDR) {
+                DE_PROFILE_SCOPE("Gamma & HDR");
+                Renderer::GammeHDRCorrecion(m_FrameBuffer->GetColorAttachment(0), Exposure, Gamma);
+            }
         }
     }
 
