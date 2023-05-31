@@ -37,6 +37,10 @@ Scene:
         Path: Assets\Textures\Skyboxes\Sky.png
         FlipUV: false
         UUID: 8911b8a8458923946819fb45fbb794fd
+      Space:
+        Path: Assets\Textures\Skyboxes\Space.png
+        FlipUV: false
+        UUID: 8911b8a8458923946819fb45fbb214fd
     Shaders:
       PBR:
         UUID: 24116af57b6022cd2464fbf641ae946a
@@ -50,13 +54,23 @@ Scene:
       SkyContoller:
         Path: Assets\Scripts\Sky\SkyController.cpp
         UUID: 15fa3d63323b421ce0329ae14b5d2111
-      SinMovement:
-        Path: Assets\Scripts\Gate\SinMovement.cpp
-        UUID: b54e9fbf43a0fd9437c0f2c1f19082ce
   Hierarchy:
     - Node:
         Name: Enviroment
         Childs:
+          - Entity:
+              Tag: Sky
+              UUID: ed39f278255d3fc7823454ad61d716e5
+              Transformation:
+                Translation: [16.9514027, 36.2624664, -97.3881531]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [180, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              SkyBox:
+                Type: CubeMap
+                UUID: 8911b8a8458923946819fb45fbb214fd
           - Entity:
               Tag: Sun
               UUID: 4c84709484f950496a723680ffa3dd15
@@ -79,12 +93,28 @@ Scene:
                 CLQ: [0.100000001, 0.00100000005, 0]
                 InnerCone: 0
                 OuterCone: 0
-              Script:
-                UUID: b54e9fbf43a0fd9437c0f2c1f19082ce
-                Fields:
-                  Speed: 1
-                  PosB: [0, 30, 60]
-                  PosA: [0, 30, -5]
+          - Entity:
+              Tag: Sun2
+              UUID: 4c84709484f950496a723680ffa3cc15
+              Transformation:
+                Translation: [0, 30, 9.74499989]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+              Shader: 24116af57b6022cd2464fbf641ae946a
+              LightSource:
+                Type: Point
+                Ambient: [0.0599078536, 0.0599078536, 0.0599078536]
+                Diffuse: [1, 1, 1]
+                Specular: [1, 1, 1]
+                Direction: [1, 0, 0]
+                Position: [0, 30, 9.74499989]
+                CLQ: [0.100000001, 0.00100000005, 0]
+                InnerCone: 0
+                OuterCone: 0
     - Node:
         Name: Objects
         Childs:

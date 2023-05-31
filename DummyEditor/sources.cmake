@@ -9,6 +9,7 @@ set(EDITOR_SOURCES
     Panels/ViewportPanel.cpp
     Panels/MenuBar.cpp
     Panels/ProfilerPanel.cpp
+    Panels/RendererPanel.cpp
     Panels/SceneHierarchyPanel.cpp
     Panels/InspectorPanel.cpp
     Panels/ThemePanel.cpp

@@ -6,6 +6,7 @@
 #include "DummyEditor/Panels/MenuBar.h"
 #include "DummyEditor/Panels/ProfilerPanel.h"
 #include "DummyEditor/Panels/SceneHierarchyPanel.h"
+#include "DummyEditor/Panels/RendererPanel.h"
 #include "DummyEditor/Panels/ThemePanel.h"
 #include "DummyEditor/Panels/ViewportPanel.h"
 
@@ -98,16 +99,9 @@ namespace DE {
         void LoadEditorResources();
         void LoadIcons();
 
-        struct PanelsState {
-            bool m_ViewportEnabled       = true;
-            bool m_ProfilerEnabled       = true;
-            bool m_InspectorEnabled      = true;
-            bool m_SceneHierarchyEnabled = true;
-        };
         SceneScriptState m_SceneScriptState = SceneScriptState::Uncompiled;
         InputState       m_InputState       = InputState::NonSpecified;
         SceneState       m_SceneState       = SceneState::None;
-        PanelsState      m_PanelState;
 
         ImGuiManager        m_ImGuiManager;
         ViewportPanel       m_Viewport;
@@ -116,6 +110,7 @@ namespace DE {
         ProfilerPanel       m_Profiler;
         ThemePanel          m_ThemePanel;
         MenuBar             m_MenuBar;
+        RendererPanel       m_RendererPanel;
 
         Ref<Scene>               m_CurrentScene;
         SceneFileData            m_SceneFileData;

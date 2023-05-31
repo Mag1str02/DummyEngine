@@ -7,7 +7,7 @@ namespace DE {
         Phong,
         PBR,
     };
-    enum class TextureChannels { None = 0, RED, RG, RGB, RGBA, Depth };
+    enum class TextureChannels { None = 0, RED, RG, RGB, RGBA };
     enum class TextureFormat {
         None = 0,
         U8,
@@ -22,9 +22,8 @@ namespace DE {
         Back   = 5,
         Front  = 4,
     };
-    std::string TextureFormatToStr(TextureChannels format);
-    U32         ChannelAmount(TextureChannels format);
-    U32         FormatSize(TextureFormat format);
+    U32 ChannelAmount(TextureChannels format);
+    U32 FormatSize(TextureFormat format);
 
     struct ShaderPart {
         ShaderPartType type;

@@ -2,6 +2,7 @@
 
 #include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
 #include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
+#include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
 #include "DummyEngine/Core/Rendering/Renderer/RenderAPI.h"
 #include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
@@ -25,6 +26,7 @@ namespace DE {
             TexturedQuad,
             GaussianBlur,
             Bloom,
+            GammaHDR,
 
             Last,
         };
@@ -58,6 +60,8 @@ namespace DE {
         S_METHOD_DEF(Unit, Submit, (Ref<VertexArray> vertex_array, Ref<Shader> shader, const Mat4& transform = Mat4(1.0f)));
         S_METHOD_DEF(Unit, Submit, (Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& transform = Mat4(1.0f)));
         S_METHOD_DEF(Unit, Submit, (Ref<CubeMap> cube_map, const FPSCamera& camera, const Mat4& transform = Mat4(1.0f)));
+
+        S_METHOD_DEF(Unit, GammeHDRCorrecion, (Ref<FrameBuffer> buffer, float exposure, float gamma));
 
         S_METHOD_DEF(Unit, Enable, (RenderSetting setting));
         S_METHOD_DEF(Unit, Disable, (RenderSetting setting));
@@ -93,6 +97,7 @@ namespace DE {
             Ref<Shader> gaussian_blur;
             Ref<Shader> copy_texture;
             Ref<Shader> bloom;
+            Ref<Shader> gamma_hdr;
         };
 
         Scope<RenderAPI> m_RenderAPI;
