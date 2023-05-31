@@ -2,22 +2,21 @@
 
 #include <glad/glad.h>
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Rendering/Renderer/Texture.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
 
-    class GLTexture : public Texture
-    {
+    class GLTexture : public Texture {
     public:
-        GLTexture() = delete;
-        GLTexture(const GLTexture& other) = delete;
-        GLTexture(GLTexture&& other) = delete;
+        GLTexture()                                  = delete;
+        GLTexture(const GLTexture& other)            = delete;
+        GLTexture(GLTexture&& other)                 = delete;
         GLTexture& operator=(const GLTexture& other) = delete;
-        GLTexture& operator=(GLTexture&& other) = delete;
+        GLTexture& operator=(GLTexture&& other)      = delete;
 
-        GLTexture(U32 width, U32 height, TextureChannels format);
+        GLTexture(U32 width, U32 height, Texture::Channels channels, Texture::Format format);
+        GLTexture(Texture::Channels channels, Texture::Format format);
         GLTexture(const TextureData& data);
 
         virtual ~GLTexture();
@@ -26,15 +25,14 @@ namespace DE
         virtual U32 Height() const override;
         virtual U32 RendererId() const override;
 
-        virtual void SetData(const void* data, U32 size) override;
-
+        virtual void Resize(U32 width, U32 height) override;
         virtual void Bind(U32 slot) const override;
 
     private:
         friend class GLFrameBuffer;
-        
-        U32 m_Width;
-        U32 m_Height;
+
+        U32    m_Width;
+        U32    m_Height;
         GLuint m_TextureId;
         GLenum m_InternalFormat;
         GLenum m_Format;

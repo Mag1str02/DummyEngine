@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DummyEngine/Core/Rendering/Renderer/Texture.h"
 #include "DummyEngine/Core/ResourceManaging/RawData.h"
 #include "DummyEngine/Utils/Base.h"
 
@@ -11,6 +12,6 @@ namespace DE {
         virtual float& GetLOD()             = 0;
 
         static Ref<CubeMap> Create(const Ref<TextureData> texture_data);
-        static Ref<CubeMap> Create(U32 size, TextureFormat format, TextureChannels channels, bool gen_mipmap = false);
+        static Ref<CubeMap> Create(U32 size, Texture::Format format, Texture::Channels channels, bool gen_mipmap = false);
     };
 }  // namespace DE

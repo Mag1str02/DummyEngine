@@ -20,7 +20,7 @@ namespace DE {
         }
         return nullptr;
     }
-    Ref<CubeMap> CubeMap::Create(U32 size, TextureFormat format, TextureChannels channels, bool gen_mipmap) {
+    Ref<CubeMap> CubeMap::Create(U32 size, Texture::Format format, Texture::Channels channels, bool gen_mipmap) {
         switch (Renderer::CurrentAPI()) {
             case API::OpenGL: return CreateRef<GLCubeMap>(size, format, channels, gen_mipmap);
             case API::Vulkan: {

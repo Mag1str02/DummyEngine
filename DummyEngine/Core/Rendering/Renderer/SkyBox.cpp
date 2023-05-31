@@ -1,7 +1,5 @@
 #include "DummyEngine/Core/Rendering/Renderer/SkyBox.h"
 
-#include <glad/glad.h>
-
 #include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
@@ -41,17 +39,17 @@ namespace DE {
 
     Ref<CubeMap> SkyBox::GenRawCubeMap(Ref<TextureData> texture) {
         Ref<Texture>     tex    = Texture::Create(*texture);
-        Ref<CubeMap>     res    = CubeMap::Create(SKYBOX_SIZE, texture->Format(), texture->Channels());
+        Ref<CubeMap>     res    = CubeMap::Create(SKYBOX_SIZE, Texture::DataFormat(texture->Format()), Texture::DataChannels(texture->Channels()));
         Ref<Shader>      shader = Renderer::GetShader(Renderer::Shaders::EquirectangularToCubeMap);
         Ref<VertexArray> cube   = Renderer::GetVertexArray(Renderer::VertexArrays::Cube);
 
         Mat4 projection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
-        Mat4 views[]    = {glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)),
-                           glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)),
-                           glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
-                           glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)),
-                           glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)),
-                           glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f))};
+        Mat4 views[]    = {glm::lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(1.0f, 0.0f, 0.0f), Vec3(0.0f, -1.0f, 0.0f)),
+                           glm::lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(-1.0f, 0.0f, 0.0f), Vec3(0.0f, -1.0f, 0.0f)),
+                           glm::lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f), Vec3(0.0f, 0.0f, 1.0f)),
+                           glm::lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, -1.0f, 0.0f), Vec3(0.0f, 0.0f, -1.0f)),
+                           glm::lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 1.0f), Vec3(0.0f, -1.0f, 0.0f)),
+                           glm::lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, -1.0f), Vec3(0.0f, -1.0f, 0.0f))};
 
         shader->Bind();
         shader->SetInt("u_EquirectangularMap", 1);
@@ -60,7 +58,7 @@ namespace DE {
             shader->SetMat4("u_View", views[i]);
             Ref<FrameBuffer> buf = FrameBuffer::Create({SKYBOX_SIZE, SKYBOX_SIZE});
             buf->Bind();
-            buf->SetDepthAttachment(TextureChannels::Depth);
+            buf->SetDepthAttachment(Texture::Format::F32);
             buf->AddColorAttachment(res, i);
             Renderer::SetViewport(SKYBOX_SIZE, SKYBOX_SIZE);
             Renderer::Clear();
@@ -70,17 +68,17 @@ namespace DE {
         return res;
     }
     void SkyBox::BakeIBL() {
-        m_Irradiance            = CubeMap::Create(SKYBOX_SIZE, TextureFormat::U8, TextureChannels::RGB);
+        m_Irradiance            = CubeMap::Create(SKYBOX_SIZE, Texture::Format::U8, Texture::Channels::RGB);
         Ref<Shader>      shader = Renderer::GetShader(Renderer::Shaders::Convolution);
         Ref<VertexArray> cube   = Renderer::GetVertexArray(Renderer::VertexArrays::Cube);
 
         Mat4 projection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
-        Mat4 views[]    = {glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)),
-                           glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)),
-                           glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
-                           glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)),
-                           glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)),
-                           glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f))};
+        Mat4 views[]    = {glm::lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(1.0f, 0.0f, 0.0f), Vec3(0.0f, -1.0f, 0.0f)),
+                           glm::lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(-1.0f, 0.0f, 0.0f), Vec3(0.0f, -1.0f, 0.0f)),
+                           glm::lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f), Vec3(0.0f, 0.0f, 1.0f)),
+                           glm::lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, -1.0f, 0.0f), Vec3(0.0f, 0.0f, -1.0f)),
+                           glm::lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 1.0f), Vec3(0.0f, -1.0f, 0.0f)),
+                           glm::lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, -1.0f), Vec3(0.0f, -1.0f, 0.0f))};
         shader->Bind();
         shader->SetInt("u_CubeMap", 1);
         shader->SetMat4("u_Transform", Mat4(1.0));
@@ -89,7 +87,7 @@ namespace DE {
             shader->SetMat4("u_View", views[i]);
             Ref<FrameBuffer> buf = FrameBuffer::Create({SKYBOX_SIZE, SKYBOX_SIZE});
             buf->Bind();
-            buf->SetDepthAttachment(TextureChannels::Depth);
+            buf->SetDepthAttachment(Texture::Format::F32);
             buf->AddColorAttachment(m_Irradiance, i);
             Renderer::SetViewport(SKYBOX_SIZE, SKYBOX_SIZE);
             Renderer::Clear();
@@ -98,7 +96,7 @@ namespace DE {
         }
 
         U32 curr_size           = SKYBOX_SIZE;
-        m_Prefilter             = CubeMap::Create(curr_size, TextureFormat::U8, TextureChannels::RGB, true);
+        m_Prefilter             = CubeMap::Create(curr_size, Texture::Format::U8, Texture::Channels::RGB, true);
         Ref<Shader> s_prefilter = Renderer::GetShader(Renderer::Shaders::PreFileterConvolution);
         s_prefilter->Bind();
         s_prefilter->SetInt("u_CubeMap", 1);
@@ -111,7 +109,7 @@ namespace DE {
                 s_prefilter->SetMat4("u_View", views[i]);
                 Ref<FrameBuffer> buf = FrameBuffer::Create({curr_size, curr_size});
                 buf->Bind();
-                buf->SetDepthAttachment(TextureChannels::Depth);
+                buf->SetDepthAttachment(Texture::Format::F32);
                 buf->AddColorAttachment(m_Prefilter, i, lod);
                 m_Raw->Bind(1);
                 Renderer::SetViewport(curr_size, curr_size);

@@ -103,6 +103,32 @@ namespace DE {
         ++m_FrameStatistics.m_DrawnInstances;
         return Unit();
     }
+    S_METHOD_IMPL(Unit, GammeHDRCorrecion, (Ref<FrameBuffer> buffer, float exposure, float gamma), (buffer, exposure, gamma)) {
+        Ref<FrameBuffer> result        = FrameBuffer::Create({buffer->GetWidth(), buffer->GetHeight()});
+        Ref<VertexArray> quad          = Renderer::GetVertexArray(Renderer::VertexArrays::ScreenQuad);
+        Ref<Shader>      gamma_hdr     = GetShader(Shaders::GammaHDR);
+        Ref<Shader>      textured_quad = GetShader(Shaders::TexturedQuad);
+        result->AddColorAttachment(Texture::Format::F32, Texture::Channels::RGBA);
+        result->SetDepthAttachment(Texture::Format::F32);
+
+        result->Bind();
+        gamma_hdr->Bind();
+        gamma_hdr->SetInt("u_Texture", 1);
+        gamma_hdr->SetFloat("u_Exposure", exposure);
+        gamma_hdr->SetFloat("u_Gamma", gamma);
+        buffer->GetColorAttachment(0)->Bind(1);
+        Renderer::Clear();
+        Renderer::Submit(quad, gamma_hdr);
+
+        buffer->Bind();
+        textured_quad->Bind();
+        textured_quad->SetInt("u_Texture", 1);
+        result->GetColorAttachment(0)->Bind(1);
+        Renderer::Clear();
+        Renderer::Submit(quad, gamma_hdr);
+
+        return Unit();
+    }
 
     S_METHOD_IMPL(Unit, Enable, (RenderSetting setting), (setting)) {
         m_RenderAPI->Enable(setting);
@@ -136,6 +162,7 @@ namespace DE {
             case Shaders::TexturedQuad: return m_Resources.copy_texture;
             case Shaders::GaussianBlur: return m_Resources.gaussian_blur;
             case Shaders::Bloom: return m_Resources.bloom;
+            case Shaders::GammaHDR: return m_Resources.gamma_hdr;
             case Shaders::Last:
             case Shaders::None: return nullptr;
             default: DE_ASSERT(false, "Wrong Renderer shader requested"); break;
@@ -316,7 +343,7 @@ namespace DE {
         }
         {
             std::vector<ShaderPart> parts = {
-                {  ShaderPartType::Vertex,          shaders / "Vertex/Square2D.vs"},
+                {  ShaderPartType::Vertex,      shaders / "Vertex/TexturedQuad.vs"},
                 {ShaderPartType::Fragment, shaders / "Fragment/BRDFConvolution.fs"},
             };
 
@@ -324,45 +351,53 @@ namespace DE {
         }
         {
             std::vector<ShaderPart> parts = {
-                    {  ShaderPartType::Vertex,              shaders / "Vertex/Bloom.vs"},
-                    {ShaderPartType::Fragment, shaders / "Fragment/BrightnessFilter.fs"}
+                {  ShaderPartType::Vertex,              shaders / "Vertex/Bloom.vs"},
+                {ShaderPartType::Fragment, shaders / "Fragment/BrightnessFilter.fs"}
             };
 
             m_Resources.brightness_filter = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
-                    {  ShaderPartType::Vertex,   shaders / "Vertex/TexturedQuad.vs"},
-                    {ShaderPartType::Fragment, shaders / "Fragment/TexturedQuad.fs"}
+                {  ShaderPartType::Vertex,   shaders / "Vertex/TexturedQuad.vs"},
+                {ShaderPartType::Fragment, shaders / "Fragment/TexturedQuad.fs"}
             };
 
             m_Resources.copy_texture = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
-                    {  ShaderPartType::Vertex,   shaders / "Vertex/TexturedQuad.vs"},
-                    {ShaderPartType::Fragment, shaders / "Fragment/GaussianBlur.fs"}
+                {  ShaderPartType::Vertex,   shaders / "Vertex/TexturedQuad.vs"},
+                {ShaderPartType::Fragment, shaders / "Fragment/GaussianBlur.fs"}
             };
 
             m_Resources.gaussian_blur = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
-                    {  ShaderPartType::Vertex,   shaders / "Vertex/TexturedQuad.vs"},
-                    {ShaderPartType::Fragment, shaders / "Fragment/Bloom.fs"}
+                {  ShaderPartType::Vertex, shaders / "Vertex/TexturedQuad.vs"},
+                {ShaderPartType::Fragment,      shaders / "Fragment/Bloom.fs"}
             };
 
             m_Resources.bloom = Shader::Create(parts);
         }
 
         {
+            std::vector<ShaderPart> parts = {
+                {  ShaderPartType::Vertex, shaders / "Vertex/TexturedQuad.vs"},
+                {ShaderPartType::Fragment,   shaders / "Fragment/GammaHDR.fs"}
+            };
+
+            m_Resources.gamma_hdr = Shader::Create(parts);
+        }
+        {
             const size_t     sz          = 1024;
             Ref<Shader>      brdf_shader = Renderer::GetShader(Renderer::Shaders::BRDFConvolution);
             Ref<FrameBuffer> buffer      = FrameBuffer::Create({sz, sz});
             Ref<VertexArray> quad        = Renderer::GetVertexArray(Renderer::VertexArrays::ScreenQuad);
             buffer->Bind();
-            buffer->SetDepthAttachment(TextureChannels::Depth);
-            buffer->AddColorAttachment(TextureChannels::RG);
+            buffer->SetDepthAttachment(Texture::Format::F32);
+            buffer->AddColorAttachment(Texture::Format::U8, Texture::Channels::RG);
             Renderer::SetViewport(sz, sz);
             Renderer::Clear();
             Renderer::Submit(quad, brdf_shader);

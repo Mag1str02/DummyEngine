@@ -1,18 +1,6 @@
 #include "DummyEngine/Core/ResourceManaging/RawData.h"
 
 namespace DE {
-    std::string TextureFormatToStr(TextureChannels format) {
-        switch (format) {
-            case TextureChannels::RED: return "RED";
-            case TextureChannels::RG: return "RG";
-            case TextureChannels::RGB: return "RGB";
-            case TextureChannels::RGBA: return "RGBA";
-            case TextureChannels::Depth: return "Depth";
-            case TextureChannels::None: return "None";
-            default: DE_ASSERT(false, "Unsupported texture channels"); break;
-        }
-        return "None";
-    }
     U32 ChannelAmount(TextureChannels format) {
         switch (format) {
             case TextureChannels::RGBA: return 4;

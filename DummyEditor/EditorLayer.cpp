@@ -17,6 +17,7 @@ namespace DE {
         m_ImGuiManager.AddPanel(&m_Inspector);
         m_ImGuiManager.AddPanel(&m_Profiler);
         m_ImGuiManager.AddPanel(&m_ThemePanel);
+        m_ImGuiManager.AddPanel(&m_RendererPanel);
         m_ImGuiManager.SetMenuBar(&m_MenuBar);
 
         m_TSSystem = CreateRef<TransformSyncSystem>();
@@ -283,6 +284,7 @@ namespace DE {
         m_CurrentScene->AttachSystem(m_TSSystem);
         m_SceneHierarchy.SetActiveScene(m_CurrentScene);
         m_Inspector.SetScene(m_CurrentScene);
+        m_RendererPanel.SetScene(m_CurrentScene);
         m_Inspector.SetActiveEntity(m_SceneHierarchy.GetActiveEntity());
     }
 

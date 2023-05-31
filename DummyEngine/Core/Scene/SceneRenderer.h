@@ -22,6 +22,10 @@ namespace DE {
         Ref<FrameBuffer> m_FrameBufferLight;
         void             Bloom(Ref<FrameBuffer> m_FrameBuffer);
 
+        float Exposure = 1;
+        float Gamma    = 1;
+        bool  GammaHDR = false;
+
     private:
         void UpdateShaders(const FPSCamera& camera, Entity skybox);
         void CreateInstancedMesh(UUID mesh_id, UUID shader_id);
@@ -33,6 +37,5 @@ namespace DE {
 
         std::unordered_map<UUID, Ref<Shader>>                                                   m_Shaders;
         std::unordered_map<std::pair<UUID, UUID>, Pair<Ref<RenderMesh>, Ref<Shader>>, PairHash> m_InstancedMeshes;
-        std::unordered_map<Entity, U32>                                                         m_EntityToVPIndex;
     };
 }  // namespace DE
