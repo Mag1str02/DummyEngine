@@ -19,11 +19,16 @@ namespace DE {
         void                    RequestShader(UUID shader_id);
         Ref<RenderMeshInstance> GetRenderMeshInstance(UUID mesh_id, UUID shader_ids);
 
-        float Exposure           = 1;
-        float Gamma              = 1;
-        float BrightnessTreshold = 1;
-        bool  GammaHDR           = false;
-        bool  Bloom              = false;
+        bool  GammaHDR = false;
+        float Exposure = 1;
+        float Gamma    = 1;
+
+        bool  Bloom             = false;
+        float BloomTreshold     = 1;
+        float BloomSoftTreshold = 0;
+        float BloomRadius       = 0.005;
+        float BloomDepth        = 5;
+        float BloomStrength     = 0.04;
 
     private:
         void UpdateShaders(const FPSCamera& camera, Entity skybox);
