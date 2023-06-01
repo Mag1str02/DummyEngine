@@ -238,6 +238,12 @@ namespace DE {
     }
 
     void WavSound::start_streaming() {
+        auto pitch = this->getPitch();
+        auto gain = this->getGain();
+        auto position = this->getPosition();
+        auto velocity = this->getVelocity();
+        auto looping = this->getLooping();
+
         alCall(alDeleteSources, 1, &source);
 
         for (std::size_t i = 0; i < StreamingBuffer::NUM_BUFFERS; ++i) {
@@ -250,11 +256,11 @@ namespace DE {
         }
 
         alCall(alGenSources, 1, &source);
-        alCall(alSourcef, source, AL_PITCH, 1);
-        alCall(alSourcef, source, AL_GAIN, 1.0f);
-        alCall(alSource3f, source, AL_POSITION, 0, 0, 0);
-        alCall(alSource3f, source, AL_VELOCITY, 0, 0, 0);
-        alCall(alSourcei, source, AL_LOOPING, AL_FALSE);
+        alCall(alSourcef, source, AL_PITCH, pitch);
+        alCall(alSourcef, source, AL_GAIN, gain);
+        alCall(alSource3f, source, AL_POSITION, position[0], position[1], position[2]);
+        alCall(alSource3f, source, AL_VELOCITY, velocity[0], velocity[1], velocity[2]);
+        alCall(alSourcei, source, AL_LOOPING, looping);
 
         cursor = StreamingBuffer::BUFFER_SIZE * StreamingBuffer::NUM_BUFFERS;
         alCall(alSourceQueueBuffers, source, StreamingBuffer::NUM_BUFFERS, (reinterpret_cast<StreamingBuffer*>(buffer.get())->get_buffer_pointer(0)));
