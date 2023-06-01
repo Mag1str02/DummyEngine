@@ -33,5 +33,5 @@ void main()
     vs_out.FragPos   = vec3(i_Transform * vec4(i_Pos, 1.0));
     vs_out.Normal    = mat3(transpose(inverse(i_Transform))) * i_Normal;
     vs_out.TexCoords = i_TexCoords;
-    vs_out.CameraPos = -vec3(view[3][0],view[3][1],view[3][2]);
+    vs_out.CameraPos = -vec3(view[3][0], view[3][1], view[3][2]);
 }

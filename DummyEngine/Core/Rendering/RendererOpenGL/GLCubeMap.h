@@ -8,9 +8,9 @@ namespace DE {
     class GLCubeMap : public CubeMap {
     public:
         GLCubeMap(const Ref<TextureData> data);
-        GLCubeMap(U32 size, TextureFormat format, TextureChannels channels, bool gen_mipmap);
+        GLCubeMap(U32 size, Texture::Format format, Texture::Channels channels, bool gen_mipmap);
         virtual ~GLCubeMap();
-        virtual void Bind(U32 slot) const override;
+        virtual void   Bind(U32 slot) const override;
         virtual float& GetLOD() override;
 
         GLCubeMap()                                  = delete;
@@ -21,7 +21,7 @@ namespace DE {
 
     private:
         friend class GLFrameBuffer;
-        float    m_LOD = 0;
+        float  m_LOD = 0;
         GLuint m_MapId;
     };
 }  // namespace DE

@@ -2,42 +2,47 @@
 
 #include <glad/glad.h>
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Rendering/Renderer/Texture.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
 
-    class GLTexture : public Texture
-    {
+    class GLTexture : public Texture {
     public:
-        GLTexture() = delete;
-        GLTexture(const GLTexture& other) = delete;
-        GLTexture(GLTexture&& other) = delete;
+        GLTexture()                                  = delete;
+        GLTexture(const GLTexture& other)            = delete;
+        GLTexture(GLTexture&& other)                 = delete;
         GLTexture& operator=(const GLTexture& other) = delete;
-        GLTexture& operator=(GLTexture&& other) = delete;
+        GLTexture& operator=(GLTexture&& other)      = delete;
 
-        GLTexture(U32 width, U32 height, TextureChannels format);
+        GLTexture(U32 width, U32 height, Channels channels, Format format);
+        GLTexture(Texture::Channels channels, Format format);
         GLTexture(const TextureData& data);
 
         virtual ~GLTexture();
 
-        virtual U32 Width() const override;
-        virtual U32 Height() const override;
-        virtual U32 RendererId() const override;
+        virtual U32      GetWidth() const override;
+        virtual U32      GetHeight() const override;
+        virtual U32      GetRendererId() const override;
+        virtual Format   GetFormat() const override;
+        virtual Channels GetChannels() const override;
 
-        virtual void SetData(const void* data, U32 size) override;
-
+        virtual void Copy(Ref<FrameBuffer> buffer, U32 attachment_id) override;
+        virtual void SetFormat(Format format) override;
+        virtual void SetChannels(Channels channels) override;
+        virtual void Resize(U32 width, U32 height) override;
         virtual void Bind(U32 slot) const override;
 
     private:
+        void Invalidate(GLenum data_type = GL_UNSIGNED_BYTE, const void* data = nullptr);
+
         friend class GLFrameBuffer;
-        
-        U32 m_Width;
-        U32 m_Height;
-        GLuint m_TextureId;
-        GLenum m_InternalFormat;
-        GLenum m_Format;
+
+        GLuint   m_TextureId;
+        U32      m_Width;
+        U32      m_Height;
+        Format   m_Format;
+        Channels m_Channels;
     };
 
     // class GLTexture

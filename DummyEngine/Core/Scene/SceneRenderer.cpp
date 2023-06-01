@@ -23,46 +23,60 @@ namespace DE {
                                                BufferElementType::Float3},
                                          MAX_LIGHTS_IN_SCENE);
         m_FrameBuffer = FrameBuffer::Create({1920, 1080});
-        m_FrameBuffer->AddColorAttachment(TextureChannels::RGBA);
-        m_FrameBuffer->SetDepthAttachment(TextureChannels::Depth);
+        m_FrameBuffer->AddColorAttachment(Texture::Format::F32, Texture::Channels::RGBA);
+        m_FrameBuffer->SetDepthAttachment(Texture::Format::F32);
     }
     void SceneRenderer::OnViewPortResize(U32 x, U32 y) {
         m_FrameBuffer->Resize(x, y);
     }
     void SceneRenderer::Render(Entity camera) {
         DE_PROFILE_SCOPE("Scene Render");
-        auto& scene_camera = camera.Get<FPSCamera>();
-        m_FrameBuffer->Bind();
-        m_Lights->Bind(LIGHT_UB_ID);
-        Renderer::SetViewport(m_FrameBuffer->GetWidth(), m_FrameBuffer->GetHeight());
-        Renderer::Clear();
-
         Entity skybox;
-        auto   skyboxes = m_Scene->m_Storage->View<SkyBoxComponent>();
-        if (!skyboxes.Empty()) {
-            skybox = *skyboxes.begin();
-        }
-        UpdateShaders(scene_camera, skybox);
-
-        if (skybox.Valid()) {
-            Mat4 transform = Mat4(1.0);
-            if (skybox.Has<TransformComponent>()) {
-                transform = skybox.Get<TransformComponent>().GetRotation();
+        {
+            DE_PROFILE_SCOPE("Shader Update");
+            auto skyboxes = m_Scene->m_Storage->View<SkyBoxComponent>();
+            if (!skyboxes.Empty()) {
+                skybox = *skyboxes.begin();
             }
-            Renderer::Submit(skybox.Get<SkyBoxComponent>()->GetMap(), scene_camera, transform);
+            UpdateShaders(camera.Get<FPSCamera>(), skybox);
         }
-
-        for (auto& [ids, target] : m_InstancedMeshes) {
-            target.first->UpdateInstanceBuffer();
-            int res = (target.first->p_Animator ? 1 : 0);
-            target.second->Bind();
-            target.second->SetInt("u_Animated", res);
-            if (target.first->p_Animator) {
-                target.first->p_Animator->SetMatricies(target.second);
+        {
+            DE_PROFILE_SCOPE("Mesh Rendering");
+            m_FrameBuffer->Bind();
+            m_Lights->Bind(LIGHT_UB_ID);
+            Renderer::SetViewport(m_FrameBuffer->GetWidth(), m_FrameBuffer->GetHeight());
+            Renderer::Clear();
+            if (skybox.Valid()) {
+                Mat4 transform = Mat4(1.0);
+                if (skybox.Has<TransformComponent>()) {
+                    transform = skybox.Get<TransformComponent>().GetRotation();
+                }
+                Renderer::Submit(skybox.Get<SkyBoxComponent>()->GetMap(), camera.Get<FPSCamera>(), transform);
             }
-            Renderer::Submit(target.first, target.second);
+
+            for (auto& [ids, target] : m_InstancedMeshes) {
+                target.first->UpdateInstanceBuffer();
+                int res = (target.first->p_Animator ? 1 : 0);
+                target.second->Bind();
+                target.second->SetInt("u_Animated", res);
+                if (target.first->p_Animator) {
+                    target.first->p_Animator->SetMatricies(target.second);
+                }
+                Renderer::Submit(target.first, target.second);
+            }
+            m_FrameBuffer->UnBind();
         }
-        m_FrameBuffer->UnBind();
+        {
+            DE_PROFILE_SCOPE("Post-Processing");
+            if (Bloom) {
+                DE_PROFILE_SCOPE("Bloom");
+                Renderer::Bloom(m_FrameBuffer->GetColorAttachment(0), BloomTreshold, BloomSoftTreshold, BloomRadius, BloomDepth, BloomStrength);
+            }
+            if (GammaHDR) {
+                DE_PROFILE_SCOPE("Gamma & HDR");
+                Renderer::GammeHDRCorrecion(m_FrameBuffer->GetColorAttachment(0), Exposure, Gamma);
+            }
+        }
     }
 
     void SceneRenderer::UpdateShaders(const FPSCamera& camera, Entity skybox) {

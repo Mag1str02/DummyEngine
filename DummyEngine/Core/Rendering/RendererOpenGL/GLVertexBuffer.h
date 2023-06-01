@@ -2,20 +2,18 @@
 
 #include <glad/glad.h>
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/Rendering/Renderer/VertexBuffer.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
 
-    class GLVertexBuffer : public VertexBuffer
-    {
+    class GLVertexBuffer : public VertexBuffer {
     public:
-        GLVertexBuffer() = delete;
-        GLVertexBuffer(const GLVertexBuffer& other) = delete;
-        GLVertexBuffer(GLVertexBuffer&& other) = delete;
+        GLVertexBuffer()                                       = delete;
+        GLVertexBuffer(const GLVertexBuffer& other)            = delete;
+        GLVertexBuffer(GLVertexBuffer&& other)                 = delete;
         GLVertexBuffer& operator=(const GLVertexBuffer& other) = delete;
-        GLVertexBuffer& operator=(GLVertexBuffer&& other) = delete;
+        GLVertexBuffer& operator=(GLVertexBuffer&& other)      = delete;
 
         GLVertexBuffer(const BufferLayout& layout, U32 size, BufferUsage usage = BufferUsage::Static);
         GLVertexBuffer(const BufferLayout& layout, U32 size, const void* data, BufferUsage usage = BufferUsage::Static);
@@ -31,26 +29,25 @@ namespace DE
         virtual void PushData() override;
 
         virtual const BufferLayout& GetLayout() const override;
-        virtual U32 Size() const override;
+        virtual U32                 Size() const override;
 
     private:
         static GLenum BufferUsafeToGLBufferUsage(BufferUsage usage);
 
-        BufferUsage m_Usage;
-        LocalBuffer m_LocalBuffer;
+        BufferUsage  m_Usage;
+        LocalBuffer  m_LocalBuffer;
         BufferLayout m_Layout;
-        GLuint m_BufferId;
-        U32 m_Size;
+        GLuint       m_BufferId;
+        U32          m_Size;
     };
 
-    class GLIndexBuffer : public IndexBuffer
-    {
+    class GLIndexBuffer : public IndexBuffer {
     public:
-        GLIndexBuffer() = delete;
-        GLIndexBuffer(const GLIndexBuffer& other) = delete;
-        GLIndexBuffer(GLIndexBuffer&& other) = delete;
+        GLIndexBuffer()                                      = delete;
+        GLIndexBuffer(const GLIndexBuffer& other)            = delete;
+        GLIndexBuffer(GLIndexBuffer&& other)                 = delete;
         GLIndexBuffer& operator=(const GLIndexBuffer& other) = delete;
-        GLIndexBuffer& operator=(GLIndexBuffer&& other) = delete;
+        GLIndexBuffer& operator=(GLIndexBuffer&& other)      = delete;
 
         GLIndexBuffer(const U32* indices, U32 count);
         virtual ~GLIndexBuffer();
@@ -62,6 +59,6 @@ namespace DE
 
     private:
         GLuint m_BufferId;
-        U32 _indices_amount;
+        U32    _indices_amount;
     };
 }  // namespace DE

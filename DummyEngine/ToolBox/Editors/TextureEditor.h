@@ -1,12 +1,10 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/ResourceManaging/RawData.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
-    class TextureEditor
-    {
+namespace DE {
+    class TextureEditor {
     public:
         static Ref<TextureData> GetTexturePart(const Ref<TextureData> data, U32 width, U32 height, U32 x_pos, U32 y_pos);
 

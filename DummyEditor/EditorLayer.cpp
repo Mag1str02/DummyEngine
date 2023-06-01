@@ -17,6 +17,7 @@ namespace DE {
         m_ImGuiManager.AddPanel(&m_Inspector);
         m_ImGuiManager.AddPanel(&m_Profiler);
         m_ImGuiManager.AddPanel(&m_ThemePanel);
+        m_ImGuiManager.AddPanel(&m_RendererPanel);
         m_ImGuiManager.SetMenuBar(&m_MenuBar);
 
         m_TSSystem = CreateRef<TransformSyncSystem>();
@@ -171,6 +172,10 @@ namespace DE {
     EditorLayer::Resources& EditorLayer::GetResources() {
         return m_Resources;
     }
+    Ref<Scene> EditorLayer::GetScene() const {
+        return m_CurrentScene;
+    }
+
     //*___Helpers______________________________________________________________________________________________________________________________________________________________________________________
 
     void EditorLayer::ReloadScripts() {
@@ -216,6 +221,7 @@ namespace DE {
         m_Viewport.SetFrameBuffer(m_CurrentScene->GetRenderer()->GetFrameBuffer());
         m_SceneState       = SceneState::Editing;
         m_SceneScriptState = SceneScriptState::Compiled;
+        // m_CurrentScene->LoadPhysics(m_CurrentScene);
         LOG_INFO("EditorLayer", "Opened scene");
     }
     void EditorLayer::SaveScene(const Path& path) {
@@ -278,6 +284,7 @@ namespace DE {
         m_CurrentScene->AttachSystem(m_TSSystem);
         m_SceneHierarchy.SetActiveScene(m_CurrentScene);
         m_Inspector.SetScene(m_CurrentScene);
+        m_RendererPanel.SetScene(m_CurrentScene);
         m_Inspector.SetActiveEntity(m_SceneHierarchy.GetActiveEntity());
     }
 

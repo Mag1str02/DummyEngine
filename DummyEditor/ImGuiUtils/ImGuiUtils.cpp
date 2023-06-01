@@ -81,7 +81,7 @@ namespace DE {
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
             ImGui::SetNextItemWidth(-1);
-            ImGui::Checkbox(name.c_str(), &value);
+            ImGui::Checkbox(StrCat("##", name.c_str()).c_str(), &value);
             ImGui::NextColumn();
         }
         void EditProperty(std::string name, std::string& value, PropertyType property_type) {
@@ -222,7 +222,7 @@ namespace DE {
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
             ImGui::SetNextItemWidth(ImGuiUtils::Constants::DefaultRightPadding);
-            ImGui::Image(reinterpret_cast<void*>(texture->RendererId()), tex_size);
+            ImGui::Image(reinterpret_cast<void*>(texture->GetRendererId()), tex_size);
             ImGui::NextColumn();
         }
     }  // namespace ImGuiUtils

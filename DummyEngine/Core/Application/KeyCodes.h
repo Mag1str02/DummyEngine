@@ -1,9 +1,7 @@
 #pragma once
 
-namespace DE
-{
-    enum class Key
-    {
+namespace DE {
+    enum class Key {
         None          = 0,
         Space         = 32,
         Apostrophe    = 39, /* ' */

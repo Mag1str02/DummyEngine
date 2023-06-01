@@ -41,6 +41,28 @@ namespace DE {
         LOG_INFO("ResourceManager", "RenderMesh (", id, ") was added");
         return true;
     }
+    S_METHOD_IMPL(bool, LoadHitBox, (UUID id), (id)) {
+        if (m_HitBoxes.contains(id)) {
+            LOG_WARNING("ResourceManager", "HitBox (", id, ") was not loaded because already loaded");
+            return false;
+        }
+        auto asset = AssetManager::GetRenderMeshAsset(id);
+        if (!asset) {
+            LOG_WARNING("ResourceManager", "Hitbox (", id, ") was not loaded because does not exist in AssetManager");
+            return false;
+        }
+        auto mesh = ModelLoader::Load(asset.value().loading_props);
+        std::vector<Vec3> vertices;
+        for(const auto &submesh: mesh->meshes) {
+            for(const auto &vert: submesh.vertices) {
+                vertices.push_back(vert.position);
+            }
+        }
+        m_HitBoxes.insert({id, CreateRef<Physics::ConvexHitbox>()});
+        m_HitBoxes[id]->Build(vertices);
+        LOG_INFO("ResourceManager", "Hitbox (", id, ") was added");
+        return true;
+    }
     S_METHOD_IMPL(bool, LoadCubeMap, (UUID id), (id)) {
         if (m_CubeMaps.contains(id)) {
             LOG_WARNING("ResourceManager", "CubeMap (", id, ") was not loaded because already loaded");
@@ -94,6 +116,12 @@ namespace DE {
         }
         return {};
     }
+    S_METHOD_IMPL(std::optional<Ref<Physics::ConvexHitbox>>, GetHitBox, (UUID id), (id)) {
+        if (m_HitBoxes.contains(id)) {
+            return m_HitBoxes[id];
+        }
+        return {};
+    }
 
     S_METHOD_IMPL(bool, HasShader, (UUID id), (id)) {
         return m_Shaders.contains(id);
@@ -106,6 +134,9 @@ namespace DE {
     }
     S_METHOD_IMPL(bool, HasTexture, (UUID id), (id)) {
         return m_Textures.contains(id);
+    }
+    S_METHOD_IMPL(bool, HasHitBox, (UUID id), (id)) {
+        return m_HitBoxes.contains(id);
     }
 
     S_METHOD_IMPL(bool, DeleteShader, (UUID id), (id)) {
@@ -132,6 +163,14 @@ namespace DE {
         }
         return false;
     }
+    S_METHOD_IMPL(bool, DeleteHitBox, (UUID id), (id)) {
+        if (m_HitBoxes.contains(id)) {
+            m_HitBoxes.erase(id);
+            LOG_INFO("ResourceManager", "Hitbox (", id, ") was deleted");
+            return true;
+        }
+        return false;
+    }
     S_METHOD_IMPL(bool, DeleteTexture, (UUID id), (id)) {
         if (m_Textures.contains(id)) {
             m_Textures.erase(id);
@@ -145,6 +184,7 @@ namespace DE {
         m_Shaders.clear();
         m_RenderMeshes.clear();
         m_CubeMaps.clear();
+        m_HitBoxes.clear();
         m_Textures.clear();
         LOG_INFO("ResourceManager", "Cleared all resources");
         return Unit();

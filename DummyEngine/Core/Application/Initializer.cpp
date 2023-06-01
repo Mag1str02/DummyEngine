@@ -1,8 +1,6 @@
 #include "DummyEngine/Core/Application/Initializer.h"
 
 // clang-format off
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <IMGUI/imgui.h>
 // clang-format on
 

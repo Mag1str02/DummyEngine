@@ -1,6 +1,8 @@
 #pragma once
 #include "DummyEngine/Utils/Types/Types.h"
 
+#include "DummyEngine/Utils/Types/Types.h"
+
 #ifdef __GNUC__
 #define DE_COMPILER_GCC_VERSION_MAJOR __GNUC__
 #else

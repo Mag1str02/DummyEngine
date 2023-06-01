@@ -1,6 +1,7 @@
 #version 410 core
 
 #define MAX_LIGHT_SOURCES 128
+const float kDefaultShininess = 64;
 
 struct Material
 {
@@ -45,7 +46,7 @@ vec3 DirectionalLightImpact(LightSource direction_light, vec3 v_Normal, vec3 vie
     vec3 halfway_ray          = normalize(light_ray + view_direction);
 
     float bounce_angle_cos = max(dot(v_Normal, light_ray), 0.0);
-    float spec             = pow(max(dot(v_Normal, halfway_ray), 0.0), u_Material.m_Shininess);
+    float spec             = pow(max(dot(v_Normal, halfway_ray), 0.0), kDefaultShininess);
 
     vec3 ambient  = direction_light.m_Ambient * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)) * u_Material.m_Ambient;
     vec3 diffuse  = bounce_angle_cos * direction_light.m_Diffuse * vec3(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)) * u_Material.m_Diffuse;
@@ -60,7 +61,7 @@ vec3 PointLightImpact(LightSource point_light, vec3 v_Normal, vec3 view_directio
 
     float dist             = length(light_ray);
     float bounce_angle_cos = max(dot(v_Normal, light_ray), 0.0);
-    float spec             = pow(max(dot(v_Normal, halfway_ray), 0.0),  u_Material.m_Shininess);
+    float spec             = pow(max(dot(v_Normal, halfway_ray), 0.0),  kDefaultShininess);
 
     float attenuation = 1.0 / (point_light.m_CLQ.x + point_light.m_CLQ.y * dist + point_light.m_CLQ.z * (dist * dist));
 
