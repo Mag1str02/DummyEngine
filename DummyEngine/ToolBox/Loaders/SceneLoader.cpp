@@ -158,6 +158,15 @@ namespace DE {
             }
         }
     }
+    template <> void SaveComponent<Physics::PhysicsComponent>(YAML::Node& n_Entity, Entity entity) {
+        if (entity.Has<Physics::PhysicsComponent>()) {
+            const auto& phys                  = entity.Get<Physics::PhysicsComponent>();
+            n_Entity["Physics"]["InvMass"]    = phys.inv_mass;
+            n_Entity["Physics"]["InvInertia"] = phys.inv_inertia;
+            n_Entity["Physics"]["Collidable"] = phys.collidable;
+            n_Entity["Physics"]["Gravity"]    = phys.gravity;
+        }
+    }
 
     void SaveEntity(YAML::Node& n_Entity, Entity entity) {
         SaveComponent<TagComponent>(n_Entity, entity);
@@ -169,6 +178,7 @@ namespace DE {
         SaveComponent<LightSource>(n_Entity, entity);
         SaveComponent<SkyBoxComponent>(n_Entity, entity);
         SaveComponent<ScriptComponent>(n_Entity, entity);
+        SaveComponent<Physics::PhysicsComponent>(n_Entity, entity);
     }
     YAML::Node SaveNode(SceneHierarchy::Node node) {
         YAML::Node res;
@@ -423,9 +433,7 @@ namespace DE {
             LOG_INFO("SceneLoader", "Failed to create valid script: ", script.ID());
         }
     }
-
     template <> void LoadComponent<Physics::PhysicsComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
-        LOG_INFO("SceneLoader", "Loading PhysicsComponent");
         Physics::PhysicsComponent component{Vec3(0, 0, 0),
                                             Vec3(0, 0, 0),
                                             n_Component["InvMass"].as<float>(),
@@ -435,7 +443,6 @@ namespace DE {
                                             Vec3(0, 0, 0),
                                             Vec3(0, 0, 0)};
         entity.AddComponent<Physics::PhysicsComponent>(component);
-        LOG_INFO("SceneLoader", "Loaded PhysicsComponent");
     }
 
     Entity LoadEntity(Ref<Scene> scene, YAML::Node n_Entity) {
@@ -524,7 +531,7 @@ namespace DE {
         settings.bloom_soft_threshold = node["BloomSoftTreshold"].as<float>();
         settings.bloom_depth          = node["BloomDepth"].as<U32>();
         settings.bloom_radius         = node["BloomRadius"].as<float>();
-        settings.bloom_strength       = node["BloomRadius"].as<float>();
+        settings.bloom_strength       = node["BloomStrength"].as<float>();
         settings.gamma_tone_mapping   = node["GammaToneMapping"].as<bool>();
         settings.exposure             = node["Exposure"].as<float>();
         settings.gamma                = node["Gamma"].as<float>();
