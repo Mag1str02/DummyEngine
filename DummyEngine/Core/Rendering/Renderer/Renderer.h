@@ -27,6 +27,8 @@ namespace DE {
             GaussianBlur,
             Bloom,
             GammaHDR,
+            BloomUpsample,
+            BloomDownsample,
 
             Last,
         };
@@ -61,9 +63,10 @@ namespace DE {
         S_METHOD_DEF(Unit, Submit, (Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& transform = Mat4(1.0f)));
         S_METHOD_DEF(Unit, Submit, (Ref<CubeMap> cube_map, const FPSCamera& camera, const Mat4& transform = Mat4(1.0f)));
 
-        S_METHOD_DEF(Unit, Bloom, (Ref<Texture> texture, float threshold));
+        S_METHOD_DEF(Unit, Bloom, (Ref<Texture> texture, float threshold, float soft_threshold, float radius, U32 depth, float strength));
         S_METHOD_DEF(Unit, GammeHDRCorrecion, (Ref<Texture> texture, float exposure, float gamma));
         S_METHOD_DEF(Unit, GaussianBlur, (Ref<Texture> texture));
+        S_METHOD_DEF(Ref<Texture>, BloomDownAndUpSample, (Ref<Texture> texture, float radius, U32 depth));
 
         S_METHOD_DEF(Unit, Enable, (RenderSetting setting));
         S_METHOD_DEF(Unit, Disable, (RenderSetting setting));
@@ -97,9 +100,11 @@ namespace DE {
             Ref<Shader> brdf_convolution;
             Ref<Shader> brightness_filter;
             Ref<Shader> gaussian_blur;
-            Ref<Shader> copy_texture;
+            Ref<Shader> textured_quad;
             Ref<Shader> bloom;
             Ref<Shader> gamma_hdr;
+            Ref<Shader> bloom_upsample;
+            Ref<Shader> bloom_downsample;
         };
 
         Scope<RenderAPI> m_RenderAPI;

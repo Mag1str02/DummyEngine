@@ -1,5 +1,8 @@
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
+//TODO: Remove glad
+#include <glad/glad.h>
+
 #include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLDebug.h"
@@ -103,37 +106,100 @@ namespace DE {
         return Unit();
     }
 
-    S_METHOD_IMPL(Unit, Bloom, (Ref<Texture> texture, float threshold), (texture, threshold)) {
+    S_METHOD_IMPL(Unit,
+                  Bloom,
+                  (Ref<Texture> texture, float threshold, float soft_threshold, float radius, U32 depth, float strength),
+                  (texture, threshold, soft_threshold, radius, depth, strength)) {
         Ref<FrameBuffer> result = FrameBuffer::Create({texture->GetWidth(), texture->GetHeight()});
 
         m_Resources.brightness_filter->Bind();
         m_Resources.brightness_filter->SetInt("u_Texture", 1);
-        m_Resources.brightness_filter->SetFloat("u_BrightnessTreshold", threshold);
+        m_Resources.brightness_filter->SetFloat("u_Treshold", threshold);
+        m_Resources.brightness_filter->SetFloat("u_SoftTreshold", soft_threshold);
         texture->Bind(1);
         result->AddColorAttachment(texture->GetFormat(), texture->GetChannels());
         result->Bind();
         SetViewport(texture->GetWidth(), texture->GetHeight());
         Clear();
         Submit(m_Resources.screen_quad, m_Resources.brightness_filter);
-
         Ref<Texture> bright_pixels = result->GetColorAttachment(0);
-        GaussianBlur(bright_pixels);
 
-        Ref<Texture> bloomed = Texture::Create(texture->GetWidth(), texture->GetHeight(), texture->GetChannels(), texture->GetFormat());
-        result->SetColorAttachment(bloomed, 0);
-        result->Bind();
-        texture->Bind(1);
-        bright_pixels->Bind(2);
+        Ref<Texture> down_up_samepled = BloomDownAndUpSample(bright_pixels, radius, depth);
+        Ref<Texture> source           = Texture::Create();
+        result->SetColorAttachment(texture, 0);
+        source->Copy(result, 0);
+
+        source->Bind(1);
+        down_up_samepled->Bind(2);
         m_Resources.bloom->Bind();
         m_Resources.bloom->SetInt("u_Texture", 1);
         m_Resources.bloom->SetInt("u_BrighnessTexture", 2);
-        SetViewport(texture->GetWidth(), texture->GetHeight());
-        Clear();
-        Submit(m_Resources.screen_quad, m_Resources.bloom);
-
-        texture->Copy(result, 0);
-
+        m_Resources.bloom->SetFloat("u_Strength", strength);
+        result->Bind();
+        Renderer::SetViewport(texture->GetWidth(), texture->GetHeight());
+        Renderer::Clear();
+        Renderer::Submit(m_Resources.screen_quad, m_Resources.bloom);
         return Unit();
+    }
+    S_METHOD_IMPL(Ref<Texture>, BloomDownAndUpSample, (Ref<Texture> texture, float radius, U32 depth), (texture, radius, depth)) {
+        const float               level_divisor = 1.5;
+        U32                       height        = texture->GetHeight() / level_divisor;
+        U32                       width         = texture->GetWidth() / level_divisor;
+        Ref<FrameBuffer>          buffer        = FrameBuffer::Create({width, height});
+        std::vector<Ref<Texture>> layers;
+        while (height > 0 && width > 0 && layers.size() < depth) {
+            layers.push_back(Texture::Create(width, height, texture->GetChannels(), texture->GetFormat()));
+            height /= level_divisor;
+            width /= level_divisor;
+        }
+        if (layers.empty()) {
+            LOG_WARNING("Renderer", "Failed to gen layers for bloom because depth < 1 or texture is smaller then 2x2");
+            return texture;
+        }
+        Ref<Texture> current = texture;
+        height               = texture->GetHeight();
+        width                = texture->GetWidth();
+        for (U32 i = 0; i < layers.size(); ++i) {
+            m_Resources.bloom_downsample->Bind();
+            m_Resources.bloom_downsample->SetInt("u_Texture", 1);
+            current->Bind(1);
+            buffer->SetColorAttachment(layers[i], 0);
+            buffer->Bind();
+            Renderer::SetViewport(width / level_divisor, height / level_divisor);
+            Renderer::Clear();
+            Renderer::Submit(m_Resources.screen_quad, m_Resources.bloom_downsample);
+
+            current = layers[i];
+            height /= level_divisor;
+            width /= level_divisor;
+        }
+
+        glBlendFunc(GL_ONE, GL_ONE);
+        glBlendEquation(GL_FUNC_ADD);
+        for (S32 i = layers.size() - 1; i > 0; --i) {
+            Ref<Texture> small = layers[i];
+            Ref<Texture> big   = layers[i - 1];
+            m_Resources.bloom_upsample->Bind();
+            m_Resources.bloom_upsample->SetInt("u_Texture", 1);
+            m_Resources.bloom_upsample->SetFloat("u_Radius", radius);
+            buffer->SetColorAttachment(big, 0);
+            buffer->Bind();
+            Renderer::SetViewport(big->GetWidth(), big->GetHeight());
+            Renderer::Submit(m_Resources.screen_quad, m_Resources.bloom_upsample);
+        }
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        // Ref<Texture> result = Texture::Create(texture->GetWidth(), texture->GetHeight(), texture->GetChannels(), texture->GetFormat());
+        // buffer->SetColorAttachment(result, 0);
+        // buffer->Bind();
+        // m_Resources.textured_quad->Bind();
+        // m_Resources.textured_quad->SetInt("u_Texture", 1);
+        // layers.front()->Bind(1);
+        // Renderer::SetViewport(texture->GetWidth(), texture->GetHeight());
+        // Renderer::Clear();
+        // Renderer::Submit(m_Resources.screen_quad, m_Resources.textured_quad);
+
+        return layers.front();
     }
     S_METHOD_IMPL(Unit, GammeHDRCorrecion, (Ref<Texture> texture, float exposure, float gamma), (texture, exposure, gamma)) {
         Ref<FrameBuffer> result = FrameBuffer::Create({texture->GetWidth(), texture->GetHeight()});
@@ -209,10 +275,12 @@ namespace DE {
             case Shaders::PreFileterConvolution: return m_Resources.pre_filter_convolution;
             case Shaders::BRDFConvolution: return m_Resources.brdf_convolution;
             case Shaders::BrightnessFilter: return m_Resources.brightness_filter;
-            case Shaders::TexturedQuad: return m_Resources.copy_texture;
+            case Shaders::TexturedQuad: return m_Resources.textured_quad;
             case Shaders::GaussianBlur: return m_Resources.gaussian_blur;
             case Shaders::Bloom: return m_Resources.bloom;
             case Shaders::GammaHDR: return m_Resources.gamma_hdr;
+            case Shaders::BloomUpsample: return m_Resources.bloom_upsample;
+            case Shaders::BloomDownsample: return m_Resources.bloom_downsample;
             case Shaders::Last:
             case Shaders::None: return nullptr;
             default: DE_ASSERT(false, "Wrong Renderer shader requested"); break;
@@ -413,7 +481,7 @@ namespace DE {
                 {ShaderPartType::Fragment, shaders / "Fragment/TexturedQuad.fs"}
             };
 
-            m_Resources.copy_texture = Shader::Create(parts);
+            m_Resources.textured_quad = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
@@ -431,7 +499,6 @@ namespace DE {
 
             m_Resources.bloom = Shader::Create(parts);
         }
-
         {
             std::vector<ShaderPart> parts = {
                 {  ShaderPartType::Vertex, shaders / "Vertex/TexturedQuad.vs"},
@@ -439,6 +506,22 @@ namespace DE {
             };
 
             m_Resources.gamma_hdr = Shader::Create(parts);
+        }
+        {
+            std::vector<ShaderPart> parts = {
+                {  ShaderPartType::Vertex,    shaders / "Vertex/TexturedQuad.vs"},
+                {ShaderPartType::Fragment, shaders / "Fragment/BloomUpsample.fs"}
+            };
+
+            m_Resources.bloom_upsample = Shader::Create(parts);
+        }
+        {
+            std::vector<ShaderPart> parts = {
+                {  ShaderPartType::Vertex,      shaders / "Vertex/TexturedQuad.vs"},
+                {ShaderPartType::Fragment, shaders / "Fragment/BloomDownsample.fs"}
+            };
+
+            m_Resources.bloom_downsample = Shader::Create(parts);
         }
         {
             const size_t     sz     = 1024;

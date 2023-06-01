@@ -65,7 +65,7 @@ namespace DE {
             DE_PROFILE_SCOPE("Post-Processing");
             if (Bloom) {
                 DE_PROFILE_SCOPE("Bloom");
-                Renderer::Bloom(m_FrameBuffer->GetColorAttachment(0), BrightnessTreshold);
+                Renderer::Bloom(m_FrameBuffer->GetColorAttachment(0), BloomTreshold, BloomSoftTreshold, BloomRadius, BloomDepth, BloomStrength);
             }
             if (GammaHDR) {
                 DE_PROFILE_SCOPE("Gamma & HDR");
