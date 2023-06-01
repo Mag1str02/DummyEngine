@@ -222,7 +222,7 @@ namespace DE {
         m_Viewport.SetFrameBuffer(m_CurrentScene->GetRenderer()->GetFrameBuffer());
         m_SceneState       = SceneState::Editing;
         m_SceneScriptState = SceneScriptState::Compiled;
-        // m_CurrentScene->LoadPhysics(m_CurrentScene);
+        m_CurrentScene->LoadPhysics(m_CurrentScene);
         LOG_INFO("EditorLayer", "Opened scene");
     }
     void EditorLayer::SaveScene(const Path& path) {
