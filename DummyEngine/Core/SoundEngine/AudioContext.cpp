@@ -12,7 +12,6 @@ namespace DE {
         if (!alcCall(alcMakeContextCurrent, isMadeCurrent, openALDevice, openALContext) || isMadeCurrent != ALC_TRUE) {
             std::cerr << "Couldn't make context current";
         }
-        std::cout << "created successfully\n";
     }
 
     AudioContext::~AudioContext() {

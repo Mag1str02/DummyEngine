@@ -12,6 +12,12 @@
 
 namespace DE {
     void Scene::OnRuntimeStart() {
+        for (auto e : View<AudioComponent>()) {
+            auto& audio = e.Get<AudioComponent>();
+            if (audio.sound) {
+                audio.sound->play();
+            }
+        }
         for (auto e : m_Storage->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
@@ -28,6 +34,12 @@ namespace DE {
         }
     }
     void Scene::OnRuntimeStop() {
+        for (auto e : View<AudioComponent>()) {
+            auto& audio = e.Get<AudioComponent>();
+            if (audio.sound) {
+                audio.sound->stop();
+            }
+        }
         for (auto e : m_Storage->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
@@ -45,10 +57,10 @@ namespace DE {
     }
     void Scene::OnUpdate(float dt) {
         DE_PROFILE_SCOPE("Scene OnUpdate");
-
         m_Storage->UpdateSystems(dt);
         if (m_PhysicsSolver) {
-            m_PhysicsSolver->OnUpdate(dt);
+            DE_PROFILE_SCOPE("Physics");
+            m_PhysicsSolver->OnUpdate(dt * 2);
         }
         for (auto e : m_Storage->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();

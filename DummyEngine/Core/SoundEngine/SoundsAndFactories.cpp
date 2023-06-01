@@ -94,7 +94,6 @@ namespace DE {
         alCall(alBufferData, buffer->getBufferID(), format, soundData.data(), soundData.size(), sampleRate);
         soundData.clear(); // erase the sound in RAM
 
-        ALuint source;
         alCall(alGenSources, 1, &source);
         alCall(alSourcef, source, AL_PITCH, 1);
         alCall(alSourcef, source, AL_GAIN, 1.0f);
@@ -116,11 +115,7 @@ namespace DE {
         alCall(alSourcePlay, source);
 
         state = AL_PLAYING;
-
-        while(state == AL_PLAYING)
-        {
-            alCall(alGetSourcei, source, AL_SOURCE_STATE, &state);
-        }
+        alCall(alGetSourcei, source, AL_SOURCE_STATE, &state);
     }
 
     void WavSound::stop() {

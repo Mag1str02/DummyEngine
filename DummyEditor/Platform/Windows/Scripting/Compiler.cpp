@@ -122,6 +122,7 @@ namespace DE {
         m_Impl = CreateScope<CompilerImpl>();
         AddIncludeDir("..");
         AddIncludeDir("../DummyEngine/Libs/GLM");
+        AddIncludeDir("../DummyEngine/Libs/openAL/include");
         AddLinkLibrary("DummyEngineLib");
         AddDefine("DE_PLATFORM_WINDOWS");
         AddDefine("DE_ENABLE_LOGGING=" + std::to_string(DE_ENABLE_LOGGING));
