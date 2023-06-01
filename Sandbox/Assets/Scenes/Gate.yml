@@ -43,8 +43,8 @@ Scene:
                 Materials:
                   - Type: PBR
                     Albedo: [1, 1, 1]
-                    Ambient: [0.200000003, 0.200000003, 0.200000003]
-                    ORM: [0, 0, 0]
+                    Ambient: [0.734693885, 0.734693885, 0.857142866]
+                    ORM: [0, 0.610000014, 0]
                     Diffuse: [0.5, 0.5, 0.5]
                     Specular: [0.5, 0.5, 0.5]
                     Emission: [1, 1, 1]
@@ -61,102 +61,6 @@ Scene:
                   Distance: 5
                   Speed: 0.00999999978
           - Entity:
-              Tag: cube3
-              UUID: 214ec18617d03032346bb9b0b1227d14
-              Transformation:
-                Translation: [0, 6, 0]
-                TranslationOffset: [0, 0, 0]
-                Rotation: [30, 0, 30]
-                RotationOffset: [0, 0, 0]
-                Scale: [1, 1, 1]
-                ScaleOffset: [1, 1, 1]
-              RenderModel:
-                UUID: 02afee3bc1cb75b7d8b882a8667faa84
-                Materials:
-                  - Type: PBR
-                    Albedo: [1, 1, 1]
-                    Ambient: [0.200000003, 0.200000003, 0.200000003]
-                    ORM: [0, 0, 0]
-                    Diffuse: [0.5, 0.5, 0.5]
-                    Specular: [0.5, 0.5, 0.5]
-                    Emission: [1, 1, 1]
-                    Shininess: 64
-                    EmissionStrength: 0
-                    MeshID: 0
-              Shader: 24116af57b6022cd2464fbf641ae946a
-          - Entity:
-              Tag: cube4
-              UUID: 214ec18617d03032346bb9b0b1227d55
-              Transformation:
-                Translation: [0, 2, 0]
-                TranslationOffset: [0, 0, 0]
-                Rotation: [12, 0, 30]
-                RotationOffset: [0, 0, 0]
-                Scale: [1, 1, 1]
-                ScaleOffset: [1, 1, 1]
-              RenderModel:
-                UUID: 02afee3bc1cb75b7d8b882a8667faa84
-                Materials:
-                  - Type: PBR
-                    Albedo: [1, 1, 1]
-                    Ambient: [0.200000003, 0.200000003, 0.200000003]
-                    ORM: [0, 0, 0]
-                    Diffuse: [0.5, 0.5, 0.5]
-                    Specular: [0.5, 0.5, 0.5]
-                    Emission: [1, 1, 1]
-                    Shininess: 64
-                    EmissionStrength: 0
-                    MeshID: 0
-              Shader: 24116af57b6022cd2464fbf641ae946a
-          - Entity:
-              Tag: cube2
-              UUID: 214ec18617d03032346bb9b0b1227d12
-              Transformation:
-                Translation: [0, -2, 0]
-                TranslationOffset: [0, 0, 0]
-                Rotation: [25, 0, 25]
-                RotationOffset: [0, 0, 0]
-                Scale: [1, 1, 1]
-                ScaleOffset: [1, 1, 1]
-              RenderModel:
-                UUID: 02afee3bc1cb75b7d8b882a8667faa84
-                Materials:
-                  - Type: PBR
-                    Albedo: [1, 1, 1]
-                    Ambient: [0.200000003, 0.200000003, 0.200000003]
-                    ORM: [0, 0, 0]
-                    Diffuse: [0.5, 0.5, 0.5]
-                    Specular: [0.5, 0.5, 0.5]
-                    Emission: [1, 1, 1]
-                    Shininess: 64
-                    EmissionStrength: 0
-                    MeshID: 0
-              Shader: 24116af57b6022cd2464fbf641ae946a
-          - Entity:
-              Tag: cube
-              UUID: 214ec18617d03032346bb9b0b1227d17
-              Transformation:
-                Translation: [0, -6, 0]
-                TranslationOffset: [0, 0, 0]
-                Rotation: [15, 0, 15]
-                RotationOffset: [0, 0, 0]
-                Scale: [1, 1, 1]
-                ScaleOffset: [1, 1, 1]
-              RenderModel:
-                UUID: 02afee3bc1cb75b7d8b882a8667faa84
-                Materials:
-                  - Type: PBR
-                    Albedo: [1, 1, 1]
-                    Ambient: [0.200000003, 0.200000003, 0.200000003]
-                    ORM: [0, 0, 0]
-                    Diffuse: [0.5, 0.5, 0.5]
-                    Specular: [0.5, 0.5, 0.5]
-                    Emission: [1, 1, 1]
-                    Shininess: 64
-                    EmissionStrength: 0
-                    MeshID: 0
-              Shader: 24116af57b6022cd2464fbf641ae946a
-          - Entity:
               Tag: WallTop
               UUID: 9a7a30b9569eb870e6815d3662321c4c
               Transformation:
@@ -170,9 +74,9 @@ Scene:
                 UUID: 02afee3bc1cb75b7d8b882a8667faa84
                 Materials:
                   - Type: PBR
-                    Albedo: [1, 1, 1]
-                    Ambient: [0.200000003, 0.200000003, 0.200000003]
-                    ORM: [0, 0, 0]
+                    Albedo: [0.125490203, 1, 0.125490203]
+                    Ambient: [1, 1, 1]
+                    ORM: [0, 0.400000006, 0]
                     Diffuse: [0.5, 0.5, 0.5]
                     Specular: [0.5, 0.5, 0.5]
                     Emission: [1, 1, 1]
@@ -194,9 +98,9 @@ Scene:
                 UUID: 02afee3bc1cb75b7d8b882a8667faa84
                 Materials:
                   - Type: PBR
-                    Albedo: [1, 1, 1]
-                    Ambient: [0.200000003, 0.200000003, 0.200000003]
-                    ORM: [0, 0, 0]
+                    Albedo: [0.125490203, 1, 0.125490203]
+                    Ambient: [1, 1, 1]
+                    ORM: [0, 0.400000006, 0]
                     Diffuse: [0.5, 0.5, 0.5]
                     Specular: [0.5, 0.5, 0.5]
                     Emission: [1, 1, 1]
@@ -218,9 +122,9 @@ Scene:
                 UUID: 02afee3bc1cb75b7d8b882a8667faa84
                 Materials:
                   - Type: PBR
-                    Albedo: [1, 1, 1]
-                    Ambient: [0.200000003, 0.200000003, 0.200000003]
-                    ORM: [0, 0, 0]
+                    Albedo: [0.125490203, 1, 0.125490203]
+                    Ambient: [1, 1, 1]
+                    ORM: [0, 0.400000006, 0]
                     Diffuse: [0.5, 0.5, 0.5]
                     Specular: [0.5, 0.5, 0.5]
                     Emission: [1, 1, 1]
@@ -231,6 +135,19 @@ Scene:
     - Node:
         Name: Enviroment
         Childs:
+          - Entity:
+              Tag: Sky
+              UUID: ed39f278255d3fc7823454ad61d716e5
+              Transformation:
+                Translation: [16.9514027, 36.2624664, -97.3881531]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [180, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              SkyBox:
+                Type: CubeMap
+                UUID: 8911b8a8458923946819fb45fbb794fd
           - Entity:
               Tag: Sun
               UUID: 2efbdeb9c46b01cff562aee205853e19
@@ -255,7 +172,7 @@ Scene:
               Tag: Lamp
               UUID: 83e18dd0c2524c974f820b992bbddaa3
               Transformation:
-                Translation: [7.95967817, -6, 0]
+                Translation: [17.7102222, -6, 0]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -278,10 +195,10 @@ Scene:
               LightSource:
                 Type: Point
                 Ambient: [0, 0, 0]
-                Diffuse: [0.284284055, 0.573529422, 0.126513824]
-                Specular: [0.346743822, 0.897058845, 0.0835496038]
+                Diffuse: [0.352941155, 1, 0]
+                Specular: [1, 1, 1]
                 Direction: [0, -1, 0]
-                Position: [7.95967817, -6, 0]
+                Position: [17.7102222, -6, 0]
                 CLQ: [1, 0.0219999999, 0.00190000003]
                 InnerCone: 0
                 OuterCone: 0
@@ -306,8 +223,8 @@ Scene:
                 Materials:
                   - Type: PBR
                     Albedo: [1, 1, 1]
-                    Ambient: [0.200000003, 0.200000003, 0.200000003]
-                    ORM: [0, 0, 0]
+                    Ambient: [1, 1, 1]
+                    ORM: [0, 0.400000006, 0]
                     Diffuse: [0.5, 0.5, 0.5]
                     Specular: [0.5, 0.5, 0.5]
                     Emission: [1, 1, 1]
@@ -315,16 +232,130 @@ Scene:
                     EmissionStrength: 0
                     MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
-    - Entity:
-        Tag: Player
-        UUID: 091bb46fc39a4c4e97c5cdecb95de497
-        FPSCamera:
-          FOV: 90
-          Aspect: 1.35078537
-          NearPlane: 0.100000001
-          FarPlane: 2000000
-          Position: [0, 0, 0]
-          Direction: [0, 0, -1]
+              Physics:
+                InvMass: 0
+                InvInertia: 0
+                Collidable: true
+                Gravity: false
+    - Node:
+        Name: Cubes
+        Childs:
+          - Entity:
+              Tag: cube1
+              UUID: 214ec18617d03032346bb9b0b1227d17
+              Transformation:
+                Translation: [0, -6, 30]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [15, 0, 15]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              RenderModel:
+                UUID: 02afee3bc1cb75b7d8b882a8667faa84
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 0, 0]
+                    Ambient: [1, 1, 1]
+                    ORM: [0, 1, 0]
+                    Diffuse: [0.5, 0.5, 0.5]
+                    Specular: [0.5, 0.5, 0.5]
+                    Emission: [1, 1, 1]
+                    Shininess: 64
+                    EmissionStrength: 0
+                    MeshID: 0
+              Shader: 24116af57b6022cd2464fbf641ae946a
+              Physics:
+                InvMass: 0.100000001
+                InvInertia: 0.600000024
+                Collidable: true
+                Gravity: true
+          - Entity:
+              Tag: cube2
+              UUID: 214ec18617d03032346bb9b0b1227d12
+              Transformation:
+                Translation: [0, -2, 30]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [25, 0, 25]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              RenderModel:
+                UUID: 02afee3bc1cb75b7d8b882a8667faa84
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 0.235294104, 0]
+                    Ambient: [1, 1, 1]
+                    ORM: [0, 1, 0]
+                    Diffuse: [0.5, 0.5, 0.5]
+                    Specular: [0.5, 0.5, 0.5]
+                    Emission: [1, 1, 1]
+                    Shininess: 64
+                    EmissionStrength: 0
+                    MeshID: 0
+              Shader: 24116af57b6022cd2464fbf641ae946a
+              Physics:
+                InvMass: 0.100000001
+                InvInertia: 0.600000024
+                Collidable: true
+                Gravity: true
+          - Entity:
+              Tag: cube4
+              UUID: 214ec18617d03032346bb9b0b1227d55
+              Transformation:
+                Translation: [0, 2, 30]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [12, 0, 30]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              RenderModel:
+                UUID: 02afee3bc1cb75b7d8b882a8667faa84
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 0.470588207, 0]
+                    Ambient: [1, 1, 1]
+                    ORM: [0, 1, 0]
+                    Diffuse: [0.5, 0.5, 0.5]
+                    Specular: [0.5, 0.5, 0.5]
+                    Emission: [1, 1, 1]
+                    Shininess: 64
+                    EmissionStrength: 0
+                    MeshID: 0
+              Shader: 24116af57b6022cd2464fbf641ae946a
+              Physics:
+                InvMass: 0.100000001
+                InvInertia: 0.600000024
+                Collidable: true
+                Gravity: true
+          - Entity:
+              Tag: cube3
+              UUID: 214ec18617d03032346bb9b0b1227d14
+              Transformation:
+                Translation: [0, 6, 30]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [30, 0, 30]
+                RotationOffset: [0, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              RenderModel:
+                UUID: 02afee3bc1cb75b7d8b882a8667faa84
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 0.705882311, 0]
+                    Ambient: [1, 1, 1]
+                    ORM: [0, 1, 0]
+                    Diffuse: [0.5, 0.5, 0.5]
+                    Specular: [0.5, 0.5, 0.5]
+                    Emission: [1, 1, 1]
+                    Shininess: 64
+                    EmissionStrength: 0
+                    MeshID: 0
+              Shader: 24116af57b6022cd2464fbf641ae946a
+              Physics:
+                InvMass: 0.100000001
+                InvInertia: 0.600000024
+                Collidable: true
+                Gravity: true
   RendererSettings:
     Bloom: false
     BloomThreshold: 1

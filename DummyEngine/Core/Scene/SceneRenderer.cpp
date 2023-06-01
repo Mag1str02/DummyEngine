@@ -51,6 +51,7 @@ namespace DE {
                 if (skybox.Has<TransformComponent>()) {
                     transform = skybox.Get<TransformComponent>().GetRotation();
                 }
+                static U32 cnt = 0;
                 Renderer::Submit(skybox.Get<SkyBoxComponent>()->GetMap(), camera.Get<FPSCamera>(), transform);
             }
 

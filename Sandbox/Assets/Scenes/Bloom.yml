@@ -11,7 +11,7 @@ Scene:
       Space:
         Path: Assets\Textures\Skyboxes\Space.png
         FlipUV: false
-        UUID: 8911b8a8458923946819fb45fbb794fd
+        UUID: 8911b8a8458923946819fb45fbb214fd
     Shaders:
       PBR:
         UUID: 24116af57b6022cd2464fbf641ae946a
@@ -20,10 +20,10 @@ Scene:
     Scripts: ~
   Hierarchy:
     - Node:
-        Name: Gate
+        Name: Cubes
         Childs:
           - Entity:
-              Tag: cube3
+              Tag: CubeRed
               UUID: 214ec18617d03032346bb9b0b1227d14
               Transformation:
                 Translation: [12, 3, -7]
@@ -37,20 +37,20 @@ Scene:
                 Materials:
                   - Type: PBR
                     Albedo: [1, 1, 1]
-                    Ambient: [0.917050719, 0.845208049, 0.845208049]
+                    Ambient: [1, 1, 1]
                     ORM: [0, 1, 0.00999999978]
                     Diffuse: [0.5, 0.5, 0.5]
                     Specular: [0.5, 0.5, 0.5]
-                    Emission: [0.261483669, 1, 0.00460827351]
+                    Emission: [1, 0, 0]
                     Shininess: 64
-                    EmissionStrength: 0
+                    EmissionStrength: 32
                     MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
-              Tag: cube4
+              Tag: CubeYellow
               UUID: 214ec18617d03032346bb9b0b1227d55
               Transformation:
-                Translation: [9, 2, 9]
+                Translation: [9, 2, 4]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [2, 0, 30]
                 RotationOffset: [0, 0, 0]
@@ -59,63 +59,63 @@ Scene:
               RenderModel:
                 UUID: 02afee3bc1cb75b7d8b882a8667faa84
                 Materials:
-                  - Type: None
+                  - Type: PBR
                     Albedo: [1, 1, 1]
-                    Ambient: [0.200000003, 0.200000003, 0.200000003]
-                    ORM: [0, 0, 0]
+                    Ambient: [1, 1, 1]
+                    ORM: [0, 1, 0]
                     Diffuse: [0.5, 0.5, 0.5]
                     Specular: [0.5, 0.5, 0.5]
-                    Emission: [1, 1, 1]
+                    Emission: [1, 0.705882311, 0]
                     Shininess: 64
-                    EmissionStrength: 0
+                    EmissionStrength: 43.4000015
                     MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
-              Tag: cube2
+              Tag: CubeBlue
               UUID: 214ec18617d03032346bb9b0b1227d12
               Transformation:
-                Translation: [14, -1, 4]
+                Translation: [16, 2, 4]
                 TranslationOffset: [0, 0, 0]
-                Rotation: [25, 332, 25]
+                Rotation: [21, 15, 0]
                 RotationOffset: [0, 0, 0]
-                Scale: [2, 2, 2]
-                ScaleOffset: [1, 1, 1]
-              RenderModel:
-                UUID: 02afee3bc1cb75b7d8b882a8667faa84
-                Materials:
-                  - Type: None
-                    Albedo: [1, 1, 1]
-                    Ambient: [0.200000003, 0.200000003, 0.200000003]
-                    ORM: [0, 0, 0]
-                    Diffuse: [0.5, 0.5, 0.5]
-                    Specular: [0.5, 0.5, 0.5]
-                    Emission: [1, 1, 1]
-                    Shininess: 64
-                    EmissionStrength: 0
-                    MeshID: 0
-              Shader: 24116af57b6022cd2464fbf641ae946a
-          - Entity:
-              Tag: cube
-              UUID: 214ec18617d03032346bb9b0b1227d17
-              Transformation:
-                Translation: [-2, -4, 29]
-                TranslationOffset: [0, 0, 0]
-                Rotation: [15, 0, 15]
-                RotationOffset: [0, 0, 0]
-                Scale: [1, 1, 1]
+                Scale: [2, 6, 2]
                 ScaleOffset: [1, 1, 1]
               RenderModel:
                 UUID: 02afee3bc1cb75b7d8b882a8667faa84
                 Materials:
                   - Type: PBR
-                    Albedo: [0, 0, 0]
-                    Ambient: [0, 0, 0]
-                    ORM: [1, 0.389999986, 0]
+                    Albedo: [1, 1, 1]
+                    Ambient: [1, 1, 1]
+                    ORM: [0, 1, 0]
+                    Diffuse: [0.5, 0.5, 0.5]
+                    Specular: [0.5, 0.5, 0.5]
+                    Emission: [0, 0, 1]
+                    Shininess: 64
+                    EmissionStrength: 50.2000008
+                    MeshID: 0
+              Shader: 24116af57b6022cd2464fbf641ae946a
+          - Entity:
+              Tag: CubeGreen
+              UUID: 214ec18617d03032346bb9b0b1227d17
+              Transformation:
+                Translation: [1, 13, 8]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [15, 0, 15]
+                RotationOffset: [0, 0, 0]
+                Scale: [3, 3, 3]
+                ScaleOffset: [1, 1, 1]
+              RenderModel:
+                UUID: 02afee3bc1cb75b7d8b882a8667faa84
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [1, 1, 1]
+                    ORM: [1, 1, 0]
                     Diffuse: [0.5, 0.5, 0.5]
                     Specular: [0.5, 0.5, 0.5]
                     Emission: [0, 1, 0]
                     Shininess: 64
-                    EmissionStrength: 4.5999999
+                    EmissionStrength: 15.6999998
                     MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
     - Node:
@@ -145,7 +145,7 @@ Scene:
               Tag: Lamp
               UUID: 83e18dd0c2524c974f820b992bbddaa3
               Transformation:
-                Translation: [7.95967817, 3, 0]
+                Translation: [-19.0400009, 6, -84]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -171,7 +171,7 @@ Scene:
                 Diffuse: [1, 1, 1]
                 Specular: [1, 1, 1]
                 Direction: [0, -1, 0]
-                Position: [7.95967817, 3, 0]
+                Position: [-19.0400009, 6, -84]
                 CLQ: [0.200000003, 0, 0.00100000005]
                 InnerCone: 0
                 OuterCone: 0
@@ -189,23 +189,36 @@ Scene:
                 UUID: 02afee3bc1cb75b7d8b882a8667faa84
                 Materials:
                   - Type: PBR
-                    Albedo: [1, 0, 0]
-                    Ambient: [1, 0, 0]
-                    ORM: [0, 0.610000014, 0.529999971]
+                    Albedo: [1, 1, 1]
+                    Ambient: [1, 1, 1]
+                    ORM: [0, 0.959999979, 0.920000017]
                     Diffuse: [0.5, 0.5, 0.5]
                     Specular: [0.5, 0.5, 0.5]
-                    Emission: [1, 0, 0]
+                    Emission: [1, 1, 1]
                     Shininess: 64
                     EmissionStrength: 0
                     MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
+          - Entity:
+              Tag: Sky
+              UUID: ed39f278255d3fc7823454ad61d716e5
+              Transformation:
+                Translation: [16.9514027, 36.2624664, -97.3881531]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [180, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              SkyBox:
+                Type: CubeMap
+                UUID: 8911b8a8458923946819fb45fbb214fd
   RendererSettings:
     Bloom: false
-    BloomThreshold: 1
-    BloomSoftTreshold: 0
-    BloomDepth: 5
+    BloomThreshold: 4.5
+    BloomSoftTreshold: 3.07999992
+    BloomDepth: 12
     BloomRadius: 0.00499999989
-    BloomStrength: 0.0399999991
-    GammaToneMapping: false
-    Exposure: 1
-    Gamma: 1
+    BloomStrength: 0.0189999994
+    GammaToneMapping: true
+    Exposure: 3
+    Gamma: 0.5

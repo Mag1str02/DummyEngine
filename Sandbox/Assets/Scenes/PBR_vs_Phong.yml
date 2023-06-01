@@ -376,7 +376,7 @@ Scene:
     BloomSoftTreshold: 0
     BloomDepth: 9
     BloomRadius: 0.00499999989
-    BloomStrength: 0.0359999985
+    BloomStrength: 0.0199999996
     GammaToneMapping: true
     Exposure: 3.95000005
     Gamma: 0.469999999
