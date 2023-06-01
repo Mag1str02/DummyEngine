@@ -8,6 +8,8 @@ namespace DE {
         Phong,
         PBR,
     };
+    std::string MaterialTypeToStr(MaterialType type);
+    MaterialType MaterialTypeFromStr(const std::string& str);
     enum class TextureChannels { None = 0, RED, RG, RGB, RGBA };
     enum class TextureFormat {
         None = 0,
@@ -67,12 +69,14 @@ namespace DE {
         Vec3 specular = Vec3(1.0f);
         Vec3 orm      = Vec3(1.0f);
         Vec3 ambient  = Vec3(1.0f);
+        Vec3 emission = Vec3(1.0f);
 
         Ref<TextureData> albedo_map;
         Ref<TextureData> diffuse_map;
         Ref<TextureData> specular_map;
         Ref<TextureData> normal_map;
         Ref<TextureData> orm_map;
+        Ref<TextureData> emission_map;
     };
 
     struct RenderSubMeshData {

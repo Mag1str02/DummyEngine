@@ -50,7 +50,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(2)
@@ -62,7 +74,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(3)
@@ -74,7 +98,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(4)
@@ -86,7 +122,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(5)
@@ -98,7 +146,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(6)
@@ -110,7 +170,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(7)
@@ -122,7 +194,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(8)
@@ -134,7 +218,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(9)
@@ -146,7 +242,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(10)
@@ -158,7 +266,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(11)
@@ -170,7 +290,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(12)
@@ -182,7 +314,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(13)
@@ -194,7 +338,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(14)
@@ -206,7 +362,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(15)
@@ -218,7 +386,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(16)
@@ -230,7 +410,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(17)
@@ -242,7 +434,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(18)
@@ -254,7 +458,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(19)
@@ -266,7 +482,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch(20)
@@ -278,7 +506,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Arch
@@ -290,7 +530,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [2, 2, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 40fb5568addff10da5c21859fe9d3c3a
+              RenderModel:
+                UUID: 40fb5568addff10da5c21859fe9d3c3a
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.200000003, 0.200000003, 0.200000003]
+                    Emission: [1, 1, 1]
+                    Shininess: 20
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
     - Node:
         Name: Enviroment
@@ -318,7 +570,7 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [1, 1, 1]
                 ScaleOffset: [1, 1, 1]
-              SkyBox: 
+              SkyBox:
                 Type: CubeMap
                 UUID: 8911b8a8458923946819fb45fbb794fd
               Script:
@@ -338,7 +590,19 @@ Scene:
                 RotationOffset: [-90, 0, 0]
                 Scale: [1, 1, 1]
                 ScaleOffset: [0.0500000007, 0.0500000007, 0.0500000007]
-              RenderModel: 9de192d9f46df53b5ff89998f688618e
+              RenderModel:
+                UUID: 9de192d9f46df53b5ff89998f688618e
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.0666666701, 0.0666666701, 0.0666666701]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.0666666701, 0.0666666701, 0.0666666701]
+                    Specular: [0.899999976, 0.899999976, 0.899999976]
+                    Emission: [1, 1, 1]
+                    Shininess: 3.24900961
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: Backpack
@@ -350,7 +614,19 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [5, 5, 5]
                 ScaleOffset: [1, 1, 1]
-              RenderModel: 5c7dfba9096b1d2047cf3bab45ecda0e
+              RenderModel:
+                UUID: 5c7dfba9096b1d2047cf3bab45ecda0e
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [1, 1, 1]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.800000012, 0.800000012, 0.800000012]
+                    Specular: [0.5, 0.5, 0.5]
+                    Emission: [1, 1, 1]
+                    Shininess: 225
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
           - Entity:
               Tag: surface
@@ -362,5 +638,27 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [1000, 1, 100]
                 ScaleOffset: [1, 1, 1]
-              RenderModel: 02afee3bc1cb75b7d8b882a8667faa84
+              RenderModel:
+                UUID: 02afee3bc1cb75b7d8b882a8667faa84
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [0.200000003, 0.200000003, 0.200000003]
+                    ORM: [0, 0, 0]
+                    Diffuse: [0.5, 0.5, 0.5]
+                    Specular: [0.5, 0.5, 0.5]
+                    Emission: [1, 1, 1]
+                    Shininess: 64
+                    EmissionStrength: 0
+                    MeshID: 0
               Shader: 24116af57b6022cd2464fbf641ae946a
+  RendererSettings:
+    Bloom: false
+    BloomThreshold: 1
+    BloomSoftTreshold: 0
+    BloomDepth: 5
+    BloomRadius: 0.00499999989
+    BloomStrength: 0.0399999991
+    GammaToneMapping: false
+    Exposure: 1
+    Gamma: 1

@@ -1,6 +1,6 @@
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 
-//TODO: Remove glad
+// TODO: Remove glad
 #include <glad/glad.h>
 
 #include "DummyEngine/Core/Application/Config.h"
@@ -64,35 +64,23 @@ namespace DE {
     }
     S_METHOD_IMPL(Unit, Submit, (Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& transform), (mesh, shader, transform)) {
         shader->Bind();
-        if (mesh->m_InstanceBuffer) {
-            shader->SetInt("u_Instanced", 1);
-            for (const auto& sub_mesh : mesh->m_SubMeshes) {
-                sub_mesh.material.Apply(shader);
-                sub_mesh.vertex_array->Bind();
-                m_RenderAPI->DrawInstanced(sub_mesh.vertex_array, mesh->m_Instances.size());
+        shader->SetMat4("u_Transform", transform);
+        for (const auto& sub_mesh : mesh->m_SubMeshes) {
+            sub_mesh.material.Apply(shader);
+            sub_mesh.vertex_array->Bind();
+            m_RenderAPI->DrawIndexed(sub_mesh.vertex_array);
 
-                ++m_FrameStatistics.m_DrawCallsAmount;
-                m_FrameStatistics.m_DrawnInstances += mesh->m_Instances.size();
-            }
-        } else {
-            shader->SetInt("u_Instanced", 0);
-            shader->SetMat4("u_Transform", transform);
-            for (const auto& sub_mesh : mesh->m_SubMeshes) {
-                sub_mesh.material.Apply(shader);
-                sub_mesh.vertex_array->Bind();
-                m_RenderAPI->DrawInstanced(sub_mesh.vertex_array, 1);
-
-                ++m_FrameStatistics.m_DrawCallsAmount;
-                ++m_FrameStatistics.m_DrawnInstances;
-            }
+            ++m_FrameStatistics.m_DrawCallsAmount;
+            ++m_FrameStatistics.m_DrawnInstances;
         }
+
         return Unit();
     }
     S_METHOD_IMPL(Unit, Submit, (Ref<CubeMap> cube_map, const FPSCamera& camera, const Mat4& transform), (cube_map, camera, transform)) {
-        cube_map->Bind(5);
+        cube_map->Bind(11);
         auto shader = m_Resources.skybox;
         shader->Bind();
-        shader->SetInt("u_SkyBox", 5);
+        shader->SetInt("u_SkyBox", 11);
         shader->SetMat4("u_Transform", transform);
         shader->SetMat4("u_Projection", camera.GetProjectionMatrix());
         shader->SetMat4("u_View", camera.GetViewMatrix());

@@ -95,7 +95,23 @@ namespace DE {
     }
     template <> void SaveComponent<RenderMeshComponent>(YAML::Node& n_Entity, Entity entity) {
         if (entity.Has<RenderMeshComponent>()) {
-            n_Entity["RenderModel"] = entity.Get<RenderMeshComponent>().id.Hex();
+            n_Entity["RenderModel"]["UUID"] = entity.Get<RenderMeshComponent>().id.Hex();
+            auto materials                  = n_Entity["RenderModel"]["Materials"];
+            U32  cnt                        = 0;
+            for (const auto& mesh : entity.Get<RenderMeshComponent>()->GetSubMeshes()) {
+                YAML::Node mat;
+                mat["Type"]             = MaterialTypeToStr(mesh.material.type);
+                mat["Albedo"]           = NodeVec3(mesh.material.albedo);
+                mat["Ambient"]          = NodeVec3(mesh.material.ambient);
+                mat["ORM"]              = NodeVec3(mesh.material.orm);
+                mat["Diffuse"]          = NodeVec3(mesh.material.diffuse);
+                mat["Specular"]         = NodeVec3(mesh.material.specular);
+                mat["Emission"]         = NodeVec3(mesh.material.emission);
+                mat["Shininess"]        = mesh.material.shininess;
+                mat["EmissionStrength"] = mesh.material.emission_strength;
+                mat["MeshID"]           = cnt++;
+                materials.push_back(mat);
+            }
         }
     }
     template <> void SaveComponent<ShaderComponent>(YAML::Node& n_Entity, Entity entity) {
@@ -175,6 +191,19 @@ namespace DE {
         return res;
     }
 
+    YAML::Node SaveRendererSettings(const SceneRenderer::Settings& settings) {
+        YAML::Node set;
+        set["Bloom"]             = settings.bloom;
+        set["BloomThreshold"]    = settings.bloom_threshold;
+        set["BloomSoftTreshold"] = settings.bloom_soft_threshold;
+        set["BloomDepth"]        = settings.bloom_depth;
+        set["BloomRadius"]       = settings.bloom_radius;
+        set["BloomStrength"]     = settings.bloom_strength;
+        set["GammaToneMapping"]  = settings.gamma_tone_mapping;
+        set["Exposure"]          = settings.exposure;
+        set["Gamma"]             = settings.gamma;
+        return set;
+    }
     YAML::Node SaveTextures(const SceneAssets& assets) {
         YAML::Node n_Textures;
         for (const auto& texture : assets.textures) {
@@ -196,12 +225,6 @@ namespace DE {
             n_Model["Compress"]  = model.loading_props.compress;
             n_Model["FlipUV"]    = model.loading_props.flip_uvs;
             n_Model["UUID"]      = model.id.Hex();
-            if (model.loading_props.mat_type == MaterialType::PBR) {
-                n_Model["MatType"] = "PBR";
-            }
-            if (model.loading_props.mat_type == MaterialType::Phong) {
-                n_Model["MatType"] = "Phong";
-            }
         }
         return n_Models;
     }
@@ -306,14 +329,28 @@ namespace DE {
         entity.AddComponent(transformation);
     }
     template <> void LoadComponent<RenderMeshComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
-        UUID id = n_Component.as<std::string>();
+        UUID id = n_Component["UUID"].as<std::string>();
         if (!ResourceManager::HasRenderMesh(id) && !ResourceManager::LoadRenderMesh(id)) {
             LOG_WARNING("SceneLoader", "RenderMesh (", id, ") not found in ResourceManager");
         }
         if (!ResourceManager::HasHitBox(id) && !ResourceManager::LoadHitBox(id)) {
             LOG_WARNING("SceneLoader", "Failed to load HitBox (", id, ")");
         }
-        entity.AddComponent<RenderMeshComponent>({id, nullptr});
+        auto& meshes = entity.AddComponent<RenderMeshComponent>({id, ResourceManager::GetRenderMesh(id).value()->Copy()})->mesh->GetSubMeshes();
+
+        for (const auto& mat : n_Component["Materials"]) {
+            U32   mesh_id              = mat["MeshID"].as<U32>();
+            auto& material             = meshes[mesh_id].material;
+            material.albedo            = GetVec3(mat["Albedo"]);
+            material.ambient           = GetVec3(mat["Ambient"]);
+            material.diffuse           = GetVec3(mat["Diffuse"]);
+            material.specular          = GetVec3(mat["Specular"]);
+            material.emission          = GetVec3(mat["Emission"]);
+            material.orm               = GetVec3(mat["ORM"]);
+            material.shininess         = mat["Shininess"].as<float>();
+            material.emission_strength = mat["EmissionStrength"].as<float>();
+            material.type              = MaterialTypeFromStr(mat["Type"].as<std::string>());
+        }
     }
     template <> void LoadComponent<ShaderComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
         UUID id = n_Component.as<std::string>();
@@ -414,13 +451,6 @@ namespace DE {
         if (n_Entity["SkyBox"]) LoadComponent<SkyBoxComponent>(scene, n_Entity["SkyBox"], entity);
         if (n_Entity["Script"]) LoadComponent<ScriptComponent>(scene, n_Entity["Script"], entity);
         if (n_Entity["Physics"]) LoadComponent<Physics::PhysicsComponent>(scene, n_Entity["Physics"], entity);
-
-        if (entity.Has<RenderMeshComponent>() && entity.Has<ShaderComponent>()) {
-            UUID mesh_id   = entity.Get<RenderMeshComponent>().id;
-            UUID shader_id = entity.Get<ShaderComponent>().id;
-
-            entity.Get<RenderMeshComponent>().mesh_instance = scene->GetRenderer()->GetRenderMeshInstance(mesh_id, shader_id);
-        }
         return entity;
     }
     void LoadHierarchyNode(Ref<Scene> scene, YAML::Node n_Array, SceneHierarchy::Node load_to) {
@@ -455,13 +485,7 @@ namespace DE {
                 asset.loading_props.compress = node.second["Compress"].as<bool>();
                 asset.loading_props.flip_uvs = node.second["FlipUV"].as<bool>();
                 std::string type             = (node.second["MatType"] ? node.second["MatType"].as<std::string>() : "");
-                if (type == "PBR") {
-                    asset.loading_props.mat_type = MaterialType::PBR;
-                }
-                if (type == "Phong") {
-                    asset.loading_props.mat_type = MaterialType::Phong;
-                }
-                asset.loading_props.path = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
+                asset.loading_props.path     = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / node.second["Path"].as<std::string>();
                 data.render_meshes.emplace_back(std::move(asset));
             }
         }
@@ -494,6 +518,17 @@ namespace DE {
             }
         }
     }
+    void LoadRendererSettings(SceneRenderer::Settings& settings, YAML::Node node) {
+        settings.bloom                = node["Bloom"].as<bool>();
+        settings.bloom_threshold      = node["BloomThreshold"].as<float>();
+        settings.bloom_soft_threshold = node["BloomSoftTreshold"].as<float>();
+        settings.bloom_depth          = node["BloomDepth"].as<U32>();
+        settings.bloom_radius         = node["BloomRadius"].as<float>();
+        settings.bloom_strength       = node["BloomRadius"].as<float>();
+        settings.gamma_tone_mapping   = node["GammaToneMapping"].as<bool>();
+        settings.exposure             = node["Exposure"].as<float>();
+        settings.gamma                = node["Gamma"].as<float>();
+    }
 
     //*~~~SceneLoader~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -502,6 +537,7 @@ namespace DE {
             SceneFileData result;
             YAML::Node    n_Scene = YAML::LoadFile(path.string())["Scene"];
             LoadAssets(result.assets, n_Scene["Assets"]);
+            LoadRendererSettings(result.settings, n_Scene["RendererSettings"]);
             result.hierarchy = n_Scene["Hierarchy"];
             result.name      = n_Scene["Name"].as<std::string>();
             LOG_INFO("SceneLoader", "Loaded SceneData for (", RelativeToExecutable(path), ")");
@@ -539,10 +575,11 @@ namespace DE {
                 return false;
             }
 
-            n_Root["Scene"]      = n_Scene;
-            n_Scene["Name"]      = data.name;
-            n_Scene["Assets"]    = SaveAssets(data.assets);
-            n_Scene["Hierarchy"] = data.hierarchy;
+            n_Root["Scene"]             = n_Scene;
+            n_Scene["Name"]             = data.name;
+            n_Scene["Assets"]           = SaveAssets(data.assets);
+            n_Scene["Hierarchy"]        = data.hierarchy;
+            n_Scene["RendererSettings"] = SaveRendererSettings(data.settings);
             output_file << n_Root;
             LOG_INFO("SceneLoader", "Saved scene (", data.name, ") to file (", RelativeToExecutable(path), ")");
             return true;

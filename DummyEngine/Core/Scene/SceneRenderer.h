@@ -10,36 +10,33 @@
 namespace DE {
     class SceneRenderer {
     public:
+        struct Settings {
+            bool  bloom               = false;
+            float bloom_threshold      = 1;
+            float bloom_soft_threshold = 0;
+            float bloom_radius        = 0.005;
+            float bloom_strength      = 0.04;
+            U32   bloom_depth         = 5;
+
+            bool  gamma_tone_mapping = false;
+            float exposure           = 1;
+            float gamma              = 1;
+        };
+        Settings settings;
         SceneRenderer(Scene* scene);
 
         void             Render(Entity camera);
         void             OnViewPortResize(U32 x, U32 y);
         Ref<FrameBuffer> GetFrameBuffer();
 
-        void                    RequestShader(UUID shader_id);
-        Ref<RenderMeshInstance> GetRenderMeshInstance(UUID mesh_id, UUID shader_ids);
-
-        bool  GammaHDR = false;
-        float Exposure = 1;
-        float Gamma    = 1;
-
-        bool  Bloom             = false;
-        float BloomTreshold     = 1;
-        float BloomSoftTreshold = 0;
-        float BloomRadius       = 0.005;
-        float BloomDepth        = 5;
-        float BloomStrength     = 0.04;
+        void RequestShader(UUID shader_id);
 
     private:
         void UpdateShaders(const FPSCamera& camera, Entity skybox);
-        void CreateInstancedMesh(UUID mesh_id, UUID shader_id);
 
-        Scene* m_Scene;
-
-        Ref<UniformBuffer> m_Lights;
-        Ref<FrameBuffer>   m_FrameBuffer;
-
-        std::unordered_map<UUID, Ref<Shader>>                                                   m_Shaders;
-        std::unordered_map<std::pair<UUID, UUID>, Pair<Ref<RenderMesh>, Ref<Shader>>, PairHash> m_InstancedMeshes;
+        Scene*                                m_Scene;
+        Ref<UniformBuffer>                    m_Lights;
+        Ref<FrameBuffer>                      m_FrameBuffer;
+        std::unordered_map<UUID, Ref<Shader>> m_Shaders;
     };
 }  // namespace DE

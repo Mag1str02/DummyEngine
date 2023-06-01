@@ -6,3 +6,13 @@ Scene:
     Shaders: ~
     Scripts: ~
   Hierarchy: ~
+  RendererSettings:
+    Bloom: false
+    BloomThreshold: 1
+    BloomSoftTreshold: 0
+    BloomDepth: 5
+    BloomRadius: 0.00499999989
+    BloomStrength: 0.0399999991
+    GammaToneMapping: false
+    Exposure: 1
+    Gamma: 1
