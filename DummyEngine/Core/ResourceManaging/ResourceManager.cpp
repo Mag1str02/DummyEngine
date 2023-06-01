@@ -163,14 +163,6 @@ namespace DE {
         }
         return false;
     }
-    S_METHOD_IMPL(bool, DeleteTexture, (UUID id), (id)) {
-        if (m_Textures.contains(id)) {
-            m_Textures.erase(id);
-            LOG_INFO("ResourceManager", "Texture (", id, ") was deleted");
-            return true;
-        }
-        return false;
-    }
     S_METHOD_IMPL(bool, DeleteHitBox, (UUID id), (id)) {
         if (m_HitBoxes.contains(id)) {
             m_HitBoxes.erase(id);
@@ -179,11 +171,19 @@ namespace DE {
         }
         return false;
     }
-
+    S_METHOD_IMPL(bool, DeleteTexture, (UUID id), (id)) {
+        if (m_Textures.contains(id)) {
+            m_Textures.erase(id);
+            LOG_INFO("ResourceManager", "Texture (", id, ") was deleted");
+            return true;
+        }
+        return false;
+    }
     S_METHOD_IMPL(Unit, Clear, (), ()) {
         m_Shaders.clear();
         m_RenderMeshes.clear();
         m_CubeMaps.clear();
+        m_HitBoxes.clear();
         m_Textures.clear();
         LOG_INFO("ResourceManager", "Cleared all resources");
         return Unit();

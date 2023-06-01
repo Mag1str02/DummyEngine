@@ -7,8 +7,7 @@ include(sources.cmake)
 add_subdirectory(Libs)
 add_library(DummyEngineLib SHARED
    ${ENGINE_SOURCES}
-   ${PLATFORM_SOURCES}
-        Core/SoundEngine/AudioEngineFacade.h Core/SoundEngine/AudioEngineFacade.cpp Core/SoundEngine/AudioFile.cpp Core/SoundEngine/AudioFile.h Core/SoundEngine/AudioEngine.cpp Core/SoundEngine/AudioEngine.h)
+   ${PLATFORM_SOURCES})
 
 target_compile_definitions(DummyEngineLib PUBLIC 
     DE_ENABLE_PROFILER=1

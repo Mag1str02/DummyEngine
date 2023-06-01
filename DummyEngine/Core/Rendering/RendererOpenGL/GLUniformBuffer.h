@@ -4,19 +4,17 @@
 
 #include "DummyEngine/Core/Rendering/Renderer/UniformBuffer.h"
 
-namespace DE
-{
-    class GLUniformBuffer : public UniformBuffer
-    {
+namespace DE {
+    class GLUniformBuffer : public UniformBuffer {
     public:
         GLUniformBuffer(const BufferLayout& layout, U32 size);
         virtual ~GLUniformBuffer();
 
-        GLUniformBuffer()                             = delete;
-        GLUniformBuffer(const GLUniformBuffer& other) = delete;
-        GLUniformBuffer(GLUniformBuffer&& other)      = delete;
+        GLUniformBuffer()                                        = delete;
+        GLUniformBuffer(const GLUniformBuffer& other)            = delete;
+        GLUniformBuffer(GLUniformBuffer&& other)                 = delete;
         GLUniformBuffer& operator=(const GLUniformBuffer& other) = delete;
-        GLUniformBuffer& operator=(GLUniformBuffer&& other) = delete;
+        GLUniformBuffer& operator=(GLUniformBuffer&& other)      = delete;
 
         virtual void                Bind(U32 index) const;
         virtual LocalBufferNode     at(U32 index);
