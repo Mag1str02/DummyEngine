@@ -238,6 +238,24 @@ namespace DE {
     }
 
     void WavSound::start_streaming() {
+        alCall(alDeleteSources, 1, &source);
+
+        for (std::size_t i = 0; i < StreamingBuffer::NUM_BUFFERS; ++i) {
+            alCall(alBufferData,
+                   reinterpret_cast<StreamingBuffer*>(buffer.get())->get_buffer(i),
+                   format,
+                   &soundData[i * StreamingBuffer::BUFFER_SIZE],
+                   StreamingBuffer::BUFFER_SIZE,
+                   sampleRate);
+        }
+
+        alCall(alGenSources, 1, &source);
+        alCall(alSourcef, source, AL_PITCH, 1);
+        alCall(alSourcef, source, AL_GAIN, 1.0f);
+        alCall(alSource3f, source, AL_POSITION, 0, 0, 0);
+        alCall(alSource3f, source, AL_VELOCITY, 0, 0, 0);
+        alCall(alSourcei, source, AL_LOOPING, AL_FALSE);
+
         cursor = StreamingBuffer::BUFFER_SIZE * StreamingBuffer::NUM_BUFFERS;
         alCall(alSourceQueueBuffers, source, StreamingBuffer::NUM_BUFFERS, (reinterpret_cast<StreamingBuffer*>(buffer.get())->get_buffer_pointer(0)));
         alCall(alSourcePlay, source);
