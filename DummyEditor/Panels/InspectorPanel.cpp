@@ -153,6 +153,32 @@ namespace DE {
             }
         }
     }
+    template <> void InspectorPanel::DrawComponentWidget<AudioComponent>(Entity entity) {
+        if (m_Entity.Has<AudioComponent>()) {
+            if (ImGui::CollapsingHeader("  AudioComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
+                auto&       audio = m_Entity.Get<AudioComponent>();
+                std::string name  = "File not selected";
+                if (!audio.path.empty()) {
+                    name = audio.path.filename().string();
+                }
+                ImGui::Columns(2);
+                ImGui::SetCursorPosX(ImGuiUtils::Constants::DefaultLeftPadding);
+                ImGui::TextUnformatted("FileName");
+                ImGui::NextColumn();
+                ImGui::SetNextItemWidth(ImGuiUtils::Constants::DefaultRightPadding);
+                ImGui::InputText("##InputAudioFile", &name, ImGuiInputTextFlags_ReadOnly);
+                ImGui::Columns(1);
+                if (ImGui::Button("Select audio file", {ImGui::GetContentRegionAvail().x, 30})) {
+                    Path res = FileSystem::OpenFileDialog("Audio (*.wav)", "wav");
+                    if (!res.empty()) {
+                        audio.sound = CreateScope<WavSound>(res.string());
+                        audio.sound->init();
+                        audio.path  = res;
+                    }
+                }
+            }
+        }
+    }
 
     void InspectorPanel::OnImGui() {
         DE_PROFILE_SCOPE("InspectorPanel OnImGui");
@@ -167,6 +193,7 @@ namespace DE {
                     DrawComponentWidget<LightSource>(m_Entity);
                     DrawComponentWidget<RenderMeshComponent>(m_Entity);
                     DrawComponentWidget<SkyBoxComponent>(m_Entity);
+                    DrawComponentWidget<AudioComponent>(m_Entity);
                     AddComponent();
                 }
             }
@@ -186,6 +213,9 @@ namespace DE {
             }
             if (!m_Entity.Has<FPSCamera>() && ImGui::Selectable(ICON_MD_VIDEOCAM "Camera")) {
                 m_Entity.Add<FPSCamera>();
+            }
+            if (!m_Entity.Has<AudioComponent>() && ImGui::Selectable("Audio")) {
+                m_Entity.Add<AudioComponent>();
             }
             ImGui::EndPopup();
         }

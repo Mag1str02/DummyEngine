@@ -45,6 +45,8 @@ target_include_directories(Dependencies
     PUBLIC ASSIMP/include
     PUBLIC STB_IMAGE
     PUBLIC YAML/include
+    PUBLIC NFD/src/include
+    PUBLIC openAL/include
     PUBLIC .
 )
 target_link_libraries(Dependencies
@@ -53,5 +55,6 @@ target_link_libraries(Dependencies
     PUBLIC glfw
     PUBLIC assimp
     PUBLIC yaml-cpp
-    PUBLIC dbghelp
+    PUBLIC OpenAL
+    PUBLIC nfd
 )
