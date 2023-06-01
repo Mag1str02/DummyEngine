@@ -20,8 +20,9 @@ namespace DE {
         Buffer(Buffer&& other) noexcept : bufferID(other.bufferID) { other.bufferID = 0; }
         Buffer& operator=(Buffer&& other) noexcept {
             if (this != &other) {
-                alDeleteBuffers(1, &bufferID);
+                alCall(alDeleteBuffers, 1, &bufferID);
                 bufferID = other.bufferID;
+                filename = other.filename;
                 other.bufferID = 0;
             }
             return *this;
@@ -33,31 +34,42 @@ namespace DE {
         Buffer() : bufferID(0) { alGenBuffers(1, &bufferID); }
 
         ALuint bufferID;
+        std::string filename;
     };
 
     class RegularBuffer : public Buffer {
     public:
         RegularBuffer();
+        RegularBuffer(const std::string& filename);
         ~RegularBuffer();
     };
 
     class StreamingBuffer : public Buffer {
     public:
-        static constexpr size_t NUM_BUFFERS = 3;
+        static constexpr size_t NUM_BUFFERS = 4;
+        static constexpr size_t BUFFER_SIZE = 65536 * 2;
 
         StreamingBuffer();
+        StreamingBuffer(const std::string& filename);
         ~StreamingBuffer();
 
     private:
+
+
         ALuint buffers[NUM_BUFFERS];
     };
 
     class BufferFactory {
     public:
+        enum class BufferType {
+            REGULAR,
+            STREAMING,
+        };
+
         BufferFactory() = default;
         ~BufferFactory() = default;
 
-        std::unique_ptr<Buffer> createBuffer();
+        std::unique_ptr<Buffer> createBuffer(BufferFactory::BufferType, const std::string& filepath);
 
         friend class SoundFactory;
     };
@@ -81,7 +93,6 @@ namespace DE {
     protected:
         std::string filepath;
         std::unique_ptr<Buffer> buffer;
-        ALenum format;
         ALuint source;
         ALint state;
     };
@@ -89,7 +100,7 @@ namespace DE {
     class WavSound : public Sound {
     public:
         WavSound() = default;
-        ~WavSound();
+        ~WavSound() override;
         explicit WavSound(const std::string& filepath) : Sound(filepath) {}
 
         void init() override; // open file;

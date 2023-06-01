@@ -10,8 +10,51 @@ namespace DE {
         }
     }
 
+    std::unique_ptr<Buffer> BufferFactory::createBuffer(BufferFactory::BufferType type, const std::string& filepath) {
+        switch (type) {
+            case BufferType::REGULAR:
+
+            case BufferType::STREAMING:
+
+            default:
+                throw std::invalid_argument("Invalid buffer type");
+        }
+    }
+
     RegularBuffer::RegularBuffer() {
         alCall(alGenBuffers, 1, &bufferID);
+    }
+
+    RegularBuffer::RegularBuffer(const std::string& filename) {
+        std::uint8_t channels;
+        std::int32_t sampleRate;
+        std::uint8_t bitsPerSample;
+        ALsizei size;
+        std::vector<char> soundData = load_wav(filename, channels, sampleRate, bitsPerSample, size);
+
+        ALenum format;
+        if (channels == 1 && bitsPerSample == 8) {
+            format = AL_FORMAT_MONO8;
+        }
+        else if (channels == 1 && bitsPerSample == 16) {
+            format = AL_FORMAT_MONO16;
+        }
+        else if (channels == 2 && bitsPerSample == 8) {
+            format = AL_FORMAT_STEREO8;
+        }
+        else if (channels == 2 && bitsPerSample == 16) {
+            format = AL_FORMAT_STEREO16;
+        }
+        else
+        {
+            std::cerr
+                << "ERROR: unrecognised wave format: "
+                << channels << " channels, "
+                << bitsPerSample << " bps" << std::endl;
+        }
+
+        alCall(alBufferData, bufferID, format, soundData.data(), soundData.size(), sampleRate);
+        soundData.clear(); // erase the sound in RAM
     }
 
     RegularBuffer::~RegularBuffer() {
@@ -26,15 +69,20 @@ namespace DE {
         std::vector<char> soundData = load_wav(filepath, channels, sampleRate, bitsPerSample, size);
 
         buffer = std::make_unique<RegularBuffer>();
+        ALenum format;
 
-        if(channels == 1 && bitsPerSample == 8)
+        if (channels == 1 && bitsPerSample == 8) {
             format = AL_FORMAT_MONO8;
-        else if(channels == 1 && bitsPerSample == 16)
+        }
+        else if (channels == 1 && bitsPerSample == 16) {
             format = AL_FORMAT_MONO16;
-        else if(channels == 2 && bitsPerSample == 8)
+        }
+        else if (channels == 2 && bitsPerSample == 8) {
             format = AL_FORMAT_STEREO8;
-        else if(channels == 2 && bitsPerSample == 16)
+        }
+        else if (channels == 2 && bitsPerSample == 16) {
             format = AL_FORMAT_STEREO16;
+        }
         else
         {
             std::cerr
@@ -67,7 +115,7 @@ namespace DE {
     void WavSound::play() {
         alCall(alSourcePlay, source);
 
-        ALint state = AL_PLAYING;
+        state = AL_PLAYING;
 
         while(state == AL_PLAYING)
         {
@@ -76,7 +124,8 @@ namespace DE {
     }
 
     void WavSound::stop() {
-
+        alCall(alSourceStop, source);
+        state = AL_STOPPED;
     }
 
 }  // namespace DE
