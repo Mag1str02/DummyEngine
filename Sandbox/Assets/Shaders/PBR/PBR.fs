@@ -21,10 +21,13 @@ struct Material
     vec3      m_Ambient;
     vec3      m_Albedo;
     vec3      m_ORM;
+    vec3      m_Emission;
     float     m_Shininess;
+    float     m_EmissionStrength;
     sampler2D m_AlbedoMap;
     sampler2D m_NormalMap;
     sampler2D m_ORMMap;
+    sampler2D m_EmissionMap;
 };
 
 struct LightSource
@@ -97,6 +100,7 @@ void main()
 
     vec3 ambient    = (specular + kD * diffuse) * mp.ao; 
     result += u_Material.m_Ambient * ambient; 
+    result += texture(u_Material.m_EmissionMap, vs_in.TexCoords).rgb * u_Material.m_EmissionStrength * u_Material.m_Emission;
 
     // vec3 a = vec3()
     // result = result / (result + vec3(0.2));

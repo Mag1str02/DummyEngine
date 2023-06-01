@@ -5,9 +5,9 @@
 
 namespace DE {
     const U32 SKYBOX_SIZE             = 2048;
-    const U32 IRRADIANCE_TEXTURE_UNIT = 6;
-    const U32 PREFILTER_TEXTURE_UNIT  = 7;
-    const U32 BRDF_TEXTURE_UNIT       = 8;
+    const U32 IRRADIANCE_TEXTURE_UNIT = 7;
+    const U32 PREFILTER_TEXTURE_UNIT  = 8;
+    const U32 BRDF_TEXTURE_UNIT       = 9;
     const U32 MAX_LEVELS              = 10;
 
     SkyBox::SkyBox(Ref<TextureData> texture) {

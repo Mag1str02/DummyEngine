@@ -56,8 +56,8 @@ namespace DE {
     struct RenderMeshComponent {
         UUID id;
 
-        Ref<RenderMeshInstance> mesh_instance = nullptr;
-        RenderMeshInstance*     operator->() { return mesh_instance.get(); }
+        Ref<RenderMesh> mesh = nullptr;
+        RenderMesh*     operator->() { return mesh.get(); }
     };
 
     struct SkyBoxComponent {

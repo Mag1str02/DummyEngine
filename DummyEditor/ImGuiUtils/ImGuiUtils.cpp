@@ -177,15 +177,18 @@ namespace DE {
             ImGui::Separator();
             switch (mat.type) {
                 case MaterialType::PBR: {
-                    auto albedo_map = (mat.albedo_map ? mat.albedo_map : Renderer::GetTexture(Renderer::Textures::White));
-                    auto normal_map = (mat.normal_map ? mat.normal_map : Renderer::GetTexture(Renderer::Textures::Normal));
-                    auto orm_map    = (mat.orm_map ? mat.orm_map : Renderer::GetTexture(Renderer::Textures::White));
+                    auto emission_map = (mat.emission_map ? mat.emission_map : Renderer::GetTexture(Renderer::Textures::White));
+                    auto albedo_map   = (mat.albedo_map ? mat.albedo_map : Renderer::GetTexture(Renderer::Textures::White));
+                    auto normal_map   = (mat.normal_map ? mat.normal_map : Renderer::GetTexture(Renderer::Textures::Normal));
+                    auto orm_map      = (mat.orm_map ? mat.orm_map : Renderer::GetTexture(Renderer::Textures::White));
 
                     ImGuiUtils::EditProperty("AmbientColor", mat.ambient, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("EmissionColor", mat.emission, ImGuiUtils::PropertyType::Color);
                     ImGuiUtils::EditProperty("AlbedoColor", mat.albedo, ImGuiUtils::PropertyType::Color);
                     ImGuiUtils::EditProperty("AmbientOcclusion", ImGuiDataType_Float, &mat.orm.r, orm_speed, &min_orm, &max_orm);
                     ImGuiUtils::EditProperty("Roughness", ImGuiDataType_Float, &mat.orm.g, orm_speed, &min_orm, &max_orm);
                     ImGuiUtils::EditProperty("Metallic", ImGuiDataType_Float, &mat.orm.b, orm_speed, &min_orm, &max_orm);
+                    ImGuiUtils::EditProperty("EmissionStrength", ImGuiDataType_Float, &mat.emission_strength, orm_speed, &min_shininess, nullptr);
                     ImGui::Separator();
                     ImGuiUtils::EditTexture("AlbedoMap", albedo_map);
                     ImGui::Separator();
@@ -193,16 +196,21 @@ namespace DE {
                     ImGui::Separator();
                     ImGuiUtils::EditTexture("NormalMap", normal_map);
                     ImGui::Separator();
+                    ImGuiUtils::EditTexture("EmissionMap", emission_map);
+                    ImGui::Separator();
                     break;
                 }
                 case MaterialType::Phong: {
+                    auto emission_map = (mat.emission_map ? mat.emission_map : Renderer::GetTexture(Renderer::Textures::White));
                     auto normal_map   = (mat.normal_map ? mat.normal_map : Renderer::GetTexture(Renderer::Textures::Normal));
                     auto diffuse_map  = (mat.diffuse_map ? mat.diffuse_map : Renderer::GetTexture(Renderer::Textures::White));
                     auto specular_map = (mat.specular_map ? mat.specular_map : Renderer::GetTexture(Renderer::Textures::White));
 
                     ImGuiUtils::EditProperty("AmbientColor", mat.ambient, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("EmissionColor", mat.emission, ImGuiUtils::PropertyType::Color);
                     ImGuiUtils::EditProperty("DiffuseColor", mat.diffuse, ImGuiUtils::PropertyType::Color);
                     ImGuiUtils::EditProperty("Specular", mat.specular, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("EmissionStrength", ImGuiDataType_Float, &mat.emission_strength, orm_speed, &min_shininess, nullptr);
                     ImGuiUtils::EditProperty("Shininess", ImGuiDataType_Float, &mat.shininess, orm_speed, &min_shininess, nullptr);
                     ImGui::Separator();
                     ImGuiUtils::EditTexture("DiffuseMap", diffuse_map);
@@ -210,6 +218,8 @@ namespace DE {
                     ImGuiUtils::EditTexture("SpecularMap", specular_map);
                     ImGui::Separator();
                     ImGuiUtils::EditTexture("NormalMap", normal_map);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("EmissionMap", emission_map);
                     ImGui::Separator();
                     break;
                 }

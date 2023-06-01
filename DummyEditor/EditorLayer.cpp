@@ -214,7 +214,8 @@ namespace DE {
             if (!ScriptManager::LoadScripts(m_SceneFileData.assets.scripts)) {
                 return;
             }
-            m_CurrentScene = SceneLoader::Serialize(m_SceneFileData.hierarchy);
+            m_CurrentScene                          = SceneLoader::Serialize(m_SceneFileData.hierarchy);
+            m_CurrentScene->GetRenderer()->settings = m_SceneFileData.settings;
         }
         PrepareScene();
         ScriptManager::AttachScripts(m_CurrentScene);
@@ -226,6 +227,7 @@ namespace DE {
     }
     void EditorLayer::SaveScene(const Path& path) {
         m_SceneFileData.hierarchy = SceneLoader::Deserialize(m_CurrentScene);
+        m_SceneFileData.settings  = m_CurrentScene->GetRenderer()->settings;
         SceneLoader::SaveScene(m_SceneFileData, path);
     }
     void EditorLayer::CloseScene() {
@@ -354,10 +356,6 @@ namespace DE {
     //*___Other________________________________________________________________________________________________________________________________________________________________________________________
 
     void TransformSyncSystem::Update(float dt) {
-        for (auto entity : View<RenderMeshComponent, TransformComponent>()) {
-            entity.Get<RenderMeshComponent>().mesh_instance->at<Mat4>(0) = entity.Get<TransformComponent>().GetTransform();
-        }
-
         for (auto entity : View<LightSource, TransformComponent>()) {
             entity.Get<LightSource>().position = entity.Get<TransformComponent>().translation;
         }

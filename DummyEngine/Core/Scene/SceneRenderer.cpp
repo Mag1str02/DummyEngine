@@ -54,27 +54,37 @@ namespace DE {
                 Renderer::Submit(skybox.Get<SkyBoxComponent>()->GetMap(), camera.Get<FPSCamera>(), transform);
             }
 
-            for (auto& [ids, target] : m_InstancedMeshes) {
-                target.first->UpdateInstanceBuffer();
-                int res = (target.first->p_Animator ? 1 : 0);
-                target.second->Bind();
-                target.second->SetInt("u_Animated", res);
-                if (target.first->p_Animator) {
-                    target.first->p_Animator->SetMatricies(target.second);
+            for (auto e : m_Scene->View<RenderMeshComponent, ShaderComponent>()) {
+                auto shader = e.Get<ShaderComponent>().shader;
+                auto mesh   = e.Get<RenderMeshComponent>().mesh;
+                int  res    = (mesh->p_Animator ? 1 : 0);
+                shader->Bind();
+                shader->SetInt("u_Animated", res);
+                if (mesh->p_Animator) {
+                    mesh->p_Animator->SetMatricies(shader);
                 }
-                Renderer::Submit(target.first, target.second);
+                Mat4 transform(1.0f);
+                if (e.Has<TransformComponent>()) {
+                    transform = e.Get<TransformComponent>().GetTransform();
+                }
+                Renderer::Submit(mesh, shader, transform);
             }
             m_FrameBuffer->UnBind();
         }
         {
             DE_PROFILE_SCOPE("Post-Processing");
-            if (Bloom) {
+            if (settings.bloom) {
                 DE_PROFILE_SCOPE("Bloom");
-                Renderer::Bloom(m_FrameBuffer->GetColorAttachment(0), BloomTreshold, BloomSoftTreshold, BloomRadius, BloomDepth, BloomStrength);
+                Renderer::Bloom(m_FrameBuffer->GetColorAttachment(0),
+                                settings.bloom_threshold,
+                                settings.bloom_soft_threshold,
+                                settings.bloom_radius,
+                                settings.bloom_depth,
+                                settings.bloom_strength);
             }
-            if (GammaHDR) {
+            if (settings.gamma_tone_mapping) {
                 DE_PROFILE_SCOPE("Gamma & HDR");
-                Renderer::GammeHDRCorrecion(m_FrameBuffer->GetColorAttachment(0), Exposure, Gamma);
+                Renderer::GammeHDRCorrecion(m_FrameBuffer->GetColorAttachment(0), settings.exposure, settings.gamma);
             }
         }
     }
@@ -126,28 +136,6 @@ namespace DE {
             } else {
                 LOG_WARNING("SceneRenderer", "Shader (", shader_id, ") not found in ResourceManager");
             }
-        }
-    }
-    Ref<RenderMeshInstance> SceneRenderer::GetRenderMeshInstance(UUID mesh_id, UUID shader_id) {
-        if (!m_InstancedMeshes.contains({mesh_id, shader_id})) {
-            CreateInstancedMesh(mesh_id, shader_id);
-        }
-        Ref<RenderMeshInstance> instance = CreateRef<RenderMeshInstance>();
-        instance->Bind(m_InstancedMeshes[{mesh_id, shader_id}].first);
-        return instance;
-    }
-
-    void SceneRenderer::CreateInstancedMesh(UUID mesh_id, UUID shader_id) {
-        auto mesh   = ResourceManager::GetRenderMesh(mesh_id);
-        auto shader = ResourceManager::GetShader(shader_id);
-        if (!mesh) {
-            LOG_WARNING("SceneRenderer", "RenderMesh (", mesh_id, ") not found in ResourceManager");
-        } else if (!shader) {
-            LOG_WARNING("SceneRenderer", "Shader (", shader_id, ") not found in ResourceManager");
-        } else {
-            m_InstancedMeshes[{mesh_id, shader_id}] = {mesh.value()->Copy(), shader.value()};
-            m_InstancedMeshes[{mesh_id, shader_id}].first->SetInstanceBuffer({{BufferElementType::Mat4}, 1}, MAX_INSTANCES_PER_BUFFER);
-            RequestShader(shader_id);
         }
     }
 }  // namespace DE

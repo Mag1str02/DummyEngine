@@ -114,7 +114,7 @@ namespace DE {
                 ImGui::NextColumn();
                 ImGui::Separator();
 
-                ImGuiUtils::EditProperty("Ambient", source.ambient, ImGuiUtils::PropertyType::Color);
+                // ImGuiUtils::EditProperty("Ambient", source.ambient, ImGuiUtils::PropertyType::Color);
                 ImGuiUtils::EditProperty("Diffuse", source.diffuse, ImGuiUtils::PropertyType::Color);
                 ImGuiUtils::EditProperty("Specular", source.specular, ImGuiUtils::PropertyType::Color);
 
@@ -138,7 +138,7 @@ namespace DE {
     template <> void InspectorPanel::DrawComponentWidget<RenderMeshComponent>(Entity entity) {
         if (m_Entity.Has<RenderMeshComponent>()) {
             if (ImGui::CollapsingHeader(ICON_MD_TOKEN "  RenderMesh", ImGuiTreeNodeFlags_DefaultOpen)) {
-                auto& meshes = m_Entity.Get<RenderMeshComponent>().mesh_instance->GetMesh()->GetSubMeshes();
+                auto& meshes = m_Entity.Get<RenderMeshComponent>()->GetSubMeshes();
                 int   cnt    = 0;
                 for (auto& mesh : meshes) {
                     std::string name = StrCat("Mesh ", cnt);

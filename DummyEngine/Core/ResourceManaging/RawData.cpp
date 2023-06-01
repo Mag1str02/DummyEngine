@@ -1,6 +1,20 @@
 #include "DummyEngine/Core/ResourceManaging/RawData.h"
 
 namespace DE {
+    std::string MaterialTypeToStr(MaterialType type) {
+        switch (type) {
+            case MaterialType::PBR: return "PBR";
+            case MaterialType::Phong: return "Phong";
+            case MaterialType::None: return "None";
+            default: DE_ASSERT(false, "Unsupported material type");
+        }
+        return "None";
+    }
+    MaterialType MaterialTypeFromStr(const std::string& str) {
+        if (str == "PBR") return MaterialType::PBR;
+        if (str == "Phong") return MaterialType::Phong;
+        return MaterialType::None;
+    }
     U32 ChannelAmount(TextureChannels format) {
         switch (format) {
             case TextureChannels::RGBA: return 4;

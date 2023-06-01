@@ -159,6 +159,7 @@ namespace DE {
         material.ambient  = GetColor(mat, ColorType::Ambient);
         material.albedo   = GetColor(mat, ColorType::Albedo);
         material.orm      = GetColor(mat, ColorType::ORM);
+        material.orm      = GetColor(mat, ColorType::Emission);
         aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &material.shininess);
 
         material.albedo_map   = GetTexture(mat, aiTextureType_DIFFUSE);
@@ -166,6 +167,7 @@ namespace DE {
         material.orm_map      = GetTexture(mat, aiTextureType_METALNESS);
         material.diffuse_map  = GetTexture(mat, aiTextureType_DIFFUSE);
         material.specular_map = GetTexture(mat, aiTextureType_SPECULAR);
+        material.emission_map = GetTexture(mat, aiTextureType_EMISSIVE);
         return material;
     }
 
@@ -262,7 +264,6 @@ namespace DE {
         if (mesh->mMaterialIndex >= 0) {
             aiMaterial* material       = scene->mMaterials[mesh->mMaterialIndex];
             current_mesh.material      = LoadMaterial(material);
-            current_mesh.material.type = m_State.m_Props.mat_type;
         }
         ++m_State.m_CurrentMeshId;
     }
@@ -271,7 +272,8 @@ namespace DE {
         switch (type) {
             case ColorType::Diffuse: mat->Get(AI_MATKEY_COLOR_DIFFUSE, color); break;
             case ColorType::Specular: mat->Get(AI_MATKEY_COLOR_SPECULAR, color); break;
-            // case ColorType::Ambient: mat->Get(AI_MATKEY_COLOR_AMBIENT, color); break;
+            case ColorType::Ambient: mat->Get(AI_MATKEY_COLOR_AMBIENT, color); break;
+            case ColorType::Emission: mat->Get(AI_MATKEY_COLOR_EMISSIVE, color); break;
             case ColorType::ORM:
                 mat->Get(AI_MATKEY_ROUGHNESS_FACTOR, color.g);
                 mat->Get(AI_MATKEY_METALLIC_FACTOR, color.b);

@@ -4,6 +4,7 @@
 #include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Core/ResourceManaging/Assets.h"
 #include "DummyEngine/Core/Scene/Scene.h"
+#include "DummyEngine/Core/Scene/SceneRenderer.h"
 
 #include <yaml-cpp/yaml.h>
 // clang-format on
@@ -17,9 +18,10 @@ namespace DE {
     };
 
     struct SceneFileData {
-        SceneAssets assets;
-        YAML::Node  hierarchy;
-        std::string name;
+        SceneRenderer::Settings settings;
+        SceneAssets             assets;
+        YAML::Node              hierarchy;
+        std::string             name;
     };
 
     class SceneLoader {

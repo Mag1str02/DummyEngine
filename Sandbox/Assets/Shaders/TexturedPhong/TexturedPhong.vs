@@ -13,7 +13,6 @@ layout(location = 4) in ivec4 i_BoneIDs1;
 layout(location = 5) in ivec4 i_BoneIDs2;
 layout(location = 6) in vec4  i_BoneWeights1;
 layout(location = 7) in vec4  i_BoneWeights2;
-layout(location = 8) in mat4  i_Transform;
 
 out VS_OUT
 {
@@ -25,13 +24,14 @@ out VS_OUT
 vs_out;
 
 uniform VP u_Camera;
+uniform mat4 u_Transform;
 
 void main()
 {
     mat4 view = -inverse( u_Camera.view) ;
-    gl_Position      = u_Camera.projection * u_Camera.view * i_Transform * vec4(i_Pos, 1.0);
-    vs_out.FragPos   = vec3(i_Transform * vec4(i_Pos, 1.0));
-    vs_out.Normal    = mat3(transpose(inverse(i_Transform))) * i_Normal;
+    gl_Position      = u_Camera.projection * u_Camera.view * u_Transform * vec4(i_Pos, 1.0);
+    vs_out.FragPos   = vec3(u_Transform * vec4(i_Pos, 1.0));
+    vs_out.Normal    = mat3(transpose(inverse(u_Transform))) * i_Normal;
     vs_out.TexCoords = i_TexCoords;
     vs_out.CameraPos = -vec3(view[3][0], view[3][1], view[3][2]);
 }

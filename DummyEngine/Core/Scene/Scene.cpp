@@ -20,7 +20,7 @@ namespace DE {
         }
         std::unordered_set<Ref<RenderMesh>> meshes;
         for (auto e : m_Storage->View<RenderMeshComponent>()) {
-            auto mesh = e.Get<RenderMeshComponent>()->GetMesh();
+            auto mesh = e.Get<RenderMeshComponent>().mesh;
             if (mesh->p_Animator && !meshes.contains(mesh)) {
                 meshes.insert(mesh);
                 mesh->p_Animator->SetTime(0);
@@ -36,7 +36,7 @@ namespace DE {
         }
         std::unordered_set<Ref<RenderMesh>> meshes;
         for (auto e : m_Storage->View<RenderMeshComponent>()) {
-            auto mesh = e.Get<RenderMeshComponent>()->GetMesh();
+            auto mesh = e.Get<RenderMeshComponent>().mesh;
             if (mesh->p_Animator && !meshes.contains(mesh)) {
                 meshes.insert(mesh);
                 mesh->p_Animator->SetTime(0);
@@ -58,7 +58,7 @@ namespace DE {
         }
         std::unordered_set<Ref<RenderMesh>> meshes;
         for (auto e : m_Storage->View<RenderMeshComponent>()) {
-            auto mesh = e.Get<RenderMeshComponent>()->GetMesh();
+            auto mesh = e.Get<RenderMeshComponent>().mesh;
             if (mesh->p_Animator && !meshes.contains(mesh)) {
                 meshes.insert(mesh);
                 mesh->p_Animator->UpdateAnimation(dt);
