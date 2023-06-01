@@ -1,12 +1,10 @@
 #include "SoundsAndFactories.h"
 
 namespace DE {
-    std::unique_ptr<Sound> SoundFactory::createSound(DE::SoundFactory::SoundType type, const std::string& filepath)  {
+    std::unique_ptr<Sound> SoundFactory::createSound(DE::SoundFactory::SoundType type, const std::string& filepath) {
         switch (type) {
-            case SoundType::WAV:
-                return std::make_unique<WavSound>(filepath);
-            default:
-                throw std::invalid_argument("Invalid sound type");
+            case SoundType::WAV: return std::make_unique<WavSound>(filepath);
+            default: throw std::invalid_argument("Invalid sound type");
         }
     }
 
@@ -16,8 +14,7 @@ namespace DE {
 
             case BufferType::STREAMING:
 
-            default:
-                throw std::invalid_argument("Invalid buffer type");
+            default: throw std::invalid_argument("Invalid buffer type");
         }
     }
 
@@ -26,35 +23,27 @@ namespace DE {
     }
 
     RegularBuffer::RegularBuffer(const std::string& filename) {
-        std::uint8_t channels;
-        std::int32_t sampleRate;
-        std::uint8_t bitsPerSample;
-        ALsizei size;
+        std::uint8_t      channels;
+        std::int32_t      sampleRate;
+        std::uint8_t      bitsPerSample;
+        ALsizei           size;
         std::vector<char> soundData = load_wav(filename, channels, sampleRate, bitsPerSample, size);
 
         ALenum format;
         if (channels == 1 && bitsPerSample == 8) {
             format = AL_FORMAT_MONO8;
-        }
-        else if (channels == 1 && bitsPerSample == 16) {
+        } else if (channels == 1 && bitsPerSample == 16) {
             format = AL_FORMAT_MONO16;
-        }
-        else if (channels == 2 && bitsPerSample == 8) {
+        } else if (channels == 2 && bitsPerSample == 8) {
             format = AL_FORMAT_STEREO8;
-        }
-        else if (channels == 2 && bitsPerSample == 16) {
+        } else if (channels == 2 && bitsPerSample == 16) {
             format = AL_FORMAT_STEREO16;
-        }
-        else
-        {
-            std::cerr
-                << "ERROR: unrecognised wave format: "
-                << channels << " channels, "
-                << bitsPerSample << " bps" << std::endl;
+        } else {
+            std::cerr << "ERROR: unrecognised wave format: " << channels << " channels, " << bitsPerSample << " bps" << std::endl;
         }
 
         alCall(alBufferData, bufferID, format, soundData.data(), soundData.size(), sampleRate);
-        soundData.clear(); // erase the sound in RAM
+        soundData.clear();  // erase the sound in RAM
     }
 
     RegularBuffer::~RegularBuffer() {
@@ -69,15 +58,14 @@ namespace DE {
         alCall(alDeleteBuffers, NUM_BUFFERS, &buffers[0]);
     }
 
-    void StreamingBuffer::update_stream(const ALuint source, const ALenum& format, const std::int32_t& sampleRate, const std::vector<char>& soundData, std::size_t& cursor) {
+    void StreamingBuffer::update_stream(
+        const ALuint source, const ALenum& format, const std::int32_t& sampleRate, const std::vector<char>& soundData, std::size_t& cursor) {
         ALint buffersProcessed = 0;
         alCall(alGetSourcei, source, AL_BUFFERS_PROCESSED, &buffersProcessed);
 
-        if(buffersProcessed <= 0)
-            return;
+        if (buffersProcessed <= 0) return;
 
-        while(buffersProcessed--)
-        {
+        while (buffersProcessed--) {
             ALuint buffer;
             alCall(alSourceUnqueueBuffers, source, 1, &buffer);
 
@@ -87,14 +75,12 @@ namespace DE {
             std::memset(data, 0, dataSize);
 
             std::size_t dataSizeToCopy = BUFFER_SIZE;
-            if(cursor + BUFFER_SIZE > soundData.size())
-                dataSizeToCopy = soundData.size() - cursor;
+            if (cursor + BUFFER_SIZE > soundData.size()) dataSizeToCopy = soundData.size() - cursor;
 
             std::memcpy(&data[0], &soundData[cursor], dataSizeToCopy);
             cursor += dataSizeToCopy;
 
-            if(dataSizeToCopy < BUFFER_SIZE)
-            {
+            if (dataSizeToCopy < BUFFER_SIZE) {
                 cursor = 0;
                 std::memcpy(&data[dataSizeToCopy], &soundData[cursor], BUFFER_SIZE - dataSizeToCopy);
                 cursor = BUFFER_SIZE - dataSizeToCopy;
@@ -114,26 +100,18 @@ namespace DE {
 
         if (channels == 1 && bitsPerSample == 8) {
             format = AL_FORMAT_MONO8;
-        }
-        else if (channels == 1 && bitsPerSample == 16) {
+        } else if (channels == 1 && bitsPerSample == 16) {
             format = AL_FORMAT_MONO16;
-        }
-        else if (channels == 2 && bitsPerSample == 8) {
+        } else if (channels == 2 && bitsPerSample == 8) {
             format = AL_FORMAT_STEREO8;
-        }
-        else if (channels == 2 && bitsPerSample == 16) {
+        } else if (channels == 2 && bitsPerSample == 16) {
             format = AL_FORMAT_STEREO16;
-        }
-        else
-        {
-            std::cerr
-                << "ERROR: unrecognised wave format: "
-                << channels << " channels, "
-                << bitsPerSample << " bps" << std::endl;
+        } else {
+            std::cerr << "ERROR: unrecognised wave format: " << channels << " channels, " << bitsPerSample << " bps" << std::endl;
         }
 
         alCall(alBufferData, buffer->getBufferID(), format, soundData.data(), soundData.size(), sampleRate);
-        soundData.clear(); // erase the sound in RAM
+        soundData.clear();  // erase the sound in RAM
 
         alCall(alGenSources, 1, &source);
         alCall(alSourcef, source, AL_PITCH, 1);
@@ -165,26 +143,23 @@ namespace DE {
 
         if (channels == 1 && bitsPerSample == 8) {
             format = AL_FORMAT_MONO8;
-        }
-        else if (channels == 1 && bitsPerSample == 16) {
+        } else if (channels == 1 && bitsPerSample == 16) {
             format = AL_FORMAT_MONO16;
-        }
-        else if (channels == 2 && bitsPerSample == 8) {
+        } else if (channels == 2 && bitsPerSample == 8) {
             format = AL_FORMAT_STEREO8;
-        }
-        else if (channels == 2 && bitsPerSample == 16) {
+        } else if (channels == 2 && bitsPerSample == 16) {
             format = AL_FORMAT_STEREO16;
-        }
-        else
-        {
-            std::cerr
-                << "ERROR: unrecognised wave format: "
-                << channels << " channels, "
-                << bitsPerSample << " bps" << std::endl;
+        } else {
+            std::cerr << "ERROR: unrecognised wave format: " << channels << " channels, " << bitsPerSample << " bps" << std::endl;
         }
 
-        for(std::size_t i = 0; i < StreamingBuffer::NUM_BUFFERS; ++i) {
-            alCall(alBufferData, reinterpret_cast<StreamingBuffer*>(buffer.get())->get_buffer(i), format, &soundData[i * StreamingBuffer::BUFFER_SIZE], StreamingBuffer::BUFFER_SIZE, sampleRate);
+        for (std::size_t i = 0; i < StreamingBuffer::NUM_BUFFERS; ++i) {
+            alCall(alBufferData,
+                   reinterpret_cast<StreamingBuffer*>(buffer.get())->get_buffer(i),
+                   format,
+                   &soundData[i * StreamingBuffer::BUFFER_SIZE],
+                   StreamingBuffer::BUFFER_SIZE,
+                   sampleRate);
         }
 
         alCall(alGenSources, 1, &source);
@@ -262,21 +237,19 @@ namespace DE {
         alCall(alGetSourcei, source, AL_SOURCE_STATE, &state);
     }
 
-    void WavSound::play_streaming() {
+    void WavSound::start_streaming() {
+        cursor = StreamingBuffer::BUFFER_SIZE * StreamingBuffer::NUM_BUFFERS;
         alCall(alSourceQueueBuffers, source, StreamingBuffer::NUM_BUFFERS, (reinterpret_cast<StreamingBuffer*>(buffer.get())->get_buffer_pointer(0)));
         alCall(alSourcePlay, source);
-
-        ALint state = AL_PLAYING;
-
-        std::size_t cursor = StreamingBuffer::BUFFER_SIZE * StreamingBuffer::NUM_BUFFERS;
-
-        while(state == AL_PLAYING)
-        {
-            reinterpret_cast<StreamingBuffer*>(buffer.get())->update_stream(source, format, sampleRate, soundData, cursor);
-            alCall(alGetSourcei, source, AL_SOURCE_STATE, &state);
-        }
+        state = AL_PLAYING;
+    }
+    void WavSound::play_streaming() {
+        state = AL_PLAYING;
+        reinterpret_cast<StreamingBuffer*>(buffer.get())->update_stream(source, format, sampleRate, soundData, cursor);
+        alCall(alGetSourcei, source, AL_SOURCE_STATE, &state);
     }
 
+    void WavSound::deinit_streaming() {}
     void WavSound::stop() {
         alCall(alSourceStop, source);
         state = AL_STOPPED;

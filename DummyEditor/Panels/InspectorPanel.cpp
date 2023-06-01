@@ -171,9 +171,12 @@ namespace DE {
                 if (ImGui::Button("Select audio file", {ImGui::GetContentRegionAvail().x, 30})) {
                     Path res = FileSystem::OpenFileDialog("Audio (*.wav)", "wav");
                     if (!res.empty()) {
+                        if (audio.sound) {
+                            audio.sound->deinit_streaming();
+                        }
                         audio.sound = CreateScope<WavSound>(res.string());
-                        audio.sound->init();
-                        audio.path  = res;
+                        audio.sound->init_streaming();
+                        audio.path = res;
                         // std::cout << audio.sound->getGain() << '\n';
                     }
                 }
