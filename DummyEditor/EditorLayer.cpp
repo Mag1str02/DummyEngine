@@ -132,11 +132,13 @@ namespace DE {
     void EditorLayer::ActionPauseScene() {
         if (m_CurrentScene && m_SceneState == SceneState::Running) {
             m_SceneState = SceneState::Paused;
+            m_CurrentScene->OnRuntimePause();
         }
     }
     void EditorLayer::ActionResumeScene() {
         if (m_CurrentScene && m_SceneState == SceneState::Paused) {
             m_SceneState = SceneState::Running;
+            m_CurrentScene->OnRuntimeResume();
         }
     }
     void EditorLayer::ActionStepScene() {

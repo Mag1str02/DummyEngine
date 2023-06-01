@@ -20,6 +20,8 @@ namespace DE {
         ~Scene();
 
         void OnRuntimeStart();
+        void OnRuntimePause();
+        void OnRuntimeResume();
         void OnRuntimeStop();
         void OnUpdate(float dt);
         void OnRender(Entity camera = Entity());
