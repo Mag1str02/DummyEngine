@@ -40,7 +40,7 @@ namespace DE {
     template <> void InspectorPanel::DrawComponentWidget<TagComponent>(Entity entity) {
         if (m_Entity.Has<TagComponent>()) {
             auto& component = m_Entity.Get<TagComponent>();
-            if (ImGui::CollapsingHeader(ICON_MD_VIEW_IN_AR "  Tag", ImGuiTreeNodeFlags_DefaultOpen)) {
+            if (ImGui::CollapsingHeader(ICON_MD_BADGE "  Tag", ImGuiTreeNodeFlags_DefaultOpen)) {
                 ImGui::Columns(2);
                 ImGuiUtils::EditProperty("Tag", component.tag);
                 ImGui::Columns(1);
@@ -52,7 +52,7 @@ namespace DE {
             auto& component = m_Entity.Get<ScriptComponent>();
             if (ImGui::CollapsingHeader(ICON_MD_DESCRIPTION "  Script", ImGuiTreeNodeFlags_DefaultOpen)) {
                 ImGui::Columns(2);
-                if (component.Loaded()) {
+                if (component.Valid()) {
                     auto scene = component->GetScene();
                     for (auto [name, field] : *component) {
                         switch (field.GetType()) {
@@ -88,7 +88,6 @@ namespace DE {
             if (ImGui::CollapsingHeader(ICON_MD_VIDEOCAM "  FPSCamera", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto& camera = m_Entity.Get<FPSCamera>();
                 ImGui::Columns(2);
-
                 ImGuiUtils::EditProperty("Position", camera.m_Position);
                 ImGuiUtils::EditProperty("NearPlane", camera.m_NearPlane);
                 ImGuiUtils::EditProperty("FarPlane", camera.m_FarPlane);
@@ -115,7 +114,7 @@ namespace DE {
                 ImGui::NextColumn();
                 ImGui::Separator();
 
-                ImGuiUtils::EditProperty("Ambient", source.ambient, ImGuiUtils::PropertyType::Color);
+                // ImGuiUtils::EditProperty("Ambient", source.ambient, ImGuiUtils::PropertyType::Color);
                 ImGuiUtils::EditProperty("Diffuse", source.diffuse, ImGuiUtils::PropertyType::Color);
                 ImGuiUtils::EditProperty("Specular", source.specular, ImGuiUtils::PropertyType::Color);
 
@@ -136,6 +135,24 @@ namespace DE {
             }
         }
     }
+    template <> void InspectorPanel::DrawComponentWidget<RenderMeshComponent>(Entity entity) {
+        if (m_Entity.Has<RenderMeshComponent>()) {
+            if (ImGui::CollapsingHeader(ICON_MD_TOKEN "  RenderMesh", ImGuiTreeNodeFlags_DefaultOpen)) {
+                auto& meshes = m_Entity.Get<RenderMeshComponent>()->GetSubMeshes();
+                int   cnt    = 0;
+                for (auto& mesh : meshes) {
+                    std::string name = StrCat("Mesh ", cnt);
+                    if (ImGui::TreeNode(name.c_str())) {
+                        ImGui::Columns(2);
+                        ImGuiUtils::EditProperty(mesh.material);
+                        ImGui::Columns(1);
+                        ImGui::TreePop();
+                    }
+                    ++cnt;
+                }
+            }
+        }
+    }
 
     void InspectorPanel::OnImGui() {
         DE_PROFILE_SCOPE("InspectorPanel OnImGui");
@@ -149,7 +166,7 @@ namespace DE {
                     DrawComponentWidget<FPSCamera>(m_Entity);
                     DrawComponentWidget<LightSource>(m_Entity);
                     DrawComponentWidget<RenderMeshComponent>(m_Entity);
-                    DrawComponentWidget<SkyBox>(m_Entity);
+                    DrawComponentWidget<SkyBoxComponent>(m_Entity);
                     AddComponent();
                 }
             }

@@ -74,6 +74,9 @@ namespace DE {
         }
         return Unit();
     }
+    S_METHOD_IMPL(Window&, GetWindow, (), ()) {
+        return *m_Window;
+    }
 
     void Application::SetUpCallbacks() {
         m_EventDispatcher.AddEventListener<WindowResizeEvent>([this](WindowResizeEvent& event) { OnWindowResize(event); });
@@ -100,7 +103,7 @@ namespace DE {
         m_EventDispatcher.AddEventListener<MouseMovedCallback>(Input::OnEvent);
     }
     void Application::OnWindowResize(WindowResizeEvent& e) {
-        Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+        Renderer::SetViewport(e.GetWidth(), e.GetHeight());
     }
     void Application::OnWindowClose(WindowCloseEvent& e) {
         m_ShouldClose = true;

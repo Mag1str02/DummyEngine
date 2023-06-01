@@ -14,8 +14,12 @@ namespace DE {
         // glFrontFace(GL_CCW);
         // glDepthMask(GL_TRUE);
         // glDepthFunc(GL_LEQUAL);
+
         glEnable(GL_BLEND);
+        glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendEquation(GL_FUNC_ADD);
+        glClearColor(0, 0, 0, 1);
     }
 
     void GLRenderAPI::SetViewport(U32 x, U32 y, U32 width, U32 height) {

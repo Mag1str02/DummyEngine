@@ -17,6 +17,7 @@ namespace DE {
         m_ImGuiManager.AddPanel(&m_Inspector);
         m_ImGuiManager.AddPanel(&m_Profiler);
         m_ImGuiManager.AddPanel(&m_ThemePanel);
+        m_ImGuiManager.AddPanel(&m_RendererPanel);
         m_ImGuiManager.SetMenuBar(&m_MenuBar);
 
         m_TSSystem = CreateRef<TransformSyncSystem>();
@@ -171,6 +172,10 @@ namespace DE {
     EditorLayer::Resources& EditorLayer::GetResources() {
         return m_Resources;
     }
+    Ref<Scene> EditorLayer::GetScene() const {
+        return m_CurrentScene;
+    }
+
     //*___Helpers______________________________________________________________________________________________________________________________________________________________________________________
 
     void EditorLayer::ReloadScripts() {
@@ -190,10 +195,10 @@ namespace DE {
     }
 
     Path EditorLayer::OpenSceneDialog() {
-        return FileSystem::OpenFileDialog("Dummy Engine Scene (*.yml)", "*.yml");
+        return FileSystem::OpenFileDialog("Dummy Engine Scene (*.yml)", "yml");
     }
     Path EditorLayer::SaveSceneDialog() {
-        return FileSystem::SaveFileDialog("Dummy Engine Scene (*.yml)", "*.yml");
+        return FileSystem::SaveFileDialog("Dummy Engine Scene (*.yml)", "yml");
     }
     void EditorLayer::OpenScene(const Path& scene_path) {
         if (scene_path.empty()) {
@@ -209,17 +214,20 @@ namespace DE {
             if (!ScriptManager::LoadScripts(m_SceneFileData.assets.scripts)) {
                 return;
             }
-            m_CurrentScene = SceneLoader::Serialize(m_SceneFileData.hierarchy);
+            m_CurrentScene                          = SceneLoader::Serialize(m_SceneFileData.hierarchy);
+            m_CurrentScene->GetRenderer()->settings = m_SceneFileData.settings;
         }
         PrepareScene();
         ScriptManager::AttachScripts(m_CurrentScene);
         m_Viewport.SetFrameBuffer(m_CurrentScene->GetRenderer()->GetFrameBuffer());
         m_SceneState       = SceneState::Editing;
         m_SceneScriptState = SceneScriptState::Compiled;
+        m_CurrentScene->LoadPhysics(m_CurrentScene);
         LOG_INFO("EditorLayer", "Opened scene");
     }
     void EditorLayer::SaveScene(const Path& path) {
         m_SceneFileData.hierarchy = SceneLoader::Deserialize(m_CurrentScene);
+        m_SceneFileData.settings  = m_CurrentScene->GetRenderer()->settings;
         SceneLoader::SaveScene(m_SceneFileData, path);
     }
     void EditorLayer::CloseScene() {
@@ -278,6 +286,7 @@ namespace DE {
         m_CurrentScene->AttachSystem(m_TSSystem);
         m_SceneHierarchy.SetActiveScene(m_CurrentScene);
         m_Inspector.SetScene(m_CurrentScene);
+        m_RendererPanel.SetScene(m_CurrentScene);
         m_Inspector.SetActiveEntity(m_SceneHierarchy.GetActiveEntity());
     }
 
@@ -320,6 +329,7 @@ namespace DE {
         }
     }
 
+    void EditorLayer::LoadEditorResources() {}
     void EditorLayer::LoadIcons() {
         auto play_data          = TextureLoader::Load({Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Editor/Icons/PlayButton.png"});
         auto pause_data         = TextureLoader::Load({Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Editor/Icons/PauseButton.png"});
@@ -346,10 +356,6 @@ namespace DE {
     //*___Other________________________________________________________________________________________________________________________________________________________________________________________
 
     void TransformSyncSystem::Update(float dt) {
-        for (auto entity : View<RenderMeshComponent, TransformComponent>()) {
-            entity.Get<RenderMeshComponent>().mesh_instance->at<Mat4>(0) = entity.Get<TransformComponent>().GetTransform();
-        }
-
         for (auto entity : View<LightSource, TransformComponent>()) {
             entity.Get<LightSource>().position = entity.Get<TransformComponent>().translation;
         }

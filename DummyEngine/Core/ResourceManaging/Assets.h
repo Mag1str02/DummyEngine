@@ -6,8 +6,9 @@
 namespace DE {
     struct TextureAsset {
         struct LoadingProperties {
-            Path path;
-            bool flip_uvs = true;
+            Path          path;
+            bool          flip_uvs = true;
+            TextureFormat format   = TextureFormat::U8;
         };
         UUID              id;
         std::string       name;
@@ -15,9 +16,9 @@ namespace DE {
     };
     struct RenderMeshAsset {
         struct LoadingProperties {
-            Path path;
-            bool flip_uvs;
-            bool compress;
+            Path         path;
+            bool         flip_uvs;
+            bool         compress;
         };
         LoadingProperties loading_props;
         UUID              id;

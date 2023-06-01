@@ -12,6 +12,7 @@ namespace DE {
         S_METHOD_DEF(Unit, PushLayer, (Layer * layer));
         S_METHOD_DEF(Unit, OnEvent, (Event & event));
         S_METHOD_DEF(Unit, Run, ());
+        S_METHOD_DEF(Window&, GetWindow, ());
 
     private:
         friend class ImGuiLayer;

@@ -1,23 +1,39 @@
 #include "DummyEngine/Core/ResourceManaging/RawData.h"
 
 namespace DE {
-    std::string TextureFormatToStr(TextureFormat format) {
-        switch (format) {
-            case TextureFormat::RED: return "RED";
-            case TextureFormat::RGB: return "RGB";
-            case TextureFormat::RGBA: return "RGBA";
-            case TextureFormat::None: return "None";
-            case TextureFormat::Depth: return "Depth";
-            default: return "Unknown";
+    std::string MaterialTypeToStr(MaterialType type) {
+        switch (type) {
+            case MaterialType::PBR: return "PBR";
+            case MaterialType::Phong: return "Phong";
+            case MaterialType::None: return "None";
+            default: DE_ASSERT(false, "Unsupported material type");
         }
+        return "None";
     }
-    U32 PixelSize(TextureFormat format) {
+    MaterialType MaterialTypeFromStr(const std::string& str) {
+        if (str == "PBR") return MaterialType::PBR;
+        if (str == "Phong") return MaterialType::Phong;
+        return MaterialType::None;
+    }
+    U32 ChannelAmount(TextureChannels format) {
         switch (format) {
-            case TextureFormat::RGBA: return 4;
-            case TextureFormat::RGB: return 3;
-            case TextureFormat::RED: return 1;
-            default: return 0;
+            case TextureChannels::RGBA: return 4;
+            case TextureChannels::RGB: return 3;
+            case TextureChannels::RG: return 2;
+            case TextureChannels::RED: return 1;
+            case TextureChannels::None: return 0;
+            default: DE_ASSERT(false, "Unsupported texture format"); break;
         }
+        return 0;
+    }
+    U32 FormatSize(TextureFormat format) {
+        switch (format) {
+            case TextureFormat::Float: return sizeof(float);
+            case TextureFormat::U8: return sizeof(U8);
+            case TextureFormat::None: return 0;
+            default: DE_ASSERT(false, "Unsupported texture format"); break;
+        }
+        return 0;
     }
 
     std::string ShaderPartTypeToString(ShaderPartType type) {
@@ -25,8 +41,10 @@ namespace DE {
             case ShaderPartType::Vertex: return "Vertex";
             case ShaderPartType::Fragment: return "Fragment";
             case ShaderPartType::Geometry: return "Geometry";
-            default: return "None";
+            case ShaderPartType::None: return "None";
+            default: DE_ASSERT(false, "Unsupported shader part type"); break;
         }
+        return "None";
     }
     ShaderPartType StringToShaderPartType(const std::string& type) {
         if (type == "Vertex") return ShaderPartType::Vertex;
@@ -35,23 +53,29 @@ namespace DE {
         return ShaderPartType::None;
     }
 
-    TextureData::TextureData() : m_Data(nullptr), m_Width(0), m_Height(0), m_Format(TextureFormat::None) {}
+    TextureData::TextureData() : m_Data(nullptr), m_Width(0), m_Height(0), m_Channels(TextureChannels::None), m_Format(TextureFormat::None) {}
 
-    TextureData::TextureData(const U8* data, U32 width, U32 height, TextureFormat format) : m_Data(nullptr) {
-        SetData(data, width, height, format);
+    TextureData::TextureData(const void* data, U32 width, U32 height, TextureChannels channels, TextureFormat format) : m_Data(nullptr) {
+        SetData(data, width, height, channels, format);
     }
     TextureData::~TextureData() {
-        delete[] m_Data;
+        free(m_Data);
     }
-    void TextureData::SetData(const U8* data, U32 width, U32 height, TextureFormat format) {
-        if (data) {
-            delete[] m_Data;
+    void TextureData::SetData(const void* data, U32 width, U32 height, TextureChannels channels, TextureFormat format) {
+        if (m_Data) {
+            free(m_Data);
         }
-        m_Width  = width;
-        m_Height = height;
-        m_Format = format;
-        m_Data   = (U8*)malloc(width * height * PixelSize(format));
-        std::memcpy(m_Data, data, width * height * PixelSize(format));
+        size_t size = width * height * ChannelAmount(channels) * FormatSize(format);
+        DE_ASSERT(size > 0, "Wrong texture data size");
+        m_Data = malloc(size);
+        std::memcpy(m_Data, data, size);
+        m_Width    = width;
+        m_Height   = height;
+        m_Channels = channels;
+        m_Format   = format;
+    }
+    U32 TextureData::PixelSize() const {
+        return ChannelAmount(m_Channels) * FormatSize(m_Format);
     }
 
     RenderSubMeshData& RenderSubMeshData::operator+=(const RenderSubMeshData& other) {

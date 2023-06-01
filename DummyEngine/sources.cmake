@@ -7,7 +7,12 @@ Utils/Helpers/Conversions.cpp
 Utils/Helpers/Random.cpp
 Utils/Helpers/Timer.cpp
 Utils/Helpers/StringOperations.cpp
+Utils/Types/Types.cpp
 Utils/Types/UUID.cpp
+
+Core/Animations/Animation.cpp
+Core/Animations/Animator.cpp
+Core/Animations/Bone.cpp
 
 Core/Application/Application.cpp
 Core/Application/ImGuiLayer.cpp
@@ -15,6 +20,7 @@ Core/Application/Window.cpp
 Core/Application/Input.cpp
 Core/Application/Initializer.cpp
 Core/Application/Config.cpp
+Core/Application/FileSystem.cpp
 
 Core/ECS/ECS.cpp
 
@@ -36,6 +42,7 @@ Core/Rendering/Renderer/VertexBuffer.cpp
 Core/Rendering/Renderer/Renderer.cpp
 Core/Rendering/Renderer/RenderStructs.cpp
 Core/Rendering/Renderer/Shader.cpp
+Core/Rendering/Renderer/SkyBox.cpp
 Core/Rendering/Renderer/Texture.cpp
 Core/Rendering/Renderer/UniformBuffer.cpp
 
@@ -50,6 +57,14 @@ Core/Rendering/RendererOpenGL/GLTexture.cpp
 Core/Rendering/RendererOpenGL/GLUniformBuffer.cpp
 Core/Rendering/RendererOpenGL/GLRenderAPI.cpp
 Core/Rendering/RendererOpenGL/GLDebug.cpp
+
+Core/Physics/SceneConstants.cpp
+Core/Physics/ForceQueue.cpp
+Core/Physics/Solver.cpp
+Core/Physics/ConvexCollider.cpp
+Core/Physics/Utils.cpp
+
+# Core/Rendering/Shaders/ShaderSources.cpp
 
 Core/SoundEngine/AudioEngineFacade.cpp
 Core/SoundEngine/AudioFile.cpp
@@ -76,7 +91,6 @@ if( ${CMAKE_PLATFORM} STREQUAL "WINDOWS")
 set(PLATFORM_SOURCES
     Platform/Windows/Utils/Debug/StackTrace.cpp
     Platform/Windows/Utils/Debug/Demangler.cpp
-    Platform/Windows/Core/Application/FileSystem.cpp
     Platform/Windows/Core/Scripting/SharedObject.cpp
 )
 endif()
@@ -84,7 +98,6 @@ if(${CMAKE_PLATFORM} STREQUAL "LINUX")
 set(PLATFORM_SOURCES
 Platform/Linux/Utils/Debug/StackTrace.cpp
 Platform/Linux/Utils/Debug/Demangler.cpp
-Platform/Linux/Core/Application/FileSystem.cpp
 Platform/Linux/Core/Scripting/SharedObject.cpp
 )
 endif()
@@ -92,7 +105,6 @@ if(${CMAKE_PLATFORM} STREQUAL "MACOS")
 set(PLATFORM_SOURCES
     Platform/Macos/Utils/Debug/StackTrace.cpp
     Platform/Macos/Utils/Debug/Demangler.cpp
-    Platform/Macos/Core/Application/FileSystem.cpp
     Platform/Macos/Core/Scripting/SharedObject.cpp
 )
 endif()

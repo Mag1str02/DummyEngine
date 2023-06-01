@@ -94,29 +94,10 @@ namespace DE {
         glUniformMatrix4fv(pos, 1, GL_FALSE, glm::value_ptr(value));
     }
     void GLShader::SetUnifromBlock(const std::string& uniform_name, U32 id) const {
+        glCheckError();
         GLint pos = glGetUniformBlockIndex(m_ShaderId, uniform_name.c_str());
         glUniformBlockBinding(m_ShaderId, pos, id);
         glCheckError();
-    }
-    void GLShader::SetMaterial(const std::string& uniform_name, const Material& mat) const {
-        SetFloat3(uniform_name + ".m_Ambient", mat.ambient_color);
-        SetFloat3(uniform_name + ".m_Diffuse", mat.diffuse_color);
-        SetFloat3(uniform_name + ".m_Specular", mat.specular_color);
-        SetFloat(uniform_name + ".m_Shininess", mat.shininess);
-
-        Renderer::GetDefaultTexture()->Bind(0);
-        if (mat.specular_map) {
-            SetInt(uniform_name + ".m_SpecularMap", 1);
-            mat.specular_map->Bind(1);
-        } else {
-            SetInt(uniform_name + ".m_SpecularMap", 0);
-        }
-        if (mat.diffuse_map) {
-            SetInt(uniform_name + ".m_DiffuseMap", 2);
-            mat.diffuse_map->Bind(2);
-        } else {
-            SetInt(uniform_name + ".m_DiffuseMap", 0);
-        }
     }
 
     std::string GLShader::ReadPartFromFile(const Path& path_to_file) {

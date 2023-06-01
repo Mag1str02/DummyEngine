@@ -10,6 +10,19 @@
 namespace DE {
     class SceneRenderer {
     public:
+        struct Settings {
+            bool  bloom               = false;
+            float bloom_threshold      = 1;
+            float bloom_soft_threshold = 0;
+            float bloom_radius        = 0.005;
+            float bloom_strength      = 0.04;
+            U32   bloom_depth         = 5;
+
+            bool  gamma_tone_mapping = false;
+            float exposure           = 1;
+            float gamma              = 1;
+        };
+        Settings settings;
         SceneRenderer(Scene* scene);
 
         void             Render(Entity camera);
@@ -17,25 +30,13 @@ namespace DE {
         Ref<FrameBuffer> GetFrameBuffer();
 
         void RequestShader(UUID shader_id);
-        void AddVPEntity(const Entity& entity);
-
-        Ref<RenderMeshInstance> GetRenderMeshInstance(UUID mesh_id, UUID shader_ids);
 
     private:
-        void UpdateLights();
-        void UpdateVP();
+        void UpdateShaders(const FPSCamera& camera, Entity skybox);
 
-        void SetVPEntity(const Entity& entity);
-        void CreateInstancedMesh(UUID mesh_id, UUID shader_id);
-
-        Scene* m_Scene;
-
-        Ref<UniformBuffer> m_Lights;
-        Ref<UniformBuffer> m_VP;
-        Ref<FrameBuffer>   m_FrameBuffer;
-
-        std::unordered_map<UUID, Ref<Shader>>                                                   m_Shaders;
-        std::unordered_map<std::pair<UUID, UUID>, Pair<Ref<RenderMesh>, Ref<Shader>>, PairHash> m_InstancedMeshes;
-        std::unordered_map<Entity, U32>                                                         m_EntityToVPIndex;
+        Scene*                                m_Scene;
+        Ref<UniformBuffer>                    m_Lights;
+        Ref<FrameBuffer>                      m_FrameBuffer;
+        std::unordered_map<UUID, Ref<Shader>> m_Shaders;
     };
 }  // namespace DE

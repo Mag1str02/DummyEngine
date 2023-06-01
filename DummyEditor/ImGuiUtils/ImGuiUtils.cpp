@@ -37,50 +37,51 @@ namespace DE {
             if (vec.w > max) vec.z = min;
         }
 
-        void EditProperty(std::string name, ImGuiDataType type, void* value, PropertyType property_type) {
+        void EditProperty(std::string name, ImGuiDataType type, void* value, float speed, const void* min, const void* max) {
             ImGui::SetCursorPosX(Constants::DefaultLeftPadding);
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
             ImGui::SetNextItemWidth(Constants::DefaultRightPadding);
             name.insert(name.begin(), 2, '#');
-            ImGui::DragScalar(name.c_str(), type, value);
+            ImGui::DragScalar(name.c_str(), type, value, speed, min, max);
             ImGui::NextColumn();
         }
-        void EditProperty(const std::string& name, float& value, PropertyType property_type) {
+        void EditProperty(const std::string& name, float& value) {
             EditProperty(name, ImGuiDataType_Float, &value);
         }
-        void EditProperty(const std::string& name, double& value, PropertyType property_type) {
+        void EditProperty(const std::string& name, double& value) {
             EditProperty(name, ImGuiDataType_Double, &value);
         }
-        void EditProperty(const std::string& name, U8& value, PropertyType property_type) {
+        void EditProperty(const std::string& name, U8& value) {
             EditProperty(name, ImGuiDataType_U8, &value);
         }
-        void EditProperty(const std::string& name, S8& value, PropertyType property_type) {
+        void EditProperty(const std::string& name, S8& value) {
             EditProperty(name, ImGuiDataType_S8, &value);
         }
-        void EditProperty(const std::string& name, U16& value, PropertyType property_type) {
+        void EditProperty(const std::string& name, U16& value) {
             EditProperty(name, ImGuiDataType_U16, &value);
         }
-        void EditProperty(const std::string& name, S16& value, PropertyType property_type) {
+        void EditProperty(const std::string& name, S16& value) {
             EditProperty(name, ImGuiDataType_S16, &value);
         }
-        void EditProperty(const std::string& name, U32& value, PropertyType property_type) {
+        void EditProperty(const std::string& name, U32& value) {
             EditProperty(name, ImGuiDataType_U32, &value);
         }
-        void EditProperty(const std::string& name, S32& value, PropertyType property_type) {
+        void EditProperty(const std::string& name, S32& value) {
             EditProperty(name, ImGuiDataType_S32, &value);
         }
-        void EditProperty(const std::string& name, U64& value, PropertyType property_type) {
+        void EditProperty(const std::string& name, U64& value) {
             EditProperty(name, ImGuiDataType_U64, &value);
         }
-        void EditProperty(const std::string& name, S64& value, PropertyType property_type) {
+        void EditProperty(const std::string& name, S64& value) {
             EditProperty(name, ImGuiDataType_S64, &value);
         }
         void EditProperty(const std::string& name, bool& value, PropertyType property_type) {
+            ImGui::SetCursorPosX(Constants::DefaultLeftPadding);
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
             ImGui::SetNextItemWidth(-1);
-            ImGui::Checkbox(name.c_str(), &value);
+            ImGui::Checkbox(StrCat("##", name.c_str()).c_str(), &value);
             ImGui::NextColumn();
         }
         void EditProperty(std::string name, std::string& value, PropertyType property_type) {
@@ -157,6 +158,81 @@ namespace DE {
                 }
                 ImGui::EndCombo();
             }
+            ImGui::NextColumn();
+        }
+        void EditProperty(Material& mat) {
+            const char* mat_types[]   = {"Unknown", "Phong", "PBR"};
+            float       max_orm       = 1;
+            float       min_orm       = 0;
+            float       min_shininess = 0;
+            float       orm_speed     = 0.01;
+
+            ImGui::Separator();
+            ImGui::SetCursorPosX(ImGuiUtils::Constants::DefaultLeftPadding);
+            ImGui::Text("Type");
+            ImGui::NextColumn();
+            ImGui::SetNextItemWidth(-1);
+            ImGui::Combo("##Material Type", (int*)&mat.type, mat_types, IM_ARRAYSIZE(mat_types));
+            ImGui::NextColumn();
+            ImGui::Separator();
+            switch (mat.type) {
+                case MaterialType::PBR: {
+                    auto emission_map = (mat.emission_map ? mat.emission_map : Renderer::GetTexture(Renderer::Textures::White));
+                    auto albedo_map   = (mat.albedo_map ? mat.albedo_map : Renderer::GetTexture(Renderer::Textures::White));
+                    auto normal_map   = (mat.normal_map ? mat.normal_map : Renderer::GetTexture(Renderer::Textures::Normal));
+                    auto orm_map      = (mat.orm_map ? mat.orm_map : Renderer::GetTexture(Renderer::Textures::White));
+
+                    ImGuiUtils::EditProperty("AmbientColor", mat.ambient, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("EmissionColor", mat.emission, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("AlbedoColor", mat.albedo, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("AmbientOcclusion", ImGuiDataType_Float, &mat.orm.r, orm_speed, &min_orm, &max_orm);
+                    ImGuiUtils::EditProperty("Roughness", ImGuiDataType_Float, &mat.orm.g, orm_speed, &min_orm, &max_orm);
+                    ImGuiUtils::EditProperty("Metallic", ImGuiDataType_Float, &mat.orm.b, orm_speed, &min_orm, &max_orm);
+                    ImGuiUtils::EditProperty("EmissionStrength", ImGuiDataType_Float, &mat.emission_strength, orm_speed, &min_shininess, nullptr);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("AlbedoMap", albedo_map);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("OrmMap", orm_map);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("NormalMap", normal_map);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("EmissionMap", emission_map);
+                    ImGui::Separator();
+                    break;
+                }
+                case MaterialType::Phong: {
+                    auto emission_map = (mat.emission_map ? mat.emission_map : Renderer::GetTexture(Renderer::Textures::White));
+                    auto normal_map   = (mat.normal_map ? mat.normal_map : Renderer::GetTexture(Renderer::Textures::Normal));
+                    auto diffuse_map  = (mat.diffuse_map ? mat.diffuse_map : Renderer::GetTexture(Renderer::Textures::White));
+                    auto specular_map = (mat.specular_map ? mat.specular_map : Renderer::GetTexture(Renderer::Textures::White));
+
+                    ImGuiUtils::EditProperty("AmbientColor", mat.ambient, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("EmissionColor", mat.emission, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("DiffuseColor", mat.diffuse, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("Specular", mat.specular, ImGuiUtils::PropertyType::Color);
+                    ImGuiUtils::EditProperty("EmissionStrength", ImGuiDataType_Float, &mat.emission_strength, orm_speed, &min_shininess, nullptr);
+                    ImGuiUtils::EditProperty("Shininess", ImGuiDataType_Float, &mat.shininess, orm_speed, &min_shininess, nullptr);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("DiffuseMap", diffuse_map);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("SpecularMap", specular_map);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("NormalMap", normal_map);
+                    ImGui::Separator();
+                    ImGuiUtils::EditTexture("EmissionMap", emission_map);
+                    ImGui::Separator();
+                    break;
+                }
+
+                default: break;
+            }
+        }
+        void EditTexture(const std::string& name, Ref<Texture> texture, const ImVec2 tex_size) {
+            ImGui::SetCursorPosX(ImGuiUtils::Constants::DefaultLeftPadding);
+            ImGui::TextUnformatted(name.c_str());
+            ImGui::NextColumn();
+            ImGui::SetNextItemWidth(ImGuiUtils::Constants::DefaultRightPadding);
+            ImGui::Image(reinterpret_cast<void*>(texture->GetRendererId()), tex_size);
             ImGui::NextColumn();
         }
     }  // namespace ImGuiUtils

@@ -1,8 +1,22 @@
 #pragma once
+#include "DummyEngine/Core/Animations/Animation.h"
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
-    enum class TextureFormat { None = 0, RED, RGB, RGBA, Depth };
+    enum class MaterialType {
+        None = 0,
+        Phong,
+        PBR,
+    };
+    std::string MaterialTypeToStr(MaterialType type);
+    MaterialType MaterialTypeFromStr(const std::string& str);
+    enum class TextureChannels { None = 0, RED, RG, RGB, RGBA };
+    enum class TextureFormat {
+        None = 0,
+        U8,
+        Float,
+    };
+
     enum CubeSide {
         Right  = 0,
         Left   = 1,
@@ -11,8 +25,8 @@ namespace DE {
         Back   = 5,
         Front  = 4,
     };
-    std::string TextureFormatToStr(TextureFormat format);
-    U32         PixelSize(TextureFormat format);
+    U32 ChannelAmount(TextureChannels format);
+    U32 FormatSize(TextureFormat format);
 
     struct ShaderPart {
         ShaderPartType type;
@@ -25,32 +39,44 @@ namespace DE {
     class TextureData {
     public:
         TextureData();
-        TextureData(const U8* data, U32 width, U32 height, TextureFormat format);
+        TextureData(const void* data, U32 width, U32 height, TextureChannels channels, TextureFormat format = TextureFormat::U8);
         ~TextureData();
+        void SetData(const void* data, U32 width, U32 height, TextureChannels channels, TextureFormat format = TextureFormat::U8);
 
-        void SetData(const U8* data, U32 width, U32 height, TextureFormat format);
-
-        U32           Width() const { return m_Width; }
-        U32           Height() const { return m_Height; }
-        TextureFormat Format() const { return m_Format; }
-        U32           Channels() const { return PixelSize(m_Format); }
-        U8*           Data() { return m_Data; }
-        const U8*     Data() const { return m_Data; }
+        U32             PixelSize() const;
+        U32             Width() const { return m_Width; }
+        U32             Height() const { return m_Height; }
+        TextureChannels Channels() const { return m_Channels; }
+        TextureFormat   Format() const { return m_Format; }
+        // U32             Channels() const { return PixelSize(m_Format); }
+        void*       Data() { return m_Data; }
+        const void* Data() const { return m_Data; }
 
     private:
-        U8*           m_Data;
-        U32           m_Width;
-        U32           m_Height;
-        TextureFormat m_Format;
+        void*           m_Data;
+        U32             m_Width;
+        U32             m_Height;
+        TextureChannels m_Channels;
+        TextureFormat   m_Format;
     };
 
     struct MaterialData {
-        Vec3             ambient_color;
-        Vec3             diffuse_color;
-        Vec3             specular_color;
-        float            shininess;
-        Ref<TextureData> specular_map;
+        MaterialType type = MaterialType::PBR;
+        float        shininess;
+
+        Vec3 albedo   = Vec3(1.0f);
+        Vec3 diffuse  = Vec3(1.0f);
+        Vec3 specular = Vec3(1.0f);
+        Vec3 orm      = Vec3(1.0f);
+        Vec3 ambient  = Vec3(1.0f);
+        Vec3 emission = Vec3(1.0f);
+
+        Ref<TextureData> albedo_map;
         Ref<TextureData> diffuse_map;
+        Ref<TextureData> specular_map;
+        Ref<TextureData> normal_map;
+        Ref<TextureData> orm_map;
+        Ref<TextureData> emission_map;
     };
 
     struct RenderSubMeshData {
@@ -61,6 +87,7 @@ namespace DE {
         RenderSubMeshData& operator+=(const RenderSubMeshData& other);
     };
     struct RenderMeshData {
+        Ref<Animation>                 animation;
         std::vector<RenderSubMeshData> meshes;
 
         void Compress();

@@ -4,15 +4,13 @@
 
 class GLFWwindow;
 
-namespace DE
-{
+namespace DE {
 
-    class Context
-    {
+    class Context {
     public:
         virtual ~Context() = default;
 
-        virtual void Load() = 0;
+        virtual void Load()        = 0;
         virtual void SwapBuffers() = 0;
 
         static Scope<Context> Create(GLFWwindow* window);

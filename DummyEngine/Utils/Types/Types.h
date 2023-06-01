@@ -3,6 +3,9 @@
 #include "DummyEngine/Utils/Base/GLMIncludes.h"
 #include "DummyEngine/Utils/Base/STDIncludes.h"
 
+#define MAX_BONE_INFLUENCE 8
+#define MAX_BONES 128
+
 using U8  = uint8_t;
 using U16 = uint16_t;
 using U32 = uint32_t;
@@ -17,11 +20,15 @@ namespace DE {
 
     using VoidFPtr = void (*)();
 
-    using Mat4 = glm::mat4;
-    using Vec4 = glm::vec4;
-    using Vec3 = glm::vec3;
-    using Vec2 = glm::vec2;
-    using Path = std::filesystem::path;
+    using Mat4       = glm::mat4;
+    using Vec4       = glm::vec4;
+    using Vec3       = glm::vec3;
+    using Vec2       = glm::vec2;
+    using IVec4      = glm::ivec4;
+    using IVec3      = glm::ivec3;
+    using IVec2      = glm::ivec2;
+    using Quaternion = glm::quat;
+    using Path       = std::filesystem::path;
 
     template <typename A, typename B> using Pair = std::pair<A, B>;
 
@@ -32,9 +39,14 @@ namespace DE {
     enum class BufferUsage { None = 0, Static, Dynamic };
 
     struct Vertex3D {
-        Vec3 position;
-        Vec3 normal;
-        Vec2 tex_coords;
+        Vec3  position                    = Vec3(0);
+        Vec3  normal                      = Vec3(0);
+        Vec3  tangent                     = Vec3(0);
+        Vec2  tex_coords                  = Vec2(0);
+        S32   bones[MAX_BONE_INFLUENCE]   = {-1, -1, -1, -1, -1, -1, -1, -1};
+        float weights[MAX_BONE_INFLUENCE] = {0, 0, 0, 0, 0, 0, 0, 0};
+
+        void AddBone(S32 id, float weight);
     };
 
     template <typename T> using Scope   = std::unique_ptr<T>;

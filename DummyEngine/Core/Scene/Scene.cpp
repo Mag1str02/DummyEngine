@@ -18,6 +18,14 @@ namespace DE {
                 component->OnRuntimeStart();
             }
         }
+        std::unordered_set<Ref<RenderMesh>> meshes;
+        for (auto e : m_Storage->View<RenderMeshComponent>()) {
+            auto mesh = e.Get<RenderMeshComponent>().mesh;
+            if (mesh->p_Animator && !meshes.contains(mesh)) {
+                meshes.insert(mesh);
+                mesh->p_Animator->SetTime(0);
+            }
+        }
     }
     void Scene::OnRuntimeStop() {
         for (auto e : m_Storage->View<ScriptComponent>()) {
@@ -26,15 +34,34 @@ namespace DE {
                 component->OnRuntimeStop();
             }
         }
+        std::unordered_set<Ref<RenderMesh>> meshes;
+        for (auto e : m_Storage->View<RenderMeshComponent>()) {
+            auto mesh = e.Get<RenderMeshComponent>().mesh;
+            if (mesh->p_Animator && !meshes.contains(mesh)) {
+                meshes.insert(mesh);
+                mesh->p_Animator->SetTime(0);
+            }
+        }
     }
     void Scene::OnUpdate(float dt) {
         DE_PROFILE_SCOPE("Scene OnUpdate");
 
         m_Storage->UpdateSystems(dt);
+        if (m_PhysicsSolver) {
+            m_PhysicsSolver->OnUpdate(dt);
+        }
         for (auto e : m_Storage->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
                 component->OnUpdate(dt);
+            }
+        }
+        std::unordered_set<Ref<RenderMesh>> meshes;
+        for (auto e : m_Storage->View<RenderMeshComponent>()) {
+            auto mesh = e.Get<RenderMeshComponent>().mesh;
+            if (mesh->p_Animator && !meshes.contains(mesh)) {
+                meshes.insert(mesh);
+                mesh->p_Animator->UpdateAnimation(dt);
             }
         }
     }
@@ -59,14 +86,13 @@ namespace DE {
     }
 
     Scene::Scene() : m_Storage(CreateRef<Storage>()), m_Renderer(CreateRef<SceneRenderer>(this)), m_Hierarchy("Scene") {
-        m_Storage->SetAddHandler<FPSCamera>([this](Entity entity) { m_Renderer->AddVPEntity(entity); });
         m_Storage->SetAddHandler<IDComponent>([this](Entity entity) {
             auto id = entity.Get<IDComponent>();
             DE_ASSERT(m_EntityByID.find(id) == m_EntityByID.end(), "UUID collision occured (", id.Get(), ")");
             m_EntityByID[id] = entity;
         });
+        m_PhysicsSolver = CreateRef<Physics::Solver>();
         m_Storage->SetRemoveHandler<IDComponent>([this](Entity entity) { m_EntityByID.erase(entity.Get<IDComponent>()); });
-        m_Storage->SetRemoveHandler<ScriptComponent>([this](Entity entity) { entity.Get<ScriptComponent>().Destroy(); });
     }
 
     Scene::~Scene() {
@@ -103,5 +129,8 @@ namespace DE {
     }
     bool Scene::HasCamera() {
         return m_Camera.Valid();
+    }
+    void Scene::LoadPhysics(Ref<Scene>& scene) {
+        m_PhysicsSolver->LoadScene(scene);
     }
 }  // namespace DE
