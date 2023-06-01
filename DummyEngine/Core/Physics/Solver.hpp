@@ -27,6 +27,7 @@ namespace DE::Physics {
         Vec3 lhs_r, rhs_r;
 
         Jacobian jN, jT, jTb;
+        size_t frame;
     };
 
 
@@ -46,6 +47,7 @@ namespace DE::Physics {
         Ref<SceneConstants> _constants;
         std::unordered_map<UUID, Ref<ConvexCollider>> _colliders;
         double _time = 0;
+        size_t _frame = 0;
     };
 
 }
