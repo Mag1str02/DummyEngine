@@ -33,6 +33,25 @@ namespace DE {
             }
         }
     }
+
+    void Scene::OnRuntimePause() {
+        for (auto e : View<AudioComponent>()) {
+            auto& audio = e.Get<AudioComponent>();
+            if (audio.sound) {
+                audio.sound->pause_streaming();
+            }
+        }
+    }
+
+    void Scene::OnRuntimeResume() {
+        for (auto e : View<AudioComponent>()) {
+            auto& audio = e.Get<AudioComponent>();
+            if (audio.sound) {
+                audio.sound->resume_streaming();
+            }
+        }
+    }
+
     void Scene::OnRuntimeStop() {
         for (auto e : View<AudioComponent>()) {
             auto& audio = e.Get<AudioComponent>();
@@ -119,7 +138,7 @@ namespace DE {
         m_Storage->SetRemoveHandler<AudioComponent>([this](Entity entity) {
             auto& sound = entity.Get<AudioComponent>().sound;
             if (sound) {
-                sound->deinit_streaming();
+                sound->stop_streaming();
             }
         });
     }

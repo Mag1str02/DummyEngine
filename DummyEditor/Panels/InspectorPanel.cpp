@@ -172,7 +172,7 @@ namespace DE {
                     Path res = FileSystem::OpenFileDialog("Audio (*.wav)", "wav");
                     if (!res.empty()) {
                         if (audio.sound) {
-                            audio.sound->deinit_streaming();
+                            audio.sound->pause_streaming();
                         }
                         audio.sound = CreateScope<WavSound>(res.string());
                         audio.sound->init_streaming();

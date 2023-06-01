@@ -243,13 +243,23 @@ namespace DE {
         alCall(alSourcePlay, source);
         state = AL_PLAYING;
     }
+
     void WavSound::play_streaming() {
         state = AL_PLAYING;
         reinterpret_cast<StreamingBuffer*>(buffer.get())->update_stream(source, format, sampleRate, soundData, cursor);
         alCall(alGetSourcei, source, AL_SOURCE_STATE, &state);
     }
 
-    void WavSound::deinit_streaming() {}
+    void WavSound::pause_streaming() {
+        alCall(alSourceStop, source);
+        state = AL_STOPPED;
+    }
+
+    void WavSound::resume_streaming() {
+        alCall(alSourcePlay, source);
+        state = AL_PLAYING;
+    }
+
     void WavSound::stop() {
         alCall(alSourceStop, source);
         state = AL_STOPPED;
