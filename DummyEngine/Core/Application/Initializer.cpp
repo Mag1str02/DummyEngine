@@ -10,6 +10,7 @@
 #include "DummyEngine/Core/ResourceManaging/AssetManager.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
+#include "DummyEngine/Core/SoundEngine/AudioEngine.h"
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
@@ -61,6 +62,7 @@ namespace DE {
         Input::Initialize();
         Application::Initialize();
         Renderer::Initialize();
+        AudioEngine::Initialize();
     }
 
     void Initializer::EngineTerminate() {
@@ -71,6 +73,7 @@ namespace DE {
         ScriptEngine::Terminate();
         ResourceManager::Terminate();
         AssetManager::Terminate();
+        AudioEngine::Terminate();
     }
     void Initializer::DepTerminate() {
         LOG_INFO("Initializer", "Terminating dependencies");
