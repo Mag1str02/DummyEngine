@@ -1,18 +1,21 @@
 #ifndef DUMMYENGINE_AUDIOENGINE_H
 #define DUMMYENGINE_AUDIOENGINE_H
+#pragma once
+
 #include "AudioEngineFacade.h"
 #include "AudioFile.h"
 #include "DummyEngine/Utils/Base.h"
+#include "AudioContext.h"
+#include "SoundsAndFactories.h"
 
 namespace DE {
-    class AudioEngine : public Singleton<AudioEngine>{
+    class AudioEngine : public Singleton <AudioEngine> {
         SINGLETON(AudioEngine)
     public:
 
     private:
-        ALCdevice* openAL_device;
-        ALCcontext* openAL_context;
-        ALCboolean is_made_current;
+        AudioContext main_context;
+        SoundFactory soundFactory{};
     };
 }
 
