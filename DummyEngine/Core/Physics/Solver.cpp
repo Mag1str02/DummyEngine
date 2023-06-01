@@ -22,6 +22,7 @@ void DE::Physics::Solver::OnUpdate(double dt) {
     if (!_scene) {
         return;
     }
+    _frame++;
     double curr_dt = 0;
     while (curr_dt < dt) {
         curr_dt += NextInteraction(dt - curr_dt);
@@ -128,6 +129,7 @@ double DE::Physics::Solver::NextInteraction(double dt) {
                         list_iterator--;
                     }
                     Collision& col = *list_iterator;
+                    col.frame = _frame;
                     for (int i = 0; i < 30; i++) {
                         Resolve(col.jN, col, delta, true, nullptr);
                         Resolve(col.jT, col, delta, false, &col.jN);
@@ -135,6 +137,12 @@ double DE::Physics::Solver::NextInteraction(double dt) {
                     }
                 }
             }
+        }
+
+        for(auto &[ids, cols]: mem) {
+            cols.remove_if([&](const auto& el) {
+                return el.frame != _frame;
+            });
         }
 
         for (auto entity : _scene->View<PhysicsComponent>()) {
