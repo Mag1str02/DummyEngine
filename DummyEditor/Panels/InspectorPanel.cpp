@@ -174,6 +174,7 @@ namespace DE {
                         audio.sound = CreateScope<WavSound>(res.string());
                         audio.sound->init();
                         audio.path  = res;
+                        // std::cout << audio.sound->getGain() << '\n';
                     }
                 }
             }
