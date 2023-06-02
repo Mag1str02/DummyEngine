@@ -74,6 +74,7 @@ namespace DE {
         virtual void OnAttach() {}
         virtual void OnRuntimeStart() {}
         virtual void OnUpdate(float dt) {}
+        virtual void OnRender() {}
         virtual void OnRuntimeStop() {}
         virtual void OnDetach() {}
 

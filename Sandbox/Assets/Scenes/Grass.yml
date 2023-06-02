@@ -1,0 +1,87 @@
+Scene:
+  Name: Scene
+  Assets:
+    Models:
+      CubeModel:
+        Path: Assets\Models\Cube\cube.obj
+        Compress: true
+        FlipUV: false
+        UUID: 02afee3bc1cb75b7d8b882a8667faa84
+    Textures:
+      Sky:
+        Path: Assets\Textures\Skyboxes\Sky.png
+        FlipUV: false
+        UUID: 8911b8a8458923946819fb45fbb794fd
+    Shaders:
+      PBR:
+        UUID: 24116af57b6022cd2464fbf641ae946a
+        Vertex: Assets\Shaders\PBR\PBR.vs
+        Fragment: Assets\Shaders\PBR\PBR.fs
+    Scripts:
+      Grass:
+        Path: Assets\Scripts\Grass\Grass.cpp
+        UUID: 15fa3d63323bca9ceb7b9ae14b5d2111
+  Hierarchy:
+    - Node:
+        Name: Enviroment
+        Childs:
+          - Entity:
+              Tag: Sky
+              UUID: ed39f278255d3fc7823454ad61d716e5
+              Transformation:
+                Translation: [16.9514027, 36.2624664, -97.3881531]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [180, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              SkyBox:
+                Type: CubeMap
+                UUID: 8911b8a8458923946819fb45fbb794fd
+          - Entity:
+              Tag: Surface
+              UUID: 30624f9f9f6a9301e3ee3e843d2c84a8
+              Transformation:
+                Translation: [0, -100, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [500, 1, 500]
+                ScaleOffset: [1, 1, 1]
+              RenderModel:
+                UUID: 02afee3bc1cb75b7d8b882a8667faa84
+                Materials:
+                  - Type: PBR
+                    Albedo: [0.254942894, 1, 0.0967742205]
+                    Ambient: [1, 1, 1]
+                    ORM: [0, 1, 0]
+                    Diffuse: [0.5, 0.5, 0.5]
+                    Specular: [0.5, 0.5, 0.5]
+                    Emission: [1, 1, 1]
+                    Shininess: 64
+                    EmissionStrength: 0
+                    MeshID: 0
+              Shader: 24116af57b6022cd2464fbf641ae946a
+              Physics:
+                InvMass: 0
+                InvInertia: 0
+                Collidable: true
+                Gravity: false
+    - Entity:
+        Tag: Grass
+        UUID: cd9c74e392c9dda356b25a3e8495d7fb
+        Script:
+          UUID: 15fa3d63323bca9ceb7b9ae14b5d2111
+          Fields:
+            Speed: 1
+            Camera: 1e9efeec5dffab4b7d0eba4250554d5b
+  RendererSettings:
+    Bloom: false
+    BloomThreshold: 1
+    BloomSoftTreshold: 0
+    BloomDepth: 5
+    BloomRadius: 0.00499999989
+    BloomStrength: 0.0399999991
+    GammaToneMapping: false
+    Exposure: 1
+    Gamma: 1
