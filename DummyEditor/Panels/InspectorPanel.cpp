@@ -155,7 +155,7 @@ namespace DE {
     }
     template <> void InspectorPanel::DrawComponentWidget<AudioComponent>(Entity entity) {
         if (m_Entity.Has<AudioComponent>()) {
-            if (ImGui::CollapsingHeader("  AudioComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
+            if (ImGui::CollapsingHeader(ICON_MD_VOLUME_UP "  AudioComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto&       audio = m_Entity.Get<AudioComponent>();
                 std::string name  = "File not selected";
                 if (!audio.path.empty()) {
@@ -177,9 +177,24 @@ namespace DE {
                         audio.sound = CreateScope<WavSound>(res.string());
                         audio.sound->init_streaming();
                         audio.path = res;
-                        // std::cout << audio.sound->getGain() << '\n';
                     }
                 }
+            }
+        }
+    }
+    template <> void InspectorPanel::DrawComponentWidget<Physics::PhysicsComponent>(Entity entity) {
+        if (m_Entity.Has<Physics::PhysicsComponent>()) {
+            if (ImGui::CollapsingHeader("  PhysicsComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
+                auto&       phys    = m_Entity.Get<Physics::PhysicsComponent>();
+                const float min_mas = 0;
+                ImGui::Columns(2);
+                ImGuiUtils::EditProperty("Speed", phys.speed);
+                ImGuiUtils::EditProperty("Rotspeed", phys.rot_speed);
+                ImGuiUtils::EditProperty("InvMass", ImGuiDataType_Float, &phys.inv_mass, 0.01, &min_mas);
+                ImGuiUtils::EditProperty("InvInertia", ImGuiDataType_Float, &phys.inv_inertia, 0.01, &min_mas);
+                ImGuiUtils::EditProperty("Collidable", phys.collidable);
+                ImGuiUtils::EditProperty("Gravity", phys.gravity);
+                ImGui::Columns(1);
             }
         }
     }
@@ -196,8 +211,9 @@ namespace DE {
                     DrawComponentWidget<FPSCamera>(m_Entity);
                     DrawComponentWidget<LightSource>(m_Entity);
                     DrawComponentWidget<RenderMeshComponent>(m_Entity);
-                    DrawComponentWidget<SkyBoxComponent>(m_Entity);
+                    // DrawComponentWidget<SkyBoxComponent>(m_Entity);
                     DrawComponentWidget<AudioComponent>(m_Entity);
+                    DrawComponentWidget<Physics::PhysicsComponent>(m_Entity);
                     AddComponent();
                 }
             }
@@ -218,7 +234,7 @@ namespace DE {
             if (!m_Entity.Has<FPSCamera>() && ImGui::Selectable(ICON_MD_VIDEOCAM "Camera")) {
                 m_Entity.Add<FPSCamera>();
             }
-            if (!m_Entity.Has<AudioComponent>() && ImGui::Selectable("Audio")) {
+            if (!m_Entity.Has<AudioComponent>() && ImGui::Selectable(ICON_MD_VOLUME_UP "Audio")) {
                 m_Entity.Add<AudioComponent>();
             }
             ImGui::EndPopup();

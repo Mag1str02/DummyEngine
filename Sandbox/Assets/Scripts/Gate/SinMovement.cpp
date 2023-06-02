@@ -11,6 +11,7 @@ public:
         auto& pos = Get<TransformComponent>().translation;
         float d   = (sin(current_time) + 1) / 2;
         pos       = d * PosA + (1 - d) * PosB;
+        // pos = d * PosA + (1 - d) * PosB + Vec3(0, 20, 0)* float(cos(current_time)) ;
     }
 
 private:
