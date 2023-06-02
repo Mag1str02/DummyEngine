@@ -6,6 +6,7 @@
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"
+#include "DummyEngine/Core/Physics/PhysicsComponent.h"
 #include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
 #include "DummyEngine/Core/Rendering/Renderer/LocalBuffer.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"

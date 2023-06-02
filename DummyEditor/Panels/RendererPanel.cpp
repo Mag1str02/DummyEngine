@@ -5,7 +5,7 @@ namespace DE {
     void RendererPanel::OnImGui() {
         DE_PROFILE_SCOPE("RendererPanel OnImGui");
         if (m_Controller) {
-            if (ImGui::Begin("  Renderer")) {
+            if (ImGui::Begin(ICON_MD_PHOTO_CAMERA "  Renderer")) {
                 auto scene = m_Scene.lock();
                 if (scene) {
                     const float mix_exposure  = 0;

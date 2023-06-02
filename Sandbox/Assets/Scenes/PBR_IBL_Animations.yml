@@ -106,7 +106,7 @@ Scene:
                 Diffuse: [1, 1, 1]
                 Specular: [1, 1, 1]
                 Direction: [1, 0, 0]
-                Position: [0, 0.238287449, -4.48371029]
+                Position: [0, 0.230217576, -4.50119495]
                 CLQ: [0, 0, 0.00100000005]
                 InnerCone: 0
                 OuterCone: 0
@@ -181,8 +181,8 @@ Scene:
                     MeshID: 0
                   - Type: PBR
                     Albedo: [1, 1, 1]
-                    Ambient: [0, 0, 0]
-                    ORM: [0, 0, 0]
+                    Ambient: [1, 1, 1]
+                    ORM: [1, 1, 1]
                     Diffuse: [1, 1, 1]
                     Specular: [0, 0, 0]
                     Emission: [1, 1, 1]

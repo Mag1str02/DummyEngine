@@ -9,7 +9,12 @@ namespace DE::Physics {
             _normal = glm::normalize(glm::cross(v2 - v1, v3 - v1));
             _d      = -glm::dot(_normal, v1);
         }
-        Vec3    intersectionPoint(Vec3 p1, Vec3 p2) const { return p1 + (p2 - p1) * (-distance(p1) / glm::dot(_normal, p2 - p1)); };
+        Vec3    intersectionPoint(Vec3 p1, Vec3 p2) const {
+            if (glm::dot(_normal, p2 - p1) == 0) {
+                return (p1 + p2) / 2.f;
+            }
+            return p1 + (p2 - p1) * (-distance(p1) / glm::dot(_normal, p2 - p1));
+        };
         void    invert() { _normal = -_normal; }
         Vec3    getNormal() const { return _normal; }
         float distance(Vec3 q) const { return glm::dot(_normal, q) + _d; }
