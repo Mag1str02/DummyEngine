@@ -6,6 +6,7 @@
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLDebug.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/Scene/Components.h"
+#include "DummyEngine/Core/Scripting/ScriptEngine.h"
 
 namespace DE {
     const U32 MAX_LIGHTS_IN_SCENE      = 1000;
@@ -54,7 +55,12 @@ namespace DE {
                 static U32 cnt = 0;
                 Renderer::Submit(skybox.Get<SkyBoxComponent>()->GetMap(), camera.Get<FPSCamera>(), transform);
             }
-
+            for (auto e : m_Scene->View<ScriptComponent>()) {
+                auto& component = e.Get<ScriptComponent>();
+                if (component.Valid()) {
+                    component->OnRender();
+                }
+            }
             for (auto e : m_Scene->View<RenderMeshComponent, ShaderComponent>()) {
                 auto shader = e.Get<ShaderComponent>().shader;
                 auto mesh   = e.Get<RenderMeshComponent>().mesh;
