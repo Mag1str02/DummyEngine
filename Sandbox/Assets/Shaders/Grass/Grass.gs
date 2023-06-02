@@ -10,13 +10,11 @@ in vec3 v_Right[];
 
 out vec3 g_Color;
 
-struct VP
-{
+struct VP{
     mat4 view;
     mat4 projection;
 };
-layout(std140) uniform ub_VP { VP vp[32]; };
-uniform int   u_VP;
+uniform VP u_Camera;
 uniform float u_Time;
 
 float random(in vec2 st) { return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123); }
@@ -46,25 +44,25 @@ void main()
     // vec3 offset = vec3(0);
 
     g_Color     = vec3(0.2, 0.54, 0.2);
-    gl_Position = vp[u_VP].projection * vp[u_VP].view * (gl_in[0].gl_Position + vec4(v_Right[0] * GRASS_WIDTH / 2, 0.0));
+    gl_Position = u_Camera.projection * u_Camera.view * (gl_in[0].gl_Position + vec4(v_Right[0] * GRASS_WIDTH / 2, 0.0));
     EmitVertex();
 
     g_Color     = vec3(0.2, 0.54, 0.2);
-    gl_Position = vp[u_VP].projection * vp[u_VP].view * (gl_in[0].gl_Position - vec4(v_Right[0] * GRASS_WIDTH / 2, 0.0));
+    gl_Position = u_Camera.projection * u_Camera.view * (gl_in[0].gl_Position - vec4(v_Right[0] * GRASS_WIDTH / 2, 0.0));
     EmitVertex();
 
     g_Color = vec3(0.2, 0.7, 0.2);
     gl_Position =
-        vp[u_VP].projection * vp[u_VP].view * (gl_in[0].gl_Position + vec4(v_Right[0] * GRASS_WIDTH / 3, 0.0) + vec4(v_Up[0] * GRASS_HEIGHT / 2 * height_multiplier, 0.0) + vec4(offset, 0.0) * 0.3);
+        u_Camera.projection * u_Camera.view * (gl_in[0].gl_Position + vec4(v_Right[0] * GRASS_WIDTH / 3, 0.0) + vec4(v_Up[0] * GRASS_HEIGHT / 2 * height_multiplier, 0.0) + vec4(offset, 0.0) * 0.3);
     EmitVertex();
 
     g_Color = vec3(0.2, 0.7, 0.2);
     gl_Position =
-        vp[u_VP].projection * vp[u_VP].view * (gl_in[0].gl_Position - vec4(v_Right[0] * GRASS_WIDTH / 3, 0.0) + vec4(v_Up[0] * GRASS_HEIGHT / 2 * height_multiplier, 0.0) + vec4(offset, 0.0) * 0.3);
+        u_Camera.projection * u_Camera.view * (gl_in[0].gl_Position - vec4(v_Right[0] * GRASS_WIDTH / 3, 0.0) + vec4(v_Up[0] * GRASS_HEIGHT / 2 * height_multiplier, 0.0) + vec4(offset, 0.0) * 0.3);
     EmitVertex();
 
     g_Color     = vec3(0.2, 1.0, 0.2);
-    gl_Position = vp[u_VP].projection * vp[u_VP].view * (gl_in[0].gl_Position + vec4(v_Up[0] * GRASS_HEIGHT * height_multiplier, 0.0) + vec4(offset, 0.0));
+    gl_Position = u_Camera.projection * u_Camera.view * (gl_in[0].gl_Position + vec4(v_Up[0] * GRASS_HEIGHT * height_multiplier, 0.0) + vec4(offset, 0.0));
     EmitVertex();
 
     EndPrimitive();
