@@ -59,7 +59,7 @@ Scene:
               Tag: Surface
               UUID: 30624f9f9f6a9301e3ee3e843d2c84a8
               Transformation:
-                Translation: [0, -10, 0]
+                Translation: [0, 18, 0]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -85,41 +85,12 @@ Scene:
                 Collidable: true
                 Gravity: false
           - Entity:
-              Tag: DownSlope
-              UUID: 30624f9f9f6a9301e3aa3e843d2c84a8
-              Transformation:
-                Translation: [0, 7, 19]
-                TranslationOffset: [0, 0, 0]
-                Rotation: [323, 0, 0]
-                RotationOffset: [0, 0, 0]
-                Scale: [10, 1, 20]
-                ScaleOffset: [1, 1, 1]
-              RenderModel:
-                UUID: 02afee3bc1cb75b7d8b882a8667faa84
-                Materials:
-                  - Type: PBR
-                    Albedo: [1, 0.525345623, 0.525345623]
-                    Ambient: [1, 1, 1]
-                    ORM: [0, 0.400000006, 0]
-                    Diffuse: [0.5, 0.5, 0.5]
-                    Specular: [0.5, 0.5, 0.5]
-                    Emission: [1, 1, 1]
-                    Shininess: 64
-                    EmissionStrength: 0
-                    MeshID: 0
-              Shader: 24116af57b6022cd2464fbf641ae946a
-              Physics:
-                InvMass: 0
-                InvInertia: 0
-                Collidable: true
-                Gravity: false
-          - Entity:
               Tag: UpSlope
               UUID: 30624f9fea6a9301e3ee3e843d2c84a8
               Transformation:
-                Translation: [0, 32, 0]
+                Translation: [0, 30, 0]
                 TranslationOffset: [0, 0, 0]
-                Rotation: [34, 0, 0]
+                Rotation: [22.8, 0, 0]
                 RotationOffset: [0, 0, 0]
                 Scale: [10, 1, 20]
                 ScaleOffset: [1, 1, 1]
@@ -151,7 +122,7 @@ Scene:
               Transformation:
                 Translation: [0, 57, -4]
                 TranslationOffset: [0, 0, 0]
-                Rotation: [15, 0, 15]
+                Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
                 Scale: [1, 1, 1]
                 ScaleOffset: [1, 1, 1]
@@ -171,7 +142,7 @@ Scene:
               Shader: 24116af57b6022cd2464fbf641ae946a
               Physics:
                 InvMass: 0.100000001
-                InvInertia: 0.600000024
+                InvInertia: 0.15
                 Collidable: true
                 Gravity: true
           - Entity:
@@ -180,7 +151,7 @@ Scene:
               Transformation:
                 Translation: [0, 51, -4]
                 TranslationOffset: [0, 0, 0]
-                Rotation: [25, 0, 25]
+                Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
                 Scale: [1, 1, 1]
                 ScaleOffset: [1, 1, 1]
@@ -200,7 +171,7 @@ Scene:
               Shader: 24116af57b6022cd2464fbf641ae946a
               Physics:
                 InvMass: 0.100000001
-                InvInertia: 0.600000024
+                InvInertia: 0.15
                 Collidable: true
                 Gravity: true
           - Entity:
@@ -209,7 +180,7 @@ Scene:
               Transformation:
                 Translation: [0, 45, -4]
                 TranslationOffset: [0, 0, 0]
-                Rotation: [12, 0, 30]
+                Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
                 Scale: [1, 1, 1]
                 ScaleOffset: [1, 1, 1]
@@ -229,7 +200,7 @@ Scene:
               Shader: 24116af57b6022cd2464fbf641ae946a
               Physics:
                 InvMass: 0.100000001
-                InvInertia: 0.600000024
+                InvInertia: 0.15
                 Collidable: true
                 Gravity: true
           - Entity:
@@ -238,7 +209,7 @@ Scene:
               Transformation:
                 Translation: [0, 65, -4]
                 TranslationOffset: [0, 0, 0]
-                Rotation: [30, 0, 30]
+                Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
                 Scale: [1, 1, 1]
                 ScaleOffset: [1, 1, 1]
@@ -258,7 +229,7 @@ Scene:
               Shader: 24116af57b6022cd2464fbf641ae946a
               Physics:
                 InvMass: 0.100000001
-                InvInertia: 0.600000024
+                InvInertia: 0.15
                 Collidable: true
                 Gravity: true
   RendererSettings:
