@@ -20,6 +20,7 @@ namespace DE {
 #define DE_CFG_TEXTURE_PATH 6
 #define DE_CFG_SCRIPT_PATH 7
 #define DE_CFG_FONT_PATH 8
+#define DE_CFG_SCENE_PATH 11
 
 #define DE_CFG_CACHE_PATH 9
 #define DE_CFG_SCRIPT_CACHE_PATH 10
@@ -60,6 +61,7 @@ namespace DE {
             Path c_ScriptPath;
             Path c_ScriptCachePath;
             Path c_FontPath;
+            Path c_ScenePath;
 
             API c_RenderAPI;
         };

@@ -3,26 +3,26 @@ Scene:
   Assets:
     Models:
       CubeModel:
-        Path: Assets\Models\Cube\cube.obj
+        Path: Assets/Models/Cube/cube.obj
         Compress: true
         FlipUV: false
         UUID: 02afee3bc1cb75b7d8b882a8667faa84
     Textures:
       Sky:
-        Path: Assets\Textures\Skyboxes\Sky.png
+        Path: Assets/Textures/Skyboxes/Sky.png
         FlipUV: false
         UUID: 8911b8a8458923946819fb45fbb794fd
     Shaders:
       TexturedPhong:
         UUID: 24116af57b6022cd2464fbf641ae946a
-        Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
-        Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
+        Vertex: Assets/Shaders/TexturedPhong/TexturedPhong.vs
+        Fragment: Assets/Shaders/TexturedPhong/TexturedPhong.fs
     Scripts:
       GateController:
-        Path: Assets\Scripts\Gate\GateController.cpp
+        Path: Assets/Scripts/Gate/GateController.cpp
         UUID: 15fa3d63323bca9ceb7b9ae14b5d2111
       SinMovement:
-        Path: Assets\Scripts\Gate\SinMovement.cpp
+        Path: Assets/Scripts/Gate/SinMovement.cpp
         UUID: b54e9fbf43a0fd9437c0f2c1f19082ce
   Hierarchy:
     - Node:

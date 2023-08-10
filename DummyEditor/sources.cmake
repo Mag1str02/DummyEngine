@@ -14,6 +14,7 @@ set(EDITOR_SOURCES
     Panels/ThemePanel.cpp
 
     Scripting/ScriptManager.cpp
+    Scripting/Compiler.cpp
 )
 if(${CMAKE_PLATFORM} STREQUAL "WINDOWS")
 set(PLATFORM_SOURCES

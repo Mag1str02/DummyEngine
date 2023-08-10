@@ -10,28 +10,28 @@ add_subdirectory(NFD)
 
 
 set(IMGUI_INCLUDES
-	ImGui/imgui.h
-	ImGui/backends/imgui_impl_glfw.h
-	ImGui/backends/imgui_impl_opengl3.h
-	ImGui/misc/cpp/imgui_stdlib.h
+	IMGUI/imgui.h
+	IMGUI/backends/imgui_impl_glfw.h
+	IMGUI/backends/imgui_impl_opengl3.h
+	IMGUI/misc/cpp/imgui_stdlib.h
 )
 set(IMGUI_SOURCES
-	ImGui/imgui.cpp
-	ImGui/backends/imgui_impl_glfw.cpp
-	ImGui/backends/imgui_impl_opengl3.cpp
-	ImGui/imgui_demo.cpp
-	ImGui/imgui_tables.cpp
-	ImGui/imgui_widgets.cpp
-	ImGui/imgui_draw.cpp
-	ImGui/misc/cpp/imgui_stdlib.cpp
-)
+    IMGUI/imgui.cpp
+    IMGUI/backends/imgui_impl_glfw.cpp
+    IMGUI/backends/imgui_impl_opengl3.cpp
+	IMGUI/imgui_demo.cpp
+	IMGUI/imgui_tables.cpp
+	IMGUI/imgui_widgets.cpp
+	IMGUI/imgui_draw.cpp
+	IMGUI/misc/cpp/imgui_stdlib.cpp
+) 
 add_library(ImGui
    ${IMGUI_SOURCES}
    ${IMGUI_INCLUDES}
 )
 target_include_directories(ImGui
-    PUBLIC ImGui
-    PUBLIC ImGui/backends
+    PUBLIC IMGUI
+    PUBLIC IMGUI/backends
 )
 target_link_libraries(ImGui PUBLIC glad glfw)
 

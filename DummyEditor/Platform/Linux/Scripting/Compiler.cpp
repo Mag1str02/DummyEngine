@@ -1,9 +1,9 @@
 #include "DummyEditor/Scripting/Compiler.h"
 
 namespace DE {
-    class WindowsCompilerImpl : public CompilerImpl {
+    class LinuxCompilerImpl : public CompilerImpl {
     public:
-        WindowsCompilerImpl() { AddDefine("DE_PLATFORM_WINDOWS"); }
+        LinuxCompilerImpl() { AddDefine("DE_PLATFORM_LINUX"); }
         virtual bool Compile(const Path& source, const Path& destination) {
             if (!fs::exists(source) || destination.filename().empty()) {
                 LOG_ERROR("Compiler", "File (", source, ") was not compiled because does not exists or destination empty");
@@ -109,7 +109,7 @@ namespace DE {
             return res;
         }
         std::string AddPathDLL(const Path& destination, const std::string& library_name) {
-            return " -o " + destination.string() + "/" + library_name + ".dll";
+            return " -o " + destination.string() + "/" + library_name + ".so";
         }
 
         std::unordered_set<Path>        m_IncludeDirs;
@@ -118,7 +118,7 @@ namespace DE {
     };
 
     Scope<CompilerImpl> Compiler::CreateCompilerImpl() {
-        return CreateScope<WindowsCompilerImpl>();
+        return CreateScope<LinuxCompilerImpl>();
     }
 
 };  // namespace DE

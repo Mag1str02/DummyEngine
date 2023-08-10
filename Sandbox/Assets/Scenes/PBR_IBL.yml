@@ -3,59 +3,59 @@ Scene:
   Assets:
     Models:
       Sphere:
-        Path: Assets\Models\Sphere\sphere.obj
+        Path: Assets/Models/Sphere/sphere.obj
         Compress: true
         FlipUV: true
         UUID: 5c7dfba9096b1d2047cf3bab45ecdc1e
         MatType: PBR
       CubeModel:
-        Path: Assets\Models\Cube\cube.obj
+        Path: Assets/Models/Cube/cube.obj
         Compress: true
         FlipUV: false
         UUID: 02afee3bc1cb75b7d8b882a8667faa84
         MatType: PBR
       SkullModel:
-        Path: Assets\Models\Skull\scene.gltf
+        Path: Assets/Models/Skull/scene.gltf
         Compress: false
         FlipUV: true
         UUID: 02afee3bc1cb75bacdb882a8667faa84
         MatType: PBR
       Samurai:
-        Path: Assets\Models\Samurai\scene.gltf
+        Path: Assets/Models/Samurai/scene.gltf
         Compress: false
         FlipUV: true
         UUID: 02afee3bc1cb75bacdb882a8667faa21
         MatType: PBR
       Car:
-        Path: Assets\Models\Car\Car.obj
+        Path: Assets/Models/Car/Car.obj
         Compress: false
         FlipUV: true
         UUID: 02afee3bc1cb75bacdb882a8667faaac
         MatType: PBR
     Textures:
       Sky:
-        Path: Assets\Textures\Skyboxes\Sky.png
+        Path: Assets/Textures/Skyboxes/Sky.png
         FlipUV: false
         UUID: 8911b8a8458923946819fb45fbb794fd
       Space:
-        Path: Assets\Textures\Skyboxes\Space.png
+        Path: Assets/Textures/Skyboxes/Space.png
         FlipUV: false
         UUID: 8911b8a8458923946819fb45fbb214fd
     Shaders:
       PBR:
         UUID: 24116af57b6022cd2464fbf641ae946a
-        Vertex: Assets\Shaders\PBR\PBR.vs
-        Fragment: Assets\Shaders\PBR\PBR.fs
+        Vertex: Assets/Shaders/PBR/PBR.vs
+        Fragment: Assets/Shaders/PBR/PBR.fs
       TexturedPhong:
         UUID: 24116af57b632acd2464fbf641ae946a
-        Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
-        Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
+        Vertex: Assets/Shaders/TexturedPhong/TexturedPhong.vs
+        Fragment: Assets/Shaders/TexturedPhong/TexturedPhong.fs
     Scripts:
       SkyContoller:
-        Path: Assets\Scripts\Sky\SkyController.cpp
+        Path: Assets/Scripts/Sky/SkyController.cpp
         UUID: 15fa3d63323b421ce0329ae14b5d2111
       SinMovement:
-        Path: Assets\Scripts\Gate\SinMovement.cpp
+        Path: Assets/Scripts/Gate/SinMovement.cpp
         UUID: b54e9fbf43a0fd9437c0f2c1f19082ce
   Hierarchy:
     - Node:

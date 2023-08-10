@@ -3,38 +3,38 @@ Scene:
   Assets:
     Models:
       ArchModel:
-        Path: Assets\Models\Arch\arch.obj
+        Path: Assets/Models/Arch/arch.obj
         Compress: true
         FlipUV: true
         UUID: 40fb5568addff10da5c21859fe9d3c3a
       BackpackModel:
-        Path: Assets\Models\Backpack\backpack.obj
+        Path: Assets/Models/Backpack/backpack.obj
         Compress: true
         FlipUV: false
         UUID: 5c7dfba9096b1d2047cf3bab45ecda0e
       CarModel:
-        Path: Assets\Models\Car\Car.obj
+        Path: Assets/Models/Car/Car.obj
         Compress: true
         FlipUV: true
         UUID: 9de192d9f46df53b5ff89998f688618e
       CubeModel:
-        Path: Assets\Models\Cube\cube.obj
+        Path: Assets/Models/Cube/cube.obj
         Compress: true
         FlipUV: false
         UUID: 02afee3bc1cb75b7d8b882a8667faa84
     Textures:
       Sky:
-        Path: Assets\Textures\Skyboxes\Space.png
+        Path: Assets/Textures/Skyboxes/Space.png
         FlipUV: false
         UUID: 8911b8a8458923946819fb45fbb794fd
     Shaders:
       TexturedPhong:
         UUID: 24116af57b6022cd2464fbf641ae946a
-        Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
-        Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
+        Vertex: Assets/Shaders/TexturedPhong/TexturedPhong.vs
+        Fragment: Assets/Shaders/TexturedPhong/TexturedPhong.fs
     Scripts:
       SkyContoller:
-        Path: Assets\Scripts\Sky\SkyController.cpp
+        Path: Assets/Scripts/Sky/SkyController.cpp
         UUID: 15fa3d63323b421ce0329ae14b5d2111
   Hierarchy:
     - Node:
@@ -152,7 +152,7 @@ Scene:
               Tag: Arch(10)
               UUID: 20b8b4df4ad5a2f8a519d0a3cd25be60
               Transformation:
-                Translation: [750, 0, 0]
+                Translation: [750, 1, 0]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -318,7 +318,7 @@ Scene:
                 RotationOffset: [0, 0, 0]
                 Scale: [1, 1, 1]
                 ScaleOffset: [1, 1, 1]
-              SkyBox: 
+              SkyBox:
                 Type: CubeMap
                 UUID: 8911b8a8458923946819fb45fbb794fd
               Script:

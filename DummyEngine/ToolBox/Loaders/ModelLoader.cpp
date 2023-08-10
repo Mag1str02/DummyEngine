@@ -50,7 +50,7 @@ namespace DE {
         m_State.m_MeshesAmount     = 0;
         m_State.m_NodesAmount      = 0;
         m_State.m_VerticesAmount   = 0;
-        m_State.m_CurrentDirectory = fs::canonical(properties.path / "..");
+        m_State.m_CurrentDirectory = properties.path.parent_path();
 
         ReadModelProperties(scene->mRootNode, scene);
         m_State.m_CurrentData->meshes.resize(m_State.m_MeshesAmount);

@@ -3,29 +3,29 @@ Scene:
   Assets:
     Models:
       CubeModel:
-        Path: Assets\Models\Cube\cube.obj
+        Path: Assets/Models/Cube/cube.obj
         Compress: true
         FlipUV: false
         UUID: 02afee3bc1cb75b7d8b882a8667faa84
       SponzaModel:
-        Path: Assets\Models\Sponza\sponza.obj
+        Path: Assets/Models/Sponza/sponza.obj
         Compress: false
         FlipUV: true
         MatType: Phong
         UUID: 70c19b08ddaef2bceb1ef82f6b6f6817
     Textures:
       Sky:
-        Path: Assets\Textures\Skyboxes\Sky.png
+        Path: Assets/Textures/Skyboxes/Sky.png
         FlipUV: false
         UUID: 8911b8a8458923946819fb45fbb794fd
     Shaders:
       TexturedPhong:
         UUID: 24116af57b6022cd2464fbf641ae946a
-        Vertex: Assets\Shaders\TexturedPhong\TexturedPhong.vs
-        Fragment: Assets\Shaders\TexturedPhong\TexturedPhong.fs
+        Vertex: Assets/Shaders/TexturedPhong/TexturedPhong.vs
+        Fragment: Assets/Shaders/TexturedPhong/TexturedPhong.fs
     Scripts:
       SquareMovement:
-        Path: Assets\Scripts\BasicScripts\SquareMovement.cpp
+        Path: Assets/Scripts/BasicScripts/SquareMovement.cpp
         UUID: 8e0df0e696a071bec7e8cc15f2430fa4
   Hierarchy:
     - Node:

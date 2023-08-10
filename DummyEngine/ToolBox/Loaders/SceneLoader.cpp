@@ -179,7 +179,7 @@ namespace DE {
         for (const auto& texture : assets.textures) {
             YAML::Node n_Texture;
             n_Textures[texture.name] = n_Texture;
-            n_Texture["Path"]        = RelativeToExecutable(texture.loading_props.path).string();
+            n_Texture["Path"]        = RelativeToExecutable(texture.loading_props.path).generic_string();
             n_Texture["FlipUV"]      = texture.loading_props.flip_uvs;
             n_Texture["UUID"]        = texture.id.Hex();
         }
@@ -191,7 +191,7 @@ namespace DE {
             YAML::Node n_Model;
 
             n_Models[model.name] = n_Model;
-            n_Model["Path"]      = RelativeToExecutable(model.loading_props.path).string();
+            n_Model["Path"]      = RelativeToExecutable(model.loading_props.path).generic_string();
             n_Model["Compress"]  = model.loading_props.compress;
             n_Model["FlipUV"]    = model.loading_props.flip_uvs;
             n_Model["UUID"]      = model.id.Hex();
@@ -209,7 +209,7 @@ namespace DE {
         for (const auto& script : assets.scripts) {
             YAML::Node n_Script;
             n_Scripts[script.name] = n_Script;
-            n_Script["Path"]       = RelativeToExecutable(script.path).string();
+            n_Script["Path"]       = RelativeToExecutable(script.path).generic_string();
             n_Script["UUID"]       = script.id.Hex();
         }
         return n_Scripts;
@@ -221,7 +221,7 @@ namespace DE {
             n_Shaders[shader.name] = n_Shader;
             n_Shader["UUID"]       = shader.id.Hex();
             for (const auto& part : shader.parts) {
-                n_Shader[ShaderPartTypeToString(part.type)] = RelativeToExecutable(part.path).string();
+                n_Shader[ShaderPartTypeToString(part.type)] = RelativeToExecutable(part.path).generic_string();
             }
         }
         return n_Shaders;
