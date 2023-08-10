@@ -3,20 +3,20 @@ Scene:
   Assets:
     Models:
       CubeModel:
-        Path: Assets\Models\Cube\cube.obj
+        Path: Assets/Models/Cube/cube.obj
         Compress: true
         FlipUV: false
         UUID: 02afee3bc1cb75b7d8b882a8667faa84
     Textures:
       Space:
-        Path: Assets\Textures\Skyboxes\Space.png
+        Path: Assets/Textures/Skyboxes/Space.png
         FlipUV: false
         UUID: 8911b8a8458923946819fb45fbb214fd
     Shaders:
       PBR:
         UUID: 24116af57b6022cd2464fbf641ae946a
-        Vertex: Assets\Shaders\PBR\PBR.vs
-        Fragment: Assets\Shaders\PBR\PBR.fs
+        Vertex: Assets/Shaders/PBR/PBR.vs
+        Fragment: Assets/Shaders/PBR/PBR.fs
     Scripts: ~
   Hierarchy:
     - Node:

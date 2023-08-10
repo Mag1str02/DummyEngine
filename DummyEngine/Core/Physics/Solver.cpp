@@ -4,11 +4,14 @@
 #include "PhysicsComponent.h"
 #include "Utils.cpp"
 void DE::Physics::Solver::LoadScene(const DE::Ref<DE::Scene>& scene) {
+    if (!scene) {
+        return;
+    }
     _scene     = scene;
     _constants = CreateRef<SceneConstants>();
     _constants->setGravity(Vec3(0, -4, 0));
     _time = 0;
-    for (auto entity : _scene->View<RenderMeshComponent>()) {
+    for (auto entity : scene->View<RenderMeshComponent>()) {
         UUID id     = entity.Get<RenderMeshComponent>().id;
         auto hitbox = ResourceManager::GetHitBox(id);
         if (hitbox) {
@@ -18,7 +21,8 @@ void DE::Physics::Solver::LoadScene(const DE::Ref<DE::Scene>& scene) {
 }
 
 void DE::Physics::Solver::OnUpdate(double dt) {
-    if (!_scene) {
+    auto scene = _scene.lock();
+    if (!scene) {
         return;
     }
     _frame++;
@@ -29,9 +33,10 @@ void DE::Physics::Solver::OnUpdate(double dt) {
 }
 
 double DE::Physics::Solver::NextInteraction(double dt) {
+    auto              scene    = _scene.lock();
     const int         SUBTICKS = 10;
     std::vector<UUID> collidableEntities;
-    for (auto entity : _scene->View<PhysicsComponent>()) {
+    for (auto entity : scene->View<PhysicsComponent>()) {
         auto& phys = entity.Get<PhysicsComponent>();
         if (phys.collidable) {
             collidableEntities.push_back(entity.Get<IDComponent>().Get());
@@ -40,9 +45,9 @@ double DE::Physics::Solver::NextInteraction(double dt) {
     float delta = dt / SUBTICKS;
     for (int subtick = 0; subtick < SUBTICKS; subtick++) {
         for (const auto& id : collidableEntities) {
-            _colliders[id]->UpdateTransformationMatrix(_scene->GetByID(id).Get<TransformComponent>().GetTransform());
+            _colliders[id]->UpdateTransformationMatrix(scene->GetByID(id).Get<TransformComponent>().GetTransform());
         }
-        for (auto entity : _scene->View<PhysicsComponent>()) {
+        for (auto entity : scene->View<PhysicsComponent>()) {
             auto& phys = entity.Get<PhysicsComponent>();
             if (phys.gravity) {
                 phys.speed += _constants->getGravity() * delta;
@@ -91,7 +96,7 @@ double DE::Physics::Solver::NextInteraction(double dt) {
                 }
                 for (const auto& collision_pt : collision_pts) {
                     LOG_DEBUG("CollisionPT", LOG_VEC(collision_pt));
-                    float penetration = abs(dst_pl.distance(collision_pt));
+                    float penetration = std::abs(dst_pl.distance(collision_pt));
 
                     auto collisionNormal_n = glm::normalize(collisionNormal);
                     LOG_DEBUG("CollisionNormal", LOG_VEC(collisionNormal_n));
@@ -153,22 +158,22 @@ double DE::Physics::Solver::NextInteraction(double dt) {
                     Resolve(col.jN, col, delta, true, nullptr);
                     Resolve(col.jT, col, delta, false, &col.jN);
                     Resolve(col.jTb, col, delta, false, &col.jN);
-//                    LOG_DEBUG("COLLISION", "================");
-//                    LOG_DEBUG("Origin", LOG_VEC(col.origin));
-//                    LOG_DEBUG("collision_normal", LOG_VEC(col.collision_normal));
-//                    LOG_DEBUG("collision_pt", LOG_VEC(col.lhs_pt));
-//                    LOG_DEBUG("lhs_r", LOG_VEC(col.lhs_r));
-//                    LOG_DEBUG("rhs_r", LOG_VEC(col.rhs_r));
-//                    LOG_DEBUG("penetration", std::to_string(col.penetration));
-//                    LOG_DEBUG("jnL", std::to_string(col.jN.m_totalLambda));
-//                    LOG_DEBUG("jtL", std::to_string(col.jT.m_totalLambda));
-//                    LOG_DEBUG("jt2L", std::to_string(col.jTb.m_totalLambda));
-//                    LOG_DEBUG("COLLISION", "================");
+                    //                    LOG_DEBUG("COLLISION", "================");
+                    //                    LOG_DEBUG("Origin", LOG_VEC(col.origin));
+                    //                    LOG_DEBUG("collision_normal", LOG_VEC(col.collision_normal));
+                    //                    LOG_DEBUG("collision_pt", LOG_VEC(col.lhs_pt));
+                    //                    LOG_DEBUG("lhs_r", LOG_VEC(col.lhs_r));
+                    //                    LOG_DEBUG("rhs_r", LOG_VEC(col.rhs_r));
+                    //                    LOG_DEBUG("penetration", std::to_string(col.penetration));
+                    //                    LOG_DEBUG("jnL", std::to_string(col.jN.m_totalLambda));
+                    //                    LOG_DEBUG("jtL", std::to_string(col.jT.m_totalLambda));
+                    //                    LOG_DEBUG("jt2L", std::to_string(col.jTb.m_totalLambda));
+                    //                    LOG_DEBUG("COLLISION", "================");
                 }
             }
         }
 
-        for (auto entity : _scene->View<PhysicsComponent>()) {
+        for (auto entity : scene->View<PhysicsComponent>()) {
             auto& phys      = entity.Get<PhysicsComponent>();
             auto& transform = entity.Get<TransformComponent>();
             transform.translation += phys.speed * delta;
@@ -182,6 +187,7 @@ double DE::Physics::Solver::NextInteraction(double dt) {
     return dt;
 }
 DE::Physics::Jacobian DE::Physics::Solver::InitJacobian(DE::Physics::Collision& collision, DE::Vec3 dir, float dt, bool is_normal) {
+    auto     scene = _scene.lock();
     Jacobian j;
     j.m_va = -dir;
     j.m_wa = -glm::cross(collision.lhs_r, dir);
@@ -190,8 +196,8 @@ DE::Physics::Jacobian DE::Physics::Solver::InitJacobian(DE::Physics::Collision& 
 
     j.m_bias = .0f;
 
-    auto lhs_phys = _scene->GetByID(collision.src).GetComponent<PhysicsComponent>();
-    auto rhs_phys = _scene->GetByID(collision.dest).GetComponent<PhysicsComponent>();
+    auto lhs_phys = scene->GetByID(collision.src).GetComponent<PhysicsComponent>();
+    auto rhs_phys = scene->GetByID(collision.dest).GetComponent<PhysicsComponent>();
 
     if (is_normal) {
         float beta = .5f;
@@ -210,10 +216,11 @@ DE::Physics::Jacobian DE::Physics::Solver::InitJacobian(DE::Physics::Collision& 
     return j;
 }
 void DE::Physics::Solver::Resolve(DE::Physics::Jacobian& j, DE::Physics::Collision& collision, float dt, bool is_normal, DE::Physics::Jacobian* jn) {
-    Vec3 dir = j.m_vb;
+    auto scene = _scene.lock();
+    Vec3 dir   = j.m_vb;
 
-    auto lhs_phys = _scene->GetByID(collision.src).GetComponent<PhysicsComponent>();
-    auto rhs_phys = _scene->GetByID(collision.dest).GetComponent<PhysicsComponent>();
+    auto lhs_phys = scene->GetByID(collision.src).GetComponent<PhysicsComponent>();
+    auto rhs_phys = scene->GetByID(collision.dest).GetComponent<PhysicsComponent>();
 
     float jv = glm::dot(j.m_va, lhs_phys->speed) + glm::dot(j.m_wa, lhs_phys->rot_speed) + glm::dot(j.m_vb, rhs_phys->speed) +
                glm::dot(j.m_wb, rhs_phys->rot_speed);

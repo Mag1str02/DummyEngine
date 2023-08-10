@@ -7,6 +7,7 @@ namespace DE {
         m_Impl = CreateCompilerImpl();
         AddIncludeDir("..");
         AddIncludeDir("../DummyEngine/Libs/GLM");
+        AddIncludeDir("../DummyEngine/Libs/OpenAL/include");
         AddLinkLibrary("DummyEngineLib");
         AddDefine("DE_ENABLE_LOGGING=" + std::to_string(DE_ENABLE_LOGGING));
         AddDefine("DE_ENABLE_ASSERTS=" + std::to_string(DE_ENABLE_ASSERTS));

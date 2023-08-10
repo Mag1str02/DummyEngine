@@ -76,7 +76,6 @@ namespace DE {
     }
     void Scene::OnUpdate(float dt) {
         DE_PROFILE_SCOPE("Scene OnUpdate");
-        m_Storage->UpdateSystems(dt);
         if (m_PhysicsSolver) {
             DE_PROFILE_SCOPE("Physics");
             m_PhysicsSolver->OnUpdate(dt * 2);
@@ -106,6 +105,7 @@ namespace DE {
                 mesh->p_Animator->UpdateAnimation(dt);
             }
         }
+        m_Storage->UpdateSystems(dt);
     }
     void Scene::OnRender(Entity camera) {
         if (!camera.Valid()) {

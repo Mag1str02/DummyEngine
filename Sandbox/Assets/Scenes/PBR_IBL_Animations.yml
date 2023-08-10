@@ -28,22 +28,22 @@ Scene:
         FlipUV: true
         UUID: 02afee3bc1cb75bacdb882a8667faaac
       Pilot:
-        Path: Assets\Models\Pilot\scene.gltf
+        Path: Assets/Models/Pilot/scene.gltf
         Compress: false
         FlipUV: true
         UUID: 02afee3bc1cb75bacdb882a8667fbbbc
       Robot:
-        Path: Assets\Models\Robot\scene.gltf
+        Path: Assets/Models/Robot/scene.gltf
         Compress: false
         FlipUV: true
         UUID: 02afee3bc1cb75bacdb882a8997fbbbc
       Mira:
-        Path: Assets\Models\Mira\scene.gltf
+        Path: Assets/Models/Mira/scene.gltf
         Compress: false
         FlipUV: true
         UUID: 02afee3bc1cb21bacdb882a8997fbbbc
       Warrior:
-        Path: Assets\Models\Warrior\scene.gltf
+        Path: Assets/Models/Warrior/scene.gltf
         Compress: false
         FlipUV: true
         UUID: 02afee3bc1cb21bacdb882a8227fbbbc

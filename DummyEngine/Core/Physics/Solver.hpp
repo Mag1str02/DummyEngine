@@ -43,7 +43,7 @@ namespace DE::Physics {
         std::map<std::pair<UUID, UUID>, std::list<Collision>> mem;
 
     private:
-        Ref<Scene> _scene;
+        WeakRef<Scene> _scene;
         Ref<SceneConstants> _constants;
         std::unordered_map<UUID, Ref<ConvexCollider>> _colliders;
         double _time = 0;
