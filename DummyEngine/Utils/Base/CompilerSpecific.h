@@ -1,12 +1,12 @@
 #pragma once
 #include "DummyEngine/Utils/Types/Types.h"
 
-#include "DummyEngine/Utils/Types/Types.h"
-
 #ifdef __GNUC__
 #define DE_COMPILER_GCC_VERSION_MAJOR __GNUC__
+#define DE_COMPILER_GCC_VERSION_MINOR __GNUC_MINOR__
 #else
 #define DE_COMPILER_GCC_VERSION_MAJOR 0
+#define DE_COMPILER_GCC_VERSION_MINOR 0
 #endif
 
 #ifdef __clang_major__
@@ -15,7 +15,8 @@
 #define DE_COMPILER_CLANG_VERSION_MAJOR 0
 #endif
 
-#if DE_COMPILER_GCC_VERSION_MAJOR >= 12 || DE_COMPILER_CLANG_VERSION_MAJOR >= 12
+#if (DE_COMPILER_GCC_VERSION_MAJOR >= 12 || (DE_COMPILER_GCC_VERSION_MAJOR == 11 && DE_COMPILER_GCC_VERSION_MINOR >= 4)) || \
+    DE_COMPILER_CLANG_VERSION_MAJOR >= 12
 #define DE_COMPILER_PATH_HASH
 #endif
 
