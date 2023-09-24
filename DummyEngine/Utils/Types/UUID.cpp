@@ -4,8 +4,8 @@
 #include "DummyEngine/Utils/Helpers/StringOperations.h"
 
 namespace DE {
-    static std::random_device                      s_RandomDevice;
-    static std::mt19937_64                         s_Engine(s_RandomDevice());
+    static std::random_device                 s_RandomDevice;
+    static std::mt19937_64                    s_Engine(s_RandomDevice());
     static std::uniform_int_distribution<U64> s_UniformDistribution;
 
     UUID::UUID(const std::string& str) {

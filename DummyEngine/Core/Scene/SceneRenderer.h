@@ -11,12 +11,12 @@ namespace DE {
     class SceneRenderer {
     public:
         struct Settings {
-            bool  bloom               = false;
+            bool  bloom                = false;
             float bloom_threshold      = 1;
             float bloom_soft_threshold = 0;
-            float bloom_radius        = 0.005;
-            float bloom_strength      = 0.04;
-            U32   bloom_depth         = 5;
+            float bloom_radius         = 0.005;
+            float bloom_strength       = 0.04;
+            U32   bloom_depth          = 5;
 
             bool  gamma_tone_mapping = false;
             float exposure           = 1;

@@ -21,8 +21,7 @@ namespace DE {
         glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
         glBufferData(GL_ARRAY_BUFFER, m_Size, nullptr, BufferUsafeToGLBufferUsage(usage));
     }
-    GLVertexBuffer::GLVertexBuffer(const BufferLayout& layout, U32 size, const void* data, BufferUsage usage) :
-        m_Layout(layout), m_Usage(usage) {
+    GLVertexBuffer::GLVertexBuffer(const BufferLayout& layout, U32 size, const void* data, BufferUsage usage) : m_Layout(layout), m_Usage(usage) {
         m_Layout.SetLayoutType(BufferLayoutType::Vertex);
         m_Size = (size * m_Layout.GetStride());
 

@@ -9,8 +9,8 @@
 namespace DE {
 
     struct Material {
-        MaterialType type = MaterialType::None;
-        float        shininess = 64;
+        MaterialType type              = MaterialType::None;
+        float        shininess         = 64;
         float        emission_strength = 0;
 
         Vec3 albedo   = Vec3(1.0f);

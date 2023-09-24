@@ -1,22 +1,18 @@
-//#include "DummyEngine/Platform/PlatformIncludes.h"
+// #include "DummyEngine/Platform/PlatformIncludes.h"
 #include "DummyEngine/Core/Scripting/SharedObject.h"
 
 #include <dlfcn.h>
 
 #include "DummyEngine/Core/Application/Config.h"
 
-namespace DE
-{
-    class SharedObjectImpl
-    {
+namespace DE {
+    class SharedObjectImpl {
     public:
         SharedObjectImpl() {}
-        ~SharedObjectImpl()
-        {
-             if (m_Handle)
-             {
-                 dlclose(m_Handle);
-             }
+        ~SharedObjectImpl() {
+            if (m_Handle) {
+                dlclose(m_Handle);
+            }
         }
 
         SharedObjectImpl(const SharedObjectImpl&)            = delete;
@@ -24,8 +20,7 @@ namespace DE
         SharedObjectImpl& operator=(const SharedObjectImpl&) = delete;
         SharedObjectImpl& operator=(SharedObjectImpl&&)      = delete;
 
-        bool Load(const Path& directory, const std::string& name)
-        {
+        bool Load(const Path& directory, const std::string& name) {
             if (m_Handle && m_Valid) {
                 LOG_WARNING("SharedObject", "Library (", name, ") already loaded");
                 return false;
@@ -43,22 +38,20 @@ namespace DE
             if (m_Handle) {
                 dlclose(m_Handle);
             }
-             m_Handle    = new_handle;
-             m_Directory = directory;
-             m_Name      = name;
-             m_Valid     = true;
-             LOG_INFO("SharedObject", "Loaded library (", RelativeToExecutable(directory / (name + ".dylib")), ")");
+            m_Handle    = new_handle;
+            m_Directory = directory;
+            m_Name      = name;
+            m_Valid     = true;
+            LOG_INFO("SharedObject", "Loaded library (", RelativeToExecutable(directory / (name + ".dylib")), ")");
             return true;
         }
         void Invalidate() { m_Valid = false; }
 
         bool     Valid() const { return m_Valid && m_Handle; }
-        VoidFPtr GetFunction(const std::string& function_name) const
-        {
-             if (!m_Handle)
-             {
-                 return nullptr;
-             }
+        VoidFPtr GetFunction(const std::string& function_name) const {
+            if (!m_Handle) {
+                return nullptr;
+            }
             return (VoidFPtr)dlsym(m_Handle, function_name.c_str());
         }
         const Path&        GetDirectory() const { return m_Directory; }
@@ -71,13 +64,27 @@ namespace DE
         bool        m_Valid  = false;
     };
 
-    SharedObject::SharedObject() { m_Impl = CreateScope<SharedObjectImpl>(); }
+    SharedObject::SharedObject() {
+        m_Impl = CreateScope<SharedObjectImpl>();
+    }
     SharedObject::~SharedObject() {}
-    bool               SharedObject::Load(const Path& directory, const std::string& name) { return m_Impl->Load(directory, name); }
-    VoidFPtr           SharedObject::GetFunction(const std::string& function_name) const { return m_Impl->GetFunction(function_name); }
-    const Path&        SharedObject::GetDirectory() const { return m_Impl->GetDirectory(); }
-    const std::string& SharedObject::GetName() const { return m_Impl->GetName(); }
-    void               SharedObject::Invalidate() { m_Impl->Invalidate(); }
-    bool               SharedObject::Valid() const { return m_Impl->Valid(); }
+    bool SharedObject::Load(const Path& directory, const std::string& name) {
+        return m_Impl->Load(directory, name);
+    }
+    VoidFPtr SharedObject::GetFunction(const std::string& function_name) const {
+        return m_Impl->GetFunction(function_name);
+    }
+    const Path& SharedObject::GetDirectory() const {
+        return m_Impl->GetDirectory();
+    }
+    const std::string& SharedObject::GetName() const {
+        return m_Impl->GetName();
+    }
+    void SharedObject::Invalidate() {
+        m_Impl->Invalidate();
+    }
+    bool SharedObject::Valid() const {
+        return m_Impl->Valid();
+    }
 
 }  // namespace DE

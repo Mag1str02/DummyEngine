@@ -31,12 +31,12 @@ namespace DE {
     }
 
     void Animator::CalculateBoneTransform(const Animation::Node* node, Mat4 parent_transform) {
-        Mat4 node_transform = node->transformation;
-        BoneInfo* bone_info = m_CurrentAnimation->GetBone(node->name);
+        Mat4      node_transform = node->transformation;
+        BoneInfo* bone_info      = m_CurrentAnimation->GetBone(node->name);
         if (bone_info) {
             node_transform                                   = bone_info->bone.GetTransform(m_CurrentTime);
             m_FinalBoneMatrices[bone_info->bone.GetBoneID()] = parent_transform * node_transform * bone_info->offset;
-        } 
+        }
         Mat4 final_transform = parent_transform * node_transform;
         for (S32 i = 0; i < node->childrens.size(); ++i) {
             CalculateBoneTransform(&node->childrens[i], final_transform);

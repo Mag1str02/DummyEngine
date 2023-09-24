@@ -1,14 +1,10 @@
 #include "DummyEditor/Scripting/Compiler.h"
 
-namespace DE
-{
-    class CompilerImpl
-    {
+namespace DE {
+    class CompilerImpl {
     public:
-        bool Compile(const Path& source, const Path& destination)
-        {
-            if (!fs::exists(source) || destination.filename().empty())
-            {
+        bool Compile(const Path& source, const Path& destination) {
+            if (!fs::exists(source) || destination.filename().empty()) {
                 return false;
             }
 
@@ -30,17 +26,13 @@ namespace DE
 
             return res == 0;
         }
-        bool Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name)
-        {
-            for (const auto& source : sources)
-            {
-                if (!fs::exists(source))
-                {
+        bool Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name) {
+            for (const auto& source : sources) {
+                if (!fs::exists(source)) {
                     return false;
                 }
             }
-            if (!fs::is_directory(destination))
-            {
+            if (!fs::is_directory(destination)) {
                 return false;
             }
             FileSystem::CreateDirectory(destination);
@@ -67,18 +59,15 @@ namespace DE
         void DeleteDefine(const std::string& define) { m_Defines.erase(define); }
 
     private:
-        std::string GetCompiler()
-        {
+        std::string GetCompiler() {
             // TODO: Get compiler from config.
             return "g++";
         }
         void FixSlash(std::string& command) { std::replace(command.begin(), command.end(), '\\', '/'); }
 
-        std::string AddIncludeDirArguments()
-        {
+        std::string AddIncludeDirArguments() {
             std::string res;
-            for (const auto& dir : m_IncludeDirs)
-            {
+            for (const auto& dir : m_IncludeDirs) {
                 res.append(" -I ");
                 res.append(dir.string());
             }
@@ -87,25 +76,20 @@ namespace DE
         std::string AddSourceArgument(const Path& source) { return " " + source.string(); }
         std::string AddDestinationArgument(const Path& source, const Path& destination) { return " -o " + destination.string(); }
 
-        std::string AddSourcesArguments(const std::vector<Path>& sources)
-        {
+        std::string AddSourcesArguments(const std::vector<Path>& sources) {
             std::string res;
-            for (const auto& source : sources)
-            {
+            for (const auto& source : sources) {
                 res.append(" ");
                 res.append(source.string());
             }
             return res;
         }
-        std::string AddLinkArgs()
-        {
+        std::string AddLinkArgs() {
             std::string res;
-            for (auto lib : m_Libraries)
-            {
+            for (auto lib : m_Libraries) {
                 std::string name = lib.stem().string();
                 lib.remove_filename();
-                if (lib.empty())
-                {
+                if (lib.empty()) {
                     lib = ".";
                 }
                 res.append(" -L ");
@@ -123,20 +107,18 @@ namespace DE
             }
             return res;
         }
-        std::string AddPathDLL(const Path& destination, const std::string& library_name)
-        {
+        std::string AddPathDLL(const Path& destination, const std::string& library_name) {
             return " -o " + destination.string() + "/" + library_name + ".dll";
         }
 
-        std::unordered_set<Path> m_IncludeDirs;
-        std::unordered_set<Path> m_Libraries;
+        std::unordered_set<Path>        m_IncludeDirs;
+        std::unordered_set<Path>        m_Libraries;
         std::unordered_set<std::string> m_Defines;
     };
 
     Scope<CompilerImpl> Compiler::m_Impl;
 
-    void Compiler::Initialize()
-    {
+    void Compiler::Initialize() {
         DE_ASSERT(!m_Impl, "Compiler already started.");
         m_Impl = CreateScope<CompilerImpl>();
         AddIncludeDir("..");
@@ -148,17 +130,28 @@ namespace DE
         AddDefine("DE_ENABLE_ASSERTS=" + std::to_string(DE_ENABLE_ASSERTS));
         AddDefine("DE_ENABLE_PROFILER=" + std::to_string(DE_ENABLE_PROFILER));
     }
-    void Compiler::Terminate() { m_Impl = nullptr; }
+    void Compiler::Terminate() {
+        m_Impl = nullptr;
+    }
 
-    bool Compiler::Compile(const Path& source, const Path& destination) { return m_Impl->Compile(source, destination); }
-    bool Compiler::Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name)
-    {
+    bool Compiler::Compile(const Path& source, const Path& destination) {
+        return m_Impl->Compile(source, destination);
+    }
+    bool Compiler::Link(const std::vector<Path>& sources, const Path& destination, const std::string& library_name) {
         return m_Impl->Link(sources, destination, library_name);
     }
-    void Compiler::AddIncludeDir(const Path& dir) { m_Impl->AddIncludeDir(dir); }
-    void Compiler::DeleteIncludeDir(const Path& dir) { m_Impl->DeleteIncludeDir(dir); }
-    void Compiler::AddLinkLibrary(const Path& library) { m_Impl->AddLinkLibrary(library); }
-    void Compiler::DeleteLinkLibrary(const Path& library) { m_Impl->DeleteLinkLibrary(library); }
+    void Compiler::AddIncludeDir(const Path& dir) {
+        m_Impl->AddIncludeDir(dir);
+    }
+    void Compiler::DeleteIncludeDir(const Path& dir) {
+        m_Impl->DeleteIncludeDir(dir);
+    }
+    void Compiler::AddLinkLibrary(const Path& library) {
+        m_Impl->AddLinkLibrary(library);
+    }
+    void Compiler::DeleteLinkLibrary(const Path& library) {
+        m_Impl->DeleteLinkLibrary(library);
+    }
     void Compiler::AddDefine(const std::string& source) {
         m_Impl->AddDefine(source);
     }

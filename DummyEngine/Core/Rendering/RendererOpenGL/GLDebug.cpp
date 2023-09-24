@@ -1,17 +1,13 @@
-#include <glad/glad.h>
-
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLDebug.h"
 
-namespace DE
-{
-    void glCheckError_(const char* file, int line)
-    {
+#include <glad/glad.h>
+
+namespace DE {
+    void glCheckError_(const char* file, int line) {
         GLenum errorCode;
-        while ((errorCode = glGetError()) != GL_NO_ERROR)
-        {
+        while ((errorCode = glGetError()) != GL_NO_ERROR) {
             std::string error;
-            switch (errorCode)
-            {
+            switch (errorCode) {
                 case GL_INVALID_ENUM: error = "INVALID_ENUM"; break;
                 case GL_INVALID_VALUE: error = "INVALID_VALUE"; break;
                 case GL_INVALID_OPERATION: error = "INVALID_OPERATION"; break;

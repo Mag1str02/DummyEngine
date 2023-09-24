@@ -15,10 +15,10 @@ namespace DE {
         virtual LocalBufferNode at(U32 index) = 0;
 
         virtual void SetData(const void* data, U32 size) = 0;
-        virtual void PushData()                               = 0;
+        virtual void PushData()                          = 0;
 
         virtual const BufferLayout& GetLayout() const = 0;
-        virtual U32            Size() const      = 0;
+        virtual U32                 Size() const      = 0;
 
         static Ref<VertexBuffer> Create(const BufferLayout& layout, U32 size, BufferUsage usage = BufferUsage::Static);
         static Ref<VertexBuffer> Create(const BufferLayout& layout, U32 size, const void* data, BufferUsage usage = BufferUsage::Static);

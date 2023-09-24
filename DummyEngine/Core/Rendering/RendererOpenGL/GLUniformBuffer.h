@@ -25,6 +25,6 @@ namespace DE {
         GLuint       m_BufferId;
         LocalBuffer  m_LocalBuffer;
         BufferLayout m_Layout;
-        U32     m_Size;
+        U32          m_Size;
     };
 }  // namespace DE

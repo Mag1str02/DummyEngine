@@ -12,11 +12,11 @@ namespace DE {
     struct WindowState {
         WindowMode  mode         = WindowMode::Windowed;
         std::string name         = "Window";
-        U32    width        = 1280;
-        U32    height       = 720;
-        U32    x_pos        = 100;
-        U32    y_pos        = 100;
-        U32    monitor_id   = 0;
+        U32         width        = 1280;
+        U32         height       = 720;
+        U32         x_pos        = 100;
+        U32         y_pos        = 100;
+        U32         monitor_id   = 0;
         bool        mouse_locked = false;
 
         EventCallback<Event> event_callback;

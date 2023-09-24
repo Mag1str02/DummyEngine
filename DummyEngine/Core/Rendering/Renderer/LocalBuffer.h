@@ -24,8 +24,8 @@ namespace DE {
         friend class LocalBufferNode;
 
         BufferLayout m_Layout;
-        U8*     m_Data;
-        U32     m_Size;
+        U8*          m_Data;
+        U32          m_Size;
     };
     class LocalBufferNode {
     public:
@@ -38,6 +38,6 @@ namespace DE {
         friend class LocalBuffer;
 
         LocalBuffer* m_Buffer;
-        U8*     m_Pointer;
+        U8*          m_Pointer;
     };
 }  // namespace DE

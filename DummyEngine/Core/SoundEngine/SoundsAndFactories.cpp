@@ -238,11 +238,11 @@ namespace DE {
     }
 
     void WavSound::start_streaming() {
-        auto pitch = this->getPitch();
-        auto gain = this->getGain();
+        auto pitch    = this->getPitch();
+        auto gain     = this->getGain();
         auto position = this->getPosition();
         auto velocity = this->getVelocity();
-        auto looping = this->getLooping();
+        auto looping  = this->getLooping();
 
         alCall(alDeleteSources, 1, &source);
 

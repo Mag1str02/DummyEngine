@@ -32,7 +32,7 @@ namespace DE {
                 ImGuiUtils::EditProperty("Translation", transform.translation);
                 ImGuiUtils::EditProperty("Scale", transform.scale);
                 ImGuiUtils::EditProperty("Rotation", transform.rotation);
-//                ImGuiUtils::ClampRoundValue(transform.rotation, 0, 360);
+                //                ImGuiUtils::ClampRoundValue(transform.rotation, 0, 360);
                 ImGui::Columns(1);
             }
         }

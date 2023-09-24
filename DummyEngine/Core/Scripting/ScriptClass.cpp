@@ -1,12 +1,9 @@
 #include "DummyEngine/Core/Scripting/ScriptClass.h"
 
-namespace DE
-{
+namespace DE {
     ScriptClass::ScriptClass(const std::string& name) : m_Name(name) {}
-    bool ScriptClass::Load(Ref<SharedObject> library)
-    {
-        if (!library->Valid())
-        {
+    bool ScriptClass::Load(Ref<SharedObject> library) {
+        if (!library->Valid()) {
             return false;
         }
         m_Library = library;
@@ -15,14 +12,14 @@ namespace DE
         f_delete = reinterpret_cast<FDelete>(library->GetFunction(m_Name + "Delete"));
         return Valid();
     }
-    bool ScriptClass::Valid()
-    {
+    bool ScriptClass::Valid() {
         auto ptr = m_Library.lock();
-        if (!ptr)
-        {
+        if (!ptr) {
             return false;
         }
         return ptr->Valid() && f_create && f_delete;
     }
-    const std::string& ScriptClass::GetName() const { return m_Name; }
+    const std::string& ScriptClass::GetName() const {
+        return m_Name;
+    }
 }  // namespace DE

@@ -14,7 +14,7 @@ namespace DE {
     struct TimeLapse {
         std::chrono::time_point<std::chrono::high_resolution_clock> m_Start;
         std::chrono::time_point<std::chrono::high_resolution_clock> m_End;
-        std::vector<U32>                                       m_Childs;
+        std::vector<U32>                                            m_Childs;
         std::string                                                 m_Name;
 
         float       Duration() const { return (m_End - m_Start).count() * 0.001 * 0.001; }
@@ -40,8 +40,8 @@ namespace DE {
         friend class ProfilerScopeObject;
 
         std::queue<ProfilerFrame> m_Frames;
-        std::stack<U32>      m_TimeLapseStack;
-        U32                  m_PrevFrameTimeLapseAmount = 0;
+        std::stack<U32>           m_TimeLapseStack;
+        U32                       m_PrevFrameTimeLapseAmount = 0;
     };
 
     class ProfilerScopeObject {

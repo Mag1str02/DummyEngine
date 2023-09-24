@@ -5,8 +5,8 @@
 #include "DummyEditor/Panels/InspectorPanel.h"
 #include "DummyEditor/Panels/MenuBar.h"
 #include "DummyEditor/Panels/ProfilerPanel.h"
-#include "DummyEditor/Panels/SceneHierarchyPanel.h"
 #include "DummyEditor/Panels/RendererPanel.h"
+#include "DummyEditor/Panels/SceneHierarchyPanel.h"
 #include "DummyEditor/Panels/ThemePanel.h"
 #include "DummyEditor/Panels/ViewportPanel.h"
 

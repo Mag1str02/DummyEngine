@@ -14,7 +14,7 @@ namespace DE {
         class Solver;
     }
 
-    class Scene{
+    class Scene {
     public:
         Scene();
         ~Scene();
@@ -34,7 +34,7 @@ namespace DE {
         void   SetCamera(Entity entity);
         bool   HasCamera();
 
-        void LoadPhysics(Ref<Scene> &scene);
+        void LoadPhysics(Ref<Scene>& scene);
 
         Ref<SceneRenderer>   GetRenderer() { return m_Renderer; }
         SceneHierarchy::Node GetHierarchyRoot();

@@ -31,9 +31,9 @@ namespace DE {
 
     class Config {
     public:
-        static U32 GetI(U32 setting);
-        static float    GetF(U32 setting);
-        static Path     GetPath(U32 setting);
+        static U32   GetI(U32 setting);
+        static float GetF(U32 setting);
+        static Path  GetPath(U32 setting);
 
         static API GetRenderAPI();
 

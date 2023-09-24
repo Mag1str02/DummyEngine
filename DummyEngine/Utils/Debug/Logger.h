@@ -26,8 +26,9 @@ namespace DE {
         S_METHOD_DEF(Unit, Close, (const std::string& log_name));
 
         template <typename... Message> static void Log(LogMessageType type, const std::string& author, Message... message) {
-            if(type == LogMessageType::Debug && author == "LHS_ROT_SPEED") {
-                std::cerr << "[" << author << "]" << "   " << StrCat(message...) << std::endl;
+            if (type == LogMessageType::Debug && author == "LHS_ROT_SPEED") {
+                std::cerr << "[" << author << "]"
+                          << "   " << StrCat(message...) << std::endl;
             }
             Get().LogInternal(type, author, "", StrCat(message...));
         }

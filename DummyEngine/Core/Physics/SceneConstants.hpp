@@ -4,7 +4,6 @@
 namespace DE::Physics {
 
     class SceneConstants {
-
     public:
         const Vec3& getGravity() const;
         void        setGravity(const Vec3& gravity);
@@ -13,4 +12,4 @@ namespace DE::Physics {
         Vec3 _gravity;
     };
 
-}
+}  // namespace DE::Physics

@@ -8,7 +8,7 @@ namespace DE {
         Phong,
         PBR,
     };
-    std::string MaterialTypeToStr(MaterialType type);
+    std::string  MaterialTypeToStr(MaterialType type);
     MaterialType MaterialTypeFromStr(const std::string& str);
     enum class TextureChannels { None = 0, RED, RG, RGB, RGBA };
     enum class TextureFormat {

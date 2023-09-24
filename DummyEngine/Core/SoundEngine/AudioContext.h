@@ -10,17 +10,17 @@ namespace DE {
         AudioContext();
         ~AudioContext();
 
-        AudioContext& operator= (const AudioContext&) = delete;
-        AudioContext(const AudioContext&) = delete;
+        AudioContext& operator=(const AudioContext&) = delete;
+        AudioContext(const AudioContext&)            = delete;
 
         AudioContext(AudioContext&& other) noexcept;
         AudioContext& operator=(AudioContext&& other) noexcept;
 
     private:
-        ALCdevice* openALDevice;
+        ALCdevice*  openALDevice;
         ALCcontext* openALContext;
-        ALCboolean isMadeCurrent;
+        ALCboolean  isMadeCurrent;
     };
-}
+}  // namespace DE
 
 #endif  // DUMMYENGINE_AUDIOCONTEXT_H

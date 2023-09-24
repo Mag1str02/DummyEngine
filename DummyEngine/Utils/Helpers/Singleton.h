@@ -24,9 +24,7 @@ public:                                           \
         DE_ASSERT(s_Instance, "Using " + CurrentSingletonName + " before initialization"); \
         return *s_Instance;                                                                \
     }                                                                                             \
-    bool type::Initialized() {                                                                    \
-        return s_Instance != nullptr;                                                             \
-    }                                                                                             \
+    bool type::Initialized() { return s_Instance != nullptr; }                                    \
     using CurrentSingleton = type
 
 #define DEL_BRACKETS(a) SECOND(FIRST a)
@@ -35,20 +33,16 @@ public:                                           \
 #define THIRD(...) ERASE##__VA_ARGS__
 #define ERASEFIRST
 
-#define S_METHOD(return_type, name, signature, variables)            \
-    static DEL_BRACKETS(return_type) name(DEL_BRACKETS(signature)) { \
-        return Get().I##name(DEL_BRACKETS(variables));               \
-    }                                                                \
+#define S_METHOD(return_type, name, signature, variables)                                                             \
+    static DEL_BRACKETS(return_type) name(DEL_BRACKETS(signature)) { return Get().I##name(DEL_BRACKETS(variables)); } \
     DEL_BRACKETS(return_type) I##name(DEL_BRACKETS(signature))
 
 #define S_METHOD_DEF(return_type, name, signature)                  \
     static DEL_BRACKETS(return_type) name(DEL_BRACKETS(signature)); \
     DEL_BRACKETS(return_type) I##name(DEL_BRACKETS(signature));
 
-#define S_METHOD_IMPL(return_type, name, signature, variables)                  \
-    DEL_BRACKETS(return_type) CurrentSingleton::name(DEL_BRACKETS(signature)) { \
-        return CurrentSingleton::Get().I##name(DEL_BRACKETS(variables));        \
-    }                                                                           \
+#define S_METHOD_IMPL(return_type, name, signature, variables)                                                                                     \
+    DEL_BRACKETS(return_type) CurrentSingleton::name(DEL_BRACKETS(signature)) { return CurrentSingleton::Get().I##name(DEL_BRACKETS(variables)); } \
     DEL_BRACKETS(return_type) CurrentSingleton::I##name(DEL_BRACKETS(signature))
 
 #define S_INITIALIZE()                                                                  \

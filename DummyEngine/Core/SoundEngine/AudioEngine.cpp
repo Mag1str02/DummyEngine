@@ -9,4 +9,4 @@ namespace DE {
     S_TERMINATE() {
         return Unit();
     }
-}
+}  // namespace DE

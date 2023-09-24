@@ -5,7 +5,7 @@
 namespace DE {
     struct BufferElement {
         BufferElementType type;
-        U32          size;
+        U32               size;
         size_t            offset;
         bool              normalized;
 
@@ -30,17 +30,17 @@ namespace DE {
         std::vector<BufferElement>::const_iterator end() const;
         const BufferElement&                       operator[](U32 index) const;
 
-        U32 GetStride() const;
-        U32 GetDivisor() const;
-        void     SetLayoutType(BufferLayoutType type);
+        U32  GetStride() const;
+        U32  GetDivisor() const;
+        void SetLayoutType(BufferLayoutType type);
 
     private:
         void CalculateOffsetsAndStride();
 
         std::vector<BufferElement> m_Elements;
         BufferLayoutType           m_Type;
-        U32                   m_Stride;
-        U32                   m_Divisor;
+        U32                        m_Stride;
+        U32                        m_Divisor;
     };
 
 }  // namespace DE

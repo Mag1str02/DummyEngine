@@ -8,7 +8,6 @@ namespace DE {
     extern void SetupApplication();
 }
 
-
 int main() {
     try {
         DE::Initializer::Initialize();

@@ -97,7 +97,7 @@ namespace DE {
         virtual void play_streaming()   = 0;
         virtual void stop()             = 0;
         virtual void stop_streaming()   = 0;
-        virtual void pause_streaming() = 0;
+        virtual void pause_streaming()  = 0;
         virtual void resume_streaming() = 0;
 
         virtual ALfloat getGain();

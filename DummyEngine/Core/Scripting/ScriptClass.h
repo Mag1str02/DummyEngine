@@ -1,14 +1,12 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
-#include "DummyEngine/Core/Scripting/SharedObject.h"
 #include "DummyEngine/Core/Scripting/Script.h"
+#include "DummyEngine/Core/Scripting/SharedObject.h"
+#include "DummyEngine/Utils/Base.h"
 
-namespace DE
-{
+namespace DE {
 
-    class ScriptClass
-    {
+    class ScriptClass {
     public:
         using FCreate = Script* (*)();
         using FDelete = void (*)(Script*);

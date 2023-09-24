@@ -262,8 +262,8 @@ namespace DE {
             }
         }
         if (mesh->mMaterialIndex >= 0) {
-            aiMaterial* material       = scene->mMaterials[mesh->mMaterialIndex];
-            current_mesh.material      = LoadMaterial(material);
+            aiMaterial* material  = scene->mMaterials[mesh->mMaterialIndex];
+            current_mesh.material = LoadMaterial(material);
         }
         ++m_State.m_CurrentMeshId;
     }
