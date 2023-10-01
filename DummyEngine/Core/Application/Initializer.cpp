@@ -6,6 +6,7 @@
 
 #include "DummyEngine/Core/Application/Application.h"
 #include "DummyEngine/Core/Application/Config.h"
+#include "DummyEngine/Core/Console/Console.hpp"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 #include "DummyEngine/Core/ResourceManaging/AssetManager.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
@@ -32,6 +33,7 @@ namespace DE {
     void Initializer::PreInitialize() {
         Profiler::Initialize();
         Config::Initialize();
+        Console::Initialize();
         Logger::Initialize();
         LOG_INFO("Initializer", "Logger and config initialized");
     }

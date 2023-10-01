@@ -10,6 +10,8 @@ Utils/Helpers/StringOperations.cpp
 Utils/Types/Types.cpp
 Utils/Types/UUID.cpp
 
+Utils/DS/Trie.cpp
+
 Core/Animations/Animation.cpp
 Core/Animations/Animator.cpp
 Core/Animations/Bone.cpp
@@ -21,6 +23,9 @@ Core/Application/Input.cpp
 Core/Application/Initializer.cpp
 Core/Application/Config.cpp
 Core/Application/FileSystem.cpp
+
+Core/Console/ConsoleLayer.cpp
+Core/Console/Console.cpp
 
 Core/ECS/ECS.cpp
 

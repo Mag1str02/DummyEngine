@@ -2,6 +2,7 @@
 
 #include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/Core/Application/FileSystem.h"
+#include "DummyEngine/Core/Console/Console.hpp"
 #include "DummyEngine/Utils/Base/Constants.h"
 #include "DummyEngine/Utils/Debug/Assert.h"
 #include "DummyEngine/Utils/Helpers/StringOperations.h"
@@ -107,6 +108,7 @@ namespace DE {
         if (log->records.size() > log->depth) {
             log->records.pop_front();
         }
+        Console::PushLog(log->records.back().ToString());
         log->stream << log->records.back().ToString();
         log->stream.flush();
         if (type == LogMessageType::Fatal) {
