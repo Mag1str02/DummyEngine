@@ -3,6 +3,7 @@
 #include "DummyEngine/Core/Application/ImGuiLayer.h"
 #include "DummyEngine/Core/Application/Input.h"
 #include "DummyEngine/Core/Application/Window.h"
+#include "DummyEngine/Core/Console/ConsoleLayer.hpp"
 
 namespace DE {
 
@@ -26,6 +27,7 @@ namespace DE {
         EventDispatcher     m_EventDispatcher;
         std::vector<Layer*> m_Layers;
         ImGuiLayer*         m_ImGuiLayer;
+        ConsoleLayer*       m_ConsoleLayer;
         Window*             m_Window;
     };
 }  // namespace DE

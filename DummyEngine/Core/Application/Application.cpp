@@ -14,6 +14,10 @@ namespace DE {
         DE_ASSERT(m_ImGuiLayer, "Failed to allocate ImGuiLayer");
         PushLayer(m_ImGuiLayer);
 
+        m_ConsoleLayer = new ConsoleLayer();
+        DE_ASSERT(m_ConsoleLayer, "Failed to allocate ConsoleLayer");
+        PushLayer(m_ConsoleLayer);
+
         SetUpCallbacks();
         return Unit();
     }
