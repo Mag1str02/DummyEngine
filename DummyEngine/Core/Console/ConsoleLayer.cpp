@@ -29,12 +29,12 @@ void DE::ConsoleLayer::OnImGuiRender() {
                 LOG_DEBUG("ConsoleLayer", "CmdHistoryLength = ", Console::GetCmdHistory().size(), ", Position = ", m_historyPosition, ", cmd=", Console::GetCmdHistory()[m_historyPosition]);
                 m_Command = Console::GetCmdHistory()[m_historyPosition];
                 m_historyPosition--;
-                ImGui::ClearActiveID();
+               // ImGui::ClearActiveID();
             }
             if (Input::KeyReleased(Key::Down)) {
                 m_Command = Console::GetCmdHistory()[m_historyPosition];
                 m_historyPosition++;
-                ImGui::ClearActiveID();
+               // ImGui::ClearActiveID();
             }
 
 
