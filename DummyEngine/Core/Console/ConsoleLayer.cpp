@@ -4,13 +4,16 @@
 
 #include "ConsoleLayer.hpp"
 
-#include "DummyEngine/Core/Application/KeyCodes.h"
-#include "DummyEngine/Core/Application/Input.h"
-#include "DummyEngine/Core/Console/Console.hpp"
 #include "DummyEditor/DummyEngineInclude.h"
+#include "DummyEngine/Core/Application/Input.h"
+#include "DummyEngine/Core/Application/KeyCodes.h"
+#include "DummyEngine/Core/Console/Console.hpp"
 
 void DE::ConsoleLayer::OnUpdate(float dt) {
     if (Input::KeyPressed(Key::I)) {
+        if (!m_Show) {
+            m_JustOpened = true;
+        }
         m_Show = !m_Show;
     }
 }
@@ -26,42 +29,55 @@ void DE::ConsoleLayer::OnImGuiRender() {
                 m_historyPosition = Console::GetCmdHistory().size() - 1;
             }
             if (Input::KeyReleased(Key::Up)) {
-                LOG_DEBUG("ConsoleLayer", "CmdHistoryLength = ", Console::GetCmdHistory().size(), ", Position = ", m_historyPosition, ", cmd=", Console::GetCmdHistory()[m_historyPosition]);
+                LOG_DEBUG("ConsoleLayer",
+                          "CmdHistoryLength = ",
+                          Console::GetCmdHistory().size(),
+                          ", Position = ",
+                          m_historyPosition,
+                          ", cmd=",
+                          Console::GetCmdHistory()[m_historyPosition]);
                 m_Command = Console::GetCmdHistory()[m_historyPosition];
                 m_historyPosition--;
-               // ImGui::ClearActiveID();
+                // ImGui::ClearActiveID();
             }
             if (Input::KeyReleased(Key::Down)) {
                 m_Command = Console::GetCmdHistory()[m_historyPosition];
                 m_historyPosition++;
-               // ImGui::ClearActiveID();
+                // ImGui::ClearActiveID();
             }
-
-
-            ImGui::SetKeyboardFocusHere();
+            if (m_JustOpened) {
+                m_JustOpened = false;
+                ImGui::SetKeyboardFocusHere();
+            }
             if (ImGui::InputTextWithHint("##", "command", &m_Command, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AlwaysOverwrite)) {
                 m_historyPosition = Console::GetCmdHistory().size() - 1;
                 Console::ExecuteCommand(m_Command);
                 m_ScrollToBottom = true;
-                m_Command = "";
+                m_Command        = "";
             }
             if (ImGui::IsItemFocused()) {
                 ImGui::SetNextWindowPos(ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMax().y));
-                ImGui::BeginTooltip();
-                ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 1));
-                const auto& tips = Console::GetHints(m_Command);
-                for (const auto& tip: tips) {
-                    ImGui::TextUnformatted(tip.c_str());
+                if (ImGui::BeginTooltip()) {
+                    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 1));
+                    const auto& tips = Console::GetHints(m_Command);
+                    if (!tips.empty()) {
+                        for (const auto& tip : tips) {
+                            ImGui::TextUnformatted(tip.c_str());
+                        }
+                    } else {
+                        ImGui::TextUnformatted("No commands found");
+                    }
+
+                    ImGui::PopStyleVar();
+                    ImGui::EndTooltip();
                 }
-                ImGui::PopStyleVar();
-                ImGui::EndTooltip();
             }
 
             ImGui::Separator();
 
             ImGui::BeginChild("log list");
             ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 1));
-            for (const auto& line: Console::GetLogHistory()) {
+            for (const auto& line : Console::GetLogHistory()) {
                 ImGui::TextUnformatted(line.data());
             }
             if (m_ScrollToBottom) {
@@ -75,7 +91,5 @@ void DE::ConsoleLayer::OnImGuiRender() {
     }
 }
 
-void DE::ConsoleLayer::OnAttach() {
-}
-void DE::ConsoleLayer::OnDetach() {
-}
+void DE::ConsoleLayer::OnAttach() {}
+void DE::ConsoleLayer::OnDetach() {}
