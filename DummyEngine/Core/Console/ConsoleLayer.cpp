@@ -38,12 +38,12 @@ void DE::ConsoleLayer::OnImGuiRender() {
                           Console::GetCmdHistory()[m_historyPosition]);
                 m_Command = Console::GetCmdHistory()[m_historyPosition];
                 m_historyPosition--;
-                // ImGui::ClearActiveID();
+                m_JustOpened = true;
             }
             if (Input::KeyReleased(Key::Down)) {
                 m_Command = Console::GetCmdHistory()[m_historyPosition];
                 m_historyPosition++;
-                // ImGui::ClearActiveID();
+                m_JustOpened = true;
             }
             if (m_JustOpened) {
                 m_JustOpened = false;
@@ -54,6 +54,7 @@ void DE::ConsoleLayer::OnImGuiRender() {
                 Console::ExecuteCommand(m_Command);
                 m_ScrollToBottom = true;
                 m_Command        = "";
+                m_JustOpened = true;
             }
             if (ImGui::IsItemFocused()) {
                 ImGui::SetNextWindowPos(ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMax().y));

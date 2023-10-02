@@ -138,8 +138,10 @@ namespace DE {
             candidates.push_back(key + " " + VarToString(key));
         }
         std::vector<std::string> result;
+        int space_idx = cmd.find(' ');
+        const auto& trunc_cmd = space_idx == -1 ? cmd : cmd.substr(0, space_idx); // for variables
         for (const auto &str: candidates) {
-            if (str.find(cmd) != -1) {
+            if (str.find(trunc_cmd) != -1) {
                 result.push_back(str);
             }
         }
