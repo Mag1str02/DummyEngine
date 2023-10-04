@@ -23,7 +23,7 @@ namespace DE {
             LOG_WARNING("ResourceManager", "Shader (", id, ") was not loaded because does not exist in AssetManager");
             return false;
         }
-        m_Shaders[id] = Shader::Create(asset.value().parts);
+        m_Shaders.insert(id, Shader::Create(asset.value().parts));
         LOG_INFO("ResourceManager", "Shader (", id, ") was added");
         return true;
     }
@@ -37,7 +37,7 @@ namespace DE {
             LOG_WARNING("ResourceManager", "RenderMesh (", id, ") was not loaded because does not exist in AssetManager");
             return false;
         }
-        m_RenderMeshes[id] = CreateRef<RenderMesh>(ModelLoader::Load(asset.value().loading_props));
+        m_RenderMeshes.insert(id, CreateRef<RenderMesh>(ModelLoader::Load(asset.value().loading_props)));
         LOG_INFO("ResourceManager", "RenderMesh (", id, ") was added");
         return true;
     }
@@ -58,8 +58,9 @@ namespace DE {
                 vertices.push_back(vert.position);
             }
         }
-        m_HitBoxes.insert({id, CreateRef<Physics::ConvexHitbox>()});
-        m_HitBoxes[id]->Build(vertices);
+        auto hitbox = CreateRef<Physics::ConvexHitbox>();
+        hitbox->Build(vertices);
+        m_HitBoxes.insert(id, hitbox);
         LOG_INFO("ResourceManager", "Hitbox (", id, ") was added");
         return true;
     }
@@ -73,7 +74,7 @@ namespace DE {
             LOG_WARNING("ResourceManager", "CubeMap (", id, ") was not loaded because does not exist in AssetManager");
             return false;
         }
-        m_CubeMaps[id] = CubeMap::Create(TextureLoader::Load(asset.value().loading_props));
+        m_CubeMaps.insert(id, CubeMap::Create(TextureLoader::Load(asset.value().loading_props)));
         LOG_INFO("ResourceManager", "CubeMap (", id, ") was added");
         return true;
     }
@@ -87,7 +88,7 @@ namespace DE {
             LOG_WARNING("ResourceManager", "Texture (", id, ") was not loaded because does not exist in AssetManager");
             return false;
         }
-        m_Textures[id] = Texture::Create(*TextureLoader::Load(asset.value().loading_props));
+        m_Textures.insert(id, Texture::Create(*TextureLoader::Load(asset.value().loading_props)));
         LOG_INFO("ResourceManager", "Texture (", id, ") was added");
         return true;
     }

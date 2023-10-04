@@ -35,6 +35,7 @@ namespace DE {
         S_METHOD_DEF(Unit, SetDepth, (U32 depth, const std::string& log = ""));
 
     private:
+        std::mutex m_Mutex;
         void LogInternal(LogMessageType type, const std::string& author, const std::string& to, const std::string& str);
 
         struct LogStream {

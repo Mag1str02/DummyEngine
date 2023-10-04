@@ -55,20 +55,25 @@ namespace DE {
 
     template <typename ComponentType> void ComponentManager::SetAddHandler(std::function<void(Entity)> func) {
         RegisterComponent<ComponentType>();
+        std::lock_guard<std::mutex> lock(m_ComponentMutex.get(INDEX(ComponentType)));
         m_AddHandlers[INDEX(ComponentType)] = func;
     }
     template <typename ComponentType> void ComponentManager::SetRemoveHandler(std::function<void(Entity)> func) {
         RegisterComponent<ComponentType>();
+        std::lock_guard<std::mutex> lock(m_ComponentMutex.get(INDEX(ComponentType)));
         m_RemoveHandlers[INDEX(ComponentType)] = func;
     }
 
     template <typename ComponentType> ComponentType* ComponentManager::AddComponent(U32 entity_id, const ComponentType& component) {
         RegisterComponent<ComponentType>();
         ValidateSignature(entity_id);
+        m_ComponentMutex.get(INDEX(ComponentType)).lock();
         m_Signatures[entity_id].Set(m_ComponentId[INDEX(ComponentType)], true);
         auto* c = reinterpret_cast<ComponentType*>(
             m_ComponentArrays[INDEX(ComponentType)]->AddComponent(entity_id, const_cast<ComponentType*>(&component)));
-        m_AddHandlers[INDEX(ComponentType)](m_Storage->GetEntity(entity_id));
+        auto& addHandler = m_AddHandlers[INDEX(ComponentType)];
+        m_ComponentMutex.get(INDEX(ComponentType)).unlock();
+        addHandler(m_Storage->GetEntity(entity_id));
         return c;
     }
     template <typename ComponentType> ComponentType* ComponentManager::GetComponent(U32 entity_id) {
@@ -76,17 +81,20 @@ namespace DE {
         if (!HasComponent<ComponentType>(entity_id)) {
             return nullptr;
         }
+        std::lock_guard<std::mutex> lock(m_ComponentMutex.get(INDEX(ComponentType)));
         return reinterpret_cast<ComponentType*>(m_ComponentArrays[INDEX(ComponentType)]->GetComponent(entity_id));
     }
     template <typename ComponentType> void ComponentManager::RemoveComponent(U32 entity_id) {
         ValidateSignature(entity_id);
         if (HasComponent<ComponentType>(entity_id)) {
+            std::lock_guard<std::mutex> lock(m_ComponentMutex.get(INDEX(ComponentType)));
             m_RemoveHandlers[INDEX(ComponentType)](m_Storage->GetEntity(entity_id));
             m_Signatures[entity_id].Set(m_ComponentId[INDEX(ComponentType)], false);
             m_ComponentArrays[INDEX(ComponentType)]->RemoveComponent(entity_id);
         }
     }
-    template <typename ComponentType> bool ComponentManager::HasComponent(U32 entity_id) const {
+    template <typename ComponentType> bool ComponentManager::HasComponent(U32 entity_id) {
+        std::lock_guard<std::mutex> lock(m_ComponentMutex.get(INDEX(ComponentType)));
         if (m_Signatures.size() < entity_id + 1 || m_ComponentId.find(INDEX(ComponentType)) == m_ComponentId.end()) {
             return false;
         }
@@ -103,27 +111,31 @@ namespace DE {
         return GetSignature<Components...>();
     }
 
-    template <typename... Components> typename std::enable_if<sizeof...(Components) == 0, bool>::type ComponentManager::ValidateComponents() const {
+    template <typename... Components> typename std::enable_if<sizeof...(Components) == 0, bool>::type ComponentManager::ValidateComponents() {
         return true;
     }
-    template <typename T, typename... Components> bool ComponentManager::ValidateComponents() const {
+    template <typename T, typename... Components> bool ComponentManager::ValidateComponents() {
+        m_ComponentMutex.get(INDEX(T)).lock();
         if (m_ComponentId.find(INDEX(T)) == m_ComponentId.end()) {
             return false;
         }
+        m_ComponentMutex.get(INDEX(T)).unlock();
         return ValidateComponents<Components...>();
     }
 
-    template <typename... Components> typename std::enable_if<sizeof...(Components) == 0, Signature>::type ComponentManager::GetSignature() const {
+    template <typename... Components> typename std::enable_if<sizeof...(Components) == 0, Signature>::type ComponentManager::GetSignature() {
         return Signature();
     }
-    template <typename T, typename... Components> Signature ComponentManager::GetSignature() const {
+    template <typename T, typename... Components> Signature ComponentManager::GetSignature() {
         Signature res = GetSignature<Components...>();
+        std::lock_guard<std::mutex> lock(m_ComponentMutex.get(INDEX(T)));
         res.Set(m_ComponentId.at(INDEX(T)), true);
         return res;
     }
 
     template <typename ComponentType> void ComponentManager::RegisterComponent() {
-        if (m_ComponentId.find(INDEX(ComponentType)) == m_ComponentId.end()) {
+        std::lock_guard<std::mutex> lock(m_ComponentMutex.get(INDEX(ComponentType)));
+        if (!m_ComponentId.contains(INDEX(ComponentType))) {
             auto default_handler                    = [](Entity e) {};
             m_ComponentId[INDEX(ComponentType)]     = m_ComponentId.size();
             m_ComponentArrays[INDEX(ComponentType)] = std::make_shared<ComponentArray<ComponentType>>(ComponentArray<ComponentType>());

@@ -1,5 +1,6 @@
 #include "DummyEngine/ToolBox/Loaders/SceneLoader.h"
 
+#include "DummyEngine/Core/Application/Application.h"
 #include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"
@@ -447,17 +448,26 @@ namespace DE {
 
     Entity LoadEntity(Ref<Scene> scene, YAML::Node n_Entity) {
         Entity entity = scene->CreateEmptyEntity();
-
-        if (n_Entity["Tag"]) LoadComponent<TagComponent>(scene, n_Entity["Tag"], entity);
-        if (n_Entity["UUID"]) LoadComponent<IDComponent>(scene, n_Entity["UUID"], entity);
-        if (n_Entity["Transformation"]) LoadComponent<TransformComponent>(scene, n_Entity["Transformation"], entity);
-        if (n_Entity["RenderModel"]) LoadComponent<RenderMeshComponent>(scene, n_Entity["RenderModel"], entity);
+        std::vector<Ref<Task>> tasks;
+        if (n_Entity["Tag"]) tasks.push_back(CreateRef<LoadComponentTask<TagComponent>>(scene, n_Entity["Tag"], entity));
+        if (n_Entity["UUID"]) tasks.push_back(CreateRef<LoadComponentTask<IDComponent>>(scene, n_Entity["UUID"], entity));
+        if (n_Entity["Transformation"]) tasks.push_back(CreateRef<LoadComponentTask<TransformComponent>>(scene, n_Entity["Transformation"], entity));
+        if (n_Entity["RenderModel"]) tasks.push_back(CreateRef<LoadComponentTask<RenderMeshComponent>>(scene, n_Entity["RenderModel"], entity));
+        if (n_Entity["FPSCamera"]) tasks.push_back(CreateRef<LoadComponentTask<FPSCamera>>(scene, n_Entity["FPSCamera"], entity));
+        if (n_Entity["LightSource"]) tasks.push_back(CreateRef<LoadComponentTask<LightSource>>(scene, n_Entity["LightSource"], entity));
+        if (n_Entity["Script"]) tasks.push_back(CreateRef<LoadComponentTask<ScriptComponent>>(scene, n_Entity["Script"], entity));
+        if (n_Entity["Physics"]) tasks.push_back(CreateRef<LoadComponentTask<Physics::PhysicsComponent>>(scene, n_Entity["Physics"], entity));
+        LOG_INFO("SceneLoader", "Loaded ", tasks.size(), " tasks");
+        for (const auto &task: tasks) {
+            LOG_INFO("SceneLoader", "Submitted task");
+            Application::GetExecutor()->Submit(task);
+        }
         if (n_Entity["Shader"]) LoadComponent<ShaderComponent>(scene, n_Entity["Shader"], entity);
-        if (n_Entity["FPSCamera"]) LoadComponent<FPSCamera>(scene, n_Entity["FPSCamera"], entity);
-        if (n_Entity["LightSource"]) LoadComponent<LightSource>(scene, n_Entity["LightSource"], entity);
         if (n_Entity["SkyBox"]) LoadComponent<SkyBoxComponent>(scene, n_Entity["SkyBox"], entity);
-        if (n_Entity["Script"]) LoadComponent<ScriptComponent>(scene, n_Entity["Script"], entity);
-        if (n_Entity["Physics"]) LoadComponent<Physics::PhysicsComponent>(scene, n_Entity["Physics"], entity);
+        for (const auto &task: tasks) {
+            task->Wait();
+        }
+        LOG_INFO("SceneLoader", "Waiting ", tasks.size(), " tasks");
         return entity;
     }
     void LoadHierarchyNode(Ref<Scene> scene, YAML::Node n_Array, SceneHierarchy::Node load_to) {
@@ -593,6 +603,12 @@ namespace DE {
             LOG_ERROR("SceneLoader", "Failed to open file (", RelativeToExecutable(path), ") to save scene");
             return false;
         }
+    }
+
+    template <typename Component> void LoadComponentTask<Component>::Run() {
+        LOG_INFO("LoadComponentTask", typeid(Component).name());
+        LoadComponent<Component>(m_scene, n_component, m_entity);
+        LOG_INFO("LoadComponentTask Finish", typeid(Component).name());
     }
 
 }  // namespace DE

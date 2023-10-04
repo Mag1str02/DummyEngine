@@ -38,10 +38,10 @@ namespace DE {
         S_METHOD_DEF(Unit, Clear, ());
 
     private:
-        std::unordered_map<UUID, Ref<Shader>>                m_Shaders;
-        std::unordered_map<UUID, Ref<RenderMesh>>            m_RenderMeshes;
-        std::unordered_map<UUID, Ref<CubeMap>>               m_CubeMaps;
-        std::unordered_map<UUID, Ref<Texture>>               m_Textures;
-        std::unordered_map<UUID, Ref<Physics::ConvexHitbox>> m_HitBoxes;
+        UnorderedMap<UUID, Ref<Shader>>                m_Shaders;
+        UnorderedMap<UUID, Ref<RenderMesh>>            m_RenderMeshes;
+        UnorderedMap<UUID, Ref<CubeMap>>               m_CubeMaps;
+        UnorderedMap<UUID, Ref<Texture>>               m_Textures;
+        UnorderedMap<UUID, Ref<Physics::ConvexHitbox>> m_HitBoxes;
     };
 }  // namespace DE

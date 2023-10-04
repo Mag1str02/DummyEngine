@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DummyEngine/Core/Threading/MutexMap.hpp"
 #include "DummyEngine/Utils/Base.h"
 
 #define INDEX(type) std::type_index(typeid(type))
@@ -65,7 +66,7 @@ namespace DE {
         template <typename ComponentType> ComponentType* AddComponent(U32 entity_id, const ComponentType& component);
         template <typename ComponentType> ComponentType* GetComponent(U32 entity_id);
         template <typename ComponentType> void           RemoveComponent(U32 entity_id);
-        template <typename ComponentType> bool           HasComponent(U32 entity_id) const;
+        template <typename ComponentType> bool           HasComponent(U32 entity_id);
         void                                             Destroy(U32 entity_id);
 
         template <typename ComponentType> void SetAddHandler(std::function<void(Entity)> func);
@@ -75,15 +76,16 @@ namespace DE {
         bool                                        Matches(U32 id, const Signature& signature) const;
 
     private:
-        template <typename... Components> typename std::enable_if<sizeof...(Components) == 0, bool>::type ValidateComponents() const;
-        template <typename T, typename... Components> bool                                                ValidateComponents() const;
+        template <typename... Components> typename std::enable_if<sizeof...(Components) == 0, bool>::type ValidateComponents();
+        template <typename T, typename... Components> bool                                                ValidateComponents();
 
-        template <typename... Components> typename std::enable_if<sizeof...(Components) == 0, Signature>::type GetSignature() const;
-        template <typename T, typename... Components> Signature                                                GetSignature() const;
+        template <typename... Components> typename std::enable_if<sizeof...(Components) == 0, Signature>::type GetSignature();
+        template <typename T, typename... Components> Signature                                                GetSignature();
 
         void                                   ValidateSignature(U32 entity_id);
         template <typename ComponentType> void RegisterComponent();
 
+        MutexMap<std::type_index>                                             m_ComponentMutex;
         std::unordered_map<std::type_index, std::shared_ptr<IComponentArray>> m_ComponentArrays;
         std::unordered_map<std::type_index, U32>                              m_ComponentId;
         std::unordered_map<std::type_index, std::function<void(Entity)>>      m_AddHandlers;
@@ -212,7 +214,7 @@ namespace DE {
 
         template <typename ComponentType> ComponentType* AddComponent(U32 id, U32 gen, const ComponentType& component);
         template <typename ComponentType> ComponentType* GetComponent(U32 id, U32 gen);
-        template <typename ComponentType> bool           HasComponent(U32 id, U32 gen) const;
+        template <typename ComponentType> bool           HasComponent(U32 id, U32 gen);
         template <typename ComponentType> void           RemoveComponent(U32 id, U32 gen);
 
         EntityManager    m_EntityManager;

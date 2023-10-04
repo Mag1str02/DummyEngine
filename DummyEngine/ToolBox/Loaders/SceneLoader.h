@@ -5,6 +5,7 @@
 #include "DummyEngine/Core/ResourceManaging/Assets.h"
 #include "DummyEngine/Core/Scene/Scene.h"
 #include "DummyEngine/Core/Scene/SceneRenderer.h"
+#include "DummyEngine/Core/Threading/Task.hpp"
 
 #include <yaml-cpp/yaml.h>
 // clang-format on
@@ -30,6 +31,19 @@ namespace DE {
         static bool                         SaveScene(const SceneFileData& data, const Path& path);
         static Ref<Scene>                   Serialize(const YAML::Node& hierarchy);
         static YAML::Node                   Deserialize(Ref<Scene> scene);
+    };
+
+    template <typename Component> class LoadComponentTask : public Task {
+    private:
+        Ref<Scene> m_scene;
+        Entity    m_entity;
+
+    public:
+        YAML::Node n_component;
+        LoadComponentTask(Ref<Scene> scene, YAML::Node node, Entity entity) : m_scene(scene), n_component(node), m_entity(entity) {
+            LOG_INFO("LoadComponentTask", typeid(Component).name());
+        }
+        void Run() override;
     };
 
 }  // namespace DE

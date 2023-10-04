@@ -11,6 +11,7 @@ Utils/Types/Types.cpp
 Utils/Types/UUID.cpp
 
 Utils/DS/Trie.cpp
+Utils/DS/UnorderedMap.cpp
 
 Core/Animations/Animation.cpp
 Core/Animations/Animator.cpp
@@ -83,6 +84,12 @@ Core/ResourceManaging/ResourceManager.cpp
 Core/Scripting/Script.cpp
 Core/Scripting/ScriptEngine.cpp
 Core/Scripting/ScriptClass.cpp
+
+
+Core/Threading/Executor.cpp
+Core/Threading/Task.cpp
+Core/Threading/TimerQueue.cpp
+Core/Threading/MutexMap.cpp
 
 ToolBox/Loaders/ModelLoader.cpp
 ToolBox/Loaders/TextureLoader.cpp 

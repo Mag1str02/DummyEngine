@@ -59,7 +59,7 @@ namespace DE {
     template <typename ComponentType> ComponentType* Storage::GetComponent(U32 id, U32 gen) {
         return (m_EntityManager.Valid(id, gen) ? m_ComponentManager.GetComponent<ComponentType>(id) : nullptr);
     }
-    template <typename ComponentType> bool Storage::HasComponent(U32 id, U32 gen) const {
+    template <typename ComponentType> bool Storage::HasComponent(U32 id, U32 gen) {
         return (m_EntityManager.Valid(id, gen) ? m_ComponentManager.HasComponent<ComponentType>(id) : false);
     }
     template <typename ComponentType> void Storage::RemoveComponent(U32 id, U32 gen) {

@@ -1,5 +1,7 @@
 #include "DummyEngine/Utils/Debug/Logger.h"
 
+#include <thread>
+
 #include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/Core/Application/FileSystem.h"
 #include "DummyEngine/Core/Console/Console.hpp"
@@ -44,7 +46,7 @@ namespace DE {
     std::string LogRecord::ToString() const {
         std::stringstream ss;
         PrintTime(ss, time);
-        ss << std::setw(Constants::MaxMessageTypeLength) << ("[" + LogMessageTypeToStr(type) + "]") << " " << std::left
+        ss << "T" << std::this_thread::get_id() << std::setw(Constants::MaxMessageTypeLength) << ("[" + LogMessageTypeToStr(type) + "]") << " " << std::left
            << std::setw(Constants::MaxAuthorLength) << StrCat("[", author, "] ") << message << std::endl;
         return ss.str();
     }
@@ -100,6 +102,7 @@ namespace DE {
     }
 
     void Logger::LogInternal(LogMessageType type, const std::string& author, const std::string& to, const std::string& str) {
+        std::lock_guard<std::mutex> lock(m_Mutex);
         LogStream* log = &m_Streams[""];
         if (m_Streams.contains(to)) {
             log = &m_Streams[to];

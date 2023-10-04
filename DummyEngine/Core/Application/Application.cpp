@@ -19,6 +19,8 @@ namespace DE {
         PushLayer(m_ConsoleLayer);
 
         SetUpCallbacks();
+
+        m_Executor = MakeThreadPoolExecutor(THREAD_COUNT);
         return Unit();
     }
     S_TERMINATE() {
@@ -28,6 +30,7 @@ namespace DE {
             delete layer;
         }
         m_Layers.clear();
+        m_Executor->WaitShutdown();
         return Unit();
     }
 
@@ -80,6 +83,9 @@ namespace DE {
     }
     S_METHOD_IMPL(Window&, GetWindow, (), ()) {
         return *m_Window;
+    }
+    S_METHOD_IMPL(Ref<Executor>, GetExecutor, (), ()) {
+        return m_Executor;
     }
 
     void Application::SetUpCallbacks() {
