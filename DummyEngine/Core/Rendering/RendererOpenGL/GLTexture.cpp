@@ -29,7 +29,7 @@ namespace DE {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     }
-    GLTexture::GLTexture(const TextureData& data) :
+    GLTexture::GLTexture(const TextureResource& data) :
         m_Width(data.Width()),
         m_Height(data.Height()),
         m_Format(Texture::DataFormat(data.Format())),
@@ -48,7 +48,7 @@ namespace DE {
     }
 
     GLTexture::~GLTexture() {
-        glDeleteTextures(1, &m_TextureId);
+        Remove();
     }
 
     U32 GLTexture::GetWidth() const {
@@ -121,5 +121,8 @@ namespace DE {
                      data_type,
                      data);
         // glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    void GLTexture::Remove() {
+        glDeleteTextures(1, &m_TextureId);
     }
 }  // namespace DE

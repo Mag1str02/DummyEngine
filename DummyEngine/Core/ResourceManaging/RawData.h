@@ -10,28 +10,13 @@ namespace DE {
     };
     std::string  MaterialTypeToStr(MaterialType type);
     MaterialType MaterialTypeFromStr(const std::string& str);
-    enum class TextureChannels { None = 0, RED, RG, RGB, RGBA };
-    enum class TextureFormat {
-        None = 0,
-        U8,
-        Float,
-    };
 
-    enum CubeSide {
-        Right  = 0,
-        Left   = 1,
-        Top    = 2,
-        Bottom = 3,
-        Back   = 5,
-        Front  = 4,
-    };
-    U32 ChannelAmount(TextureChannels format);
-    U32 FormatSize(TextureFormat format);
 
-    struct ShaderPart {
-        ShaderPartType type;
-        Path           path;
-    };
+//
+//    struct ShaderPart {
+//        ShaderPartType type;
+//        Path           path;
+//    };
 
     std::string    ShaderPartTypeToString(ShaderPartType type);
     ShaderPartType StringToShaderPartType(const std::string& type);

@@ -5,6 +5,7 @@
 #include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 #include "DummyEngine/Utils/Base.h"
+#include "GLShaderPart.h"
 
 namespace DE {
     namespace fs = std::filesystem;
@@ -17,7 +18,7 @@ namespace DE {
         GLShader& operator=(Shader&& other)      = delete;
         GLShader& operator=(const Shader& other) = delete;
 
-        GLShader(const std::vector<ShaderPart>& shader_parts);
+        GLShader(const std::vector<GLShaderPart>& shader_parts);
         virtual ~GLShader();
 
         virtual void Bind() const override;
@@ -35,14 +36,11 @@ namespace DE {
         virtual void SetInt3(const std::string& uniform_name, int x, int y, int z) const override;
         virtual void SetInt4(const std::string& uniform_name, int x, int y, int z, int w) const override;
         virtual void SetMat4(const std::string& uniform_name, Mat4 value) const override;
-        virtual void SetUnifromBlock(const std::string& uniform_name, U32 id) const override;
+        virtual void SetUniformBlock(const std::string& uniform_name, U32 id) const override;
 
     private:
-        static std::string ReadPartFromFile(const Path& path_to_file);
+        void AddPart(GLShaderPart part) const;
 
-        void AddPart(ShaderPart part);
-
-        std::vector<GLuint> m_Parts;
         GLuint              m_ShaderId;
     };
 }  // namespace DE

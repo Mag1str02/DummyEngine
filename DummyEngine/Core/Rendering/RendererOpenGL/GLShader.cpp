@@ -5,16 +5,8 @@
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLDebug.h"
 
 namespace DE {
-    GLenum ShaderPartTypeToGLShaderPartType(ShaderPartType type) {
-        switch (type) {
-            case ShaderPartType::Vertex: return GL_VERTEX_SHADER;
-            case ShaderPartType::Fragment: return GL_FRAGMENT_SHADER;
-            case ShaderPartType::Geometry: return GL_GEOMETRY_SHADER;
-            default: return GL_VERTEX_SHADER;
-        }
-    }
 
-    GLShader::GLShader(const std::vector<ShaderPart>& shader_parts) {
+    GLShader::GLShader(const std::vector<GLShaderPart>& shader_parts) {
         m_ShaderId = glCreateProgram();
         for (const auto& part : shader_parts) {
             AddPart(part);
@@ -33,9 +25,6 @@ namespace DE {
     }
     GLShader::~GLShader() {
         glDeleteProgram(m_ShaderId);
-        for (const auto& part : m_Parts) {
-            glDeleteShader(part);
-        }
     }
 
     void GLShader::Bind() const {
@@ -93,50 +82,13 @@ namespace DE {
         GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
         glUniformMatrix4fv(pos, 1, GL_FALSE, glm::value_ptr(value));
     }
-    void GLShader::SetUnifromBlock(const std::string& uniform_name, U32 id) const {
+    void GLShader::SetUniformBlock(const std::string& uniform_name, U32 id) const {
         GLint pos = glGetUniformBlockIndex(m_ShaderId, uniform_name.c_str());
         glUniformBlockBinding(m_ShaderId, pos, id);
         glCheckError();
     }
 
-    std::string GLShader::ReadPartFromFile(const Path& path_to_file) {
-        std::string line;
-        std::string source_string;
-
-        std::ifstream fin(path_to_file);
-        if (!fin.is_open()) {
-            LOG_ERROR("GLShader", "Can't open shader source file (", RelativeToExecutable(path_to_file), ")");
-            return source_string;
-        }
-        try {
-            while (getline(fin, line)) {
-                source_string.append(line + "\n");
-            }
-        } catch (...) {
-            LOG_ERROR("GLShader", "Failed to read shader source file (", RelativeToExecutable(path_to_file), ")");
-            return source_string;
-        }
-        return source_string;
-    }
-    void GLShader::AddPart(ShaderPart part) {
-        std::string source       = ReadPartFromFile(part.path);
-        const char* source_c_str = source.c_str();
-
-        GLuint shader_part = glCreateShader(ShaderPartTypeToGLShaderPartType(part.type));
-        glShaderSource(shader_part, 1, &source_c_str, NULL);
-        glCompileShader(shader_part);
-        m_Parts.push_back(shader_part);
-
-        int  success = 1;
-        char infoLog[Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN)];
-        glGetShaderiv(shader_part, GL_COMPILE_STATUS, &success);
-        if (!success) {
-            glGetShaderInfoLog(shader_part, Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN), NULL, infoLog);
-            LOG_ERROR("GLShader", "Failed to compile shader (", part.path.string(), ")\n", reinterpret_cast<const char*>(&infoLog));
-            return;
-        }
-        LOG_INFO("GLShader", "File (", RelativeToExecutable(part.path), ") compiled");
-
-        glAttachShader(m_ShaderId, shader_part);
+    void GLShader::AddPart(GLShaderPart part) const {
+        glAttachShader(m_ShaderId, part.m_ShaderId);
     }
 }  // namespace DE

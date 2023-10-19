@@ -6,24 +6,21 @@
 #include "DummyEngine/Core/Application/Config.h"
 
 namespace DE {
-    Ref<TextureData> TextureLoader::Load(const TextureAsset::LoadingProperties& props) {
+    Ref<TextureResource> TextureLoader::Load(Ref<TextureResource> resource, const Path& path, const bool flip_uv = false, const TextureFormat &format = TextureFormat::U8) {
         void*           stb_data;
         int             width, height, nrChannels;
         TextureChannels channels;
         std::string     channels_s;
         std::string     format_s;
+        stbi_set_flip_vertically_on_load(flip_uv ? true : false);
 
-        auto res = CreateRef<TextureData>();
-
-        stbi_set_flip_vertically_on_load(props.flip_uvs ? true : false);
-
-        switch (props.format) {
+        switch (format) {
             case TextureFormat::U8:
-                stb_data = stbi_load(props.path.string().c_str(), &width, &height, &nrChannels, 0);
+                stb_data = stbi_load(path.string().c_str(), &width, &height, &nrChannels, 0);
                 format_s = "U8";
                 break;
             case TextureFormat::Float:
-                stb_data = stbi_loadf(props.path.string().c_str(), &width, &height, &nrChannels, 0);
+                stb_data = stbi_loadf(path.string().c_str(), &width, &height, &nrChannels, 0);
                 format_s = "Float";
                 break;
             case TextureFormat::None: LOG_WARNING("TextureLoader", "Texture was not loaded because of unspecified format"); return res;
@@ -31,7 +28,7 @@ namespace DE {
         }
 
         if (!stb_data) {
-            LOG_ERROR("TextureLoader", "Failed to load texture (", RelativeToExecutable(props.path), ")");
+            LOG_ERROR("TextureLoader", "Failed to load texture (", RelativeToExecutable(path), ")");
             return nullptr;
         }
 
@@ -57,12 +54,11 @@ namespace DE {
                 channels   = TextureChannels::None;
                 break;
         }
-
-        res->SetData(stb_data, width, height, channels, props.format);
+        resource->SetData(stb_data, width, height, channels, format);
         stbi_image_free(stb_data);
 
-        LOG_INFO("TextureLoader", "Texture loaded (", RelativeToExecutable(props.path), ") channels (", channels_s, ") format (", format_s, ")");
-        return res;
+        LOG_INFO("TextureLoader", "Texture loaded (", RelativeToExecutable(path), ") channels (", channels_s, ") format (", format_s, ")");
+        return resource;
     }
     // void TextureLoader::Save(const Path& path, const Ref<TextureData> data) {
     //     switch (data->Format()) {

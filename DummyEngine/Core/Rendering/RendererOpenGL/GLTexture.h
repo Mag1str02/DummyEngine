@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 
 #include "DummyEngine/Core/Rendering/Renderer/Texture.h"
+#include "DummyEngine/Core/ResourceManaging/Resources/Texture.hpp"
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
@@ -17,7 +18,7 @@ namespace DE {
 
         GLTexture(U32 width, U32 height, Channels channels, Format format);
         GLTexture(Texture::Channels channels, Format format);
-        GLTexture(const TextureData& data);
+        GLTexture(const TextureResource& data);
 
         virtual ~GLTexture();
 
@@ -32,6 +33,7 @@ namespace DE {
         virtual void SetChannels(Channels channels) override;
         virtual void Resize(U32 width, U32 height) override;
         virtual void Bind(U32 slot) const override;
+        virtual void Remove() override;
 
     private:
         void Invalidate(GLenum data_type = GL_UNSIGNED_BYTE, const void* data = nullptr);

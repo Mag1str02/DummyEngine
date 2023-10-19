@@ -1,5 +1,7 @@
 #include "DummyEngine/Core/ResourceManaging/RawData.h"
 
+#include "Resource.hpp"
+
 namespace DE {
     std::string MaterialTypeToStr(MaterialType type) {
         switch (type) {

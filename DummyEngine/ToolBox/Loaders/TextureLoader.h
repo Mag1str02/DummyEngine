@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DummyEngine/Core/ResourceManaging/Assets.h"
-#include "DummyEngine/Core/ResourceManaging/RawData.h"
+#include "DummyEngine/Core/ResourceManaging/Resources/Texture.hpp"
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
@@ -9,7 +9,7 @@ namespace DE {
 
     class TextureLoader {
     public:
-        static Ref<TextureData> Load(const TextureAsset::LoadingProperties& props);
+        static Ref<TextureResource> Load(Ref<TextureResource> resource, const Path& path, const bool flip_uv, const TextureFormat &format);
         // static void             Save(const Path& path, const Ref<TextureData> data);
     };
 }  // namespace DE

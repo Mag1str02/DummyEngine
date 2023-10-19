@@ -58,7 +58,7 @@ namespace DE {
         }
         return nullptr;
     }
-    Ref<Texture> Texture::Create(const TextureData& texture_data) {
+    Ref<Texture> Texture::Create(const TextureResource& texture_data) {
         switch (Renderer::CurrentAPI()) {
             case API::OpenGL: return CreateRef<GLTexture>(texture_data);
             case API::Vulkan: {

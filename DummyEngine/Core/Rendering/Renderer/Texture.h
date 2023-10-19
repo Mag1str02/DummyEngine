@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DummyEngine/Core/ResourceManaging/RawData.h"
+#include "DummyEngine/Core/ResourceManaging/Resources/Texture.hpp"
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
@@ -28,9 +29,10 @@ namespace DE {
         virtual void SetChannels(Channels channels)                   = 0;
         virtual void Resize(U32 width, U32 height)                    = 0;
         virtual void Bind(U32 slot) const                             = 0;
+        virtual void Remove()                                         = 0;
 
         static Ref<Texture> Create(Channels channels = Channels::RGBA, Format format = Format::U8);
         static Ref<Texture> Create(U32 width, U32 height, Channels channels = Channels::RGBA, Format format = Format::U8);
-        static Ref<Texture> Create(const TextureData& texture_data);
+        static Ref<Texture> Create(const TextureResource& texture_data);
     };
 }  // namespace DE

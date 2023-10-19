@@ -139,7 +139,7 @@ namespace DE {
             auto shader = ResourceManager::GetShader(shader_id);
             if (shader) {
                 m_Shaders[shader_id] = shader.value();
-                m_Shaders[shader_id]->SetUnifromBlock("ub_Lights", LIGHT_UB_ID);
+                m_Shaders[shader_id]->SetUniformBlock("ub_Lights", LIGHT_UB_ID);
             } else {
                 LOG_WARNING("SceneRenderer", "Shader (", shader_id, ") not found in ResourceManager");
             }
