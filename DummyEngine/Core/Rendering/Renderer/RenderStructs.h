@@ -37,6 +37,8 @@ namespace DE {
 
         RenderSubMesh Copy() const;
         void          FillData(const RenderSubMeshData& data);
+        void          FillData(const std::vector<Vertex3D>& vertices, const std::vector<U32>& indices, const Ref<Material>& mat);
+        void          Remove();
     };
 
     class RenderMesh {

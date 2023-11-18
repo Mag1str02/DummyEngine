@@ -4,7 +4,7 @@
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLShader.h"
 
 namespace DE {
-    Ref<Shader> Shader::Create(const std::vector<ShaderPart>& initializers) {
+    Ref<Shader> Shader::Create(const std::vector<Ref<ShaderPart>>& initializers) {
         switch (Renderer::CurrentAPI()) {
             case API::OpenGL: return CreateRef<GLShader>(initializers);
             case API::Vulkan: {

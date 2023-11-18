@@ -76,6 +76,11 @@ namespace DE {
     }
 
     void RenderSubMesh::FillData(const RenderSubMeshData& data) {
+        FillData(data.vertices, data.indices, CreateRef<Material>()); // TODO: fix, use normal material class
+    }
+
+
+    void RenderSubMesh::FillData(const std::vector<Vertex3D>& vertices, const std::vector<U32>& indices, const Ref<Material>& mat) {
         BufferLayout layout({BufferElementType::Float3,
                              BufferElementType::Float3,
                              BufferElementType::Float3,
@@ -87,19 +92,25 @@ namespace DE {
 
         vertex_array = VertexArray::Create();
 
-        Ref<VertexBuffer> vertex_buffer = VertexBuffer::Create(layout, data.vertices.size(), &data.vertices[0]);
-        Ref<IndexBuffer>  index_buffer  = IndexBuffer::Create(&data.indices[0], data.indices.size());
-        material.FillData(data.material);
+        Ref<VertexBuffer> vertex_buffer = VertexBuffer::Create(layout, vertices.size(), &vertices[0]);
+        Ref<IndexBuffer>  index_buffer  = IndexBuffer::Create(&indices[0], indices.size());
+        material.FillData(material); // TODO: fix, use normal material class
 
         vertex_array->AddVertexBuffer(vertex_buffer);
         vertex_array->SetIndexBuffer(index_buffer);
     }
+
+
     RenderSubMesh RenderSubMesh::Copy() const {
         RenderSubMesh res;
         res.material     = material;
         res.vertex_array = vertex_array->Copy();
         return res;
     }
+    void RenderSubMesh::Remove() {
+        vertex_array->
+    }
+
     RenderMesh::RenderMesh(Ref<RenderMeshData> data) {
         FillData(data);
     }

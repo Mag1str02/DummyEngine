@@ -45,7 +45,7 @@ namespace DE {
         if (GetState() == LOADED_TO_RAM) {
             Remove();
         }
-        DE_ASSERT(GetState() == NOT_LOADED, "Shader didn't unload");
+        DE_ASSERT(GetState() == NOT_LOADED, "ShaderPart didn't unload");
     }
     ShaderPartResource::ShaderPartResource(Path path, ShaderPartType type) : m_Path(path), m_Type(type) {}
 }  // namespace DE

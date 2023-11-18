@@ -6,6 +6,8 @@ namespace DE {
 
     class ShaderResource : public Resource {
     public:
+        ~ShaderResource();
+
         void AddPart(Ref<ShaderPartResource> &part);
         void Prepare() override;
         void Load() override;

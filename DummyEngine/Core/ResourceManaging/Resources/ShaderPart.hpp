@@ -1,13 +1,15 @@
 #pragma once
 
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
-#include "DummyEngine/Core/Rendering/Renderer/ShaderPart.h"
 #include "DummyEngine/Core/ResourceManaging/Resource.hpp"
 
 namespace DE {
 
+    class ShaderPart;
+
     class ShaderPartResource : public Resource, public std::enable_shared_from_this<ShaderPartResource> {
     public:
+        friend class ShaderResource;
         ShaderPartResource() = delete;
         ShaderPartResource(Path path, ShaderPartType type);
 

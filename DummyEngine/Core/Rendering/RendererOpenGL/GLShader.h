@@ -18,11 +18,12 @@ namespace DE {
         GLShader& operator=(Shader&& other)      = delete;
         GLShader& operator=(const Shader& other) = delete;
 
-        GLShader(const std::vector<GLShaderPart>& shader_parts);
+        GLShader(const std::vector<Ref<GLShaderPart> >& shader_parts);
         virtual ~GLShader();
 
         virtual void Bind() const override;
         virtual void UnBind() const override;
+        virtual void Unload() const override;
 
         virtual void SetFloat(const std::string& uniform_name, float value) const override;
         virtual void SetFloat2(const std::string& uniform_name, float x, float y) const override;
@@ -39,7 +40,7 @@ namespace DE {
         virtual void SetUniformBlock(const std::string& uniform_name, U32 id) const override;
 
     private:
-        void AddPart(GLShaderPart part) const;
+        void AddPart(Ref<GLShaderPart> part) const;
 
         GLuint              m_ShaderId;
     };

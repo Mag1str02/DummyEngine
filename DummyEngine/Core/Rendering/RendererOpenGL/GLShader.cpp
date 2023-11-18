@@ -6,7 +6,7 @@
 
 namespace DE {
 
-    GLShader::GLShader(const std::vector<GLShaderPart>& shader_parts) {
+    GLShader::GLShader(const std::vector<Ref<GLShaderPart>>& shader_parts) {
         m_ShaderId = glCreateProgram();
         for (const auto& part : shader_parts) {
             AddPart(part);
@@ -27,6 +27,9 @@ namespace DE {
         glDeleteProgram(m_ShaderId);
     }
 
+    void GLShader::Unload() const {
+        glDeleteProgram(m_ShaderId);
+    }
     void GLShader::Bind() const {
         glUseProgram(m_ShaderId);
     }
@@ -88,7 +91,7 @@ namespace DE {
         glCheckError();
     }
 
-    void GLShader::AddPart(GLShaderPart part) const {
-        glAttachShader(m_ShaderId, part.m_ShaderId);
+    void GLShader::AddPart(Ref<GLShaderPart> part) const {
+        glAttachShader(m_ShaderId, part->m_ShaderId);
     }
 }  // namespace DE

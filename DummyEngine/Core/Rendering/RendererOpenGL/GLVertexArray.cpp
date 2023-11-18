@@ -9,6 +9,10 @@ namespace DE {
         glDeleteVertexArrays(1, &m_ArrayId);
     }
 
+    void GLVertexArray::Remove() {
+        glDeleteVertexArrays(1, &m_ArrayId);
+    }
+
     void GLVertexArray::Bind() const {
         glBindVertexArray(m_ArrayId);
     }

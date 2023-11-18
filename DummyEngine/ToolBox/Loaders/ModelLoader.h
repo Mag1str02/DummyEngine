@@ -5,6 +5,7 @@
 #include <assimp/Importer.hpp>
 
 #include "DummyEngine/Core/ResourceManaging/Assets.h"
+#include "DummyEngine/Core/ResourceManaging/Resources/Mesh.hpp"
 
 namespace DE {
     namespace fs = std::filesystem;
@@ -24,8 +25,11 @@ namespace DE {
             Path                               m_CurrentDirectory;
             RenderMeshAsset::LoadingProperties m_Props;
 
-            Ref<RenderMeshData>                        m_CurrentData;
-            std::unordered_map<Path, Ref<TextureData>> m_ModelTextures;
+            std::vector<Ref<SubMesh>> m_SubMeshes;
+            Ref<Animation>            m_Animation;
+
+            //            Ref<RenderMeshData>                        m_CurrentData; // TODO: remove
+            std::unordered_map<Path, Ref<TextureResource>> m_ModelTextures;
             Assimp::Importer                           m_Importer;
         };
 
@@ -37,12 +41,12 @@ namespace DE {
         static void ReadAnimationNode(Animation::Node& node, const aiNode* src);
         static void ReadAnimation(Animation& animation, const aiScene* scene);
 
-        static MaterialData     LoadMaterial(aiMaterial* mat);
-        static void             ProcessNode(aiNode* node, const aiScene* scene);
-        static void             ProcessMesh(aiMesh* mesh, const aiScene* scene);
-        static Vec3             GetColor(aiMaterial* mat, ColorType type);
-        static Ref<TextureData> GetTexture(aiMaterial* mat, aiTextureType type);
-        static void             ReadModelProperties(aiNode* node, const aiScene* scene);
+        static Ref<Material> LoadMaterial(aiMaterial* mat);
+        static void          ProcessNode(aiNode* node, const aiScene* scene);
+        static void          ProcessMesh(aiMesh* mesh, const aiScene* scene);
+        static Vec3          GetColor(aiMaterial* mat, ColorType type);
+        static Ref<TextureResource>  GetTexture(aiMaterial* mat, aiTextureType type);
+        static void          ReadModelProperties(aiNode* node, const aiScene* scene);
 
     };  // namespace DE
 }  // namespace DE

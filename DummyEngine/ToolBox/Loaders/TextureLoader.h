@@ -9,7 +9,10 @@ namespace DE {
 
     class TextureLoader {
     public:
-        static Ref<TextureResource> Load(Ref<TextureResource> resource, const Path& path, const bool flip_uv, const TextureFormat &format);
+        static Ref<TextureResource> Load(Ref<TextureResource> resource,
+                                         const Path&          path,
+                                         const bool           flip_uv = false,
+                                         const TextureFormat& format  = TextureFormat::U8);
         // static void             Save(const Path& path, const Ref<TextureData> data);
     };
 }  // namespace DE

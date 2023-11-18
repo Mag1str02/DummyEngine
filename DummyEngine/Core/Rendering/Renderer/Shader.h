@@ -12,6 +12,7 @@ namespace DE {
 
         virtual void Bind() const   = 0;
         virtual void UnBind() const = 0;
+        virtual void Unload() const = 0;
 
         virtual void SetFloat(const std::string& uniform_name, float value) const                         = 0;
         virtual void SetFloat2(const std::string& uniform_name, float x, float y) const                   = 0;
@@ -27,6 +28,6 @@ namespace DE {
         virtual void SetMat4(const std::string& uniform_name, Mat4 value) const                           = 0;
         virtual void SetUniformBlock(const std::string& uniform_name, U32 id) const                       = 0;
 
-        static Ref<Shader> Create(const std::vector<ShaderPart>& initializers);
+        static Ref<Shader> Create(const std::vector<Ref<ShaderPart>>& initializers);
     };
 }  // namespace DE

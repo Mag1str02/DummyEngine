@@ -9,6 +9,7 @@ namespace DE {
     public:
         GLVertexArray();
         virtual ~GLVertexArray();
+        virtual void Remove();
 
         virtual void Bind() const override;
         virtual void UnBind() const override;

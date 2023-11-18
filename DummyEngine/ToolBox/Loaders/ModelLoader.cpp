@@ -3,6 +3,7 @@
 #include <assimp/postprocess.h>
 
 #include "DummyEngine/Core/Application/Config.h"
+#include "DummyEngine/Core/ResourceManaging/Resources/Mesh.hpp"
 #include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
 
 namespace DE {
@@ -152,23 +153,64 @@ namespace DE {
 
     ModelLoader::LoaderState ModelLoader::m_State;
 
-    MaterialData ModelLoader::LoadMaterial(aiMaterial* mat) {
-        MaterialData material;
-        material.diffuse  = GetColor(mat, ColorType::Diffuse);
-        material.specular = GetColor(mat, ColorType::Specular);
-        material.ambient  = GetColor(mat, ColorType::Ambient);
-        material.albedo   = GetColor(mat, ColorType::Albedo);
-        material.orm      = GetColor(mat, ColorType::ORM);
-        material.orm      = GetColor(mat, ColorType::Emission);
+    Ref<Material> ModelLoader::LoadMaterial(aiMaterial* mat) {
+        Ref<Material> material = CreateRef<Material>();
+        material->diffuse      = GetColor(mat, ColorType::Diffuse);
+        material->specular     = GetColor(mat, ColorType::Specular);
+        material->ambient      = GetColor(mat, ColorType::Ambient);
+        material->albedo       = GetColor(mat, ColorType::Albedo);
+        material->orm          = GetColor(mat, ColorType::ORM);
+        material->emission     = GetColor(mat, ColorType::Emission);
         aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &material.shininess);
 
-        material.albedo_map   = GetTexture(mat, aiTextureType_DIFFUSE);
-        material.normal_map   = GetTexture(mat, aiTextureType_NORMALS);
-        material.orm_map      = GetTexture(mat, aiTextureType_METALNESS);
-        material.diffuse_map  = GetTexture(mat, aiTextureType_DIFFUSE);
-        material.specular_map = GetTexture(mat, aiTextureType_SPECULAR);
-        material.emission_map = GetTexture(mat, aiTextureType_EMISSIVE);
+        material->albedo_map   = GetTexture(mat, aiTextureType_DIFFUSE);
+        material->normal_map   = GetTexture(mat, aiTextureType_NORMALS);
+        material->orm_map      = GetTexture(mat, aiTextureType_METALNESS);
+        material->diffuse_map  = GetTexture(mat, aiTextureType_DIFFUSE);
+        material->specular_map = GetTexture(mat, aiTextureType_SPECULAR);
+        material->emission_map = GetTexture(mat, aiTextureType_EMISSIVE);
         return material;
+    }
+
+    void ModelLoader::Load(Path path, bool flip_uvs, bool compress, std::vector<SubMesh>& submeshes, Ref<Animation>& animation) {
+        unsigned int flags = aiProcess_Triangulate | aiProcess_CalcTangentSpace;
+        if (flip_uvs) {
+            flags |= aiProcess_FlipUVs;
+        }
+        const aiScene* scene = m_State.m_Importer.ReadFile(path.string(), flags);
+
+        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+            LOG_ERROR(
+                "ModelLoader", "Failed to load model (", RelativeToExecutable(path), ") with error (", m_State.m_Importer.GetErrorString(), ")");
+            return;
+        }
+
+        m_State.m_CurrentData = CreateRef<RenderMeshData>();
+        if (scene->mNumAnimations > 0) {
+            animation = CreateRef<Animation>();
+        }
+
+        m_State.m_CurrentMeshId    = 0;
+        m_State.m_MeshesAmount     = 0;
+        m_State.m_NodesAmount      = 0;
+        m_State.m_VerticesAmount   = 0;
+        m_State.m_CurrentDirectory = path.parent_path();
+
+        ReadModelProperties(scene->mRootNode, scene);
+        submeshes.resize(m_State.m_MeshesAmount);
+        ProcessNode(scene->mRootNode, scene);
+        if (animation) {
+            ReadAnimation(*animation, scene);
+        }
+        LOG_INFO("ModelLoader",
+                 "Model loaded (",
+                 RelativeToExecutable(path),
+                 ") with (",
+                 m_State.m_MeshesAmount,
+                 ") meshes, (",
+                 m_State.m_VerticesAmount,
+                 ") verticies");
+        return;
     }
 
     Ref<RenderMeshData> ModelLoader::Load(const RenderMeshAsset::LoadingProperties& properties) {
@@ -189,15 +231,15 @@ namespace DE {
             return nullptr;
         }
 
-        m_State.m_CurrentData = CreateRef<RenderMeshData>();
         if (scene->mNumAnimations > 0) {
-            m_State.m_CurrentData->animation = CreateRef<Animation>();
+            m_State.m_Animation = CreateRef<Animation>();
         }
         m_State.m_CurrentMeshId    = 0;
         m_State.m_MeshesAmount     = 0;
         m_State.m_NodesAmount      = 0;
         m_State.m_VerticesAmount   = 0;
         m_State.m_CurrentDirectory = properties.path.parent_path();
+        m_State.m_
 
         ReadModelProperties(scene->mRootNode, scene);
         m_State.m_CurrentData->meshes.resize(m_State.m_MeshesAmount);
@@ -229,8 +271,9 @@ namespace DE {
         }
     }
     void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
-        RenderMeshData&    model        = *m_State.m_CurrentData;
-        RenderSubMeshData& current_mesh = model.meshes[m_State.m_CurrentMeshId];
+        std::vector<Vertex3D> vertices;
+        std::vector<U32>      indices;
+        Ref<Material>         mat;
         for (size_t i = 0; i < mesh->mNumVertices; ++i) {
             Vertex3D vertex;
 
@@ -252,19 +295,20 @@ namespace DE {
                 vertex.tex_coords.x = mesh->mTextureCoords[0][i].x;
                 vertex.tex_coords.y = mesh->mTextureCoords[0][i].y;
             }
-            current_mesh.vertices.push_back(vertex);
+            vertices.push_back(vertex);
         }
         ReadWeights(mesh);
         for (size_t i = 0; i < mesh->mNumFaces; ++i) {
             aiFace face = mesh->mFaces[i];
             for (size_t j = 0; j < face.mNumIndices; ++j) {
-                current_mesh.indices.push_back(face.mIndices[j]);
+                indices.push_back(face.mIndices[j]);
             }
         }
         if (mesh->mMaterialIndex >= 0) {
-            aiMaterial* material  = scene->mMaterials[mesh->mMaterialIndex];
-            current_mesh.material = LoadMaterial(material);
+            aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+            mat                  = LoadMaterial(material);
         }
+        m_State.m_SubMeshes.push_back(CreateRef<SubMesh>(vertices, indices, mat));
         ++m_State.m_CurrentMeshId;
     }
     Vec3 ModelLoader::GetColor(aiMaterial* mat, ColorType type) {
@@ -283,7 +327,7 @@ namespace DE {
         Vec3 res(color.r, color.g, color.b);
         return res;
     }
-    Ref<TextureData> ModelLoader::GetTexture(aiMaterial* mat, aiTextureType type) {
+    Ref<TextureResource> ModelLoader::GetTexture(aiMaterial* mat, aiTextureType type) {
         aiString file_name;
         Path     texture_path;
         if (mat->GetTextureCount(type) == 0) {
@@ -295,7 +339,9 @@ namespace DE {
 
         if (!m_State.m_ModelTextures.contains(m_State.m_CurrentDirectory / file_name.C_Str())) {
             m_State.m_ModelTextures[m_State.m_CurrentDirectory / file_name.C_Str()] =
-                TextureLoader::Load({m_State.m_CurrentDirectory / file_name.C_Str(), false});
+                TextureLoader::Load(m_State.m_ModelTextures[m_State.m_CurrentDirectory / file_name.C_Str()],
+                                    m_State.m_CurrentDirectory / file_name.C_Str(),
+                                    false);
         }
         return m_State.m_ModelTextures[m_State.m_CurrentDirectory / file_name.C_Str()];
     }
