@@ -123,7 +123,11 @@ namespace DE {
         const char* source_c_str = source.c_str();
 
         GLuint shader_part = glCreateShader(ShaderPartTypeToGLShaderPartType(part.type));
+//        if (part.type == ShaderPartType::Geometry) {
+//            glShaderSource(shader_part, strlen(source_c_str), &source_c_str, NULL);
+//        } else {
         glShaderSource(shader_part, 1, &source_c_str, NULL);
+//        }
         glCompileShader(shader_part);
         m_Parts.push_back(shader_part);
 

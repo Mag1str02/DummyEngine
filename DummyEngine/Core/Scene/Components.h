@@ -4,16 +4,16 @@
 #include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 #include "DummyEngine/Core/Rendering/Renderer/SkyBox.h"
-#include "DummyEngine/Core/SoundEngine/SoundsAndFactories.h"
+//#include "DummyEngine/Core/SoundEngine/SoundsAndFactories.h"
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
-    struct AudioComponent {
-        AudioComponent() = default;
-
-        Scope<Sound> sound;
-        Path         path;
-    };
+//    struct AudioComponent {
+//        AudioComponent() = default;
+//
+//        Scope<Sound> sound;
+//        Path         path;
+//    };
 
     class IDComponent {
     public:

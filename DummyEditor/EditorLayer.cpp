@@ -2,6 +2,7 @@
 
 #include "DummyEditor/Scripting/Compiler.h"
 #include "DummyEditor/Scripting/ScriptManager.h"
+#include "DummyEngine/Core/Console/Console.hpp"
 
 namespace DE {
 
@@ -13,6 +14,7 @@ namespace DE {
 
         m_ImGuiManager.LoadEditorResources();
         m_ImGuiManager.AddPanel(&m_Viewport);
+        m_ImGuiManager.AddPanel(&m_FBOViewport);
         m_ImGuiManager.AddPanel(&m_SceneHierarchy);
         m_ImGuiManager.AddPanel(&m_Inspector);
         m_ImGuiManager.AddPanel(&m_Profiler);
@@ -27,6 +29,11 @@ namespace DE {
         DE_PROFILE_SCOPE("EditorLayer OnUpdate");
 
         ProcessControlls(dt);
+
+        if (Console::GetBool("r_shadowmap_fbo")) {
+            m_FBOViewport.SetFrameBuffer(m_CurrentScene->GetRenderer()->GetShadowMap());
+            m_FBOViewport.UseDepthAttachment(true);
+        }
 
         switch (m_SceneState) {
             case SceneState::Running: {
@@ -149,7 +156,7 @@ namespace DE {
 
     //*___Editor_______________________________________________________________________________________________________________________________________________________________________________________
 
-    EditorLayer::EditorLayer() : Layer("EditorLayer") {
+    EditorLayer::EditorLayer() : Layer("EditorLayer"), m_FBOViewport("fbo_viewport") {
         DE_ASSERT(s_Instance == nullptr, "Editor layer already created");
         s_Instance = this;
     }

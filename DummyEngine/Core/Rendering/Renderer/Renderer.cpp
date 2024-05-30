@@ -56,17 +56,20 @@ namespace DE {
     S_METHOD_IMPL(Unit, Submit, (Ref<VertexArray> vertex_array, Ref<Shader> shader, const Mat4& transform), (vertex_array, shader, transform)) {
         shader->Bind();
         shader->SetMat4("u_Transform", transform);
+        vertex_array->Bind();
         m_RenderAPI->DrawIndexed(vertex_array);
 
         ++m_FrameStatistics.m_DrawCallsAmount;
         ++m_FrameStatistics.m_DrawnInstances;
         return Unit();
     }
-    S_METHOD_IMPL(Unit, Submit, (Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& transform), (mesh, shader, transform)) {
+    S_METHOD_IMPL(Unit, Submit, (Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& transform, const bool is_depthmap), (mesh, shader, transform, is_depthmap)) {
         shader->Bind();
         shader->SetMat4("u_Transform", transform);
         for (const auto& sub_mesh : mesh->m_SubMeshes) {
-            sub_mesh.material.Apply(shader);
+            if (!is_depthmap) {
+                sub_mesh.material.Apply(shader);
+            }
             sub_mesh.vertex_array->Bind();
             m_RenderAPI->DrawIndexed(sub_mesh.vertex_array);
 
@@ -269,6 +272,8 @@ namespace DE {
             case Shaders::GammaHDR: return m_Resources.gamma_hdr;
             case Shaders::BloomUpsample: return m_Resources.bloom_upsample;
             case Shaders::BloomDownsample: return m_Resources.bloom_downsample;
+            case Shaders::DirectionalShadowMap: return m_Resources.directional_shadow_map;
+            case Shaders::OmnidirectionalShadowMap: return m_Resources.omnidirectional_shadow_map;
             case Shaders::Last:
             case Shaders::None: return nullptr;
             default: DE_ASSERT(false, "Wrong Renderer shader requested"); break;
@@ -510,6 +515,23 @@ namespace DE {
             };
 
             m_Resources.bloom_downsample = Shader::Create(parts);
+        }
+        {
+            std::vector<ShaderPart> parts = {
+                {  ShaderPartType::Vertex,      shaders / "Vertex/DirectionalShadowMap.vs"},
+                {ShaderPartType::Fragment, shaders / "Fragment/DirectionalShadowMap.fs"}
+            };
+
+            m_Resources.directional_shadow_map = Shader::Create(parts);
+        }
+        {
+            std::vector<ShaderPart> parts = {
+                {ShaderPartType::Vertex,   shaders / "Vertex/OmnidirectionalShadowMap.vs"},
+                {ShaderPartType::Fragment, shaders / "Fragment/OmnidirectionalShadowMap.fs"},
+                {ShaderPartType::Geometry, shaders / "Geometry/OmnidirectionalShadowMap.gs"}
+            };
+
+            m_Resources.omnidirectional_shadow_map = Shader::Create(parts);
         }
         {
             const size_t     sz     = 1024;

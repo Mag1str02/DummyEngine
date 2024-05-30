@@ -28,6 +28,7 @@ namespace DE {
         virtual void SetDepthAttachment(Texture::Format format)                             = 0;
         virtual void SetColorAttachment(Ref<Texture> texture, U32 id)                       = 0;
         virtual void AddColorAttachment(Ref<CubeMap>, U32 side, U32 lod = 0)                = 0;
+        virtual void SetDepthAttachment(Ref<CubeMap> map)                                   = 0;
         virtual bool Valid() const                                                          = 0;
 
         virtual Ref<Texture> GetColorAttachment(U32 attachment_id) = 0;

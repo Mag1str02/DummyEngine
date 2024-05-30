@@ -12,6 +12,6 @@ namespace DE {
         virtual float& GetLOD()             = 0;
 
         static Ref<CubeMap> Create(const Ref<TextureData> texture_data);
-        static Ref<CubeMap> Create(U32 size, Texture::Format format, Texture::Channels channels, bool gen_mipmap = false);
+        static Ref<CubeMap> Create(U32 size, Texture::Format format, Texture::Channels channels, bool gen_mipmap = false, bool depth_map = false);
     };
 }  // namespace DE

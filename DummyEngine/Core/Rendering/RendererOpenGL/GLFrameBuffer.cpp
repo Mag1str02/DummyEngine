@@ -67,7 +67,7 @@ namespace DE {
     }
     void GLFrameBuffer::SetDepthAttachment(Texture::Format format) {
         glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
-        m_DepthAttachment.m_Texture = Texture::Create(m_Properties.width, m_Properties.height, Texture::Channels::Depth, format);
+        m_DepthAttachment.m_Texture = Texture::Create(m_Properties.width, m_Properties.height, Texture::Channels::Depth, format, true);
         glFramebufferTexture2D(
             GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, std::dynamic_pointer_cast<GLTexture>(m_DepthAttachment.m_Texture)->m_TextureId, 0);
     }
@@ -79,6 +79,10 @@ namespace DE {
         glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
         glFramebufferTexture2D(
             GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + id, GL_TEXTURE_2D, std::dynamic_pointer_cast<GLTexture>(texture)->m_TextureId, 0);
+    }
+    void GLFrameBuffer::SetDepthAttachment(Ref<CubeMap> map) {
+        glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, std::dynamic_pointer_cast<GLCubeMap>(map)->m_MapId, 0);
     }
     bool GLFrameBuffer::Valid() const {
         glBindFramebuffer(GL_FRAMEBUFFER, m_BufferId);

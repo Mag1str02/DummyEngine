@@ -25,6 +25,7 @@ namespace DE {
         virtual void SetDepthAttachment(Texture::Format format) override;
         virtual void SetColorAttachment(Ref<Texture> texture, U32 id) override;
         virtual void AddColorAttachment(Ref<CubeMap> map, U32 side, U32 lod = 0) override;
+        virtual void SetDepthAttachment(Ref<CubeMap> map) override;
         virtual bool Valid() const override;
 
         virtual void Resize(U32 width, U32 height) override;

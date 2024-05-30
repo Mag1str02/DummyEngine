@@ -69,12 +69,12 @@ Core/Physics/Solver.cpp
 Core/Physics/ConvexCollider.cpp
 Core/Physics/Utils.cpp
 
-Core/SoundEngine/AudioEngineFacade.cpp
-Core/SoundEngine/AudioFile.cpp
-Core/SoundEngine/WAVLoader.cpp
-Core/SoundEngine/AudioEngine.cpp
-Core/SoundEngine/AudioContext.cpp
-Core/SoundEngine/SoundsAndFactories.cpp
+#Core/SoundEngine/AudioEngineFacade.cpp
+#Core/SoundEngine/AudioFile.cpp
+#Core/SoundEngine/WAVLoader.cpp
+#Core/SoundEngine/AudioEngine.cpp
+#Core/SoundEngine/AudioContext.cpp
+#Core/SoundEngine/SoundsAndFactories.cpp
 
 Core/ResourceManaging/AssetManager.cpp
 Core/ResourceManaging/RawData.cpp

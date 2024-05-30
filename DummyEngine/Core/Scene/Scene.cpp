@@ -12,12 +12,12 @@
 
 namespace DE {
     void Scene::OnRuntimeStart() {
-        for (auto e : View<AudioComponent>()) {
-            auto& audio = e.Get<AudioComponent>();
-            if (audio.sound) {
-                audio.sound->start_streaming();
-            }
-        }
+//        for (auto e : View<AudioComponent>()) {
+//            auto& audio = e.Get<AudioComponent>();
+//            if (audio.sound) {
+//                audio.sound->start_streaming();
+//            }
+//        }
         for (auto e : m_Storage->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
@@ -35,30 +35,30 @@ namespace DE {
     }
 
     void Scene::OnRuntimePause() {
-        for (auto e : View<AudioComponent>()) {
-            auto& audio = e.Get<AudioComponent>();
-            if (audio.sound) {
-                audio.sound->pause_streaming();
-            }
-        }
+//        for (auto e : View<AudioComponent>()) {
+//            auto& audio = e.Get<AudioComponent>();
+//            if (audio.sound) {
+//                audio.sound->pause_streaming();
+//            }
+//        }
     }
 
     void Scene::OnRuntimeResume() {
-        for (auto e : View<AudioComponent>()) {
-            auto& audio = e.Get<AudioComponent>();
-            if (audio.sound) {
-                audio.sound->resume_streaming();
-            }
-        }
+//        for (auto e : View<AudioComponent>()) {
+//            auto& audio = e.Get<AudioComponent>();
+//            if (audio.sound) {
+//                audio.sound->resume_streaming();
+//            }
+//        }
     }
 
     void Scene::OnRuntimeStop() {
-        for (auto e : View<AudioComponent>()) {
-            auto& audio = e.Get<AudioComponent>();
-            if (audio.sound) {
-                audio.sound->stop_streaming();
-            }
-        }
+//        for (auto e : View<AudioComponent>()) {
+//            auto& audio = e.Get<AudioComponent>();
+//            if (audio.sound) {
+//                audio.sound->stop_streaming();
+//            }
+//        }
         for (auto e : m_Storage->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
@@ -86,17 +86,17 @@ namespace DE {
                 component->OnUpdate(dt);
             }
         }
-        for (auto e : m_Storage->View<AudioComponent>()) {
-            auto& component = e.Get<AudioComponent>();
-            if (component.sound) {
-                Vec3 pos(0.0f);
-                if (e.Has<TransformComponent>()) {
-                    pos = e.Get<TransformComponent>().translation;
-                }
-                component.sound->setPosition({pos.x, pos.y, pos.z});
-                component.sound->play_streaming();
-            }
-        }
+//        for (auto e : m_Storage->View<AudioComponent>()) {
+//            auto& component = e.Get<AudioComponent>();
+//            if (component.sound) {
+//                Vec3 pos(0.0f);
+//                if (e.Has<TransformComponent>()) {
+//                    pos = e.Get<TransformComponent>().translation;
+//                }
+//                component.sound->setPosition({pos.x, pos.y, pos.z});
+//                component.sound->play_streaming();
+//            }
+//        }
         std::unordered_set<Ref<RenderMesh>> meshes;
         for (auto e : m_Storage->View<RenderMeshComponent>()) {
             auto mesh = e.Get<RenderMeshComponent>().mesh;
@@ -135,12 +135,12 @@ namespace DE {
         });
         m_PhysicsSolver = CreateRef<Physics::Solver>();
         m_Storage->SetRemoveHandler<IDComponent>([this](Entity entity) { m_EntityByID.erase(entity.Get<IDComponent>()); });
-        m_Storage->SetRemoveHandler<AudioComponent>([this](Entity entity) {
-            auto& sound = entity.Get<AudioComponent>().sound;
-            if (sound) {
-                sound->stop_streaming();
-            }
-        });
+//        m_Storage->SetRemoveHandler<AudioComponent>([this](Entity entity) {
+//            auto& sound = entity.Get<AudioComponent>().sound;
+//            if (sound) {
+//                sound->stop_streaming();
+//            }
+//        });
     }
 
     Scene::~Scene() {

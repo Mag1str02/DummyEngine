@@ -30,7 +30,7 @@ namespace DE {
         virtual void Bind(U32 slot) const                             = 0;
 
         static Ref<Texture> Create(Channels channels = Channels::RGBA, Format format = Format::U8);
-        static Ref<Texture> Create(U32 width, U32 height, Channels channels = Channels::RGBA, Format format = Format::U8);
+        static Ref<Texture> Create(U32 width, U32 height, Channels channels = Channels::RGBA, Format format = Format::U8, bool depth_buffer = false);
         static Ref<Texture> Create(const TextureData& texture_data);
     };
 }  // namespace DE

@@ -35,6 +35,11 @@ namespace DE {
                     ImGuiUtils::EditProperty("Gamma", ImGuiDataType_Float, &settings.gamma, 0.01, &min_gamma);
                     ImGui::Columns(1);
                     ImGui::Separator();
+                    ImGui::Columns(2);
+                    ImGuiUtils::EditProperty("DirectionalShadowMap", settings.use_directional_shadow_map);
+                    ImGuiUtils::EditProperty("PointShadows", settings.use_point_shadows);
+                    ImGui::Columns(1);
+                    ImGui::Separator();
                 }
             }
             ImGui::End();

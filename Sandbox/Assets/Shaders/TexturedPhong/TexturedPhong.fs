@@ -24,6 +24,8 @@ struct LightSource
     vec3 m_Position;
     vec3 m_CLQ;
     vec3 m_ConesAndType;
+    samplerCube m_ShadowMap;
+    int m_UseShadowMap;
 };
 
 in VS_OUT
@@ -38,6 +40,9 @@ vs_in;
 out vec4 f_FragColor;
 
 uniform int      u_LightAmount;
+uniform int         u_UseShadowMap;
+uniform sampler2D   u_ShadowMap;
+uniform float       u_ShadowFarPlane;
 uniform Material u_Material;
 
 layout(std140) uniform ub_Lights { LightSource lights[100]; };

@@ -203,15 +203,17 @@ namespace DE {
 
     YAML::Node SaveRendererSettings(const SceneRenderer::Settings& settings) {
         YAML::Node set;
-        set["Bloom"]             = settings.bloom;
-        set["BloomThreshold"]    = settings.bloom_threshold;
-        set["BloomSoftTreshold"] = settings.bloom_soft_threshold;
-        set["BloomDepth"]        = settings.bloom_depth;
-        set["BloomRadius"]       = settings.bloom_radius;
-        set["BloomStrength"]     = settings.bloom_strength;
-        set["GammaToneMapping"]  = settings.gamma_tone_mapping;
-        set["Exposure"]          = settings.exposure;
-        set["Gamma"]             = settings.gamma;
+        set["Bloom"]                   = settings.bloom;
+        set["BloomThreshold"]          = settings.bloom_threshold;
+        set["BloomSoftTreshold"]       = settings.bloom_soft_threshold;
+        set["BloomDepth"]              = settings.bloom_depth;
+        set["BloomRadius"]             = settings.bloom_radius;
+        set["BloomStrength"]           = settings.bloom_strength;
+        set["GammaToneMapping"]        = settings.gamma_tone_mapping;
+        set["Exposure"]                = settings.exposure;
+        set["Gamma"]                   = settings.gamma;
+        set["UseDirectionalShadowMap"] = settings.use_directional_shadow_map;
+        set["UsePointShadows"] = settings.use_directional_shadow_map;
         return set;
     }
     YAML::Node SaveTextures(const SceneAssets& assets) {
@@ -535,6 +537,9 @@ namespace DE {
         settings.gamma_tone_mapping   = node["GammaToneMapping"].as<bool>();
         settings.exposure             = node["Exposure"].as<float>();
         settings.gamma                = node["Gamma"].as<float>();
+        if (node["UseDirectionalShadowMap"].IsDefined()) {
+            settings.use_directional_shadow_map = node["UseDirectionalShadowMap"].as<bool>();
+        }
     }
 
     //*~~~SceneLoader~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -21,6 +21,9 @@ namespace DE {
             bool  gamma_tone_mapping = false;
             float exposure           = 1;
             float gamma              = 1;
+
+            bool use_directional_shadow_map = false;
+            bool use_point_shadows = false;
         };
         Settings settings;
         SceneRenderer(Scene* scene);
@@ -28,15 +31,21 @@ namespace DE {
         void             Render(Entity camera);
         void             OnViewPortResize(U32 x, U32 y);
         Ref<FrameBuffer> GetFrameBuffer();
+        Ref<FrameBuffer> GetShadowMap();
+
+        void initializeShadowMap();
 
         void RequestShader(UUID shader_id);
 
     private:
-        void UpdateShaders(const FPSCamera& camera, Entity skybox);
+        void UpdateShaders(const FPSCamera& camera, Entity skybox, const FPSCamera& lightCamera);
 
         Scene*                                m_Scene;
         Ref<UniformBuffer>                    m_Lights;
         Ref<FrameBuffer>                      m_FrameBuffer;
+        Ref<FrameBuffer>                      m_ShadowMap;
+        std::unordered_map<UUID, Ref<FrameBuffer> > m_PointShadowFrameBuffers;
+        std::unordered_map<UUID, Ref<CubeMap> > m_PointShadowCubemaps;
         std::unordered_map<UUID, Ref<Shader>> m_Shaders;
     };
 }  // namespace DE

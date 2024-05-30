@@ -6,7 +6,7 @@ add_subdirectory(GLFW)
 add_subdirectory(GLAD)
 add_subdirectory(YAML)
 add_subdirectory(NFD)
-add_subdirectory(OpenAL)
+#add_subdirectory(OpenAL)
 
 
 set(IMGUI_INCLUDES
@@ -44,7 +44,7 @@ target_include_directories(Dependencies
     PUBLIC STB_IMAGE
     PUBLIC YAML/include
 	PUBLIC NFD/src/include
-	PUBLIC OpenAL/include
+#	PUBLIC OpenAL/include
     PUBLIC .
 )
 target_link_libraries(Dependencies
@@ -54,5 +54,5 @@ target_link_libraries(Dependencies
     PUBLIC assimp
     PUBLIC yaml-cpp
 	PUBLIC nfd
-	PUBLIC OpenAL
+#	PUBLIC OpenAL
 )
