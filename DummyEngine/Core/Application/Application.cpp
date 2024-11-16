@@ -22,12 +22,12 @@ namespace DE {
         return Unit();
     }
     S_TERMINATE() {
-        delete m_Window;
         for (auto layer : m_Layers) {
             layer->OnDetach();
             delete layer;
         }
         m_Layers.clear();
+        delete m_Window;
         return Unit();
     }
 
