@@ -54,7 +54,6 @@ At the moment, the engine has not so much functionality. Here is a full function
 * [GLM](https://github.com/g-truc/glm/) - math library with vectors, matrices and quaternions. Also implements a lot of usefull math functions
 * [IMGUI](https://github.com/ocornut/imgui) - GUI library for editor interface
 * [NDF](https://github.com/btzy/nativefiledialog-extended) - library for creating native os file dialogs
-* [OpenAL](https://github.com/kcat/openal-soft/) - audio library
 * [STB Image](https://github.com/nothings/stb/) - library for loading various texture formats
 * [YAMLCPP](https://github.com/jbeder/yaml-cpp/) - yaml parser
 

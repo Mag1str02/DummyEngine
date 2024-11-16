@@ -70,6 +70,7 @@ namespace DE {
                          GLTextureFormatExternal(channels),
                          depth_map ? GL_FLOAT : GL_UNSIGNED_BYTE,
                          nullptr);
+
         }
         if (gen_mipmap) {
             glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
