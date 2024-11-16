@@ -24,7 +24,6 @@ struct LightSource
     vec3 m_Position;
     vec3 m_CLQ;
     vec3 m_ConesAndType;
-    samplerCube m_ShadowMap;
     int m_UseShadowMap;
 };
 
