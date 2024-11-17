@@ -4,7 +4,6 @@ set(DE_LIB_SOURCE_DIR .)
 
 include(sources.cmake)
 
-add_subdirectory(Libs)
 add_library(DummyEngineLib SHARED
    ${ENGINE_SOURCES}
    ${PLATFORM_SOURCES}

@@ -11,6 +11,7 @@ include(platform.cmake)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../Sandbox)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../Sandbox)
 
+add_subdirectory(Dependencies)
 add_subdirectory(DummyEngine)
 add_subdirectory(DummyEditor)
 add_subdirectory(Examples)
