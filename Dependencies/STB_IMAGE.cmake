@@ -1,0 +1,4 @@
+add_library(stb_image STBImplementation.cpp)
+
+add_external_library(STB_IMAGE STB_IMAGE stb_image)
+target_include_directories(stb_image PUBLIC STB_IMAGE)

@@ -8,6 +8,7 @@ add_library(DummyEngineLib SHARED
    ${ENGINE_SOURCES}
    ${PLATFORM_SOURCES}
 )
+link_dependencies(DummyEngineLib)
 target_compile_definitions(DummyEngineLib PUBLIC 
     DE_ENABLE_PROFILER=1
     DE_ENABLE_ASSERTS=1
@@ -15,11 +16,6 @@ target_compile_definitions(DummyEngineLib PUBLIC
 )
 target_precompile_headers(DummyEngineLib PUBLIC ${ENGINE_PRECOMPILED_HEADERS})
 
-get_target_property(DependenciesInclude Dependencies INCLUDE_DIRECTORIES)
-
 target_include_directories(DummyEngineLib
     PUBLIC ../.
-)
-target_link_libraries(DummyEngineLib
-    PUBLIC Dependencies    
 )
