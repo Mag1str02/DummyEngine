@@ -10,7 +10,7 @@
 #include "DummyEngine/Core/Console/Console.hpp"
 
 void DE::ConsoleLayer::OnUpdate(float dt) {
-    if (Input::KeyPressed(Key::I)) {
+    if (Input::KeyPressed(Key::I) && Input::KeyDown(Key::LeftShift)) {
         if (!m_Show) {
             m_JustOpened = true;
         }

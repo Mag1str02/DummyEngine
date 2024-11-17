@@ -25,6 +25,7 @@ namespace DE {
 
         Mat4  GetViewMatrix() const;
         Mat4  GetProjectionMatrix() const;
+        Mat4  GetOrthoProjectionMatrix() const;
         Mat4  GetViewProjection() const;
         Vec3  GetPos() const;
         Vec3  GetDir() const;

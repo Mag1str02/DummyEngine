@@ -50,24 +50,31 @@ in VS_OUT
     vec3 CameraPos;
     vec2 TexCoords;
     mat3 TBNMatrix;
+    vec4 ShadowMapPos;
 }
 vs_in;
 out vec4 f_FragColor;
 
-uniform int      u_LightAmount;
-uniform Material u_Material;
+uniform int         u_LightAmount;
+uniform Material    u_Material;
 uniform samplerCube u_IrradianceMap;
 uniform samplerCube u_PrefilterMap;
 uniform sampler2D   u_BRDF;
+uniform int         u_UseShadowMap;
+uniform sampler2D   u_ShadowMap;
+uniform float       u_ShadowFarPlane;
 uniform mat4        u_EnvRotation;
+uniform int         u_UsePointShadowMap;
+uniform samplerCube u_PointShadowMap[100];
 
+float ShadowImpact(vec4 pos);
 vec3  FresnelSchlick(float angle_cos, vec3 base_reflectivity);
 vec3  FresnelSchlickWithRoughness(float angle_cos, vec3 base_reflectivity, float roughness);
 float DistributionGGX(vec3 n_normal, vec3 n_halfway, float roughness);
 float GeometrySchlickGGX(float angle_cos, float roughness);
 float GeometrySmith(vec3 n_normal, vec3 n_view, vec3 n_light, float roughness);
 vec3  CalcLightImpact(LightSource source, MaterialPrecalc mp);
-
+int shadowMapIdx = 0;
 
 void main()
 {
@@ -84,9 +91,18 @@ void main()
     mp.n_normal = mp.n_normal * 2.0 - 1.0;   
     mp.n_normal = normalize(vs_in.TBNMatrix * mp.n_normal);
 
-    for (int i = 0; i < u_LightAmount; ++i){  
-        result += CalcLightImpact(lights[i], mp);
-    } 
+    float shadow = 0;
+    if (u_UseShadowMap > 0) {
+        shadow = ShadowImpact(vs_in.ShadowMapPos) * 0.4;
+    }
+    shadowMapIdx = 0;
+    for (int i = 0; i < u_LightAmount; ++i){
+        vec3 impact = CalcLightImpact(lights[i], mp);
+        if (lights[i].m_ConesAndType.z == 1) {
+            impact = impact * (1.0 - shadow);
+        }
+        result += impact;
+    }
     vec3 env_n = mat3(u_EnvRotation) * mp.n_normal;
     vec3 ray = mat3(u_EnvRotation) * normalize(reflect(-mp.n_view, mp.n_normal));
     vec3 kS = FresnelSchlickWithRoughness(max(dot(mp.n_normal, mp.n_view), 0.0), mp.base_reflectivity, mp.roughness);
@@ -98,7 +114,7 @@ void main()
     vec2 brdf  = texture(u_BRDF, vec2(max(dot(mp.n_normal, mp.n_view), 0.0), mp.roughness)).rg; 
     vec3 specular = prefiltered_color * (kS * brdf.x + brdf.y);
 
-    vec3 ambient    = (specular + kD * diffuse) * mp.ao; 
+    vec3 ambient = (specular + kD * diffuse) * mp.ao;
     result += u_Material.m_Ambient * ambient; 
     result += texture(u_Material.m_EmissionMap, vs_in.TexCoords).rgb * u_Material.m_EmissionStrength * u_Material.m_Emission;
 
@@ -113,6 +129,20 @@ void main()
     f_FragColor = vec4(result, 1.0);
 }
 
+float ShadowImpact(vec4 pos) {
+    vec3 projCoords = pos.xyz / pos.w;
+    projCoords = projCoords * 0.5 + 0.5;
+    float depth = texture(u_ShadowMap, projCoords.xy).r;
+    if (projCoords.z > 1.0) {
+        return 0.0;
+    }
+    if (projCoords.z > depth + 0.001) {
+        return 1.0;
+    } else {
+        return 0.0;
+    }
+}
+
 vec3 CalcLightImpact(LightSource source, MaterialPrecalc mp){
     float attenuation;
     vec3 n_light;
@@ -123,6 +153,15 @@ vec3 CalcLightImpact(LightSource source, MaterialPrecalc mp){
         float dist = length(source.m_Position - vs_in.FragPos);
         attenuation =  1.0 / (source.m_CLQ.x + source.m_CLQ.y * dist + source.m_CLQ.z * (dist * dist));
         n_light = normalize(source.m_Position - vs_in.FragPos);
+    }
+    if(u_UsePointShadowMap > 0 && source.m_ConesAndType.z == 2) {
+        vec3 fragToLight = vs_in.FragPos - source.m_Position;
+        float depth = texture(u_PointShadowMap[shadowMapIdx], fragToLight).r * u_ShadowFarPlane;
+        float realDepth = length(fragToLight);
+        shadowMapIdx = shadowMapIdx + 1;
+        if (realDepth > depth + 0.001) {
+            return vec3(0.0);
+        }
     }
     vec3 n_halfway = normalize(n_light + mp.n_view);
     vec3 radiance = source.m_Diffuse * attenuation;
@@ -136,6 +175,7 @@ vec3 CalcLightImpact(LightSource source, MaterialPrecalc mp){
     vec3 specular = k_s * G * D/ (4.0 * nl_angle * nv_angle + 0.0001);
     vec3 diffuse = k_d * mp.albedo / kPI;
     vec3 L = (diffuse + specular) * radiance * nl_angle;
+
     return L;
 }
 vec3 FresnelSchlick(float angle_cos, vec3 base_reflectivity)

@@ -123,6 +123,9 @@ namespace DE {
         });
 
         glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+            if (key == -1) {
+                return;
+            }
             WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
             switch (action) {
                 case GLFW_PRESS: {
@@ -145,7 +148,6 @@ namespace DE {
 
         glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
             WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
-
             switch (action) {
                 case GLFW_PRESS: {
                     MouseButtonPressedEvent event(button);

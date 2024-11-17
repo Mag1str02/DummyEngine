@@ -111,6 +111,7 @@ namespace DE {
 
         ImGuiManager        m_ImGuiManager;
         ViewportPanel       m_Viewport;
+        ViewportPanel       m_FBOViewport;
         SceneHierarchyPanel m_SceneHierarchy;
         InspectorPanel      m_Inspector;
         ProfilerPanel       m_Profiler;

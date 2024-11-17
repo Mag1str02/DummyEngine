@@ -29,6 +29,8 @@ namespace DE {
             GammaHDR,
             BloomUpsample,
             BloomDownsample,
+            DirectionalShadowMap,
+            OmnidirectionalShadowMap,
 
             Last,
         };
@@ -60,7 +62,7 @@ namespace DE {
         S_METHOD_DEF(Unit, Clear, ());
 
         S_METHOD_DEF(Unit, Submit, (Ref<VertexArray> vertex_array, Ref<Shader> shader, const Mat4& transform = Mat4(1.0f)));
-        S_METHOD_DEF(Unit, Submit, (Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& transform = Mat4(1.0f)));
+        S_METHOD_DEF(Unit, Submit, (Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& transform = Mat4(1.0f), const bool is_depthmap = false));
         S_METHOD_DEF(Unit, Submit, (Ref<CubeMap> cube_map, const FPSCamera& camera, const Mat4& transform = Mat4(1.0f)));
 
         S_METHOD_DEF(Unit, Bloom, (Ref<Texture> texture, float threshold, float soft_threshold, float radius, U32 depth, float strength));
@@ -105,6 +107,8 @@ namespace DE {
             Ref<Shader> gamma_hdr;
             Ref<Shader> bloom_upsample;
             Ref<Shader> bloom_downsample;
+            Ref<Shader> directional_shadow_map;
+            Ref<Shader> omnidirectional_shadow_map;
         };
 
         Scope<RenderAPI> m_RenderAPI;

@@ -16,6 +16,8 @@ namespace DE {
         m_Direction = glm::normalize(camera_direction);
         m_Right     = glm::normalize(glm::cross(m_Direction, m_WorldUp));
         m_Up        = glm::normalize(glm::cross(m_Right, m_Direction));
+        m_FarPlane = 100;
+        m_NearPlane = -10;
     }
 
     void FPSCamera::MoveInWorld(const Vec3& delta) {
@@ -44,6 +46,12 @@ namespace DE {
     Mat4 FPSCamera::GetProjectionMatrix() const {
         Mat4 projection = Mat4(1.0f);
         projection      = glm::perspective(glm::radians(m_FOV), m_Aspect, m_NearPlane, m_FarPlane);
+        return projection;
+    }
+
+    Mat4 FPSCamera::GetOrthoProjectionMatrix() const {
+        Mat4 projection = Mat4(1.0f);
+        projection      = glm::ortho(-100.f, 100.f, -100.f, 100.f, m_NearPlane, m_FarPlane);
         return projection;
     }
     Mat4 FPSCamera::GetViewMatrix() const {

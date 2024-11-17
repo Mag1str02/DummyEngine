@@ -44,14 +44,18 @@ namespace DE {
         }
         glCheckError();
     }
-    GLCubeMap::GLCubeMap(U32 size, Texture::Format format, Texture::Channels channels, bool gen_mipmap) {
+    GLCubeMap::GLCubeMap(U32 size, Texture::Format format, Texture::Channels channels, bool gen_mipmap, bool depth_map) {
         glGenTextures(1, &m_MapId);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_MapId);
 
         // TODO: move somewhere else...
-
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, (gen_mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR));
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        if (!depth_map) {
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, (gen_mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR));
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        } else {
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        }
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
@@ -64,8 +68,9 @@ namespace DE {
                          size,
                          0,
                          GLTextureFormatExternal(channels),
-                         GL_UNSIGNED_BYTE,
+                         depth_map ? GL_FLOAT : GL_UNSIGNED_BYTE,
                          nullptr);
+
         }
         if (gen_mipmap) {
             glGenerateMipmap(GL_TEXTURE_CUBE_MAP);

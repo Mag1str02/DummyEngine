@@ -42,9 +42,9 @@ namespace DE {
         }
         return nullptr;
     }
-    Ref<Texture> Texture::Create(U32 width, U32 height, Texture::Channels channels, Texture::Format format) {
+    Ref<Texture> Texture::Create(U32 width, U32 height, Texture::Channels channels, Texture::Format format, bool depth_buffer) {
         switch (Renderer::CurrentAPI()) {
-            case API::OpenGL: return CreateRef<GLTexture>(width, height, channels, format);
+            case API::OpenGL: return CreateRef<GLTexture>(width, height, channels, format, depth_buffer);
             case API::Vulkan: {
                 DE_ASSERT(false, "Attempt to create Texture on VulkanAPI which is currently unsupported.");
                 return nullptr;

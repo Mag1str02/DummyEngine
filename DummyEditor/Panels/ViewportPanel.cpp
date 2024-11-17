@@ -7,14 +7,16 @@ namespace DE {
         DE_PROFILE_SCOPE("ViewportPanel OnImGui");
         if (m_Controller) {
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-            if (ImGui::Begin(ICON_MD_TV "  Viewport")) {
+            if (ImGui::Begin((ICON_MD_TV + m_Name).c_str())) {
                 m_ViewportSize = ImGui::GetContentRegionAvail();
                 auto buffer    = m_FrameBuffer.lock();
                 if (buffer) {
-                    ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(0)->GetRendererId()), m_ViewportSize, {0, 1}, {1, 0});
-                    // ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(1)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
-                    // ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(2)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
-                    ToolPanel();
+                    if (m_UseDepthAttachment) {
+                        ImGui::Image(reinterpret_cast<void*>(buffer->GetDepthAttachment()->GetRendererId()), m_ViewportSize, {0, 1}, {1, 0});
+                    } else {
+                        ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(0)->GetRendererId()), m_ViewportSize, {0, 1}, {1, 0});
+                        ToolPanel();
+                    }
                 }
             }
             ImGui::End();

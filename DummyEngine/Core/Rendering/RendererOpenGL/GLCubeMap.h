@@ -8,7 +8,7 @@ namespace DE {
     class GLCubeMap : public CubeMap {
     public:
         GLCubeMap(const Ref<TextureData> data);
-        GLCubeMap(U32 size, Texture::Format format, Texture::Channels channels, bool gen_mipmap);
+        GLCubeMap(U32 size, Texture::Format format, Texture::Channels channels, bool gen_mipmap, bool depth_map);
         virtual ~GLCubeMap();
         virtual void   Bind(U32 slot) const override;
         virtual float& GetLOD() override;

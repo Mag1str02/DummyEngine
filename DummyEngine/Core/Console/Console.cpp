@@ -7,7 +7,13 @@
 namespace DE {
     SINGLETON_BASE(Console);
     S_INITIALIZE() {
-        m_Commands = {"clear", "exit"};
+        m_Commands = {"clear", "exit", "r_shadowmap_resize"};
+        m_Variables["r_shadowmap_width"] = 1920ll;
+        m_Variables["r_shadowmap_height"] = 1080ll;
+        m_Variables["r_shadowmap_fbo"] = false;
+        m_Variables["r_psm_size"] = 2048ll;
+        m_Variables["r_psm_near"] = 0.1f;
+        m_Variables["r_psm_far"] = 50.f;
         m_Variables["testInt"] = 534ll;
         m_Variables["testBool"] = true;
         m_Variables["testFloat"] = 0.5f;
@@ -54,6 +60,13 @@ namespace DE {
         if (cmd == "clear") {
             ClearLogs();
         }
+        if (m_Callback.find(cmd) != m_Callback.end()) {
+            m_Callback[cmd]();
+        }
+    }
+
+    S_METHOD_IMPL(void, OnCommand, (std::string cmd, std::function<void(void)> func), (cmd, func)) {
+        m_Callback[cmd] = func;
     }
 
     S_METHOD_IMPL(void, PushLog, (std::string log), (log)) {
@@ -94,28 +107,28 @@ namespace DE {
         return "unknown type";
     }
 
-    S_METHOD_IMPL(int64_t, GetInt, (std::string& var), (var)) {
+    S_METHOD_IMPL(int64_t, GetInt, (std::string var), (var)) {
         if (m_Variables.find(var) == m_Variables.end()) {
             LOG_WARNING("Console GetInt", "undefined variable");
             return -1;
         }
         return std::get<int64_t>(m_Variables[var]);
     }
-    S_METHOD_IMPL(float, GetFloat, (std::string& var), (var)) {
+    S_METHOD_IMPL(float, GetFloat, (std::string var), (var)) {
         if (m_Variables.find(var) == m_Variables.end()) {
             LOG_WARNING("Console GetFloat", "undefined variable");
             return -1;
         }
         return std::get<float>(m_Variables[var]);
     }
-    S_METHOD_IMPL(double, GetDouble, (std::string& var), (var)) {
+    S_METHOD_IMPL(double, GetDouble, (std::string var), (var)) {
         if (m_Variables.find(var) == m_Variables.end()) {
             LOG_WARNING("Console GetDouble", "undefined variable");
             return -1;
         }
         return std::get<double>(m_Variables[var]);
     }
-    S_METHOD_IMPL(std::string, GetString, (std::string& var), (var)) {
+    S_METHOD_IMPL(std::string, GetString, (std::string var), (var)) {
         if (m_Variables.find(var) == m_Variables.end()) {
             LOG_WARNING("Console GetString", "undefined variable");
             return "undefined";
@@ -123,10 +136,10 @@ namespace DE {
         return std::get<std::string>(m_Variables[var]);
     }
 
-    S_METHOD_IMPL(bool, GetBool, (std::string& var), (var)) {
+    S_METHOD_IMPL(bool, GetBool, (std::string var), (var)) {
         if (m_Variables.find(var) == m_Variables.end()) {
             LOG_WARNING("Console GetBool", "undefined variable");
-            return "undefined";
+            return false;
         }
         return std::get<bool>(m_Variables[var]);
     }
