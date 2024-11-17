@@ -1,7 +1,7 @@
 include(ASSIMP.cmake)
 include(GLAD.cmake)
+include(GLFW.cmake)
 
-add_subdirectory(GLFW)
 add_subdirectory(YAML)
 add_subdirectory(NFD)
 
@@ -36,7 +36,7 @@ add_library(Dependencies STBImplementation.cpp)
 target_include_directories(Dependencies
     PUBLIC ${EXTERNAL_ASSIMP_INCLUDE_DIR}
     PUBLIC ${EXTERNAL_GLAD_INCLUDE_DIR}
-    PUBLIC GLFW/include
+    PUBLIC ${EXTERNAL_GLFW_INCLUDE_DIR}
     PUBLIC GLM
     PUBLIC STB_IMAGE
     PUBLIC YAML/include
@@ -46,8 +46,8 @@ target_include_directories(Dependencies
 target_link_libraries(Dependencies
     PUBLIC ${EXTERNAL_ASSIMP_LIBRARY}
     PUBLIC ${EXTERNAL_GLAD_LIBRARY}
+    PUBLIC ${EXTERNAL_GLFW_LIBRARY}
     PUBLIC ImGui
-    PUBLIC glfw
     PUBLIC yaml-cpp
 	PUBLIC nfd
 )
