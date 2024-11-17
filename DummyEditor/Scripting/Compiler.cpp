@@ -11,6 +11,7 @@ namespace DE {
         AddDefine("DE_ENABLE_LOGGING=" + std::to_string(DE_ENABLE_LOGGING));
         AddDefine("DE_ENABLE_ASSERTS=" + std::to_string(DE_ENABLE_ASSERTS));
         AddDefine("DE_ENABLE_PROFILER=" + std::to_string(DE_ENABLE_PROFILER));
+        AddDefine("GLM_ENABLE_EXPERIMENTAL");
 
         return Unit();
     }
