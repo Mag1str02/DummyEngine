@@ -83,6 +83,8 @@ ToolBox/Loaders/SceneLoader.cpp
 ToolBox/Editors/TextureEditor.cpp
 )
 
+set(ENGINE_PRECOMPILED_HEADERS Utils/Base.h)
+
 if( ${CMAKE_PLATFORM} STREQUAL "WINDOWS")
 set(PLATFORM_SOURCES
     Platform/Windows/Utils/Debug/StackTrace.cpp

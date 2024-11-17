@@ -13,6 +13,7 @@ target_compile_definitions(DummyEngineLib PUBLIC
     DE_ENABLE_ASSERTS=1
     DE_ENABLE_LOGGING=1
 )
+target_precompile_headers(DummyEngineLib PUBLIC ${ENGINE_PRECOMPILED_HEADERS})
 
 get_target_property(DependenciesInclude Dependencies INCLUDE_DIRECTORIES)
 
