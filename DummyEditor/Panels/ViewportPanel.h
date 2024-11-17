@@ -6,7 +6,7 @@ namespace DE {
     class ViewportPanel : public ImGuiPanel {
     public:
         ViewportPanel() : ImGuiPanel("Viewport") {}
-        ViewportPanel(std::string panelName) : ImGuiPanel(panelName) {}
+        ViewportPanel(const std::string& panelName) : ImGuiPanel(panelName) {}
         virtual void OnImGui() override;
 
         void ToolPanel();
@@ -16,7 +16,7 @@ namespace DE {
         void UseDepthAttachment(bool f) { m_UseDepthAttachment = f; }
 
     private:
-        bool m_UseDepthAttachment = false;
+        bool                 m_UseDepthAttachment = false;
         ImVec2               m_ViewportSize;
         WeakRef<FrameBuffer> m_FrameBuffer;
     };

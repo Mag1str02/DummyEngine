@@ -15,8 +15,6 @@ namespace DE {
                         ImGui::Image(reinterpret_cast<void*>(buffer->GetDepthAttachment()->GetRendererId()), m_ViewportSize, {0, 1}, {1, 0});
                     } else {
                         ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(0)->GetRendererId()), m_ViewportSize, {0, 1}, {1, 0});
-                        // ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(1)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
-                        // ImGui::Image(reinterpret_cast<void*>(buffer->GetColorAttachment(2)->RendererId()), m_ViewportSize, {0, 1}, {1, 0});
                         ToolPanel();
                     }
                 }

@@ -237,7 +237,7 @@ namespace DE {
         DE_PROFILE_SCOPE("UpdateShaders");
 
         int cnt_light_sources = 0;
-        int cnt_shadowmaps = 0;
+        int cnt_shadowmaps    = 0;
         for (auto enitity : m_Scene->m_Storage->View<LightSource>()) {
             auto& light_source                           = enitity.Get<LightSource>();
             auto  id                                     = enitity.Get<IDComponent>().Get();

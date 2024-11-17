@@ -56,7 +56,6 @@ namespace DE {
     S_METHOD_IMPL(Unit, Submit, (Ref<VertexArray> vertex_array, Ref<Shader> shader, const Mat4& transform), (vertex_array, shader, transform)) {
         shader->Bind();
         shader->SetMat4("u_Transform", transform);
-        vertex_array->Bind();
         m_RenderAPI->DrawIndexed(vertex_array);
 
         ++m_FrameStatistics.m_DrawCallsAmount;

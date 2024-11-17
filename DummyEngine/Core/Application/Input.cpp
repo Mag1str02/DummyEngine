@@ -9,8 +9,14 @@ namespace DE {
 
     SINGLETON_BASE(Input);
     S_INITIALIZE() {
-        m_EventDispatcher.AddEventListener<KeyPressedEvent>([this](KeyPressedEvent& event) { m_CurrentFrame.key_states[event.GetKey()] = true; });
-        m_EventDispatcher.AddEventListener<KeyReleasedEvent>([this](KeyReleasedEvent& event) { m_CurrentFrame.key_states[event.GetKey()] = false; });
+        m_EventDispatcher.AddEventListener<KeyPressedEvent>([this](KeyPressedEvent& event) {
+            DE_ASSERT(m_CurrentFrame.key_states.size() > event.GetKey(), "Bad key code: {}", event.GetKey());
+            m_CurrentFrame.key_states[event.GetKey()] = true;
+        });
+        m_EventDispatcher.AddEventListener<KeyReleasedEvent>([this](KeyReleasedEvent& event) {
+            DE_ASSERT(m_CurrentFrame.key_states.size() > event.GetKey(), "Bad key code: {}", event.GetKey());
+            m_CurrentFrame.key_states[event.GetKey()] = false;
+        });
 
         m_EventDispatcher.AddEventListener<SetMouseLockEvent>([this](SetMouseLockEvent& event) { m_CurrentFrame.mouse_locked = true; });
         m_EventDispatcher.AddEventListener<SetMouseUnlockEvent>([this](SetMouseUnlockEvent& event) { m_CurrentFrame.mouse_locked = false; });
