@@ -37,7 +37,11 @@ namespace DE {
             LOG_WARNING("ResourceManager", "RenderMesh (", id, ") was not loaded because does not exist in AssetManager");
             return false;
         }
-        m_RenderMeshes[id] = CreateRef<RenderMesh>(ModelLoader::Load(asset.value().loading_props));
+        auto model = ModelLoader::Load(asset.value().loading_props);
+        if (model == nullptr) {
+            return false;
+        }
+        m_RenderMeshes[id] = CreateRef<RenderMesh>(model);
         LOG_INFO("ResourceManager", "RenderMesh (", id, ") was added");
         return true;
     }
@@ -52,6 +56,9 @@ namespace DE {
             return false;
         }
         auto              mesh = ModelLoader::Load(asset.value().loading_props);
+        if (mesh == nullptr) {
+            return false;
+        }
         std::vector<Vec3> vertices;
         for (const auto& submesh : mesh->meshes) {
             for (const auto& vert : submesh.vertices) {

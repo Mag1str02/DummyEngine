@@ -2,7 +2,7 @@ set(SANDBOX_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../Sandbox)
 set(EXTERNAL_LIBS_DIR libs)
 set(DE_LIB_SOURCE_DIR .) 
 
-include(sources.cmake)
+include(Sources.cmake)
 
 add_library(DummyEngineLib SHARED
    ${ENGINE_SOURCES}
