@@ -1,0 +1,6 @@
+set(YAML_CPP_BUILD_CONTRIB OFF)
+set(YAML_CPP_BUILD_TOOLS OFF)
+set(YAML_CPP_FORMAT_SOURCE OFF)
+set(YAML_CPP_BUILD_TESTS OFF)
+
+add_external_library(YAML YAML/include yaml-cpp)

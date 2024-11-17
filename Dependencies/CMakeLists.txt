@@ -4,8 +4,7 @@ include(GLFW.cmake)
 include(GLM.cmake)
 include(IMGUI.cmake)
 include(NFD.cmake)
-
-add_subdirectory(YAML)
+include(YAML.cmake)
 
 add_library(Dependencies STBImplementation.cpp)
 target_include_directories(Dependencies
@@ -15,8 +14,8 @@ target_include_directories(Dependencies
     PUBLIC ${EXTERNAL_GLM_INCLUDE_DIR}
     PUBLIC ${EXTERNAL_IMGUI_INCLUDE_DIR}
     PUBLIC ${EXTERNAL_NFD_INCLUDE_DIR}
+    PUBLIC ${EXTERNAL_YAML_INDCLUDE_DIR}
     PUBLIC STB_IMAGE
-    PUBLIC YAML/include
 )
 target_link_libraries(Dependencies
     PUBLIC ${EXTERNAL_ASSIMP_LIBRARY}
@@ -25,5 +24,5 @@ target_link_libraries(Dependencies
     PUBLIC ${EXTERNAL_GLM_LIBRARY}
     PUBLIC ${EXTERNAL_IMGUI_LIBRARY}
     PUBLIC ${EXTERNAL_NFD_LIBRARY}
-    PUBLIC yaml-cpp
+    PUBLIC ${EXTERNAL_YAML_LIBRARY}
 )
