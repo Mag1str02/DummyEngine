@@ -1,7 +1,7 @@
 #include "DummyEngine/Core/Application/Initializer.h"
 
 // clang-format off
-#include <IMGUI/imgui.h>
+#include <imgui.h>
 // clang-format on
 
 #include "DummyEngine/Core/Application/Application.h"

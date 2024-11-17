@@ -232,7 +232,7 @@ namespace DE {
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
             ImGui::SetNextItemWidth(ImGuiUtils::Constants::DefaultRightPadding);
-            ImGui::Image(reinterpret_cast<void*>(texture->GetRendererId()), tex_size);
+            ImGui::Image(texture->GetRendererId(), tex_size);
             ImGui::NextColumn();
         }
     }  // namespace ImGuiUtils
