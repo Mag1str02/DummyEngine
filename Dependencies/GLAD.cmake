@@ -1,1 +1,1 @@
-add_external_library(GLAD GLAD/include glad)
+add_external_library(GLAD NFD/src/include nfd)
