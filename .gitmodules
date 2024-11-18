@@ -22,3 +22,7 @@
 [submodule "Dependencies/NFD"]
 	path = Dependencies/NFD
 	url = https://github.com/btzy/nativefiledialog-extended.git
+[submodule "Dependencies/TRACY"]
+	path = Dependencies/TRACY
+	url = https://github.com/Mag1str02/Tracy-Profiler
+	branch = client_only_0.11.1

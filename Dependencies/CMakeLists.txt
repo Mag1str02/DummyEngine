@@ -6,6 +6,7 @@ include(IMGUI.cmake)
 include(NFD.cmake)
 include(YAML.cmake)
 include(STB_IMAGE.cmake)
+include(TRACY.cmake)
 
 function (link_dependencies TARGET)
     target_include_directories(${TARGET}
@@ -17,6 +18,7 @@ function (link_dependencies TARGET)
         PUBLIC ${EXTERNAL_NFD_INCLUDE_DIR}
         PUBLIC ${EXTERNAL_YAML_INDCLUDE_DIR}
         PUBLIC ${EXTERNAL_STB_IMAGE_INCLUDE_DIR}
+        PUBLIC ${EXTERNAL_TRACY_INCLUDE_DIR}
     )
     target_link_libraries(${TARGET}
         PUBLIC ${EXTERNAL_ASSIMP_LIBRARY}
@@ -27,6 +29,7 @@ function (link_dependencies TARGET)
         PUBLIC ${EXTERNAL_NFD_LIBRARY}
         PUBLIC ${EXTERNAL_YAML_LIBRARY}
         PUBLIC ${EXTERNAL_STB_IMAGE_LIBRARY}
+        PUBLIC ${EXTERNAL_TRACY_LIBRARY}
     )
 endfunction(link_dependencies)
 
