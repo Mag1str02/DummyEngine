@@ -1,14 +1,15 @@
 #pragma once
 
 #include <chrono>
-#include <iostream>
 #include <queue>
 #include <stack>
 #include <string>
+#include <tracy/Tracy.hpp>
 #include <vector>
 
 #include "DummyEngine/Utils/Helpers/Singleton.h"
 #include "DummyEngine/Utils/Types/Types.h"
+
 
 namespace DE {
     struct TimeLapse {
@@ -51,8 +52,15 @@ namespace DE {
     };
 
 #if DE_ENABLE_PROFILER
-#define DE_PROFILE_SCOPE(name) ProfilerScopeObject profiler_scope_object(name)
-#define DE_PROFILER_BEGIN_FRAME() Profiler::BeginFrame()
+#define DE_PROFILE_SCOPE(name)                       \
+    ProfilerScopeObject profiler_scope_object(name); \
+    ZoneScopedN(name)
+#define DE_PROFILER_BEGIN_FRAME() \
+    do {                          \
+        Profiler::BeginFrame();   \
+        FrameMark;                \
+    } while (false)
+
 #else
 #define DE_PROFILE_SCOPE(name)
 #define DE_PROFILER_BEGIN_FRAME()

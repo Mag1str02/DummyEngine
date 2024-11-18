@@ -1,7 +1,5 @@
 #include "DummyEngine/Utils/Debug/Profiler.h"
 
-#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
-
 namespace DE {
     ProfilerFrame::ProfilerFrame(U32 predicted_lapse_amount) {
         m_TimeLapses.reserve(predicted_lapse_amount);
@@ -9,9 +7,11 @@ namespace DE {
 
     SINGLETON_BASE(Profiler);
     S_INITIALIZE() {
+        tracy::StartupProfiler();
         return Unit();
     }
     S_TERMINATE() {
+        tracy::ShutdownProfiler();
         return Unit();
     }
 

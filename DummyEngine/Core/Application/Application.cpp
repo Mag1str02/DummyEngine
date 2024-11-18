@@ -47,11 +47,13 @@ namespace DE {
     S_METHOD_IMPL(Unit, Run, (), ()) {
         double frame_begin = glfwGetTime(), frame_end, prev_frame_time = 0.001, fake_time;
         while (!m_ShouldClose) {
+            DE_PROFILER_BEGIN_FRAME();
+            DE_PROFILE_SCOPE("Aplication loop");
+
             frame_end       = glfwGetTime();
             prev_frame_time = frame_end - frame_begin;
             frame_begin     = glfwGetTime();
 
-            DE_PROFILER_BEGIN_FRAME();
 
             Renderer::BeginFrame();
             Input::NewFrame();
