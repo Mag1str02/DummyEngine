@@ -23,7 +23,7 @@ namespace DE {
 
     void Animator::SetMatricies(Ref<Shader> shader, const std::string& name) {
         for (S32 i = 0; i < m_FinalBoneMatrices.size(); ++i) {
-            shader->SetMat4(StrCat(name, "[", i, "]"), m_FinalBoneMatrices[i]);
+            shader->SetMat4(std::format("{}[{}]", name, i), m_FinalBoneMatrices[i]);
         }
     }
     Ref<Animation> Animator::GetAnimation() {

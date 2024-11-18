@@ -5,6 +5,7 @@
 
 namespace DE {
     class AssetManager : public Singleton<AssetManager> {
+        LOGGER_AUTHOR(AssetManager)
         SINGLETON(AssetManager)
     public:
         S_METHOD_DEF(bool, AddScriptAsset, (const ScriptAsset& asset));

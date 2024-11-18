@@ -61,18 +61,12 @@ namespace DE {
             data.time_stamp = time_stamp;
             bone.m_Scales.push_back(data);
         }
-        // LOG_INFO("ModelLoader",
-        //          "Loaded bone (",
+        // LOG_INFO("Loaded bone ({}|{}), with positions ({}), rotations ({}) and scales ({})",
         //          bone.GetBoneName(),
-        //          ", ",
         //          bone.GetBoneID(),
-        //          ") with positions (",
         //          bone.m_Positions.size(),
-        //          ") rotations (",
         //          bone.m_Rotations.size(),
-        //          ") scales (",
-        //          bone.m_Scales.size(),
-        //          ")");
+        //          bone.m_Scales.size());
     }
 
     void ModelLoader::ReadWeights(aiMesh* mesh) {
@@ -99,7 +93,7 @@ namespace DE {
                 bone_id = animation.m_BoneNameToID[bone_name];
             }
             if (bone_id == -1) {
-                LOG_WARNING("ModelLoader", "Wrong bone id");
+                LOG_WARNING("Wrong bone id");
                 return;
             }
             auto weights        = mesh->mBones[i]->mWeights;
@@ -110,7 +104,7 @@ namespace DE {
                 float weight = weights[j].mWeight;
 
                 if (v_id >= current_mesh.vertices.size()) {
-                    LOG_WARNING("ModelLoader", "Wrong vertex id");
+                    LOG_WARNING("Wrong vertex id");
                     return;
                 }
                 current_mesh.vertices[v_id].AddBone(bone_id, weight);
@@ -127,7 +121,7 @@ namespace DE {
                 animation.m_BoneNameToID[channel->mNodeName.data] = animation.m_Bones.size();
                 animation.m_Bones.push_back(info);
                 bone_info = &animation.m_Bones.back();
-                LOG_WARNING("ModelLoader", "Added unknown bone");
+                LOG_WARNING("Added unknown bone");
             }
             LoadBone(bone_info->bone, channel);
         }
@@ -180,12 +174,7 @@ namespace DE {
         const aiScene* scene = m_State.m_Importer.ReadFile(properties.path.string(), flags);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            LOG_ERROR("ModelLoader",
-                      "Failed to load model (",
-                      RelativeToExecutable(properties.path),
-                      ") with error (",
-                      m_State.m_Importer.GetErrorString(),
-                      ")");
+            LOG_ERROR("Failed to load model {} due: {}", RelativeToExecutable(properties.path), m_State.m_Importer.GetErrorString());
             return nullptr;
         }
 
@@ -208,14 +197,10 @@ namespace DE {
         if (properties.compress) {
             m_State.m_CurrentData->Compress();
         }
-        LOG_INFO("ModelLoader",
-                 "Model loaded (",
+        LOG_INFO("Model {} loaded with {} meshes and {} verticies",
                  RelativeToExecutable(properties.path),
-                 ") with (",
                  m_State.m_MeshesAmount,
-                 ") meshes, (",
-                 m_State.m_VerticesAmount,
-                 ") verticies");
+                 m_State.m_VerticesAmount);
         return m_State.m_CurrentData;
     }
 
@@ -289,7 +274,7 @@ namespace DE {
         if (mat->GetTextureCount(type) == 0) {
             return nullptr;
         } else if (mat->GetTextureCount(type) > 1) {
-            LOG_WARNING("ModelLoader", "Model has more multiple textures of same type. Loading only first one.");
+            LOG_WARNING("Model has more multiple textures of same type. Loading only first one.");
         }
         mat->GetTexture(type, 0, &file_name);
 

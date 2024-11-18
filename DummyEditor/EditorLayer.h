@@ -26,6 +26,8 @@ namespace DE {
     };
 
     class EditorLayer : public DE::Layer {
+        LOGGER_AUTHOR(EditorLayer);
+
     public:
         enum class SceneState {
             None = 0,

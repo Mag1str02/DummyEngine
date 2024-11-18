@@ -9,6 +9,7 @@
 
 namespace DE {
     class SceneRenderer {
+        LOGGER_AUTHOR(SceneRenderer)
     public:
         struct Settings {
             bool  bloom                = false;

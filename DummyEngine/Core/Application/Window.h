@@ -23,6 +23,7 @@ namespace DE {
     };
 
     class Window {
+        LOGGER_AUTHOR(Window)
     public:
         Window(const WindowState& state = WindowState());
         ~Window();

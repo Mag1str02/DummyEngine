@@ -10,6 +10,7 @@ namespace DE {
     namespace fs = std::filesystem;
 
     class ModelLoader {
+        LOGGER_AUTHOR(ModelLoader)
     public:
         static Ref<RenderMeshData> Load(const RenderMeshAsset::LoadingProperties& props);
 

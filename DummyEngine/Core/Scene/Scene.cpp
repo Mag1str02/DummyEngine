@@ -12,12 +12,12 @@
 
 namespace DE {
     void Scene::OnRuntimeStart() {
-//        for (auto e : View<AudioComponent>()) {
-//            auto& audio = e.Get<AudioComponent>();
-//            if (audio.sound) {
-//                audio.sound->start_streaming();
-//            }
-//        }
+        //        for (auto e : View<AudioComponent>()) {
+        //            auto& audio = e.Get<AudioComponent>();
+        //            if (audio.sound) {
+        //                audio.sound->start_streaming();
+        //            }
+        //        }
         for (auto e : m_Storage->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
@@ -35,30 +35,30 @@ namespace DE {
     }
 
     void Scene::OnRuntimePause() {
-//        for (auto e : View<AudioComponent>()) {
-//            auto& audio = e.Get<AudioComponent>();
-//            if (audio.sound) {
-//                audio.sound->pause_streaming();
-//            }
-//        }
+        //        for (auto e : View<AudioComponent>()) {
+        //            auto& audio = e.Get<AudioComponent>();
+        //            if (audio.sound) {
+        //                audio.sound->pause_streaming();
+        //            }
+        //        }
     }
 
     void Scene::OnRuntimeResume() {
-//        for (auto e : View<AudioComponent>()) {
-//            auto& audio = e.Get<AudioComponent>();
-//            if (audio.sound) {
-//                audio.sound->resume_streaming();
-//            }
-//        }
+        //        for (auto e : View<AudioComponent>()) {
+        //            auto& audio = e.Get<AudioComponent>();
+        //            if (audio.sound) {
+        //                audio.sound->resume_streaming();
+        //            }
+        //        }
     }
 
     void Scene::OnRuntimeStop() {
-//        for (auto e : View<AudioComponent>()) {
-//            auto& audio = e.Get<AudioComponent>();
-//            if (audio.sound) {
-//                audio.sound->stop_streaming();
-//            }
-//        }
+        //        for (auto e : View<AudioComponent>()) {
+        //            auto& audio = e.Get<AudioComponent>();
+        //            if (audio.sound) {
+        //                audio.sound->stop_streaming();
+        //            }
+        //        }
         for (auto e : m_Storage->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
@@ -86,17 +86,17 @@ namespace DE {
                 component->OnUpdate(dt);
             }
         }
-//        for (auto e : m_Storage->View<AudioComponent>()) {
-//            auto& component = e.Get<AudioComponent>();
-//            if (component.sound) {
-//                Vec3 pos(0.0f);
-//                if (e.Has<TransformComponent>()) {
-//                    pos = e.Get<TransformComponent>().translation;
-//                }
-//                component.sound->setPosition({pos.x, pos.y, pos.z});
-//                component.sound->play_streaming();
-//            }
-//        }
+        //        for (auto e : m_Storage->View<AudioComponent>()) {
+        //            auto& component = e.Get<AudioComponent>();
+        //            if (component.sound) {
+        //                Vec3 pos(0.0f);
+        //                if (e.Has<TransformComponent>()) {
+        //                    pos = e.Get<TransformComponent>().translation;
+        //                }
+        //                component.sound->setPosition({pos.x, pos.y, pos.z});
+        //                component.sound->play_streaming();
+        //            }
+        //        }
         std::unordered_set<Ref<RenderMesh>> meshes;
         for (auto e : m_Storage->View<RenderMeshComponent>()) {
             auto mesh = e.Get<RenderMeshComponent>().mesh;
@@ -112,7 +112,7 @@ namespace DE {
             camera = m_Camera;
         }
         if (!camera.Has<FPSCamera>()) {
-            LOG_WARNING("Scene", "Specified camera entity has no camera component");
+            LOG_WARNING("Specified camera entity has no camera component");
             return;
         }
         m_Renderer->Render(camera);
@@ -130,17 +130,17 @@ namespace DE {
     Scene::Scene() : m_Storage(CreateRef<Storage>()), m_Renderer(CreateRef<SceneRenderer>(this)), m_Hierarchy("Scene") {
         m_Storage->SetAddHandler<IDComponent>([this](Entity entity) {
             auto id = entity.Get<IDComponent>();
-            DE_ASSERT(m_EntityByID.find(id) == m_EntityByID.end(), "UUID collision occured (", id.Get(), ")");
+            DE_ASSERT(m_EntityByID.find(id) == m_EntityByID.end(), "UUID collision occured {}", id.Get());
             m_EntityByID[id] = entity;
         });
         m_PhysicsSolver = CreateRef<Physics::Solver>();
         m_Storage->SetRemoveHandler<IDComponent>([this](Entity entity) { m_EntityByID.erase(entity.Get<IDComponent>()); });
-//        m_Storage->SetRemoveHandler<AudioComponent>([this](Entity entity) {
-//            auto& sound = entity.Get<AudioComponent>().sound;
-//            if (sound) {
-//                sound->stop_streaming();
-//            }
-//        });
+        //        m_Storage->SetRemoveHandler<AudioComponent>([this](Entity entity) {
+        //            auto& sound = entity.Get<AudioComponent>().sound;
+        //            if (sound) {
+        //                sound->stop_streaming();
+        //            }
+        //        });
     }
 
     Scene::~Scene() {

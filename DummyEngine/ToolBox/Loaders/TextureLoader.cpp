@@ -26,12 +26,12 @@ namespace DE {
                 stb_data = stbi_loadf(props.path.string().c_str(), &width, &height, &nrChannels, 0);
                 format_s = "Float";
                 break;
-            case TextureFormat::None: LOG_WARNING("TextureLoader", "Texture was not loaded because of unspecified format"); return res;
+            case TextureFormat::None: LOG_WARNING("Texture was not loaded because of unspecified format"); return res;
             default: DE_ASSERT(false, "Unsupported texture format"); break;
         }
 
         if (!stb_data) {
-            LOG_ERROR("TextureLoader", "Failed to load texture (", RelativeToExecutable(props.path), ")");
+            LOG_ERROR("Failed to load texture {}", RelativeToExecutable(props.path));
             return nullptr;
         }
 
@@ -61,7 +61,7 @@ namespace DE {
         res->SetData(stb_data, width, height, channels, props.format);
         stbi_image_free(stb_data);
 
-        LOG_INFO("TextureLoader", "Texture loaded (", RelativeToExecutable(props.path), ") channels (", channels_s, ") format (", format_s, ")");
+        LOG_INFO("Texture {} loaded, channels ({}), format ({})", RelativeToExecutable(props.path), channels_s, format_s);
         return res;
     }
     // void TextureLoader::Save(const Path& path, const Ref<TextureData> data) {

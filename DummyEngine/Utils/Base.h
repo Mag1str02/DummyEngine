@@ -15,3 +15,4 @@
 #include "DummyEngine/Utils/Helpers/StringOperations.h"
 #include "DummyEngine/Utils/Helpers/Timer.h"
 #include "DummyEngine/Utils/Types/UUID.h"
+#include "DummyEngine/Utils/Types/STDAdapters.h"

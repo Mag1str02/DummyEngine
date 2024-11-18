@@ -2,11 +2,12 @@
 
 namespace DE {
     class LinuxCompilerImpl : public CompilerImpl {
+        LOGGER_AUTHOR(Compiler)
     public:
         LinuxCompilerImpl() { AddDefine("DE_PLATFORM_LINUX"); }
         virtual bool Compile(const Path& source, const Path& destination) {
             if (!fs::exists(source) || destination.filename().empty()) {
-                LOG_ERROR("Compiler", "File (", source, ") was not compiled because does not exists or destination empty");
+                LOG_ERROR("File {} was not compiled because does not exists or destination empty", source);
                 return false;
             }
 

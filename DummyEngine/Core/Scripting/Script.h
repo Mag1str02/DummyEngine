@@ -102,36 +102,30 @@ namespace DE {
     std::string                           ScriptFieldTypeToString(ScriptFieldType type);
     template <typename T> ScriptFieldType TypeToScriptFieldType();
 
-    template <typename T, typename U> constexpr U32 OffsetOf(U T::*member) {
+    template <typename T, typename U> constexpr U32 OffsetOf(U T::* member) {
         return (char*)&((T*)nullptr->*member) - (char*)nullptr;
     }
 
     template <typename T> T& Script::Field::Get() {
         DE_ASSERT(m_Type == TypeToScriptFieldType<T>(),
-                  "Wrong field type (",
+                  "Wrong field type {} expected {}",
                   ScriptFieldTypeToString(TypeToScriptFieldType<T>()),
-                  ") expected (",
-                  ScriptFieldTypeToString(m_Type),
-                  ")");
+                  ScriptFieldTypeToString(m_Type));
         return *(T*)m_Data;
     }
     template <typename T> const T& Script::Field::Get() const {
         DE_ASSERT(m_Type == TypeToScriptFieldType<T>(),
-                  "Wrong field type (",
+                  "Wrong field type {} expected {}",
                   ScriptFieldTypeToString(TypeToScriptFieldType<T>()),
-                  ") expected (",
-                  ScriptFieldTypeToString(m_Type),
-                  ")");
+                  ScriptFieldTypeToString(m_Type));
         return *(T*)m_Data;
     }
     template <typename T> T& Script::GetField(const std::string& name) {
         DE_ASSERT(GetClassFields().contains(name), "Wrong field name(", name, ")");
         DE_ASSERT(GetClassFields().at(name).type == TypeToScriptFieldType<T>(),
-                  "Wrong field type (",
+                  "Wrong field type {} expected {}",
                   ScriptFieldTypeToString(TypeToScriptFieldType<T>()),
-                  ") expected (",
-                  ScriptFieldTypeToString(GetClassFields().at(name).type),
-                  ")");
+                  ScriptFieldTypeToString(GetClassFields().at(name).type));
         return *(T*)((char*)this + GetClassFields().at(name).offset);
     }
     template <typename T> T& Script::Add(const T& t) {
@@ -151,21 +145,29 @@ namespace DE {
         m_Entity.Remove<T>();
     }
 
-#define FIELD(field)                                                                              \
-    {                                                                                             \
-#field, { TypeToScriptFieldType<decltype(field)>(), OffsetOf(&CurrentScriptType::field) } \
+#define FIELD(field)                                                                      \
+    {                                                                                     \
+        #field, {                                                                         \
+            TypeToScriptFieldType<decltype(field)>(), OffsetOf(&CurrentScriptType::field) \
+        }                                                                                 \
     }
 
-#define SCRIPT(type)                                                              \
-    static const std::unordered_map<std::string, ScriptClassField> s_ClassFields; \
-                                                                                  \
-protected:                                                                        \
-    virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const override { return s_ClassFields; }
+#define SCRIPT(type)                                                                                   \
+    static const std::unordered_map<std::string, ScriptClassField> s_ClassFields;                      \
+                                                                                                       \
+protected:                                                                                             \
+    virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const override { \
+        return s_ClassFields;                                                                          \
+    }
 
-#define SCRIPT_BASE(type, ...)                                                                    \
-    using CurrentScriptType                                                     = type;           \
-    const std::unordered_map<std::string, ScriptClassField> type::s_ClassFields = {__VA_ARGS__};  \
-    DE_SCRIPT_API Script*                                   type##Create() { return new type(); } \
-    DE_SCRIPT_API void                                      type##Delete(Script* script) { delete script; }
+#define SCRIPT_BASE(type, ...)                                                                   \
+    using CurrentScriptType                                                     = type;          \
+    const std::unordered_map<std::string, ScriptClassField> type::s_ClassFields = {__VA_ARGS__}; \
+    DE_SCRIPT_API Script*                                   type##Create() {                     \
+        return new type();                                     \
+    }                                                                                            \
+    DE_SCRIPT_API void type##Delete(Script* script) {                                            \
+        delete script;                                                                           \
+    }
 
 }  // namespace DE

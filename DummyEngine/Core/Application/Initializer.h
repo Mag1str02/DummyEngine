@@ -1,7 +1,10 @@
 #pragma once
 
+#include "DummyEngine/Utils/Base.h"
+
 namespace DE {
     class Initializer {
+        LOGGER_AUTHOR(Initializer)
     public:
         static void Initialize();
         static void Terminate();

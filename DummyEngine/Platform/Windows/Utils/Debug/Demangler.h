@@ -2,7 +2,7 @@
 
 #include <cxxabi.h>
 
-#include <string>
+#include "DummyEngine/Utils/Base.h"
 
 namespace DE {
     template <typename T> std::string DemangledName() {

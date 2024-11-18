@@ -2,6 +2,7 @@
 
 namespace DE {
     class WindowsCompilerImpl : public CompilerImpl {
+        LOGGER_AUTHOR(Compiler)
     public:
         WindowsCompilerImpl() { AddDefine("DE_PLATFORM_WINDOWS"); }
         virtual bool Compile(const Path& source, const Path& destination) {

@@ -81,7 +81,7 @@ namespace DE {
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
             ImGui::SetNextItemWidth(-1);
-            ImGui::Checkbox(StrCat("##", name.c_str()).c_str(), &value);
+            ImGui::Checkbox(std::format("##{}", name.c_str()).c_str(), &value);
             ImGui::NextColumn();
         }
         void EditProperty(std::string name, std::string& value, PropertyType property_type) {

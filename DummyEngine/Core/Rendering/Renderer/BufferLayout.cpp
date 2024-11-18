@@ -111,7 +111,7 @@ namespace DE {
         return m_Elements.end();
     }
     const BufferElement& BufferLayout::operator[](U32 index) const {
-        DE_ASSERT(index >= 0 && index < m_Elements.size(), "Index out of bounce (", index, ") should be between [0,", m_Elements.size(), ")");
+        DE_ASSERT(index >= 0 && index < m_Elements.size(), "Index out of bounce {} should be between [0,{})", index, m_Elements.size());
         return m_Elements[index];
     }
 

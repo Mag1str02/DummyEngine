@@ -117,7 +117,7 @@ namespace DE {
                 shadowMatrices[4] = shadowProj * glm::lookAt(pos, pos + glm::vec3(0., 0., 1.), glm::vec3(0., -1., 0.));
                 shadowMatrices[5] = shadowProj * glm::lookAt(pos, pos + glm::vec3(0., 0., -1.), glm::vec3(0., -1., 0.));
                 for (size_t i = 0; i < 6; i++) {
-                    shader->SetMat4(StrCat("shadowMatrices", "[", i, "]"), shadowMatrices[i]);
+                    shader->SetMat4(std::format("shadowMatrices[{}]", i), shadowMatrices[i]);
                 }
                 shader->SetFloat("far_plane", Console::GetFloat("r_psm_far"));
                 shader->SetFloat3("lightPos", pos);
@@ -204,7 +204,7 @@ namespace DE {
                     int idx = 0;
                     for (auto entity : m_Scene->m_Storage->View<LightSource>()) {
                         if (entity.Get<LightSource>().type == LightSourceType::Point) {
-                            shader->SetInt(StrCat("u_PointShadowMap[", idx, "]"), 15 + idx);
+                            shader->SetInt(std::format("u_PointShadowMap[{}]", idx), 15 + idx);
                             idx++;
                         }
                     }
@@ -289,7 +289,7 @@ namespace DE {
                 m_Shaders[shader_id] = shader.value();
                 m_Shaders[shader_id]->SetUnifromBlock("ub_Lights", LIGHT_UB_ID);
             } else {
-                LOG_WARNING("SceneRenderer", "Shader (", shader_id, ") not found in ResourceManager");
+                LOG_WARNING("Shader {} not found in ResourceManager", shader_id);
             }
         }
     }
@@ -298,7 +298,7 @@ namespace DE {
             FrameBuffer::Create({static_cast<U32>(Console::GetInt("r_shadowmap_width")), static_cast<U32>(Console::GetInt("r_shadowmap_height"))});
         m_ShadowMap->SetDepthAttachment(Texture::Format::F32);
         Console::OnCommand("r_shadowmap_resize", [&]() {
-            Logger::Log(LogMessageType::Info, "ShadowMap resize");
+            LOG_INFO("ShadowMap resize");
             m_ShadowMap->Resize(static_cast<U32>(Console::GetInt("r_shadowmap_width")), static_cast<U32>(Console::GetInt("r_shadowmap_height")));
         });
     }

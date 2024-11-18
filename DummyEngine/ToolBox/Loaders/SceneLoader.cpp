@@ -213,7 +213,7 @@ namespace DE {
         set["Exposure"]                = settings.exposure;
         set["Gamma"]                   = settings.gamma;
         set["UseDirectionalShadowMap"] = settings.use_directional_shadow_map;
-        set["UsePointShadows"] = settings.use_directional_shadow_map;
+        set["UsePointShadows"]         = settings.use_directional_shadow_map;
         return set;
     }
     YAML::Node SaveTextures(const SceneAssets& assets) {
@@ -319,7 +319,7 @@ namespace DE {
     }
 
     template <typename ComponentType> void LoadComponent(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
-        LOG_WARNING("SceneLoader", "Load function of ", DemangledName<ComponentType>(), " undefined.");
+        LOG_WARNING("Load function of {} undefined", DemangledName<ComponentType>());
     }
     template <> void LoadComponent<TagComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
         entity.AddComponent<TagComponent>(n_Component.as<std::string>());
@@ -343,10 +343,10 @@ namespace DE {
     template <> void LoadComponent<RenderMeshComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
         UUID id = n_Component["UUID"].as<std::string>();
         if (!ResourceManager::HasRenderMesh(id) && !ResourceManager::LoadRenderMesh(id)) {
-            LOG_WARNING("SceneLoader", "RenderMesh (", id, ") not found in ResourceManager");
+            LOG_WARNING("RenderMesh {} not found in ResourceManager", id);
         }
         if (!ResourceManager::HasHitBox(id) && !ResourceManager::LoadHitBox(id)) {
-            LOG_WARNING("SceneLoader", "Failed to load HitBox (", id, ")");
+            LOG_WARNING("Failed to load HitBox {}", id);
         }
         auto& meshes = entity.AddComponent<RenderMeshComponent>({id, ResourceManager::GetRenderMesh(id).value()->Copy()})->mesh->GetSubMeshes();
 
@@ -367,7 +367,7 @@ namespace DE {
     template <> void LoadComponent<ShaderComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
         UUID id = n_Component.as<std::string>();
         if (!ResourceManager::HasShader(id) && !ResourceManager::LoadShader(id)) {
-            LOG_WARNING("SceneLoader", "Shader (", id, ") not found in ResourceManager");
+            LOG_WARNING("Shader {} not found in ResourceManager", id);
         } else {
             entity.AddComponent<ShaderComponent>({id, ResourceManager::GetShader(id).value()});
             scene->GetRenderer()->RequestShader(id);
@@ -406,7 +406,7 @@ namespace DE {
             (n_Component["Type"].as<std::string>() == "CubeMap" ? SkyBoxComponent::TexType::CubeMap : SkyBoxComponent::TexType::Equirectangular);
         if (type == SkyBoxComponent::TexType::CubeMap) {
             if (!ResourceManager::HasCubeMap(id) && !ResourceManager::LoadCubeMap(id)) {
-                LOG_WARNING("SceneLoader", "CubeMap (", id, ") not found in ResourceManager");
+                LOG_WARNING("CubeMap {} not found in ResourceManager", id);
             } else {
                 Ref<SkyBox> skybox = CreateRef<SkyBox>(ResourceManager::GetCubeMap(id).value());
                 entity.AddComponent<SkyBoxComponent>({type, id, skybox});
@@ -414,7 +414,7 @@ namespace DE {
         } else {
             auto asset = AssetManager::GetTextureAsset(id);
             if (!asset.has_value()) {
-                LOG_WARNING("SceneLoader", "CubeMap (", id, ") not found in ResourceManager");
+                LOG_WARNING("CubeMap {} not found in ResourceManager", id);
             } else {
                 auto        asset  = AssetManager::GetTextureAsset(id);
                 Ref<SkyBox> skybox = CreateRef<SkyBox>(TextureLoader::Load(asset.value().loading_props));
@@ -432,7 +432,7 @@ namespace DE {
                 }
             }
         } else {
-            LOG_INFO("SceneLoader", "Failed to create valid script: ", script.ID());
+            LOG_INFO("Failed to create valid script: {}", script.ID());
         }
     }
     template <> void LoadComponent<Physics::PhysicsComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
@@ -552,10 +552,10 @@ namespace DE {
             LoadRendererSettings(result.settings, n_Scene["RendererSettings"]);
             result.hierarchy = n_Scene["Hierarchy"];
             result.name      = n_Scene["Name"].as<std::string>();
-            LOG_INFO("SceneLoader", "Loaded SceneData for (", RelativeToExecutable(path), ")");
+            LOG_INFO("Loaded SceneData for {}", RelativeToExecutable(path));
             return result;
         } catch (const std::exception& e) {
-            LOG_ERROR("SceneLoader", "Failed to load SceneData for (", path.string(), ") because of exception (", e.what(), ")");
+            LOG_ERROR("Failed to load SceneData for {} due to exception: {}", path.string(), e.what());
             return {};
         }
     }
@@ -563,12 +563,12 @@ namespace DE {
         try {
             Ref<Scene> scene = CreateRef<Scene>();
             LoadHierarchyNode(scene, hierarchy, scene->GetHierarchyRoot());
-            LOG_INFO("SceneLoader", "Serialized scene");
+            LOG_INFO("Serialized scene");
             return scene;
         } catch (const std::exception& e) {
-            LOG_ERROR("SceneLoader", "Failed to serialize scene because of exception (", e.what(), ")");
+            LOG_ERROR("Failed to serialize scene due to exception: {}", e.what());
         } catch (...) {
-            LOG_ERROR("SceneLoader", "Failed to serialize scene");
+            LOG_ERROR("Failed to serialize scene");
         }
         return nullptr;
     }
@@ -582,7 +582,7 @@ namespace DE {
 
             output_file.open(path);
             if (!output_file.is_open()) {
-                LOG_ERROR("SceneLoader", "Failed to open file (", RelativeToExecutable(path), ") to save scene");
+                LOG_ERROR("Failed to open file {} to save scene", RelativeToExecutable(path));
                 return false;
             }
 
@@ -592,10 +592,10 @@ namespace DE {
             n_Scene["Hierarchy"]        = data.hierarchy;
             n_Scene["RendererSettings"] = SaveRendererSettings(data.settings);
             output_file << n_Root;
-            LOG_INFO("SceneLoader", "Saved scene (", data.name, ") to file (", RelativeToExecutable(path), ")");
+            LOG_INFO("Saved scene {} to file {}", data.name, RelativeToExecutable(path));
             return true;
         } catch (...) {
-            LOG_ERROR("SceneLoader", "Failed to open file (", RelativeToExecutable(path), ") to save scene");
+            LOG_ERROR("Failed to open file {} to save scene", RelativeToExecutable(path));
             return false;
         }
     }

@@ -25,26 +25,26 @@ namespace DE {
         if (!recompile_ids.empty()) {
             auto failed_file = CompileSelected(scripts, recompile_ids);
             if (failed_file.has_value()) {
-                LOG_WARNING("ScriptManager", "Failed to compile source file (", failed_file.value().string(), ")");
+                LOG_WARNING("Failed to compile source file {}", failed_file.value().string());
                 return false;
             }
         };
 
         auto new_library_name = LinkLibrary(scripts);
         if (!new_library_name.has_value()) {
-            LOG_WARNING("ScriptManager", "Failed to link library (", new_library_name.value(), ")");
+            LOG_WARNING("Failed to link library {}", new_library_name.value());
             return false;
         }
         auto swapped = SwapLibrary(new_library_name.value());
         if (!swapped) {
-            LOG_WARNING("ScriptManager", "Failed to load library (", new_library_name.value(), ")");
+            LOG_WARNING("Failed to load library {}", new_library_name.value());
             return false;
         }
 
         for (const auto& script : scripts) {
             ScriptEngine::AddScript(script.id);
         }
-        LOG_INFO("ScriptManager", "Loaded script for scene");
+        LOG_INFO("Loaded script for scene");
         return true;
     }
     S_METHOD_IMPL(Unit, UnloadScripts, (const std::vector<ScriptAsset>& scripts), (scripts)) {
@@ -55,7 +55,7 @@ namespace DE {
             ScriptEngine::DeleteLibrary(m_LibraryName);
             m_LibraryName.clear();
         }
-        LOG_INFO("ScriptManager", "Unloaded scripts");
+        LOG_INFO("Unloaded scripts");
         return Unit();
     }
     S_METHOD_IMPL(bool, ReloadScripts, (const std::vector<ScriptAsset>& scripts, Ref<Scene> scene), (scripts, scene)) {
@@ -71,17 +71,17 @@ namespace DE {
 
         auto failed_file = CompileSelected(scripts, recompile_ids);
         if (failed_file.has_value()) {
-            LOG_WARNING("ScriptManager", "Failed to compile source file (", failed_file.value().string(), ")");
+            LOG_WARNING("Failed to compile source file {}", failed_file.value().string());
             return false;
         }
         auto new_library_name = LinkLibrary(scripts);
         if (!new_library_name.has_value()) {
-            LOG_WARNING("ScriptManager", "Failed to link library (", new_library_name.value(), ")");
+            LOG_WARNING("Failed to link library {}", new_library_name.value());
             return false;
         }
         auto swapped = SwapLibrary(new_library_name.value());
         if (!swapped) {
-            LOG_WARNING("ScriptManager", "Failed to load library (", new_library_name.value(), ")");
+            LOG_WARNING("Failed to load library {}", new_library_name.value());
             return false;
         }
 
@@ -100,7 +100,7 @@ namespace DE {
         return Unit();
     }
     S_METHOD_IMPL(UUID, EditorScript, (const std::string& name), (name)) {
-        DE_ASSERT(m_EditorScriptNameToId.contains(name), "There is no editor script with name (", name, ")");
+        DE_ASSERT(m_EditorScriptNameToId.contains(name), "There is no editor script with name {}", name);
         return m_EditorScriptNameToId.at(name);
     }
 
@@ -187,7 +187,7 @@ namespace DE {
     void ScriptManager::LoadEditorLibrary() {
         Ref<SharedObject> library               = CreateRef<SharedObject>();
         bool              editor_library_loaded = library->Load(Config::GetPath(DE_CFG_EXECUTABLE_PATH), DE_EDITOR_LIBRARY_NAME);
-        DE_ASSERT(editor_library_loaded, "Failed to load editor library (", DE_EDITOR_LIBRARY_NAME, ")");
+        DE_ASSERT(editor_library_loaded, "Failed to load editor library {}", DE_EDITOR_LIBRARY_NAME);
         ScriptEngine::AddLibrary(library);
     }
     void ScriptManager::LoadEditorScripts() {
@@ -200,7 +200,7 @@ namespace DE {
     std::vector<U32> ScriptManager::RecompilationList(const std::vector<ScriptAsset>& scripts) {
         std::vector<U32> recompile_ids;
         for (size_t i = 0; i < scripts.size(); ++i) {
-            DE_ASSERT(fs::exists(scripts[i].path), "Failed to find script source file(", scripts[i].path.string(), ")");
+            DE_ASSERT(fs::exists(scripts[i].path), "Failed to find script source file {}", scripts[i].path.string());
             if (NeedToCompile(scripts[i].path)) {
                 recompile_ids.push_back(i);
             }

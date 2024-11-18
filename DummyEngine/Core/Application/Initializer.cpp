@@ -34,10 +34,10 @@ namespace DE {
         Config::Initialize();
         Console::Initialize();
         Logger::Initialize();
-        LOG_INFO("Initializer", "Logger and config initialized");
+        LOG_INFO("Logger and config initialized");
     }
     void Initializer::DepInitialize() {
-        LOG_INFO("Initializer", "Initializing dependencies");
+        LOG_INFO("Initializing dependencies");
         //* Init GLFW
         {
             if (!glfwInit()) {
@@ -50,13 +50,13 @@ namespace DE {
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             ImGui::g_ImGuiFailAssert                                    = FailAssert;
             ImGui::g_ExternalSettings.DragAndDropTooltipAlphaMultiplyer = 1.0;
-            LOG_INFO("Initializer", "Initialized GLFW");
+            LOG_INFO("Initialized GLFW");
         }
     }
     void Initializer::EngineInitialize() {
         DE_PROFILER_BEGIN_FRAME();
 
-        LOG_INFO("Initializer", "Initializing Engine");
+        LOG_INFO("Initializing Engine");
         AssetManager::Initialize();
         ResourceManager::Initialize();
         ScriptEngine::Initialize();
@@ -66,7 +66,7 @@ namespace DE {
     }
 
     void Initializer::EngineTerminate() {
-        LOG_INFO("Initializer", "Terminating Engine");
+        LOG_INFO("Terminating Engine");
         Renderer::Terminate();
         Application::Terminate();
         Input::Terminate();
@@ -75,12 +75,14 @@ namespace DE {
         AssetManager::Terminate();
     }
     void Initializer::DepTerminate() {
-        LOG_INFO("Initializer", "Terminating dependencies");
+        LOG_INFO("Terminating dependencies");
         //* Terminate GLFW
-        { glfwTerminate(); }
+        {
+            glfwTerminate();
+        }
     }
     void Initializer::PostTerminate() {
-        LOG_INFO("Initializer", "PostTerminating");
+        LOG_INFO("PostTerminating");
         Logger::Terminate();
         Config::Terminate();
         Profiler::Terminate();

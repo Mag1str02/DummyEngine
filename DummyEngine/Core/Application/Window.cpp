@@ -10,15 +10,15 @@ namespace DE {
     GLFWmonitor* GetMonitor(U32 id) {
         int           monitors_amount;
         GLFWmonitor** monitors = glfwGetMonitors(&monitors_amount);
-        DE_ASSERT(0 <= id && id < monitors_amount, "Wrong monitor id (", id, ") should be between [0, ", monitors_amount, ")");
+        DE_ASSERT(0 <= id && id < monitors_amount, "Wrong monitor id {} should be between [0, {})", id, monitors_amount);
         return monitors[id];
     }
 
     Window::Window(const WindowState& state) : m_State(state) {
         m_Window = glfwCreateWindow(1280, 720, m_State.name.c_str(), NULL, NULL);
         // glfwSwapInterval(0);
-        DE_ASSERT(m_Window, "Failed to create GLFW Window (", m_State.name, ")");
-        LOG_INFO("Window", "Window created: ", m_State.name);
+        DE_ASSERT(m_Window, "Failed to create GLFW Window {}", m_State.name);
+        LOG_INFO("Window created: {}", m_State.name);
 
         m_Context = Context::Create(m_Window);
         m_Context->Load();
@@ -36,7 +36,7 @@ namespace DE {
         icon.pixels = stbi_load(path.string().c_str(), &icon.width, &icon.height, 0, 4);
 
         if (!icon.pixels) {
-            LOG_WARNING("Window", "Failed to set window icon (", path, ")");
+            LOG_WARNING("Failed to set window icon {}", path);
             return;
         }
         glfwSetWindowIcon(m_Window, 1, &icon);
@@ -89,8 +89,8 @@ namespace DE {
     }
 
     void Window::Invalidate() {
-        DE_ASSERT(m_State.mode != WindowMode::None, "Wrong window mode.");
-        DE_ASSERT(m_State.width != 0 && m_State.height != 0, "Wrong window size(", m_State.width, ", ", m_State.height, ") expected non 0 sides");
+        DE_ASSERT(m_State.mode != WindowMode::None, "Wrong window mode");
+        DE_ASSERT(m_State.width != 0 && m_State.height != 0, "Wrong window size ({},{}) expected non 0 sides", m_State.width, m_State.height);
         if (m_State.mode == WindowMode::Windowed) {
             glfwSetWindowMonitor(m_Window, nullptr, m_State.x_pos, m_State.y_pos, m_State.width, m_State.height, 1000);
         }

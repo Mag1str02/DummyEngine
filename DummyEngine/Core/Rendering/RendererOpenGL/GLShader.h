@@ -10,6 +10,7 @@ namespace DE {
     namespace fs = std::filesystem;
 
     class GLShader : public Shader {
+        LOGGER_AUTHOR(GLShader)
     public:
         GLShader()                               = delete;
         GLShader(const Shader& other)            = delete;

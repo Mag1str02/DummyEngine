@@ -3,13 +3,13 @@
 #include "DummyEngine/Utils/Base.h"
 #include "DummyEngine/Utils/Base/STDIncludes.h"
 #include "DummyEngine/Utils/Helpers/Singleton.h"
-#include "DummyEngine/Utils/Helpers/StringOperations.h"
 #include "DummyEngine/Utils/Types/Types.h"
 
 namespace DE {
     using ConsoleVariable = std::variant<int64_t, float, double, bool, std::string>;
 
     class Console : public Singleton<Console> {
+        LOGGER_AUTHOR(Console)
         SINGLETON(Console)
     private:
         S_METHOD_DEF(std::string, VarToString, (const std::string& var))

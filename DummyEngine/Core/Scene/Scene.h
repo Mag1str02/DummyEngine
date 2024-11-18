@@ -15,6 +15,7 @@ namespace DE {
     }
 
     class Scene {
+        LOGGER_AUTHOR(Scene)
     public:
         Scene();
         ~Scene();

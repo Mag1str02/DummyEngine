@@ -18,7 +18,7 @@ namespace DE {
            << "Source:\t\t" << file << ", line " << line << "\n";
         std::cerr << ss.str() << std::endl;
         if (Logger::Initialized()) {
-            LOG_FATAL("Assertion", 0, ss.str());
+            LOG_FATAL_AS("Assertion", "{}", ss.str());
         }
         exit(1);
     }

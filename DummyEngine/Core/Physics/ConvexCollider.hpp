@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "DummyEngine/Utils/Types/Types.h"
-#define LOG_VEC(p) std::to_string(p.x), " ", std::to_string(p.y), " ", std::to_string(p.z), " "
+#include "DummyEngine/Utils/Debug/Logger.h"
+
 namespace DE::Physics {
 
     class ConvexHitbox {
@@ -19,6 +19,7 @@ namespace DE::Physics {
     };
 
     class ConvexCollider {
+        LOGGER_AUTHOR(ConvexCollider)
     public:
         ConvexCollider()                      = delete;
         ConvexCollider(const ConvexCollider&) = delete;

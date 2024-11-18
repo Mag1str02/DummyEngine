@@ -50,7 +50,7 @@ namespace DE {
         if (m_Usage == BufferUsage::Dynamic) {
             m_LocalBuffer.SetData(data, size);
         } else {
-            DE_ASSERT(m_Size == size, "Invalid data size (", size, ") expected (", m_Size, ")");
+            DE_ASSERT(m_Size == size, "Invalid data size {} expected {}", size, m_Size);
 
             glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
             glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);

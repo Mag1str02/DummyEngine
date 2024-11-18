@@ -9,7 +9,7 @@ namespace DE {
     static std::uniform_int_distribution<U64> s_UniformDistribution;
 
     UUID::UUID(const std::string& str) {
-        DE_ASSERT(str.size() == 32, "Wrong str size (", str.size(), ")");
+        DE_ASSERT(str.size() == 32, "Wrong str size {}", str.size());
         std::string_view first(str);
         std::string_view second(str);
         first.remove_suffix(16);
@@ -18,10 +18,10 @@ namespace DE {
         m_Second = StrToHex(second);
     }
     UUID::operator std::string() const {
-        return StrCat(HexToStr(m_First), HexToStr(m_Second));
+        return std::format("{:032x}{:032x}", m_First, m_Second);
     }
     std::string UUID::Hex() const {
-        return StrCat(HexToStr(m_First), HexToStr(m_Second));
+        return std::format("{:032x}{:032x}", m_First, m_Second);
     }
 
     bool UUID::operator==(const UUID& other) const {

@@ -30,7 +30,7 @@ namespace DE {
         }
         m_RenderAPI->SetDefaultState();
         GenResources();
-        LOG_INFO("Renderer", "Renderer initialized");
+        LOG_INFO("Renderer initialized");
         return Unit();
     }
     S_TERMINATE() {
@@ -143,7 +143,7 @@ namespace DE {
             width /= level_divisor;
         }
         if (layers.empty()) {
-            LOG_WARNING("Renderer", "Failed to gen layers for bloom because depth < 1 or texture is smaller then 2x2");
+            LOG_WARNING("Failed to gen layers for bloom because depth < 1 or texture is smaller then 2x2");
             return texture;
         }
         Ref<Texture> current = texture;

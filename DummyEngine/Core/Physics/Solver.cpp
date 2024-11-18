@@ -1,8 +1,10 @@
 #include "Solver.hpp"
 
-#include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "PhysicsComponent.h"
-#include "Utils.cpp"
+#include "Utils.hpp"
+
+#include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
+
 void DE::Physics::Solver::LoadScene(const DE::Ref<DE::Scene>& scene) {
     if (!scene) {
         return;
@@ -82,8 +84,8 @@ double DE::Physics::Solver::NextInteraction(double dt) {
                 auto lhs_pt = lhsCollider->GetCollisionPoint(collisionNormal, lhs_cnt);
                 auto rhs_pt = rhsCollider->GetCollisionPoint(-collisionNormal, rhs_cnt);
 
-                LOG_DEBUG("LHS_PT", LOG_VEC(lhs_pt));
-                LOG_DEBUG("RHS_PT", LOG_VEC(rhs_pt));
+                LOG_DEBUG("LHS_PT {}", lhs_pt);
+                LOG_DEBUG("RHS_PT {}", rhs_pt);
                 float lhs_area = 0, rhs_area = 0;
                 auto  rhs_pts = lhsCollider->GetCollisionCenter(collisionNormal, rhs_pt, rhs_area);
                 auto  lhs_pts = rhsCollider->GetCollisionCenter(-collisionNormal, lhs_pt, lhs_area);
@@ -95,18 +97,18 @@ double DE::Physics::Solver::NextInteraction(double dt) {
                     dst_pl        = Plane(-collisionNormal, lhs_pt);
                 }
                 for (const auto& collision_pt : collision_pts) {
-                    LOG_DEBUG("CollisionPT", LOG_VEC(collision_pt));
+                    LOG_DEBUG("CollisionPT {}", collision_pt);
                     float penetration = std::abs(dst_pl.distance(collision_pt));
 
                     auto collisionNormal_n = glm::normalize(collisionNormal);
-                    LOG_DEBUG("CollisionNormal", LOG_VEC(collisionNormal_n));
+                    LOG_DEBUG("CollisionNormal {}", collisionNormal_n);
                     auto lhs_com = lhsCollider->TransformPoint(lhsCollider->GetCenterOfMass());
                     auto rhs_com = rhsCollider->TransformPoint(rhsCollider->GetCenterOfMass());
 
                     auto lhs_r = collision_pt - lhs_com;
                     auto rhs_r = collision_pt - rhs_com;
-                    LOG_DEBUG("lhs_r", LOG_VEC(lhs_r));
-                    LOG_DEBUG("rhs_r", LOG_VEC(rhs_r));
+                    LOG_DEBUG("lhs_r {}", lhs_r);
+                    LOG_DEBUG("rhs_r {}", rhs_r);
 
                     Vec3 tangent   = glm::normalize(glm::cross(collisionNormal_n, glm::normalize(Vec3(1) + collisionNormal_n)));
                     Vec3 tangent_b = glm::normalize(glm::cross(collisionNormal_n, tangent));
@@ -158,17 +160,6 @@ double DE::Physics::Solver::NextInteraction(double dt) {
                     Resolve(col.jN, col, delta, true, nullptr);
                     Resolve(col.jT, col, delta, false, &col.jN);
                     Resolve(col.jTb, col, delta, false, &col.jN);
-                    //                    LOG_DEBUG("COLLISION", "================");
-                    //                    LOG_DEBUG("Origin", LOG_VEC(col.origin));
-                    //                    LOG_DEBUG("collision_normal", LOG_VEC(col.collision_normal));
-                    //                    LOG_DEBUG("collision_pt", LOG_VEC(col.lhs_pt));
-                    //                    LOG_DEBUG("lhs_r", LOG_VEC(col.lhs_r));
-                    //                    LOG_DEBUG("rhs_r", LOG_VEC(col.rhs_r));
-                    //                    LOG_DEBUG("penetration", std::to_string(col.penetration));
-                    //                    LOG_DEBUG("jnL", std::to_string(col.jN.m_totalLambda));
-                    //                    LOG_DEBUG("jtL", std::to_string(col.jT.m_totalLambda));
-                    //                    LOG_DEBUG("jt2L", std::to_string(col.jTb.m_totalLambda));
-                    //                    LOG_DEBUG("COLLISION", "================");
                 }
             }
         }

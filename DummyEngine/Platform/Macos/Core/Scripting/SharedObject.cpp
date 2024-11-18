@@ -7,6 +7,7 @@
 
 namespace DE {
     class SharedObjectImpl {
+        LOGGER_AUTHOR(SharedObject)
     public:
         SharedObjectImpl() {}
         ~SharedObjectImpl() {
@@ -22,17 +23,17 @@ namespace DE {
 
         bool Load(const Path& directory, const std::string& name) {
             if (m_Handle && m_Valid) {
-                LOG_WARNING("SharedObject", "Library (", name, ") already loaded");
+                LOG_WARNING("Library {} already loaded", name);
                 return false;
             }
             Path path_to_dll = directory / (name + ".dylib");
             if (!fs::exists(path_to_dll)) {
-                LOG_WARNING("SharedObject", "Library (", (directory / (name + ".dylib")).string(), ") does not exist");
+                LOG_WARNING("Library {} does not exist", directory / (name + ".dylib"));
                 return false;
             }
             void* new_handle = dlopen(path_to_dll.string().c_str(), RTLD_NOW);
             if (!new_handle) {
-                LOG_WARNING("SharedObject", "Failed to load library (", (directory / (name + ".dylib")).string(), ")");
+                LOG_WARNING("Failed to load library {}", directory / (name + ".dylib"));
                 return false;
             }
             if (m_Handle) {
@@ -42,7 +43,7 @@ namespace DE {
             m_Directory = directory;
             m_Name      = name;
             m_Valid     = true;
-            LOG_INFO("SharedObject", "Loaded library (", RelativeToExecutable(directory / (name + ".dylib")), ")");
+            LOG_INFO("Loaded library {}", RelativeToExecutable(directory / (name + ".dylib")));
             return true;
         }
         void Invalidate() { m_Valid = false; }

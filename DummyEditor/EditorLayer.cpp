@@ -235,7 +235,7 @@ namespace DE {
         m_SceneState       = SceneState::Editing;
         m_SceneScriptState = SceneScriptState::Compiled;
         m_CurrentScene->LoadPhysics(m_CurrentScene);
-        LOG_INFO("EditorLayer", "Opened scene");
+        LOG_INFO("Opened scene");
     }
     void EditorLayer::SaveScene(const Path& path) {
         m_SceneFileData.hierarchy = SceneLoader::Deserialize(m_CurrentScene);
@@ -250,7 +250,7 @@ namespace DE {
         ResourceManager::Clear();
         ScriptManager::UnloadScripts(m_SceneFileData.assets.scripts);
         UnloadAssets();
-        LOG_INFO("EditorLayer", "Closed scene");
+        LOG_INFO("Closed scene");
     }
     void EditorLayer::RunScene() {
         m_CurrentScene->OnRuntimeStart();

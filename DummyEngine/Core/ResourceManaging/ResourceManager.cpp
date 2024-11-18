@@ -15,26 +15,26 @@ namespace DE {
 
     S_METHOD_IMPL(bool, LoadShader, (UUID id), (id)) {
         if (m_Shaders.contains(id)) {
-            LOG_WARNING("ResourceManager", "Shader (", id, ") was not loaded because already loaded");
+            LOG_WARNING("Shader {} was not loaded because already loaded", id);
             return false;
         }
         auto asset = AssetManager::GetShaderAsset(id);
         if (!asset) {
-            LOG_WARNING("ResourceManager", "Shader (", id, ") was not loaded because does not exist in AssetManager");
+            LOG_WARNING("Shader {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
         m_Shaders[id] = Shader::Create(asset.value().parts);
-        LOG_INFO("ResourceManager", "Shader (", id, ") was added");
+        LOG_INFO("Shader {} was added", id);
         return true;
     }
     S_METHOD_IMPL(bool, LoadRenderMesh, (UUID id), (id)) {
         if (m_RenderMeshes.contains(id)) {
-            LOG_WARNING("ResourceManager", "RenderMesh (", id, ") was not loaded because already loaded");
+            LOG_WARNING("RenderMesh {} was not loaded because already loaded", id);
             return false;
         }
         auto asset = AssetManager::GetRenderMeshAsset(id);
         if (!asset) {
-            LOG_WARNING("ResourceManager", "RenderMesh (", id, ") was not loaded because does not exist in AssetManager");
+            LOG_WARNING("RenderMesh {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
         auto model = ModelLoader::Load(asset.value().loading_props);
@@ -42,17 +42,17 @@ namespace DE {
             return false;
         }
         m_RenderMeshes[id] = CreateRef<RenderMesh>(model);
-        LOG_INFO("ResourceManager", "RenderMesh (", id, ") was added");
+        LOG_INFO("RenderMesh {} was added", id);
         return true;
     }
     S_METHOD_IMPL(bool, LoadHitBox, (UUID id), (id)) {
         if (m_HitBoxes.contains(id)) {
-            LOG_WARNING("ResourceManager", "HitBox (", id, ") was not loaded because already loaded");
+            LOG_WARNING("HitBox {} was not loaded because already loaded", id);
             return false;
         }
         auto asset = AssetManager::GetRenderMeshAsset(id);
         if (!asset) {
-            LOG_WARNING("ResourceManager", "Hitbox (", id, ") was not loaded because does not exist in AssetManager");
+            LOG_WARNING("Hitbox {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
         auto              mesh = ModelLoader::Load(asset.value().loading_props);
@@ -67,35 +67,35 @@ namespace DE {
         }
         m_HitBoxes.insert({id, CreateRef<Physics::ConvexHitbox>()});
         m_HitBoxes[id]->Build(vertices);
-        LOG_INFO("ResourceManager", "Hitbox (", id, ") was added");
+        LOG_INFO("Hitbox {} was added", id);
         return true;
     }
     S_METHOD_IMPL(bool, LoadCubeMap, (UUID id), (id)) {
         if (m_CubeMaps.contains(id)) {
-            LOG_WARNING("ResourceManager", "CubeMap (", id, ") was not loaded because already loaded");
+            LOG_WARNING("CubeMap {} was not loaded because already loaded", id);
             return false;
         }
         auto asset = AssetManager::GetTextureAsset(id);
         if (!asset) {
-            LOG_WARNING("ResourceManager", "CubeMap (", id, ") was not loaded because does not exist in AssetManager");
+            LOG_WARNING("CubeMap {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
         m_CubeMaps[id] = CubeMap::Create(TextureLoader::Load(asset.value().loading_props));
-        LOG_INFO("ResourceManager", "CubeMap (", id, ") was added");
+        LOG_INFO("CubeMap {} was added", id);
         return true;
     }
     S_METHOD_IMPL(bool, LoadTexture, (UUID id), (id)) {
         if (m_Textures.contains(id)) {
-            LOG_WARNING("ResourceManager", "Texture (", id, ") was not loaded because already loaded");
+            LOG_WARNING("Texture {} was not loaded because already loaded", id);
             return false;
         }
         auto asset = AssetManager::GetTextureAsset(id);
         if (!asset) {
-            LOG_WARNING("ResourceManager", "Texture (", id, ") was not loaded because does not exist in AssetManager");
+            LOG_WARNING("Texture {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
         m_Textures[id] = Texture::Create(*TextureLoader::Load(asset.value().loading_props));
-        LOG_INFO("ResourceManager", "Texture (", id, ") was added");
+        LOG_INFO("Texture {} was added", id);
         return true;
     }
 
@@ -149,7 +149,7 @@ namespace DE {
     S_METHOD_IMPL(bool, DeleteShader, (UUID id), (id)) {
         if (m_Shaders.contains(id)) {
             m_Shaders.erase(id);
-            LOG_INFO("ResourceManager", "Shader (", id, ") was deleted");
+            LOG_INFO("Shader {} was deleted", id);
             return true;
         }
         return false;
@@ -157,7 +157,7 @@ namespace DE {
     S_METHOD_IMPL(bool, DeleteRenderMesh, (UUID id), (id)) {
         if (m_RenderMeshes.contains(id)) {
             m_RenderMeshes.erase(id);
-            LOG_INFO("ResourceManager", "RenderMesh (", id, ") was deleted");
+            LOG_INFO("RenderMesh {} was deleted", id);
             return true;
         }
         return false;
@@ -165,7 +165,7 @@ namespace DE {
     S_METHOD_IMPL(bool, DeleteCubeMap, (UUID id), (id)) {
         if (m_CubeMaps.contains(id)) {
             m_CubeMaps.erase(id);
-            LOG_INFO("ResourceManager", "CubeMap (", id, ") was deleted");
+            LOG_INFO("CubeMap {} was deleted", id);
             return true;
         }
         return false;
@@ -173,7 +173,7 @@ namespace DE {
     S_METHOD_IMPL(bool, DeleteHitBox, (UUID id), (id)) {
         if (m_HitBoxes.contains(id)) {
             m_HitBoxes.erase(id);
-            LOG_INFO("ResourceManager", "Hitbox (", id, ") was deleted");
+            LOG_INFO("Hitbox {} was deleted", id);
             return true;
         }
         return false;
@@ -181,7 +181,7 @@ namespace DE {
     S_METHOD_IMPL(bool, DeleteTexture, (UUID id), (id)) {
         if (m_Textures.contains(id)) {
             m_Textures.erase(id);
-            LOG_INFO("ResourceManager", "Texture (", id, ") was deleted");
+            LOG_INFO("Texture {} was deleted", id);
             return true;
         }
         return false;
@@ -192,7 +192,7 @@ namespace DE {
         m_CubeMaps.clear();
         m_HitBoxes.clear();
         m_Textures.clear();
-        LOG_INFO("ResourceManager", "Cleared all resources");
+        LOG_INFO("Cleared all resources");
         return Unit();
     }
 }  // namespace DE

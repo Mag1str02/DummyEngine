@@ -74,6 +74,7 @@ namespace DE {
     };
 
     class ScriptEngine : public Singleton<ScriptEngine> {
+        LOGGER_AUTHOR(ScriptEngine)
         SINGLETON(ScriptEngine)
     public:
         S_METHOD_DEF(bool, AddScript, (UUID id));

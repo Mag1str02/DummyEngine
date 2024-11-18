@@ -9,6 +9,7 @@
 
 namespace DE {
     class ResourceManager : public Singleton<ResourceManager> {
+        LOGGER_AUTHOR(ResourceManager)
         SINGLETON(ResourceManager)
     public:
         S_METHOD_DEF(bool, LoadShader, (UUID id));

@@ -2,6 +2,7 @@
 
 namespace DE {
     class ScriptManager : public Singleton<ScriptManager> {
+        LOGGER_AUTHOR(ScriptManager)
         SINGLETON(ScriptManager)
     public:
         S_METHOD_DEF(bool, LoadScripts, (const std::vector<ScriptAsset>& scripts));

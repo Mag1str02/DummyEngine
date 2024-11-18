@@ -22,7 +22,7 @@ namespace DE {
         return LocalBufferNode(this, m_Data + index * m_Layout.GetStride());
     }
     void LocalBuffer::SetData(const void* data, U32 size) {
-        DE_ASSERT(m_Size == size, "Wrong data size (", size, ") expected (", m_Size, ")");
+        DE_ASSERT(m_Size == size, "Wrong data size {} expected {}", size, m_Size);
         memcpy(m_Data, data, m_Size);
     }
     void LocalBuffer::Allocate(const BufferLayout& layout, U32 size) {

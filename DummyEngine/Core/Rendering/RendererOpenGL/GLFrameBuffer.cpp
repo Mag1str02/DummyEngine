@@ -104,8 +104,7 @@ namespace DE {
     }
 
     Ref<Texture> GLFrameBuffer::GetColorAttachment(U32 attachment_id = 0) {
-        DE_ASSERT(
-            0 <= attachment_id && attachment_id < m_ColorAttachments.size(), "Color attachment with index (", attachment_id, ") does not exist");
+        DE_ASSERT(0 <= attachment_id && attachment_id < m_ColorAttachments.size(), "Color attachment with index {} does not exist", attachment_id);
         return m_ColorAttachments[attachment_id].m_Texture;
     }
     Ref<Texture> GLFrameBuffer::GetDepthAttachment() {

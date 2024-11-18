@@ -7,6 +7,7 @@ struct GLFWwindow;
 namespace DE {
 
     class GLContext : public Context {
+        LOGGER_AUTHOR(GLContext)
     public:
         GLContext(GLFWwindow* window);
 

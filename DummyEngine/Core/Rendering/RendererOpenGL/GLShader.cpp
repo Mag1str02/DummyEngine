@@ -26,10 +26,10 @@ namespace DE {
         glGetProgramiv(m_ShaderId, GL_LINK_STATUS, &success);
         if (!success) {
             glGetProgramInfoLog(m_ShaderId, 512, NULL, info_log);
-            LOG_ERROR("GLShader", "Failed to link shader program (", std::to_string(m_ShaderId), ")\n", reinterpret_cast<const char*>(&info_log));
+            LOG_ERROR("Failed to link shader program {} due:\n{}", std::to_string(m_ShaderId), reinterpret_cast<const char*>(&info_log));
             throw std::runtime_error("Failed to compile shader.");
         }
-        LOG_INFO("GLShader", "GLShader program (", std::to_string(m_ShaderId), ") linked successfully");
+        LOG_INFO("GLShader program {} linked successfully", std::to_string(m_ShaderId));
     }
     GLShader::~GLShader() {
         glDeleteProgram(m_ShaderId);
@@ -105,7 +105,7 @@ namespace DE {
 
         std::ifstream fin(path_to_file);
         if (!fin.is_open()) {
-            LOG_ERROR("GLShader", "Can't open shader source file (", RelativeToExecutable(path_to_file), ")");
+            LOG_ERROR("Can't open shader source file {}", RelativeToExecutable(path_to_file));
             return source_string;
         }
         try {
@@ -113,7 +113,7 @@ namespace DE {
                 source_string.append(line + "\n");
             }
         } catch (...) {
-            LOG_ERROR("GLShader", "Failed to read shader source file (", RelativeToExecutable(path_to_file), ")");
+            LOG_ERROR("Failed to read shader source file {}", RelativeToExecutable(path_to_file));
             return source_string;
         }
         return source_string;
@@ -123,11 +123,11 @@ namespace DE {
         const char* source_c_str = source.c_str();
 
         GLuint shader_part = glCreateShader(ShaderPartTypeToGLShaderPartType(part.type));
-//        if (part.type == ShaderPartType::Geometry) {
-//            glShaderSource(shader_part, strlen(source_c_str), &source_c_str, NULL);
-//        } else {
+        //        if (part.type == ShaderPartType::Geometry) {
+        //            glShaderSource(shader_part, strlen(source_c_str), &source_c_str, NULL);
+        //        } else {
         glShaderSource(shader_part, 1, &source_c_str, NULL);
-//        }
+        //        }
         glCompileShader(shader_part);
         m_Parts.push_back(shader_part);
 
@@ -136,10 +136,10 @@ namespace DE {
         glGetShaderiv(shader_part, GL_COMPILE_STATUS, &success);
         if (!success) {
             glGetShaderInfoLog(shader_part, Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN), NULL, infoLog);
-            LOG_ERROR("GLShader", "Failed to compile shader (", part.path.string(), ")\n", reinterpret_cast<const char*>(&infoLog));
+            LOG_ERROR("Failed to compile shader {} due:\n{}", part.path, reinterpret_cast<const char*>(&infoLog));
             return;
         }
-        LOG_INFO("GLShader", "File (", RelativeToExecutable(part.path), ") compiled");
+        LOG_INFO("File {} compiled", RelativeToExecutable(part.path));
 
         glAttachShader(m_ShaderId, shader_part);
     }

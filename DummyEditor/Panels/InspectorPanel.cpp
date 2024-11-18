@@ -140,7 +140,7 @@ namespace DE {
                 auto& meshes = m_Entity.Get<RenderMeshComponent>()->GetSubMeshes();
                 int   cnt    = 0;
                 for (auto& mesh : meshes) {
-                    std::string name = StrCat("Mesh ", cnt);
+                    std::string name = std::format("Mesh_{}", cnt);
                     if (ImGui::TreeNode(name.c_str())) {
                         ImGui::Columns(2);
                         ImGuiUtils::EditProperty(mesh.material);

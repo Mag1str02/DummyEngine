@@ -18,8 +18,8 @@ namespace DE {
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         DE_ASSERT(status, "Failed to initialize GLAD");
 
-        LOG_INFO("GLContext", "OpenGL loaded for context");
-        LOG_INFO("GLContext", "Vendor (", GL_STRING(GL_VENDOR), ") Renderer (", GL_STRING(GL_RENDERER), ") Version (", GL_STRING(GL_VERSION), ")");
+        LOG_INFO("OpenGL loaded for context");
+        LOG_INFO("Vendor {}, Renderer {}, Version {}", GL_STRING(GL_VENDOR), GL_STRING(GL_RENDERER), GL_STRING(GL_VERSION));
     }
 
     void GLContext::SwapBuffers() {

@@ -25,6 +25,7 @@ namespace DE {
     };
 
     class SceneLoader {
+        LOGGER_AUTHOR(SceneLoader)
     public:
         static std::optional<SceneFileData> LoadScene(const Path& path);
         static bool                         SaveScene(const SceneFileData& data, const Path& path);

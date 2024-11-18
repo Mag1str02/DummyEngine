@@ -3,6 +3,8 @@
 
 namespace DE {
     class ConsoleLayer : public Layer {
+        LOGGER_AUTHOR(ConsoleLayer)
+    public:
         void OnAttach() override;
         void OnUpdate(float dt) override;
         void OnImGuiRender() override;

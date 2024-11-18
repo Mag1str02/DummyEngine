@@ -7,7 +7,7 @@ namespace DE {
         switch (setting) {
             case DE_CFG_MAX_COMPILE_ERROR_LEN: return m_Configs.c_MaxShaderCompileErrorLen;
             case DE_CFG_MAX_INPUT_FRAME_AMOUNT: return m_Configs.c_MaxInputFrameAmount;
-            default: DE_ASSERT(false, "Wrong config requested (", setting, ")");
+            default: DE_ASSERT(false, "Wrong config requested {}", setting);
         }
         return 0;
     }
@@ -17,7 +17,7 @@ namespace DE {
             case DE_CFG_DEFAULT_CAMERA_ASPECT: return m_Configs.c_DefaultCameraAspect;
             case DE_CFG_DEFAULT_CAMERA_NEAR_PLANE: return m_Configs.c_DefaultCameraNearPlane;
             case DE_CFG_DEFAULT_CAMERA_FAR_PLANE: return m_Configs.c_DefaultCameraFarPlane;
-            default: DE_ASSERT(false, "Wrong config requested (", setting, ")");
+            default: DE_ASSERT(false, "Wrong config requested {}", setting);
         }
         return 0;
     }
@@ -34,7 +34,7 @@ namespace DE {
             case DE_CFG_SCRIPT_CACHE_PATH: return m_Configs.c_ScriptCachePath;
             case DE_CFG_FONT_PATH: return m_Configs.c_FontPath;
             case DE_CFG_SCENE_PATH: return m_Configs.c_ScenePath;
-            default: DE_ASSERT(false, "Wrong config requested (", setting, ")");
+            default: DE_ASSERT(false, "Wrong config requested {}", setting);
         }
         return Path(".");
     }

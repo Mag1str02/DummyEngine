@@ -1,7 +1,7 @@
 #include "ConvexCollider.hpp"
 
-#include "DummyEngine/Core/Physics/Utils.cpp"
-#include "DummyEngine/Utils/Debug/Logger.h"
+#include "DummyEngine/Core/Physics/Utils.hpp"
+#include "DummyEngine/Utils/Base.h"
 
 void DE::Physics::ConvexHitbox::Build(const std::vector<Vec3>& mesh) {
     float min_x = mesh[0].x, max_x = mesh[0].x;
@@ -189,14 +189,14 @@ std::vector<DE::Vec3> DE::Physics::ConvexCollider::GetCollisionCenter(const DE::
     for (size_t i = 0; i < _hitbox->_size; i++) {
         Vec3 lhs = GetPoint(i);
         if (pl.distance(lhs) == 0) {
-            // LOG_DEBUG("GCC PTA", LOG_VEC(lhs));
+            // LOG_DEBUG("GCC PTA {}", lhs);
             pts_res.push_back(lhs);
         }
         for (const auto& j : _hitbox->_edges[i]) {
             if (side[i] == side[j]) continue;
             Vec3 rhs = GetPoint(j);
             Vec3 pt  = pl.intersectionPoint(lhs, rhs);
-            // LOG_DEBUG("GCC PTI", LOG_VEC(pt));
+            // LOG_DEBUG("GCC PTI {}", pt);
             pts_res.push_back(pt);
         }
     }

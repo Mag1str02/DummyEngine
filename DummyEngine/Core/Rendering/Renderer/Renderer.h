@@ -13,6 +13,7 @@
 namespace DE {
 
     class Renderer : public Singleton<Renderer> {
+        LOGGER_AUTHOR(Renderer)
         SINGLETON(Renderer)
     public:
         enum class Shaders {

@@ -6,6 +6,7 @@
 
 namespace DE {
     class GLCubeMap : public CubeMap {
+        LOGGER_AUTHOR(GLCubeMap)
     public:
         GLCubeMap(const Ref<TextureData> data);
         GLCubeMap(U32 size, Texture::Format format, Texture::Channels channels, bool gen_mipmap, bool depth_map);

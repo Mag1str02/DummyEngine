@@ -26,7 +26,7 @@ namespace DE {
         if (format == Texture::Format::F32 && channels == Texture::Channels::RGBA) return GL_RGBA32F;
         if (format == Texture::Format::F32 && channels == Texture::Channels::Depth) return GL_DEPTH_COMPONENT32F;
 
-        DE_ASSERT(false, "Unsupported format and channels combination (", Texture::FormatToStr(format), ", ", Texture::ChannelsToStr(channels), ")");
+        DE_ASSERT(false, "Unsupported format and channels combination {}, {}", Texture::FormatToStr(format), Texture::ChannelsToStr(channels));
         return 0;
     }
     GLenum GLTextureFormatExternal(Texture::Channels channels) {
