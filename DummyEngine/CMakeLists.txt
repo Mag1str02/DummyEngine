@@ -14,8 +14,8 @@ target_compile_definitions(DummyEngineLib PUBLIC
     DE_ENABLE_ASSERTS=1
     DE_ENABLE_LOGGING=1
 )
-target_precompile_headers(DummyEngineLib PUBLIC ${ENGINE_PRECOMPILED_HEADERS})
+target_include_directories(DummyEngineLib PUBLIC ../.)
 
-target_include_directories(DummyEngineLib
-    PUBLIC ../.
-)
+if (${ENABLE_PRECOMPILED_HEADERS})
+    target_precompile_headers(DummyEngineLib PUBLIC ${ENGINE_PRECOMPILED_HEADERS})
+endif()

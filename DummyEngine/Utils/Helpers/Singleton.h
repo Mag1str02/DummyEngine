@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DummyEngine/Utils/Debug/Assert.h"
+
 struct Unit {};
 
 #define SINGLETON(type)                           \

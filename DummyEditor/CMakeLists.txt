@@ -12,4 +12,7 @@ target_compile_definitions(DummyEditor PUBLIC DE_EDITOR_LIBRARY_NAME="libDummyEd
 target_link_libraries(DummyEditor PUBLIC DummyEngineLib)
 target_include_directories(DummyEditor PUBLIC ../.)
 add_dependencies(DummyEditor DummyEditorScripts)
-target_precompile_headers(DummyEditor REUSE_FROM DummyEngineLib)
+
+if (${ENABLE_PRECOMPILED_HEADERS})
+        target_precompile_headers(DummyEditor REUSE_FROM DummyEngineLib)
+endif()

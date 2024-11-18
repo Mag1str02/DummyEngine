@@ -14,3 +14,13 @@ macro(add_external_library DIRECTORY INCLUDE_DIR LIBRARY)
     message(STATUS "${DIRECTORY} library: ${LIBRARY}")
     message(STATUS "---Configured-${LIBRARY}-----------------------------------------------------------------------------")
 endmacro(add_external_library)
+
+macro(save_compile_flags)
+    set(CXX_BUFF "${CMNAKE_CXX_FLAGS}")
+    set(C_BUFF "${CMNAKE_C_FLAGS}")
+endmacro(save_compile_flags)
+
+macro(restore_compile_flags)
+    set(CMAKE_CXX_FLAGS "${CXX_BUFF}")
+    set(CMAKE_C_FLAGS "${C_BUFF}")
+endmacro(restore_compile_flags)

@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "DummyEngine/Utils/Helpers/StringOperations.h"
+
 namespace DE {
     void FailAssert(const char* expr_str, const char* file, int line, const std::string& msg);
 
