@@ -28,7 +28,7 @@ namespace DE {
     }
 
     void ModelLoader::LoadBone(Bone& bone, aiNodeAnim* node) {
-        for (S32 i = 0; i < node->mNumPositionKeys; ++i) {
+        for (U32 i = 0; i < node->mNumPositionKeys; ++i) {
             auto        pos        = node->mPositionKeys[i].mValue;
             float       time_stamp = node->mPositionKeys[i].mTime;
             KeyPosition data;
@@ -39,7 +39,7 @@ namespace DE {
             bone.m_Positions.push_back(data);
         }
 
-        for (S32 i = 0; i < node->mNumRotationKeys; ++i) {
+        for (U32 i = 0; i < node->mNumRotationKeys; ++i) {
             auto        rot        = node->mRotationKeys[i].mValue;
             float       time_stamp = node->mRotationKeys[i].mTime;
             KeyRotation data;
@@ -51,7 +51,7 @@ namespace DE {
             bone.m_Rotations.push_back(data);
         }
 
-        for (S32 i = 0; i < node->mNumScalingKeys; ++i) {
+        for (U32 i = 0; i < node->mNumScalingKeys; ++i) {
             aiVector3D scale      = node->mScalingKeys[i].mValue;
             float      time_stamp = node->mScalingKeys[i].mTime;
             KeyScale   data;
@@ -77,7 +77,7 @@ namespace DE {
         }
         auto& animation = *model.animation;
 
-        for (int i = 0; i < mesh->mNumBones; ++i) {
+        for (U32 i = 0; i < mesh->mNumBones; ++i) {
             int         bone_id   = -1;
             std::string bone_name = mesh->mBones[i]->mName.C_Str();
             if (!animation.m_BoneNameToID.contains(bone_name)) {
@@ -100,7 +100,7 @@ namespace DE {
             int  weights_amount = mesh->mBones[i]->mNumWeights;
 
             for (int j = 0; j < weights_amount; ++j) {
-                int   v_id   = weights[j].mVertexId;
+                U32   v_id   = weights[j].mVertexId;
                 float weight = weights[j].mWeight;
 
                 if (v_id >= current_mesh.vertices.size()) {
@@ -112,7 +112,7 @@ namespace DE {
         }
     }
     void ModelLoader::ReadBones(Animation& animation, const aiAnimation* anim) {
-        for (int i = 0; i < anim->mNumChannels; ++i) {
+        for (U32 i = 0; i < anim->mNumChannels; ++i) {
             auto channel   = anim->mChannels[i];
             auto bone_info = animation.GetBone(channel->mNodeName.data);
             if (!bone_info) {
@@ -131,7 +131,7 @@ namespace DE {
         node.transformation = AssimpToGLM(src->mTransformation);
         node.childrens.resize(src->mNumChildren);
 
-        for (int i = 0; i < src->mNumChildren; i++) {
+        for (U32 i = 0; i < src->mNumChildren; i++) {
             Animation::Node& data = node.childrens[i];
             ReadAnimationNode(data, src->mChildren[i]);
         }

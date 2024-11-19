@@ -13,7 +13,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif()
 
 function(add_warnings TARGET)
-    target_compile_options(${TARGET} PUBLIC -Wall -Wextra -Wpedantic -Wno-extra-semi -Wno-missing-field-initializers)
+    target_compile_options(${TARGET} PUBLIC -Wall -Wextra -Wpedantic -Wno-extra-semi -Wno-missing-field-initializers -Werror)
 
     if (${ENABLE_PRECOMPILED_HEADERS})
         target_compile_options(${TARGET} PUBLIC -Winvalid-pch)
