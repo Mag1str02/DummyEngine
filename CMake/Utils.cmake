@@ -16,8 +16,8 @@ macro(add_external_library DIRECTORY INCLUDE_DIR LIBRARY)
 endmacro(add_external_library)
 
 macro(save_compile_flags)
-    set(CXX_BUFF "${CMNAKE_CXX_FLAGS}")
-    set(C_BUFF "${CMNAKE_C_FLAGS}")
+    set(CXX_BUFF "${CMAKE_CXX_FLAGS}")
+    set(C_BUFF "${CMAKE_C_FLAGS}")
 endmacro(save_compile_flags)
 
 macro(restore_compile_flags)
