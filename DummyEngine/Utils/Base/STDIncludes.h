@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <functional>
 #include <iomanip>
@@ -26,4 +27,3 @@
 #include <unordered_set>
 #include <variant>
 #include <vector>
-#include <format>

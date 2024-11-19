@@ -10,7 +10,6 @@
 #include "DummyEngine/Utils/Helpers/Singleton.h"
 #include "DummyEngine/Utils/Types/Types.h"
 
-
 namespace DE {
     struct TimeLapse {
         std::chrono::time_point<std::chrono::high_resolution_clock> m_Start;

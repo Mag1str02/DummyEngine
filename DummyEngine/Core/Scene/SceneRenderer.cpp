@@ -10,7 +10,7 @@
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
 
 namespace DE {
-    const U32 MAX_LIGHTS_IN_SCENE      = 1000;
+    const U32 MAX_LIGHTS_IN_SCENE = 1000;
 
     const U32 LIGHT_UB_ID = 1;
 

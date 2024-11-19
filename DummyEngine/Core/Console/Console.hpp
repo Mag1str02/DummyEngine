@@ -25,12 +25,12 @@ namespace DE {
         S_METHOD_DEF(double, GetDouble, (std::string var))
         S_METHOD_DEF(bool, GetBool, (std::string var))
         S_METHOD_DEF(std::string, GetString, (std::string var))
-        S_METHOD_DEF(std::vector<std::string>, GetHints, (std::string& cmd))
+        S_METHOD_DEF(std::vector<std::string>, GetHints, (std::string & cmd))
     private:
-        std::vector<std::string> m_CmdHistory;
-        std::vector<std::string> m_LogHistory;
-        std::map<std::string, ConsoleVariable> m_Variables;
+        std::vector<std::string>                         m_CmdHistory;
+        std::vector<std::string>                         m_LogHistory;
+        std::map<std::string, ConsoleVariable>           m_Variables;
         std::map<std::string, std::function<void(void)>> m_Callback;
-        std::vector<std::string> m_Commands;
+        std::vector<std::string>                         m_Commands;
     };
 }  // namespace DE

@@ -3,7 +3,7 @@
 namespace DE {
 #ifdef ECS_IMPLEMENTATION
 
-    Storage::Storage() : m_ComponentManager(this), m_SystemManager(this){}
+    Storage::Storage() : m_ComponentManager(this), m_SystemManager(this) {}
     void Storage::Destruct() {
         for (U32 id = m_EntityManager.BeginEntity(); id != m_EntityManager.EndEntity(); id = m_EntityManager.NextEntity(id)) {
             m_ComponentManager.Destroy(id);

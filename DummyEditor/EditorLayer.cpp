@@ -223,7 +223,7 @@ namespace DE {
             if (!ScriptManager::LoadScripts(m_SceneFileData.assets.scripts)) {
                 return;
             }
-            m_CurrentScene                          = SceneLoader::Serialize(m_SceneFileData.hierarchy);
+            m_CurrentScene = SceneLoader::Serialize(m_SceneFileData.hierarchy);
             if (m_CurrentScene == nullptr) {
                 return;
             }

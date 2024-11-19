@@ -62,7 +62,10 @@ namespace DE {
         ++m_FrameStatistics.m_DrawnInstances;
         return Unit();
     }
-    S_METHOD_IMPL(Unit, Submit, (Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& transform, const bool is_depthmap), (mesh, shader, transform, is_depthmap)) {
+    S_METHOD_IMPL(Unit,
+                  Submit,
+                  (Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& transform, const bool is_depthmap),
+                  (mesh, shader, transform, is_depthmap)) {
         shader->Bind();
         shader->SetMat4("u_Transform", transform);
         for (const auto& sub_mesh : mesh->m_SubMeshes) {
@@ -517,7 +520,7 @@ namespace DE {
         }
         {
             std::vector<ShaderPart> parts = {
-                {  ShaderPartType::Vertex,      shaders / "Vertex/DirectionalShadowMap.vs"},
+                {  ShaderPartType::Vertex,   shaders / "Vertex/DirectionalShadowMap.vs"},
                 {ShaderPartType::Fragment, shaders / "Fragment/DirectionalShadowMap.fs"}
             };
 
@@ -525,7 +528,7 @@ namespace DE {
         }
         {
             std::vector<ShaderPart> parts = {
-                {ShaderPartType::Vertex,   shaders / "Vertex/OmnidirectionalShadowMap.vs"},
+                {  ShaderPartType::Vertex,   shaders / "Vertex/OmnidirectionalShadowMap.vs"},
                 {ShaderPartType::Fragment, shaders / "Fragment/OmnidirectionalShadowMap.fs"},
                 {ShaderPartType::Geometry, shaders / "Geometry/OmnidirectionalShadowMap.gs"}
             };

@@ -9,7 +9,7 @@ namespace DE {
 
     GLFWmonitor* GetMonitor(U32 id) {
         int           monitors_amount = 0;
-        GLFWmonitor** monitors = glfwGetMonitors(&monitors_amount);
+        GLFWmonitor** monitors        = glfwGetMonitors(&monitors_amount);
         DE_ASSERT(0 <= id && id < U32(monitors_amount), "Wrong monitor id {} should be between [0, {})", id, monitors_amount);
         return monitors[id];
     }
@@ -43,7 +43,7 @@ namespace DE {
         stbi_image_free(icon.pixels);
     }
     void Window::FullScreen(U32 id) {
-        m_State.mode = WindowMode::FullScreen;
+        m_State.mode       = WindowMode::FullScreen;
         m_State.monitor_id = id;
 
         Invalidate();

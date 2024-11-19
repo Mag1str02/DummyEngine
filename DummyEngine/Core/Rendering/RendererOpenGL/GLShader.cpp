@@ -21,7 +21,7 @@ namespace DE {
         }
         glLinkProgram(m_ShaderId);
 
-        int               success;
+        int         success;
         std::string info_log;
         info_log.resize(Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN));
         glGetProgramiv(m_ShaderId, GL_LINK_STATUS, &success);
@@ -130,7 +130,7 @@ namespace DE {
         glCompileShader(shader_part);
         m_Parts.push_back(shader_part);
 
-        int  success = 1;
+        int         success = 1;
         std::string info_log;
         info_log.resize(Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN));
         int len = 0;

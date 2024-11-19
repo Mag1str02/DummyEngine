@@ -55,7 +55,7 @@ namespace DE {
             LOG_WARNING("Hitbox {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
-        auto              mesh = ModelLoader::Load(asset.value().loading_props);
+        auto mesh = ModelLoader::Load(asset.value().loading_props);
         if (mesh == nullptr) {
             return false;
         }

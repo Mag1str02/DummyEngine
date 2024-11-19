@@ -24,7 +24,7 @@ namespace DE {
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-            float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+            float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
             glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
         }
         Resize(width, height);
