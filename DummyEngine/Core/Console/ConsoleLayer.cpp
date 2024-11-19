@@ -11,7 +11,7 @@
 
 namespace DE {
 
-    void ConsoleLayer::OnUpdate(float dt) {
+    void ConsoleLayer::OnUpdate(float) {
         if (Input::KeyPressed(Key::I) && Input::KeyDown(Key::LeftShift)) {
             if (!m_Show) {
                 m_JustOpened = true;

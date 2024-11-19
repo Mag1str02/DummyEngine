@@ -75,7 +75,8 @@ namespace DE {
     }
     ScriptProxyManager::Iterator ScriptProxyManager::Iterator::operator++(int) {
         Iterator res = *this;
-        return ++(*this);
+        ++(*this);
+        return res;
     }
     ScriptProxy& ScriptProxyManager::Iterator::operator*() {
         return m_Manager->m_Proxys[m_ID];
@@ -87,7 +88,7 @@ namespace DE {
     ScriptProxyManager::Iterator::Iterator(ScriptProxyManager* manager, U32 id) : m_Manager(manager), m_ID(id) {}
 
     ScriptProxyManager::Iterator ScriptProxyManager::begin() {
-        int id = 0;
+        U32 id = 0;
         while (id < m_States.size() && !m_States[id]) {
             ++id;
         }

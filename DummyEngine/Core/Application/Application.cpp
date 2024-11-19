@@ -8,7 +8,7 @@ namespace DE {
         // TODO: Customizeble name
         m_Window = new Window(WindowState{.mode = WindowMode::Windowed, .name = "DummyEngine", .width = 1280, .height = 720});
         DE_ASSERT(m_Window, "Failed to allocate Windows");
-        m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
+        m_Window->SetEventCallback([](Event& e) { Application::OnEvent(e); });
 
         m_ImGuiLayer = new ImGuiLayer();
         DE_ASSERT(m_ImGuiLayer, "Failed to allocate ImGuiLayer");
@@ -33,7 +33,7 @@ namespace DE {
 
     S_METHOD_IMPL(Unit, PushLayer, (Layer * layer), (layer)) {
         m_Layers.push_back(layer);
-        layer->m_EventCallback = [this](Event& e) { OnEvent(e); };
+        layer->m_EventCallback = [](Event& e) { Application::OnEvent(e); };
         layer->OnAttach();
         return Unit();
     }
@@ -45,7 +45,9 @@ namespace DE {
         return Unit();
     }
     S_METHOD_IMPL(Unit, Run, (), ()) {
-        double frame_begin = glfwGetTime(), frame_end, prev_frame_time = 0.001, fake_time;
+        double frame_begin = glfwGetTime();
+        double frame_end;
+        double prev_frame_time = 0.001;
         while (!m_ShouldClose) {
             DE_PROFILER_BEGIN_FRAME();
             DE_PROFILE_SCOPE("Aplication loop");
@@ -53,7 +55,6 @@ namespace DE {
             frame_end       = glfwGetTime();
             prev_frame_time = frame_end - frame_begin;
             frame_begin     = glfwGetTime();
-
 
             Renderer::BeginFrame();
             Input::NewFrame();
@@ -111,7 +112,7 @@ namespace DE {
     void Application::OnWindowResize(WindowResizeEvent& e) {
         Renderer::SetViewport(e.GetWidth(), e.GetHeight());
     }
-    void Application::OnWindowClose(WindowCloseEvent& e) {
+    void Application::OnWindowClose(WindowCloseEvent&) {
         m_ShouldClose = true;
     }
 

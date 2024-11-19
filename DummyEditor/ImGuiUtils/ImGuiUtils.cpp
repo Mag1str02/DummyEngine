@@ -76,7 +76,7 @@ namespace DE {
         void EditProperty(const std::string& name, S64& value) {
             EditProperty(name, ImGuiDataType_S64, &value);
         }
-        void EditProperty(const std::string& name, bool& value, PropertyType property_type) {
+        void EditProperty(const std::string& name, bool& value, PropertyType) {
             ImGui::SetCursorPosX(Constants::DefaultLeftPadding);
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
@@ -84,7 +84,7 @@ namespace DE {
             ImGui::Checkbox(std::format("##{}", name.c_str()).c_str(), &value);
             ImGui::NextColumn();
         }
-        void EditProperty(std::string name, std::string& value, PropertyType property_type) {
+        void EditProperty(std::string name, std::string& value, PropertyType) {
             ImGui::SetCursorPosX(Constants::DefaultLeftPadding);
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();
@@ -93,7 +93,7 @@ namespace DE {
             ImGui::InputText(name.c_str(), &value);
             ImGui::NextColumn();
         }
-        void EditProperty(std::string name, Vec2& vec, PropertyType property_type) {
+        void EditProperty(std::string name, Vec2& vec, PropertyType) {
             ImGui::SetCursorPosX(Constants::DefaultLeftPadding);
             ImGui::TextUnformatted(name.c_str());
             ImGui::NextColumn();

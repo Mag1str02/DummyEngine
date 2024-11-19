@@ -4,13 +4,13 @@
 
 namespace DE {
     bool SceneHierarchy::Node::Valid() const {
-        return m_ID != -1 && m_Owner && !std::holds_alternative<std::monostate>(m_Owner->m_Nodes[m_ID].node);
+        return m_ID != UINT32_MAX && m_Owner && !std::holds_alternative<std::monostate>(m_Owner->m_Nodes[m_ID].node);
     }
     bool SceneHierarchy::Node::IsEntity() const {
-        return m_ID != -1 && m_Owner && std::holds_alternative<NodeData::EntityNode>(m_Owner->m_Nodes[m_ID].node);
+        return m_ID != UINT32_MAX && m_Owner && std::holds_alternative<NodeData::EntityNode>(m_Owner->m_Nodes[m_ID].node);
     }
     bool SceneHierarchy::Node::IsFolder() const {
-        return m_ID != -1 && m_Owner && std::holds_alternative<NodeData::FolderNode>(m_Owner->m_Nodes[m_ID].node);
+        return m_ID != UINT32_MAX && m_Owner && std::holds_alternative<NodeData::FolderNode>(m_Owner->m_Nodes[m_ID].node);
     }
     bool SceneHierarchy::Node::IsAnsestorOf(const Node& child) const {
         if (!Valid() || !child.Valid() || m_Owner != child.m_Owner) {
@@ -22,12 +22,12 @@ namespace DE {
         return m_ID;
     }
     SceneHierarchy::Node SceneHierarchy::Node::GetParent() const {
-        DE_ASSERT(m_ID != -1 && m_Owner, "Use of GetParent on invalid SceneHierarchy::Node");
+        DE_ASSERT(m_ID != UINT32_MAX && m_Owner, "Use of GetParent on invalid SceneHierarchy::Node");
         return Node(m_Owner, m_Owner->m_Nodes[m_ID].parent);
     }
 
     bool SceneHierarchy::Node::Attach(Node other) {
-        DE_ASSERT(m_ID != -1 && m_Owner, "Use of Attach on invalid SceneHierarchy::Node");
+        DE_ASSERT(m_ID != UINT32_MAX && m_Owner, "Use of Attach on invalid SceneHierarchy::Node");
         return m_Owner->Attach(*this, other);
     }
     SceneHierarchy::Node SceneHierarchy::Node::AddEntity(Entity entity) {
@@ -43,7 +43,7 @@ namespace DE {
         return folder;
     }
     void SceneHierarchy::Node::Delete() {
-        DE_ASSERT(m_ID != -1 && m_Owner, "Use of Delete on invalid SceneHierarchy::Node");
+        DE_ASSERT(m_ID != UINT32_MAX && m_Owner, "Use of Delete on invalid SceneHierarchy::Node");
         m_Owner->DeleteNode(*this);
         *this = Node();
     }
@@ -150,7 +150,7 @@ namespace DE {
                 return true;
             }
             child = m_Nodes[child].parent;
-        } while (child != -1);
+        } while (child != UINT32_MAX);
         return false;
     }
 

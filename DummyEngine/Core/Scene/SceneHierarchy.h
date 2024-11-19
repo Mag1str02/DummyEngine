@@ -35,7 +35,7 @@ namespace DE {
             Node(SceneHierarchy* owner, U32 id);
 
             SceneHierarchy* m_Owner = nullptr;
-            U32             m_ID    = -1;
+            U32             m_ID    = UINT32_MAX;
         };
 
         SceneHierarchy(const std::string& name);

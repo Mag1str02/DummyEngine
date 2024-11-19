@@ -124,7 +124,7 @@ namespace DE {
 
     template <typename ComponentType> void ComponentManager::RegisterComponent() {
         if (m_ComponentId.find(INDEX(ComponentType)) == m_ComponentId.end()) {
-            auto default_handler                    = [](Entity e) {};
+            auto default_handler                    = [](Entity) {};
             m_ComponentId[INDEX(ComponentType)]     = m_ComponentId.size();
             m_ComponentArrays[INDEX(ComponentType)] = std::make_shared<ComponentArray<ComponentType>>(ComponentArray<ComponentType>());
             m_AddHandlers[INDEX(ComponentType)]     = default_handler;

@@ -73,7 +73,7 @@ namespace DE {
 
         virtual void OnAttach() {}
         virtual void OnRuntimeStart() {}
-        virtual void OnUpdate(float dt) {}
+        virtual void OnUpdate(float) {}
         virtual void OnRender() {}
         virtual void OnRuntimeStop() {}
         virtual void OnDetach() {}
@@ -103,7 +103,7 @@ namespace DE {
     template <typename T> ScriptFieldType TypeToScriptFieldType();
 
     template <typename T, typename U> constexpr U32 OffsetOf(U T::* member) {
-        return (char*)&((T*)nullptr->*member) - (char*)nullptr;
+        return (size_t)&((T*)nullptr->*member);
     }
 
     template <typename T> T& Script::Field::Get() {

@@ -14,7 +14,7 @@ namespace DE {
         }
     }
 
-    template <typename Component> void InspectorPanel::DrawComponentWidget(Entity entity) {
+    template <typename Component> void InspectorPanel::DrawComponentWidget() {
         if (m_Entity.Has<Component>()) {
             std::string header = ICON_MD_REPORT_PROBLEM "  " + DemangledName<Component>();
             if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
@@ -24,7 +24,7 @@ namespace DE {
         }
     }
 
-    template <> void InspectorPanel::DrawComponentWidget<TransformComponent>(Entity entity) {
+    template <> void InspectorPanel::DrawComponentWidget<TransformComponent>() {
         if (m_Entity.Has<TransformComponent>()) {
             if (ImGui::CollapsingHeader(ICON_MD_OPEN_IN_FULL "  Transformation", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto& transform = m_Entity.Get<TransformComponent>();
@@ -36,7 +36,7 @@ namespace DE {
             }
         }
     }
-    template <> void InspectorPanel::DrawComponentWidget<TagComponent>(Entity entity) {
+    template <> void InspectorPanel::DrawComponentWidget<TagComponent>() {
         if (m_Entity.Has<TagComponent>()) {
             auto& component = m_Entity.Get<TagComponent>();
             if (ImGui::CollapsingHeader(ICON_MD_BADGE "  Tag", ImGuiTreeNodeFlags_DefaultOpen)) {
@@ -46,7 +46,7 @@ namespace DE {
             }
         }
     }
-    template <> void InspectorPanel::DrawComponentWidget<ScriptComponent>(Entity entity) {
+    template <> void InspectorPanel::DrawComponentWidget<ScriptComponent>() {
         if (m_Entity.Has<ScriptComponent>()) {
             auto& component = m_Entity.Get<ScriptComponent>();
             if (ImGui::CollapsingHeader(ICON_MD_DESCRIPTION "  Script", ImGuiTreeNodeFlags_DefaultOpen)) {
@@ -82,7 +82,7 @@ namespace DE {
             }
         }
     }
-    template <> void InspectorPanel::DrawComponentWidget<FPSCamera>(Entity entity) {
+    template <> void InspectorPanel::DrawComponentWidget<FPSCamera>() {
         if (m_Entity.Has<FPSCamera>()) {
             if (ImGui::CollapsingHeader(ICON_MD_VIDEOCAM "  FPSCamera", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto& camera = m_Entity.Get<FPSCamera>();
@@ -93,12 +93,12 @@ namespace DE {
                 ImGuiUtils::EditProperty("FIeldOfView", camera.m_FOV);
                 ImGui::Columns(1);
                 if (ImGui::Button("Select as main camera", {ImGui::GetContentRegionAvail().x, 20})) {
-                    m_Scene.lock()->SetCamera(entity);
+                    m_Scene.lock()->SetCamera(m_Entity);
                 }
             }
         }
     }
-    template <> void InspectorPanel::DrawComponentWidget<LightSource>(Entity entity) {
+    template <> void InspectorPanel::DrawComponentWidget<LightSource>() {
         if (m_Entity.Has<LightSource>()) {
             if (ImGui::CollapsingHeader(ICON_MD_LIGHTBULB "  LightSoruce", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto&       source        = m_Entity.Get<LightSource>();
@@ -134,7 +134,7 @@ namespace DE {
             }
         }
     }
-    template <> void InspectorPanel::DrawComponentWidget<RenderMeshComponent>(Entity entity) {
+    template <> void InspectorPanel::DrawComponentWidget<RenderMeshComponent>() {
         if (m_Entity.Has<RenderMeshComponent>()) {
             if (ImGui::CollapsingHeader(ICON_MD_TOKEN "  RenderMesh", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto& meshes = m_Entity.Get<RenderMeshComponent>()->GetSubMeshes();
@@ -153,7 +153,7 @@ namespace DE {
         }
     }
 
-    template <> void InspectorPanel::DrawComponentWidget<Physics::PhysicsComponent>(Entity entity) {
+    template <> void InspectorPanel::DrawComponentWidget<Physics::PhysicsComponent>() {
         if (m_Entity.Has<Physics::PhysicsComponent>()) {
             if (ImGui::CollapsingHeader("  PhysicsComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto&       phys    = m_Entity.Get<Physics::PhysicsComponent>();
@@ -176,14 +176,14 @@ namespace DE {
             if (ImGui::Begin(ICON_MD_INFO "  Inspector")) {
                 auto scene = m_Scene.lock();
                 if (scene && m_Entity.Valid()) {
-                    DrawComponentWidget<TagComponent>(m_Entity);
-                    DrawComponentWidget<ScriptComponent>(m_Entity);
-                    DrawComponentWidget<TransformComponent>(m_Entity);
-                    DrawComponentWidget<FPSCamera>(m_Entity);
-                    DrawComponentWidget<LightSource>(m_Entity);
-                    DrawComponentWidget<RenderMeshComponent>(m_Entity);
-                    DrawComponentWidget<SkyBoxComponent>(m_Entity);
-                    DrawComponentWidget<Physics::PhysicsComponent>(m_Entity);
+                    DrawComponentWidget<TagComponent>();
+                    DrawComponentWidget<ScriptComponent>();
+                    DrawComponentWidget<TransformComponent>();
+                    DrawComponentWidget<FPSCamera>();
+                    DrawComponentWidget<LightSource>();
+                    DrawComponentWidget<RenderMeshComponent>();
+                    DrawComponentWidget<SkyBoxComponent>();
+                    DrawComponentWidget<Physics::PhysicsComponent>();
                     AddComponent();
                 }
             }

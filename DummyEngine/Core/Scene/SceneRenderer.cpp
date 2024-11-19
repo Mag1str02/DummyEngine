@@ -11,7 +11,6 @@
 
 namespace DE {
     const U32 MAX_LIGHTS_IN_SCENE      = 1000;
-    const U32 MAX_INSTANCES_PER_BUFFER = 1000;
 
     const U32 LIGHT_UB_ID = 1;
 
@@ -172,7 +171,6 @@ namespace DE {
                 if (skybox.Has<TransformComponent>()) {
                     transform = skybox.Get<TransformComponent>().GetRotation();
                 }
-                static U32 cnt = 0;
                 Renderer::Submit(skybox.Get<SkyBoxComponent>()->GetMap(), camera, transform);
             }
             for (auto e : m_Scene->View<ScriptComponent>()) {
@@ -237,10 +235,8 @@ namespace DE {
         DE_PROFILE_SCOPE("UpdateShaders");
 
         int cnt_light_sources = 0;
-        int cnt_shadowmaps    = 0;
         for (auto enitity : m_Scene->m_Storage->View<LightSource>()) {
             auto& light_source                           = enitity.Get<LightSource>();
-            auto  id                                     = enitity.Get<IDComponent>().Get();
             m_Lights->at(cnt_light_sources).Get<Vec3>(0) = light_source.ambient;
             m_Lights->at(cnt_light_sources).Get<Vec3>(1) = light_source.diffuse;
             m_Lights->at(cnt_light_sources).Get<Vec3>(2) = light_source.specular;

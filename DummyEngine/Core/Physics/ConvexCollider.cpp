@@ -83,21 +83,21 @@ DE::Vec3 DE::Physics::ConvexCollider::GetPoint(const size_t idx) const {
 
 DE::Vec3 DE::Physics::ConvexCollider::Collide(const DE::Physics::ConvexCollider& oth) const {
     std::vector<DE::Vec3> axis;
-    for (int i = 1; i < DE::Physics::UNIQUE_FACES; i++) {
+    for (U32 i = 1; i < DE::Physics::UNIQUE_FACES; ++i) {
         Vec3 A = GetPoint(i) - GetPoint(0);
         Vec3 B = GetPoint((i + 1) % (UNIQUE_FACES - 1) + 1) - GetPoint(0);
         axis.push_back(glm::normalize(glm::cross(A, B)));
     }
 
-    for (int i = 1; i < DE::Physics::UNIQUE_FACES; i++) {
+    for (U32 i = 1; i < DE::Physics::UNIQUE_FACES; ++i) {
         Vec3 A = oth.GetPoint(i) - oth.GetPoint(0);
         Vec3 B = oth.GetPoint((i + 1) % (UNIQUE_FACES - 1) + 1) - oth.GetPoint(0);
         axis.push_back(glm::normalize(glm::cross(A, B)));
     }
 
-    for (int i = 1; i < DE::Physics::UNIQUE_FACES; i++) {
+    for (U32 i = 1; i < DE::Physics::UNIQUE_FACES; ++i) {
         Vec3 A = GetPoint(i) - GetPoint(0);
-        for (int j = 1; j < DE::Physics::UNIQUE_FACES; j++) {
+        for (U32 j = 1; j < DE::Physics::UNIQUE_FACES; ++j) {
             Vec3 B     = oth.GetPoint((j + 1) % (UNIQUE_FACES - 1) + 1) - oth.GetPoint(0);
             Vec3 cross = glm::cross(A, B);
             if (glm::length(cross) == 0) {
@@ -156,7 +156,7 @@ DE::Vec3 DE::Physics::ConvexCollider::GetCollisionPoint(const DE::Vec3& collisio
     Vec3 sum(0);
     cnt = 0;
     for (const auto& pt : _hitbox->_points) {
-        auto tpt = TransformPoint(pt);
+        TransformPoint(pt);
         if (std::abs(glm::dot(norm, TransformPoint(pt)) - best) < 1e-7) {
             cnt++;
             sum += TransformPoint(pt);

@@ -21,12 +21,15 @@ namespace DE {
         }
         glLinkProgram(m_ShaderId);
 
-        int  success;
-        char info_log[Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN)];
+        int               success;
+        std::string info_log;
+        info_log.resize(Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN));
         glGetProgramiv(m_ShaderId, GL_LINK_STATUS, &success);
+        int len = 0;
         if (!success) {
-            glGetProgramInfoLog(m_ShaderId, 512, NULL, info_log);
-            LOG_ERROR("Failed to link shader program {} due:\n{}", std::to_string(m_ShaderId), reinterpret_cast<const char*>(&info_log));
+            glGetProgramInfoLog(m_ShaderId, info_log.size(), &len, info_log.data());
+            info_log.resize(len);
+            LOG_ERROR("Failed to link shader program {} due:\n{}", std::to_string(m_ShaderId), info_log);
             throw std::runtime_error("Failed to compile shader.");
         }
         LOG_INFO("GLShader program {} linked successfully", std::to_string(m_ShaderId));
@@ -123,20 +126,19 @@ namespace DE {
         const char* source_c_str = source.c_str();
 
         GLuint shader_part = glCreateShader(ShaderPartTypeToGLShaderPartType(part.type));
-        //        if (part.type == ShaderPartType::Geometry) {
-        //            glShaderSource(shader_part, strlen(source_c_str), &source_c_str, NULL);
-        //        } else {
         glShaderSource(shader_part, 1, &source_c_str, NULL);
-        //        }
         glCompileShader(shader_part);
         m_Parts.push_back(shader_part);
 
         int  success = 1;
-        char infoLog[Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN)];
+        std::string info_log;
+        info_log.resize(Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN));
+        int len = 0;
         glGetShaderiv(shader_part, GL_COMPILE_STATUS, &success);
         if (!success) {
-            glGetShaderInfoLog(shader_part, Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN), NULL, infoLog);
-            LOG_ERROR("Failed to compile shader {} due:\n{}", part.path, reinterpret_cast<const char*>(&infoLog));
+            glGetShaderInfoLog(shader_part, info_log.size(), &len, info_log.data());
+            info_log.resize(len);
+            LOG_ERROR("Failed to compile shader {} due:\n{}", part.path, info_log);
             return;
         }
         LOG_INFO("File {} compiled", RelativeToExecutable(part.path));

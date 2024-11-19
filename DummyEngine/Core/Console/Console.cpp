@@ -26,7 +26,7 @@ namespace DE {
 
     S_METHOD_IMPL(void, ExecuteCommand, (std::string & cmd), (cmd)) {
         m_CmdHistory.push_back(cmd);
-        if (cmd.find(' ') != -1) {
+        if (cmd.find(' ') != std::string::npos) {
             size_t      pos      = cmd.find(' ');
             const auto& var_name = cmd.substr(0, pos);
             if (m_Variables.find(var_name) != m_Variables.end()) {
@@ -153,7 +153,7 @@ namespace DE {
         int                      space_idx = cmd.find(' ');
         const auto&              trunc_cmd = space_idx == -1 ? cmd : cmd.substr(0, space_idx);  // for variables
         for (const auto& str : candidates) {
-            if (str.find(trunc_cmd) != -1) {
+            if (str.find(trunc_cmd) != std::string::npos) {
                 result.push_back(str);
             }
         }

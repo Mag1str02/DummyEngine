@@ -76,7 +76,7 @@ namespace DE {
             return res;
         }
         std::string AddSourceArgument(const Path& source) { return " " + source.string(); }
-        std::string AddDestinationArgument(const Path& source, const Path& destination) { return " -o " + destination.string(); }
+        std::string AddDestinationArgument(const Path&, const Path& destination) { return " -o " + destination.string(); }
 
         std::string AddSourcesArguments(const std::vector<Path>& sources) {
             std::string res;

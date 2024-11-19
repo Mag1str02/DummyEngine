@@ -13,7 +13,7 @@ namespace DE {
     private:
         bool        m_Show = false;
         std::string m_Command;
-        int         m_historyPosition = 0;
+        U32         m_historyPosition = 0;
         bool        m_ScrollToBottom  = true;
         bool        m_JustOpened      = false;
     };

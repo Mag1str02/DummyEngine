@@ -21,18 +21,18 @@ namespace DE {
     class Bone {
     public:
         Bone() = default;
-        Bone(const std::string& name, int ID);
+        Bone(const std::string& name, U32 ID);
 
         Mat4        GetTransform(float animationTime);
         std::string GetBoneName() const;
-        S32         GetBoneID() const;
+        U32         GetBoneID() const;
 
     private:
         float GetScaleFactor(float prev_time, float next_time, float time);
 
-        S32 GetPositionIndex(float time);
-        S32 GetRotationIndex(float time);
-        S32 GetScaleIndex(float time);
+        U32 GetPositionIndex(float time);
+        U32 GetRotationIndex(float time);
+        U32 GetScaleIndex(float time);
 
         Mat4 InterpolatePosition(float time);
         Mat4 InterpolateRotation(float time);
@@ -45,9 +45,9 @@ namespace DE {
         std::vector<KeyRotation> m_Rotations;
         std::vector<KeyScale>    m_Scales;
 
-        S32         m_ID;
-        Mat4        m_LocalTransform;
         std::string m_Name;
+        U32         m_ID;
+        Mat4        m_LocalTransform;
     };
     struct BoneInfo {
         Bone bone;

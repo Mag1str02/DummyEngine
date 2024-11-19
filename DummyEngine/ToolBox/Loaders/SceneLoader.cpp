@@ -69,7 +69,7 @@ namespace DE {
         }
     }
 
-    template <typename ComponentType> void SaveComponent(YAML::Node& n_Entity, Entity entity) {
+    template <typename ComponentType> void SaveComponent(YAML::Node&, Entity) {
         // TODO: Different names for different unknown components...
         DE_ASSERT(false, "Trying to save unknown component");
     }
@@ -318,17 +318,17 @@ namespace DE {
         }
     }
 
-    template <typename ComponentType> void LoadComponent(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
+    template <typename ComponentType> void LoadComponent(Ref<Scene>, YAML::Node, Entity&) {
         LOG_WARNING("Load function of {} undefined", DemangledName<ComponentType>());
     }
-    template <> void LoadComponent<TagComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
+    template <> void LoadComponent<TagComponent>(Ref<Scene>, YAML::Node n_Component, Entity& entity) {
         entity.AddComponent<TagComponent>(n_Component.as<std::string>());
     }
-    template <> void LoadComponent<IDComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
+    template <> void LoadComponent<IDComponent>(Ref<Scene>, YAML::Node n_Component, Entity& entity) {
         auto s = n_Component.as<std::string>();
         entity.AddComponent<IDComponent>(IDComponent(UUID(n_Component.as<std::string>())));
     }
-    template <> void LoadComponent<TransformComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
+    template <> void LoadComponent<TransformComponent>(Ref<Scene>, YAML::Node n_Component, Entity& entity) {
         TransformComponent transformation;
 
         transformation.translation        = GetVec3(n_Component["Translation"]);
@@ -340,7 +340,7 @@ namespace DE {
 
         entity.AddComponent(transformation);
     }
-    template <> void LoadComponent<RenderMeshComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
+    template <> void LoadComponent<RenderMeshComponent>(Ref<Scene>, YAML::Node n_Component, Entity& entity) {
         UUID id = n_Component["UUID"].as<std::string>();
         if (!ResourceManager::HasRenderMesh(id) && !ResourceManager::LoadRenderMesh(id)) {
             LOG_WARNING("RenderMesh {} not found in ResourceManager", id);
@@ -373,7 +373,7 @@ namespace DE {
             scene->GetRenderer()->RequestShader(id);
         }
     }
-    template <> void LoadComponent<FPSCamera>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
+    template <> void LoadComponent<FPSCamera>(Ref<Scene>, YAML::Node n_Component, Entity& entity) {
         FPSCamera fps_camera;
 
         fps_camera.SetFov(n_Component["FOV"].as<float>());
@@ -385,7 +385,7 @@ namespace DE {
 
         entity.AddComponent<FPSCamera>(fps_camera);
     }
-    template <> void LoadComponent<LightSource>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
+    template <> void LoadComponent<LightSource>(Ref<Scene>, YAML::Node n_Component, Entity& entity) {
         LightSource light_source;
 
         light_source.type           = StringToLightSourceType(n_Component["Type"].as<std::string>());
@@ -400,7 +400,7 @@ namespace DE {
 
         entity.AddComponent<LightSource>(light_source);
     }
-    template <> void LoadComponent<SkyBoxComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
+    template <> void LoadComponent<SkyBoxComponent>(Ref<Scene>, YAML::Node n_Component, Entity& entity) {
         UUID                     id = n_Component["UUID"].as<std::string>();
         SkyBoxComponent::TexType type =
             (n_Component["Type"].as<std::string>() == "CubeMap" ? SkyBoxComponent::TexType::CubeMap : SkyBoxComponent::TexType::Equirectangular);
@@ -422,7 +422,7 @@ namespace DE {
             }
         }
     }
-    template <> void LoadComponent<ScriptComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
+    template <> void LoadComponent<ScriptComponent>(Ref<Scene>, YAML::Node n_Component, Entity& entity) {
         ScriptComponent script = ScriptEngine::CreateScript(n_Component["UUID"].as<std::string>());
         entity.AddComponent<ScriptComponent>(script);
         if (script.Valid()) {
@@ -435,7 +435,7 @@ namespace DE {
             LOG_INFO("Failed to create valid script: {}", script.ID());
         }
     }
-    template <> void LoadComponent<Physics::PhysicsComponent>(Ref<Scene> scene, YAML::Node n_Component, Entity& entity) {
+    template <> void LoadComponent<Physics::PhysicsComponent>(Ref<Scene>, YAML::Node n_Component, Entity& entity) {
         Physics::PhysicsComponent component{Vec3(0, 0, 0),
                                             Vec3(0, 0, 0),
                                             n_Component["InvMass"].as<float>(),

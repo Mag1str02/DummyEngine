@@ -15,7 +15,7 @@ namespace DE {
         using ScriptStates = std::unordered_map<Entity, std::unordered_map<std::string, Script::Field>>;
 
         ScriptStates SaveSciptStates(Ref<Scene> scene);
-        void         RestoreSciptStates(const ScriptStates& states, Ref<Scene> scene);
+        void         RestoreSciptStates(const ScriptStates& states);
 
         void* Clone(const Script::Field& field) const;
         void  Restore(ScriptComponent& script, const std::string& name, const Script::Field& field) const;

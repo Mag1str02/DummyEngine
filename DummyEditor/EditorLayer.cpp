@@ -302,7 +302,7 @@ namespace DE {
         m_Inspector.SetActiveEntity(m_SceneHierarchy.GetActiveEntity());
     }
 
-    void EditorLayer::ProcessControlls(float dt) {
+    void EditorLayer::ProcessControlls(float) {
         DE_PROFILE_SCOPE("ProcessControlls");
 
         if (Input::KeyDown(Key::LeftControl) && Input::KeyDown(Key::LeftShift)) {
@@ -367,7 +367,7 @@ namespace DE {
 
     //*___Other________________________________________________________________________________________________________________________________________________________________________________________
 
-    void TransformSyncSystem::Update(float dt) {
+    void TransformSyncSystem::Update(float) {
         for (auto entity : View<LightSource, TransformComponent>()) {
             entity.Get<LightSource>().position = entity.Get<TransformComponent>().translation;
         }

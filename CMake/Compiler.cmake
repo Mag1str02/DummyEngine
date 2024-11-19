@@ -11,3 +11,11 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -stdlib=libc++")
     set(ENABLE_PRECOMPILED_HEADERS ON)
 endif()
+
+function(add_warnings TARGET)
+    target_compile_options(${TARGET} PUBLIC -Wall -Wextra -Wpedantic -Wno-extra-semi -Wno-missing-field-initializers)
+
+    if (${ENABLE_PRECOMPILED_HEADERS})
+        target_compile_options(${TARGET} PUBLIC -Winvalid-pch)
+    endif()
+endfunction(add_warnings)

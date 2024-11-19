@@ -22,7 +22,7 @@ namespace DE {
     }
 
     void Animator::SetMatricies(Ref<Shader> shader, const std::string& name) {
-        for (S32 i = 0; i < m_FinalBoneMatrices.size(); ++i) {
+        for (U32 i = 0; i < m_FinalBoneMatrices.size(); ++i) {
             shader->SetMat4(std::format("{}[{}]", name, i), m_FinalBoneMatrices[i]);
         }
     }
@@ -38,7 +38,7 @@ namespace DE {
             m_FinalBoneMatrices[bone_info->bone.GetBoneID()] = parent_transform * node_transform * bone_info->offset;
         }
         Mat4 final_transform = parent_transform * node_transform;
-        for (S32 i = 0; i < node->childrens.size(); ++i) {
+        for (U32 i = 0; i < node->childrens.size(); ++i) {
             CalculateBoneTransform(&node->childrens[i], final_transform);
         }
     }

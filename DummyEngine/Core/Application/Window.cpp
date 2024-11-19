@@ -8,9 +8,9 @@
 namespace DE {
 
     GLFWmonitor* GetMonitor(U32 id) {
-        int           monitors_amount;
+        int           monitors_amount = 0;
         GLFWmonitor** monitors = glfwGetMonitors(&monitors_amount);
-        DE_ASSERT(0 <= id && id < monitors_amount, "Wrong monitor id {} should be between [0, {})", id, monitors_amount);
+        DE_ASSERT(0 <= id && id < U32(monitors_amount), "Wrong monitor id {} should be between [0, {})", id, monitors_amount);
         return monitors[id];
     }
 
@@ -44,6 +44,7 @@ namespace DE {
     }
     void Window::FullScreen(U32 id) {
         m_State.mode = WindowMode::FullScreen;
+        m_State.monitor_id = id;
 
         Invalidate();
     }
@@ -122,7 +123,7 @@ namespace DE {
             state.event_callback(event);
         });
 
-        glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+        glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int, int action, int) {
             if (key == -1) {
                 return;
             }
@@ -146,7 +147,7 @@ namespace DE {
             }
         });
 
-        glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
+        glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int) {
             WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
             switch (action) {
                 case GLFW_PRESS: {
