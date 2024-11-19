@@ -19,7 +19,7 @@ namespace DE {
         U32         monitor_id   = 0;
         bool        mouse_locked = false;
 
-        EventCallback<Event> event_callback;
+        EventCallback<Event> event_callback = {};
     };
 
     class Window {

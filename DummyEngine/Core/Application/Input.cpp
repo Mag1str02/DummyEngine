@@ -18,10 +18,10 @@ namespace DE {
             m_CurrentFrame.key_states[event.GetKey()] = false;
         });
 
-        m_EventDispatcher.AddEventListener<SetMouseLockEvent>([this](SetMouseLockEvent& event) { m_CurrentFrame.mouse_locked = true; });
-        m_EventDispatcher.AddEventListener<SetMouseUnlockEvent>([this](SetMouseUnlockEvent& event) { m_CurrentFrame.mouse_locked = false; });
+        m_EventDispatcher.AddEventListener<SetMouseLockEvent>([this](SetMouseLockEvent&) { m_CurrentFrame.mouse_locked = true; });
+        m_EventDispatcher.AddEventListener<SetMouseUnlockEvent>([this](SetMouseUnlockEvent&) { m_CurrentFrame.mouse_locked = false; });
         m_EventDispatcher.AddEventListener<SetMouseLockToggleEvent>(
-            [this](SetMouseLockToggleEvent& event) { m_CurrentFrame.mouse_locked = !m_CurrentFrame.mouse_locked; });
+            [this](SetMouseLockToggleEvent&) { m_CurrentFrame.mouse_locked = !m_CurrentFrame.mouse_locked; });
 
         m_EventDispatcher.AddEventListener<MouseMovedCallback>([this](MouseMovedCallback& event) {
             m_CurrentFrame.x_pos = event.GetXPos();

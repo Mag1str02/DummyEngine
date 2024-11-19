@@ -206,9 +206,8 @@ DE::Physics::Jacobian DE::Physics::Solver::InitJacobian(DE::Physics::Collision& 
     j.m_totalLambda    = 0;
     return j;
 }
-void DE::Physics::Solver::Resolve(DE::Physics::Jacobian& j, DE::Physics::Collision& collision, float dt, bool is_normal, DE::Physics::Jacobian* jn) {
+void DE::Physics::Solver::Resolve(DE::Physics::Jacobian& j, DE::Physics::Collision& collision, float, bool is_normal, DE::Physics::Jacobian* jn) {
     auto scene = _scene.lock();
-    Vec3 dir   = j.m_vb;
 
     auto lhs_phys = scene->GetByID(collision.src).GetComponent<PhysicsComponent>();
     auto rhs_phys = scene->GetByID(collision.dest).GetComponent<PhysicsComponent>();

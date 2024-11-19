@@ -4,7 +4,7 @@ namespace DE {
 
     //*~~~BufferElement~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    BufferElement::BufferElement(BufferElementType type, bool normalized) : type(type), normalized(normalized), size(SizeOfElementType(type)) {}
+    BufferElement::BufferElement(BufferElementType type, bool normalized) : type(type), size(SizeOfElementType(type)), normalized(normalized) {}
     U32 BufferElement::SizeOfElementType(BufferElementType type) {
         switch (type) {
             case BufferElementType::Float: return 4;

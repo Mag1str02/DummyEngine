@@ -24,3 +24,17 @@ macro(restore_compile_flags)
     set(CMAKE_CXX_FLAGS "${CXX_BUFF}")
     set(CMAKE_C_FLAGS "${C_BUFF}")
 endmacro(restore_compile_flags)
+
+add_custom_target(FormatDummyEngine
+    COMMAND python ${CMAKE_CURRENT_LIST_DIR}/Format.py
+    COMMENT "Running clang-format for DummyEngine"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/DummyEngine
+)
+add_custom_target(FormatDummyEditor
+    COMMAND python ${CMAKE_CURRENT_LIST_DIR}/Format.py
+    COMMENT "Running clang-format for DummyEditor"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/DummyEditor
+)
+add_custom_target(FormatAll)
+add_dependencies(FormatAll FormatDummyEditor FormatDummyEngine)
+

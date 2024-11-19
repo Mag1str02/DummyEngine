@@ -73,7 +73,7 @@ namespace DE {
 
         virtual void OnAttach() {}
         virtual void OnRuntimeStart() {}
-        virtual void OnUpdate(float dt) {}
+        virtual void OnUpdate(float) {}
         virtual void OnRender() {}
         virtual void OnRuntimeStop() {}
         virtual void OnDetach() {}
@@ -102,9 +102,11 @@ namespace DE {
     std::string                           ScriptFieldTypeToString(ScriptFieldType type);
     template <typename T> ScriptFieldType TypeToScriptFieldType();
 
+    // clang-format off
     template <typename T, typename U> constexpr U32 OffsetOf(U T::* member) {
-        return (char*)&((T*)nullptr->*member) - (char*)nullptr;
+        return (size_t)&((T*)nullptr->*member);
     }
+    // clang-format on
 
     template <typename T> T& Script::Field::Get() {
         DE_ASSERT(m_Type == TypeToScriptFieldType<T>(),

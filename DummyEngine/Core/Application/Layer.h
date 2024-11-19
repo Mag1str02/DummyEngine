@@ -11,9 +11,9 @@ namespace DE {
 
         virtual void OnAttach() {}
         virtual void OnDetach() {}
-        virtual void OnUpdate(float dt) {}
+        virtual void OnUpdate(float) {}
         virtual void OnImGuiRender() {}
-        virtual void OnEvent(Event& event) {}
+        virtual void OnEvent(Event&) {}
 
         const std::string& GetName() const { return m_Name; }
 

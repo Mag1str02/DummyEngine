@@ -13,11 +13,9 @@ namespace DE {
         void SetScene(WeakRef<Scene> scene);
 
     private:
-        template <typename Component> void DrawComponentWidget(Entity entity);
+        template <typename Component> void DrawComponentWidget();
 
         Entity         m_Entity;
         WeakRef<Scene> m_Scene;
-
-        float m_SliderSensitivity = 0.1;
     };
 }  // namespace DE

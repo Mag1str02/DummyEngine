@@ -2,8 +2,6 @@
 
 #include "DummyEngine/Core/Rendering/Renderer/Context.h"
 
-struct GLFWwindow;
-
 namespace DE {
 
     class GLContext : public Context {

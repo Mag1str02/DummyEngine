@@ -56,9 +56,13 @@ namespace DE {
         std::array<std::vector<EventCallback<Event>>, static_cast<size_t>(EventType::Count)> m_EventCallbacks;
     };
 
-#define EVENT_TYPE(type)                                                   \
-    virtual EventType GetType() const override { return EventType::type; } \
-    static EventType  Type() { return EventType::type; }
+#define EVENT_TYPE(type)                         \
+    virtual EventType GetType() const override { \
+        return EventType::type;                  \
+    }                                            \
+    static EventType Type() {                    \
+        return EventType::type;                  \
+    }
 
     //*Responding
 

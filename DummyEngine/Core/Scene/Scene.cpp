@@ -160,7 +160,7 @@ namespace DE {
         }
         return new_entity;
     }
-    Entity Scene::CloneEntity(Entity entity) {
+    Entity Scene::CloneEntity(Entity) {
         // DE_ASSERT(false, "Clone of entity not implemented yet.");
         return CreateEntity("Entity", false);
     }

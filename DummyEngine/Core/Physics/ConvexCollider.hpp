@@ -43,5 +43,5 @@ namespace DE::Physics {
         Mat4              _transform{};
     };
 
-    const size_t UNIQUE_FACES = 4;
+    const U32 UNIQUE_FACES = 4;
 }  // namespace DE::Physics

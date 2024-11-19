@@ -2,7 +2,7 @@
 
 #include "DummyEngine/Utils/Base.h"
 
-class GLFWwindow;
+struct GLFWwindow;
 
 namespace DE {
 

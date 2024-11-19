@@ -85,7 +85,7 @@ namespace DE {
             return false;
         }
 
-        RestoreSciptStates(states, scene);
+        RestoreSciptStates(states);
         AttachScripts(scene);
 
         return true;
@@ -116,7 +116,7 @@ namespace DE {
         }
         return states;
     }
-    void ScriptManager::RestoreSciptStates(const ScriptStates& states, Ref<Scene> scene) {
+    void ScriptManager::RestoreSciptStates(const ScriptStates& states) {
         for (auto it = states.begin(); it != states.end(); ++it) {
             auto        entity = it->first;
             const auto& state  = it->second;

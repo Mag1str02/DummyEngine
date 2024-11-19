@@ -17,10 +17,10 @@ int main() {
 
         DE::Initializer::Terminate();
     } catch (const std::exception& e) {
-        LOG_FATAL_AS( "EntryPoint", "Unhandled exeption occured: {}", e.what());
+        LOG_FATAL_AS("EntryPoint", "Unhandled exeption occured: {}", e.what());
         return -1;
     } catch (...) {
-        LOG_FATAL_AS( "EntryPoint", "Unknown error occured");
+        LOG_FATAL_AS("EntryPoint", "Unknown error occured");
         return -1;
     }
     return 0;

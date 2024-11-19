@@ -67,13 +67,13 @@ namespace DE {
 
     std::vector<Ref<std::string>> Trie::Search(std::string needle) {
         std::vector<Ref<std::string>> result;
-        std::set<size_t> idx_found;
-        Ref<Trie::Node> current = m_root;
-        for (char c: needle) {
-            current = getNext(current, c);
-            auto &ptr = current;
+        std::set<size_t>              idx_found;
+        Ref<Trie::Node>               current = m_root;
+        for (char c : needle) {
+            current   = getNext(current, c);
+            auto& ptr = current;
             while (ptr != m_root) {
-                for (const auto &idx: ptr->terminal_idx) {
+                for (const auto& idx : ptr->terminal_idx) {
                     if (idx_found.contains(idx)) {
                         continue;
                     }

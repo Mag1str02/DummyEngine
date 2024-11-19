@@ -14,7 +14,7 @@
 #include "DummyEngine/Utils/Base.h"
 
 namespace DE {
-    void error_callback(int error, const char* description) {
+    void error_callback(int, const char* description) {
         fprintf(stderr, "Error: %s\n", description);
         fflush(stderr);
     }
@@ -77,9 +77,7 @@ namespace DE {
     void Initializer::DepTerminate() {
         LOG_INFO("Terminating dependencies");
         //* Terminate GLFW
-        {
-            glfwTerminate();
-        }
+        { glfwTerminate(); }
     }
     void Initializer::PostTerminate() {
         LOG_INFO("PostTerminating");

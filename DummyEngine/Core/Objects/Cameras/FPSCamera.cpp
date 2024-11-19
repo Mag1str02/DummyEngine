@@ -16,7 +16,7 @@ namespace DE {
         m_Direction = glm::normalize(camera_direction);
         m_Right     = glm::normalize(glm::cross(m_Direction, m_WorldUp));
         m_Up        = glm::normalize(glm::cross(m_Right, m_Direction));
-        m_FarPlane = 100;
+        m_FarPlane  = 100;
         m_NearPlane = -10;
     }
 
