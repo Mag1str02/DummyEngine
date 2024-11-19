@@ -39,3 +39,4 @@ AllowAllArgumentsOnNextLine: true
 AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: true
 IncludeBlocks: Preserve
+AllowShortBlocksOnASingleLine: Empty

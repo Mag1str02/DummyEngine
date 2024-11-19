@@ -102,9 +102,11 @@ namespace DE {
     std::string                           ScriptFieldTypeToString(ScriptFieldType type);
     template <typename T> ScriptFieldType TypeToScriptFieldType();
 
+    // clang-format off
     template <typename T, typename U> constexpr U32 OffsetOf(U T::* member) {
         return (size_t)&((T*)nullptr->*member);
     }
+    // clang-format on
 
     template <typename T> T& Script::Field::Get() {
         DE_ASSERT(m_Type == TypeToScriptFieldType<T>(),

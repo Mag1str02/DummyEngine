@@ -77,9 +77,7 @@ namespace DE {
     void Initializer::DepTerminate() {
         LOG_INFO("Terminating dependencies");
         //* Terminate GLFW
-        {
-            glfwTerminate();
-        }
+        { glfwTerminate(); }
     }
     void Initializer::PostTerminate() {
         LOG_INFO("PostTerminating");

@@ -82,8 +82,9 @@ namespace DE {
 
     protected:
         static T& Get();
-        Singleton() {};
-        virtual ~Singleton() {}
+
+        Singleton()          = default;
+        virtual ~Singleton() = default;
         static T* s_Instance;
     };
 }  // namespace DE
