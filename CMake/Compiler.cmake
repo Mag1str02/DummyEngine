@@ -1,3 +1,6 @@
+option(ENABLE_CLANG_TIDY_ON_COMPILATION "Run clang tidy during compilation" OFF)
+option(FORCE_NO_PCH "Prevent PCH" OFF)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fPIC -fno-omit-frame-pointer")
@@ -10,16 +13,19 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -stdlib=libc++")
     set(ENABLE_PRECOMPILED_HEADERS ON)
 endif()
-option(FORCE_NO_PCH "Prevent PCH" OFF)
 if (${FORCE_NO_PCH}) 
     set(ENABLE_PRECOMPILED_HEADERS OFF)
 endif()
+if(${ENABLE_CLANG_TIDY_ON_COMPILATION})
+    find_program(CLANG_TIDY_EXE NAMES "clang-tidy" REQUIRED)
+    set(CLANG_TIDY_COMMAND "${CLANG_TIDY_EXE}" "-p" "${CMAKE_CURRENT_SOURCE_DIR}/build")
+endif()
+
 
 message(STATUS "Precompiled headers: ${ENABLE_PRECOMPILED_HEADERS}")
 
 function(add_warnings TARGET)
     target_compile_options(${TARGET} PUBLIC -Wall -Wextra -Wpedantic -Wno-extra-semi -Wno-missing-field-initializers -Werror)
-
     if (${ENABLE_PRECOMPILED_HEADERS})
         target_compile_options(${TARGET} PUBLIC -Winvalid-pch)
     endif()
