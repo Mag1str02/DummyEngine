@@ -20,3 +20,4 @@ Sandbox/**.dylib
 Sandbox/**.so**
 Sandbox/*.yml
 
+Config.cmake

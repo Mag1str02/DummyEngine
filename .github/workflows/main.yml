@@ -95,19 +95,19 @@ jobs:
           generator: Unix Makefiles
           cxx-compiler: clang++-19
           c-compiler: clang-19
-          options: CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXPORT_COMPILE_COMMANDS=ON FORCE_NO_PCH=ON
+          options: CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXPORT_COMPILE_COMMANDS=ON DE_FORCE_NO_PCH=ON
           run-build: false
       - uses: cpp-linter/cpp-linter-action@v2
         id: linter
         with:
           style: 'file'
           tidy-checks: ''
-          verbosity: debug
+          verbosity: info
           version: 18
           files-changed-only: false
           database: '${{ github.workspace }}/build'
           repo-root: '${{ github.workspace }}'
-          ignore: '${{ github.workspace }}/build|${{ github.workspace }}/Examples|${{ github.workspace }}/Sandbox'
+          ignore: 'build/**|Examples/**|Sandbox/**'
           step-summary: true
       - name: Check Linter Results
         if: steps.linter.outputs.checks-failed > 0
