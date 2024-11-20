@@ -71,7 +71,7 @@ jobs:
         source-dir: ${{ github.workspace }}
         build-dir: ${{ github.workspace }}/build
         generator: Unix Makefiles
-        cxx-compiler: clang++
-        c-compiler: clang
+        cxx-compiler: ${{ matrix.cpp_compiler }}
+        c-compiler: ${{ matrix.c_compiler }}
         build-args: --target DummyEditor --parallel 16 --config ${{ matrix.build_type }}
         options: CMAKE_BUILD_TYPE=${{ matrix.build_type }}
