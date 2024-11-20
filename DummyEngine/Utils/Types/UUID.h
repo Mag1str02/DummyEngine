@@ -9,7 +9,6 @@ namespace DE {
         static UUID Generate();
 
         UUID()            = default;
-        UUID(const UUID&) = default;
         UUID(const std::string& str);
 
         operator std::string() const;

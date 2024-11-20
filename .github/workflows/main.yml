@@ -1,4 +1,4 @@
-name: Build Checks
+name: Checks
 
 on:
   push:
@@ -9,13 +9,11 @@ on:
 jobs:
   BuildWindows:
     runs-on: windows-latest
-
+    name: Build Windows
     strategy:
       fail-fast: false
-
       matrix:
         build_type: [RelWithDebInfo]
-
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -44,20 +42,18 @@ jobs:
         options: CMAKE_BUILD_TYPE=${{ matrix.build_type }}
   BuildUbuntu:
     runs-on: ubuntu-latest
-
+    name: Build Ubuntu
     strategy:
       fail-fast: false
-
       matrix:
         build_type: [RelWithDebInfo]
         c_compiler: [clang-19]
         cpp_compiler: [clang++-19]
-
     steps:
     - name: Install Packages
       run: |
         sudo apt update
-        sudo apt install libwayland-dev libxkbcommon-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgtk-3-dev
+        sudo apt install libwayland-dev libxkbcommon-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgtk-3-dev ninja-build
         wget https://apt.llvm.org/llvm.sh
         chmod +x llvm.sh
         sudo ./llvm.sh 19 all
@@ -70,8 +66,49 @@ jobs:
       with:
         source-dir: ${{ github.workspace }}
         build-dir: ${{ github.workspace }}/build
-        generator: Unix Makefiles
+        generator: Ninja
         cxx-compiler: ${{ matrix.cpp_compiler }}
         c-compiler: ${{ matrix.c_compiler }}
         build-args: --target DummyEditor --parallel 16 --config ${{ matrix.build_type }}
         options: CMAKE_BUILD_TYPE=${{ matrix.build_type }}
+  Linter:
+    runs-on: ubuntu-latest
+    name: Clang Tidy
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'  
+      - name: Install Packages
+        run: |
+          sudo apt update
+          sudo apt install libwayland-dev libxkbcommon-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgtk-3-dev
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 19 all
+      - name: Configure Cmake
+        uses: threeal/cmake-action@v2.0.0
+        with:
+          source-dir: ${{ github.workspace }}
+          build-dir: ${{ github.workspace }}/build
+          generator: Unix Makefiles
+          cxx-compiler: clang++-19
+          c-compiler: clang-19
+          options: CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_EXPORT_COMPILE_COMMANDS=ON FORCE_NO_PCH=ON
+          run-build: false
+      - uses: cpp-linter/cpp-linter-action@v2
+        id: linter
+        with:
+          style: 'file'
+          tidy-checks: ''
+          verbosity: debug
+          version: 18
+          files-changed-only: false
+          database: '${{ github.workspace }}/build'
+          repo-root: '${{ github.workspace }}'
+          ignore: '${{ github.workspace }}/build|${{ github.workspace }}/Examples|${{ github.workspace }}/Sandbox'
+          step-summary: true
+      - name: Check Linter Results
+        if: steps.linter.outputs.checks-failed > 0
+        run: exit 1

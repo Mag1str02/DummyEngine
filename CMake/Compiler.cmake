@@ -6,11 +6,16 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../Sandbox)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../Sandbox)
 
 set(ENABLE_PRECOMPILED_HEADERS OFF)
-
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -stdlib=libc++")
     set(ENABLE_PRECOMPILED_HEADERS ON)
 endif()
+option(FORCE_NO_PCH "Prevent PCH" OFF)
+if (${FORCE_NO_PCH}) 
+    set(ENABLE_PRECOMPILED_HEADERS OFF)
+endif()
+
+message(STATUS "Precompiled headers: ${ENABLE_PRECOMPILED_HEADERS}")
 
 function(add_warnings TARGET)
     target_compile_options(${TARGET} PUBLIC -Wall -Wextra -Wpedantic -Wno-extra-semi -Wno-missing-field-initializers -Werror)
