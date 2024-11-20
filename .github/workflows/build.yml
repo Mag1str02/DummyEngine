@@ -7,6 +7,41 @@ on:
     branches: [ "main" ]
 
 jobs:
+  BuildWindows:
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        build_type: [RelWithDebInfo]
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        submodules: 'true'
+    - name: Install clang
+      uses: msys2/setup-msys2@v2
+      with:
+        location: D:\
+        update: true
+        install: >-
+          mingw-w64-clang-x86_64-clang
+          mingw-w64-clang-x86_64-ninja
+    - name: Add msys to path
+      run: |
+        echo "D:\msys64\clang64\bin\" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
+    - name: Build
+      uses: threeal/cmake-action@v2.0.0
+      with:
+        source-dir: ${{ github.workspace }}
+        build-dir: ${{ github.workspace }}/build
+        generator: Ninja
+        cxx-compiler: clang++
+        c-compiler: clang
+        build-args: --target DummyEditor --parallel 16 --config ${{ matrix.build_type }}
+        options: CMAKE_BUILD_TYPE=${{ matrix.build_type }}
   BuildUbuntu:
     runs-on: ubuntu-latest
 
@@ -30,17 +65,13 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: 'true'
-    - name: Set reusable strings
-      id: strings
-      shell: bash
-      run: |
-        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-    - name: CMake Configure 
-      run: >
-        cmake -B ${{ steps.strings.outputs.build-output-dir }}
-        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
-        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
-        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -S ${{ github.workspace }}
-    - name: Cmake Build
-      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }} --target DummyEditor --parallel 16
+    - name: Build
+      uses: threeal/cmake-action@v2.0.0
+      with:
+        source-dir: ${{ github.workspace }}
+        build-dir: ${{ github.workspace }}/build
+        generator: Unix Makefiles
+        cxx-compiler: clang++
+        c-compiler: clang
+        build-args: --target DummyEditor --parallel 16 --config ${{ matrix.build_type }}
+        options: CMAKE_BUILD_TYPE=${{ matrix.build_type }}
