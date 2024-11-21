@@ -8,5 +8,6 @@ macro(set_option option help value)
 endmacro()
 
 set_option(DE_ENABLE_CLANG_TIDY_ON_COMPILATION "Run clang tidy during compilation" OFF)
+set_option(DE_CLANG_TIDY_WARNINGS_AS_ERRORS "Set clang warnings as errors" OFF)
 set_option(DE_FORCE_NO_PCH "Prevent PCH" OFF)
 
