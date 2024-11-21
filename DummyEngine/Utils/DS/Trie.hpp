@@ -7,19 +7,19 @@ namespace DummyEngine {
     class Trie {
         struct Node {
             Node(Ref<Node>& p, char prev) {
-                parent         = p;
-                char_to_parent = prev;
+                Parent         = p;
+                CharToParent = prev;
             }
 
-            std::vector<size_t> terminal_idx;
+            std::vector<size_t> TerminalIdx;
 
-            Ref<Node> parent;
-            char      char_to_parent;
+            Ref<Node> Parent;
+            char      CharToParent;
 
-            std::unordered_map<char, Ref<Node>> next;
-            std::unordered_map<char, Ref<Node>> sons;
-            Ref<Node>                           suffix_link;
-            Ref<Node>                           super_suffix_link;
+            std::unordered_map<char, Ref<Node>> Next;
+            std::unordered_map<char, Ref<Node>> Sons;
+            Ref<Node>                           SuffixLink;
+            Ref<Node>                           SuperSuffixLink;
         };
 
         Ref<Node> GetSuffixLink(Ref<Node> v);

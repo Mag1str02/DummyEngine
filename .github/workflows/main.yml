@@ -39,7 +39,7 @@ jobs:
         cxx-compiler: clang++
         c-compiler: clang
         build-args: --target DummyEditor --parallel 16 --config ${{ matrix.build_type }}
-        options: CMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        options: CMAKE_BUILD_TYPE=${{ matrix.build_type }} DE_FORCE_NO_PCH=ON
   BuildUbuntu:
     runs-on: ubuntu-latest
     name: Build Ubuntu
@@ -70,7 +70,7 @@ jobs:
         cxx-compiler: ${{ matrix.cpp_compiler }}
         c-compiler: ${{ matrix.c_compiler }}
         build-args: --target DummyEditor --parallel 16 --config ${{ matrix.build_type }}
-        options: CMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        options: CMAKE_BUILD_TYPE=${{ matrix.build_type }} DE_FORCE_NO_PCH=ON
   Linter:
     runs-on: ubuntu-latest
     name: Clang Tidy
@@ -107,7 +107,7 @@ jobs:
           files-changed-only: false
           database: '${{ github.workspace }}/build'
           repo-root: '${{ github.workspace }}'
-          ignore: 'build/**|Examples/**|Sandbox/**|DummyEngine/Core/ECS**'
+          ignore: 'build/**|Examples/**|Sandbox/**|DummyEngine/Core/ECS**|DummyEngine/Platform/Macos/**|DummyEditor/Platform/Macos/**'
           step-summary: true
       - name: Check Linter Results
         if: steps.linter.outputs.checks-failed > 0

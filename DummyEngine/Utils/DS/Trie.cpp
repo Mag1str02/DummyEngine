@@ -8,57 +8,57 @@ namespace DummyEngine {
         if (!v) {
             return v;
         }
-        if (!v->suffix_link) {
-            if (v == root_ || v->parent == root_) {
-                v->suffix_link = root_;
+        if (!v->SuffixLink) {
+            if (v == root_ || v->Parent == root_) {
+                v->SuffixLink = root_;
             } else {
-                v->suffix_link = GetNext(GetSuffixLink(v->parent), v->char_to_parent);
+                v->SuffixLink = GetNext(GetSuffixLink(v->Parent), v->CharToParent);
             }
         }
-        return v->suffix_link;
+        return v->SuffixLink;
     }
 
     Ref<Trie::Node> Trie::GetNext(Ref<Trie::Node> v, char c) {
         if (!v) {
             return v;
         }
-        if (v->next.contains(c)) {
-            return v->next[c];
-        } else if (v->sons.contains(c)) {
-            v->next[c] = v->sons[c];
+        if (v->Next.contains(c)) {
+            return v->Next[c];
+        } else if (v->Sons.contains(c)) {
+            v->Next[c] = v->Sons[c];
         } else if (v == root_) {
-            v->next[c] = root_;
+            v->Next[c] = root_;
         } else {
-            v->next[c] = GetNext(GetSuffixLink(v), c);
+            v->Next[c] = GetNext(GetSuffixLink(v), c);
         }
-        return v->next[c];
+        return v->Next[c];
     }
 
     Ref<Trie::Node> Trie::GetUp(Ref<Trie::Node> v) {
         if (!v) {
             return v;
         }
-        if (!v->super_suffix_link) {
-            if (!GetSuffixLink(v)->terminal_idx.empty()) {  // leaf
-                v->super_suffix_link = GetSuffixLink(v);
+        if (!v->SuperSuffixLink) {
+            if (!GetSuffixLink(v)->TerminalIdx.empty()) {  // leaf
+                v->SuperSuffixLink = GetSuffixLink(v);
             } else if (GetSuffixLink(v) == root_) {
-                v->super_suffix_link = root_;
+                v->SuperSuffixLink = root_;
             } else {
-                v->super_suffix_link = GetUp(GetSuffixLink(v));
+                v->SuperSuffixLink = GetUp(GetSuffixLink(v));
             }
         }
-        return v->super_suffix_link;
+        return v->SuperSuffixLink;
     }
 
     void Trie::AddWord(std::string& str) {
         Ref<Trie::Node> current = root_;
         for (const char c : str) {
-            if (!current->sons.contains(c)) {
-                current->sons[c] = CreateRef<Trie::Node>(current, c);
+            if (!current->Sons.contains(c)) {
+                current->Sons[c] = CreateRef<Trie::Node>(current, c);
             }
-            current = current->sons[c];
+            current = current->Sons[c];
         }
-        current->terminal_idx.push_back(words_.size());
+        current->TerminalIdx.push_back(words_.size());
         words_.push_back(CreateRef<std::string>(str));
     }
 
@@ -76,7 +76,7 @@ namespace DummyEngine {
             current   = GetNext(current, c);
             auto& ptr = current;
             while (ptr != root_) {
-                for (const auto& idx : ptr->terminal_idx) {
+                for (const auto& idx : ptr->TerminalIdx) {
                     if (idx_found.contains(idx)) {
                         continue;
                     }

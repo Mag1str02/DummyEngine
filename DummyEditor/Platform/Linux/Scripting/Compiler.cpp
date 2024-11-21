@@ -1,8 +1,12 @@
 #include "DummyEditor/Scripting/Compiler.h"
 
 #include "DummyEngine/Core/Application/FileSystem.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
+
+#include <unordered_set>
 
 namespace DummyEngine {
+
     class LinuxCompilerImpl : public CompilerImpl {
         LOG_AUTHOR(Compiler)
     public:

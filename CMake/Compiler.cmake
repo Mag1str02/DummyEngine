@@ -16,10 +16,10 @@ endif()
 if(${DE_ENABLE_CLANG_TIDY_ON_COMPILATION})
     find_program(CLANG_TIDY_EXE NAMES "clang-tidy" "clang-tidy-17" "clang-tidy-18" "clang-tidy-19" REQUIRED)
     set(CLANG_TIDY_COMMAND "${CLANG_TIDY_EXE}" "-p" "${CMAKE_CURRENT_SOURCE_DIR}/build")
-    message(STATUS "TIDY COMMAND: [${CLANG_TIDY_COMMAND}]")
     if (${DE_CLANG_TIDY_WARNINGS_AS_ERRORS})
-        set(CLANG_TIDY_COMMAND ${CLANG_TIDY_COMMAND} "--warnings-as-errors=*")
+        set(CLANG_TIDY_COMMAND ${CLANG_TIDY_COMMAND} "--warnings-as-errors='*'")
     endif()
+    message(STATUS "CLANG_TIDY_COMMAND: [${CLANG_TIDY_COMMAND}]")
 endif()
 
 
