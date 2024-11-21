@@ -1,8 +1,8 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
-namespace DE {
+namespace DummyEngine {
 
     class SharedObjectImpl;
 
@@ -10,6 +10,7 @@ namespace DE {
     public:
         SharedObject();
         ~SharedObject();
+
         bool Load(const Path& directory, const std::string& name);
         void Invalidate();
 
@@ -19,6 +20,7 @@ namespace DE {
         const std::string& GetName() const;
 
     private:
-        Scope<SharedObjectImpl> m_Impl;
+        Scope<SharedObjectImpl> impl_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

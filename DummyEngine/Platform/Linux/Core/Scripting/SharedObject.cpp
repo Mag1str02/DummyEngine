@@ -1,12 +1,13 @@
 #include "DummyEngine/Core/Scripting/SharedObject.h"
 
+#include "DummyEngine/Core/Application/Config.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
+
 #include <dlfcn.h>
 
-#include "DummyEngine/Core/Application/Config.h"
-
-namespace DE {
+namespace DummyEngine {
     class SharedObjectImpl {
-        LOGGER_AUTHOR(SharedObject)
+        LOG_AUTHOR(SharedObject)
     public:
         SharedObjectImpl() {}
         ~SharedObjectImpl() {
@@ -43,7 +44,7 @@ namespace DE {
             m_Directory = directory;
             m_Name      = name;
             m_Valid     = true;
-            LOG_INFO("Loaded library {}", RelativeToExecutable(directory / (name + ".dll")));
+            LOG_INFO("Loaded library {}", Config::RelativeToExecutable(directory / (name + ".dll")));
             return true;
         }
         void Invalidate() { m_Valid = false; }
@@ -89,4 +90,4 @@ namespace DE {
         return m_Impl->GetName();
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

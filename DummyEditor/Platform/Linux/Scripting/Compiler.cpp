@@ -1,8 +1,8 @@
 #include "DummyEditor/Scripting/Compiler.h"
 
-namespace DE {
+namespace DummyEngine {
     class LinuxCompilerImpl : public CompilerImpl {
-        LOGGER_AUTHOR(Compiler)
+        LOG_AUTHOR(Compiler)
     public:
         LinuxCompilerImpl() { AddDefine("DE_PLATFORM_LINUX"); }
         virtual bool Compile(const Path& source, const Path& destination) {
@@ -122,4 +122,4 @@ namespace DE {
         return CreateScope<LinuxCompilerImpl>();
     }
 
-};  // namespace DE
+};  // namespace DummyEngine

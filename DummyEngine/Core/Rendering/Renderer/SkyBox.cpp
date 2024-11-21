@@ -1,45 +1,47 @@
-#include "DummyEngine/Core/Rendering/Renderer/SkyBox.h"
+#include "SkyBox.h"
 
+#include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
 #include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 
-namespace DE {
-    const U32 SKYBOX_SIZE             = 2048;
-    const U32 IRRADIANCE_TEXTURE_UNIT = 7;
-    const U32 PREFILTER_TEXTURE_UNIT  = 8;
-    const U32 BRDF_TEXTURE_UNIT       = 9;
-    const U32 MAX_LEVELS              = 10;
+namespace DummyEngine {
+    constexpr U32 kSkyboxSize            = 2048;
+    constexpr U32 kIrradianceTextureUnit = 7;
+    constexpr U32 kPrefilterTextureUnit  = 8;
+    constexpr U32 kBRDFTextureUnit       = 9;
+    constexpr U32 kMaxLevels             = 10;
 
     SkyBox::SkyBox(Ref<TextureData> texture) {
-        m_Raw = GenRawCubeMap(texture);
+        raw_ = GenRawCubeMap(texture);
         BakeIBL();
     }
     SkyBox::SkyBox(Ref<CubeMap> cubemap) {
-        m_Raw = cubemap;
+        raw_ = cubemap;
         BakeIBL();
     }
 
     Ref<CubeMap> SkyBox::GetMap() {
-        return m_Raw;
+        return raw_;
     }
     void SkyBox::ApplyIBL(Ref<Shader> shader) {
-        if (!m_Irradiance) {
+        if (!irradiance_) {
             return;
         }
-        if (!m_Prefilter) {
+        if (!prefilter_) {
             return;
         }
-        m_Irradiance->Bind(IRRADIANCE_TEXTURE_UNIT);
-        m_Prefilter->Bind(PREFILTER_TEXTURE_UNIT);
-        Renderer::GetTexture(Renderer::Textures::BRDF)->Bind(BRDF_TEXTURE_UNIT);
-        shader->SetInt("u_IrradianceMap", IRRADIANCE_TEXTURE_UNIT);
-        shader->SetInt("u_PrefilterMap", PREFILTER_TEXTURE_UNIT);
-        shader->SetInt("u_BRDF", BRDF_TEXTURE_UNIT);
+        irradiance_->Bind(kIrradianceTextureUnit);
+        prefilter_->Bind(kPrefilterTextureUnit);
+        Renderer::GetTexture(Renderer::Textures::BRDF)->Bind(kBRDFTextureUnit);
+        shader->SetInt("u_IrradianceMap", kIrradianceTextureUnit);
+        shader->SetInt("u_PrefilterMap", kPrefilterTextureUnit);
+        shader->SetInt("u_BRDF", kBRDFTextureUnit);
     }
 
     Ref<CubeMap> SkyBox::GenRawCubeMap(Ref<TextureData> texture) {
         Ref<Texture>     tex    = Texture::Create(*texture);
-        Ref<CubeMap>     res    = CubeMap::Create(SKYBOX_SIZE, Texture::DataFormat(texture->Format()), Texture::DataChannels(texture->Channels()));
+        Ref<CubeMap>     res    = CubeMap::Create(kSkyboxSize, Texture::DataFormat(texture->Format()), Texture::DataChannels(texture->Channels()));
         Ref<Shader>      shader = Renderer::GetShader(Renderer::Shaders::EquirectangularToCubeMap);
         Ref<VertexArray> cube   = Renderer::GetVertexArray(Renderer::VertexArrays::Cube);
 
@@ -56,11 +58,11 @@ namespace DE {
         shader->SetMat4("u_Projection", projection);
         for (U32 i = 0; i < 6; ++i) {
             shader->SetMat4("u_View", views[i]);
-            Ref<FrameBuffer> buf = FrameBuffer::Create({SKYBOX_SIZE, SKYBOX_SIZE});
+            Ref<FrameBuffer> buf = FrameBuffer::Create({kSkyboxSize, kSkyboxSize});
             buf->Bind();
             buf->SetDepthAttachment(Texture::Format::F32);
             buf->AddColorAttachment(res, i);
-            Renderer::SetViewport(SKYBOX_SIZE, SKYBOX_SIZE);
+            Renderer::SetViewport(kSkyboxSize, kSkyboxSize);
             Renderer::Clear();
             tex->Bind(1);
             Renderer::Submit(cube, shader);
@@ -68,7 +70,7 @@ namespace DE {
         return res;
     }
     void SkyBox::BakeIBL() {
-        m_Irradiance            = CubeMap::Create(SKYBOX_SIZE, Texture::Format::U8, Texture::Channels::RGB);
+        irradiance_             = CubeMap::Create(kSkyboxSize, Texture::Format::U8, Texture::Channels::RGB);
         Ref<Shader>      shader = Renderer::GetShader(Renderer::Shaders::Convolution);
         Ref<VertexArray> cube   = Renderer::GetVertexArray(Renderer::VertexArrays::Cube);
 
@@ -85,33 +87,33 @@ namespace DE {
         shader->SetMat4("u_Projection", projection);
         for (U32 i = 0; i < 6; ++i) {
             shader->SetMat4("u_View", views[i]);
-            Ref<FrameBuffer> buf = FrameBuffer::Create({SKYBOX_SIZE, SKYBOX_SIZE});
+            Ref<FrameBuffer> buf = FrameBuffer::Create({kSkyboxSize, kSkyboxSize});
             buf->Bind();
             buf->SetDepthAttachment(Texture::Format::F32);
-            buf->AddColorAttachment(m_Irradiance, i);
-            Renderer::SetViewport(SKYBOX_SIZE, SKYBOX_SIZE);
+            buf->AddColorAttachment(irradiance_, i);
+            Renderer::SetViewport(kSkyboxSize, kSkyboxSize);
             Renderer::Clear();
-            m_Raw->Bind(1);
+            raw_->Bind(1);
             Renderer::Submit(cube, shader);
         }
 
-        U32 curr_size           = SKYBOX_SIZE;
-        m_Prefilter             = CubeMap::Create(curr_size, Texture::Format::U8, Texture::Channels::RGB, true);
+        U32 curr_size           = kSkyboxSize;
+        prefilter_              = CubeMap::Create(curr_size, Texture::Format::U8, Texture::Channels::RGB, true);
         Ref<Shader> s_prefilter = Renderer::GetShader(Renderer::Shaders::PreFileterConvolution);
         s_prefilter->Bind();
         s_prefilter->SetInt("u_CubeMap", 1);
         s_prefilter->SetMat4("u_Projection", projection);
         s_prefilter->SetMat4("u_Transform", Mat4(1.0));
-        for (U32 lod = 0; lod < MAX_LEVELS; ++lod) {
-            float roughness = (float)lod / (MAX_LEVELS - 1);
+        for (U32 lod = 0; lod < kMaxLevels; ++lod) {
+            float roughness = (float)lod / (kMaxLevels - 1);
             s_prefilter->SetFloat("u_Roughness", roughness);
             for (U32 i = 0; i < 6; ++i) {
                 s_prefilter->SetMat4("u_View", views[i]);
                 Ref<FrameBuffer> buf = FrameBuffer::Create({curr_size, curr_size});
                 buf->Bind();
                 buf->SetDepthAttachment(Texture::Format::F32);
-                buf->AddColorAttachment(m_Prefilter, i, lod);
-                m_Raw->Bind(1);
+                buf->AddColorAttachment(prefilter_, i, lod);
+                raw_->Bind(1);
                 Renderer::SetViewport(curr_size, curr_size);
                 Renderer::Clear();
                 Renderer::Submit(cube, s_prefilter);
@@ -119,4 +121,5 @@ namespace DE {
             curr_size /= 2;
         }
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

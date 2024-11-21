@@ -2,11 +2,18 @@
 
 #include "DummyEditor/ImGuiUtils/ImGuiPanel.h"
 
-namespace DE {
+#include "DummyEngine/Utils/Types/Types.h"
+
+#include <imgui.h>
+
+namespace DummyEngine {
+
+    class FrameBuffer;
+
     class ViewportPanel : public ImGuiPanel {
     public:
         ViewportPanel() : ImGuiPanel("Viewport") {}
-        ViewportPanel(const std::string& panelName) : ImGuiPanel(panelName) {}
+        explicit ViewportPanel(const std::string& panel_name) : ImGuiPanel(panel_name) {}
         virtual void OnImGui() override;
 
         void ToolPanel();
@@ -20,4 +27,5 @@ namespace DE {
         ImVec2               m_ViewportSize;
         WeakRef<FrameBuffer> m_FrameBuffer;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

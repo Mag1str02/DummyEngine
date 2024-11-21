@@ -1,6 +1,6 @@
-#include "DummyEngine/Core/Scripting/Script.h"
+#include "Script.h"
 
-namespace DE {
+namespace DummyEngine {
 
     std::string ScriptFieldTypeToString(ScriptFieldType type) {
         switch (type) {
@@ -73,25 +73,25 @@ namespace DE {
     }
 
     bool Script::FieldIterator::operator==(const FieldIterator& other) const {
-        return m_Script == other.m_Script && m_Iterator == other.m_Iterator;
+        return script_ == other.script_ && iterator_ == other.iterator_;
     }
     bool Script::FieldIterator::operator!=(const FieldIterator& other) const {
-        return m_Script != other.m_Script || m_Iterator != other.m_Iterator;
+        return script_ != other.script_ || iterator_ != other.iterator_;
     }
     Script::FieldIterator& Script::FieldIterator::operator++() {
-        ++m_Iterator;
+        ++iterator_;
         return *this;
     }
     Script::FieldIterator Script::FieldIterator::operator++(int) {
         FieldIterator result = *this;
-        ++m_Iterator;
+        ++iterator_;
         return result;
     }
     std::pair<std::reference_wrapper<const std::string>, Script::Field> Script::FieldIterator::operator*() const {
-        return {std::cref(m_Iterator->first), Field(m_Iterator->second.type, (char*)m_Script + m_Iterator->second.offset)};
+        return {std::cref(iterator_->first), Field(iterator_->second.Type, (char*)script_ + iterator_->second.Offset)};
     }
 
-    Script::FieldIterator::FieldIterator(Script* owner, Iterator it) : m_Iterator(it), m_Script(owner) {}
+    Script::FieldIterator::FieldIterator(Script* owner, Iterator it) : iterator_(it), script_(owner) {}
 
     Script::FieldIterator Script::begin() {
         return FieldIterator(this, GetClassFields().begin());
@@ -99,7 +99,7 @@ namespace DE {
     Script::FieldIterator Script::end() {
         return FieldIterator(this, GetClassFields().end());
     }
-    Script::Field::Field(ScriptFieldType type, void* ptr) : m_Type(type), m_Data(ptr) {}
+    Script::Field::Field(ScriptFieldType type, void* ptr) : type_(type), data_(ptr) {}
 
     void Script::AttachToScene(WeakRef<Scene> scene, Entity entity) {
         m_Scene  = scene;
@@ -109,7 +109,7 @@ namespace DE {
 
     ScriptFieldType Script::GetFieldType(const std::string& name) const {
         if (GetClassFields().contains(name)) {
-            return GetClassFields().at(name).type;
+            return GetClassFields().at(name).Type;
         }
         return ScriptFieldType::None;
     }
@@ -122,4 +122,4 @@ namespace DE {
     Ref<Scene> Script::GetScene() const {
         return m_Scene.lock();
     }
-}  // namespace DE
+}  // namespace DummyEngine

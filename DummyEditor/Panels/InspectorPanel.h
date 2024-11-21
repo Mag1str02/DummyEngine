@@ -2,7 +2,11 @@
 
 #include "DummyEditor/ImGuiUtils/ImGuiPanel.h"
 
-namespace DE {
+#include "DummyEngine/Core/ECS/ECS.h"
+
+namespace DummyEngine {
+    class Scene;
+
     class InspectorPanel : public ImGuiPanel {
     public:
         InspectorPanel() : ImGuiPanel("Inspector") {}
@@ -15,7 +19,7 @@ namespace DE {
     private:
         template <typename Component> void DrawComponentWidget();
 
-        Entity         m_Entity;
-        WeakRef<Scene> m_Scene;
+        Entity         entity_;
+        WeakRef<Scene> scene_;
     };
-}  // namespace DE
+}  // namespace DummyEngine

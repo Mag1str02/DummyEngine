@@ -1,29 +1,30 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
-namespace DE {
+namespace DummyEngine {
+
     struct KeyPosition {
-        Vec3  position;
-        float time_stamp;
+        Vec3  Position;
+        float TimeStamp;
     };
 
     struct KeyRotation {
-        Quaternion orientation;
-        float      time_stamp;
+        Quaternion Orientation;
+        float      TimeStamp;
     };
 
     struct KeyScale {
-        Vec3  scale;
-        float time_stamp;
+        Vec3  Scale;
+        float TimeStamp;
     };
 
     class Bone {
     public:
         Bone() = default;
-        Bone(const std::string& name, U32 ID);
+        Bone(const std::string& name, U32 id);
 
-        Mat4        GetTransform(float animationTime);
+        Mat4        GetTransform(float animation_time);
         std::string GetBoneName() const;
         U32         GetBoneID() const;
 
@@ -41,16 +42,16 @@ namespace DE {
     private:
         friend class ModelLoader;
 
-        std::vector<KeyPosition> m_Positions;
-        std::vector<KeyRotation> m_Rotations;
-        std::vector<KeyScale>    m_Scales;
+        std::vector<KeyPosition> positions_;
+        std::vector<KeyRotation> rotations_;
+        std::vector<KeyScale>    scales_;
 
-        std::string m_Name;
-        U32         m_ID;
-        Mat4        m_LocalTransform;
+        std::string name_;
+        U32         id_;
     };
     struct BoneInfo {
-        Bone bone;
-        Mat4 offset = Mat4(1.0);
+        Bone Bone;
+        Mat4 Offset = Mat4(1.0);
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

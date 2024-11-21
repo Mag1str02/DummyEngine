@@ -1,13 +1,13 @@
-#include "DummyEditor/DummyEngineInclude.h"
+#include "DummyEngine/DummyEngine.h"
 
-using namespace DE;
+using namespace DummyEngine;
 
 class EditorCameraController : public Script {
     SCRIPT(EditorCameraController)
 public:
     virtual void OnUpdate(float dt) override {
         auto& camera = Get<FPSCamera>();
-        if (active) {
+        if (active_) {
             float speed       = 15;
             float sensitivity = 0.07;
 
@@ -39,11 +39,11 @@ public:
                 camera.MoveInWorld(Vec3(0.0f, -1.0f, 0.0f) * speed * dt);
             }
         }
-        Get<TransformComponent>().translation = camera.GetPos();
+        Get<TransformComponent>().Translation = camera.GetPos();
     }
 
 private:
-    bool active = false;
+    bool active_ = false;
 };
 
-SCRIPT_BASE(EditorCameraController, FIELD(active))
+SCRIPT_BASE(EditorCameraController, FIELD(active_))

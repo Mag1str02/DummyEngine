@@ -1,19 +1,20 @@
 #pragma once
 
 #include "DummyEngine/Core/Rendering/Renderer/Context.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
 
-namespace DE {
+namespace DummyEngine {
 
     class GLContext : public Context {
-        LOGGER_AUTHOR(GLContext)
+        LOG_AUTHOR(GLContext)
     public:
-        GLContext(GLFWwindow* window);
+        explicit GLContext(GLFWwindow* window);
 
         virtual void Load() override;
         virtual void SwapBuffers() override;
 
     private:
-        GLFWwindow* m_Window;
+        GLFWwindow* window_;
     };
 
-}  // namespace DE
+}  // namespace DummyEngine

@@ -1,28 +1,28 @@
 #pragma once
 
-namespace DE {
+namespace DummyEngine {
 
-    template <typename... Components> StorageView<Components...>::Iterator::Iterator(U32 id, StorageView* v) : m_ID(id), m_View(v) {}
+    template <typename... Components> StorageView<Components...>::Iterator::Iterator(U32 id, StorageView* v) : id_(id), view_(v) {}
 
     template <typename... Components> bool StorageView<Components...>::Iterator::operator==(const Iterator& other) const {
-        return m_View == other.m_View && m_ID == other.m_ID;
+        return view_ == other.view_ && id_ == other.id_;
     }
     template <typename... Components> bool StorageView<Components...>::Iterator::operator!=(const Iterator& other) const {
-        return m_View != other.m_View || m_ID != other.m_ID;
+        return view_ != other.view_ || id_ != other.id_;
     }
 
-    template <typename... Components> StorageView<Components...>::StorageView(Storage* storage) : m_Storage(storage) {
-        m_Signature = m_Storage->m_ComponentManager.BuildSignature<Components...>();
+    template <typename... Components> StorageView<Components...>::StorageView(Storage* storage) : storage_(storage) {
+        signature_ = storage_->component_manager_.BuildSignature<Components...>();
     }
     template <typename... Components> typename StorageView<Components...>::Iterator StorageView<Components...>::begin() {
-        Iterator res(m_Storage->m_EntityManager.BeginEntity(), this);
-        if (!m_Storage->m_ComponentManager.Matches(res.m_ID, m_Signature)) {
+        Iterator res(storage_->entity_manager_.BeginEntity(), this);
+        if (!storage_->component_manager_.Matches(res.id_, signature_)) {
             ++res;
         }
         return res;
     }
     template <typename... Components> typename StorageView<Components...>::Iterator StorageView<Components...>::end() {
-        return Iterator(m_Storage->m_EntityManager.EndEntity(), this);
+        return Iterator(storage_->entity_manager_.EndEntity(), this);
     }
     template <typename... Components> bool StorageView<Components...>::Empty() {
         return begin() == end();
@@ -30,23 +30,23 @@ namespace DE {
 
     template <typename... Components> typename StorageView<Components...>::Iterator& StorageView<Components...>::Iterator::operator++() {
         do {
-            m_ID = m_View->m_Storage->m_EntityManager.NextEntity(m_ID);
-        } while (m_ID != m_View->m_Storage->m_EntityManager.EndEntity() && !m_View->m_Storage->m_ComponentManager.Matches(m_ID, m_View->m_Signature));
+            id_ = view_->storage_->entity_manager_.NextEntity(id_);
+        } while (id_ != view_->storage_->entity_manager_.EndEntity() && !view_->storage_->component_manager_.Matches(id_, view_->signature_));
         return *this;
     }
     template <typename... Components> typename StorageView<Components...>::Iterator StorageView<Components...>::Iterator::operator++(int) {
         auto res = *this;
         do {
-            m_ID = m_View->m_Storage->m_EntityManager.NextEntity(m_ID);
-        } while (m_ID != m_View->m_Storage->m_EntityManager.EndEntity() && m_View->m_Storage->m_ComponentManager.Matches(m_ID, m_View->m_Signature));
+            id_ = view_->storage_->entity_manager_.NextEntity(id_);
+        } while (id_ != view_->storage_->entity_manager_.EndEntity() && view_->storage_->component_manager_.Matches(id_, view_->signature_));
         return res;
     }
     template <typename... Components> Entity StorageView<Components...>::Iterator::operator*() {
         Entity res;
-        res.m_ID      = m_ID;
-        res.m_Gen     = m_View->m_Storage->m_EntityManager.Generation(m_ID);
-        res.m_Storage = m_View->m_Storage->weak_from_this();
+        res.id_      = id_;
+        res.gen_     = view_->storage_->entity_manager_.Generation(id_);
+        res.storage_ = view_->storage_->weak_from_this();
         return res;
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

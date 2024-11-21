@@ -1,6 +1,7 @@
 #include "DummyEngine/Platform/Linux/Utils/Debug/Demangler.h"
 
-namespace DE {
+namespace DummyEngine {
+
     std::string DemangledName(const std::string& name) {
         std::string res;
         int         status;
@@ -11,4 +12,5 @@ namespace DE {
         free(realname);
         return res;
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

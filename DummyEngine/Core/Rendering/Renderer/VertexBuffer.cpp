@@ -1,9 +1,11 @@
-#include "DummyEngine/Core/Rendering/Renderer/VertexBuffer.h"
+#include "VertexBuffer.h"
 
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLVertexBuffer.h"
+#include "DummyEngine/Utils/Debug/Assert.h"
 
-namespace DE {
+namespace DummyEngine {
+
     Ref<VertexBuffer> VertexBuffer::Create(const BufferLayout& layout, U32 size, BufferUsage usage) {
         switch (Renderer::CurrentAPI()) {
             case API::OpenGL: return CreateRef<GLVertexBuffer>(layout, size, usage);
@@ -55,4 +57,4 @@ namespace DE {
         return nullptr;
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

@@ -1,10 +1,11 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
 
-namespace DE {
+namespace DummyEngine {
+
     class Initializer {
-        LOGGER_AUTHOR(Initializer)
+        LOG_AUTHOR(Initializer)
     public:
         static void Initialize();
         static void Terminate();
@@ -18,4 +19,5 @@ namespace DE {
         static void DepTerminate();
         static void PostTerminate();
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

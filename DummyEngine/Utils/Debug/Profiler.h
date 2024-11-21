@@ -1,5 +1,8 @@
 #pragma once
 
+#include "DummyEngine/Utils/Helpers/Singleton.h"
+#include "DummyEngine/Utils/Types/Types.h"
+
 #include <chrono>
 #include <queue>
 #include <stack>
@@ -7,25 +10,23 @@
 #include <tracy/Tracy.hpp>
 #include <vector>
 
-#include "DummyEngine/Utils/Helpers/Singleton.h"
-#include "DummyEngine/Utils/Types/Types.h"
+namespace DummyEngine {
 
-namespace DE {
     struct TimeLapse {
-        std::chrono::time_point<std::chrono::high_resolution_clock> m_Start;
-        std::chrono::time_point<std::chrono::high_resolution_clock> m_End;
-        std::vector<U32>                                            m_Childs;
-        std::string                                                 m_Name;
+        std::chrono::time_point<std::chrono::high_resolution_clock> Start;
+        std::chrono::time_point<std::chrono::high_resolution_clock> End;
+        std::vector<U32>                                            Childs;
+        std::string                                                 Name;
 
-        float       Duration() const { return (m_End - m_Start).count() * 0.001 * 0.001; }
-        std::string StrDuration() const { return std::to_string((m_End - m_Start).count() * 0.001 * 0.001) + "ms"; }
+        float       Duration() const { return (End - Start).count() * 0.001 * 0.001; }
+        std::string StrDuration() const { return std::to_string((End - Start).count() * 0.001 * 0.001) + "ms"; }
 
-        TimeLapse(const std::string& name) : m_Name(name) {}
+        explicit TimeLapse(const std::string& name) : Name(name) {}
     };
     struct ProfilerFrame {
-        std::vector<TimeLapse> m_TimeLapses;
+        std::vector<TimeLapse> Timelapses;
 
-        ProfilerFrame(U32 predicted_lapse_amount);
+        explicit ProfilerFrame(U32 predicted_lapse_amount);
     };
 
     class Profiler : public Singleton<Profiler> {
@@ -39,16 +40,18 @@ namespace DE {
     private:
         friend class ProfilerScopeObject;
 
-        std::queue<ProfilerFrame> m_Frames;
-        std::stack<U32>           m_TimeLapseStack;
-        U32                       m_PrevFrameTimeLapseAmount = 0;
+        std::queue<ProfilerFrame> frames_;
+        std::stack<U32>           timelapse_stack_;
+        U32                       prev_frame_timelapse_amount_ = 0;
     };
 
     class ProfilerScopeObject {
     public:
-        ProfilerScopeObject(const std::string& name);
+        explicit ProfilerScopeObject(const std::string& name);
         ~ProfilerScopeObject();
     };
+
+}  // namespace DummyEngine
 
 #if DE_ENABLE_PROFILER
 #define DE_PROFILE_SCOPE(name)                       \
@@ -64,5 +67,3 @@ namespace DE {
 #define DE_PROFILE_SCOPE(name)
 #define DE_PROFILER_BEGIN_FRAME()
 #endif
-
-}  // namespace DE

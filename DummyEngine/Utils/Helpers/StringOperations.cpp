@@ -1,9 +1,8 @@
-#include "DummyEngine/Utils/Helpers/StringOperations.h"
+#include "StringOperations.h"
 
-#include "DummyEngine/Utils/Base/STDIncludes.h"
-#include "DummyEngine/Utils/Types/UUID.h"
+#include <sstream>
 
-namespace DE {
+namespace DummyEngine {
 
     U32 HexCharToInt(char a) {
         if (a >= 'a') {
@@ -27,4 +26,4 @@ namespace DE {
         res << std::setfill('0') << std::setw(16) << std::hex << a;
         return res.str();
     }
-}  // namespace DE
+}  // namespace DummyEngine

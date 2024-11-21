@@ -2,9 +2,9 @@
 
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Scene/Scene.h"
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Helpers/CompilerSpecific.h"
 
-namespace DE {
+namespace DummyEngine {
 
     enum class ScriptFieldType {
         None = 0,
@@ -26,8 +26,8 @@ namespace DE {
         Entity,
     };
     struct ScriptClassField {
-        ScriptFieldType type;
-        U32             offset;
+        ScriptFieldType Type;
+        U32             Offset;
     };
 
     class Script {
@@ -41,12 +41,12 @@ namespace DE {
             Field(ScriptFieldType type, void* ptr);
             template <typename T> T&       Get();
             template <typename T> const T& Get() const;
-            ScriptFieldType                GetType() const { return m_Type; }
-            void*                          Get() const { return m_Data; }
+            ScriptFieldType                GetType() const { return type_; }
+            void*                          Get() const { return data_; }
 
         private:
-            ScriptFieldType m_Type;
-            void*           m_Data;
+            ScriptFieldType type_;
+            void*           data_;
         };
         class FieldIterator {
         public:
@@ -60,8 +60,8 @@ namespace DE {
             friend class Script;
             FieldIterator(Script* owner, Iterator it);
 
-            Iterator m_Iterator;
-            Script*  m_Script;
+            Iterator iterator_;
+            Script*  script_;
         };
 
         Script()                         = default;
@@ -78,8 +78,8 @@ namespace DE {
         virtual void OnRuntimeStop() {}
         virtual void OnDetach() {}
 
-        FieldIterator begin();
-        FieldIterator end();
+        FieldIterator begin();  // NOLINT
+        FieldIterator end();    // NOLINT
 
         template <typename T> T& GetField(const std::string& name);
         ScriptFieldType          GetFieldType(const std::string& name) const;
@@ -109,26 +109,26 @@ namespace DE {
     // clang-format on
 
     template <typename T> T& Script::Field::Get() {
-        DE_ASSERT(m_Type == TypeToScriptFieldType<T>(),
+        DE_ASSERT(type_ == TypeToScriptFieldType<T>(),
                   "Wrong field type {} expected {}",
                   ScriptFieldTypeToString(TypeToScriptFieldType<T>()),
-                  ScriptFieldTypeToString(m_Type));
-        return *(T*)m_Data;
+                  ScriptFieldTypeToString(type_));
+        return *(T*)data_;
     }
     template <typename T> const T& Script::Field::Get() const {
-        DE_ASSERT(m_Type == TypeToScriptFieldType<T>(),
+        DE_ASSERT(type_ == TypeToScriptFieldType<T>(),
                   "Wrong field type {} expected {}",
                   ScriptFieldTypeToString(TypeToScriptFieldType<T>()),
-                  ScriptFieldTypeToString(m_Type));
-        return *(T*)m_Data;
+                  ScriptFieldTypeToString(type_));
+        return *(T*)data_;
     }
     template <typename T> T& Script::GetField(const std::string& name) {
         DE_ASSERT(GetClassFields().contains(name), "Wrong field name(", name, ")");
-        DE_ASSERT(GetClassFields().at(name).type == TypeToScriptFieldType<T>(),
+        DE_ASSERT(GetClassFields().at(name).Type == TypeToScriptFieldType<T>(),
                   "Wrong field type {} expected {}",
                   ScriptFieldTypeToString(TypeToScriptFieldType<T>()),
-                  ScriptFieldTypeToString(GetClassFields().at(name).type));
-        return *(T*)((char*)this + GetClassFields().at(name).offset);
+                  ScriptFieldTypeToString(GetClassFields().at(name).Type));
+        return *(T*)((char*)this + GetClassFields().at(name).Offset);
     }
     template <typename T> T& Script::Add(const T& t) {
         DE_ASSERT(m_Entity.Valid(), "Using invalid entity in script");
@@ -172,4 +172,4 @@ protected:                                                                      
         delete script;                                                                           \
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

@@ -1,37 +1,40 @@
 #pragma once
 
 #include "DummyEngine/Core/ResourceManaging/RawData.h"
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Types/UUID.h"
 
-namespace DE {
+namespace DummyEngine {
+
     struct TextureAsset {
         struct LoadingProperties {
-            Path          path;
-            bool          flip_uvs = true;
-            TextureFormat format   = TextureFormat::U8;
+            Path          Path;
+            bool          FlipUV = true;
+            TextureFormat Format = TextureFormat::U8;
         };
-        UUID              id;
-        std::string       name;
-        LoadingProperties loading_props;
+
+        UUID              ID;
+        std::string       Name;
+        LoadingProperties LoadingProps;
     };
     struct RenderMeshAsset {
         struct LoadingProperties {
-            Path path;
-            bool flip_uvs;
-            bool compress;
+            Path Path;
+            bool FlipUV;
+            bool Compress;
         };
-        LoadingProperties loading_props;
-        UUID              id;
-        std::string       name;
+        LoadingProperties LoadingProps;
+        UUID              ID;
+        std::string       Name;
     };
     struct ShaderAsset {
-        UUID                    id;
-        std::string             name;
-        std::vector<ShaderPart> parts;
+        UUID                    ID;
+        std::string             Name;
+        std::vector<ShaderPart> Parts;
     };
     struct ScriptAsset {
-        UUID        id;
-        std::string name;
-        Path        path;
+        UUID        ID;
+        std::string Name;
+        Path        Path;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

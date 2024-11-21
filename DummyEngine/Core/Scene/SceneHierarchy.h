@@ -1,10 +1,24 @@
 #pragma once
 
 #include "DummyEngine/Core/ECS/ECS.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
+
     class SceneHierarchy {
+    public:
+        class Node;
+
+        explicit SceneHierarchy(const std::string& name);
+
+        Node GetRoot();
+        Node AddFolder(const std::string& name);
+        Node AddEntity(Entity entity);
+        void DeleteNode(Node node);
+        bool Attach(Node parent, Node child);
+
+    private:
+        bool IsAnsestor(U32 parent, U32 child) const;
+
     public:
         class Node {
         public:
@@ -34,41 +48,38 @@ namespace DE {
             friend class SceneHierarchy;
             Node(SceneHierarchy* owner, U32 id);
 
-            SceneHierarchy* m_Owner = nullptr;
-            U32             m_ID    = UINT32_MAX;
+            SceneHierarchy* owner_ = nullptr;
+            U32             id_    = UINT32_MAX;
         };
-
-        SceneHierarchy(const std::string& name);
-
-        Node GetRoot();
-        Node AddFolder(const std::string& name);
-        Node AddEntity(Entity entity);
-        void DeleteNode(Node node);
-        bool Attach(Node parent, Node child);
 
     private:
-        bool IsAnsestor(U32 parent, U32 child) const;
-
         struct NodeData {
+        public:
             NodeData() = default;
-            NodeData(Entity entity, U32 parent = -1);
-            NodeData(const std::string& name, U32 parent = -1);
+            explicit NodeData(Entity entity, U32 parent = -1);
+            explicit NodeData(const std::string& name, U32 parent = -1);
 
+        public:
             struct FolderNode {
-                std::string      name;
-                std::vector<U32> childs;
-                FolderNode(const std::string& name);
+                std::string      Name;
+                std::vector<U32> Childs;
+
+                explicit FolderNode(const std::string& name);
             };
             struct EntityNode {
-                Entity entity;
-                EntityNode(Entity ent);
+                Entity Entity;
+
+                explicit EntityNode(class Entity entity);
             };
 
-            std::variant<std::monostate, FolderNode, EntityNode> node;
-            U32                                                  parent;
+        public:
+            std::variant<std::monostate, FolderNode, EntityNode> Node;
+            U32                                                  Parent;
         };
-        std::vector<NodeData> m_Nodes;
-        std::queue<U32>       m_AvailableNodes;
+
+    private:
+        std::vector<NodeData> nodes_;
+        std::queue<U32>       available_nodes_;
     };
 
-}  // namespace DE
+}  // namespace DummyEngine

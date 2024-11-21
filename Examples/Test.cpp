@@ -1,6 +1,6 @@
 #include "DummyEngine/DummyEngine.h"
 
-using namespace DE;
+using namespace DummyEngine;
 
 int main() {
     freopen("output.txt", "w", stdout);

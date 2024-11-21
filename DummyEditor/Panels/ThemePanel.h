@@ -1,9 +1,11 @@
 #pragma once
 
-#include "DummyEditor/DummyEngineInclude.h"
 #include "DummyEditor/ImGuiUtils/ImGuiPanel.h"
+#include "DummyEditor/ImGuiUtils/ImGuiUtils.h"
 
-namespace DE {
+#include <imgui.h>
+
+namespace DummyEngine {
     struct EditorTheme {
         std::string Name;
 
@@ -37,7 +39,7 @@ namespace DE {
     private:
         void SetDefaultStyle();
 
-        EditorTheme m_ActiveTheme;
+        EditorTheme active_theme_;
     };
-}  // namespace DE
+}  // namespace DummyEngine
    //*Enums for colors

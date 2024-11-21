@@ -1,6 +1,5 @@
 #pragma once
 
-#include "DummyEditor/DummyEngineInclude.h"
 #include "DummyEditor/ImGuiUtils/ImGuiManager.h"
 #include "DummyEditor/Panels/InspectorPanel.h"
 #include "DummyEditor/Panels/MenuBar.h"
@@ -10,7 +9,13 @@
 #include "DummyEditor/Panels/ThemePanel.h"
 #include "DummyEditor/Panels/ViewportPanel.h"
 
-namespace DE {
+#include "DummyEngine/Core/Application/Layer.h"
+#include "DummyEngine/ToolBox/Loaders/SceneLoader.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
+
+namespace DummyEngine {
+
+    class Texture;
 
     class TransformSyncSystem : public System {
     public:
@@ -25,8 +30,8 @@ namespace DE {
         void                Update(float dt) override;
     };
 
-    class EditorLayer : public DE::Layer {
-        LOGGER_AUTHOR(EditorLayer);
+    class EditorLayer : public DummyEngine::Layer {
+        LOG_AUTHOR(EditorLayer);
 
     public:
         enum class SceneState {
@@ -43,12 +48,12 @@ namespace DE {
         };
         enum class InputState { NonSpecified = 0, ViewPort };
         struct Resources {
-            Ref<Texture> play_icon;
-            Ref<Texture> pause_icon;
-            Ref<Texture> step_icon;
-            Ref<Texture> stop_icon;
-            Ref<Texture> build_icon;
-            Ref<Texture> build_and_run_icon;
+            Ref<Texture> PlayIcon;
+            Ref<Texture> PauseIcon;
+            Ref<Texture> StepIcon;
+            Ref<Texture> StopIcon;
+            Ref<Texture> BuildIcon;
+            Ref<Texture> BuildAndRunIcon;
         };
 
         //*___Layer____________________________________________________________________________________________________________________________________________________________________________________
@@ -107,26 +112,27 @@ namespace DE {
         void LoadEditorResources();
         void LoadIcons();
 
-        SceneScriptState m_SceneScriptState = SceneScriptState::Uncompiled;
-        InputState       m_InputState       = InputState::NonSpecified;
-        SceneState       m_SceneState       = SceneState::None;
+        SceneScriptState scene_script_state_ = SceneScriptState::Uncompiled;
+        InputState       input_state_        = InputState::NonSpecified;
+        SceneState       scene_state_        = SceneState::None;
 
-        ImGuiManager        m_ImGuiManager;
-        ViewportPanel       m_Viewport;
-        ViewportPanel       m_FBOViewport;
-        SceneHierarchyPanel m_SceneHierarchy;
-        InspectorPanel      m_Inspector;
-        ProfilerPanel       m_Profiler;
-        ThemePanel          m_ThemePanel;
-        MenuBar             m_MenuBar;
-        RendererPanel       m_RendererPanel;
+        ImGuiManager        imgui_manager_;
+        ViewportPanel       viewport_;
+        ViewportPanel       shadow_viewport_;
+        SceneHierarchyPanel scene_hierarchy_;
+        InspectorPanel      inspector_;
+        ProfilerPanel       profiler_;
+        ThemePanel          theme_panel_;
+        MenuBar             menu_bar_;
+        RendererPanel       renderer_panel_;
 
-        Ref<Scene>               m_CurrentScene;
-        SceneFileData            m_SceneFileData;
-        Entity                   m_EditorCamera;
-        Ref<TransformSyncSystem> m_TSSystem;
+        Ref<Scene>               current_scene_;
+        SceneFileData            scene_file_data_;
+        Entity                   editor_camera_;
+        Ref<TransformSyncSystem> ts_system_;
 
-        Resources           m_Resources;
-        static EditorLayer* s_Instance;
+        Resources resources_;
+
+        static EditorLayer* gInstance;
     };
-}  // namespace DE
+}  // namespace DummyEngine

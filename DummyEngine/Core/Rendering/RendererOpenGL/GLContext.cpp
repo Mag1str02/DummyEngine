@@ -1,20 +1,21 @@
-#include "DummyEngine/Core/Rendering/RendererOpenGL/GLContext.h"
+#include "GLContext.h"
 
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLUtils.h"
+#include "DummyEngine/Utils/Debug/Profiler.h"
 
 // clang-format off
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 // clang-format on
 
-namespace DE {
+namespace DummyEngine {
 
-    GLContext::GLContext(GLFWwindow* window) : m_Window(window) {
+    GLContext::GLContext(GLFWwindow* window) : window_(window) {
         DE_ASSERT(window, "Wrong window handle");
     }
 
     void GLContext::Load() {
-        glfwMakeContextCurrent(m_Window);
+        glfwMakeContextCurrent(window_);
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         DE_ASSERT(status, "Failed to initialize GLAD");
 
@@ -25,7 +26,7 @@ namespace DE {
     void GLContext::SwapBuffers() {
         DE_PROFILE_SCOPE("Context SwapBuffers");
 
-        glfwSwapBuffers(m_Window);
+        glfwSwapBuffers(window_);
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

@@ -1,13 +1,13 @@
 #include "DummyEngine/Core/Application/EntryPoint.h"
 #include "DummyEngine/DummyEngine.h"
 
-class MyLayer : public DE::Layer {
+class MyLayer : public DummyEngine::Layer {
 public:
-    MyLayer() : DE::Layer("MyLayer") {}
+    MyLayer() : DummyEngine::Layer("MyLayer") {}
 };
-namespace DE {
+namespace DummyEngine {
 
     void SetupApplication() {
         Application::PushLayer(new MyLayer());
     }
-}  // namespace DE
+}  // namespace DummyEngine

@@ -2,7 +2,10 @@
 
 #include "DummyEditor/ImGuiUtils/ImGuiPanel.h"
 
-namespace DE {
+#include "DummyEngine/Core/Scene/Scene.h"
+
+namespace DummyEngine {
+
     class SceneHierarchyPanel : public ImGuiPanel {
     public:
         SceneHierarchyPanel() : ImGuiPanel("Scene Hierarchy") {}
@@ -19,11 +22,12 @@ namespace DE {
         bool        PossibleDND(SceneHierarchy::Node from, SceneHierarchy::Node to);
         std::string GetDNDText(SceneHierarchy::Node from, SceneHierarchy::Node to);
 
-        WeakRef<Scene>       m_Scene;
-        SceneHierarchy::Node m_SelectedNode;
-        SceneHierarchy::Node m_From;
-        SceneHierarchy::Node m_To;
-        SceneHierarchy::Node m_Rename;
-        bool                 m_WasTarget = false;
+        WeakRef<Scene>       scene_;
+        SceneHierarchy::Node selected_node_;
+        SceneHierarchy::Node from_;
+        SceneHierarchy::Node to_;
+        SceneHierarchy::Node rename_;
+        bool                 was_target_ = false;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

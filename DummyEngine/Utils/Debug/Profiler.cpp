@@ -1,8 +1,9 @@
-#include "DummyEngine/Utils/Debug/Profiler.h"
+#include "Profiler.h"
 
-namespace DE {
+namespace DummyEngine {
+
     ProfilerFrame::ProfilerFrame(U32 predicted_lapse_amount) {
-        m_TimeLapses.reserve(predicted_lapse_amount);
+        Timelapses.reserve(predicted_lapse_amount);
     }
 
     SINGLETON_BASE(Profiler);
@@ -16,39 +17,39 @@ namespace DE {
     }
 
     S_METHOD_IMPL(const ProfilerFrame&, GetOldestFrame, (), ()) {
-        return Get().m_Frames.front();
+        return frames_.front();
     }
     S_METHOD_IMPL(Unit, BeginFrame, (), ()) {
-        if (!m_Frames.empty()) {
+        if (!frames_.empty()) {
             IPopTimeLapse();
         }
-        m_Frames.push(ProfilerFrame(m_PrevFrameTimeLapseAmount));
-        m_PrevFrameTimeLapseAmount = 0;
+        frames_.push(ProfilerFrame(prev_frame_timelapse_amount_));
+        prev_frame_timelapse_amount_ = 0;
 
         // TODO: Move somewhere frame storage size.
-        if (m_Frames.size() > 2) {
-            m_Frames.pop();
+        if (frames_.size() > 2) {
+            frames_.pop();
         }
 
         IPushTimeLapse("Frame");
         return Unit();
     }
     S_METHOD_IMPL(Unit, PushTimeLapse, (const std::string& name), (name)) {
-        ++m_PrevFrameTimeLapseAmount;
-        U32 index = m_Frames.back().m_TimeLapses.size();
-        m_Frames.back().m_TimeLapses.push_back(TimeLapse(name));
-        m_Frames.back().m_TimeLapses.back().m_Start = std::chrono::high_resolution_clock::now();
-        if (!m_TimeLapseStack.empty()) {
-            m_Frames.back().m_TimeLapses[m_TimeLapseStack.top()].m_Childs.push_back(index);
+        ++prev_frame_timelapse_amount_;
+        U32 index = frames_.back().Timelapses.size();
+        frames_.back().Timelapses.push_back(TimeLapse(name));
+        frames_.back().Timelapses.back().Start = std::chrono::high_resolution_clock::now();
+        if (!timelapse_stack_.empty()) {
+            frames_.back().Timelapses[timelapse_stack_.top()].Childs.push_back(index);
         }
-        m_TimeLapseStack.push(index);
+        timelapse_stack_.push(index);
         return Unit();
     }
     S_METHOD_IMPL(Unit, PopTimeLapse, (), ()) {
-        DE_ASSERT(!m_TimeLapseStack.empty(), "Attempt to pop empty timelapse stack.");
+        DE_ASSERT(!timelapse_stack_.empty(), "Attempt to pop empty timelapse stack.");
 
-        m_Frames.back().m_TimeLapses[m_TimeLapseStack.top()].m_End = std::chrono::high_resolution_clock::now();
-        m_TimeLapseStack.pop();
+        frames_.back().Timelapses[timelapse_stack_.top()].End = std::chrono::high_resolution_clock::now();
+        timelapse_stack_.pop();
         return Unit();
     }
 
@@ -59,4 +60,4 @@ namespace DE {
         Profiler::PopTimeLapse();
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

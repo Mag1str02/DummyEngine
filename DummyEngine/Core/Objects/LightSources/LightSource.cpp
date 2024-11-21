@@ -1,6 +1,6 @@
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"
 
-namespace DE {
+namespace DummyEngine {
 
     std::string LightSourceTypeToString(LightSourceType type) {
         switch (type) {
@@ -24,4 +24,5 @@ namespace DE {
             default: return 0;
         }
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

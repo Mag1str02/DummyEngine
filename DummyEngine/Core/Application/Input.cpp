@@ -1,14 +1,16 @@
-#include "DummyEngine/Core/Application/Input.h"
+#include "Input.h"
 
-#include <GLFW/glfw3.h>
+#include "DummyEngine/Core/Application/Config.h"
+#include "DummyEngine/Utils/Debug/Profiler.h"
 
-namespace DE {
+namespace DummyEngine {
     InputFrame::InputFrame() {
         key_states.resize((size_t)Key::Last);
     }
 
     SINGLETON_BASE(Input);
     S_INITIALIZE() {
+        m_MaxFrameAmount = Config::Get().MaxInputFrameAmount;
         m_EventDispatcher.AddEventListener<KeyPressedEvent>([this](KeyPressedEvent& event) {
             DE_ASSERT(m_CurrentFrame.key_states.size() > event.GetKey(), "Bad key code: {}", event.GetKey());
             m_CurrentFrame.key_states[event.GetKey()] = true;
@@ -76,4 +78,4 @@ namespace DE {
         return !m_Frames[0].key_states.at((size_t)key);
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

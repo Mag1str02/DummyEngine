@@ -1,10 +1,14 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Debug/Assert.h"  // IWYU pragma: export
+#include "DummyEngine/Utils/Types/Types.h"
+
+#include <typeindex>
 
 #define INDEX(type) std::type_index(typeid(type))
 
-namespace DE {
+namespace DummyEngine {
+
     //*___CLASS_DECLARATIONS___________________________________________________________________________________________________________________________________________________________________________________________________
     class Entity;
     class Storage;
@@ -35,9 +39,9 @@ namespace DE {
         virtual void  RemoveComponent(U32 id);
 
     private:
-        std::unordered_map<U32, U32> m_EntityToIndex;
-        std::vector<U32>             m_IndexToEntity;
-        std::vector<ComponentType>   m_ComponentArray;
+        std::unordered_map<U32, U32> entity_to_index_;
+        std::vector<U32>             index_to_entity_;
+        std::vector<ComponentType>   component_array_;
     };
 
     class Signature {
@@ -47,7 +51,7 @@ namespace DE {
         bool   Matches(const Signature& required) const;
         size_t Size() const {
             size_t size = 0;
-            for (size_t i = 0; i < 64 * m_Data.size(); ++i) {
+            for (size_t i = 0; i < 64 * data_.size(); ++i) {
                 if (Get(i)) {
                     ++size;
                 }
@@ -56,11 +60,11 @@ namespace DE {
         }
 
     private:
-        std::vector<U64> m_Data;
+        std::vector<U64> data_;
     };
     class ComponentManager {
     public:
-        ComponentManager(Storage* storage);
+        explicit ComponentManager(Storage* storage);
 
         template <typename ComponentType> ComponentType* AddComponent(U32 entity_id, const ComponentType& component);
         template <typename ComponentType> ComponentType* GetComponent(U32 entity_id);
@@ -84,12 +88,12 @@ namespace DE {
         void                                   ValidateSignature(U32 entity_id);
         template <typename ComponentType> void RegisterComponent();
 
-        std::unordered_map<std::type_index, std::shared_ptr<IComponentArray>> m_ComponentArrays;
-        std::unordered_map<std::type_index, U32>                              m_ComponentId;
-        std::unordered_map<std::type_index, std::function<void(Entity)>>      m_AddHandlers;
-        std::unordered_map<std::type_index, std::function<void(Entity)>>      m_RemoveHandlers;
-        std::vector<Signature>                                                m_Signatures;
-        Storage*                                                              m_Storage;
+        std::unordered_map<std::type_index, std::shared_ptr<IComponentArray>> component_arrays_;
+        std::unordered_map<std::type_index, U32>                              component_id_;
+        std::unordered_map<std::type_index, std::function<void(Entity)>>      add_handlers_;
+        std::unordered_map<std::type_index, std::function<void(Entity)>>      remove_handlers_;
+        std::vector<Signature>                                                signatures_;
+        Storage*                                                              storage_;
     };
 
     //*___ENTITY_MANAGER___________________________________________________________________________________________________________________________________________________________________________________________
@@ -108,9 +112,9 @@ namespace DE {
         U32 EndEntity() const;
 
     private:
-        std::vector<U32>  m_Generations;
-        std::vector<bool> m_States;
-        std::queue<U32>   m_AvailableEntities;
+        std::vector<U32>  generations_;
+        std::vector<bool> states_;
+        std::queue<U32>   available_entities_;
     };
 
     //*___SYSTEM_MANAGER___________________________________________________________________________________________________________________________________________________________________________________________
@@ -128,20 +132,20 @@ namespace DE {
         friend class SystemManager;
         void Bind(Storage* storage);
 
-        Storage* m_Storage;
+        Storage* storage_;
     };
     class SystemManager {
     public:
-        SystemManager(Storage* storage);
+        explicit SystemManager(Storage* storage);
         void                                            Update(float dt);
         template <typename Before, typename After> void AddDependency();
         template <typename SystemType> void             AttachSystem(std::shared_ptr<System> system);
 
     private:
-        std::vector<std::shared_ptr<System>>     m_Systems;
-        std::unordered_map<std::type_index, U32> m_SystemId;
-        std::vector<std::vector<U32>>            m_DependencyGraph;
-        Storage*                                 m_Storage;
+        std::vector<std::shared_ptr<System>>     systems_;
+        std::unordered_map<std::type_index, U32> system_ids_;
+        std::vector<std::vector<U32>>            dependency_graph_;
+        Storage*                                 storage_;
     };
 
     //*___ENTITY____________________________________________________________________________________________________________________________________________________________________________________________________
@@ -173,9 +177,9 @@ namespace DE {
         friend struct std::hash<Entity>;
         friend class Storage;
 
-        U32              m_ID;
-        U32              m_Gen;
-        WeakRef<Storage> m_Storage;
+        U32              id_;
+        U32              gen_;
+        WeakRef<Storage> storage_;
     };
 
     //*___STORAGE___________________________________________________________________________________________________________________________________________________________________________________________
@@ -215,9 +219,9 @@ namespace DE {
         template <typename ComponentType> bool           HasComponent(U32 id, U32 gen) const;
         template <typename ComponentType> void           RemoveComponent(U32 id, U32 gen);
 
-        EntityManager    m_EntityManager;
-        ComponentManager m_ComponentManager;
-        SystemManager    m_SystemManager;
+        EntityManager    entity_manager_;
+        ComponentManager component_manager_;
+        SystemManager    system_manager_;
     };
     template <typename... Components> class StorageView {
     public:
@@ -233,28 +237,28 @@ namespace DE {
 
         private:
             friend class StorageView;
-            U32          m_ID;
-            StorageView* m_View;
+            U32          id_;
+            StorageView* view_;
         };
-        Iterator begin();
-        Iterator end();
+        Iterator begin();  // NOLINT
+        Iterator end();    // NOLINT
         bool     Empty();
 
     private:
         friend class Storage;
-        StorageView(Storage* storage);
+        explicit StorageView(Storage* storage);
 
-        Signature m_Signature;
-        Storage*  m_Storage;
+        Signature signature_;
+        Storage*  storage_;
     };
 
-}  // namespace DE
+}  // namespace DummyEngine
 
-#include "DummyEngine/Core/ECS/ComponentArray.hpp"
-#include "DummyEngine/Core/ECS/ComponentManager.hpp"
-#include "DummyEngine/Core/ECS/Entity.hpp"
-#include "DummyEngine/Core/ECS/EntityManager.hpp"
-#include "DummyEngine/Core/ECS/Storage.hpp"
-#include "DummyEngine/Core/ECS/StorageView.hpp"
-#include "DummyEngine/Core/ECS/System.hpp"
-#include "DummyEngine/Core/ECS/SystemManager.hpp"
+#include "DummyEngine/Core/ECS/ComponentArray.hpp"    // IWYU pragma: export
+#include "DummyEngine/Core/ECS/ComponentManager.hpp"  // IWYU pragma: export
+#include "DummyEngine/Core/ECS/Entity.hpp"            // IWYU pragma: export
+#include "DummyEngine/Core/ECS/EntityManager.hpp"     // IWYU pragma: export
+#include "DummyEngine/Core/ECS/Storage.hpp"           // IWYU pragma: export
+#include "DummyEngine/Core/ECS/StorageView.hpp"       // IWYU pragma: export
+#include "DummyEngine/Core/ECS/System.hpp"            // IWYU pragma: export
+#include "DummyEngine/Core/ECS/SystemManager.hpp"     // IWYU pragma: export

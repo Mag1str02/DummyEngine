@@ -1,5 +1,6 @@
 #pragma once
-#include "DummyEngine/Utils/Types/Types.h"
+
+#include "DummyEngine/Utils/Types/Types.h"  // IWYU pragma: keep
 
 #ifdef __GNUC__
 #define DE_COMPILER_GCC_VERSION_MAJOR __GNUC__
@@ -21,7 +22,6 @@
 #endif
 
 #if DE_PLATFORM_WINDOWS
-#define YAML_CPP_STATIC_DEFINE
 #define DE_SCRIPT_API extern "C" __declspec(dllexport)
 #endif
 
@@ -34,10 +34,10 @@
 #undef DE_COMPILER_PATH_HASH
 #endif
 
-namespace std {
+namespace std {  // NOLINT
 #ifndef DE_COMPILER_PATH_HASH
-    template <> struct hash<DE::Path> {
-        std::size_t operator()(const DE::Path& path) const { return hash_value(path); }
+    template <> struct hash<DummyEngine::Path> {
+        std::size_t operator()(const DummyEngine::Path& path) const { return hash_value(path); }
     };
 #endif
 }  // namespace std

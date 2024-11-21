@@ -2,7 +2,8 @@
 
 #include "DummyEngine/Core/Rendering/Renderer/RenderAPI.h"
 
-namespace DE {
+namespace DummyEngine {
+
     class GLRenderAPI : public RenderAPI {
     public:
         GLRenderAPI()          = default;
@@ -28,4 +29,5 @@ namespace DE {
 
         virtual API GetAPI() override;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

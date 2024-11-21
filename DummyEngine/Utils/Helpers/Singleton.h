@@ -2,8 +2,6 @@
 
 #include "DummyEngine/Utils/Debug/Assert.h"
 
-struct Unit {};
-
 #define SINGLETON(type)                           \
 private:                                          \
     friend class Singleton<type>;                 \
@@ -19,16 +17,16 @@ public:                                           \
     S_METHOD_DEF(Unit, Initialize, ());           \
     S_METHOD_DEF(Unit, Terminate, ());
 
-#define SINGLETON_BASE(type)                                                                  \
-    static const std::string CurrentSingletonName        = #type;                             \
-    template <> type*        Singleton<type>::s_Instance = nullptr;                           \
-    template <> type&        Singleton<type>::Get() {                                         \
-        DE_ASSERT(s_Instance, "Using {} before initialization", CurrentSingletonName); \
-        return *s_Instance;                                                            \
-    }                                                                                         \
-    bool type::Initialized() {                                                                \
-        return s_Instance != nullptr;                                                         \
-    }                                                                                         \
+#define SINGLETON_BASE(type)                                                                 \
+    static const std::string CurrentSingletonName       = #type;                             \
+    template <> type*        Singleton<type>::gInstance = nullptr;                           \
+    template <> type&        Singleton<type>::GetInstance() {                                \
+        DE_ASSERT(gInstance, "Using {} before initialization", CurrentSingletonName); \
+        return *gInstance;                                                            \
+    }                                                                                        \
+    bool type::Initialized() {                                                               \
+        return gInstance != nullptr;                                                         \
+    }                                                                                        \
     using CurrentSingleton = type
 
 #define DEL_BRACKETS(a) SECOND(FIRST a)
@@ -39,7 +37,7 @@ public:                                           \
 
 #define S_METHOD(return_type, name, signature, variables)            \
     static DEL_BRACKETS(return_type) name(DEL_BRACKETS(signature)) { \
-        return Get().I##name(DEL_BRACKETS(variables));               \
+        return GetInstance().I##name(DEL_BRACKETS(variables));       \
     }                                                                \
     DEL_BRACKETS(return_type) I##name(DEL_BRACKETS(signature))
 
@@ -47,32 +45,35 @@ public:                                           \
     static DEL_BRACKETS(return_type) name(DEL_BRACKETS(signature)); \
     DEL_BRACKETS(return_type) I##name(DEL_BRACKETS(signature));
 
-#define S_METHOD_IMPL(return_type, name, signature, variables)                  \
-    DEL_BRACKETS(return_type) CurrentSingleton::name(DEL_BRACKETS(signature)) { \
-        return CurrentSingleton::Get().I##name(DEL_BRACKETS(variables));        \
-    }                                                                           \
+#define S_METHOD_IMPL(return_type, name, signature, variables)                   \
+    DEL_BRACKETS(return_type) CurrentSingleton::name(DEL_BRACKETS(signature)) {  \
+        return CurrentSingleton::GetInstance().I##name(DEL_BRACKETS(variables)); \
+    }                                                                            \
     DEL_BRACKETS(return_type) CurrentSingleton::I##name(DEL_BRACKETS(signature))
 
-#define S_INITIALIZE()                                                                   \
-    Unit CurrentSingleton::Initialize() {                                                \
-        DE_ASSERT(!s_Instance, "Double initialization of {}", CurrentSingletonName);     \
-        s_Instance = new CurrentSingleton();                                             \
-        DE_ASSERT(s_Instance, "Failed to allocate memory for {}", CurrentSingletonName); \
-        s_Instance->IInitialize();                                                       \
-        return Unit();                                                                   \
-    }                                                                                    \
+#define S_INITIALIZE()                                                                  \
+    Unit CurrentSingleton::Initialize() {                                               \
+        DE_ASSERT(!gInstance, "Double initialization of {}", CurrentSingletonName);     \
+        gInstance = new CurrentSingleton();                                             \
+        DE_ASSERT(gInstance, "Failed to allocate memory for {}", CurrentSingletonName); \
+        gInstance->IInitialize();                                                       \
+        return Unit();                                                                  \
+    }                                                                                   \
     Unit CurrentSingleton::IInitialize()
-#define S_TERMINATE()                                                                           \
-    Unit CurrentSingleton::Terminate() {                                                        \
-        DE_ASSERT(s_Instance, "Terminating before initialization of {}", CurrentSingletonName); \
-        s_Instance->ITerminate();                                                               \
-        delete s_Instance;                                                                      \
-        s_Instance = nullptr;                                                                   \
-        return Unit();                                                                          \
-    }                                                                                           \
+#define S_TERMINATE()                                                                          \
+    Unit CurrentSingleton::Terminate() {                                                       \
+        DE_ASSERT(gInstance, "Terminating before initialization of {}", CurrentSingletonName); \
+        gInstance->ITerminate();                                                               \
+        delete gInstance;                                                                      \
+        gInstance = nullptr;                                                                   \
+        return Unit();                                                                         \
+    }                                                                                          \
     Unit CurrentSingleton::ITerminate()
 
-namespace DE {
+namespace DummyEngine {
+
+    struct Unit {};
+
     template <typename T> class Singleton {
     public:
         Singleton(const Singleton&)           = delete;
@@ -81,10 +82,11 @@ namespace DE {
         Singleton& operator=(Singleton&&)     = delete;
 
     protected:
-        static T& Get();
+        static T& GetInstance();
 
         Singleton()          = default;
         virtual ~Singleton() = default;
-        static T* s_Instance;
+        static T* gInstance;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

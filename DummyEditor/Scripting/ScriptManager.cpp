@@ -1,10 +1,13 @@
-#include "DummyEditor/Scripting/ScriptManager.h"
+#include "ScriptManager.h"
 
 #include "DummyEditor/Scripting/Compiler.h"
 
-namespace DE {
+#include "DummyEngine/Core/Application/Config.h"
+#include "DummyEngine/Core/ResourceManaging/AssetManager.h"
+
+namespace DummyEngine {
     Path PathToCompiledScript(Path path) {
-        return Config::GetPath(DE_CFG_SCRIPT_CACHE_PATH) / (fs::relative(path, Config::GetPath(DE_CFG_SCRIPT_PATH)).string() + ".o");
+        return Config::Get().ScriptCachePath / (fs::relative(path, Config::Get().ScriptPath).string() + ".o");
     }
 
     SINGLETON_BASE(ScriptManager);
@@ -42,18 +45,18 @@ namespace DE {
         }
 
         for (const auto& script : scripts) {
-            ScriptEngine::AddScript(script.id);
+            ScriptEngine::AddScript(script.ID);
         }
         LOG_INFO("Loaded script for scene");
         return true;
     }
     S_METHOD_IMPL(Unit, UnloadScripts, (const std::vector<ScriptAsset>& scripts), (scripts)) {
         for (const auto& script : scripts) {
-            ScriptEngine::DeleteScript(script.id);
+            ScriptEngine::DeleteScript(script.ID);
         }
-        if (!m_LibraryName.empty()) {
-            ScriptEngine::DeleteLibrary(m_LibraryName);
-            m_LibraryName.clear();
+        if (!library_name_.empty()) {
+            ScriptEngine::DeleteLibrary(library_name_);
+            library_name_.clear();
         }
         LOG_INFO("Unloaded scripts");
         return Unit();
@@ -100,8 +103,8 @@ namespace DE {
         return Unit();
     }
     S_METHOD_IMPL(UUID, EditorScript, (const std::string& name), (name)) {
-        DE_ASSERT(m_EditorScriptNameToId.contains(name), "There is no editor script with name {}", name);
-        return m_EditorScriptNameToId.at(name);
+        DE_ASSERT(editor_script_name_to_id_.contains(name), "There is no editor script with name {}", name);
+        return editor_script_name_to_id_.at(name);
     }
 
     ScriptManager::ScriptStates ScriptManager::SaveSciptStates(Ref<Scene> scene) {
@@ -186,22 +189,22 @@ namespace DE {
 
     void ScriptManager::LoadEditorLibrary() {
         Ref<SharedObject> library               = CreateRef<SharedObject>();
-        bool              editor_library_loaded = library->Load(Config::GetPath(DE_CFG_EXECUTABLE_PATH), DE_EDITOR_LIBRARY_NAME);
+        bool              editor_library_loaded = library->Load(Config::Get().ExecutablePath, DE_EDITOR_LIBRARY_NAME);
         DE_ASSERT(editor_library_loaded, "Failed to load editor library {}", DE_EDITOR_LIBRARY_NAME);
         ScriptEngine::AddLibrary(library);
     }
     void ScriptManager::LoadEditorScripts() {
-        for (const auto& asset : m_EditorScriptAssets) {
+        for (const auto& asset : editor_script_assets_) {
             AssetManager::AddScriptAsset(asset);
-            ScriptEngine::AddScript(asset.id);
+            ScriptEngine::AddScript(asset.ID);
         }
     }
 
     std::vector<U32> ScriptManager::RecompilationList(const std::vector<ScriptAsset>& scripts) {
         std::vector<U32> recompile_ids;
         for (size_t i = 0; i < scripts.size(); ++i) {
-            DE_ASSERT(fs::exists(scripts[i].path), "Failed to find script source file {}", scripts[i].path.string());
-            if (NeedToCompile(scripts[i].path)) {
+            DE_ASSERT(fs::exists(scripts[i].Path), "Failed to find script source file {}", scripts[i].Path);
+            if (NeedToCompile(scripts[i].Path)) {
                 recompile_ids.push_back(i);
             }
         }
@@ -209,35 +212,35 @@ namespace DE {
     }
     std::optional<Path> ScriptManager::CompileSelected(const std::vector<ScriptAsset>& scripts, const std::vector<U32> ids) {
         for (auto id : ids) {
-            if (!Compiler::Compile(scripts[id].path, PathToCompiledScript(scripts[id].path))) {
-                return scripts[id].path;
+            if (!Compiler::Compile(scripts[id].Path, PathToCompiledScript(scripts[id].Path))) {
+                return scripts[id].Path;
             }
-            m_CompiledScripts.insert(scripts[id].path);
+            compiler_scripts_.insert(scripts[id].Path);
         }
         return {};
     }
     std::optional<std::string> ScriptManager::LinkLibrary(const std::vector<ScriptAsset>& scripts) {
         std::vector<Path> compiled_sources;
         for (const auto& script : scripts) {
-            compiled_sources.push_back(PathToCompiledScript(script.path));
+            compiled_sources.push_back(PathToCompiledScript(script.Path));
         }
         std::string new_name = AvailableName();
-        return (Compiler::Link(compiled_sources, Config::GetPath(DE_CFG_SCRIPT_CACHE_PATH), new_name) ? new_name : std::optional<std::string>());
+        return (Compiler::Link(compiled_sources, Config::Get().ScriptCachePath, new_name) ? new_name : std::optional<std::string>());
     }
     bool ScriptManager::SwapLibrary(const std::string& name) {
         Ref<SharedObject> library = CreateRef<SharedObject>();
-        if (!library->Load(Config::GetPath(DE_CFG_SCRIPT_CACHE_PATH), name)) {
+        if (!library->Load(Config::Get().ScriptCachePath, name)) {
             return false;
         }
-        if (!m_LibraryName.empty()) {
-            ScriptEngine::DeleteLibrary(m_LibraryName);
+        if (!library_name_.empty()) {
+            ScriptEngine::DeleteLibrary(library_name_);
         }
         ScriptEngine::AddLibrary(library);
-        m_LibraryName = name;
+        library_name_ = name;
         return true;
     }
     bool ScriptManager::NeedToCompile(const Path& path) {
-        if (!m_CompiledScripts.contains(path)) {
+        if (!compiler_scripts_.contains(path)) {
             return true;
         }
         Path object = PathToCompiledScript(path);
@@ -248,9 +251,9 @@ namespace DE {
     }
     std::string ScriptManager::AvailableName() {
         // TODO: Generate available name properly
-        if (m_LibraryName.empty()) {
+        if (library_name_.empty()) {
             return "ScriptLibrary0";
         }
-        return (m_LibraryName.back() == '0' ? "ScriptLibrary1" : "ScriptLibrary0");
+        return (library_name_.back() == '0' ? "ScriptLibrary1" : "ScriptLibrary0");
     }
-}  // namespace DE
+}  // namespace DummyEngine

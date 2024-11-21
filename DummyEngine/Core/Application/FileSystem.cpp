@@ -1,22 +1,22 @@
-#include "DummyEngine/Core/Application/FileSystem.h"
+#include "FileSystem.h"
 
 #include <nfd.h>
 
-namespace DE {
+namespace DummyEngine {
 
     using namespace std::string_literals;
 
     Path FileSystem::OpenFileDialog(const std::string& description, const std::string& filter, const Path& default_path) {
         Path path = Path();
         NFD_Init();
-        nfdchar_t*      outPath;
-        nfdfilteritem_t filterItem[1] = {
+        nfdchar_t*      out_path;
+        nfdfilteritem_t filter_item[1] = {
             {description.c_str(), filter.c_str()}
         };
-        nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 1, default_path.empty() ? nullptr : default_path.string().c_str());
+        nfdresult_t result = NFD_OpenDialog(&out_path, filter_item, 1, default_path.empty() ? nullptr : default_path.string().c_str());
         if (result == NFD_OKAY) {
-            path = Path(outPath);
-            NFD_FreePath(outPath);
+            path = Path(out_path);
+            NFD_FreePath(out_path);
         }
         NFD_Quit();
         return path;
@@ -28,19 +28,18 @@ namespace DE {
                                     const Path&        default_path) {
         Path path = Path();
         NFD_Init();
-        nfdchar_t*      outPath;
-        nfdfilteritem_t filterItem[1] = {
-            {description.c_str(), filter.c_str()}
-        };
-        nfdresult_t result = NFD_SaveDialog(&outPath,
-                                            filterItem,
+        nfdchar_t*      out_path;
+        nfdfilteritem_t filter_item = {description.c_str(), filter.c_str()};
+
+        nfdresult_t result = NFD_SaveDialog(&out_path,
+                                            &filter_item,
                                             1,
                                             (default_path.empty() ? nullptr : default_path.string().c_str()),
                                             (default_name.empty() ? nullptr : default_name.c_str()));
         if (result == NFD_OKAY) {
-            std::string s(outPath);
+            std::string s(out_path);
             path = Path(s);
-            NFD_FreePath(outPath);
+            NFD_FreePath(out_path);
         }
         NFD_Quit();
         return path;
@@ -52,4 +51,5 @@ namespace DE {
     bool FileSystem::CreateDirectory(const Path& path) {
         return fs::create_directories(path);
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

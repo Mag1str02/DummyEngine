@@ -2,7 +2,10 @@
 
 #include "DummyEditor/ImGuiUtils/ImGuiPanel.h"
 
-namespace DE {
+#include "DummyEngine/Utils/Debug/Profiler.h"
+
+namespace DummyEngine {
+
     class ProfilerPanel : public ImGuiPanel {
     public:
         ProfilerPanel() : ImGuiPanel("Profiler") {}
@@ -11,4 +14,5 @@ namespace DE {
     private:
         void RenderTimeLapse(const std::vector<TimeLapse>& time_lapses, U32 index);
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

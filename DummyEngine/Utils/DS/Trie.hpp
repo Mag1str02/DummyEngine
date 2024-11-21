@@ -1,8 +1,9 @@
 #pragma once
 
-#include "../Types/Types.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
-namespace DE {
+namespace DummyEngine {
+
     class Trie {
         struct Node {
             Node(Ref<Node>& p, char prev) {
@@ -21,9 +22,9 @@ namespace DE {
             Ref<Node>                           super_suffix_link;
         };
 
-        Ref<Node> getSuffixLink(Ref<Node> v);
-        Ref<Node> getNext(Ref<Node> v, char c);
-        Ref<Node> getUp(Ref<Node> v);
+        Ref<Node> GetSuffixLink(Ref<Node> v);
+        Ref<Node> GetNext(Ref<Node> v, char c);
+        Ref<Node> GetUp(Ref<Node> v);
 
     public:
         void                          Build(std::vector<std::string>& dict);
@@ -31,7 +32,8 @@ namespace DE {
         std::vector<Ref<std::string>> Search(std::string needle);
 
     private:
-        Ref<Node>                     m_root;
-        std::vector<Ref<std::string>> m_words;
+        Ref<Node>                     root_;
+        std::vector<Ref<std::string>> words_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

@@ -23,3 +23,7 @@ endif()
 if (${DE_ENABLE_CLANG_TIDY_ON_COMPILATION})
     set_target_properties(DummyEngineLib PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
 endif()
+
+if ("${CMAKE_PLATFORM}" STREQUAL "WINDOWS")
+    target_compile_definitions(DummyEngineLib PUBLIC YAML_CPP_STATIC_DEFINE)
+endif()

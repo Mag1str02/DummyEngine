@@ -1,9 +1,8 @@
 #pragma once
 
 #include "DummyEngine/Core/Rendering/Renderer/BufferLayout.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
     // TODO: Weak ptr stuff
     class LocalBufferNode;
     class LocalBuffer {
@@ -14,7 +13,7 @@ namespace DE {
         void SetData(const void* data, U32 size);
         void Allocate(const BufferLayout& layout, U32 size);
 
-        LocalBufferNode at(U32 index);
+        LocalBufferNode At(U32 index);
 
     private:
         void Allocate(U32 size);
@@ -23,13 +22,13 @@ namespace DE {
         friend class GLUniformBuffer;
         friend class LocalBufferNode;
 
-        BufferLayout m_Layout;
-        U8*          m_Data;
-        U32          m_Size;
+        BufferLayout layout_;
+        U8*          data_;
+        U32          size_;
     };
     class LocalBufferNode {
     public:
-        template <typename T> T& Get(U32 index) { return *(T*)(m_Pointer + m_Buffer->m_Layout[index].offset); }
+        template <typename T> T& Get(U32 index) { return *(T*)(pointer_ + buffer_->layout_[index].Offset); }
         LocalBufferNode&         operator=(const LocalBufferNode& other);
 
     private:
@@ -37,7 +36,7 @@ namespace DE {
 
         friend class LocalBuffer;
 
-        LocalBuffer* m_Buffer;
-        U8*          m_Pointer;
+        LocalBuffer* buffer_;
+        U8*          pointer_;
     };
-}  // namespace DE
+}  // namespace DummyEngine

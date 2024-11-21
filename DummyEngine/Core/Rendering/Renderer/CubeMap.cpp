@@ -1,9 +1,10 @@
-#include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
+#include "CubeMap.h"
 
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLCubeMap.h"
 
-namespace DE {
+namespace DummyEngine {
+
     Ref<CubeMap> CubeMap::Create(const Ref<TextureData> texture_data) {
         switch (Renderer::CurrentAPI()) {
             case API::OpenGL: return CreateRef<GLCubeMap>(texture_data);
@@ -36,4 +37,5 @@ namespace DE {
         }
         return nullptr;
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

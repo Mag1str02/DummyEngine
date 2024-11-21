@@ -1,6 +1,7 @@
-#include "DummyEngine/Utils/Helpers/Conversions.h"
+#include "Conversions.h"
 
-namespace DE {
+namespace DummyEngine {
+
     std::ostream& operator<<(std::ostream& os, const Vec2& vec) {
         os << "(" << vec.x << " " << vec.y << ")";
         return os;
@@ -20,4 +21,5 @@ namespace DE {
            << " " << mat[1][3] << " " << mat[2][3] << " " << mat[3][3] << "))";
         return os;
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

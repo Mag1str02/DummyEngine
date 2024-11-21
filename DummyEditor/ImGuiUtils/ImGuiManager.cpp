@@ -1,36 +1,44 @@
-#include "DummyEditor/ImGuiUtils/ImGuiManager.h"
+#include "ImGuiManager.h"
 
-namespace DE {
+#include "DummyEditor/ImGuiUtils/ImGuiIcons.h"
+#include "DummyEditor/ImGuiUtils/ImGuiUtils.h"
+
+#include "DummyEngine/Core/Application/Config.h"
+#include "DummyEngine/Utils/Types/Types.h"
+
+#include <imgui.h>
+
+namespace DummyEngine {
     void ImGuiManager::SetMenuBar(ImGuiPanel* bar) {
-        m_MenuBar = bar;
+        menu_bar_ = bar;
     }
     void ImGuiManager::AddPanel(ImGuiPanel* panel) {
-        m_Panels.push_back(panel);
+        panels_.push_back(panel);
     }
     void ImGuiManager::OnImGui() {
         CreateDockingSpace();
-        for (auto panel : m_Panels) {
+        for (auto panel : panels_) {
             panel->OnImGui();
         }
     }
 
     const std::vector<ImGuiPanel*>& ImGuiManager::GetPanels() {
-        return m_Panels;
+        return panels_;
     }
 
     void ImGuiManager::LoadEditorResources() {
         ImGuiIO& io             = ImGui::GetIO();
-        Path     font_dir       = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Editor" / "Fonts";
-        Path     icon_font_path = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "Editor" / "Icons" / "IconsMaterialDesign.ttf";
+        Path     font_dir       = Config::Get().ExecutablePath / "Editor" / "Fonts";
+        Path     icon_font_path = Config::Get().ExecutablePath / "Editor" / "Icons" / "IconsMaterialDesign.ttf";
         for (const auto& entry : fs::directory_iterator(font_dir)) {
             // TODO: font size to settings
-            io.Fonts->AddFontFromFileTTF(entry.path().string().c_str(), ImGuiUtils::Constants::BasicFontSize);
-            static const ImWchar icons_ranges[] = {ICON_MIN_MD, ICON_MAX_16_MD, 0};
-            ImFontConfig         icons_config;
+            io.Fonts->AddFontFromFileTTF(entry.path().string().c_str(), ImGuiUtils::Constants::kBasicFontSize);
+            static constexpr ImWchar kIconsRanges[] = {ICON_MIN_MD, ICON_MAX_16_MD, 0};  // do not remove static  : - )
+            ImFontConfig             icons_config;
             icons_config.MergeMode   = true;
             icons_config.PixelSnapH  = true;
             icons_config.GlyphOffset = {0.f, 4.f};
-            io.Fonts->AddFontFromFileTTF(icon_font_path.string().c_str(), ImGuiUtils::Constants::BasicFontSize + 1, &icons_config, icons_ranges);
+            io.Fonts->AddFontFromFileTTF(icon_font_path.string().c_str(), ImGuiUtils::Constants::kBasicFontSize + 1, &icons_config, kIconsRanges);
         }
     }
     void ImGuiManager::CreateDockingSpace() {
@@ -52,7 +60,7 @@ namespace DE {
 
         ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
-        m_MenuBar->OnImGui();
+        menu_bar_->OnImGui();
         ImGui::End();
     }
-}  // namespace DE
+}  // namespace DummyEngine

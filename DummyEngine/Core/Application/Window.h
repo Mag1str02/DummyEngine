@@ -1,31 +1,32 @@
 #pragma once
-#include <GLFW/glfw3.h>
 
 #include "DummyEngine/Core/Application/Event.h"
 #include "DummyEngine/Core/Rendering/Renderer/Context.h"
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
 
-namespace DE {
+struct GLFWWindow;
+
+namespace DummyEngine {
 
     enum class WindowMode { None = 0, Windowed, FullScreen };
 
     struct WindowState {
-        WindowMode  mode         = WindowMode::Windowed;
-        std::string name         = "Window";
-        U32         width        = 1280;
-        U32         height       = 720;
-        U32         x_pos        = 100;
-        U32         y_pos        = 100;
-        U32         monitor_id   = 0;
-        bool        mouse_locked = false;
+        WindowMode  Mode        = WindowMode::Windowed;
+        std::string Name        = "Window";
+        U32         Width       = 1280;
+        U32         Height      = 720;
+        U32         PosX        = 100;
+        U32         PosY        = 100;
+        U32         MonitorID   = 0;
+        bool        MouseLocked = false;
 
-        EventCallback<Event> event_callback = {};
+        EventCallback<Event> EventCallback = {};
     };
 
     class Window {
-        LOGGER_AUTHOR(Window)
+        LOG_AUTHOR(Window)
     public:
-        Window(const WindowState& state = WindowState());
+        explicit Window(const WindowState& state = WindowState());
         ~Window();
 
         void OnUpdate();
@@ -48,8 +49,8 @@ namespace DE {
         void SetupCallbacks();
         void Invalidate();
 
-        WindowState    m_State;
-        GLFWwindow*    m_Window;
-        Scope<Context> m_Context;
+        WindowState    state_;
+        GLFWwindow*    window_;
+        Scope<Context> context_;
     };
-}  // namespace DE
+}  // namespace DummyEngine

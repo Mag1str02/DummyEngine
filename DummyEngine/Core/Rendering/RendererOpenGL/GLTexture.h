@@ -3,9 +3,8 @@
 #include <glad/glad.h>
 
 #include "DummyEngine/Core/Rendering/Renderer/Texture.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
 
     class GLTexture : public Texture {
     public:
@@ -17,7 +16,7 @@ namespace DE {
 
         GLTexture(U32 width, U32 height, Channels channels, Format format, bool depth_buffer);
         GLTexture(Texture::Channels channels, Format format);
-        GLTexture(const TextureData& data);
+        explicit GLTexture(const TextureData& data);
 
         virtual ~GLTexture();
 
@@ -38,56 +37,11 @@ namespace DE {
 
         friend class GLFrameBuffer;
 
-        GLuint   m_TextureId;
-        U32      m_Width;
-        U32      m_Height;
-        Format   m_Format;
-        Channels m_Channels;
+        GLuint   texture_id_;
+        U32      width_;
+        U32      height_;
+        Format   format_;
+        Channels channels_;
     };
 
-    // class GLTexture
-    // {
-    // public:
-    //     void SetData(const Texture2DData& data);
-    //     void BindToUnit(unsigned int unit_id) const;
-
-    //     GLTexture();
-    //     GLTexture(const GLTexture& other);
-    //     GLTexture(GLTexture&& other);
-    //     GLTexture& operator=(const GLTexture& other);
-    //     GLTexture& operator=(GLTexture&& other);
-    //     ~GLTexture();
-
-    // private:
-    //     friend class Initializer;
-
-    //     class Texture2DManager
-    //     {
-    //     private:
-    //         bool _initialized;
-    //         std::unordered_map<unsigned int, S64> _reference_count;
-
-    //         Texture2DManager();
-
-    //         unsigned int ICreateTexture2D();
-    //         unsigned int ICreateInstance(unsigned int texture_id);
-    //         void IDestroyInstance(unsigned int texture_id);
-    //         void IDestroyTexture2D(unsigned int texture_id);
-
-    //         static Texture2DManager& Get();
-
-    //     public:
-    //         static void Initialize();
-    //         static void Terminate();
-
-    //         static unsigned int CreateTexture2D();
-    //         static unsigned int CreateInstance(unsigned int texture_id);
-    //         static void DestroyInstance(unsigned int texture_id);
-    //         static void DestroyTexture2D(unsigned int texture_id);
-    //     };
-
-    //     GLint Texture2DFormatToGLenum(Texture2DFormat format) const;
-
-    //     unsigned int m_TextureId;
-    // };
-}  // namespace DE
+}  // namespace DummyEngine

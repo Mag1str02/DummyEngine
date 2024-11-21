@@ -1,24 +1,24 @@
-#include "DummyEngine/Utils/ScriptIncludes.h"
+#include "DummyEngine/DummyEngine.h"
 
-using namespace DE;
+using namespace DummyEngine;
 
 class SinMovement : public Script {
     SCRIPT(SinMovement)
 public:
     virtual void OnUpdate(float dt) override {
         DE_PROFILE_SCOPE("SinMovement");
-        current_time += dt * Speed;
-        auto& pos = Get<TransformComponent>().translation;
-        float d   = (sin(current_time) + 1) / 2;
-        pos       = d * PosA + (1 - d) * PosB;
+        current_time_ += dt * speed_;
+        auto& pos = Get<TransformComponent>().Translation;
+        float d   = (sin(current_time_) + 1) / 2;
+        pos       = d * pos_a_ + (1 - d) * pos_b_;
         // pos = d * PosA + (1 - d) * PosB + Vec3(0, 20, 0)* float(cos(current_time)) ;
     }
 
 private:
-    Vec3  PosA         = Vec3(0, 0, 0);
-    Vec3  PosB         = Vec3(0, 0, 0);
-    float Speed        = 1;
-    float current_time = 0;
+    Vec3  pos_a_        = Vec3(0, 0, 0);
+    Vec3  pos_b_        = Vec3(0, 0, 0);
+    float speed_        = 1;
+    float current_time_ = 0;
 };
 
-SCRIPT_BASE(SinMovement, FIELD(PosA), FIELD(PosB), FIELD(Speed))
+SCRIPT_BASE(SinMovement, FIELD(pos_a_), FIELD(pos_b_), FIELD(speed_))

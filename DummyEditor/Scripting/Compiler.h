@@ -1,6 +1,9 @@
-#include "DummyEditor/DummyEngineInclude.h"
+#pragma once
 
-namespace DE {
+#include "DummyEngine/Utils/Helpers/Singleton.h"
+#include "DummyEngine/Utils/Types/Types.h"
+
+namespace DummyEngine {
     class CompilerImpl {
     public:
         virtual ~CompilerImpl()                                                                                       = default;
@@ -28,6 +31,6 @@ namespace DE {
         S_METHOD_DEF(Unit, DeleteDefine, (const std::string& source));
 
     private:
-        Scope<CompilerImpl> m_Impl;
+        Scope<CompilerImpl> impl_;
     };
-}  // namespace DE
+}  // namespace DummyEngine

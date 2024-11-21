@@ -5,9 +5,9 @@
 
 #include "DummyEngine/Core/Application/Config.h"
 
-namespace DE {
+namespace DummyEngine {
     class SharedObjectImpl {
-        LOGGER_AUTHOR(SharedObject)
+        LOG_AUTHOR(SharedObject)
     public:
         SharedObjectImpl() {}
         ~SharedObjectImpl() {
@@ -43,7 +43,7 @@ namespace DE {
             m_Directory = directory;
             m_Name      = name;
             m_Valid     = true;
-            LOG_INFO("Loaded library {}", RelativeToExecutable(directory / (name + ".dylib")));
+            LOG_INFO("Loaded library {}", Config::RelativeToExecutable(directory / (name + ".dylib")));
             return true;
         }
         void Invalidate() { m_Valid = false; }
@@ -88,4 +88,4 @@ namespace DE {
         return m_Impl->Valid();
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

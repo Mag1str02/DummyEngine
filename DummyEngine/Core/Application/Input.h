@@ -2,9 +2,9 @@
 
 #include "DummyEngine/Core/Application/Event.h"
 #include "DummyEngine/Core/Application/KeyCodes.h"
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Helpers/Singleton.h"
 
-namespace DE {
+namespace DummyEngine {
 
     struct InputFrame {
         bool              mouse_locked = false;
@@ -35,6 +35,7 @@ namespace DE {
         InputFrame             m_CurrentFrame;
         EventDispatcher        m_EventDispatcher;
         std::deque<InputFrame> m_Frames;
-        size_t                 m_MaxFrameAmount = 100;
+        size_t                 m_MaxFrameAmount;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

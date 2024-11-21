@@ -1,11 +1,11 @@
-#include "DummyEngine/ToolBox/Loaders/ModelLoader.h"
-
-#include <assimp/postprocess.h>
+#include "ModelLoader.h"
 
 #include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
 
-namespace DE {
+#include <assimp/postprocess.h>
+
+namespace DummyEngine {
     Mat4 AssimpToGLM(const aiMatrix4x4& from) {
         Mat4 to;
         to[0][0] = from.a1;
@@ -32,34 +32,34 @@ namespace DE {
             auto        pos        = node->mPositionKeys[i].mValue;
             float       time_stamp = node->mPositionKeys[i].mTime;
             KeyPosition data;
-            data.position.x = pos.x;
-            data.position.y = pos.y;
-            data.position.z = pos.z;
-            data.time_stamp = time_stamp;
-            bone.m_Positions.push_back(data);
+            data.Position.x = pos.x;
+            data.Position.y = pos.y;
+            data.Position.z = pos.z;
+            data.TimeStamp  = time_stamp;
+            bone.positions_.push_back(data);
         }
 
         for (U32 i = 0; i < node->mNumRotationKeys; ++i) {
             auto        rot        = node->mRotationKeys[i].mValue;
             float       time_stamp = node->mRotationKeys[i].mTime;
             KeyRotation data;
-            data.orientation.x = rot.x;
-            data.orientation.y = rot.y;
-            data.orientation.z = rot.z;
-            data.orientation.w = rot.w;
-            data.time_stamp    = time_stamp;
-            bone.m_Rotations.push_back(data);
+            data.Orientation.x = rot.x;
+            data.Orientation.y = rot.y;
+            data.Orientation.z = rot.z;
+            data.Orientation.w = rot.w;
+            data.TimeStamp     = time_stamp;
+            bone.rotations_.push_back(data);
         }
 
         for (U32 i = 0; i < node->mNumScalingKeys; ++i) {
             aiVector3D scale      = node->mScalingKeys[i].mValue;
             float      time_stamp = node->mScalingKeys[i].mTime;
             KeyScale   data;
-            data.scale.x    = scale.x;
-            data.scale.y    = scale.y;
-            data.scale.z    = scale.z;
-            data.time_stamp = time_stamp;
-            bone.m_Scales.push_back(data);
+            data.Scale.x   = scale.x;
+            data.Scale.y   = scale.y;
+            data.Scale.z   = scale.z;
+            data.TimeStamp = time_stamp;
+            bone.scales_.push_back(data);
         }
         // LOG_INFO("Loaded bone ({}|{}), with positions ({}), rotations ({}) and scales ({})",
         //          bone.GetBoneName(),
@@ -70,27 +70,27 @@ namespace DE {
     }
 
     void ModelLoader::ReadWeights(aiMesh* mesh) {
-        auto& model        = *m_State.m_CurrentData;
-        auto& current_mesh = model.meshes[m_State.m_CurrentMeshId];
-        if (!model.animation) {
+        auto& model        = *gState.CurrentData;
+        auto& current_mesh = model.Meshes[gState.CurrentMeshID];
+        if (!model.Animation) {
             return;
         }
-        auto& animation = *model.animation;
+        auto& animation = *model.Animation;
 
         for (U32 i = 0; i < mesh->mNumBones; ++i) {
             int         bone_id   = -1;
             std::string bone_name = mesh->mBones[i]->mName.C_Str();
-            if (!animation.m_BoneNameToID.contains(bone_name)) {
-                bone_id                             = animation.m_Bones.size();
-                animation.m_BoneNameToID[bone_name] = bone_id;
+            if (!animation.bone_name_to_id_.contains(bone_name)) {
+                bone_id                               = animation.bones_.size();
+                animation.bone_name_to_id_[bone_name] = bone_id;
 
                 BoneInfo bone_info;
-                bone_info.bone   = Bone(bone_name, bone_id);
-                bone_info.offset = AssimpToGLM(mesh->mBones[i]->mOffsetMatrix);
-                animation.m_Bones.push_back(bone_info);
+                bone_info.Bone   = Bone(bone_name, bone_id);
+                bone_info.Offset = AssimpToGLM(mesh->mBones[i]->mOffsetMatrix);
+                animation.bones_.push_back(bone_info);
                 // printf("Added bone (%s) with id (%d)\n", bone_name.c_str(), bone_id);
             } else {
-                bone_id = animation.m_BoneNameToID[bone_name];
+                bone_id = animation.bone_name_to_id_[bone_name];
             }
             if (bone_id == -1) {
                 LOG_WARNING("Wrong bone id");
@@ -103,11 +103,11 @@ namespace DE {
                 U32   v_id   = weights[j].mVertexId;
                 float weight = weights[j].mWeight;
 
-                if (v_id >= current_mesh.vertices.size()) {
+                if (v_id >= current_mesh.Vertices.size()) {
                     LOG_WARNING("Wrong vertex id");
                     return;
                 }
-                current_mesh.vertices[v_id].AddBone(bone_id, weight);
+                current_mesh.Vertices[v_id].AddBone(bone_id, weight);
             }
         }
     }
@@ -115,93 +115,93 @@ namespace DE {
         for (U32 i = 0; i < anim->mNumChannels; ++i) {
             auto channel   = anim->mChannels[i];
             auto bone_info = animation.GetBone(channel->mNodeName.data);
-            if (!bone_info) {
+            if (bone_info == nullptr) {
                 BoneInfo info;
-                info.offset                                       = glm::mat4(1.0);
-                animation.m_BoneNameToID[channel->mNodeName.data] = animation.m_Bones.size();
-                animation.m_Bones.push_back(info);
-                bone_info = &animation.m_Bones.back();
+                info.Offset                                         = glm::mat4(1.0);
+                animation.bone_name_to_id_[channel->mNodeName.data] = animation.bones_.size();
+                animation.bones_.push_back(info);
+                bone_info = &animation.bones_.back();
                 LOG_WARNING("Added unknown bone");
             }
-            LoadBone(bone_info->bone, channel);
+            LoadBone(bone_info->Bone, channel);
         }
     }
     void ModelLoader::ReadAnimationNode(Animation::Node& node, const aiNode* src) {
-        node.name           = src->mName.data;
-        node.transformation = AssimpToGLM(src->mTransformation);
-        node.childrens.resize(src->mNumChildren);
+        node.Name           = src->mName.data;
+        node.Transformation = AssimpToGLM(src->mTransformation);
+        node.Childrens.resize(src->mNumChildren);
 
         for (U32 i = 0; i < src->mNumChildren; i++) {
-            Animation::Node& data = node.childrens[i];
+            Animation::Node& data = node.Childrens[i];
             ReadAnimationNode(data, src->mChildren[i]);
         }
     }
     void ModelLoader::ReadAnimation(Animation& animation, const aiScene* scene) {
-        auto anim                  = scene->mAnimations[0];
-        animation.m_Duration       = anim->mDuration;
-        animation.m_TicksPerSecond = anim->mTicksPerSecond;
-        ReadAnimationNode(animation.m_RootNode, scene->mRootNode);
+        auto anim                   = scene->mAnimations[0];
+        animation.duration_         = anim->mDuration;
+        animation.ticks_per_second_ = anim->mTicksPerSecond;
+        ReadAnimationNode(animation.root_node_, scene->mRootNode);
         ReadBones(animation, anim);
     }
 
-    ModelLoader::LoaderState ModelLoader::m_State;
+    ModelLoader::LoaderState ModelLoader::gState;
 
     MaterialData ModelLoader::LoadMaterial(aiMaterial* mat) {
         MaterialData material;
-        material.diffuse  = GetColor(mat, ColorType::Diffuse);
-        material.specular = GetColor(mat, ColorType::Specular);
-        material.ambient  = GetColor(mat, ColorType::Ambient);
-        material.albedo   = GetColor(mat, ColorType::Albedo);
-        material.orm      = GetColor(mat, ColorType::ORM);
-        material.orm      = GetColor(mat, ColorType::Emission);
-        aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &material.shininess);
+        material.Diffuse  = GetColor(mat, ColorType::Diffuse);
+        material.Specular = GetColor(mat, ColorType::Specular);
+        material.Ambient  = GetColor(mat, ColorType::Ambient);
+        material.Albedo   = GetColor(mat, ColorType::Albedo);
+        material.ORM      = GetColor(mat, ColorType::ORM);
+        material.Emission = GetColor(mat, ColorType::Emission);
+        aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &material.Shininess);
 
-        material.albedo_map   = GetTexture(mat, aiTextureType_DIFFUSE);
-        material.normal_map   = GetTexture(mat, aiTextureType_NORMALS);
-        material.orm_map      = GetTexture(mat, aiTextureType_METALNESS);
-        material.diffuse_map  = GetTexture(mat, aiTextureType_DIFFUSE);
-        material.specular_map = GetTexture(mat, aiTextureType_SPECULAR);
-        material.emission_map = GetTexture(mat, aiTextureType_EMISSIVE);
+        material.AlbedoMap   = GetTexture(mat, aiTextureType_DIFFUSE);
+        material.NormalMap   = GetTexture(mat, aiTextureType_NORMALS);
+        material.ORMMap      = GetTexture(mat, aiTextureType_METALNESS);
+        material.DiffuseMap  = GetTexture(mat, aiTextureType_DIFFUSE);
+        material.SpecularMap = GetTexture(mat, aiTextureType_SPECULAR);
+        material.EmissionMap = GetTexture(mat, aiTextureType_EMISSIVE);
         return material;
     }
 
     Ref<RenderMeshData> ModelLoader::Load(const RenderMeshAsset::LoadingProperties& properties) {
-        m_State.m_Props    = properties;
+        gState.Props       = properties;
         unsigned int flags = aiProcess_Triangulate | aiProcess_CalcTangentSpace;
-        if (properties.flip_uvs) {
+        if (properties.FlipUV) {
             flags |= aiProcess_FlipUVs;
         }
-        const aiScene* scene = m_State.m_Importer.ReadFile(properties.path.string(), flags);
+        const aiScene* scene = gState.Importer.ReadFile(properties.Path.string(), flags);
 
-        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            LOG_ERROR("Failed to load model {} due: {}", RelativeToExecutable(properties.path), m_State.m_Importer.GetErrorString());
+        if (scene == nullptr || (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) != 0 || scene->mRootNode == nullptr) {
+            LOG_ERROR("Failed to load model {} due: {}", Config::RelativeToExecutable(properties.Path), gState.Importer.GetErrorString());
             return nullptr;
         }
 
-        m_State.m_CurrentData = CreateRef<RenderMeshData>();
+        gState.CurrentData = CreateRef<RenderMeshData>();
         if (scene->mNumAnimations > 0) {
-            m_State.m_CurrentData->animation = CreateRef<Animation>();
+            gState.CurrentData->Animation = CreateRef<Animation>();
         }
-        m_State.m_CurrentMeshId    = 0;
-        m_State.m_MeshesAmount     = 0;
-        m_State.m_NodesAmount      = 0;
-        m_State.m_VerticesAmount   = 0;
-        m_State.m_CurrentDirectory = properties.path.parent_path();
+        gState.CurrentMeshID    = 0;
+        gState.MeshesAmount     = 0;
+        gState.NodesAmount      = 0;
+        gState.VerticesAmount   = 0;
+        gState.CurrentDirectory = properties.Path.parent_path();
 
         ReadModelProperties(scene->mRootNode, scene);
-        m_State.m_CurrentData->meshes.resize(m_State.m_MeshesAmount);
+        gState.CurrentData->Meshes.resize(gState.MeshesAmount);
         ProcessNode(scene->mRootNode, scene);
-        if (m_State.m_CurrentData->animation) {
-            ReadAnimation(*m_State.m_CurrentData->animation, scene);
+        if (gState.CurrentData->Animation) {
+            ReadAnimation(*gState.CurrentData->Animation, scene);
         }
-        if (properties.compress) {
-            m_State.m_CurrentData->Compress();
+        if (properties.Compress) {
+            gState.CurrentData->Compress();
         }
         LOG_INFO("Model {} loaded with {} meshes and {} verticies",
-                 RelativeToExecutable(properties.path),
-                 m_State.m_MeshesAmount,
-                 m_State.m_VerticesAmount);
-        return m_State.m_CurrentData;
+                 Config::RelativeToExecutable(properties.Path),
+                 gState.MeshesAmount,
+                 gState.VerticesAmount);
+        return gState.CurrentData;
     }
 
     void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene) {
@@ -214,43 +214,43 @@ namespace DE {
         }
     }
     void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
-        RenderMeshData&    model        = *m_State.m_CurrentData;
-        RenderSubMeshData& current_mesh = model.meshes[m_State.m_CurrentMeshId];
+        RenderMeshData&    model        = *gState.CurrentData;
+        RenderSubMeshData& current_mesh = model.Meshes[gState.CurrentMeshID];
         for (size_t i = 0; i < mesh->mNumVertices; ++i) {
             Vertex3D vertex;
 
-            vertex.position.x = mesh->mVertices[i].x;
-            vertex.position.y = mesh->mVertices[i].y;
-            vertex.position.z = mesh->mVertices[i].z;
+            vertex.Position.x = mesh->mVertices[i].x;
+            vertex.Position.y = mesh->mVertices[i].y;
+            vertex.Position.z = mesh->mVertices[i].z;
 
-            if (mesh->mNormals) {
-                vertex.normal.x = mesh->mNormals[i].x;
-                vertex.normal.y = mesh->mNormals[i].y;
-                vertex.normal.z = mesh->mNormals[i].z;
+            if (mesh->mNormals != nullptr) {
+                vertex.Normal.x = mesh->mNormals[i].x;
+                vertex.Normal.y = mesh->mNormals[i].y;
+                vertex.Normal.z = mesh->mNormals[i].z;
             }
-            if (mesh->mTangents) {
-                vertex.tangent.x = mesh->mTangents[i].x;
-                vertex.tangent.y = mesh->mTangents[i].y;
-                vertex.tangent.z = mesh->mTangents[i].z;
+            if (mesh->mTangents != nullptr) {
+                vertex.Tangent.x = mesh->mTangents[i].x;
+                vertex.Tangent.y = mesh->mTangents[i].y;
+                vertex.Tangent.z = mesh->mTangents[i].z;
             }
-            if (mesh->mTextureCoords[0]) {
-                vertex.tex_coords.x = mesh->mTextureCoords[0][i].x;
-                vertex.tex_coords.y = mesh->mTextureCoords[0][i].y;
+            if (mesh->mTextureCoords[0] != nullptr) {
+                vertex.TexCoords.x = mesh->mTextureCoords[0][i].x;
+                vertex.TexCoords.y = mesh->mTextureCoords[0][i].y;
             }
-            current_mesh.vertices.push_back(vertex);
+            current_mesh.Vertices.push_back(vertex);
         }
         ReadWeights(mesh);
         for (size_t i = 0; i < mesh->mNumFaces; ++i) {
             aiFace face = mesh->mFaces[i];
             for (size_t j = 0; j < face.mNumIndices; ++j) {
-                current_mesh.indices.push_back(face.mIndices[j]);
+                current_mesh.Indices.push_back(face.mIndices[j]);
             }
         }
         if (mesh->mMaterialIndex >= 0) {
             aiMaterial* material  = scene->mMaterials[mesh->mMaterialIndex];
-            current_mesh.material = LoadMaterial(material);
+            current_mesh.Material = LoadMaterial(material);
         }
-        ++m_State.m_CurrentMeshId;
+        ++gState.CurrentMeshID;
     }
     Vec3 ModelLoader::GetColor(aiMaterial* mat, ColorType type) {
         aiColor3D color(1.f, 1.f, 1.f);
@@ -278,20 +278,20 @@ namespace DE {
         }
         mat->GetTexture(type, 0, &file_name);
 
-        if (!m_State.m_ModelTextures.contains(m_State.m_CurrentDirectory / file_name.C_Str())) {
-            m_State.m_ModelTextures[m_State.m_CurrentDirectory / file_name.C_Str()] =
-                TextureLoader::Load({m_State.m_CurrentDirectory / file_name.C_Str(), false});
+        if (!gState.ModelTextures.contains(gState.CurrentDirectory / file_name.C_Str())) {
+            gState.ModelTextures[gState.CurrentDirectory / file_name.C_Str()] =
+                TextureLoader::Load({gState.CurrentDirectory / file_name.C_Str(), false});
         }
-        return m_State.m_ModelTextures[m_State.m_CurrentDirectory / file_name.C_Str()];
+        return gState.ModelTextures[gState.CurrentDirectory / file_name.C_Str()];
     }
     void ModelLoader::ReadModelProperties(aiNode* node, const aiScene* scene) {
-        ++m_State.m_NodesAmount;
-        m_State.m_MeshesAmount += node->mNumMeshes;
+        ++gState.NodesAmount;
+        gState.MeshesAmount += node->mNumMeshes;
         for (size_t i = 0; i < node->mNumMeshes; ++i) {
-            m_State.m_VerticesAmount += scene->mMeshes[node->mMeshes[i]]->mNumVertices;
+            gState.VerticesAmount += scene->mMeshes[node->mMeshes[i]]->mNumVertices;
         }
         for (size_t i = 0; i < node->mNumChildren; ++i) {
             ReadModelProperties(node->mChildren[i], scene);
         }
     }
-}  // namespace DE
+}  // namespace DummyEngine

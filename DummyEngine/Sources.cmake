@@ -63,8 +63,6 @@ Core/Rendering/RendererOpenGL/GLUniformBuffer.cpp
 Core/Rendering/RendererOpenGL/GLRenderAPI.cpp
 Core/Rendering/RendererOpenGL/GLDebug.cpp
 
-Core/Physics/SceneConstants.cpp
-Core/Physics/ForceQueue.cpp
 Core/Physics/Solver.cpp
 Core/Physics/ConvexCollider.cpp
 Core/Physics/Utils.cpp
@@ -83,7 +81,7 @@ ToolBox/Loaders/SceneLoader.cpp
 ToolBox/Editors/TextureEditor.cpp
 )
 
-set(ENGINE_PRECOMPILED_HEADERS Utils/Base.h)
+set(ENGINE_PRECOMPILED_HEADERS Utils/PCH/PCH.h)
 
 if("${CMAKE_PLATFORM}" STREQUAL "WINDOWS")
 set(PLATFORM_SOURCES

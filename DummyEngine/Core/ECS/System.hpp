@@ -1,12 +1,12 @@
 #pragma once
 
-namespace DE {
+namespace DummyEngine {
 #ifdef ECS_IMPLEMENTATION
     void System::Bind(Storage* storage) {
-        m_Storage = storage;
+        storage_ = storage;
     }
 #endif
     template <typename... Components> StorageView<Components...> System::View() {
-        return m_Storage->View<Components...>();
+        return storage_->View<Components...>();
     }
-}  // namespace DE
+}  // namespace DummyEngine

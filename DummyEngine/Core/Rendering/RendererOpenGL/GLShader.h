@@ -2,15 +2,14 @@
 
 #include <glad/glad.h>
 
-#include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
 
-namespace DE {
+namespace DummyEngine {
     namespace fs = std::filesystem;
 
     class GLShader : public Shader {
-        LOGGER_AUTHOR(GLShader)
+        LOG_AUTHOR(GLShader)
     public:
         GLShader()                               = delete;
         GLShader(const Shader& other)            = delete;
@@ -18,7 +17,7 @@ namespace DE {
         GLShader& operator=(Shader&& other)      = delete;
         GLShader& operator=(const Shader& other) = delete;
 
-        GLShader(const std::vector<ShaderPart>& shader_parts);
+        explicit GLShader(const std::vector<ShaderPart>& shader_parts);
         virtual ~GLShader();
 
         virtual void Bind() const override;
@@ -43,7 +42,7 @@ namespace DE {
 
         void AddPart(ShaderPart part);
 
-        std::vector<GLuint> m_Parts;
-        GLuint              m_ShaderId;
+        std::vector<GLuint> parts_;
+        GLuint              shader_id_;
     };
-}  // namespace DE
+}  // namespace DummyEngine

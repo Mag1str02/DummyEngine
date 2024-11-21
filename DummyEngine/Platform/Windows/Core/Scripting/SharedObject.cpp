@@ -1,17 +1,18 @@
 #include "DummyEngine/Core/Scripting/SharedObject.h"
 
+#include "DummyEngine/Core/Application/Config.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
+
 #include <windows.h>
 
-#include "DummyEngine/Core/Application/Config.h"
-
-namespace DE {
+namespace DummyEngine {
     class SharedObjectImpl {
-        LOGGER_AUTHOR(SharedObject)
+        LOG_AUTHOR(SharedObject)
     public:
         SharedObjectImpl() {}
         ~SharedObjectImpl() {
-            if (m_Handle) {
-                FreeLibrary(m_Handle);
+            if (handle_ != nullptr) {
+                FreeLibrary(handle_);
             }
         }
 
@@ -21,7 +22,7 @@ namespace DE {
         SharedObjectImpl& operator=(SharedObjectImpl&&)      = delete;
 
         bool Load(const Path& directory, const std::string& name) {
-            if (m_Handle && m_Valid) {
+            if (handle_ != nullptr && valid_) {
                 LOG_WARNING("Library {} already loaded", name);
                 return false;
             }
@@ -31,62 +32,62 @@ namespace DE {
                 return false;
             }
             HMODULE new_handle = LoadLibrary(path_to_dll.string().c_str());
-            if (!new_handle) {
+            if (new_handle == nullptr) {
                 LOG_WARNING("Failed to load library {}", path_to_dll);
                 return false;
             }
-            if (m_Handle) {
-                FreeLibrary(m_Handle);
+            if (handle_ != nullptr) {
+                FreeLibrary(handle_);
             }
 
-            m_Handle    = new_handle;
-            m_Directory = directory;
-            m_Name      = name;
-            m_Valid     = true;
-            LOG_INFO("Loaded library {}", RelativeToExecutable(path_to_dll));
+            handle_    = new_handle;
+            directory_ = directory;
+            name_      = name;
+            valid_     = true;
+            LOG_INFO("Loaded library {}", Config::RelativeToExecutable(path_to_dll));
             return true;
         }
-        void Invalidate() { m_Valid = false; }
+        void Invalidate() { valid_ = false; }
 
-        bool     Valid() const { return m_Valid && m_Handle; }
+        bool     Valid() const { return valid_ && handle_ != nullptr; }
         VoidFPtr GetFunction(const std::string& function_name) const {
-            if (!m_Handle) {
+            if (handle_ == nullptr) {
                 return nullptr;
             }
-            return (VoidFPtr)GetProcAddress(m_Handle, function_name.c_str());
+            return (VoidFPtr)GetProcAddress(handle_, function_name.c_str());
         }
-        const Path&        GetDirectory() const { return m_Directory; }
-        const std::string& GetName() const { return m_Name; }
+        const Path&        GetDirectory() const { return directory_; }
+        const std::string& GetName() const { return name_; }
 
     private:
-        Path        m_Directory;
-        std::string m_Name;
-        HMODULE     m_Handle = NULL;
-        bool        m_Valid  = false;
+        Path        directory_;
+        std::string name_;
+        HMODULE     handle_ = nullptr;
+        bool        valid_  = false;
     };
 
     SharedObject::SharedObject() {
-        m_Impl = CreateScope<SharedObjectImpl>();
+        impl_ = CreateScope<SharedObjectImpl>();
     }
     SharedObject::~SharedObject() {}
     bool SharedObject::Load(const Path& directory, const std::string& name) {
-        return m_Impl->Load(directory, name);
+        return impl_->Load(directory, name);
     }
     void SharedObject::Invalidate() {
-        m_Impl->Invalidate();
+        impl_->Invalidate();
     }
 
     bool SharedObject::Valid() const {
-        return m_Impl->Valid();
+        return impl_->Valid();
     }
     VoidFPtr SharedObject::GetFunction(const std::string& function_name) const {
-        return m_Impl->GetFunction(function_name);
+        return impl_->GetFunction(function_name);
     }
     const Path& SharedObject::GetDirectory() const {
-        return m_Impl->GetDirectory();
+        return impl_->GetDirectory();
     }
     const std::string& SharedObject::GetName() const {
-        return m_Impl->GetName();
+        return impl_->GetName();
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

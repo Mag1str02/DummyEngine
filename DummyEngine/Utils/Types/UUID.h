@@ -1,17 +1,17 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base/STDIncludes.h"
 #include "DummyEngine/Utils/Types/Types.h"
 
-namespace DE {
+#include <string>
+
+namespace DummyEngine {
     class UUID {
     public:
         static UUID Generate();
 
-        UUID()            = default;
-        UUID(const std::string& str);
-
-        operator std::string() const;
+        UUID() = default;
+        UUID(const std::string& str);  // NOLINT
+        operator std::string() const;  // NOLINT
 
         bool operator==(const UUID& other) const;
         bool operator!=(const UUID& other) const;
@@ -23,15 +23,15 @@ namespace DE {
 
     private:
         template <typename T> friend struct std::hash;
-        U64 m_First  = 0;
-        U64 m_Second = 0;
+        U64 first_  = 0;
+        U64 second_ = 0;
     };
 
-}  // namespace DE
+}  // namespace DummyEngine
 
 namespace std {
-    template <> struct hash<DE::UUID> {
-        std::size_t operator()(const DE::UUID& uuid) const { return uuid.m_First ^ uuid.m_Second; }
+    template <> struct hash<DummyEngine::UUID> {
+        std::size_t operator()(const DummyEngine::UUID& uuid) const { return uuid.first_ ^ uuid.second_; }
     };
 
 }  // namespace std

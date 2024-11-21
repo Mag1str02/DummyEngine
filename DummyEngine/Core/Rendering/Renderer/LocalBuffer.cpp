@@ -1,40 +1,43 @@
-#include "DummyEngine/Core/Rendering/Renderer/LocalBuffer.h"
+#include "LocalBuffer.h"
 
-namespace DE {
+#include "DummyEngine/Utils/Debug/Assert.h"
+
+namespace DummyEngine {
+
     //*~~~LocalBufferNode~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    LocalBufferNode::LocalBufferNode(LocalBuffer* buffer, U8* pointer) : m_Buffer(buffer), m_Pointer(pointer) {}
+    LocalBufferNode::LocalBufferNode(LocalBuffer* buffer, U8* pointer) : buffer_(buffer), pointer_(pointer) {}
     LocalBufferNode& LocalBufferNode::operator=(const LocalBufferNode& other) {
-        DE_ASSERT(m_Buffer == other.m_Buffer, "Trying to assign LocalBufferNodes from diffrent LocalBuffers");
-        std::memcpy(m_Pointer, other.m_Pointer, m_Buffer->m_Layout.GetStride());
+        DE_ASSERT(buffer_ == other.buffer_, "Trying to assign LocalBufferNodes from diffrent LocalBuffers");
+        std::memcpy(pointer_, other.pointer_, buffer_->layout_.GetStride());
         return *this;
     }
 
     //*~~~LocalBuffer~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    LocalBuffer::LocalBuffer() : m_Data(nullptr), m_Size(0) {}
+    LocalBuffer::LocalBuffer() : data_(nullptr), size_(0) {}
     LocalBuffer::~LocalBuffer() {
-        if (m_Data) {
-            delete[] m_Data;
+        if (data_ != nullptr) {
+            delete[] data_;
         }
     }
-    LocalBufferNode LocalBuffer::at(U32 index) {
-        return LocalBufferNode(this, m_Data + index * m_Layout.GetStride());
+    LocalBufferNode LocalBuffer::At(U32 index) {
+        return LocalBufferNode(this, data_ + index * layout_.GetStride());
     }
     void LocalBuffer::SetData(const void* data, U32 size) {
-        DE_ASSERT(m_Size == size, "Wrong data size {} expected {}", size, m_Size);
-        memcpy(m_Data, data, m_Size);
+        DE_ASSERT(size_ == size, "Wrong data size {} expected {}", size, size_);
+        memcpy(data_, data, size_);
     }
     void LocalBuffer::Allocate(const BufferLayout& layout, U32 size) {
-        m_Layout = layout;
-        Allocate(size * m_Layout.GetStride());
+        layout_ = layout;
+        Allocate(size * layout_.GetStride());
     }
     void LocalBuffer::Allocate(U32 size) {
-        if (m_Data) {
-            delete[] m_Data;
+        if (data_ != nullptr) {
+            delete[] data_;
         }
-        m_Data = (U8*)malloc(size);
-        m_Size = size;
+        data_ = (U8*)malloc(size);
+        size_ = size;
     }
 
-}  // namespace DE
+}  // namespace DummyEngine
