@@ -46,4 +46,4 @@ private:
     bool active_ = false;
 };
 
-SCRIPT_BASE(EditorCameraController, FIELD(active_))
+SCRIPT_BASE(EditorCameraController, FIELD("Active", active_))

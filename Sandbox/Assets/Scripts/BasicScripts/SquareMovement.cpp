@@ -31,4 +31,9 @@ private:
     Vec2  right_front_  = {0.0, 0.0};
 };
 
-SCRIPT_BASE(SquareMovement, FIELD(cycle_time_), FIELD(height_), FIELD(offset_), FIELD(left_back_), FIELD(right_front_))
+SCRIPT_BASE(SquareMovement,
+            FIELD("CycleTime", cycle_time_),
+            FIELD("Height", height_),
+            FIELD("Offset", offset_),
+            FIELD("LeftBack", left_back_),
+            FIELD("RightFront", right_front_))

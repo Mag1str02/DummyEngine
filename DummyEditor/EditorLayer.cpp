@@ -340,7 +340,7 @@ namespace DummyEngine {
             }
         }
         if (editor_camera_.Valid()) {
-            bool& active = editor_camera_.Get<ScriptComponent>()->GetField<bool>("active_");
+            bool& active = editor_camera_.Get<ScriptComponent>()->GetField<bool>("Active");
             if (input_state_ == InputState::ViewPort) {
                 active = true;
             } else {

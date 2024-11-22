@@ -21,4 +21,4 @@ private:
     float current_time_ = 0;
 };
 
-SCRIPT_BASE(SinMovement, FIELD(pos_a_), FIELD(pos_b_), FIELD(speed_))
+SCRIPT_BASE(SinMovement, FIELD("PosA", pos_a_), FIELD("PosB", pos_b_), FIELD("Speed", speed_))

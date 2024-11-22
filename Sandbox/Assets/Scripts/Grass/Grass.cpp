@@ -53,4 +53,4 @@ private:
     Ref<Shader>      shader_;
 };
 
-SCRIPT_BASE(Grass, FIELD(camera_), FIELD(speed_))
+SCRIPT_BASE(Grass, FIELD("Camera", camera_), FIELD("Speed", speed_))

@@ -32,4 +32,4 @@ private:
     float current_time_   = 0;
 };
 
-SCRIPT_BASE(SkyContoller, FIELD(rotation_speed_))
+SCRIPT_BASE(SkyContoller, FIELD("RotationSpeed", rotation_speed_))

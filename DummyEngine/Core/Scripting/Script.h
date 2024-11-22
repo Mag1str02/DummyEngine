@@ -147,9 +147,9 @@ namespace DummyEngine {
         m_Entity.Remove<T>();
     }
 
-#define FIELD(field)                                                                      \
+#define FIELD(field_name, field)                                                          \
     {                                                                                     \
-        #field, {                                                                         \
+        field_name, {                                                                     \
             TypeToScriptFieldType<decltype(field)>(), OffsetOf(&CurrentScriptType::field) \
         }                                                                                 \
     }
