@@ -10,4 +10,6 @@ endmacro()
 set_option(DE_ENABLE_CLANG_TIDY_ON_COMPILATION "Run clang tidy during compilation" OFF)
 set_option(DE_CLANG_TIDY_WARNINGS_AS_ERRORS "Set clang warnings as errors" OFF)
 set_option(DE_FORCE_NO_PCH "Prevent PCH" OFF)
-
+set_option(DE_ENABLE_UBSAN "Enable UBSAN" OFF)
+set_option(DE_ENABLE_ASAN "Enable ASAN" OFF)
+set_option(DE_ENABLE_TSAN "Enable TSAN" OFF)
