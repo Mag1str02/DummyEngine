@@ -1,13 +1,14 @@
-#include "DummyEngine/Core/Rendering/RendererOpenGL/GLCubeMap.h"
+#include "GLCubeMap.h"
 
 #include "DummyEngine/Core/Rendering/Renderer/Texture.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLUtils.h"
 #include "DummyEngine/ToolBox/Editors/TextureEditor.h"
 
-namespace DE {
+namespace DummyEngine {
+
     GLCubeMap::GLCubeMap(const Ref<TextureData> data) {
-        glGenTextures(1, &m_MapId);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, m_MapId);
+        glGenTextures(1, &map_id_);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, map_id_);
 
         // TODO: move somewhere else...
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -45,8 +46,8 @@ namespace DE {
         glCheckError();
     }
     GLCubeMap::GLCubeMap(U32 size, Texture::Format format, Texture::Channels channels, bool gen_mipmap, bool depth_map) {
-        glGenTextures(1, &m_MapId);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, m_MapId);
+        glGenTextures(1, &map_id_);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, map_id_);
 
         // TODO: move somewhere else...
         if (!depth_map) {
@@ -77,14 +78,15 @@ namespace DE {
         glCheckError();
     }
     GLCubeMap::~GLCubeMap() {
-        glDeleteTextures(1, &m_MapId);
+        glDeleteTextures(1, &map_id_);
     }
 
     float& GLCubeMap::GetLOD() {
-        return m_LOD;
+        return lod_;
     }
     void GLCubeMap::Bind(U32 slot) const {
         glActiveTexture(GL_TEXTURE0 + slot);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, m_MapId);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, map_id_);
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

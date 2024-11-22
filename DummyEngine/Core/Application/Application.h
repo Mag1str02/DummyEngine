@@ -1,11 +1,14 @@
 #pragma once
 
-#include "DummyEngine/Core/Application/ImGuiLayer.h"
-#include "DummyEngine/Core/Application/Input.h"
-#include "DummyEngine/Core/Application/Window.h"
-#include "DummyEngine/Core/Console/ConsoleLayer.hpp"
+#include "DummyEngine/Core/Application/Event.h"
+#include "DummyEngine/Utils/Helpers/Singleton.h"
 
-namespace DE {
+namespace DummyEngine {
+
+    class Window;
+    class ConsoleLayer;
+    class ImGuiLayer;
+    class Layer;
 
     class Application : public Singleton<Application> {
         SINGLETON(Application)
@@ -23,11 +26,11 @@ namespace DE {
         void OnWindowResize(WindowResizeEvent& e);
         void OnWindowClose(WindowCloseEvent& e);
 
-        bool                m_ShouldClose;
-        EventDispatcher     m_EventDispatcher;
-        std::vector<Layer*> m_Layers;
-        ImGuiLayer*         m_ImGuiLayer;
-        ConsoleLayer*       m_ConsoleLayer;
-        Window*             m_Window;
+        bool                should_close_;
+        EventDispatcher     event_dispatcher_;
+        std::vector<Layer*> layers_;
+        ImGuiLayer*         imgui_layer_;
+        ConsoleLayer*       console_layer_;
+        Window*             window_;
     };
-}  // namespace DE
+}  // namespace DummyEngine

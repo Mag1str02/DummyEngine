@@ -1,6 +1,7 @@
 #include "DummyEngine/ToolBox/Editors/TextureEditor.h"
 
-namespace DE {
+namespace DummyEngine {
+
     Ref<TextureData> TextureEditor::GetTexturePart(const Ref<TextureData> data, U32 width, U32 height, U32 x_pos, U32 y_pos) {
         Ref<TextureData> res = CreateRef<TextureData>();
         res->SetData(data->Data(), width, height, data->Channels(), data->Format());
@@ -28,4 +29,5 @@ namespace DE {
             default: return nullptr;
         }
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

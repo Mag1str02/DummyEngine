@@ -2,9 +2,8 @@
 
 #include "DummyEngine/Core/Scripting/Script.h"
 #include "DummyEngine/Core/Scripting/SharedObject.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
 
     class ScriptClass {
     public:
@@ -12,20 +11,20 @@ namespace DE {
         using FDelete = void (*)(Script*);
 
         ScriptClass() = default;
-        ScriptClass(const std::string& name);
+        explicit ScriptClass(const std::string& name);
 
         bool               Load(Ref<SharedObject> library);
         bool               Valid();
         const std::string& GetName() const;
 
-        inline Script* Create() { return f_create(); }
-        inline void    Delete(Script* ptr) { f_delete(ptr); }
+        inline Script* Create() { return f_create_(); }
+        inline void    Delete(Script* ptr) { f_delete_(ptr); }
 
     private:
-        std::string           m_Name;
-        WeakRef<SharedObject> m_Library;
+        std::string           name_;
+        WeakRef<SharedObject> library_;
 
-        FCreate f_create = nullptr;
-        FDelete f_delete = nullptr;
+        FCreate f_create_ = nullptr;
+        FDelete f_delete_ = nullptr;
     };
-}  // namespace DE
+}  // namespace DummyEngine

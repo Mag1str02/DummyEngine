@@ -1,21 +1,21 @@
-#include "DummyEngine/Utils/ScriptIncludes.h"
+#include "DummyEngine/DummyEngine.h"
 
-using namespace DE;
+using namespace DummyEngine;
 
 class SkyContoller : public Script {
     SCRIPT(SkyContoller)
 public:
     virtual void OnRuntimeStop() override {
-        auto& pos = Get<TransformComponent>().rotation;
+        auto& pos = Get<TransformComponent>().Rotation;
         pos       = {0.0, 0.0, 0.0};
     }
     virtual void OnUpdate(float dt) override {
         DE_PROFILE_SCOPE("SkyController");
-        current_time += dt;
-        auto& pos = Get<TransformComponent>().rotation;
-        pos.x += dt * RotationSpeed.x;
-        pos.y += dt * RotationSpeed.y;
-        pos.z += dt * RotationSpeed.z;
+        current_time_ += dt;
+        auto& pos = Get<TransformComponent>().Rotation;
+        pos.x += dt * rotation_speed_.x;
+        pos.y += dt * rotation_speed_.y;
+        pos.z += dt * rotation_speed_.z;
         ClampRoundValue(pos, 0, 360);
     }
 
@@ -28,8 +28,8 @@ private:
         if (vec.z < min) vec.z = max;
         if (vec.z > max) vec.z = min;
     }
-    Vec3  RotationSpeed = {0.1, 0.1, 0.1};
-    float current_time  = 0;
+    Vec3  rotation_speed_ = {0.1, 0.1, 0.1};
+    float current_time_   = 0;
 };
 
-SCRIPT_BASE(SkyContoller, FIELD(RotationSpeed))
+SCRIPT_BASE(SkyContoller, FIELD("RotationSpeed", rotation_speed_))

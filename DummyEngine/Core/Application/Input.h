@@ -2,15 +2,15 @@
 
 #include "DummyEngine/Core/Application/Event.h"
 #include "DummyEngine/Core/Application/KeyCodes.h"
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Helpers/Singleton.h"
 
-namespace DE {
+namespace DummyEngine {
 
     struct InputFrame {
-        bool              mouse_locked = false;
-        double            x_pos;
-        double            y_pos;
-        std::vector<bool> key_states;
+        bool              MouseLocked = false;
+        double            PosX;
+        double            PosY;
+        std::vector<bool> KeyStates;
 
         InputFrame();
     };
@@ -32,9 +32,10 @@ namespace DE {
         S_METHOD_DEF(bool, KeyUp, (Key key));
 
     private:
-        InputFrame             m_CurrentFrame;
-        EventDispatcher        m_EventDispatcher;
-        std::deque<InputFrame> m_Frames;
-        size_t                 m_MaxFrameAmount = 100;
+        InputFrame             current_frame_;
+        EventDispatcher        event_dispatcher_;
+        std::deque<InputFrame> frames_;
+        size_t                 max_frame_amount_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

@@ -1,62 +1,65 @@
 #include "Trie.hpp"
 
-namespace DE {
-    Ref<Trie::Node> Trie::getSuffixLink(Ref<Trie::Node> v) {
+#include <set>
+
+namespace DummyEngine {
+
+    Ref<Trie::Node> Trie::GetSuffixLink(Ref<Trie::Node> v) {
         if (!v) {
             return v;
         }
-        if (!v->suffix_link) {
-            if (v == m_root || v->parent == m_root) {
-                v->suffix_link = m_root;
+        if (!v->SuffixLink) {
+            if (v == root_ || v->Parent == root_) {
+                v->SuffixLink = root_;
             } else {
-                v->suffix_link = getNext(getSuffixLink(v->parent), v->char_to_parent);
+                v->SuffixLink = GetNext(GetSuffixLink(v->Parent), v->CharToParent);
             }
         }
-        return v->suffix_link;
+        return v->SuffixLink;
     }
 
-    Ref<Trie::Node> Trie::getNext(Ref<Trie::Node> v, char c) {
+    Ref<Trie::Node> Trie::GetNext(Ref<Trie::Node> v, char c) {
         if (!v) {
             return v;
         }
-        if (v->next.contains(c)) {
-            return v->next[c];
-        } else if (v->sons.contains(c)) {
-            v->next[c] = v->sons[c];
-        } else if (v == m_root) {
-            v->next[c] = m_root;
+        if (v->Next.contains(c)) {
+            return v->Next[c];
+        } else if (v->Sons.contains(c)) {
+            v->Next[c] = v->Sons[c];
+        } else if (v == root_) {
+            v->Next[c] = root_;
         } else {
-            v->next[c] = getNext(getSuffixLink(v), c);
+            v->Next[c] = GetNext(GetSuffixLink(v), c);
         }
-        return v->next[c];
+        return v->Next[c];
     }
 
-    Ref<Trie::Node> Trie::getUp(Ref<Trie::Node> v) {
+    Ref<Trie::Node> Trie::GetUp(Ref<Trie::Node> v) {
         if (!v) {
             return v;
         }
-        if (!v->super_suffix_link) {
-            if (!getSuffixLink(v)->terminal_idx.empty()) {  // leaf
-                v->super_suffix_link = getSuffixLink(v);
-            } else if (getSuffixLink(v) == m_root) {
-                v->super_suffix_link = m_root;
+        if (!v->SuperSuffixLink) {
+            if (!GetSuffixLink(v)->TerminalIdx.empty()) {  // leaf
+                v->SuperSuffixLink = GetSuffixLink(v);
+            } else if (GetSuffixLink(v) == root_) {
+                v->SuperSuffixLink = root_;
             } else {
-                v->super_suffix_link = getUp(getSuffixLink(v));
+                v->SuperSuffixLink = GetUp(GetSuffixLink(v));
             }
         }
-        return v->super_suffix_link;
+        return v->SuperSuffixLink;
     }
 
     void Trie::AddWord(std::string& str) {
-        Ref<Trie::Node> current = m_root;
+        Ref<Trie::Node> current = root_;
         for (const char c : str) {
-            if (!current->sons.contains(c)) {
-                current->sons[c] = CreateRef<Trie::Node>(current, c);
+            if (!current->Sons.contains(c)) {
+                current->Sons[c] = CreateRef<Trie::Node>(current, c);
             }
-            current = current->sons[c];
+            current = current->Sons[c];
         }
-        current->terminal_idx.push_back(m_words.size());
-        m_words.push_back(CreateRef<std::string>(str));
+        current->TerminalIdx.push_back(words_.size());
+        words_.push_back(CreateRef<std::string>(str));
     }
 
     void Trie::Build(std::vector<std::string>& dict) {
@@ -68,22 +71,22 @@ namespace DE {
     std::vector<Ref<std::string>> Trie::Search(std::string needle) {
         std::vector<Ref<std::string>> result;
         std::set<size_t>              idx_found;
-        Ref<Trie::Node>               current = m_root;
+        Ref<Trie::Node>               current = root_;
         for (char c : needle) {
-            current   = getNext(current, c);
+            current   = GetNext(current, c);
             auto& ptr = current;
-            while (ptr != m_root) {
-                for (const auto& idx : ptr->terminal_idx) {
+            while (ptr != root_) {
+                for (const auto& idx : ptr->TerminalIdx) {
                     if (idx_found.contains(idx)) {
                         continue;
                     }
                     idx_found.insert(idx);
-                    result.push_back(m_words[idx]);
+                    result.push_back(words_[idx]);
                 }
-                ptr = getUp(ptr);
+                ptr = GetUp(ptr);
             }
         }
         return result;
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

@@ -1,10 +1,10 @@
 #pragma once
 
 #include <cxxabi.h>
+#include <string>
 
-#include "DummyEngine/Utils/Base.h"
+namespace DummyEngine {
 
-namespace DE {
     template <typename T> std::string DemangledName() {
         std::string           res;
         int                   status;
@@ -17,4 +17,5 @@ namespace DE {
         return res;
     }
     std::string DemangledName(const std::string& name);
-}  // namespace DE
+
+}  // namespace DummyEngine

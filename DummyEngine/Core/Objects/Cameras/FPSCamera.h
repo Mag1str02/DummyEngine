@@ -1,27 +1,27 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Types/Constants.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
-namespace DE {
-    class SceneLoader;
+namespace DummyEngine {
 
     class FPSCamera {
         // TODO: Rework when render graph implemented
     public:
-        float m_FOV       = Constants::DefaultCameraFOV;
-        float m_Aspect    = Constants::DefaultCameraAspect;
-        float m_NearPlane = Constants::DefaultCameraNearPlane;
-        float m_FarPlane  = Constants::DefaultCameraFarPlane;
+        float FOV       = Constants::kDefaultCameraFOV;
+        float Aspect    = Constants::kDefaultCameraAspect;
+        float NearPlane = Constants::kDefaultCameraNearPlane;
+        float FarPlane  = Constants::kDefaultCameraFarPlane;
 
-        Vec3 m_WorldUp  = Vec3(0.0f, 1.0f, 0.0f);
-        Vec3 m_Position = Vec3(0.0f, 0.0f, 0.0f);
-        Vec3 m_Direction;
-        Vec3 m_Right;
-        Vec3 m_Up;
+        Vec3 WorldUp  = Vec3(0.0f, 1.0f, 0.0f);
+        Vec3 Position = Vec3(0.0f, 0.0f, 0.0f);
+        Vec3 Direction;
+        Vec3 Right;
+        Vec3 Up;
 
         FPSCamera();
-        FPSCamera(Vec3 camera_position);
         FPSCamera(Vec3 camera_position, Vec3 camera_direction);
+        explicit FPSCamera(Vec3 camera_position);
 
         Mat4  GetViewMatrix() const;
         Mat4  GetProjectionMatrix() const;
@@ -48,4 +48,5 @@ namespace DE {
         void MoveInWorld(const Vec3& delta);
         void MoveInLocal(const Vec3& delta);
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

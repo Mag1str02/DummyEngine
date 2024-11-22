@@ -1,9 +1,9 @@
-#include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
+#include "VertexArray.h"
 
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLVertexArray.h"
 
-namespace DE {
+namespace DummyEngine {
 
     Ref<VertexArray> VertexArray::Copy() const {
         Ref<VertexArray> result = VertexArray::Create();
@@ -29,4 +29,4 @@ namespace DE {
         }
         return nullptr;
     }
-}  // namespace DE
+}  // namespace DummyEngine

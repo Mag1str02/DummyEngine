@@ -1,8 +1,10 @@
-#include "DummyEngine/Core/Rendering/RendererOpenGL/GLUtils.h"
+#include "GLUtils.h"
 
 #include "DummyEngine/Core/Rendering/Renderer/RenderAPI.h"
+#include "DummyEngine/Utils/Debug/Assert.h"
 
-namespace DE {
+namespace DummyEngine {
+
     GLenum GLTextureFormatInternal(Texture::Format format, Texture::Channels channels) {
         if (format == Texture::Format::U8 && channels == Texture::Channels::R) return GL_R8;
         if (format == Texture::Format::U8 && channels == Texture::Channels::RG) return GL_RG8;
@@ -59,4 +61,5 @@ namespace DE {
         }
         return 0;
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

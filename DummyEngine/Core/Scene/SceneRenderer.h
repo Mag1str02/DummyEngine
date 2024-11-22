@@ -1,52 +1,60 @@
 #pragma once
 
 #include "DummyEngine/Core/ECS/ECS.h"
-#include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
-#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
-#include "DummyEngine/Core/Rendering/Renderer/UniformBuffer.h"
+#include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
 #include "DummyEngine/Core/Scene/Scene.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
+
+    class Shader;
+    class UniformBuffer;
+    class FrameBuffer;
+    class CubeMap;
+
     class SceneRenderer {
-        LOGGER_AUTHOR(SceneRenderer)
+        LOG_AUTHOR(SceneRenderer)
     public:
-        struct Settings {
-            bool  bloom                = false;
-            float bloom_threshold      = 1;
-            float bloom_soft_threshold = 0;
-            float bloom_radius         = 0.005;
-            float bloom_strength       = 0.04;
-            U32   bloom_depth          = 5;
-
-            bool  gamma_tone_mapping = false;
-            float exposure           = 1;
-            float gamma              = 1;
-
-            bool use_directional_shadow_map = false;
-            bool use_point_shadows          = false;
-        };
-        Settings settings;
-        SceneRenderer(Scene* scene);
+        explicit SceneRenderer(Scene* scene);
 
         void             Render(Entity camera);
         void             OnViewPortResize(U32 x, U32 y);
         Ref<FrameBuffer> GetFrameBuffer();
         Ref<FrameBuffer> GetShadowMap();
 
-        void initializeShadowMap();
-
+        void InitializeShadowMap();
         void RequestShader(UUID shader_id);
 
-    private:
-        void UpdateShaders(const FPSCamera& camera, Entity skybox, const FPSCamera& lightCamera);
+    public:
+        struct GraphicsSettings {
+            bool  Bloom              = false;
+            float BloomThreshold     = 1;
+            float BloomSoftThreshold = 0;
+            float BloomRadius        = 0.005;
+            float BloomStrength      = 0.04;
+            U32   BloomDepth         = 5;
 
-        Scene*                                     m_Scene;
-        Ref<UniformBuffer>                         m_Lights;
-        Ref<FrameBuffer>                           m_FrameBuffer;
-        Ref<FrameBuffer>                           m_ShadowMap;
-        std::unordered_map<UUID, Ref<FrameBuffer>> m_PointShadowFrameBuffers;
-        std::unordered_map<UUID, Ref<CubeMap>>     m_PointShadowCubemaps;
-        std::unordered_map<UUID, Ref<Shader>>      m_Shaders;
+            bool  GammaToneMapping = false;
+            float Exposure         = 1;
+            float Gamma            = 1;
+
+            bool UseDirectionalShadowMap = false;
+            bool UsePointShadows         = false;
+        };
+
+    public:
+        GraphicsSettings Settings;
+
+    private:
+        void UpdateShaders(const FPSCamera& camera, Entity skybox, const FPSCamera& light_camera);
+
+    private:
+        Scene*                                     scene_;
+        Ref<UniformBuffer>                         lights_;
+        Ref<FrameBuffer>                           frame_buffer_;
+        Ref<FrameBuffer>                           shadow_map_;
+        std::unordered_map<UUID, Ref<FrameBuffer>> point_shadow_map_;
+        std::unordered_map<UUID, Ref<CubeMap>>     point_shadow_cubemaps_;
+        std::unordered_map<UUID, Ref<Shader>>      shaders_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

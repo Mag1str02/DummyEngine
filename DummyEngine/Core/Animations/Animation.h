@@ -2,13 +2,14 @@
 
 #include "DummyEngine/Core/Animations/Bone.h"
 
-namespace DE {
+namespace DummyEngine {
+
     class Animation {
     public:
         struct Node {
-            Mat4              transformation = Mat4(1.0);
-            std::string       name;
-            std::vector<Node> childrens;
+            Mat4              Transformation = Mat4(1.0);
+            std::string       Name;
+            std::vector<Node> Childrens;
         };
         Animation() = default;
 
@@ -21,10 +22,11 @@ namespace DE {
     private:
         friend class ModelLoader;
 
-        float                                m_Duration;
-        int                                  m_TicksPerSecond;
-        Node                                 m_RootNode;
-        std::vector<BoneInfo>                m_Bones;
-        std::unordered_map<std::string, S32> m_BoneNameToID;
+        float                                duration_;
+        int                                  ticks_per_second_;
+        Node                                 root_node_;
+        std::vector<BoneInfo>                bones_;
+        std::unordered_map<std::string, S32> bone_name_to_id_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

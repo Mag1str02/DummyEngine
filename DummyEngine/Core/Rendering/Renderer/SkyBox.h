@@ -1,16 +1,18 @@
 #pragma once
 
-#include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
-#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
-#include "DummyEngine/Core/Rendering/Renderer/Texture.h"
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
-namespace DE {
+namespace DummyEngine {
+
+    class TextureData;
+    class CubeMap;
+    class Shader;
+
     class SkyBox {
     public:
         SkyBox() = default;
-        SkyBox(Ref<TextureData> texture);
-        SkyBox(Ref<CubeMap> cubemap);
+        explicit SkyBox(Ref<TextureData> texture);
+        explicit SkyBox(Ref<CubeMap> cubemap);
 
         Ref<CubeMap> GetMap();
         void         ApplyIBL(Ref<Shader> shader);
@@ -19,8 +21,9 @@ namespace DE {
         Ref<CubeMap> GenRawCubeMap(Ref<TextureData> texture);
         void         BakeIBL();
 
-        Ref<CubeMap> m_Raw;
-        Ref<CubeMap> m_Irradiance;
-        Ref<CubeMap> m_Prefilter;
+        Ref<CubeMap> raw_;
+        Ref<CubeMap> irradiance_;
+        Ref<CubeMap> prefilter_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

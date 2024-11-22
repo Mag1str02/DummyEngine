@@ -1,20 +1,30 @@
-#include "DummyEditor/Panels/SceneHierarchyPanel.h"
+#include "SceneHierarchyPanel.h"
 
-namespace DE {
+#include "DummyEditor/ImGuiUtils/ImGuiIcons.h"
+#include "DummyEditor/ImGuiUtils/ImGuiUtils.h"
+
+#include "DummyEngine/Core/Scene/Components.h"
+#include "DummyEngine/Utils/Debug/Profiler.h"
+
+#include <imgui.h>
+#include <imgui_stdlib.h>
+
+namespace DummyEngine {
+
     void SceneHierarchyPanel::SetActiveScene(WeakRef<Scene> scene) {
-        m_Scene        = scene;
-        m_SelectedNode = SceneHierarchy::Node();
+        scene_         = scene;
+        selected_node_ = SceneHierarchy::Node();
     }
     void SceneHierarchyPanel::OnImGui() {
         DE_PROFILE_SCOPE("SceneHierarchyPanel OnImGui");
         if (m_Controller) {
             if (ImGui::Begin(ICON_MD_ACCOUNT_TREE "  Scene Hierarchy")) {
-                auto scene = m_Scene.lock();
+                auto scene = scene_.lock();
                 if (scene) {
-                    if (!m_WasTarget) {
-                        m_To = SceneHierarchy::Node();
+                    if (!was_target_) {
+                        to_ = SceneHierarchy::Node();
                     }
-                    m_WasTarget = false;
+                    was_target_ = false;
                     ShowNode(scene->GetHierarchyRoot());
                 }
             }
@@ -23,9 +33,9 @@ namespace DE {
     }
 
     Entity SceneHierarchyPanel::GetActiveEntity() {
-        auto scene = m_Scene.lock();
-        if (scene && m_SelectedNode.IsEntity()) {
-            return m_SelectedNode.GetEntity();
+        auto scene = scene_.lock();
+        if (scene && selected_node_.IsEntity()) {
+            return selected_node_.GetEntity();
         }
         return Entity();
     }
@@ -33,7 +43,7 @@ namespace DE {
     void SceneHierarchyPanel::ShowNodeContextMenu(SceneHierarchy::Node node) {
         if (node.IsFolder()) {
             if (ImGui::MenuItem("Create Entity")) {
-                auto entity = m_Scene.lock()->CreateEntity("Entity", false);
+                auto entity = scene_.lock()->CreateEntity("Entity", false);
                 node.AddEntity(entity);
                 ImGui::CloseCurrentPopup();
             }
@@ -42,10 +52,10 @@ namespace DE {
                 ImGui::CloseCurrentPopup();
             }
             if (ImGui::MenuItem("Rename")) {
-                m_Rename = node;
+                rename_ = node;
                 ImGui::CloseCurrentPopup();
             }
-            if (node.GetID() && ImGui::MenuItem("Delete")) {
+            if (node.GetID() != 0 && ImGui::MenuItem("Delete")) {
                 auto parent = node.GetParent();
                 for (auto c : node.GetChilds()) {
                     parent.Attach(c);
@@ -57,7 +67,7 @@ namespace DE {
         if (node.IsEntity()) {
             if (ImGui::MenuItem("Clone")) {
                 auto parent = node.GetParent();
-                auto entity = m_Scene.lock()->CloneEntity(node.GetEntity());
+                auto entity = scene_.lock()->CloneEntity(node.GetEntity());
                 parent.AddEntity(entity);
                 ImGui::CloseCurrentPopup();
             }
@@ -72,7 +82,7 @@ namespace DE {
         bool open;
         if (node.IsFolder()) {
             ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
-            if (node != m_Rename) {
+            if (node != rename_) {
                 flags |= ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_SpanAvailWidth;
             }
             ImGuiUtils::ScopedID id(node.GetID());
@@ -85,11 +95,11 @@ namespace DE {
                 DropTarget(node);
                 DragTarget(node);
                 ImGui::SameLine();
-                if (m_Rename == node) {
+                if (rename_ == node) {
                     ImGui::SetKeyboardFocusHere();
                     if (ImGui::InputText(
-                            "###FolderRename", &m_Rename.GetName(), ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue)) {
-                        m_Rename = SceneHierarchy::Node();
+                            "###FolderRename", &rename_.GetName(), ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue)) {
+                        rename_ = SceneHierarchy::Node();
                     }
                 } else {
                     ImGui::Text("%s", node.GetName().c_str());
@@ -107,11 +117,11 @@ namespace DE {
         if (node.IsEntity()) {
             ImGuiUtils::ScopedID id(node.GetID());
             auto                 entity      = node.GetEntity();
-            std::string          name        = "        " ICON_MD_CHECK_BOX_OUTLINE_BLANK "  " + entity.Get<TagComponent>().tag;
-            bool                 is_selected = (m_SelectedNode.IsEntity() ? m_SelectedNode.GetEntity() == entity : false);
+            std::string          name        = "        " ICON_MD_CHECK_BOX_OUTLINE_BLANK "  " + entity.Get<TagComponent>().Tag;
+            bool                 is_selected = (selected_node_.IsEntity() ? selected_node_.GetEntity() == entity : false);
             if (ImGui::Selectable(name.c_str(), is_selected, ImGuiSelectableFlags_AllowDoubleClick | ImGuiSelectableFlags_SpanAllColumns) &&
                 ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-                m_SelectedNode = node;
+                selected_node_ = node;
             }
             if (ImGui::BeginPopupContextItem()) {
                 ShowNodeContextMenu(node);
@@ -126,29 +136,29 @@ namespace DE {
     void SceneHierarchyPanel::DragTarget(SceneHierarchy::Node node) {
         ImGui::PushStyleVar(ImGuiStyleVar_Alpha, 1.0f);
         if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoHoldToOpenOthers)) {
-            m_From = node;
-            ImGui::Text("%s", GetDNDText(node, m_To).c_str());
+            from_ = node;
+            ImGui::Text("%s", GetDNDText(node, to_).c_str());
             ImGui::SetDragDropPayload("DND_HIERARCHY_NODE", &node, sizeof(node), ImGuiCond_Once);
             ImGui::EndDragDropSource();
         }
         ImGui::PopStyleVar();
     }
     void SceneHierarchyPanel::DropTarget(SceneHierarchy::Node node) {
-        if (!PossibleDND(m_From, node)) {
+        if (!PossibleDND(from_, node)) {
             return;
         }
         if (ImGui::BeginDragDropTarget()) {
-            m_To        = node;
-            m_WasTarget = true;
+            to_         = node;
+            was_target_ = true;
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_HIERARCHY_NODE")) {
                 auto from = *(SceneHierarchy::Node*)payload->Data;
-                if (from.Valid() && m_To.IsFolder()) {
-                    m_To.Attach(from);
+                if (from.Valid() && to_.IsFolder()) {
+                    to_.Attach(from);
                 }
-                if (from.IsEntity() && m_To.IsEntity()) {
-                    auto parent = m_To.GetParent();
+                if (from.IsEntity() && to_.IsEntity()) {
+                    auto parent = to_.GetParent();
                     auto folder = parent.AddFolder("Folder");
-                    folder.Attach(m_To);
+                    folder.Attach(to_);
                     folder.Attach(from);
                 }
             }
@@ -182,7 +192,7 @@ namespace DE {
             return message;
         }
         if (to.IsEntity() && from.IsEntity()) {
-            return "Create Folder with " + to.GetEntity().Get<TagComponent>().tag + " and " + from.GetEntity().Get<TagComponent>().tag;
+            return "Create Folder with " + to.GetEntity().Get<TagComponent>().Tag + " and " + from.GetEntity().Get<TagComponent>().Tag;
         }
         if (to.IsFolder() && from.Valid()) {
             std::string message = "Moving ";
@@ -198,4 +208,5 @@ namespace DE {
         }
         return "Something went wrong";
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

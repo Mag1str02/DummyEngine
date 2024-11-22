@@ -1,19 +1,20 @@
 #pragma once
 
-#include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
-#include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
-#include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
 #include "DummyEngine/Core/Rendering/Renderer/RenderAPI.h"
-#include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
-#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
-#include "DummyEngine/Core/Rendering/Renderer/Texture.h"
-#include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+#include "DummyEngine/Utils/Debug/Logger.h"
+#include "DummyEngine/Utils/Helpers/Singleton.h"
+
+namespace DummyEngine {
+
+    class RenderMesh;
+    class CubeMap;
+    class Shader;
+    class Texture;
+    class FPSCamera;
 
     class Renderer : public Singleton<Renderer> {
-        LOGGER_AUTHOR(Renderer)
+        LOG_AUTHOR(Renderer)
         SINGLETON(Renderer)
     public:
         enum class Shaders {
@@ -51,8 +52,8 @@ namespace DE {
             Last,
         };
         struct Statistics {
-            U32 m_DrawCallsAmount;
-            U32 m_DrawnInstances;
+            U32 DrawCallsAmount;
+            U32 DrawnInstances;
 
             void Reset();
         };
@@ -89,32 +90,32 @@ namespace DE {
         void GenResources();
 
         struct Resources {
-            Ref<Texture> white;
-            Ref<Texture> normal;
-            Ref<Texture> brdf;
+            Ref<Texture> White;
+            Ref<Texture> Normal;
+            Ref<Texture> BRDF;
 
-            Ref<VertexArray> screen_quad;
-            Ref<VertexArray> cube;
+            Ref<VertexArray> ScreenQuad;
+            Ref<VertexArray> Cube;
 
-            Ref<Shader> equirectangular_to_cubemap;
-            Ref<Shader> skybox;
-            Ref<Shader> convolution;
-            Ref<Shader> pre_filter_convolution;
-            Ref<Shader> brdf_convolution;
-            Ref<Shader> brightness_filter;
-            Ref<Shader> gaussian_blur;
-            Ref<Shader> textured_quad;
-            Ref<Shader> bloom;
-            Ref<Shader> gamma_hdr;
-            Ref<Shader> bloom_upsample;
-            Ref<Shader> bloom_downsample;
-            Ref<Shader> directional_shadow_map;
-            Ref<Shader> omnidirectional_shadow_map;
+            Ref<Shader> EquirectangularToCubemap;
+            Ref<Shader> Skybox;
+            Ref<Shader> Convolution;
+            Ref<Shader> PreFilterConvolution;
+            Ref<Shader> BRDFConvolution;
+            Ref<Shader> BrightnessFilter;
+            Ref<Shader> GaussianBlur;
+            Ref<Shader> TexturedQuad;
+            Ref<Shader> Bloom;
+            Ref<Shader> GammaHDR;
+            Ref<Shader> BloomUpsample;
+            Ref<Shader> BloomDownsample;
+            Ref<Shader> DirectionalShadowMap;
+            Ref<Shader> OmnidirectionalShadowMap;
         };
 
-        Scope<RenderAPI> m_RenderAPI;
-        Statistics       m_FrameStatistics;
-        Resources        m_Resources;
+        Scope<RenderAPI> render_api_;
+        Statistics       frame_statistics_;
+        Resources        resources_;
     };
 
-}  // namespace DE
+}  // namespace DummyEngine

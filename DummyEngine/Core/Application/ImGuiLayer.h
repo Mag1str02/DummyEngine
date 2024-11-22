@@ -2,7 +2,7 @@
 
 #include "DummyEngine/Core/Application/Layer.h"
 
-namespace DE {
+namespace DummyEngine {
 
     class ImGuiLayer : public Layer {
     public:
@@ -16,4 +16,4 @@ namespace DE {
         void EndFrame();
     };
 
-}  // namespace DE
+}  // namespace DummyEngine

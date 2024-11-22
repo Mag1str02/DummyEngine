@@ -15,4 +15,8 @@ add_dependencies(DummyEditor DummyEditorScripts)
 
 if (${ENABLE_PRECOMPILED_HEADERS})
         target_precompile_headers(DummyEditor REUSE_FROM DummyEngineLib)
+        target_precompile_headers(DummyEditorScripts REUSE_FROM DummyEngineLib)
+endif()
+if (${DE_CLANG_TIDY_RUN_ON_COMPILATION})
+    set_target_properties(DummyEditor PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
 endif()

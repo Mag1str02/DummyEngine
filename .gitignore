@@ -12,6 +12,10 @@ DummyEngine/Presets
 
 Sandbox/imgui.ini
 Sandbox/DummyEditor
+Sandbox/TestASAN
+Sandbox/TestLSAN
+Sandbox/TestMSAN
+Sandbox/TestTSAN
 Sandbox/Logs/**
 Sandbox/Cache/**
 Sandbox/**.dll
@@ -20,3 +24,4 @@ Sandbox/**.dylib
 Sandbox/**.so**
 Sandbox/*.yml
 
+Config.cmake

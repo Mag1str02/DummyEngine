@@ -1,52 +1,57 @@
 #pragma once
 
-#include <list>
+#include "DummyEngine/Core/Physics/ConvexCollider.hpp"
 
-#include "ConvexCollider.hpp"
-#include "DummyEngine/Core/Scene/Scene.h"
-#include "SceneConstants.hpp"
+#include <map>
+#include <vector>
 
-namespace DE {
+namespace DummyEngine {
     class Scene;
 }
 
-namespace DE::Physics {
+namespace DummyEngine::Physics {
 
     struct Jacobian {
-        Vec3  m_va, m_wa, m_vb, m_wb;
-        float m_bias, m_effective_mass, m_totalLambda;
+        Vec3  VA, WA, VB, WB;
+        float Bias;
+        float EffectiveMass;
+        float TotatlLambda;
     };
 
     struct Collision {
-        UUID  src, dest;
-        Vec3  origin;
-        Vec3  collision_normal;
-        float penetration;
+        UUID  Source, Destination;
+        Vec3  Origin;
+        Vec3  CollisionNormal;
+        float Penetration;
 
-        Vec3 lhs_pt, rhs_pt;
-        Vec3 lhs_r, rhs_r;
+        Vec3 LhsPt, RhsPt;
+        Vec3 LhsR, RhsR;
 
-        Jacobian jN, jT, jTb;
-        size_t   frame;
+        Jacobian JN, JT, JTb;
+        size_t   Frame;
+    };
+
+    struct SceneConstants {
+        Vec3 Gravity;
     };
 
     class Solver {
     public:
-        void LoadScene(const Ref<DE::Scene>& scene);
+        void LoadScene(const Ref<DummyEngine::Scene>& scene);
 
         void     OnUpdate(double dt);
         double   NextInteraction(double dt);
         Jacobian InitJacobian(Collision& collision, Vec3 dir, float dt, bool is_normal);
         void     Resolve(Jacobian& j, Collision& collision, float dt, bool is_normal, Jacobian* jn);
 
-        std::map<std::pair<UUID, UUID>, std::list<Collision>> mem;
+        std::map<std::pair<UUID, UUID>, std::vector<Collision>> Memory;
 
     private:
-        WeakRef<Scene>                                _scene;
-        Ref<SceneConstants>                           _constants;
-        std::unordered_map<UUID, Ref<ConvexCollider>> _colliders;
-        double                                        _time  = 0;
-        size_t                                        _frame = 0;
+        WeakRef<Scene>                                scene_;
+        SceneConstants                                constants_;
+        std::unordered_map<UUID, Ref<ConvexCollider>> colliders_;
+        double                                        time_  = 0;
+        size_t                                        frame_ = 0;
     };
 
-}  // namespace DE::Physics
+}  // namespace DummyEngine::Physics

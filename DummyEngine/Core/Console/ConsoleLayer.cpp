@@ -1,66 +1,64 @@
-//
-// Created by balanda on 9/29/2023.
-//
-
 #include "ConsoleLayer.hpp"
 
-#include "DummyEditor/DummyEngineInclude.h"
 #include "DummyEngine/Core/Application/Input.h"
 #include "DummyEngine/Core/Application/KeyCodes.h"
 #include "DummyEngine/Core/Console/Console.hpp"
 
-namespace DE {
+#include <imgui.h>
+#include <imgui_stdlib.h>
+
+namespace DummyEngine {
 
     void ConsoleLayer::OnUpdate(float) {
         if (Input::KeyPressed(Key::I) && Input::KeyDown(Key::LeftShift)) {
-            if (!m_Show) {
-                m_JustOpened = true;
+            if (!show_) {
+                just_opened_ = true;
             }
-            m_Show = !m_Show;
+            show_ = !show_;
         }
     }
 
     void ConsoleLayer::OnImGuiRender() {
-        if (m_Show) {
+        if (show_) {
             if (ImGui::Begin("Console")) {
-                if (m_historyPosition >= Console::GetCmdHistory().size()) {
-                    m_Command         = "";
-                    m_historyPosition = Console::GetCmdHistory().size() - 1;
+                if (history_position_ >= Console::GetCmdHistory().size()) {
+                    command_          = "";
+                    history_position_ = Console::GetCmdHistory().size() - 1;
                 }
-                if (m_historyPosition < 0) {
-                    m_historyPosition = Console::GetCmdHistory().size() - 1;
+                if (history_position_ < 0) {
+                    history_position_ = Console::GetCmdHistory().size() - 1;
                 }
                 if (Input::KeyReleased(Key::Up)) {
                     LOG_DEBUG("CmdHistoryLength = {}, Position = {}, cmd = {}",
                               Console::GetCmdHistory().size(),
-                              m_historyPosition,
-                              Console::GetCmdHistory()[m_historyPosition]);
-                    m_Command = Console::GetCmdHistory()[m_historyPosition];
-                    m_historyPosition--;
-                    m_JustOpened = true;
+                              history_position_,
+                              Console::GetCmdHistory()[history_position_]);
+                    command_ = Console::GetCmdHistory()[history_position_];
+                    history_position_--;
+                    just_opened_ = true;
                 }
                 if (Input::KeyReleased(Key::Down)) {
-                    m_Command = Console::GetCmdHistory()[m_historyPosition];
-                    m_historyPosition++;
-                    m_JustOpened = true;
+                    command_ = Console::GetCmdHistory()[history_position_];
+                    history_position_++;
+                    just_opened_ = true;
                 }
-                if (m_JustOpened) {
-                    m_JustOpened = false;
+                if (just_opened_) {
+                    just_opened_ = false;
                     ImGui::SetKeyboardFocusHere();
                 }
                 if (ImGui::InputTextWithHint(
-                        "##", "command", &m_Command, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AlwaysOverwrite)) {
-                    m_historyPosition = Console::GetCmdHistory().size() - 1;
-                    Console::ExecuteCommand(m_Command);
-                    m_ScrollToBottom = true;
-                    m_Command        = "";
-                    m_JustOpened     = true;
+                        "##", "command", &command_, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AlwaysOverwrite)) {
+                    history_position_ = Console::GetCmdHistory().size() - 1;
+                    Console::ExecuteCommand(command_);
+                    scroll_to_bottom_ = true;
+                    command_          = "";
+                    just_opened_      = true;
                 }
                 if (ImGui::IsItemFocused()) {
                     ImGui::SetNextWindowPos(ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMax().y));
                     if (ImGui::BeginTooltip()) {
                         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 1));
-                        const auto& tips = Console::GetHints(m_Command);
+                        const auto& tips = Console::GetHints(command_);
                         if (!tips.empty()) {
                             for (const auto& tip : tips) {
                                 ImGui::TextUnformatted(tip.c_str());
@@ -81,9 +79,9 @@ namespace DE {
                 for (const auto& line : Console::GetLogHistory()) {
                     ImGui::TextUnformatted(line.data());
                 }
-                if (m_ScrollToBottom) {
+                if (scroll_to_bottom_) {
                     ImGui::SetScrollHereY();
-                    m_ScrollToBottom = false;
+                    scroll_to_bottom_ = false;
                 }
                 ImGui::PopStyleVar();
                 ImGui::EndChild();
@@ -95,4 +93,4 @@ namespace DE {
     void ConsoleLayer::OnAttach() {}
     void ConsoleLayer::OnDetach() {}
 
-}  // namespace DE
+}  // namespace DummyEngine

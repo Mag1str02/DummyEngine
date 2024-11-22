@@ -1,8 +1,13 @@
-#include "DummyEditor/Panels/MenuBar.h"
+#include "MenuBar.h"
 
 #include "DummyEditor/EditorLayer.h"
+#include "DummyEditor/ImGuiUtils/ImGuiUtils.h"
 
-namespace DE {
+#include "DummyEngine/Utils/Debug/Profiler.h"
+
+#include <imgui.h>
+
+namespace DummyEngine {
     void MenuBar::OnImGui() {
         DE_PROFILE_SCOPE("MenuBar OnImGui");
 
@@ -41,9 +46,9 @@ namespace DE {
             int cnt = 0;
             for (auto panel : editor.GetImGuiManager().GetPanels()) {
                 ImGuiUtils::ScopedID id(++cnt);
-                ImGui::MenuItem(panel->GetName().c_str(), NULL, &panel->GetController());
+                ImGui::MenuItem(panel->GetName().c_str(), nullptr, &panel->GetController());
             }
             ImGui::EndMenu();
         }
     }
-}  // namespace DE
+}  // namespace DummyEngine

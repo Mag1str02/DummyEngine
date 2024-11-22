@@ -1,0 +1,81 @@
+buildType:
+  default: Release 
+  choices:
+    Release:
+      short: Release
+      long: Main development build type with optimized code and debug info
+      buildType: ReleaseWithDebInfo
+      settings:
+        DE_FORMAT_BEFORE_BUILD: OFF
+        DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
+        DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
+        DE_FORCE_NO_PCH: OFF
+        DE_ENABLE_UBSAN: OFF
+        DE_ENABLE_ASAN: OFF
+        DE_ENABLE_MSAN: OFF
+        DE_ENABLE_TSAN: OFF
+    Debug:
+      short: Debug
+      long: Debug build type
+      buildType: Debug
+      settings:
+        DE_FORMAT_BEFORE_BUILD: OFF
+        DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
+        DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
+        DE_FORCE_NO_PCH: OFF
+        DE_ENABLE_UBSAN: OFF
+        DE_ENABLE_ASAN: OFF
+        DE_ENABLE_MSAN: OFF
+        DE_ENABLE_TSAN: OFF
+    ReleaseTSAN:
+      short: ReleaseTSAN
+      long: Optimized code with TSAN
+      buildType: ReleaseWithDebInfo
+      settings:
+        DE_FORMAT_BEFORE_BUILD: OFF
+        DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
+        DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
+        DE_FORCE_NO_PCH: OFF
+        DE_ENABLE_UBSAN: ON
+        DE_ENABLE_ASAN: OFF
+        DE_ENABLE_MSAN: OFF
+        DE_ENABLE_TSAN: ON
+    ReleaseASAN:
+      short: ReleaseASAN
+      long: Optimized code with ASAN
+      buildType: ReleaseWithDebInfo
+      settings:
+        DE_FORMAT_BEFORE_BUILD: OFF
+        DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
+        DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
+        DE_FORCE_NO_PCH: OFF
+        DE_ENABLE_UBSAN: ON
+        DE_ENABLE_ASAN: ON
+        DE_ENABLE_MSAN: OFF
+        DE_ENABLE_TSAN: OFF
+    ReleaseMSAN:
+      short: ReleaseMSAN
+      long: Optimized code with MSAN
+      buildType: ReleaseWithDebInfo
+      settings:
+        DE_FORMAT_BEFORE_BUILD: OFF
+        DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
+        DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
+        DE_FORCE_NO_PCH: OFF
+        DE_ENABLE_UBSAN: ON
+        DE_ENABLE_ASAN: OFF
+        DE_ENABLE_MSAN: ON
+        DE_ENABLE_TSAN: OFF
+    ReleaseTidy:
+      short: ReleaseTidy
+      long: Runs clang-format before build, forces no PCH and runs clang-tidy checks
+      buildType: ReleaseWithDebInfo
+      settings:
+        DE_FORMAT_BEFORE_BUILD: ON
+        DE_CLANG_TIDY_RUN_ON_COMPILATION: ON
+        DE_CLANG_TIDY_WARNINGS_AS_ERRORS: ON
+        DE_FORCE_NO_PCH: ON
+        DE_ENABLE_UBSAN: OFF
+        DE_ENABLE_ASAN: OFF
+        DE_ENABLE_MSAN: OFF
+        DE_ENABLE_TSAN: OFF

@@ -1,20 +1,25 @@
-#include "DummyEditor/Panels/ViewportPanel.h"
+#include "ViewportPanel.h"
 
 #include "DummyEditor/EditorLayer.h"
 
-namespace DE {
+#include "DummyEditor/ImGuiUtils/ImGuiIcons.h"
+#include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
+
+namespace DummyEngine {
+
     void ViewportPanel::OnImGui() {
         DE_PROFILE_SCOPE("ViewportPanel OnImGui");
         if (m_Controller) {
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
             if (ImGui::Begin((ICON_MD_TV + m_Name).c_str())) {
-                m_ViewportSize = ImGui::GetContentRegionAvail();
-                auto buffer    = m_FrameBuffer.lock();
+                viewport_size_ = ImGui::GetContentRegionAvail();
+                auto buffer    = frame_buffer_.lock();
                 if (buffer) {
-                    if (m_UseDepthAttachment) {
-                        ImGui::Image(buffer->GetDepthAttachment()->GetRendererId(), m_ViewportSize, {0, 1}, {1, 0});
+                    if (use_depth_attachment_) {
+                        ImGui::Image(buffer->GetDepthAttachment()->GetRendererId(), viewport_size_, {0, 1}, {1, 0});
                     } else {
-                        ImGui::Image(buffer->GetColorAttachment(0)->GetRendererId(), m_ViewportSize, {0, 1}, {1, 0});
+                        ImGui::Image(buffer->GetColorAttachment(0)->GetRendererId(), viewport_size_, {0, 1}, {1, 0});
+
                         ToolPanel();
                     }
                 }
@@ -65,12 +70,12 @@ namespace DE {
             ++button_amount;
             build_and_run = true;
         }
-        ImVec2 cursor_pos{m_ViewportSize.x * 0.5f - (button_amount * button_size.x + (button_amount - 1) * button_padding.x) / 2, button_padding.y};
+        ImVec2 cursor_pos{viewport_size_.x * 0.5f - (button_amount * button_size.x + (button_amount - 1) * button_padding.x) / 2, button_padding.y};
 
         if (play) {
             ImGui::SetCursorPos(cursor_pos);
             cursor_pos.x += button_size.x + button_padding.x;
-            if (ImGui::ImageButton("Play", resources.play_icon->GetRendererId(), button_size)) {
+            if (ImGui::ImageButton("Play", resources.PlayIcon->GetRendererId(), button_size)) {
                 if (state == State::Editing) {
                     editor.ActionRunScene();
                 } else {
@@ -81,40 +86,40 @@ namespace DE {
         if (pause) {
             ImGui::SetCursorPos(cursor_pos);
             cursor_pos.x += button_size.x + button_padding.x;
-            if (ImGui::ImageButton("Pause", resources.pause_icon->GetRendererId(), button_size)) {
+            if (ImGui::ImageButton("Pause", resources.PauseIcon->GetRendererId(), button_size)) {
                 editor.ActionPauseScene();
             }
         }
         if (step) {
             ImGui::SetCursorPos(cursor_pos);
             cursor_pos.x += button_size.x + button_padding.x;
-            if (ImGui::ImageButton("Step", resources.step_icon->GetRendererId(), button_size)) {
+            if (ImGui::ImageButton("Step", resources.StepIcon->GetRendererId(), button_size)) {
                 editor.ActionStepScene();
             }
         }
         if (stop) {
             ImGui::SetCursorPos(cursor_pos);
             cursor_pos.x += button_size.x + button_padding.x;
-            if (ImGui::ImageButton("Stop", resources.stop_icon->GetRendererId(), button_size)) {
+            if (ImGui::ImageButton("Stop", resources.StopIcon->GetRendererId(), button_size)) {
                 editor.ActionStopScene();
             }
         }
         if (build) {
             ImGui::SetCursorPos(cursor_pos);
             cursor_pos.x += button_size.x + button_padding.x;
-            if (ImGui::ImageButton("Build", resources.build_icon->GetRendererId(), button_size)) {
+            if (ImGui::ImageButton("Build", resources.BuildIcon->GetRendererId(), button_size)) {
                 editor.ActionBuild();
             }
         }
         if (build_and_run) {
             ImGui::SetCursorPos(cursor_pos);
             cursor_pos.x += button_size.x + button_padding.x;
-            if (ImGui::ImageButton("BuildAndRun", resources.build_and_run_icon->GetRendererId(), button_size)) {
+            if (ImGui::ImageButton("BuildAndRun", resources.BuildAndRunIcon->GetRendererId(), button_size)) {
                 editor.ActionBuildAndRun();
             }
         }
     }
     void ViewportPanel::SetFrameBuffer(Ref<FrameBuffer> buffer) {
-        m_FrameBuffer = buffer;
+        frame_buffer_ = buffer;
     }
-}  // namespace DE
+}  // namespace DummyEngine

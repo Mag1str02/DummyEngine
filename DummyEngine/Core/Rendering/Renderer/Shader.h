@@ -1,9 +1,8 @@
 #pragma once
 
 #include "DummyEngine/Core/ResourceManaging/RawData.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
 
     class Shader {
     public:
@@ -28,4 +27,5 @@ namespace DE {
 
         static Ref<Shader> Create(const std::vector<ShaderPart>& initializers);
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

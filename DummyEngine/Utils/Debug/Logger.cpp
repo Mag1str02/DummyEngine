@@ -1,111 +1,116 @@
-#include "DummyEngine/Utils/Debug/Logger.h"
+#include "Logger.h"
 
 #include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/Core/Application/FileSystem.h"
 #include "DummyEngine/Core/Console/Console.hpp"
 #include "DummyEngine/Utils/Debug/Assert.h"
 
-namespace DE {
-    std::string Logger::Record::LogRecordTypeToStr(Type type) {
+#include <chrono>  // IWYU pragma: keep
+#include <format>
+#include <iostream>
+
+namespace DummyEngine {
+
+    std::string Logger::Record::LogRecordTypeToStr(RecordType type) {
         switch (type) {
-            case Type::Debug: return "Debug";
-            case Type::Info: return "Info";
-            case Type::Warning: return "Warning";
-            case Type::Error: return "Error";
-            case Type::Fatal: return "Fatal";
+            case RecordType::Debug: return "Debug";
+            case RecordType::Info: return "Info";
+            case RecordType::Warning: return "Warning";
+            case RecordType::Error: return "Error";
+            case RecordType::Fatal: return "Fatal";
             default: return "None";
         }
     }
 
     std::string Logger::Record::ToString() const {
-        auto type_str   = std::format("[{}]", LogRecordTypeToStr(type));
-        auto author_str = author.empty() ? author : std::format("[{}]", author);
-        return std::format("[{}] {: >9} {: <20} {}\n", timestamp, type_str, author_str, message);
+        auto type_str   = std::format("[{}]", LogRecordTypeToStr(Type));
+        auto author_str = Author.empty() ? Author : std::format("[{}]", Author);
+        return std::format("[{}] {: >9} {: <20} {}\n", Timestamp, type_str, author_str, Message);
     }
 
     SINGLETON_BASE(Logger);
     S_INITIALIZE() {
-        FileSystem::CreateDirectory(Config::GetPath(DE_CFG_LOG_PATH));
-        auto& log  = m_Streams.emplace(kDefaultLog, LogStream()).first->second;
-        auto  path = Config::GetPath(DE_CFG_LOG_PATH) / kDefaultLogFileName;
-        log.stream.open(path);
-        DE_ASSERT(log.stream.is_open(), "Failed to open default log: {}", path.string());
+        FileSystem::CreateDirectory(Config::Get().LogPath);
+        auto& log  = streams_.emplace(kDefaultLog, LogStream()).first->second;
+        auto  path = Config::Get().LogPath / kDefaultLogFileName;
+        log.Stream.open(path);
+        DE_ASSERT(log.Stream.is_open(), "Failed to open default log: {}", path.string());
         return Unit();
     }
     S_TERMINATE() {
-        for (auto& [name, stream] : m_Streams) {
-            stream.stream.close();
+        for (auto& [name, stream] : streams_) {
+            stream.Stream.close();
         }
-        m_Streams.clear();
+        streams_.clear();
         return Unit();
     }
 
     S_METHOD_IMPL(bool, Open, (const std::string& log_name), (log_name)) {
-        auto [it, emplaced] = m_Streams.emplace(log_name, LogStream());
+        auto [it, emplaced] = streams_.emplace(log_name, LogStream());
         if (!emplaced) {
             return false;
         }
         auto& log = it->second;
-        FileSystem::CreateDirectory(Config::GetPath(DE_CFG_LOG_PATH));
-        log.stream.open(Config::GetPath(DE_CFG_LOG_PATH) / (log_name + ".txt"));
-        if (!log.stream.is_open()) {
-            m_Streams.erase(it);
+        FileSystem::CreateDirectory(Config::Get().LogPath);
+        log.Stream.open(Config::Get().LogPath / (log_name + ".txt"));
+        if (!log.Stream.is_open()) {
+            streams_.erase(it);
             return false;
         }
         return true;
     }
     S_METHOD_IMPL(Unit, Close, (const std::string& log_name), (log_name)) {
-        m_Streams.erase(log_name);
+        streams_.erase(log_name);
         return Unit();
     }
 
     S_METHOD_IMPL(Unit, Log, (const std::string& log, Record&& record), (log, std::move(record))) {
-        auto it = m_Streams.find(log);
-        if (it == m_Streams.end()) {
+        auto it = streams_.find(log);
+        if (it == streams_.end()) {
             return Unit();
         }
         auto& stream = it->second;
 
-        stream.records.push_back(std::move(record));
-        if (stream.records.size() > stream.depth) {
-            stream.records.pop_front();
+        stream.Records.push_back(std::move(record));
+        if (stream.Records.size() > stream.Depth) {
+            stream.Records.pop_front();
         }
-        auto log_string = stream.records.back().ToString();
+        auto log_string = stream.Records.back().ToString();
         Console::PushLog(log_string);
         std::cout << log_string;
-        stream.stream << log_string;
-        stream.stream.flush();
-        if (stream.records.back().type == Record::Type::Fatal) {
+        stream.Stream << log_string;
+        stream.Stream.flush();
+        if (stream.Records.back().Type == RecordType::Fatal) {
             ITerminate();
         }
         return Unit();
     }
     S_METHOD_IMPL(const std::deque<Logger::Record>&, GetRecords, (const std::string& log), (log)) {
-        if (!m_Streams.contains(log)) {
-            return m_Empty;
+        if (!streams_.contains(log)) {
+            return empty_;
         }
-        return m_Streams[log].records;
+        return streams_[log].Records;
     }
     S_METHOD_IMPL(Unit, SetLogDepth, (U32 depth, const std::string& log), (depth, log)) {
-        if (!m_Streams.contains(log)) {
+        if (!streams_.contains(log)) {
             return Unit();
         }
-        m_Streams[log].depth = depth;
+        streams_[log].Depth = depth;
         return Unit();
     }
 
-    void LogWithAuthor(const std::string& log, Logger::Record::Type type, const std::string& author, std::string&& message) {
+    void LogWithAuthor(const std::string& log, Logger::RecordType type, const std::string& author, std::string&& message) {
         Logger::Record record;
-        record.author    = author;
-        record.timestamp = Logger::Record::Clock::now();
-        record.type      = type;
-        record.message   = std::move(message);
+        record.Author    = author;
+        record.Timestamp = Logger::Record::Clock::now();
+        record.Type      = type;
+        record.Message   = std::move(message);
 
         Logger::Log(log, std::move(record));
     }
 
-    void Log(const std::string& log, Logger::Record::Type type, std::string&& message) {
+    void Log(const std::string& log, Logger::RecordType type, std::string&& message) {
         LogWithAuthor(log, type, Logger::kDefaultAuthor, std::move(message));
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

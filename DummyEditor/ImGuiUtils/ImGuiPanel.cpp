@@ -1,6 +1,7 @@
-#include "DummyEditor/ImGuiUtils/ImGuiPanel.h"
+#include "ImGuiPanel.h"
 
-namespace DE {
+namespace DummyEngine {
+
     void ImGuiPanel::Enable() {
         m_Controller = true;
     }
@@ -13,4 +14,5 @@ namespace DE {
     const std::string& ImGuiPanel::GetName() const {
         return m_Name;
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

@@ -2,20 +2,19 @@
 
 #include "DummyEngine/Core/Application/Application.h"
 #include "DummyEngine/Core/Application/Initializer.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
     extern void SetupApplication();
 }
 
 int main() {
     try {
-        DE::Initializer::Initialize();
+        DummyEngine::Initializer::Initialize();
 
-        DE::SetupApplication();
-        DE::Application::Run();
+        DummyEngine::SetupApplication();
+        DummyEngine::Application::Run();
 
-        DE::Initializer::Terminate();
+        DummyEngine::Initializer::Terminate();
     } catch (const std::exception& e) {
         LOG_FATAL_AS("EntryPoint", "Unhandled exeption occured: {}", e.what());
         return -1;

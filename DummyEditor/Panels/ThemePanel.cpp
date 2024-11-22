@@ -1,18 +1,21 @@
-#include "DummyEditor/Panels/ThemePanel.h"
+#include "ThemePanel.h"
 
-namespace DE {
+#include "DummyEditor/ImGuiUtils/ImGuiIcons.h"
+#include "DummyEngine/Utils/Debug/Profiler.h"
+
+namespace DummyEngine {
 
     ThemePanel::ThemePanel() : ImGuiPanel("ThemePanel") {
         SetDefaultTheme();
         SetDefaultStyle();
     }
     void ThemePanel::SetTheme(const EditorTheme& theme) {
-        m_ActiveTheme = theme;
-        m_ActiveTheme.Apply();
+        active_theme_ = theme;
+        active_theme_.Apply();
     }
     void ThemePanel::SetDefaultTheme() {
-        m_ActiveTheme = EditorTheme();
-        m_ActiveTheme.Apply();
+        active_theme_ = EditorTheme();
+        active_theme_.Apply();
     }
 
     void ThemePanel::OnImGui() {
@@ -21,23 +24,23 @@ namespace DE {
             if (ImGui::Begin(ICON_MD_BRUSH "  ThemePanel")) {
                 ImGui::Separator();
                 ImGui::Columns(2);
-                ImGuiUtils::EditProperty("Background", m_ActiveTheme.Background, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("FieldBackground", m_ActiveTheme.FieldBackground, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("TitleBar", m_ActiveTheme.TitleBar, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("MenuBar", m_ActiveTheme.MenuBar, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("Header", m_ActiveTheme.Header, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("Background", active_theme_.Background, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("FieldBackground", active_theme_.FieldBackground, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("TitleBar", active_theme_.TitleBar, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("MenuBar", active_theme_.MenuBar, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("Header", active_theme_.Header, ImGuiUtils::PropertyType::Color);
 
-                ImGuiUtils::EditProperty("Text", m_ActiveTheme.Text, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("TextDisabled", m_ActiveTheme.TextDisabled, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("WidgetInactive", m_ActiveTheme.WidgetInactive, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("WidgetHovered", m_ActiveTheme.WidgetHovered, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("WidgetActive", m_ActiveTheme.WidgetActive, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("Button", m_ActiveTheme.Button, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("CheckMark", m_ActiveTheme.CheckMark, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("Default", m_ActiveTheme.Default, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("Text", active_theme_.Text, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("TextDisabled", active_theme_.TextDisabled, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("WidgetInactive", active_theme_.WidgetInactive, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("WidgetHovered", active_theme_.WidgetHovered, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("WidgetActive", active_theme_.WidgetActive, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("Button", active_theme_.Button, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("CheckMark", active_theme_.CheckMark, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("Default", active_theme_.Default, ImGuiUtils::PropertyType::Color);
                 ImGui::Columns(1);
                 ImGui::Separator();
-                m_ActiveTheme.Apply();
+                active_theme_.Apply();
             }
             ImGui::End();
         }
@@ -134,4 +137,4 @@ namespace DE {
         colors[ImGuiCol_NavWindowingDimBg]     = Default;
         colors[ImGuiCol_ModalWindowDimBg]      = Default;
     }
-}  // namespace DE
+}  // namespace DummyEngine

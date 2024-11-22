@@ -3,9 +3,9 @@
 
 #include "DummyEngine/Utils/Debug/Demangler.h"
 
-namespace DE {
+namespace DummyEngine {
 
     std::string StackTrace() {
         return "StackTrace not impemented\n";
     }
-}  // namespace DE
+}  // namespace DummyEngine

@@ -4,12 +4,11 @@
 #include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
 #include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
-#include "DummyEngine/Core/ResourceManaging/Assets.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
+
     class ResourceManager : public Singleton<ResourceManager> {
-        LOGGER_AUTHOR(ResourceManager)
+        LOG_AUTHOR(ResourceManager)
         SINGLETON(ResourceManager)
     public:
         S_METHOD_DEF(bool, LoadShader, (UUID id));
@@ -39,10 +38,11 @@ namespace DE {
         S_METHOD_DEF(Unit, Clear, ());
 
     private:
-        std::unordered_map<UUID, Ref<Shader>>                m_Shaders;
-        std::unordered_map<UUID, Ref<RenderMesh>>            m_RenderMeshes;
-        std::unordered_map<UUID, Ref<CubeMap>>               m_CubeMaps;
-        std::unordered_map<UUID, Ref<Texture>>               m_Textures;
-        std::unordered_map<UUID, Ref<Physics::ConvexHitbox>> m_HitBoxes;
+        std::unordered_map<UUID, Ref<Shader>>                shaders_;
+        std::unordered_map<UUID, Ref<RenderMesh>>            render_meshes_;
+        std::unordered_map<UUID, Ref<CubeMap>>               cube_maps_;
+        std::unordered_map<UUID, Ref<Texture>>               textures_;
+        std::unordered_map<UUID, Ref<Physics::ConvexHitbox>> hit_boxes_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace DE {
+namespace DummyEngine {
     enum class Key {
         None          = 0,
         Space         = 32,

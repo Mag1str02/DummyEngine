@@ -2,9 +2,9 @@
 
 #include <string>
 
-namespace DE {
+namespace DummyEngine {
     template <typename T> std::string DemangledName() {
         return "Demangler not impemented\n";
     }
     std::string DemangledName(const std::string& name);
-}  // namespace DE
+}  // namespace DummyEngine

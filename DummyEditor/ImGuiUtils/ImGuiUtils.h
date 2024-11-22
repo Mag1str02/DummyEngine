@@ -1,24 +1,32 @@
 #pragma once
 
-#include "DummyEditor/DummyEngineInclude.h"
-#include "DummyEditor/ImGuiUtils/ImGuiIcons.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
-namespace DE {
+#include <imgui.h>
+
+namespace DummyEngine {
+
+    class Event;
+    class Entity;
+    struct Material;
+    class Texture;
+    class Scene;
+
     namespace ImGuiUtils {
         class ScopedID {
         public:
-            ScopedID(int cnt);
-            ScopedID(const char* str);
-            ScopedID(const std::string& str);
-            ScopedID(const void* ptr);
+            explicit ScopedID(int cnt);
+            explicit ScopedID(const char* str);
+            explicit ScopedID(const std::string& str);
+            explicit ScopedID(const void* ptr);
             ~ScopedID();
         };
 
         namespace Constants {
-            constexpr S32 BasicFontSize       = 16;
-            constexpr S32 ColorPading         = -1;
-            constexpr S32 DefaultRightPadding = -23;
-            constexpr S32 DefaultLeftPadding  = 25;
+            constexpr S32 kBasicFontSize       = 16;
+            constexpr S32 kColorPading         = -1;
+            constexpr S32 kDefaultRightPadding = -23;
+            constexpr S32 kDefaultLeftPadding  = 25;
         }  // namespace Constants
 
         void ClampRoundValue(Vec3& vec, float min, float max);
@@ -61,4 +69,4 @@ namespace DE {
         void EditTexture(const std::string& name, Ref<Texture> texture, const ImVec2 tex_size = {128, 128});
     }  // namespace ImGuiUtils
 
-}  // namespace DE
+}  // namespace DummyEngine

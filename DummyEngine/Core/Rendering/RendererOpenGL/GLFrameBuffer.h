@@ -1,14 +1,14 @@
 #pragma once
 
+#include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
+
 #include <glad/glad.h>
 
-#include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
-#include "DummyEngine/Utils/Base.h"
+namespace DummyEngine {
 
-namespace DE {
     class GLFrameBuffer : public FrameBuffer {
     public:
-        GLFrameBuffer(const FrameBufferProperties& properties);
+        explicit GLFrameBuffer(const FrameBufferProperties& properties);
         virtual ~GLFrameBuffer();
 
         GLFrameBuffer()                                    = delete;
@@ -38,10 +38,11 @@ namespace DE {
         virtual const FrameBufferProperties& GetProperties() const override;
 
     private:
-        GLuint                m_BufferId;
-        FrameBufferProperties m_Properties;
+        GLuint                buffer_id_;
+        FrameBufferProperties properties_;
 
-        FrameBufferAttchment              m_DepthAttachment;
-        std::vector<FrameBufferAttchment> m_ColorAttachments;
+        FrameBufferAttchment              depth_attachment_;
+        std::vector<FrameBufferAttchment> color_attachments_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

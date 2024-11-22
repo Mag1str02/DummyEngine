@@ -27,7 +27,7 @@ Core/Application/FileSystem.cpp
 Core/Console/ConsoleLayer.cpp
 Core/Console/Console.cpp
 
-Core/ECS/ECS.cpp
+Core/ECS/Implementation/ECS.cpp
 
 Core/Scene/Components.cpp
 Core/Scene/Scene.cpp
@@ -63,8 +63,6 @@ Core/Rendering/RendererOpenGL/GLUniformBuffer.cpp
 Core/Rendering/RendererOpenGL/GLRenderAPI.cpp
 Core/Rendering/RendererOpenGL/GLDebug.cpp
 
-Core/Physics/SceneConstants.cpp
-Core/Physics/ForceQueue.cpp
 Core/Physics/Solver.cpp
 Core/Physics/ConvexCollider.cpp
 Core/Physics/Utils.cpp
@@ -83,23 +81,23 @@ ToolBox/Loaders/SceneLoader.cpp
 ToolBox/Editors/TextureEditor.cpp
 )
 
-set(ENGINE_PRECOMPILED_HEADERS Utils/Base.h)
+set(ENGINE_PRECOMPILED_HEADERS Utils/PCH/PCH.h)
 
-if("${CMAKE_PLATFORM}" STREQUAL "WINDOWS")
+if(DE_PLATFORM STREQUAL "WINDOWS")
 set(PLATFORM_SOURCES
     Platform/Windows/Utils/Debug/StackTrace.cpp
     Platform/Windows/Utils/Debug/Demangler.cpp
     Platform/Windows/Core/Scripting/SharedObject.cpp
 )
 endif()
-if("${CMAKE_PLATFORM}" STREQUAL "LINUX")
+if(DE_PLATFORM STREQUAL "LINUX")
 set(PLATFORM_SOURCES
 Platform/Linux/Utils/Debug/StackTrace.cpp
 Platform/Linux/Utils/Debug/Demangler.cpp
 Platform/Linux/Core/Scripting/SharedObject.cpp
 )
 endif()
-if("${CMAKE_PLATFORM}" STREQUAL "MACOS")
+if(DE_PLATFORM STREQUAL "MACOS")
 set(PLATFORM_SOURCES
     Platform/Macos/Utils/Debug/StackTrace.cpp
     Platform/Macos/Utils/Debug/Demangler.cpp

@@ -2,11 +2,13 @@
 
 #include "DummyEngine/Core/Animations/Animation.h"
 
-namespace DE {
+namespace DummyEngine {
+
     class Shader;
     class Animator {
     public:
-        Animator(Ref<Animation> animation);
+        explicit Animator(Ref<Animation> animation);
+
         void           SetTime(float tm);
         Ref<Animation> GetAnimation();
 
@@ -14,10 +16,11 @@ namespace DE {
         void SetMatricies(Ref<Shader> shader, const std::string& name = "u_BoneMatrices");
 
     private:
-        void CalculateBoneTransform(const Animation::Node* node, Mat4 parentTransform);
+        void CalculateBoneTransform(const Animation::Node* node, Mat4 parent_transform);
 
-        std::vector<Mat4> m_FinalBoneMatrices;
-        Ref<Animation>    m_CurrentAnimation;
-        float             m_CurrentTime;
+        std::vector<Mat4> final_bone_matrices_;
+        Ref<Animation>    current_animation_;
+        float             current_time_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

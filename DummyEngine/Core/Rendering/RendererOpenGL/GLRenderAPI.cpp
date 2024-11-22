@@ -1,19 +1,15 @@
-#include "DummyEngine/Core/Rendering/RendererOpenGL/GLRenderAPI.h"
-
-#include <glad/glad.h>
+#include "GLRenderAPI.h"
 
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLUtils.h"
 
-namespace DE {
+#include <glad/glad.h>
+
+namespace DummyEngine {
 
     void GLRenderAPI::SetDefaultState() {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_MULTISAMPLE);
-        //        glEnable(GL_CULL_FACE);
         glCullFace(GL_FRONT);
-        //        glFrontFace(GL_CW);
-        // glDepthMask(GL_TRUE);
-        // glDepthFunc(GL_LEQUAL);
 
         glEnable(GL_BLEND);
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -76,4 +72,5 @@ namespace DE {
     API GLRenderAPI::GetAPI() {
         return API::OpenGL;
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

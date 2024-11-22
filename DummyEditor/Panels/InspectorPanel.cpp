@@ -1,6 +1,20 @@
-#include "DummyEditor/Panels/InspectorPanel.h"
+#include "InspectorPanel.h"
 
-namespace DE {
+#include "DummyEditor/ImGuiUtils/ImGuiIcons.h"
+#include "DummyEditor/ImGuiUtils/ImGuiUtils.h"
+
+#include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
+#include "DummyEngine/Core/Objects/LightSources/LightSource.h"
+#include "DummyEngine/Core/Physics/PhysicsComponent.h"
+#include "DummyEngine/Core/Scene/Components.h"
+#include "DummyEngine/Core/Scripting/Script.h"
+#include "DummyEngine/Core/Scripting/ScriptEngine.h"
+#include "DummyEngine/Utils/Debug/Demangler.h"  // IWYU pragma: keep
+#include "DummyEngine/Utils/Debug/Profiler.h"
+
+#include <imgui.h>
+
+namespace DummyEngine {
 
     ImGuiDataType_ ScriptFieldTypeToImGuiType(ScriptFieldType type) {
         switch (type) {
@@ -15,40 +29,40 @@ namespace DE {
     }
 
     template <typename Component> void InspectorPanel::DrawComponentWidget() {
-        if (m_Entity.Has<Component>()) {
+        if (entity_.Has<Component>()) {
             std::string header = ICON_MD_REPORT_PROBLEM "  " + DemangledName<Component>();
             if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
-                ImGui::SetCursorPosX(ImGuiUtils::Constants::DefaultLeftPadding);
+                ImGui::SetCursorPosX(ImGuiUtils::Constants::kDefaultLeftPadding);
                 ImGui::Text("Widget for %s not yet implmented", DemangledName<Component>().c_str());
             }
         }
     }
 
     template <> void InspectorPanel::DrawComponentWidget<TransformComponent>() {
-        if (m_Entity.Has<TransformComponent>()) {
+        if (entity_.Has<TransformComponent>()) {
             if (ImGui::CollapsingHeader(ICON_MD_OPEN_IN_FULL "  Transformation", ImGuiTreeNodeFlags_DefaultOpen)) {
-                auto& transform = m_Entity.Get<TransformComponent>();
+                auto& transform = entity_.Get<TransformComponent>();
                 ImGui::Columns(2);
-                ImGuiUtils::EditProperty("Translation", transform.translation);
-                ImGuiUtils::EditProperty("Scale", transform.scale);
-                ImGuiUtils::EditProperty("Rotation", transform.rotation);
+                ImGuiUtils::EditProperty("Translation", transform.Translation);
+                ImGuiUtils::EditProperty("Scale", transform.Scale);
+                ImGuiUtils::EditProperty("Rotation", transform.Rotation);
                 ImGui::Columns(1);
             }
         }
     }
     template <> void InspectorPanel::DrawComponentWidget<TagComponent>() {
-        if (m_Entity.Has<TagComponent>()) {
-            auto& component = m_Entity.Get<TagComponent>();
+        if (entity_.Has<TagComponent>()) {
+            auto& component = entity_.Get<TagComponent>();
             if (ImGui::CollapsingHeader(ICON_MD_BADGE "  Tag", ImGuiTreeNodeFlags_DefaultOpen)) {
                 ImGui::Columns(2);
-                ImGuiUtils::EditProperty("Tag", component.tag);
+                ImGuiUtils::EditProperty("Tag", component.Tag);
                 ImGui::Columns(1);
             }
         }
     }
     template <> void InspectorPanel::DrawComponentWidget<ScriptComponent>() {
-        if (m_Entity.Has<ScriptComponent>()) {
-            auto& component = m_Entity.Get<ScriptComponent>();
+        if (entity_.Has<ScriptComponent>()) {
+            auto& component = entity_.Get<ScriptComponent>();
             if (ImGui::CollapsingHeader(ICON_MD_DESCRIPTION "  Script", ImGuiTreeNodeFlags_DefaultOpen)) {
                 ImGui::Columns(2);
                 if (component.Valid()) {
@@ -83,67 +97,67 @@ namespace DE {
         }
     }
     template <> void InspectorPanel::DrawComponentWidget<FPSCamera>() {
-        if (m_Entity.Has<FPSCamera>()) {
+        if (entity_.Has<FPSCamera>()) {
             if (ImGui::CollapsingHeader(ICON_MD_VIDEOCAM "  FPSCamera", ImGuiTreeNodeFlags_DefaultOpen)) {
-                auto& camera = m_Entity.Get<FPSCamera>();
+                auto& camera = entity_.Get<FPSCamera>();
                 ImGui::Columns(2);
-                ImGuiUtils::EditProperty("Position", camera.m_Position);
-                ImGuiUtils::EditProperty("NearPlane", camera.m_NearPlane);
-                ImGuiUtils::EditProperty("FarPlane", camera.m_FarPlane);
-                ImGuiUtils::EditProperty("FIeldOfView", camera.m_FOV);
+                ImGuiUtils::EditProperty("Position", camera.Position);
+                ImGuiUtils::EditProperty("NearPlane", camera.NearPlane);
+                ImGuiUtils::EditProperty("FarPlane", camera.FarPlane);
+                ImGuiUtils::EditProperty("FIeldOfView", camera.FOV);
                 ImGui::Columns(1);
                 if (ImGui::Button("Select as main camera", {ImGui::GetContentRegionAvail().x, 20})) {
-                    m_Scene.lock()->SetCamera(m_Entity);
+                    scene_.lock()->SetCamera(entity_);
                 }
             }
         }
     }
     template <> void InspectorPanel::DrawComponentWidget<LightSource>() {
-        if (m_Entity.Has<LightSource>()) {
+        if (entity_.Has<LightSource>()) {
             if (ImGui::CollapsingHeader(ICON_MD_LIGHTBULB "  LightSoruce", ImGuiTreeNodeFlags_DefaultOpen)) {
-                auto&       source        = m_Entity.Get<LightSource>();
+                auto&       source        = entity_.Get<LightSource>();
                 const char* light_types[] = {"Directional", "Point", "Spot"};
                 ImGui::Columns(2);
 
-                ImGui::SetCursorPosX(ImGuiUtils::Constants::DefaultLeftPadding);
+                ImGui::SetCursorPosX(ImGuiUtils::Constants::kDefaultLeftPadding);
                 ImGui::Text("Type");
                 ImGui::NextColumn();
                 ImGui::SetNextItemWidth(-1);
-                ImGui::Combo("##Light Type", (int*)&source.type, light_types, IM_ARRAYSIZE(light_types));
+                ImGui::Combo("##Light Type", (int*)&source.Type, light_types, IM_ARRAYSIZE(light_types));
                 ImGui::NextColumn();
                 ImGui::Separator();
 
                 // ImGuiUtils::EditProperty("Ambient", source.ambient, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("Diffuse", source.diffuse, ImGuiUtils::PropertyType::Color);
-                ImGuiUtils::EditProperty("Specular", source.specular, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("Diffuse", source.Diffuse, ImGuiUtils::PropertyType::Color);
+                ImGuiUtils::EditProperty("Specular", source.Specular, ImGuiUtils::PropertyType::Color);
 
-                if (source.type == LightSourceType::Point || source.type == LightSourceType::Spot) {
-                    ImGuiUtils::EditProperty("CLQ", source.clq);
+                if (source.Type == LightSourceType::Point || source.Type == LightSourceType::Spot) {
+                    ImGuiUtils::EditProperty("CLQ", source.CLQ);
                 }
-                if (source.type == LightSourceType::Spot || source.type == LightSourceType::Direction) {
-                    ImGuiUtils::EditProperty("Direction", source.direction);
+                if (source.Type == LightSourceType::Spot || source.Type == LightSourceType::Direction) {
+                    ImGuiUtils::EditProperty("Direction", source.Direction);
                 }
-                if (source.type == LightSourceType::Spot || source.type == LightSourceType::Point) {
-                    ImGuiUtils::EditProperty("Position", source.position);
+                if (source.Type == LightSourceType::Spot || source.Type == LightSourceType::Point) {
+                    ImGuiUtils::EditProperty("Position", source.Position);
                 }
-                if (source.type == LightSourceType::Spot) {
-                    ImGuiUtils::EditProperty("Inner Cone", source.inner_cone_cos);
-                    ImGuiUtils::EditProperty("Outer Cone", source.outer_cone_cos);
+                if (source.Type == LightSourceType::Spot) {
+                    ImGuiUtils::EditProperty("Inner Cone", source.InnerConeCosinus);
+                    ImGuiUtils::EditProperty("Outer Cone", source.OuterConeCosinus);
                 }
                 ImGui::Columns(1);
             }
         }
     }
     template <> void InspectorPanel::DrawComponentWidget<RenderMeshComponent>() {
-        if (m_Entity.Has<RenderMeshComponent>()) {
+        if (entity_.Has<RenderMeshComponent>()) {
             if (ImGui::CollapsingHeader(ICON_MD_TOKEN "  RenderMesh", ImGuiTreeNodeFlags_DefaultOpen)) {
-                auto& meshes = m_Entity.Get<RenderMeshComponent>()->GetSubMeshes();
+                auto& meshes = entity_.Get<RenderMeshComponent>()->GetSubMeshes();
                 int   cnt    = 0;
                 for (auto& mesh : meshes) {
                     std::string name = std::format("Mesh_{}", cnt);
                     if (ImGui::TreeNode(name.c_str())) {
                         ImGui::Columns(2);
-                        ImGuiUtils::EditProperty(mesh.material);
+                        ImGuiUtils::EditProperty(mesh.Material);
                         ImGui::Columns(1);
                         ImGui::TreePop();
                     }
@@ -154,17 +168,17 @@ namespace DE {
     }
 
     template <> void InspectorPanel::DrawComponentWidget<Physics::PhysicsComponent>() {
-        if (m_Entity.Has<Physics::PhysicsComponent>()) {
+        if (entity_.Has<Physics::PhysicsComponent>()) {
             if (ImGui::CollapsingHeader("  PhysicsComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
-                auto&       phys    = m_Entity.Get<Physics::PhysicsComponent>();
+                auto&       phys    = entity_.Get<Physics::PhysicsComponent>();
                 const float min_mas = 0;
                 ImGui::Columns(2);
-                ImGuiUtils::EditProperty("Speed", phys.speed);
-                ImGuiUtils::EditProperty("Rotspeed", phys.rot_speed);
-                ImGuiUtils::EditProperty("InvMass", ImGuiDataType_Float, &phys.inv_mass, 0.01, &min_mas);
-                ImGuiUtils::EditProperty("InvInertia", ImGuiDataType_Float, &phys.inv_inertia, 0.01, &min_mas);
-                ImGuiUtils::EditProperty("Collidable", phys.collidable);
-                ImGuiUtils::EditProperty("Gravity", phys.gravity);
+                ImGuiUtils::EditProperty("Speed", phys.Speed);
+                ImGuiUtils::EditProperty("Rotspeed", phys.RotationSpeed);
+                ImGuiUtils::EditProperty("InvMass", ImGuiDataType_Float, &phys.InvertedMass, 0.01, &min_mas);
+                ImGuiUtils::EditProperty("InvInertia", ImGuiDataType_Float, &phys.InvertedInertia, 0.01, &min_mas);
+                ImGuiUtils::EditProperty("Collidable", phys.Collidable);
+                ImGuiUtils::EditProperty("Gravity", phys.Gravity);
                 ImGui::Columns(1);
             }
         }
@@ -174,8 +188,8 @@ namespace DE {
         DE_PROFILE_SCOPE("InspectorPanel OnImGui");
         if (m_Controller) {
             if (ImGui::Begin(ICON_MD_INFO "  Inspector")) {
-                auto scene = m_Scene.lock();
-                if (scene && m_Entity.Valid()) {
+                auto scene = scene_.lock();
+                if (scene && entity_.Valid()) {
                     DrawComponentWidget<TagComponent>();
                     DrawComponentWidget<ScriptComponent>();
                     DrawComponentWidget<TransformComponent>();
@@ -195,23 +209,23 @@ namespace DE {
             ImGui::OpenPopup("AddComponentPopup");
         }
         if (ImGui::BeginPopup("AddComponentPopup")) {
-            if (!m_Entity.Has<TransformComponent>() && ImGui::Selectable(ICON_MD_OPEN_IN_FULL "Transform")) {
-                m_Entity.Add<TransformComponent>();
+            if (!entity_.Has<TransformComponent>() && ImGui::Selectable(ICON_MD_OPEN_IN_FULL "Transform")) {
+                entity_.Add<TransformComponent>();
             }
-            if (!m_Entity.Has<LightSource>() && ImGui::Selectable(ICON_MD_LIGHTBULB "LightSource")) {
-                m_Entity.Add<LightSource>();
+            if (!entity_.Has<LightSource>() && ImGui::Selectable(ICON_MD_LIGHTBULB "LightSource")) {
+                entity_.Add<LightSource>();
             }
-            if (!m_Entity.Has<FPSCamera>() && ImGui::Selectable(ICON_MD_VIDEOCAM "Camera")) {
-                m_Entity.Add<FPSCamera>();
+            if (!entity_.Has<FPSCamera>() && ImGui::Selectable(ICON_MD_VIDEOCAM "Camera")) {
+                entity_.Add<FPSCamera>();
             }
             ImGui::EndPopup();
         }
     }
     void InspectorPanel::SetActiveEntity(Entity entity) {
-        m_Entity = entity;
+        entity_ = entity;
     }
     void InspectorPanel::SetScene(WeakRef<Scene> scene) {
-        m_Scene = scene;
+        scene_ = scene;
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

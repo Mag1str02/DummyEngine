@@ -1,11 +1,10 @@
 #pragma once
 
+#include "DummyEngine/Core/Rendering/Renderer/VertexBuffer.h"
+
 #include <glad/glad.h>
 
-#include "DummyEngine/Core/Rendering/Renderer/VertexBuffer.h"
-#include "DummyEngine/Utils/Base.h"
-
-namespace DE {
+namespace DummyEngine {
 
     class GLVertexBuffer : public VertexBuffer {
     public:
@@ -23,7 +22,7 @@ namespace DE {
         virtual void Bind() const override;
         virtual void UnBind() const override;
 
-        virtual LocalBufferNode at(U32 index) override;
+        virtual LocalBufferNode At(U32 index) override;
 
         virtual void SetData(const void* data, U32 size) override;
         virtual void PushData() override;
@@ -34,11 +33,11 @@ namespace DE {
     private:
         static GLenum BufferUsafeToGLBufferUsage(BufferUsage usage);
 
-        BufferUsage  m_Usage;
-        LocalBuffer  m_LocalBuffer;
-        BufferLayout m_Layout;
-        GLuint       m_BufferId;
-        U32          m_Size;
+        BufferUsage  usage_;
+        LocalBuffer  local_buffer_;
+        BufferLayout layout_;
+        GLuint       buffer_id_;
+        U32          size_;
     };
 
     class GLIndexBuffer : public IndexBuffer {
@@ -58,7 +57,7 @@ namespace DE {
         virtual U32 IndicesAmount() const override;
 
     private:
-        GLuint m_BufferId;
-        U32    _indices_amount;
+        GLuint buffer_id_;
+        U32    indices_amount_;
     };
-}  // namespace DE
+}  // namespace DummyEngine

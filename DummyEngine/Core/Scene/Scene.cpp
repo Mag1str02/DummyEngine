@@ -1,184 +1,140 @@
-#include "DummyEngine/Core/Scene/Scene.h"
+#include "Scene.h"
 
-#include "DummyEngine/Core/ECS/Entity.hpp"
-#include "DummyEngine/Core/Objects/LightSources/LightSource.h"
-#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
-#include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
+#include "DummyEngine/Core/Physics/Solver.hpp"
 #include "DummyEngine/Core/Scene/Components.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"
 #include "DummyEngine/Core/Scene/SceneRenderer.h"
 #include "DummyEngine/Core/Scripting/Script.h"
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
+#include "DummyEngine/Utils/Debug/Profiler.h"
 
-namespace DE {
+#include <unordered_set>
+
+namespace DummyEngine {
     void Scene::OnRuntimeStart() {
-        //        for (auto e : View<AudioComponent>()) {
-        //            auto& audio = e.Get<AudioComponent>();
-        //            if (audio.sound) {
-        //                audio.sound->start_streaming();
-        //            }
-        //        }
-        for (auto e : m_Storage->View<ScriptComponent>()) {
+        for (auto e : storage_->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
                 component->OnRuntimeStart();
             }
         }
         std::unordered_set<Ref<RenderMesh>> meshes;
-        for (auto e : m_Storage->View<RenderMeshComponent>()) {
-            auto mesh = e.Get<RenderMeshComponent>().mesh;
-            if (mesh->p_Animator && !meshes.contains(mesh)) {
+        for (auto e : storage_->View<RenderMeshComponent>()) {
+            auto mesh = e.Get<RenderMeshComponent>().Mesh;
+            if (mesh->Animator && !meshes.contains(mesh)) {
                 meshes.insert(mesh);
-                mesh->p_Animator->SetTime(0);
+                mesh->Animator->SetTime(0);
             }
         }
     }
 
-    void Scene::OnRuntimePause() {
-        //        for (auto e : View<AudioComponent>()) {
-        //            auto& audio = e.Get<AudioComponent>();
-        //            if (audio.sound) {
-        //                audio.sound->pause_streaming();
-        //            }
-        //        }
-    }
+    void Scene::OnRuntimePause() {}
 
-    void Scene::OnRuntimeResume() {
-        //        for (auto e : View<AudioComponent>()) {
-        //            auto& audio = e.Get<AudioComponent>();
-        //            if (audio.sound) {
-        //                audio.sound->resume_streaming();
-        //            }
-        //        }
-    }
+    void Scene::OnRuntimeResume() {}
 
     void Scene::OnRuntimeStop() {
-        //        for (auto e : View<AudioComponent>()) {
-        //            auto& audio = e.Get<AudioComponent>();
-        //            if (audio.sound) {
-        //                audio.sound->stop_streaming();
-        //            }
-        //        }
-        for (auto e : m_Storage->View<ScriptComponent>()) {
+        for (auto e : storage_->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
                 component->OnRuntimeStop();
             }
         }
         std::unordered_set<Ref<RenderMesh>> meshes;
-        for (auto e : m_Storage->View<RenderMeshComponent>()) {
-            auto mesh = e.Get<RenderMeshComponent>().mesh;
-            if (mesh->p_Animator && !meshes.contains(mesh)) {
+        for (auto e : storage_->View<RenderMeshComponent>()) {
+            auto mesh = e.Get<RenderMeshComponent>().Mesh;
+            if (mesh->Animator && !meshes.contains(mesh)) {
                 meshes.insert(mesh);
-                mesh->p_Animator->SetTime(0);
+                mesh->Animator->SetTime(0);
             }
         }
     }
     void Scene::OnUpdate(float dt) {
         DE_PROFILE_SCOPE("Scene OnUpdate");
-        if (m_PhysicsSolver) {
+        if (physics_solver_) {
             DE_PROFILE_SCOPE("Physics");
-            m_PhysicsSolver->OnUpdate(dt * 2);
+            physics_solver_->OnUpdate(dt * 2);
         }
-        for (auto e : m_Storage->View<ScriptComponent>()) {
+        for (auto e : storage_->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
                 component->OnUpdate(dt);
             }
         }
-        //        for (auto e : m_Storage->View<AudioComponent>()) {
-        //            auto& component = e.Get<AudioComponent>();
-        //            if (component.sound) {
-        //                Vec3 pos(0.0f);
-        //                if (e.Has<TransformComponent>()) {
-        //                    pos = e.Get<TransformComponent>().translation;
-        //                }
-        //                component.sound->setPosition({pos.x, pos.y, pos.z});
-        //                component.sound->play_streaming();
-        //            }
-        //        }
         std::unordered_set<Ref<RenderMesh>> meshes;
-        for (auto e : m_Storage->View<RenderMeshComponent>()) {
-            auto mesh = e.Get<RenderMeshComponent>().mesh;
-            if (mesh->p_Animator && !meshes.contains(mesh)) {
+        for (auto e : storage_->View<RenderMeshComponent>()) {
+            auto mesh = e.Get<RenderMeshComponent>().Mesh;
+            if (mesh->Animator && !meshes.contains(mesh)) {
                 meshes.insert(mesh);
-                mesh->p_Animator->UpdateAnimation(dt);
+                mesh->Animator->UpdateAnimation(dt);
             }
         }
-        m_Storage->UpdateSystems(dt);
+        storage_->UpdateSystems(dt);
     }
     void Scene::OnRender(Entity camera) {
         if (!camera.Valid()) {
-            camera = m_Camera;
+            camera = camera_;
         }
         if (!camera.Has<FPSCamera>()) {
             LOG_WARNING("Specified camera entity has no camera component");
             return;
         }
-        m_Renderer->Render(camera);
+        renderer_->Render(camera);
     }
 
     void Scene::OnViewPortResize(U32 x, U32 y) {
         double aspect  = double(x) / double(y);
-        auto   cameras = m_Storage->View<FPSCamera>();
+        auto   cameras = storage_->View<FPSCamera>();
         for (auto e : cameras) {
             e.Get<FPSCamera>().SetAspect(aspect);
         }
-        m_Renderer->OnViewPortResize(x, y);
+        renderer_->OnViewPortResize(x, y);
     }
 
-    Scene::Scene() : m_Storage(CreateRef<Storage>()), m_Renderer(CreateRef<SceneRenderer>(this)), m_Hierarchy("Scene") {
-        m_Storage->SetAddHandler<IDComponent>([this](Entity entity) {
+    Scene::Scene() : storage_(CreateRef<Storage>()), renderer_(CreateRef<SceneRenderer>(this)), hierarchy_("Scene") {
+        storage_->SetAddHandler<IDComponent>([this](Entity entity) {
             auto id = entity.Get<IDComponent>();
-            DE_ASSERT(m_EntityByID.find(id) == m_EntityByID.end(), "UUID collision occured {}", id.Get());
-            m_EntityByID[id] = entity;
+            DE_ASSERT(entity_by_id_.find(id) == entity_by_id_.end(), "UUID collision occured {}", id.Get());
+            entity_by_id_[id] = entity;
         });
-        m_PhysicsSolver = CreateRef<Physics::Solver>();
-        m_Storage->SetRemoveHandler<IDComponent>([this](Entity entity) { m_EntityByID.erase(entity.Get<IDComponent>()); });
-        //        m_Storage->SetRemoveHandler<AudioComponent>([this](Entity entity) {
-        //            auto& sound = entity.Get<AudioComponent>().sound;
-        //            if (sound) {
-        //                sound->stop_streaming();
-        //            }
-        //        });
+        physics_solver_ = CreateRef<Physics::Solver>();
+        storage_->SetRemoveHandler<IDComponent>([this](Entity entity) { entity_by_id_.erase(entity.Get<IDComponent>()); });
     }
 
     Scene::~Scene() {
-        m_Storage->Destruct();
-        m_Storage = nullptr;
+        storage_->Destruct();
+        storage_ = nullptr;
     }
 
     Entity Scene::CreateEmptyEntity() {
-        return m_Storage->CreateEntity();
+        return storage_->CreateEntity();
     }
     Entity Scene::CreateEntity(const std::string& name, bool visisble) {
-        Entity new_entity = m_Storage->CreateEntity();
+        Entity new_entity = storage_->CreateEntity();
         new_entity.AddComponent(TagComponent(name));
         new_entity.AddComponent(IDComponent(UUID::Generate()));
         if (visisble) {
-            m_Hierarchy.AddEntity(new_entity);
+            hierarchy_.AddEntity(new_entity);
         }
         return new_entity;
     }
     Entity Scene::CloneEntity(Entity) {
-        // DE_ASSERT(false, "Clone of entity not implemented yet.");
         return CreateEntity("Entity", false);
     }
 
     Entity Scene::GetByID(UUID uuid) {
-        return (m_EntityByID.contains(uuid) ? m_EntityByID.at(uuid) : Entity());
+        return (entity_by_id_.contains(uuid) ? entity_by_id_.at(uuid) : Entity());
     }
     SceneHierarchy::Node Scene::GetHierarchyRoot() {
-        return m_Hierarchy.GetRoot();
+        return hierarchy_.GetRoot();
     }
     void Scene::SetCamera(Entity entity) {
         DE_ASSERT(entity.Has<FPSCamera>(), "SetCamera on entity withour camera");
-        m_Camera = entity;
+        camera_ = entity;
     }
     bool Scene::HasCamera() {
-        return m_Camera.Valid();
+        return camera_.Valid();
     }
     void Scene::LoadPhysics(Ref<Scene>& scene) {
-        m_PhysicsSolver->LoadScene(scene);
+        physics_solver_->LoadScene(scene);
     }
-}  // namespace DE
+}  // namespace DummyEngine

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "DummyEngine/Core/ResourceManaging/RawData.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
+
     class FrameBuffer;
     class Texture {
     public:
@@ -33,4 +33,5 @@ namespace DE {
         static Ref<Texture> Create(U32 width, U32 height, Channels channels = Channels::RGBA, Format format = Format::U8, bool depth_buffer = false);
         static Ref<Texture> Create(const TextureData& texture_data);
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

@@ -1,6 +1,6 @@
 #include "DummyEditor/Scripting/Compiler.h"
 
-namespace DE {
+namespace DummyEngine {
     class CompilerImpl {
     public:
         bool Compile(const Path& source, const Path& destination) {
@@ -156,4 +156,4 @@ namespace DE {
         m_Impl->AddDefine(source);
     }
 
-};  // namespace DE
+};  // namespace DummyEngine

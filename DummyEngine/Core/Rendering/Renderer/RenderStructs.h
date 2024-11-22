@@ -4,36 +4,35 @@
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 #include "DummyEngine/Core/Rendering/Renderer/Texture.h"
 #include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
 
     struct Material {
-        MaterialType type              = MaterialType::None;
-        float        shininess         = 64;
-        float        emission_strength = 0;
+        MaterialType Type             = MaterialType::None;
+        float        Shininess        = 64;
+        float        EmissionStrength = 0;
 
-        Vec3 albedo   = Vec3(1.0f);
-        Vec3 orm      = Vec3(1.0f);
-        Vec3 diffuse  = Vec3(1.0f);
-        Vec3 specular = Vec3(1.0f);
-        Vec3 ambient  = Vec3(1.0f);
-        Vec3 emission = Vec3(0.0f);
+        Vec3 Albedo   = Vec3(1.0f);
+        Vec3 ORM      = Vec3(1.0f);
+        Vec3 Diffuse  = Vec3(1.0f);
+        Vec3 Specular = Vec3(1.0f);
+        Vec3 Ambient  = Vec3(1.0f);
+        Vec3 Emission = Vec3(0.0f);
 
-        Ref<Texture> albedo_map;
-        Ref<Texture> normal_map;
-        Ref<Texture> orm_map;
-        Ref<Texture> diffuse_map;
-        Ref<Texture> specular_map;
-        Ref<Texture> emission_map;
+        Ref<Texture> AlbedoMap;
+        Ref<Texture> NormalMap;
+        Ref<Texture> ORMMap;
+        Ref<Texture> DiffuseMap;
+        Ref<Texture> SpecularMap;
+        Ref<Texture> EmissionMap;
 
         void Apply(Ref<Shader> shader, const std::string& uniform_name = "u_Material") const;
         void FillData(const MaterialData& material);
     };
 
     struct RenderSubMesh {
-        Material         material;
-        Ref<VertexArray> vertex_array;
+        Material         Material;
+        Ref<VertexArray> VertexArray;
 
         RenderSubMesh Copy() const;
         void          FillData(const RenderSubMeshData& data);
@@ -42,17 +41,19 @@ namespace DE {
     class RenderMesh {
     public:
         RenderMesh() {}
-        RenderMesh(Ref<RenderMeshData> data);
+        explicit RenderMesh(Ref<RenderMeshData> data);
+
         Ref<RenderMesh>             Copy() const;
         std::vector<RenderSubMesh>& GetSubMeshes();
+        void                        FillData(Ref<RenderMeshData> data);
 
-        void          FillData(Ref<RenderMeshData> data);
-        Ref<Animator> p_Animator;
+        Ref<Animator> Animator;
 
     private:
         friend class Renderer;
         friend class RenderMeshInstance;
 
-        std::vector<RenderSubMesh> m_SubMeshes;
+        std::vector<RenderSubMesh> sub_meshes_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine
