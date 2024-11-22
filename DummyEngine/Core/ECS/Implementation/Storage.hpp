@@ -1,8 +1,11 @@
 #pragma once
 
-namespace DummyEngine {
-#ifdef ECS_IMPLEMENTATION
+#include "DummyEngine/Core/ECS/EntityManager.h"
+#include "DummyEngine/Core/ECS/Storage.h"
 
+namespace DummyEngine {
+
+#ifdef ECS_IMPLEMENTATION
     Storage::Storage() : component_manager_(this), system_manager_(this) {}
     void Storage::Destruct() {
         for (U32 id = entity_manager_.BeginEntity(); id != entity_manager_.EndEntity(); id = entity_manager_.NextEntity(id)) {
@@ -38,6 +41,7 @@ namespace DummyEngine {
         }
     }
 #endif
+
     template <typename... Components> StorageView<Components...> Storage::View() {
         return StorageView<Components...>(this);
     }

@@ -1,33 +1,14 @@
 #pragma once
 
-namespace DummyEngine {
-#ifdef ECS_IMPLEMENTATION
-    bool Signature::Get(U64 id) const {
-        return (data_.size() <= (id >> 6) ? false : (data_[id >> 6] >> (id & 63)) & 1);
-    }
-    void Signature::Set(U64 id, bool value) {
-        if (data_.size() <= id >> 6) {
-            data_.resize((id >> 6) + 1);
-        }
-        data_[id >> 6] &= ~(1 << (id & 63));
-        data_[id >> 6] |= ((U64)value << (id & 63));
-    }
-    bool Signature::Matches(const Signature& required) const {
-        size_t i;
-        size_t mn = std::min(required.data_.size(), data_.size());
-        for (i = 0; i < mn; ++i) {
-            if ((data_[i] & required.data_[i]) != required.data_[i]) {
-                return false;
-            }
-        }
-        while (i < required.data_.size()) {
-            if (required.data_[i++]) {
-                return false;
-            }
-        }
-        return true;
-    }
+#include "DummyEngine/Core/ECS/ComponentArray.h"
+#include "DummyEngine/Core/ECS/ComponentManager.h"
+#include "DummyEngine/Core/ECS/Entity.h"
+#include "DummyEngine/Core/ECS/Signature.h"
+#include "DummyEngine/Core/ECS/Storage.h"
 
+namespace DummyEngine {
+
+#ifdef ECS_IMPLEMENTATION
     ComponentManager::ComponentManager(Storage* storage) : storage_(storage) {}
     void ComponentManager::Destroy(U32 entity_id) {
         Entity e = storage_->GetEntity(entity_id);
@@ -55,20 +36,20 @@ namespace DummyEngine {
 
     template <typename ComponentType> void ComponentManager::SetAddHandler(std::function<void(Entity)> func) {
         RegisterComponent<ComponentType>();
-        add_handlers_[INDEX(ComponentType)] = func;
+        add_handlers_[std::type_index(typeid(ComponentType))] = func;
     }
     template <typename ComponentType> void ComponentManager::SetRemoveHandler(std::function<void(Entity)> func) {
         RegisterComponent<ComponentType>();
-        remove_handlers_[INDEX(ComponentType)] = func;
+        remove_handlers_[std::type_index(typeid(ComponentType))] = func;
     }
 
     template <typename ComponentType> ComponentType* ComponentManager::AddComponent(U32 entity_id, const ComponentType& component) {
         RegisterComponent<ComponentType>();
         ValidateSignature(entity_id);
-        signatures_[entity_id].Set(component_id_[INDEX(ComponentType)], true);
+        signatures_[entity_id].Set(component_id_[std::type_index(typeid(ComponentType))], true);
         auto* c = reinterpret_cast<ComponentType*>(
-            component_arrays_[INDEX(ComponentType)]->AddComponent(entity_id, const_cast<ComponentType*>(&component)));
-        add_handlers_[INDEX(ComponentType)](storage_->GetEntity(entity_id));
+            component_arrays_[std::type_index(typeid(ComponentType))]->AddComponent(entity_id, const_cast<ComponentType*>(&component)));
+        add_handlers_[std::type_index(typeid(ComponentType))](storage_->GetEntity(entity_id));
         return c;
     }
     template <typename ComponentType> ComponentType* ComponentManager::GetComponent(U32 entity_id) {
@@ -76,22 +57,22 @@ namespace DummyEngine {
         if (!HasComponent<ComponentType>(entity_id)) {
             return nullptr;
         }
-        return reinterpret_cast<ComponentType*>(component_arrays_[INDEX(ComponentType)]->GetComponent(entity_id));
+        return reinterpret_cast<ComponentType*>(component_arrays_[std::type_index(typeid(ComponentType))]->GetComponent(entity_id));
     }
     template <typename ComponentType> void ComponentManager::RemoveComponent(U32 entity_id) {
         ValidateSignature(entity_id);
         if (HasComponent<ComponentType>(entity_id)) {
-            remove_handlers_[INDEX(ComponentType)](storage_->GetEntity(entity_id));
-            signatures_[entity_id].Set(component_id_[INDEX(ComponentType)], false);
-            component_arrays_[INDEX(ComponentType)]->RemoveComponent(entity_id);
+            remove_handlers_[std::type_index(typeid(ComponentType))](storage_->GetEntity(entity_id));
+            signatures_[entity_id].Set(component_id_[std::type_index(typeid(ComponentType))], false);
+            component_arrays_[std::type_index(typeid(ComponentType))]->RemoveComponent(entity_id);
         }
     }
     template <typename ComponentType> bool ComponentManager::HasComponent(U32 entity_id) const {
-        if (signatures_.size() < entity_id + 1 || component_id_.find(INDEX(ComponentType)) == component_id_.end()) {
+        if (signatures_.size() < entity_id + 1 || component_id_.find(std::type_index(typeid(ComponentType))) == component_id_.end()) {
             return false;
         }
 
-        return signatures_.at(entity_id).Get(component_id_.at(INDEX(ComponentType)));
+        return signatures_.at(entity_id).Get(component_id_.at(std::type_index(typeid(ComponentType))));
     }
 
     template <typename... Components> Signature ComponentManager::BuildSignature() {
@@ -107,7 +88,7 @@ namespace DummyEngine {
         return true;
     }
     template <typename T, typename... Components> bool ComponentManager::ValidateComponents() const {
-        if (component_id_.find(INDEX(T)) == component_id_.end()) {
+        if (component_id_.find(std::type_index(typeid(T))) == component_id_.end()) {
             return false;
         }
         return ValidateComponents<Components...>();
@@ -118,17 +99,18 @@ namespace DummyEngine {
     }
     template <typename T, typename... Components> Signature ComponentManager::GetSignature() const {
         Signature res = GetSignature<Components...>();
-        res.Set(component_id_.at(INDEX(T)), true);
+        res.Set(component_id_.at(std::type_index(typeid(T))), true);
         return res;
     }
 
     template <typename ComponentType> void ComponentManager::RegisterComponent() {
-        if (component_id_.find(INDEX(ComponentType)) == component_id_.end()) {
-            auto default_handler                    = [](Entity) {};
-            component_id_[INDEX(ComponentType)]     = component_id_.size();
-            component_arrays_[INDEX(ComponentType)] = std::make_shared<ComponentArray<ComponentType>>(ComponentArray<ComponentType>());
-            add_handlers_[INDEX(ComponentType)]     = default_handler;
-            remove_handlers_[INDEX(ComponentType)]  = default_handler;
+        if (component_id_.find(std::type_index(typeid(ComponentType))) == component_id_.end()) {
+            auto default_handler                                  = [](Entity) {};
+            component_id_[std::type_index(typeid(ComponentType))] = component_id_.size();
+            component_arrays_[std::type_index(typeid(ComponentType))] =
+                std::make_shared<ComponentArray<ComponentType>>(ComponentArray<ComponentType>());
+            add_handlers_[std::type_index(typeid(ComponentType))]    = default_handler;
+            remove_handlers_[std::type_index(typeid(ComponentType))] = default_handler;
         }
     }
 }  // namespace DummyEngine

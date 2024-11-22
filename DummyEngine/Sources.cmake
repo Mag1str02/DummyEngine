@@ -27,7 +27,7 @@ Core/Application/FileSystem.cpp
 Core/Console/ConsoleLayer.cpp
 Core/Console/Console.cpp
 
-Core/ECS/ECS.cpp
+Core/ECS/Implementation/ECS.cpp
 
 Core/Scene/Components.cpp
 Core/Scene/Scene.cpp

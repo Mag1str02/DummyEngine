@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DummyEngine/Core/ECS/ComponentArray.h"
+
 namespace DummyEngine {
     template <typename ComponentType> void* ComponentArray<ComponentType>::AddComponent(U32 id, void* component) {
         DE_ASSERT(!entity_to_index_.contains(id), "Adding component which already exists to entity {}", id);

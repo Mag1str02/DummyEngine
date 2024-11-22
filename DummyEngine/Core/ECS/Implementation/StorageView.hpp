@@ -1,5 +1,10 @@
 #pragma once
 
+#include "Storage.hpp"  // IWYU pragma: keep
+
+#include "DummyEngine/Core/ECS/Entity.h"
+#include "DummyEngine/Core/ECS/StorageView.h"
+
 namespace DummyEngine {
 
     template <typename... Components> StorageView<Components...>::Iterator::Iterator(U32 id, StorageView* v) : id_(id), view_(v) {}

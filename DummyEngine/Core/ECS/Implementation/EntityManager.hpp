@@ -1,6 +1,9 @@
 #pragma once
 
+#include "DummyEngine/Core/ECS/EntityManager.h"
+
 namespace DummyEngine {
+
 #ifdef ECS_IMPLEMENTATION
     std::pair<U32, U32> EntityManager::CreateEntity() {
         if (available_entities_.empty()) {
@@ -45,4 +48,5 @@ namespace DummyEngine {
         return states_.size();
     }
 #endif
+
 }  // namespace DummyEngine

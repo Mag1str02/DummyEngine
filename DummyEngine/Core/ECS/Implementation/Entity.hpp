@@ -1,5 +1,8 @@
 #pragma once
 
+#include "DummyEngine/Core/ECS/Entity.h"
+#include "DummyEngine/Core/ECS/Storage.h"
+
 namespace DummyEngine {
 #ifdef ECS_IMPLEMENTATION
     Entity::Entity() : id_(0), gen_(0) {}

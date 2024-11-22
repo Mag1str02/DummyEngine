@@ -107,7 +107,7 @@ jobs:
           files-changed-only: false
           database: '${{ github.workspace }}/build'
           repo-root: '${{ github.workspace }}'
-          ignore: 'build/**|Examples/**|Sandbox/**|DummyEngine/Core/ECS**|DummyEngine/Platform/**|DummyEditor/Platform/**'
+          ignore: 'build/**|Examples/**|Sandbox/**|DummyEngine/Platform/**|DummyEditor/Platform/**'
           step-summary: true
       - name: Check Linter Results
         if: steps.linter.outputs.checks-failed > 0
