@@ -12,13 +12,14 @@ namespace DummyEngine {
         if (m_Controller) {
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
             if (ImGui::Begin((ICON_MD_TV + m_Name).c_str())) {
-                m_ViewportSize = ImGui::GetContentRegionAvail();
-                auto buffer    = m_FrameBuffer.lock();
+                viewport_size_ = ImGui::GetContentRegionAvail();
+                auto buffer    = frame_buffer_.lock();
                 if (buffer) {
-                    if (m_UseDepthAttachment) {
-                        ImGui::Image(buffer->GetDepthAttachment()->GetRendererId(), m_ViewportSize, {0, 1}, {1, 0});
+                    if (use_depth_attachment_) {
+                        ImGui::Image(buffer->GetDepthAttachment()->GetRendererId(), viewport_size_, {0, 1}, {1, 0});
                     } else {
-                        ImGui::Image(buffer->GetColorAttachment(0)->GetRendererId(), m_ViewportSize, {0, 1}, {1, 0});
+                        ImGui::Image(buffer->GetColorAttachment(0)->GetRendererId(), viewport_size_, {0, 1}, {1, 0});
+
                         ToolPanel();
                     }
                 }
@@ -69,7 +70,7 @@ namespace DummyEngine {
             ++button_amount;
             build_and_run = true;
         }
-        ImVec2 cursor_pos{m_ViewportSize.x * 0.5f - (button_amount * button_size.x + (button_amount - 1) * button_padding.x) / 2, button_padding.y};
+        ImVec2 cursor_pos{viewport_size_.x * 0.5f - (button_amount * button_size.x + (button_amount - 1) * button_padding.x) / 2, button_padding.y};
 
         if (play) {
             ImGui::SetCursorPos(cursor_pos);
@@ -119,6 +120,6 @@ namespace DummyEngine {
         }
     }
     void ViewportPanel::SetFrameBuffer(Ref<FrameBuffer> buffer) {
-        m_FrameBuffer = buffer;
+        frame_buffer_ = buffer;
     }
 }  // namespace DummyEngine

@@ -18,14 +18,14 @@ namespace DummyEngine {
 
         void ToolPanel();
         void SetFrameBuffer(Ref<FrameBuffer> buffer);
-        U32  GetWidth() const { return m_ViewportSize.x; }
-        U32  GetHeight() const { return m_ViewportSize.y; }
-        void UseDepthAttachment(bool f) { m_UseDepthAttachment = f; }
+        U32  GetWidth() const { return viewport_size_.x; }
+        U32  GetHeight() const { return viewport_size_.y; }
+        void UseDepthAttachment(bool f) { use_depth_attachment_ = f; }
 
     private:
-        bool                 m_UseDepthAttachment = false;
-        ImVec2               m_ViewportSize;
-        WeakRef<FrameBuffer> m_FrameBuffer;
+        bool                 use_depth_attachment_ = false;
+        ImVec2               viewport_size_;
+        WeakRef<FrameBuffer> frame_buffer_;
     };
 
 }  // namespace DummyEngine

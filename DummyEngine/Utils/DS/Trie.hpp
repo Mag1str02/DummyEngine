@@ -7,7 +7,7 @@ namespace DummyEngine {
     class Trie {
         struct Node {
             Node(Ref<Node>& p, char prev) {
-                Parent         = p;
+                Parent       = p;
                 CharToParent = prev;
             }
 
