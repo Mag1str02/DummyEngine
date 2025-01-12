@@ -1,8 +1,9 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base/STDIncludes.h"
+#include <chrono>
 
-namespace DE {
+namespace DummyEngine {
+
     class Timer {
     public:
         Timer();
@@ -12,6 +13,7 @@ namespace DE {
         float Reset();
 
     private:
-        std::chrono::system_clock::time_point m_StartTime;
+        std::chrono::system_clock::time_point start_time_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

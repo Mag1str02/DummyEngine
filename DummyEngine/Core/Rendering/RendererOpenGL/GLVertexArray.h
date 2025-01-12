@@ -1,10 +1,11 @@
 #pragma once
-#include <glad/glad.h>
 
 #include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+#include <glad/glad.h>
+
+namespace DummyEngine {
+
     class GLVertexArray : public VertexArray {
     public:
         GLVertexArray();
@@ -21,10 +22,11 @@ namespace DE {
         virtual const Ref<IndexBuffer>&               GetIndexBuffer() const override;
 
     private:
-        std::vector<Ref<VertexBuffer>> m_VertexBuffers;
-        Ref<IndexBuffer>               m_IndexBuffer;
+        std::vector<Ref<VertexBuffer>> vertex_buffers_;
+        Ref<IndexBuffer>               index_buffer_;
 
-        GLuint m_ArrayId;
-        U32    m_CurrentAtributeId;
+        GLuint array_id_;
+        U32    current_attribute_id_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

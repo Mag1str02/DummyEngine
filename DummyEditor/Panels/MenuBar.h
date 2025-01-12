@@ -1,9 +1,9 @@
 #pragma once
 
-#include "DummyEditor/DummyEngineInclude.h"
 #include "DummyEditor/ImGuiUtils/ImGuiPanel.h"
 
-namespace DE {
+namespace DummyEngine {
+
     class EditorLayer;
     class MenuBar : public ImGuiPanel {
     public:
@@ -14,4 +14,5 @@ namespace DE {
         void ViewMenu();
         void FileMenu();
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

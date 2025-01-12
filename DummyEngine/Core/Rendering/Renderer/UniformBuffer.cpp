@@ -1,9 +1,10 @@
-#include "DummyEngine/Core/Rendering/Renderer/UniformBuffer.h"
+#include "UniformBuffer.h"
 
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLUniformBuffer.h"
 
-namespace DE {
+namespace DummyEngine {
+
     Ref<UniformBuffer> UniformBuffer::Create(const BufferLayout& layout, U32 size) {
         switch (Renderer::CurrentAPI()) {
             case API::OpenGL: return CreateRef<GLUniformBuffer>(layout, size);
@@ -21,4 +22,5 @@ namespace DE {
 
         return nullptr;
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

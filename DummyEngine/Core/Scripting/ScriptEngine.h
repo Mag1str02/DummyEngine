@@ -1,13 +1,11 @@
 #pragma once
 
-#include "DummyEngine/Core/ResourceManaging/Assets.h"
-#include "DummyEngine/Core/ResourceManaging/HandleManager.h"
 #include "DummyEngine/Core/Scripting/Script.h"
 #include "DummyEngine/Core/Scripting/ScriptClass.h"
 #include "DummyEngine/Core/Scripting/SharedObject.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
+
     class ScriptComponent {
     public:
         ScriptComponent() = default;
@@ -23,16 +21,16 @@ namespace DE {
         Script* operator->();
 
     private:
-        ScriptComponent(U32 id);
+        explicit ScriptComponent(U32 id);
         friend class ScriptEngine;
 
-        U32 m_ID = UINT32_MAX;
+        U32 id_ = UINT32_MAX;
     };
 
     struct ScriptProxy {
-        Script* m_Script   = nullptr;
-        U32     m_RefCount = 0;
-        UUID    m_ScriptID;
+        Script* Script   = nullptr;
+        U32     RefCount = 0;
+        UUID    ScriptID;
     };
 
     class ScriptProxyManager {
@@ -51,12 +49,12 @@ namespace DE {
             friend class ScriptProxyManager;
             Iterator(ScriptProxyManager* manager, U32 id);
 
-            ScriptProxyManager* m_Manager = nullptr;
-            U32                 m_ID      = 0;
+            ScriptProxyManager* manager_ = nullptr;
+            U32                 id_      = 0;
         };
 
-        Iterator begin();
-        Iterator end();
+        Iterator begin();  // NOLINT
+        Iterator end();    // NOLINT
 
         void Clear();
         void Destroy(U32 id);
@@ -68,12 +66,13 @@ namespace DE {
     private:
         void ExtendIfRequired();
 
-        std::vector<ScriptProxy> m_Proxys;
-        std::deque<U32>          m_AvailableIds;
-        std::vector<bool>        m_States;
+        std::vector<ScriptProxy> proxys_;
+        std::deque<U32>          available_ids_;
+        std::vector<bool>        states_;
     };
 
     class ScriptEngine : public Singleton<ScriptEngine> {
+        LOG_AUTHOR(ScriptEngine)
         SINGLETON(ScriptEngine)
     public:
         S_METHOD_DEF(bool, AddScript, (UUID id));
@@ -97,8 +96,9 @@ namespace DE {
 
         void UpdateScriptClasses(Ref<SharedObject> library);
 
-        std::vector<Ref<SharedObject>>        m_Libraries;
-        std::unordered_map<UUID, ScriptClass> m_ScriptClasses;
-        ScriptProxyManager                    m_ProxyManager;
+        std::vector<Ref<SharedObject>>        libraries_;
+        std::unordered_map<UUID, ScriptClass> script_classes_;
+        ScriptProxyManager                    proxy_manager_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

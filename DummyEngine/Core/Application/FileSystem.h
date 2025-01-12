@@ -1,8 +1,9 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
-namespace DE {
+namespace DummyEngine {
+
     class FileSystem {
     public:
         static Path OpenFileDialog(const std::string& description, const std::string& filter, const Path& default_path = Path());
@@ -15,4 +16,4 @@ namespace DE {
         static bool CreateDirectory(const Path& path);
     };
 
-}  // namespace DE
+}  // namespace DummyEngine

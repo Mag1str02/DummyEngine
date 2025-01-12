@@ -1,16 +1,19 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
-namespace DE {
+namespace DummyEngine {
+
     struct BufferElement {
-        BufferElementType type;
-        U32               size;
-        size_t            offset;
-        bool              normalized;
+    public:
+        BufferElementType Type;
+        U32               Size;
+        size_t            Offset;
+        bool              Normalized;
 
+    public:
         BufferElement() = default;
-        BufferElement(BufferElementType type, bool normalized = false);
+        BufferElement(BufferElementType type, bool normalized = false);  // NOLINT
 
         U32 ComponentCount() const;
 
@@ -24,10 +27,10 @@ namespace DE {
         BufferLayout() = default;
         BufferLayout(std::initializer_list<BufferElement> elements, U32 divisor = 0);
 
-        std::vector<BufferElement>::iterator       begin();
-        std::vector<BufferElement>::iterator       end();
-        std::vector<BufferElement>::const_iterator begin() const;
-        std::vector<BufferElement>::const_iterator end() const;
+        std::vector<BufferElement>::iterator       begin();        // NOLINT
+        std::vector<BufferElement>::iterator       end();          // NOLINT
+        std::vector<BufferElement>::const_iterator begin() const;  // NOLINT
+        std::vector<BufferElement>::const_iterator end() const;    // NOLINT
         const BufferElement&                       operator[](U32 index) const;
 
         U32  GetStride() const;
@@ -37,10 +40,11 @@ namespace DE {
     private:
         void CalculateOffsetsAndStride();
 
-        std::vector<BufferElement> m_Elements;
-        BufferLayoutType           m_Type;
-        U32                        m_Stride;
-        U32                        m_Divisor;
+    private:
+        std::vector<BufferElement> elements_;
+        BufferLayoutType           type_;
+        U32                        stride_;
+        U32                        divisor_;
     };
 
-}  // namespace DE
+}  // namespace DummyEngine

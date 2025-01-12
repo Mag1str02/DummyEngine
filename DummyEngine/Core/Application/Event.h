@@ -1,8 +1,8 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
-namespace DE {
+namespace DummyEngine {
     template <typename Event> using EventCallback = std::function<void(Event&)>;
 
     enum class EventType {
@@ -43,37 +43,41 @@ namespace DE {
     public:
         template <typename ListeningEvent> void AddEventListener(EventCallback<ListeningEvent> callback) {
             auto base_callback = [func = std::move(callback)](Event& e) { func(static_cast<ListeningEvent&>(e)); };
-            m_EventCallbacks[(size_t)ListeningEvent::Type()].push_back(base_callback);
+            event_callbacks_[(size_t)ListeningEvent::Type()].push_back(base_callback);
         }
 
         void Dispatch(Event& event) {
-            for (auto& callback : m_EventCallbacks[(size_t)(event.GetType())]) {
+            for (auto& callback : event_callbacks_[(size_t)(event.GetType())]) {
                 callback(event);
             }
         }
 
     private:
-        std::array<std::vector<EventCallback<Event>>, static_cast<size_t>(EventType::Count)> m_EventCallbacks;
+        std::array<std::vector<EventCallback<Event>>, static_cast<size_t>(EventType::Count)> event_callbacks_;
     };
 
-#define EVENT_TYPE(type)                                                   \
-    virtual EventType GetType() const override { return EventType::type; } \
-    static EventType  Type() { return EventType::type; }
+#define EVENT_TYPE(type)                         \
+    virtual EventType GetType() const override { \
+        return EventType::type;                  \
+    }                                            \
+    static EventType Type() {                    \
+        return EventType::type;                  \
+    }
 
     //*Responding
 
     class WindowResizeEvent : public Event {
     public:
-        WindowResizeEvent(U32 width, U32 height) : m_Width(width), m_Height(height) {}
+        WindowResizeEvent(U32 width, U32 height) : width_(width), height_(height) {}
 
-        U32 GetWidth() const { return m_Width; }
-        U32 GetHeight() const { return m_Height; }
+        U32 GetWidth() const { return width_; }
+        U32 GetHeight() const { return height_; }
 
         EVENT_TYPE(WindowResize);
 
     private:
-        U32 m_Width;
-        U32 m_Height;
+        U32 width_;
+        U32 height_;
     };
     class WindowCloseEvent : public Event {
     public:
@@ -84,106 +88,106 @@ namespace DE {
 
     class KeyPressedEvent : public Event {
     public:
-        KeyPressedEvent(U32 key) : m_KeyKode(key) {}
+        explicit KeyPressedEvent(U32 key) : key_code_(key) {}
 
-        U32 GetKey() const { return m_KeyKode; }
+        U32 GetKey() const { return key_code_; }
 
         EVENT_TYPE(KeyPressed);
 
     private:
-        U32 m_KeyKode;
+        U32 key_code_;
     };
     class KeyReleasedEvent : public Event {
     public:
-        KeyReleasedEvent(U32 key) : m_KeyKode(key) {}
+        explicit KeyReleasedEvent(U32 key) : key_code_(key) {}
 
-        U32 GetKey() const { return m_KeyKode; }
+        U32 GetKey() const { return key_code_; }
 
         EVENT_TYPE(KeyReleased);
 
     private:
-        U32 m_KeyKode;
+        U32 key_code_;
     };
 
     class MouseButtonPressedEvent : public Event {
     public:
-        MouseButtonPressedEvent(U32 key) : m_KeyKode(key) {}
+        explicit MouseButtonPressedEvent(U32 key) : key_code_(key) {}
 
-        U32 GetKey() const { return m_KeyKode; }
+        U32 GetKey() const { return key_code_; }
 
         EVENT_TYPE(MouseButtonPressed);
 
     private:
-        U32 m_KeyKode;
+        U32 key_code_;
     };
     class MouseButtonReleasedEvent : public Event {
     public:
-        MouseButtonReleasedEvent(U32 key) : m_KeyKode(key) {}
+        explicit MouseButtonReleasedEvent(U32 key) : key_code_(key) {}
 
-        U32 GetKey() const { return m_KeyKode; }
+        U32 GetKey() const { return key_code_; }
 
         EVENT_TYPE(MouseButtonReleased);
 
     private:
-        U32 m_KeyKode;
+        U32 key_code_;
     };
     class MouseScrolledEvent : public Event {
     public:
-        MouseScrolledEvent(float x_offset, float y_offset) : m_XPos(x_offset), m_YPos(y_offset) {}
+        MouseScrolledEvent(float x_offset, float y_offset) : x_pos_(x_offset), y_pos_(y_offset) {}
 
-        float GetXOffset() const { return m_XPos; }
-        float GetYOffset() const { return m_YPos; }
+        float GetXOffset() const { return x_pos_; }
+        float GetYOffset() const { return y_pos_; }
 
         EVENT_TYPE(MouseScrolled);
 
     private:
-        float m_XPos;
-        float m_YPos;
+        float x_pos_;
+        float y_pos_;
     };
     class MouseMovedCallback : public Event {
     public:
-        MouseMovedCallback(float x_pos, float y_pos) : m_XPos(x_pos), m_YPos(y_pos) {}
+        MouseMovedCallback(float x_pos, float y_pos) : x_pos_(x_pos), y_pos_(y_pos) {}
 
-        float GetXPos() const { return m_XPos; }
-        float GetYPos() const { return m_YPos; }
+        float GetXPos() const { return x_pos_; }
+        float GetYPos() const { return y_pos_; }
 
         EVENT_TYPE(MouseMoved);
 
     private:
-        float m_XPos;
-        float m_YPos;
+        float x_pos_;
+        float y_pos_;
     };
 
     //*Triggering
 
     class SetWindowModeWindowedEvent : public Event {
     public:
-        SetWindowModeWindowedEvent(U32 width = 1280, U32 height = 720, U32 x_pos = 100, U32 y_pos = 100) :
-            m_Width(width), m_Height(height), m_XPos(x_pos), m_YPos(y_pos) {}
+        explicit SetWindowModeWindowedEvent(U32 width = 1280, U32 height = 720, U32 x_pos = 100, U32 y_pos = 100) :
+            width_(width), height_(height), x_pos_(x_pos), y_pos_(y_pos) {}
 
-        U32 GetWidth() const { return m_Width; }
-        U32 GetHeight() const { return m_Height; }
-        U32 GetXPos() const { return m_XPos; }
-        U32 GetYPos() const { return m_YPos; }
+        U32 GetWidth() const { return width_; }
+        U32 GetHeight() const { return height_; }
+        U32 GetXPos() const { return x_pos_; }
+        U32 GetYPos() const { return y_pos_; }
 
         EVENT_TYPE(SetWindowModeWindowed);
 
     private:
-        U32 m_Width;
-        U32 m_Height;
-        U32 m_XPos;
-        U32 m_YPos;
+        U32 width_;
+        U32 height_;
+        U32 x_pos_;
+        U32 y_pos_;
     };
     class SetWindowModeFullscreenEvent : public Event {
     public:
-        SetWindowModeFullscreenEvent(U32 monitor_id) : m_MonitorId(monitor_id) {}
+        explicit SetWindowModeFullscreenEvent(U32 monitor_id) : monitor_id_(monitor_id) {}
 
-        U32 GetMonitorId() const { return m_MonitorId; }
+        U32 GetMonitorId() const { return monitor_id_; }
 
         EVENT_TYPE(SetWindowModeFullscreen);
 
     private:
-        U32 m_MonitorId;
+        U32 monitor_id_;
     };
 
     class SetMouseLockEvent : public Event {
@@ -205,4 +209,4 @@ namespace DE {
         EVENT_TYPE(SetMouseLockToggle);
     };
 
-}  // namespace DE
+}  // namespace DummyEngine

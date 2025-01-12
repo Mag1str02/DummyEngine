@@ -1,23 +1,23 @@
 #pragma once
 
 #include "DummyEngine/Core/Application/Event.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
+
     class Layer {
     public:
-        Layer(const std::string& name = "Layer") : m_Name(name) {}
+        explicit Layer(const std::string& name = "Layer") : m_Name(name) {}
         virtual ~Layer() = default;
 
         virtual void OnAttach() {}
         virtual void OnDetach() {}
-        virtual void OnUpdate(float dt) {}
+        virtual void OnUpdate(float) {}
         virtual void OnImGuiRender() {}
-        virtual void OnEvent(Event& event) {}
+        virtual void OnEvent(Event&) {}
 
         const std::string& GetName() const { return m_Name; }
 
-        void BroadcastEvent(Event& event) { m_EventCallback(event); }
+        void BroadcastEvent(Event& event) { event_callback_(event); }
 
     protected:
         std::string m_Name;
@@ -25,7 +25,7 @@ namespace DE {
     private:
         friend class Application;
 
-        EventCallback<Event> m_EventCallback;
+        EventCallback<Event> event_callback_;
     };
 
-}  // namespace DE
+}  // namespace DummyEngine

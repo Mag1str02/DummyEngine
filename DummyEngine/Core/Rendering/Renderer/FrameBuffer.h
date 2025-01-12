@@ -2,16 +2,16 @@
 
 #include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
 #include "DummyEngine/Core/Rendering/Renderer/Texture.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
+
     struct FrameBufferProperties {
-        U32 width  = 0;
-        U32 height = 0;
+        U32 Width  = 0;
+        U32 Height = 0;
     };
 
     struct FrameBufferAttchment {
-        Ref<Texture> m_Texture;
+        Ref<Texture> Texture;
     };
 
     class FrameBuffer {
@@ -37,4 +37,5 @@ namespace DE {
         virtual const FrameBufferProperties& GetProperties() const = 0;
         static Ref<FrameBuffer>              Create(const FrameBufferProperties& properties);
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

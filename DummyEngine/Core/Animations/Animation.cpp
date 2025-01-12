@@ -1,19 +1,21 @@
 #include "DummyEngine/Core/Animations/Animation.h"
 
-namespace DE {
+namespace DummyEngine {
+
     BoneInfo* Animation::GetBone(const std::string& name) {
-        return (m_BoneNameToID.contains(name) ? &m_Bones[m_BoneNameToID[name]] : nullptr);
+        return (bone_name_to_id_.contains(name) ? &bones_[bone_name_to_id_[name]] : nullptr);
     }
     float Animation::GetTicksPerSecond() {
-        return m_TicksPerSecond;
+        return ticks_per_second_;
     }
     float Animation::GetDuration() {
-        return m_Duration;
+        return duration_;
     }
     const Animation::Node& Animation::GetRootNode() {
-        return m_RootNode;
+        return root_node_;
     }
     const std::unordered_map<std::string, S32>& Animation::GetBoneIDMap() {
-        return m_BoneNameToID;
+        return bone_name_to_id_;
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

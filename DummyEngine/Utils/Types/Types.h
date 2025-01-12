@@ -1,7 +1,10 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base/GLMIncludes.h"
-#include "DummyEngine/Utils/Base/STDIncludes.h"
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+
+#include <cstdint>
+#include <filesystem>
 
 #define MAX_BONE_INFLUENCE 8
 #define MAX_BONES 128
@@ -15,7 +18,7 @@ using S16 = int16_t;
 using S32 = int32_t;
 using S64 = int64_t;
 
-namespace DE {
+namespace DummyEngine {
     namespace fs = std::filesystem;
 
     using VoidFPtr = void (*)();
@@ -39,12 +42,12 @@ namespace DE {
     enum class BufferUsage { None = 0, Static, Dynamic };
 
     struct Vertex3D {
-        Vec3  position                    = Vec3(0);
-        Vec3  normal                      = Vec3(0);
-        Vec3  tangent                     = Vec3(0);
-        Vec2  tex_coords                  = Vec2(0);
-        S32   bones[MAX_BONE_INFLUENCE]   = {-1, -1, -1, -1, -1, -1, -1, -1};
-        float weights[MAX_BONE_INFLUENCE] = {0, 0, 0, 0, 0, 0, 0, 0};
+        Vec3  Position                    = Vec3(0);
+        Vec3  Normal                      = Vec3(0);
+        Vec3  Tangent                     = Vec3(0);
+        Vec2  TexCoords                   = Vec2(0);
+        S32   Bones[MAX_BONE_INFLUENCE]   = {-1, -1, -1, -1, -1, -1, -1, -1};
+        float Weights[MAX_BONE_INFLUENCE] = {0, 0, 0, 0, 0, 0, 0, 0};
 
         void AddBone(S32 id, float weight);
     };
@@ -68,4 +71,4 @@ namespace DE {
             return h1 ^ h2;
         }
     };
-}  // namespace DE
+}  // namespace DummyEngine

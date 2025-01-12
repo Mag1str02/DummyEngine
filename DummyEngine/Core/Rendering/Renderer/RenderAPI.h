@@ -1,9 +1,8 @@
 #pragma once
 
 #include "DummyEngine/Core/Rendering/Renderer/VertexArray.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
     enum class RenderSetting { None = 0, DepthTest, MultiSampling, FaceCulling, DepthMask };
     enum class RenderPrimitive { None = 0, Triangle, Line, Point };
     class RenderAPI {
@@ -29,4 +28,4 @@ namespace DE {
 
         virtual API GetAPI() = 0;
     };
-}  // namespace DE
+}  // namespace DummyEngine

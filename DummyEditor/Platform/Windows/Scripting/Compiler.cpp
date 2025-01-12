@@ -1,7 +1,13 @@
 #include "DummyEditor/Scripting/Compiler.h"
 
-namespace DE {
+#include "DummyEngine/Core/Application/FileSystem.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
+
+#include <unordered_set>
+
+namespace DummyEngine {
     class WindowsCompilerImpl : public CompilerImpl {
+        LOG_AUTHOR(Compiler)
     public:
         WindowsCompilerImpl() { AddDefine("DE_PLATFORM_WINDOWS"); }
         virtual bool Compile(const Path& source, const Path& destination) {
@@ -52,30 +58,30 @@ namespace DE {
             int res = system(link_command.c_str());
             return res == 0;
         }
-        virtual void AddIncludeDir(const Path& dir) { m_IncludeDirs.insert(dir); }
-        virtual void DeleteIncludeDir(const Path& dir) { m_IncludeDirs.erase(dir); }
-        virtual void AddLinkLibrary(const Path& library) { m_Libraries.insert(library); }
-        virtual void DeleteLinkLibrary(const Path& library) { m_Libraries.erase(library); }
-        virtual void AddDefine(const std::string& define) { m_Defines.insert(define); }
-        virtual void DeleteDefine(const std::string& define) { m_Defines.erase(define); }
+        virtual void AddIncludeDir(const Path& dir) { include_dirs_.insert(dir); }
+        virtual void DeleteIncludeDir(const Path& dir) { include_dirs_.erase(dir); }
+        virtual void AddLinkLibrary(const Path& library) { libraries_.insert(library); }
+        virtual void DeleteLinkLibrary(const Path& library) { libraries_.erase(library); }
+        virtual void AddDefine(const std::string& define) { defines_.insert(define); }
+        virtual void DeleteDefine(const std::string& define) { defines_.erase(define); }
 
     private:
         std::string GetCompiler() {
             // TODO: Get compiler from config.
-            return "g++";
+            return "clang++";
         }
         void FixSlash(std::string& command) { std::replace(command.begin(), command.end(), '\\', '/'); }
 
         std::string AddIncludeDirArguments() {
             std::string res;
-            for (const auto& dir : m_IncludeDirs) {
+            for (const auto& dir : include_dirs_) {
                 res.append(" -I ");
                 res.append(dir.string());
             }
             return res;
         }
         std::string AddSourceArgument(const Path& source) { return " " + source.string(); }
-        std::string AddDestinationArgument(const Path& source, const Path& destination) { return " -o " + destination.string(); }
+        std::string AddDestinationArgument(const Path&, const Path& destination) { return " -o " + destination.string(); }
 
         std::string AddSourcesArguments(const std::vector<Path>& sources) {
             std::string res;
@@ -87,7 +93,7 @@ namespace DE {
         }
         std::string AddLinkArgs() {
             std::string res;
-            for (auto lib : m_Libraries) {
+            for (auto lib : libraries_) {
                 std::string name = lib.stem().string();
                 lib.remove_filename();
                 if (lib.empty()) {
@@ -102,7 +108,7 @@ namespace DE {
         }
         std::string AddDefines() {
             std::string res;
-            for (const auto& def : m_Defines) {
+            for (const auto& def : defines_) {
                 res.append(" -D");
                 res.append(def);
             }
@@ -112,13 +118,13 @@ namespace DE {
             return " -o " + destination.string() + "/" + library_name + ".dll";
         }
 
-        std::unordered_set<Path>        m_IncludeDirs;
-        std::unordered_set<Path>        m_Libraries;
-        std::unordered_set<std::string> m_Defines;
+        std::unordered_set<Path>        include_dirs_;
+        std::unordered_set<Path>        libraries_;
+        std::unordered_set<std::string> defines_;
     };
 
     Scope<CompilerImpl> Compiler::CreateCompilerImpl() {
         return CreateScope<WindowsCompilerImpl>();
     }
 
-};  // namespace DE
+};  // namespace DummyEngine

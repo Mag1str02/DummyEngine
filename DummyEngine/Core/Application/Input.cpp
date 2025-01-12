@@ -1,25 +1,33 @@
-#include "DummyEngine/Core/Application/Input.h"
+#include "Input.h"
 
-#include <GLFW/glfw3.h>
+#include "DummyEngine/Core/Application/Config.h"
+#include "DummyEngine/Utils/Debug/Profiler.h"
 
-namespace DE {
+namespace DummyEngine {
     InputFrame::InputFrame() {
-        key_states.resize((size_t)Key::Last);
+        KeyStates.resize((size_t)Key::Last);
     }
 
     SINGLETON_BASE(Input);
     S_INITIALIZE() {
-        m_EventDispatcher.AddEventListener<KeyPressedEvent>([this](KeyPressedEvent& event) { m_CurrentFrame.key_states[event.GetKey()] = true; });
-        m_EventDispatcher.AddEventListener<KeyReleasedEvent>([this](KeyReleasedEvent& event) { m_CurrentFrame.key_states[event.GetKey()] = false; });
+        max_frame_amount_ = Config::Get().MaxInputFrameAmount;
+        event_dispatcher_.AddEventListener<KeyPressedEvent>([this](KeyPressedEvent& event) {
+            DE_ASSERT(current_frame_.KeyStates.size() > event.GetKey(), "Bad key code: {}", event.GetKey());
+            current_frame_.KeyStates[event.GetKey()] = true;
+        });
+        event_dispatcher_.AddEventListener<KeyReleasedEvent>([this](KeyReleasedEvent& event) {
+            DE_ASSERT(current_frame_.KeyStates.size() > event.GetKey(), "Bad key code: {}", event.GetKey());
+            current_frame_.KeyStates[event.GetKey()] = false;
+        });
 
-        m_EventDispatcher.AddEventListener<SetMouseLockEvent>([this](SetMouseLockEvent& event) { m_CurrentFrame.mouse_locked = true; });
-        m_EventDispatcher.AddEventListener<SetMouseUnlockEvent>([this](SetMouseUnlockEvent& event) { m_CurrentFrame.mouse_locked = false; });
-        m_EventDispatcher.AddEventListener<SetMouseLockToggleEvent>(
-            [this](SetMouseLockToggleEvent& event) { m_CurrentFrame.mouse_locked = !m_CurrentFrame.mouse_locked; });
+        event_dispatcher_.AddEventListener<SetMouseLockEvent>([this](SetMouseLockEvent&) { current_frame_.MouseLocked = true; });
+        event_dispatcher_.AddEventListener<SetMouseUnlockEvent>([this](SetMouseUnlockEvent&) { current_frame_.MouseLocked = false; });
+        event_dispatcher_.AddEventListener<SetMouseLockToggleEvent>(
+            [this](SetMouseLockToggleEvent&) { current_frame_.MouseLocked = !current_frame_.MouseLocked; });
 
-        m_EventDispatcher.AddEventListener<MouseMovedCallback>([this](MouseMovedCallback& event) {
-            m_CurrentFrame.x_pos = event.GetXPos();
-            m_CurrentFrame.y_pos = event.GetYPos();
+        event_dispatcher_.AddEventListener<MouseMovedCallback>([this](MouseMovedCallback& event) {
+            current_frame_.PosX = event.GetXPos();
+            current_frame_.PosY = event.GetYPos();
         });
 
         INewFrame();
@@ -30,44 +38,44 @@ namespace DE {
     }
 
     S_METHOD_IMPL(Unit, OnEvent, (Event & event), (event)) {
-        m_EventDispatcher.Dispatch(event);
+        event_dispatcher_.Dispatch(event);
         return Unit();
     }
     S_METHOD_IMPL(Unit, NewFrame, (), ()) {
         DE_PROFILE_SCOPE("Imput Frame Begin");
 
-        m_Frames.push_front(m_CurrentFrame);
-        if (m_Frames.size() > m_MaxFrameAmount) {
-            m_Frames.pop_back();
+        frames_.push_front(current_frame_);
+        if (frames_.size() > max_frame_amount_) {
+            frames_.pop_back();
         }
         return Unit();
     }
     S_METHOD_IMPL(Unit, SetFrameAmount, (size_t n), (n)) {
-        m_MaxFrameAmount = n;
+        max_frame_amount_ = n;
         return Unit();
     }
 
     S_METHOD_IMPL(double, CursorXOffset, (), ()) {
-        return m_Frames[0].x_pos - m_Frames[1].x_pos;
+        return frames_[0].PosX - frames_[1].PosX;
     }
     S_METHOD_IMPL(double, CursorYOffset, (), ()) {
-        return m_Frames[0].y_pos - m_Frames[1].y_pos;
+        return frames_[0].PosY - frames_[1].PosY;
     }
 
     S_METHOD_IMPL(bool, MouseLocked, (), ()) {
-        return m_Frames[0].mouse_locked;
+        return frames_[0].MouseLocked;
     }
     S_METHOD_IMPL(bool, KeyReleased, (Key key), (key)) {
-        return !m_Frames[0].key_states.at((size_t)key) && m_Frames[1].key_states.at((size_t)key);
+        return !frames_[0].KeyStates.at((size_t)key) && frames_[1].KeyStates.at((size_t)key);
     }
     S_METHOD_IMPL(bool, KeyPressed, (Key key), (key)) {
-        return m_Frames[0].key_states.at((size_t)key) && !m_Frames[1].key_states.at((size_t)key);
+        return frames_[0].KeyStates.at((size_t)key) && !frames_[1].KeyStates.at((size_t)key);
     }
     S_METHOD_IMPL(bool, KeyDown, (Key key), (key)) {
-        return m_Frames[0].key_states.at((size_t)key);
+        return frames_[0].KeyStates.at((size_t)key);
     }
     S_METHOD_IMPL(bool, KeyUp, (Key key), (key)) {
-        return !m_Frames[0].key_states.at((size_t)key);
+        return !frames_[0].KeyStates.at((size_t)key);
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

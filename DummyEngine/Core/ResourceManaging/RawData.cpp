@@ -1,6 +1,9 @@
-#include "DummyEngine/Core/ResourceManaging/RawData.h"
+#include "RawData.h"
 
-namespace DE {
+#include "DummyEngine/Utils/Debug/Assert.h"
+
+namespace DummyEngine {
+
     std::string MaterialTypeToStr(MaterialType type) {
         switch (type) {
             case MaterialType::PBR: return "PBR";
@@ -53,49 +56,49 @@ namespace DE {
         return ShaderPartType::None;
     }
 
-    TextureData::TextureData() : m_Data(nullptr), m_Width(0), m_Height(0), m_Channels(TextureChannels::None), m_Format(TextureFormat::None) {}
+    TextureData::TextureData() : data_(nullptr), width_(0), height_(0), channels_(TextureChannels::None), format_(TextureFormat::None) {}
 
-    TextureData::TextureData(const void* data, U32 width, U32 height, TextureChannels channels, TextureFormat format) : m_Data(nullptr) {
+    TextureData::TextureData(const void* data, U32 width, U32 height, TextureChannels channels, TextureFormat format) : data_(nullptr) {
         SetData(data, width, height, channels, format);
     }
     TextureData::~TextureData() {
-        free(m_Data);
+        free(data_);
     }
     void TextureData::SetData(const void* data, U32 width, U32 height, TextureChannels channels, TextureFormat format) {
-        if (m_Data) {
-            free(m_Data);
+        if (data_ != nullptr) {
+            free(data_);
         }
         size_t size = width * height * ChannelAmount(channels) * FormatSize(format);
         DE_ASSERT(size > 0, "Wrong texture data size");
-        m_Data = malloc(size);
-        std::memcpy(m_Data, data, size);
-        m_Width    = width;
-        m_Height   = height;
-        m_Channels = channels;
-        m_Format   = format;
+        data_ = malloc(size);
+        std::memcpy(data_, data, size);
+        width_    = width;
+        height_   = height;
+        channels_ = channels;
+        format_   = format;
     }
     U32 TextureData::PixelSize() const {
-        return ChannelAmount(m_Channels) * FormatSize(m_Format);
+        return ChannelAmount(channels_) * FormatSize(format_);
     }
 
     RenderSubMeshData& RenderSubMeshData::operator+=(const RenderSubMeshData& other) {
-        size_t sz = vertices.size();
-        for (size_t i = 0; i < other.vertices.size(); ++i) {
-            vertices.push_back(other.vertices[i]);
+        size_t sz = Vertices.size();
+        for (size_t i = 0; i < other.Vertices.size(); ++i) {
+            Vertices.push_back(other.Vertices[i]);
         }
-        for (size_t i = 0; i < other.indices.size(); ++i) {
-            indices.push_back(other.indices[i] + sz);
+        for (size_t i = 0; i < other.Indices.size(); ++i) {
+            Indices.push_back(other.Indices[i] + sz);
         }
         return *this;
     }
 
     void RenderMeshData::Compress() {
         std::vector<RenderSubMeshData> new_vec(1);
-        new_vec.back() = meshes.front();
-        for (size_t i = 1; i < meshes.size(); ++i) {
-            new_vec.back() += meshes[i];
+        new_vec.back() = Meshes.front();
+        for (size_t i = 1; i < Meshes.size(); ++i) {
+            new_vec.back() += Meshes[i];
         }
-        meshes = new_vec;
+        Meshes = new_vec;
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

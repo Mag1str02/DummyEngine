@@ -1,177 +1,179 @@
-#include "DummyEngine/Core/Application/Window.h"
+#include "Window.h"
 
+#include "DummyEngine/Utils/Debug/Profiler.h"
+
+#include <GLFW/glfw3.h>
 #include <stb_image.h>
 
-#include "DummyEngine/Core/ECS/ECS.h"
-#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
-
-namespace DE {
+namespace DummyEngine {
 
     GLFWmonitor* GetMonitor(U32 id) {
-        int           monitors_amount;
-        GLFWmonitor** monitors = glfwGetMonitors(&monitors_amount);
-        DE_ASSERT(0 <= id && id < monitors_amount, "Wrong monitor id (", id, ") should be between [0, ", monitors_amount, ")");
+        int           monitors_amount = 0;
+        GLFWmonitor** monitors        = glfwGetMonitors(&monitors_amount);
+        DE_ASSERT(0 <= id && id < U32(monitors_amount), "Wrong monitor id {} should be between [0, {})", id, monitors_amount);
         return monitors[id];
     }
 
-    Window::Window(const WindowState& state) : m_State(state) {
-        m_Window = glfwCreateWindow(1280, 720, m_State.name.c_str(), NULL, NULL);
-        // glfwSwapInterval(0);
-        DE_ASSERT(m_Window, "Failed to create GLFW Window (", m_State.name, ")");
-        LOG_INFO("Window", "Window created: ", m_State.name);
+    Window::Window(const WindowState& state) : state_(state) {
+        window_ = glfwCreateWindow(1280, 720, state_.Name.c_str(), nullptr, nullptr);
+        DE_ASSERT(window_, "Failed to create GLFW Window {}", state_.Name);
+        LOG_INFO("Window created: {}", state_.Name);
 
-        m_Context = Context::Create(m_Window);
-        m_Context->Load();
+        context_ = Context::Create(window_);
+        context_->Load();
 
         SetupCallbacks();
 
         Invalidate();
     }
     Window::~Window() {
-        glfwDestroyWindow(m_Window);
+        glfwDestroyWindow(window_);
     }
 
     void Window::SetIcon(Path path) {
         GLFWimage icon;
-        icon.pixels = stbi_load(path.string().c_str(), &icon.width, &icon.height, 0, 4);
+        icon.pixels = stbi_load(path.string().c_str(), &icon.width, &icon.height, nullptr, 4);
 
-        if (!icon.pixels) {
-            LOG_WARNING("Window", "Failed to set window icon (", path, ")");
+        if (icon.pixels == nullptr) {
+            LOG_WARNING("Failed to set window icon {}", path);
             return;
         }
-        glfwSetWindowIcon(m_Window, 1, &icon);
+        glfwSetWindowIcon(window_, 1, &icon);
         stbi_image_free(icon.pixels);
     }
     void Window::FullScreen(U32 id) {
-        m_State.mode = WindowMode::FullScreen;
+        state_.Mode      = WindowMode::FullScreen;
+        state_.MonitorID = id;
 
         Invalidate();
     }
     void Window::Windowed(U32 width, U32 height, U32 x_pos, U32 y_pos) {
-        m_State.mode   = WindowMode::Windowed;
-        m_State.width  = width;
-        m_State.height = height;
-        m_State.x_pos  = x_pos;
-        m_State.y_pos  = y_pos;
+        state_.Mode   = WindowMode::Windowed;
+        state_.Width  = width;
+        state_.Height = height;
+        state_.PosX   = x_pos;
+        state_.PosY   = y_pos;
 
         Invalidate();
     }
 
     void Window::LockMouse() {
-        m_State.mouse_locked = true;
-        glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        state_.MouseLocked = true;
+        glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
     void Window::UnlockMouse() {
-        m_State.mouse_locked = false;
-        glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        state_.MouseLocked = false;
+        glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
     void Window::ToggleMouseLock() {
-        if (m_State.mouse_locked) {
-            glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        if (state_.MouseLocked) {
+            glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         } else {
-            glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
-        m_State.mouse_locked = !m_State.mouse_locked;
+        state_.MouseLocked = !state_.MouseLocked;
     }
 
     void Window::OnUpdate() {
         DE_PROFILE_SCOPE("Window OnUpdate");
 
         glfwPollEvents();
-        m_Context->SwapBuffers();
+        context_->SwapBuffers();
     }
     void Window::SetEventCallback(EventCallback<Event> callback) {
-        m_State.event_callback = callback;
+        state_.EventCallback = callback;
     }
 
     const WindowState& Window::GetState() const {
-        return m_State;
+        return state_;
     }
 
     void Window::Invalidate() {
-        DE_ASSERT(m_State.mode != WindowMode::None, "Wrong window mode.");
-        DE_ASSERT(m_State.width != 0 && m_State.height != 0, "Wrong window size(", m_State.width, ", ", m_State.height, ") expected non 0 sides");
-        if (m_State.mode == WindowMode::Windowed) {
-            glfwSetWindowMonitor(m_Window, nullptr, m_State.x_pos, m_State.y_pos, m_State.width, m_State.height, 1000);
+        DE_ASSERT(state_.Mode != WindowMode::None, "Wrong window mode");
+        DE_ASSERT(state_.Width != 0 && state_.Height != 0, "Wrong window size ({},{}) expected non 0 sides", state_.Width, state_.Height);
+        if (state_.Mode == WindowMode::Windowed) {
+            glfwSetWindowMonitor(window_, nullptr, state_.PosX, state_.PosY, state_.Width, state_.Height, 1000);
         }
-        if (m_State.mode == WindowMode::FullScreen) {
-            GLFWmonitor*       monitor = GetMonitor(m_State.monitor_id);
+        if (state_.Mode == WindowMode::FullScreen) {
+            GLFWmonitor*       monitor = GetMonitor(state_.MonitorID);
             const GLFWvidmode* mode    = glfwGetVideoMode(monitor);
-            m_State.height             = mode->height;
-            m_State.width              = mode->width;
-            m_State.x_pos              = 0;
-            m_State.y_pos              = 0;
-            glfwSetWindowMonitor(m_Window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+            state_.Height              = mode->height;
+            state_.Width               = mode->width;
+            state_.PosX                = 0;
+            state_.PosY                = 0;
+            glfwSetWindowMonitor(window_, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
         }
     }
     void Window::SetupCallbacks() {
-        glfwSetWindowUserPointer(m_Window, &m_State);
+        glfwSetWindowUserPointer(window_, &state_);
 
-        glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
+        glfwSetWindowSizeCallback(window_, [](GLFWwindow* window, int width, int height) {
             WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
-            state.width        = width;
-            state.height       = height;
+            state.Width        = width;
+            state.Height       = height;
 
             WindowResizeEvent event(width, height);
-            state.event_callback(event);
+            state.EventCallback(event);
         });
 
-        glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
+        glfwSetWindowCloseCallback(window_, [](GLFWwindow* window) {
             WindowState&     state = *(WindowState*)glfwGetWindowUserPointer(window);
             WindowCloseEvent event;
-            state.event_callback(event);
+            state.EventCallback(event);
         });
 
-        glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+        glfwSetKeyCallback(window_, [](GLFWwindow* window, int key, int, int action, int) {
+            if (key == -1) {
+                return;
+            }
             WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
             switch (action) {
                 case GLFW_PRESS: {
                     KeyPressedEvent event(key);
-                    state.event_callback(event);
+                    state.EventCallback(event);
                     break;
                 }
                 case GLFW_RELEASE: {
                     KeyReleasedEvent event(key);
-                    state.event_callback(event);
+                    state.EventCallback(event);
                     break;
                 }
                 case GLFW_REPEAT: {
                     KeyPressedEvent event(key);
-                    state.event_callback(event);
+                    state.EventCallback(event);
                     break;
                 }
             }
         });
 
-        glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
+        glfwSetMouseButtonCallback(window_, [](GLFWwindow* window, int button, int action, int) {
             WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
-
             switch (action) {
                 case GLFW_PRESS: {
                     MouseButtonPressedEvent event(button);
-                    state.event_callback(event);
+                    state.EventCallback(event);
                     break;
                 }
                 case GLFW_RELEASE: {
                     MouseButtonReleasedEvent event(button);
-                    state.event_callback(event);
+                    state.EventCallback(event);
                     break;
                 }
             }
         });
 
-        glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset) {
+        glfwSetScrollCallback(window_, [](GLFWwindow* window, double x_offset, double y_offset) {
             WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
 
-            MouseScrolledEvent event((float)xOffset, (float)yOffset);
-            state.event_callback(event);
+            MouseScrolledEvent event((float)x_offset, (float)y_offset);
+            state.EventCallback(event);
         });
 
-        glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos) {
+        glfwSetCursorPosCallback(window_, [](GLFWwindow* window, double x_pos, double y_pos) {
             WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
 
-            MouseMovedCallback event((float)xPos, (float)yPos);
-            state.event_callback(event);
+            MouseMovedCallback event((float)x_pos, (float)y_pos);
+            state.EventCallback(event);
         });
     }
-}  // namespace DE
+}  // namespace DummyEngine

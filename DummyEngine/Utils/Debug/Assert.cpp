@@ -1,12 +1,14 @@
-#include "DummyEngine/Utils/Debug/Assert.h"
+#include "Assert.h"
 
-#include "DummyEngine/Utils/Base/STDIncludes.h"
 #include "DummyEngine/Utils/Debug/Logger.h"
 #include "DummyEngine/Utils/Debug/StackTrace.h"
 
-namespace DE {
+#include <iostream>
+#include <sstream>
 
-    extern bool g_EnteredInMain;
+namespace DummyEngine {
+
+    extern bool gEnteredInMain;
 
     void FailAssert(const char* expr_str, const char* file, int line, const std::string& msg) {
         std::stringstream ss;
@@ -18,9 +20,9 @@ namespace DE {
            << "Source:\t\t" << file << ", line " << line << "\n";
         std::cerr << ss.str() << std::endl;
         if (Logger::Initialized()) {
-            LOG_FATAL("Assertion", 0, ss.str());
+            LOG_FATAL_AS("Assertion", "{}", ss.str());
         }
-        exit(1);
+        abort();
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

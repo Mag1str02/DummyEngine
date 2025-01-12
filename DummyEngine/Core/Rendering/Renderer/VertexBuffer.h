@@ -1,9 +1,9 @@
 #pragma once
 
+#include "DummyEngine/Core/Rendering/Renderer/BufferLayout.h"
 #include "DummyEngine/Core/Rendering/Renderer/LocalBuffer.h"
-#include "DummyEngine/Utils/Base.h"
 
-namespace DE {
+namespace DummyEngine {
 
     class VertexBuffer {
     public:
@@ -12,7 +12,7 @@ namespace DE {
         virtual void Bind() const   = 0;
         virtual void UnBind() const = 0;
 
-        virtual LocalBufferNode at(U32 index) = 0;
+        virtual LocalBufferNode At(U32 index) = 0;
 
         virtual void SetData(const void* data, U32 size) = 0;
         virtual void PushData()                          = 0;
@@ -36,4 +36,4 @@ namespace DE {
         static Ref<IndexBuffer> Create(const U32* indices, U32 count);
     };
 
-}  // namespace DE
+}  // namespace DummyEngine

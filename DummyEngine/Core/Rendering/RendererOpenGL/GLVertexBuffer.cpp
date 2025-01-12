@@ -1,8 +1,11 @@
-#include "DummyEngine/Core/Rendering/RendererOpenGL/GLVertexBuffer.h"
+#include "GLVertexBuffer.h"
 
-namespace DE {
+#include "DummyEngine/Utils/Debug/Assert.h"
+
+namespace DummyEngine {
+
     void GLVertexBuffer::Bind() const {
-        glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_id_);
     }
     void GLVertexBuffer::UnBind() const {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -10,57 +13,57 @@ namespace DE {
 
     // TODO: Think about not creating LocalBuffer if BufferUsage is Static.
 
-    GLVertexBuffer::GLVertexBuffer(const BufferLayout& layout, U32 size, BufferUsage usage) : m_Layout(layout), m_Usage(usage) {
-        m_Layout.SetLayoutType(BufferLayoutType::Vertex);
-        m_Size = (size * m_Layout.GetStride());
+    GLVertexBuffer::GLVertexBuffer(const BufferLayout& layout, U32 size, BufferUsage usage) : usage_(usage), layout_(layout) {
+        layout_.SetLayoutType(BufferLayoutType::Vertex);
+        size_ = (size * layout_.GetStride());
 
-        if (m_Usage == BufferUsage::Dynamic) {
-            m_LocalBuffer.Allocate(m_Layout, size);
+        if (usage_ == BufferUsage::Dynamic) {
+            local_buffer_.Allocate(layout_, size);
         }
-        glGenBuffers(1, &m_BufferId);
-        glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
-        glBufferData(GL_ARRAY_BUFFER, m_Size, nullptr, BufferUsafeToGLBufferUsage(usage));
+        glGenBuffers(1, &buffer_id_);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_id_);
+        glBufferData(GL_ARRAY_BUFFER, size_, nullptr, BufferUsafeToGLBufferUsage(usage));
     }
-    GLVertexBuffer::GLVertexBuffer(const BufferLayout& layout, U32 size, const void* data, BufferUsage usage) : m_Layout(layout), m_Usage(usage) {
-        m_Layout.SetLayoutType(BufferLayoutType::Vertex);
-        m_Size = (size * m_Layout.GetStride());
+    GLVertexBuffer::GLVertexBuffer(const BufferLayout& layout, U32 size, const void* data, BufferUsage usage) : usage_(usage), layout_(layout) {
+        layout_.SetLayoutType(BufferLayoutType::Vertex);
+        size_ = (size * layout_.GetStride());
 
-        if (m_Usage == BufferUsage::Dynamic) {
-            m_LocalBuffer.Allocate(m_Layout, size);
-            m_LocalBuffer.SetData(data, m_Size);
+        if (usage_ == BufferUsage::Dynamic) {
+            local_buffer_.Allocate(layout_, size);
+            local_buffer_.SetData(data, size_);
         }
 
-        glGenBuffers(1, &m_BufferId);
-        glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
-        glBufferData(GL_ARRAY_BUFFER, m_Size, data, BufferUsafeToGLBufferUsage(usage));
+        glGenBuffers(1, &buffer_id_);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_id_);
+        glBufferData(GL_ARRAY_BUFFER, size_, data, BufferUsafeToGLBufferUsage(usage));
     }
     GLVertexBuffer::~GLVertexBuffer() {
-        glDeleteBuffers(1, &m_BufferId);
+        glDeleteBuffers(1, &buffer_id_);
     }
 
     const BufferLayout& GLVertexBuffer::GetLayout() const {
-        return m_Layout;
+        return layout_;
     }
 
-    LocalBufferNode GLVertexBuffer::at(U32 index) {
-        DE_ASSERT(m_Usage == BufferUsage::Dynamic, "Using at function on non-dynamic-usage vertex_buffer");
-        return m_LocalBuffer.at(index);
+    LocalBufferNode GLVertexBuffer::At(U32 index) {
+        DE_ASSERT(usage_ == BufferUsage::Dynamic, "Using at function on non-dynamic-usage vertex_buffer");
+        return local_buffer_.At(index);
     }
     void GLVertexBuffer::SetData(const void* data, U32 size) {
-        if (m_Usage == BufferUsage::Dynamic) {
-            m_LocalBuffer.SetData(data, size);
+        if (usage_ == BufferUsage::Dynamic) {
+            local_buffer_.SetData(data, size);
         } else {
-            DE_ASSERT(m_Size == size, "Invalid data size (", size, ") expected (", m_Size, ")");
+            DE_ASSERT(size_ == size, "Invalid data size {} expected {}", size, size_);
 
-            glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
+            glBindBuffer(GL_ARRAY_BUFFER, buffer_id_);
             glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
         }
     }
     void GLVertexBuffer::PushData() {
-        DE_ASSERT(m_Usage == BufferUsage::Dynamic, "Using PushData function on non-dynamic-usage vertex_buffer. Use SetData instead");
+        DE_ASSERT(usage_ == BufferUsage::Dynamic, "Using PushData function on non-dynamic-usage vertex_buffer. Use SetData instead");
 
-        glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, m_LocalBuffer.m_Size, m_LocalBuffer.m_Data);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_id_);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, local_buffer_.size_, local_buffer_.data_);
     }
 
     GLenum GLVertexBuffer::BufferUsafeToGLBufferUsage(BufferUsage usage) {
@@ -71,29 +74,29 @@ namespace DE {
         }
     }
     U32 GLVertexBuffer::Size() const {
-        return m_Size / m_Layout.GetStride();
+        return size_ / layout_.GetStride();
     }
 
     //*----------------------------------------------------------------------------------
 
-    GLIndexBuffer::GLIndexBuffer(const U32* indices, U32 indices_amount) : _indices_amount(indices_amount) {
-        glGenBuffers(1, &m_BufferId);
-        glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
+    GLIndexBuffer::GLIndexBuffer(const U32* indices, U32 indices_amount) : indices_amount_(indices_amount) {
+        glGenBuffers(1, &buffer_id_);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_id_);
         glBufferData(GL_ARRAY_BUFFER, indices_amount * sizeof(U32), indices, GL_STATIC_DRAW);
     }
     GLIndexBuffer::~GLIndexBuffer() {
-        glDeleteBuffers(1, &m_BufferId);
+        glDeleteBuffers(1, &buffer_id_);
     }
 
     void GLIndexBuffer::Bind() const {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_BufferId);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_id_);
     }
     void GLIndexBuffer::UnBind() const {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
     U32 GLIndexBuffer::IndicesAmount() const {
-        return _indices_amount;
+        return indices_amount_;
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

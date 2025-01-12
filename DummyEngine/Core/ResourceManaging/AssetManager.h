@@ -1,10 +1,13 @@
 #pragma once
 
 #include "DummyEngine/Core/ResourceManaging/Assets.h"
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
+#include "DummyEngine/Utils/Helpers/Singleton.h"
 
-namespace DE {
+namespace DummyEngine {
+
     class AssetManager : public Singleton<AssetManager> {
+        LOG_AUTHOR(AssetManager)
         SINGLETON(AssetManager)
     public:
         S_METHOD_DEF(bool, AddScriptAsset, (const ScriptAsset& asset));
@@ -25,9 +28,10 @@ namespace DE {
         S_METHOD_DEF(Unit, Clear, ());
 
     private:
-        std::unordered_map<UUID, RenderMeshAsset> m_RenderMeshes;
-        std::unordered_map<UUID, TextureAsset>    m_Textures;
-        std::unordered_map<UUID, ShaderAsset>     m_Shaders;
-        std::unordered_map<UUID, ScriptAsset>     m_Scripts;
+        std::unordered_map<UUID, RenderMeshAsset> render_meshes_;
+        std::unordered_map<UUID, TextureAsset>    textures_;
+        std::unordered_map<UUID, ShaderAsset>     shaders_;
+        std::unordered_map<UUID, ScriptAsset>     scripts_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

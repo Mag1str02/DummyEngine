@@ -1,7 +1,9 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base/STDIncludes.h"
+#include <string>
 
-namespace DE {
+namespace DummyEngine {
+
     std::string StackTrace();
+
 }

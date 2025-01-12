@@ -1,41 +1,42 @@
-#include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
+#include "TextureLoader.h"
+
+#include "DummyEngine/Core/Application/Config.h"
 
 #include <stb_image.h>
 #include <stb_image_write.h>
 
-#include "DummyEngine/Core/Application/Config.h"
+namespace DummyEngine {
 
-namespace DE {
     Ref<TextureData> TextureLoader::Load(const TextureAsset::LoadingProperties& props) {
         void*           stb_data;
-        int             width, height, nrChannels;
+        int             width, height, nr_channels;
         TextureChannels channels;
         std::string     channels_s;
         std::string     format_s;
 
         auto res = CreateRef<TextureData>();
 
-        stbi_set_flip_vertically_on_load(props.flip_uvs ? true : false);
+        stbi_set_flip_vertically_on_load(int(props.FlipUV));
 
-        switch (props.format) {
+        switch (props.Format) {
             case TextureFormat::U8:
-                stb_data = stbi_load(props.path.string().c_str(), &width, &height, &nrChannels, 0);
+                stb_data = stbi_load(props.Path.string().c_str(), &width, &height, &nr_channels, 0);
                 format_s = "U8";
                 break;
             case TextureFormat::Float:
-                stb_data = stbi_loadf(props.path.string().c_str(), &width, &height, &nrChannels, 0);
+                stb_data = stbi_loadf(props.Path.string().c_str(), &width, &height, &nr_channels, 0);
                 format_s = "Float";
                 break;
-            case TextureFormat::None: LOG_WARNING("TextureLoader", "Texture was not loaded because of unspecified format"); return res;
+            case TextureFormat::None: LOG_WARNING("Texture was not loaded because of unspecified format"); return res;
             default: DE_ASSERT(false, "Unsupported texture format"); break;
         }
 
-        if (!stb_data) {
-            LOG_ERROR("TextureLoader", "Failed to load texture (", RelativeToExecutable(props.path), ")");
+        if (stb_data == nullptr) {
+            LOG_ERROR("Failed to load texture {}", Config::RelativeToExecutable(props.Path));
             return nullptr;
         }
 
-        switch (nrChannels) {
+        switch (nr_channels) {
             case 1:
                 channels_s = "RED";
                 channels   = TextureChannels::RED;
@@ -58,20 +59,11 @@ namespace DE {
                 break;
         }
 
-        res->SetData(stb_data, width, height, channels, props.format);
+        res->SetData(stb_data, width, height, channels, props.Format);
         stbi_image_free(stb_data);
 
-        LOG_INFO("TextureLoader", "Texture loaded (", RelativeToExecutable(props.path), ") channels (", channels_s, ") format (", format_s, ")");
+        LOG_INFO("Texture {} loaded, channels ({}), format ({})", Config::RelativeToExecutable(props.Path), channels_s, format_s);
         return res;
     }
-    // void TextureLoader::Save(const Path& path, const Ref<TextureData> data) {
-    //     switch (data->Format()) {
-    //         case TextureChannels::RGBA: {
-    //             stbi_write_png(
-    //                 path.string().c_str(), data->Width(), data->Height(), data->Channels(), data->Data(), data->Width() * data->Channels());
-    //             break;
-    //         }
-    //         default: break;
-    //     }
-    // }
-}  // namespace DE
+
+}  // namespace DummyEngine

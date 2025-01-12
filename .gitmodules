@@ -1,27 +1,28 @@
-[submodule "DummyEngine/Libs/GLM"]
-	path = DummyEngine/Libs/GLM
+[submodule "Dependencies/GLM"]
+	path = Dependencies/GLM
 	url = https://github.com/g-truc/glm
-[submodule "DummyEngine/Libs/GLFW"]
-	path = DummyEngine/Libs/GLFW
+[submodule "Dependencies/GLFW"]
+	path = Dependencies/GLFW
 	url = https://github.com/glfw/glfw
-[submodule "DummyEngine/Libs/STB_IMAGE"]
-	path = DummyEngine/Libs/STB_IMAGE
+[submodule "Dependencies/STB_IMAGE"]
+	path = Dependencies/STB_IMAGE
 	url = https://github.com/nothings/stb
-[submodule "DummyEngine/Libs/YAML"]
-	path = DummyEngine/Libs/YAML
+[submodule "Dependencies/YAML"]
+	path = Dependencies/YAML
 	url = https://github.com/jbeder/yaml-cpp
-[submodule "DummyEngine/Libs/ASSIMP"]
-	path = DummyEngine/Libs/ASSIMP
+[submodule "Dependencies/ASSIMP"]
+	path = Dependencies/ASSIMP
 	url = https://github.com/assimp/assimp
-[submodule "DummyEngine/Libs/GLAD"]
-	path = DummyEngine/Libs/GLAD
+[submodule "Dependencies/GLAD"]
+	path = Dependencies/GLAD
 	url = https://github.com/Mag1str02/GLAD
-[submodule "DummyEngine/Libs/IMGUI"]
-	path = DummyEngine/Libs/IMGUI
+[submodule "Dependencies/IMGUI"]
+	path = Dependencies/IMGUI
 	url = https://github.com/Mag1str02/DummyEngine_ImGui
-[submodule "DummyEngine/Libs/NFD"]
-	path = DummyEngine/Libs/NFD
+[submodule "Dependencies/NFD"]
+	path = Dependencies/NFD
 	url = https://github.com/btzy/nativefiledialog-extended.git
-[submodule "DummyEngine/Libs/OpenAL"]
-	path = DummyEngine/Libs/OpenAL
-	url = https://github.com/kcat/openal-soft
+[submodule "Dependencies/TRACY"]
+	path = Dependencies/TRACY
+	url = https://github.com/Mag1str02/Tracy-Profiler
+	branch = client_only_0.11.1

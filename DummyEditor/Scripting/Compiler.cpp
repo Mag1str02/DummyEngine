@@ -1,17 +1,19 @@
-#include "DummyEditor/Scripting/Compiler.h"
+#include "Compiler.h"
 
-namespace DE {
+namespace DummyEngine {
+
     SINGLETON_BASE(Compiler);
 
     S_INITIALIZE() {
-        m_Impl = CreateCompilerImpl();
+        impl_ = CreateCompilerImpl();
         AddIncludeDir("..");
-        AddIncludeDir("../DummyEngine/Libs/GLM");
-        AddIncludeDir("../DummyEngine/Libs/OpenAL/include");
+        AddIncludeDir("../Dependencies/GLM");
+        AddIncludeDir("../Dependencies/TRACY/public");
         AddLinkLibrary("DummyEngineLib");
         AddDefine("DE_ENABLE_LOGGING=" + std::to_string(DE_ENABLE_LOGGING));
         AddDefine("DE_ENABLE_ASSERTS=" + std::to_string(DE_ENABLE_ASSERTS));
         AddDefine("DE_ENABLE_PROFILER=" + std::to_string(DE_ENABLE_PROFILER));
+        AddDefine("GLM_ENABLE_EXPERIMENTAL");
 
         return Unit();
     }
@@ -19,38 +21,38 @@ namespace DE {
         return Unit();
     }
     S_METHOD_IMPL(bool, Compile, (const Path& source, const Path& destination), (source, destination)) {
-        return m_Impl->Compile(source, destination);
+        return impl_->Compile(source, destination);
     }
     S_METHOD_IMPL(bool,
                   Link,
                   (const std::vector<Path>& sources, const Path& destination, const std::string& library_name),
                   (sources, destination, library_name)) {
-        return m_Impl->Link(sources, destination, library_name);
+        return impl_->Link(sources, destination, library_name);
     }
 
     S_METHOD_IMPL(Unit, AddIncludeDir, (const Path& dir), (dir)) {
-        m_Impl->AddIncludeDir(dir);
+        impl_->AddIncludeDir(dir);
         return Unit();
     }
     S_METHOD_IMPL(Unit, DeleteIncludeDir, (const Path& dir), (dir)) {
-        m_Impl->DeleteIncludeDir(dir);
+        impl_->DeleteIncludeDir(dir);
         return Unit();
     }
     S_METHOD_IMPL(Unit, AddLinkLibrary, (const Path& dir), (dir)) {
-        m_Impl->AddLinkLibrary(dir);
+        impl_->AddLinkLibrary(dir);
         return Unit();
     }
     S_METHOD_IMPL(Unit, DeleteLinkLibrary, (const Path& dir), (dir)) {
-        m_Impl->DeleteLinkLibrary(dir);
+        impl_->DeleteLinkLibrary(dir);
         return Unit();
     }
     S_METHOD_IMPL(Unit, AddDefine, (const std::string& dir), (dir)) {
-        m_Impl->AddDefine(dir);
+        impl_->AddDefine(dir);
         return Unit();
     }
     S_METHOD_IMPL(Unit, DeleteDefine, (const std::string& dir), (dir)) {
-        m_Impl->DeleteDefine(dir);
+        impl_->DeleteDefine(dir);
         return Unit();
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

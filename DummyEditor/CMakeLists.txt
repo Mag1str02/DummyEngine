@@ -1,29 +1,22 @@
-cmake_minimum_required(VERSION 3.0.0)
+include(Sources.cmake)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-include(sources.cmake)
+add_library(DummyEditorScripts SHARED Scripts/EditorCameraController.cpp)
+target_link_libraries(DummyEditorScripts PUBLIC DummyEngineLib)
+target_include_directories(DummyEditorScripts PUBLIC ../.)
 
 add_executable(DummyEditor
         ${EDITOR_SOURCES}
         ${PLATFORM_SOURCES}
-        )
-add_library(DummyEditorScripts SHARED
-        Scripts/EditorCameraController.cpp
-        )
-add_dependencies(DummyEditor DummyEditorScripts)
-target_compile_definitions(DummyEditor PUBLIC
-        DE_EDITOR_LIBRARY_NAME="libDummyEditorScripts"
-        )
-
-target_link_libraries(DummyEditorScripts PUBLIC DummyEngineLib)
-target_include_directories(DummyEditorScripts PUBLIC
-        ../.
-        )
+)
+target_compile_definitions(DummyEditor PUBLIC DE_EDITOR_LIBRARY_NAME="libDummyEditorScripts")
 target_link_libraries(DummyEditor PUBLIC DummyEngineLib)
-target_include_directories(DummyEditor PUBLIC
-        ../.
-        )
+target_include_directories(DummyEditor PUBLIC ../.)
+add_dependencies(DummyEditor DummyEditorScripts)
 
-
+if (${ENABLE_PRECOMPILED_HEADERS})
+        target_precompile_headers(DummyEditor REUSE_FROM DummyEngineLib)
+        target_precompile_headers(DummyEditorScripts REUSE_FROM DummyEngineLib)
+endif()
+if (${DE_CLANG_TIDY_RUN_ON_COMPILATION})
+    set_target_properties(DummyEditor PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
+endif()

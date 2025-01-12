@@ -1,10 +1,11 @@
-#include "DummyEngine/Core/Rendering/RendererOpenGL/GLShader.h"
+#include "GLShader.h"
 
 #include "DummyEngine/Core/Application/Config.h"
-#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLDebug.h"
 
-namespace DE {
+#include <glm/gtc/type_ptr.hpp>
+
+namespace DummyEngine {
     GLenum ShaderPartTypeToGLShaderPartType(ShaderPartType type) {
         switch (type) {
             case ShaderPartType::Vertex: return GL_VERTEX_SHADER;
@@ -15,87 +16,90 @@ namespace DE {
     }
 
     GLShader::GLShader(const std::vector<ShaderPart>& shader_parts) {
-        m_ShaderId = glCreateProgram();
+        shader_id_ = glCreateProgram();
         for (const auto& part : shader_parts) {
             AddPart(part);
         }
-        glLinkProgram(m_ShaderId);
+        glLinkProgram(shader_id_);
 
-        int  success;
-        char info_log[Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN)];
-        glGetProgramiv(m_ShaderId, GL_LINK_STATUS, &success);
-        if (!success) {
-            glGetProgramInfoLog(m_ShaderId, 512, NULL, info_log);
-            LOG_ERROR("GLShader", "Failed to link shader program (", std::to_string(m_ShaderId), ")\n", reinterpret_cast<const char*>(&info_log));
+        int         success;
+        std::string info_log;
+        info_log.resize(Config::Get().MaxShaderCompileErrorLen);
+        glGetProgramiv(shader_id_, GL_LINK_STATUS, &success);
+        int len = 0;
+        if (success == GL_FALSE) {
+            glGetProgramInfoLog(shader_id_, info_log.size(), &len, info_log.data());
+            info_log.resize(len);
+            LOG_ERROR("Failed to link shader program {} due:\n{}", std::to_string(shader_id_), info_log);
             throw std::runtime_error("Failed to compile shader.");
         }
-        LOG_INFO("GLShader", "GLShader program (", std::to_string(m_ShaderId), ") linked successfully");
+        LOG_INFO("GLShader program {} linked successfully", std::to_string(shader_id_));
     }
     GLShader::~GLShader() {
-        glDeleteProgram(m_ShaderId);
-        for (const auto& part : m_Parts) {
+        glDeleteProgram(shader_id_);
+        for (const auto& part : parts_) {
             glDeleteShader(part);
         }
     }
 
     void GLShader::Bind() const {
-        glUseProgram(m_ShaderId);
+        glUseProgram(shader_id_);
     }
     void GLShader::UnBind() const {
         glUseProgram(0);
     }
 
     void GLShader::SetFloat(const std::string& uniform_name, float x) const {
-        GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
+        GLint pos = glGetUniformLocation(shader_id_, uniform_name.c_str());
         glUniform1f(pos, x);
     }
     void GLShader::SetFloat2(const std::string& uniform_name, float x, float y) const {
-        GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
+        GLint pos = glGetUniformLocation(shader_id_, uniform_name.c_str());
         glUniform2f(pos, x, y);
     }
     void GLShader::SetFloat3(const std::string& uniform_name, float x, float y, float z) const {
-        GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
+        GLint pos = glGetUniformLocation(shader_id_, uniform_name.c_str());
         glUniform3f(pos, x, y, z);
     }
     void GLShader::SetFloat4(const std::string& uniform_name, float x, float y, float z, float w) const {
-        GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
+        GLint pos = glGetUniformLocation(shader_id_, uniform_name.c_str());
         glUniform4f(pos, x, y, z, w);
     }
     void GLShader::SetFloat2(const std::string& uniform_name, Vec2 value) const {
-        GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
+        GLint pos = glGetUniformLocation(shader_id_, uniform_name.c_str());
         glUniform2f(pos, value.x, value.y);
     }
     void GLShader::SetFloat3(const std::string& uniform_name, Vec3 value) const {
-        GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
+        GLint pos = glGetUniformLocation(shader_id_, uniform_name.c_str());
         glUniform3f(pos, value.x, value.y, value.z);
     }
     void GLShader::SetFloat4(const std::string& uniform_name, Vec4 value) const {
-        GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
+        GLint pos = glGetUniformLocation(shader_id_, uniform_name.c_str());
         glUniform4f(pos, value.x, value.y, value.z, value.w);
     }
     void GLShader::SetInt(const std::string& uniform_name, int x) const {
-        GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
+        GLint pos = glGetUniformLocation(shader_id_, uniform_name.c_str());
         glUniform1i(pos, x);
     }
     void GLShader::SetInt2(const std::string& uniform_name, int x, int y) const {
-        GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
+        GLint pos = glGetUniformLocation(shader_id_, uniform_name.c_str());
         glUniform2i(pos, x, y);
     }
     void GLShader::SetInt3(const std::string& uniform_name, int x, int y, int z) const {
-        GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
+        GLint pos = glGetUniformLocation(shader_id_, uniform_name.c_str());
         glUniform3i(pos, x, y, z);
     }
     void GLShader::SetInt4(const std::string& uniform_name, int x, int y, int z, int w) const {
-        GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
+        GLint pos = glGetUniformLocation(shader_id_, uniform_name.c_str());
         glUniform4i(pos, x, y, z, w);
     }
     void GLShader::SetMat4(const std::string& uniform_name, Mat4 value) const {
-        GLint pos = glGetUniformLocation(m_ShaderId, uniform_name.c_str());
+        GLint pos = glGetUniformLocation(shader_id_, uniform_name.c_str());
         glUniformMatrix4fv(pos, 1, GL_FALSE, glm::value_ptr(value));
     }
     void GLShader::SetUnifromBlock(const std::string& uniform_name, U32 id) const {
-        GLint pos = glGetUniformBlockIndex(m_ShaderId, uniform_name.c_str());
-        glUniformBlockBinding(m_ShaderId, pos, id);
+        GLint pos = glGetUniformBlockIndex(shader_id_, uniform_name.c_str());
+        glUniformBlockBinding(shader_id_, pos, id);
         glCheckError();
     }
 
@@ -105,7 +109,7 @@ namespace DE {
 
         std::ifstream fin(path_to_file);
         if (!fin.is_open()) {
-            LOG_ERROR("GLShader", "Can't open shader source file (", RelativeToExecutable(path_to_file), ")");
+            LOG_ERROR("Can't open shader source file {}", Config::RelativeToExecutable(path_to_file));
             return source_string;
         }
         try {
@@ -113,34 +117,33 @@ namespace DE {
                 source_string.append(line + "\n");
             }
         } catch (...) {
-            LOG_ERROR("GLShader", "Failed to read shader source file (", RelativeToExecutable(path_to_file), ")");
+            LOG_ERROR("Failed to read shader source file {}", Config::RelativeToExecutable(path_to_file));
             return source_string;
         }
         return source_string;
     }
     void GLShader::AddPart(ShaderPart part) {
-        std::string source       = ReadPartFromFile(part.path);
+        std::string source       = ReadPartFromFile(part.Path);
         const char* source_c_str = source.c_str();
 
-        GLuint shader_part = glCreateShader(ShaderPartTypeToGLShaderPartType(part.type));
-//        if (part.type == ShaderPartType::Geometry) {
-//            glShaderSource(shader_part, strlen(source_c_str), &source_c_str, NULL);
-//        } else {
-        glShaderSource(shader_part, 1, &source_c_str, NULL);
-//        }
+        GLuint shader_part = glCreateShader(ShaderPartTypeToGLShaderPartType(part.Type));
+        glShaderSource(shader_part, 1, &source_c_str, nullptr);
         glCompileShader(shader_part);
-        m_Parts.push_back(shader_part);
+        parts_.push_back(shader_part);
 
-        int  success = 1;
-        char infoLog[Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN)];
+        int         success = 1;
+        std::string info_log;
+        info_log.resize(Config::Get().MaxShaderCompileErrorLen);
+        int len = 0;
         glGetShaderiv(shader_part, GL_COMPILE_STATUS, &success);
-        if (!success) {
-            glGetShaderInfoLog(shader_part, Config::GetI(DE_CFG_MAX_COMPILE_ERROR_LEN), NULL, infoLog);
-            LOG_ERROR("GLShader", "Failed to compile shader (", part.path.string(), ")\n", reinterpret_cast<const char*>(&infoLog));
+        if (success == GL_FALSE) {
+            glGetShaderInfoLog(shader_part, info_log.size(), &len, info_log.data());
+            info_log.resize(len);
+            LOG_ERROR("Failed to compile shader {} due:\n{}", part.Path, info_log);
             return;
         }
-        LOG_INFO("GLShader", "File (", RelativeToExecutable(part.path), ") compiled");
+        LOG_INFO("File {} compiled", Config::RelativeToExecutable(part.Path));
 
-        glAttachShader(m_ShaderId, shader_part);
+        glAttachShader(shader_id_, shader_part);
     }
-}  // namespace DE
+}  // namespace DummyEngine

@@ -1,6 +1,7 @@
 #include "DummyEngine/Core/ResourceManaging/AssetManager.h"
 
-namespace DE {
+namespace DummyEngine {
+
     SINGLETON_BASE(AssetManager);
     S_INITIALIZE() {
         return Unit();
@@ -10,102 +11,102 @@ namespace DE {
     }
 
     S_METHOD_IMPL(bool, AddScriptAsset, (const ScriptAsset& asset), (asset)) {
-        if (m_Scripts.contains(asset.id)) {
+        if (scripts_.contains(asset.ID)) {
             return false;
         }
-        m_Scripts[asset.id] = asset;
-        LOG_INFO("AssetManager", "Added ScriptAsset(", asset.name, "|", asset.id, ")");
+        scripts_[asset.ID] = asset;
+        LOG_INFO("Added ScriptAsset({}|{})", asset.Name, asset.ID);
         return true;
     }
     S_METHOD_IMPL(bool, AddTextureAsset, (const TextureAsset& asset), (asset)) {
-        if (m_Textures.contains(asset.id)) {
+        if (textures_.contains(asset.ID)) {
             return false;
         }
-        m_Textures[asset.id] = asset;
-        LOG_INFO("AssetManager", "Added TextureAsset(", asset.name, "|", asset.id, ")");
+        textures_[asset.ID] = asset;
+        LOG_INFO("Added TextureAsset({}|{})", asset.Name, asset.ID);
         return true;
     }
     S_METHOD_IMPL(bool, AddShaderAsset, (const ShaderAsset& asset), (asset)) {
-        if (m_Shaders.contains(asset.id)) {
+        if (shaders_.contains(asset.ID)) {
             return false;
         }
-        m_Shaders[asset.id] = asset;
-        LOG_INFO("AssetManager", "Added ShaderAsset(", asset.name, "|", asset.id, ")");
+        shaders_[asset.ID] = asset;
+        LOG_INFO("Added ShaderAsset({}|{})", asset.Name, asset.ID);
         return true;
     }
     S_METHOD_IMPL(bool, AddRenderMeshAsset, (const RenderMeshAsset& asset), (asset)) {
-        if (m_RenderMeshes.contains(asset.id)) {
+        if (render_meshes_.contains(asset.ID)) {
             return false;
         }
-        m_RenderMeshes[asset.id] = asset;
-        LOG_INFO("AssetManager", "Added RenderMeshAsset(", asset.name, "|", asset.id, ")");
+        render_meshes_[asset.ID] = asset;
+        LOG_INFO("Added RenderMeshAsset({}|{})", asset.Name, asset.ID);
         return true;
     }
 
     S_METHOD_IMPL(std::optional<ScriptAsset>, GetScriptAsset, (UUID id), (id)) {
-        if (!m_Scripts.contains(id)) {
+        if (!scripts_.contains(id)) {
             return {};
         }
-        return m_Scripts[id];
+        return scripts_[id];
     }
     S_METHOD_IMPL(std::optional<TextureAsset>, GetTextureAsset, (UUID id), (id)) {
-        if (!m_Textures.contains(id)) {
+        if (!textures_.contains(id)) {
             return {};
         }
-        return m_Textures[id];
+        return textures_[id];
     }
     S_METHOD_IMPL(std::optional<ShaderAsset>, GetShaderAsset, (UUID id), (id)) {
-        if (!m_Shaders.contains(id)) {
+        if (!shaders_.contains(id)) {
             return {};
         }
-        return m_Shaders[id];
+        return shaders_[id];
     }
     S_METHOD_IMPL(std::optional<RenderMeshAsset>, GetRenderMeshAsset, (UUID id), (id)) {
-        if (!m_RenderMeshes.contains(id)) {
+        if (!render_meshes_.contains(id)) {
             return {};
         }
-        return m_RenderMeshes[id];
+        return render_meshes_[id];
     }
 
     S_METHOD_IMPL(bool, RemoveScriptAsset, (UUID id), (id)) {
-        if (m_Scripts.contains(id)) {
-            m_Scripts.erase(id);
-            LOG_INFO("AssetManager", "Remove ScriptAsset(", id, ")");
+        if (scripts_.contains(id)) {
+            scripts_.erase(id);
+            LOG_INFO("Remove ScriptAsset({})", id);
             return true;
         }
         return false;
     }
     S_METHOD_IMPL(bool, RemoveTextureAsset, (UUID id), (id)) {
-        if (m_Textures.contains(id)) {
-            m_Textures.erase(id);
-            LOG_INFO("AssetManager", "Remove TextureAsset(", id, ")");
+        if (textures_.contains(id)) {
+            textures_.erase(id);
+            LOG_INFO("Remove TextureAsset({})", id);
             return true;
         }
         return false;
     }
     S_METHOD_IMPL(bool, RemoveShaderAsset, (UUID id), (id)) {
-        if (m_Shaders.contains(id)) {
-            m_Shaders.erase(id);
-            LOG_INFO("AssetManager", "Remove ShaderAsset(", id, ")");
+        if (shaders_.contains(id)) {
+            shaders_.erase(id);
+            LOG_INFO("Remove ShaderAsset({})", id);
             return true;
         }
         return false;
     }
     S_METHOD_IMPL(bool, RemoveRenderMeshAsset, (UUID id), (id)) {
-        if (m_RenderMeshes.contains(id)) {
-            m_RenderMeshes.erase(id);
-            LOG_INFO("AssetManager", "Remove RenderMeshAsset(", id, ")");
+        if (render_meshes_.contains(id)) {
+            render_meshes_.erase(id);
+            LOG_INFO("Remove RenderMeshAsset({})", id);
             return true;
         }
         return false;
     }
 
     S_METHOD_IMPL(Unit, Clear, (), ()) {
-        m_RenderMeshes.clear();
-        m_Textures.clear();
-        m_Shaders.clear();
-        m_Scripts.clear();
+        render_meshes_.clear();
+        textures_.clear();
+        shaders_.clear();
+        scripts_.clear();
         return Unit();
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

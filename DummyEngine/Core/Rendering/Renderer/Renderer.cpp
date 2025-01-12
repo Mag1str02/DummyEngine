@@ -1,36 +1,37 @@
-#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "Renderer.h"
 
 // TODO: Remove glad
 #include <glad/glad.h>
 
 #include "DummyEngine/Core/Application/Config.h"
+#include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
+#include "DummyEngine/Core/Rendering/Renderer/BufferLayout.h"
 #include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
-#include "DummyEngine/Core/Rendering/RendererOpenGL/GLDebug.h"
+#include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
+#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLRenderAPI.h"
-#include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
-#include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
 
-namespace DE {
+namespace DummyEngine {
 
     SINGLETON_BASE(Renderer);
 
     S_INITIALIZE() {
-        switch (Config::GetRenderAPI()) {
-            case API::OpenGL: m_RenderAPI = CreateScope<GLRenderAPI>(); break;
+        switch (Config::Get().RendererAPI) {
+            case API::OpenGL: render_api_ = CreateScope<GLRenderAPI>(); break;
             case API::Vulkan: {
                 DE_ASSERT(false, "Attempt to init Renderer with VulkanAPI which is currently unsupported");
-                m_RenderAPI = nullptr;
+                render_api_ = nullptr;
                 break;
             }
             case API::None: {
                 DE_ASSERT(false, "Attempt to init Renderer without RenderingAPI");
-                m_RenderAPI = nullptr;
+                render_api_ = nullptr;
                 break;
             }
         }
-        m_RenderAPI->SetDefaultState();
+        render_api_->SetDefaultState();
         GenResources();
-        LOG_INFO("Renderer", "Renderer initialized");
+        LOG_INFO("Renderer initialized");
         return Unit();
     }
     S_TERMINATE() {
@@ -38,62 +39,64 @@ namespace DE {
     }
 
     S_METHOD_IMPL(Unit, SetViewport, (U32 width, U32 height), (width, height)) {
-        m_RenderAPI->SetViewport(0, 0, width, height);
+        render_api_->SetViewport(0, 0, width, height);
         return Unit();
     }
     S_METHOD_IMPL(Unit, BeginFrame, (), ()) {
-        m_FrameStatistics.Reset();
+        frame_statistics_.Reset();
         return Unit();
     }
     S_METHOD_IMPL(Unit, EndFrame, (), ()) {
         return Unit();
     }
     S_METHOD_IMPL(Unit, Clear, (), ()) {
-        m_RenderAPI->Clear();
+        render_api_->Clear();
         return Unit();
     }
 
     S_METHOD_IMPL(Unit, Submit, (Ref<VertexArray> vertex_array, Ref<Shader> shader, const Mat4& transform), (vertex_array, shader, transform)) {
         shader->Bind();
         shader->SetMat4("u_Transform", transform);
-        vertex_array->Bind();
-        m_RenderAPI->DrawIndexed(vertex_array);
+        render_api_->DrawIndexed(vertex_array);
 
-        ++m_FrameStatistics.m_DrawCallsAmount;
-        ++m_FrameStatistics.m_DrawnInstances;
+        ++frame_statistics_.DrawCallsAmount;
+        ++frame_statistics_.DrawnInstances;
         return Unit();
     }
-    S_METHOD_IMPL(Unit, Submit, (Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& transform, const bool is_depthmap), (mesh, shader, transform, is_depthmap)) {
+    S_METHOD_IMPL(Unit,
+                  Submit,
+                  (Ref<RenderMesh> mesh, Ref<Shader> shader, const Mat4& transform, const bool is_depthmap),
+                  (mesh, shader, transform, is_depthmap)) {
         shader->Bind();
         shader->SetMat4("u_Transform", transform);
-        for (const auto& sub_mesh : mesh->m_SubMeshes) {
+        for (const auto& sub_mesh : mesh->sub_meshes_) {
             if (!is_depthmap) {
-                sub_mesh.material.Apply(shader);
+                sub_mesh.Material.Apply(shader);
             }
-            sub_mesh.vertex_array->Bind();
-            m_RenderAPI->DrawIndexed(sub_mesh.vertex_array);
+            sub_mesh.VertexArray->Bind();
+            render_api_->DrawIndexed(sub_mesh.VertexArray);
 
-            ++m_FrameStatistics.m_DrawCallsAmount;
-            ++m_FrameStatistics.m_DrawnInstances;
+            ++frame_statistics_.DrawCallsAmount;
+            ++frame_statistics_.DrawnInstances;
         }
 
         return Unit();
     }
     S_METHOD_IMPL(Unit, Submit, (Ref<CubeMap> cube_map, const FPSCamera& camera, const Mat4& transform), (cube_map, camera, transform)) {
         cube_map->Bind(11);
-        auto shader = m_Resources.skybox;
+        auto shader = resources_.Skybox;
         shader->Bind();
         shader->SetInt("u_SkyBox", 11);
         shader->SetMat4("u_Transform", transform);
         shader->SetMat4("u_Projection", camera.GetProjectionMatrix());
         shader->SetMat4("u_View", camera.GetViewMatrix());
         shader->SetFloat("u_SkyBoxLOD", cube_map->GetLOD());
-        m_RenderAPI->Disable(RenderSetting::DepthMask);
-        m_RenderAPI->DrawIndexed(m_Resources.cube);
-        m_RenderAPI->Enable(RenderSetting::DepthMask);
+        render_api_->Disable(RenderSetting::DepthMask);
+        render_api_->DrawIndexed(resources_.Cube);
+        render_api_->Enable(RenderSetting::DepthMask);
 
-        ++m_FrameStatistics.m_DrawCallsAmount;
-        ++m_FrameStatistics.m_DrawnInstances;
+        ++frame_statistics_.DrawCallsAmount;
+        ++frame_statistics_.DrawnInstances;
         return Unit();
     }
 
@@ -103,16 +106,16 @@ namespace DE {
                   (texture, threshold, soft_threshold, radius, depth, strength)) {
         Ref<FrameBuffer> result = FrameBuffer::Create({texture->GetWidth(), texture->GetHeight()});
 
-        m_Resources.brightness_filter->Bind();
-        m_Resources.brightness_filter->SetInt("u_Texture", 1);
-        m_Resources.brightness_filter->SetFloat("u_Treshold", threshold);
-        m_Resources.brightness_filter->SetFloat("u_SoftTreshold", soft_threshold);
+        resources_.BrightnessFilter->Bind();
+        resources_.BrightnessFilter->SetInt("u_Texture", 1);
+        resources_.BrightnessFilter->SetFloat("u_Treshold", threshold);
+        resources_.BrightnessFilter->SetFloat("u_SoftTreshold", soft_threshold);
         texture->Bind(1);
         result->AddColorAttachment(texture->GetFormat(), texture->GetChannels());
         result->Bind();
         SetViewport(texture->GetWidth(), texture->GetHeight());
         Clear();
-        Submit(m_Resources.screen_quad, m_Resources.brightness_filter);
+        Submit(resources_.ScreenQuad, resources_.BrightnessFilter);
         Ref<Texture> bright_pixels = result->GetColorAttachment(0);
 
         Ref<Texture> down_up_samepled = BloomDownAndUpSample(bright_pixels, radius, depth);
@@ -122,14 +125,14 @@ namespace DE {
 
         source->Bind(1);
         down_up_samepled->Bind(2);
-        m_Resources.bloom->Bind();
-        m_Resources.bloom->SetInt("u_Texture", 1);
-        m_Resources.bloom->SetInt("u_BrighnessTexture", 2);
-        m_Resources.bloom->SetFloat("u_Strength", strength);
+        resources_.Bloom->Bind();
+        resources_.Bloom->SetInt("u_Texture", 1);
+        resources_.Bloom->SetInt("u_BrighnessTexture", 2);
+        resources_.Bloom->SetFloat("u_Strength", strength);
         result->Bind();
         Renderer::SetViewport(texture->GetWidth(), texture->GetHeight());
         Renderer::Clear();
-        Renderer::Submit(m_Resources.screen_quad, m_Resources.bloom);
+        Renderer::Submit(resources_.ScreenQuad, resources_.Bloom);
         return Unit();
     }
     S_METHOD_IMPL(Ref<Texture>, BloomDownAndUpSample, (Ref<Texture> texture, float radius, U32 depth), (texture, radius, depth)) {
@@ -144,21 +147,21 @@ namespace DE {
             width /= level_divisor;
         }
         if (layers.empty()) {
-            LOG_WARNING("Renderer", "Failed to gen layers for bloom because depth < 1 or texture is smaller then 2x2");
+            LOG_WARNING("Failed to gen layers for Bloom because depth < 1 or texture is smaller then 2x2");
             return texture;
         }
         Ref<Texture> current = texture;
         height               = texture->GetHeight();
         width                = texture->GetWidth();
         for (U32 i = 0; i < layers.size(); ++i) {
-            m_Resources.bloom_downsample->Bind();
-            m_Resources.bloom_downsample->SetInt("u_Texture", 1);
+            resources_.BloomDownsample->Bind();
+            resources_.BloomDownsample->SetInt("u_Texture", 1);
             current->Bind(1);
             buffer->SetColorAttachment(layers[i], 0);
             buffer->Bind();
             Renderer::SetViewport(width / level_divisor, height / level_divisor);
             Renderer::Clear();
-            Renderer::Submit(m_Resources.screen_quad, m_Resources.bloom_downsample);
+            Renderer::Submit(resources_.ScreenQuad, resources_.BloomDownsample);
 
             current = layers[i];
             height /= level_divisor;
@@ -170,25 +173,25 @@ namespace DE {
         for (S32 i = layers.size() - 1; i > 0; --i) {
             Ref<Texture> small = layers[i];
             Ref<Texture> big   = layers[i - 1];
-            m_Resources.bloom_upsample->Bind();
-            m_Resources.bloom_upsample->SetInt("u_Texture", 1);
-            m_Resources.bloom_upsample->SetFloat("u_Radius", radius);
+            resources_.BloomUpsample->Bind();
+            resources_.BloomUpsample->SetInt("u_Texture", 1);
+            resources_.BloomUpsample->SetFloat("u_Radius", radius);
             buffer->SetColorAttachment(big, 0);
             buffer->Bind();
             Renderer::SetViewport(big->GetWidth(), big->GetHeight());
-            Renderer::Submit(m_Resources.screen_quad, m_Resources.bloom_upsample);
+            Renderer::Submit(resources_.ScreenQuad, resources_.BloomUpsample);
         }
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Ref<Texture> result = Texture::Create(texture->GetWidth(), texture->GetHeight(), texture->GetChannels(), texture->GetFormat());
         // buffer->SetColorAttachment(result, 0);
         // buffer->Bind();
-        // m_Resources.textured_quad->Bind();
-        // m_Resources.textured_quad->SetInt("u_Texture", 1);
+        // resources_.textured_quad->Bind();
+        // resources_.textured_quad->SetInt("u_Texture", 1);
         // layers.front()->Bind(1);
         // Renderer::SetViewport(texture->GetWidth(), texture->GetHeight());
         // Renderer::Clear();
-        // Renderer::Submit(m_Resources.screen_quad, m_Resources.textured_quad);
+        // Renderer::Submit(resources_.ScreenQuad, resources_.textured_quad);
 
         return layers.front();
     }
@@ -197,14 +200,14 @@ namespace DE {
         result->AddColorAttachment(texture->GetFormat(), texture->GetChannels());
 
         result->Bind();
-        m_Resources.gamma_hdr->Bind();
-        m_Resources.gamma_hdr->SetInt("u_Texture", 1);
-        m_Resources.gamma_hdr->SetFloat("u_Exposure", exposure);
-        m_Resources.gamma_hdr->SetFloat("u_Gamma", gamma);
+        resources_.GammaHDR->Bind();
+        resources_.GammaHDR->SetInt("u_Texture", 1);
+        resources_.GammaHDR->SetFloat("u_Exposure", exposure);
+        resources_.GammaHDR->SetFloat("u_Gamma", gamma);
         texture->Bind(1);
         SetViewport(texture->GetWidth(), texture->GetHeight());
         Clear();
-        Submit(m_Resources.screen_quad, m_Resources.gamma_hdr);
+        Submit(resources_.ScreenQuad, resources_.GammaHDR);
 
         texture->Copy(result, 0);
 
@@ -216,64 +219,64 @@ namespace DE {
 
         result->Bind();
         texture->Bind(1);
-        m_Resources.gaussian_blur->Bind();
-        m_Resources.gaussian_blur->SetInt("u_Texture", 1);
-        m_Resources.gaussian_blur->SetInt("u_Horizontal", 1);
+        resources_.GaussianBlur->Bind();
+        resources_.GaussianBlur->SetInt("u_Texture", 1);
+        resources_.GaussianBlur->SetInt("u_Horizontal", 1);
         SetViewport(texture->GetWidth(), texture->GetHeight());
         Clear();
-        Submit(m_Resources.screen_quad, m_Resources.gaussian_blur);
+        Submit(resources_.ScreenQuad, resources_.GaussianBlur);
 
         Ref<Texture> horizontal = result->GetColorAttachment(0);
 
         result->SetColorAttachment(texture, 0);
-        m_Resources.gaussian_blur->Bind();
-        m_Resources.gaussian_blur->SetInt("u_Texture", 1);
-        m_Resources.gaussian_blur->SetInt("u_Horizontal", 0);
+        resources_.GaussianBlur->Bind();
+        resources_.GaussianBlur->SetInt("u_Texture", 1);
+        resources_.GaussianBlur->SetInt("u_Horizontal", 0);
         horizontal->Bind(1);
         result->Bind();
         SetViewport(texture->GetWidth(), texture->GetHeight());
         Clear();
-        Submit(m_Resources.screen_quad, m_Resources.gaussian_blur);
+        Submit(resources_.ScreenQuad, resources_.GaussianBlur);
         return Unit();
     }
 
     S_METHOD_IMPL(Unit, Enable, (RenderSetting setting), (setting)) {
-        m_RenderAPI->Enable(setting);
+        render_api_->Enable(setting);
         return Unit();
     }
     S_METHOD_IMPL(Unit, Disable, (RenderSetting setting), (setting)) {
-        m_RenderAPI->Disable(setting);
+        render_api_->Disable(setting);
         return Unit();
     }
     S_METHOD_IMPL(Unit, SetClearColor, (Vec4 color), (color)) {
-        m_RenderAPI->SetClearColor(color);
+        render_api_->SetClearColor(color);
         return Unit();
     }
     S_METHOD_IMPL(Unit, SetClearColor, (float r, float g, float b, float a), (r, g, b, a)) {
-        m_RenderAPI->SetClearColor(Vec4(r, g, b, a));
+        render_api_->SetClearColor(Vec4(r, g, b, a));
         return Unit();
     }
     S_METHOD_IMPL(Unit, SetDefaultFrameBuffer, (), ()) {
-        m_RenderAPI->SetDefaultFrameBuffer();
+        render_api_->SetDefaultFrameBuffer();
         return Unit();
     }
 
     S_METHOD_IMPL(Ref<Shader>, GetShader, (Shaders shader), (shader)) {
         switch (shader) {
-            case Shaders::EquirectangularToCubeMap: return m_Resources.equirectangular_to_cubemap;
-            case Shaders::Skybox: return m_Resources.skybox;
-            case Shaders::Convolution: return m_Resources.convolution;
-            case Shaders::PreFileterConvolution: return m_Resources.pre_filter_convolution;
-            case Shaders::BRDFConvolution: return m_Resources.brdf_convolution;
-            case Shaders::BrightnessFilter: return m_Resources.brightness_filter;
-            case Shaders::TexturedQuad: return m_Resources.textured_quad;
-            case Shaders::GaussianBlur: return m_Resources.gaussian_blur;
-            case Shaders::Bloom: return m_Resources.bloom;
-            case Shaders::GammaHDR: return m_Resources.gamma_hdr;
-            case Shaders::BloomUpsample: return m_Resources.bloom_upsample;
-            case Shaders::BloomDownsample: return m_Resources.bloom_downsample;
-            case Shaders::DirectionalShadowMap: return m_Resources.directional_shadow_map;
-            case Shaders::OmnidirectionalShadowMap: return m_Resources.omnidirectional_shadow_map;
+            case Shaders::EquirectangularToCubeMap: return resources_.EquirectangularToCubemap;
+            case Shaders::Skybox: return resources_.Skybox;
+            case Shaders::Convolution: return resources_.Convolution;
+            case Shaders::PreFileterConvolution: return resources_.PreFilterConvolution;
+            case Shaders::BRDFConvolution: return resources_.BRDFConvolution;
+            case Shaders::BrightnessFilter: return resources_.BrightnessFilter;
+            case Shaders::TexturedQuad: return resources_.TexturedQuad;
+            case Shaders::GaussianBlur: return resources_.GaussianBlur;
+            case Shaders::Bloom: return resources_.Bloom;
+            case Shaders::GammaHDR: return resources_.GammaHDR;
+            case Shaders::BloomUpsample: return resources_.BloomUpsample;
+            case Shaders::BloomDownsample: return resources_.BloomDownsample;
+            case Shaders::DirectionalShadowMap: return resources_.DirectionalShadowMap;
+            case Shaders::OmnidirectionalShadowMap: return resources_.OmnidirectionalShadowMap;
             case Shaders::Last:
             case Shaders::None: return nullptr;
             default: DE_ASSERT(false, "Wrong Renderer shader requested"); break;
@@ -282,9 +285,9 @@ namespace DE {
     }
     S_METHOD_IMPL(Ref<Texture>, GetTexture, (Textures texture), (texture)) {
         switch (texture) {
-            case Textures::White: return m_Resources.white;
-            case Textures::Normal: return m_Resources.normal;
-            case Textures::BRDF: return m_Resources.brdf;
+            case Textures::White: return resources_.White;
+            case Textures::Normal: return resources_.Normal;
+            case Textures::BRDF: return resources_.BRDF;
             case Textures::Last:
             case Textures::None: return nullptr;
             default: DE_ASSERT(false, "Wrong Renderer texture requested"); break;
@@ -293,8 +296,8 @@ namespace DE {
     }
     S_METHOD_IMPL(Ref<VertexArray>, GetVertexArray, (VertexArrays vao), (vao)) {
         switch (vao) {
-            case VertexArrays::Cube: return m_Resources.cube;
-            case VertexArrays::ScreenQuad: return m_Resources.screen_quad;
+            case VertexArrays::Cube: return resources_.Cube;
+            case VertexArrays::ScreenQuad: return resources_.ScreenQuad;
             case VertexArrays::Last:
             case VertexArrays::None: return nullptr;
             default: DE_ASSERT(false, "Wrong Renderer vertex array requested"); break;
@@ -303,13 +306,13 @@ namespace DE {
     }
 
     S_METHOD_IMPL(API, CurrentAPI, (), ()) {
-        return m_RenderAPI->GetAPI();
+        return render_api_->GetAPI();
     }
     S_METHOD_IMPL(Renderer::Statistics, GetStatistics, (), ()) {
-        return m_FrameStatistics;
+        return frame_statistics_;
     }
     S_METHOD_IMPL(RenderAPI&, GetRenderAPI, (), ()) {
-        return *m_RenderAPI;
+        return *render_api_;
     }
 
     void Renderer::GenResources() {
@@ -322,7 +325,7 @@ namespace DE {
             std::vector<U8> data(4, 255);
 
             TextureData tex_data(&data[0], width, height, format);
-            m_Resources.white = Texture::Create(tex_data);
+            resources_.White = Texture::Create(tex_data);
         }
         //*Normal
         {
@@ -332,7 +335,7 @@ namespace DE {
             std::vector<U8> data   = {128, 128, 255, 255};
 
             TextureData tex_data(&data[0], width, height, format);
-            m_Resources.normal = Texture::Create(tex_data);
+            resources_.Normal = Texture::Create(tex_data);
         }
 
         //*___VertexArrays_____________________________________________________________________________________________________________________________________________________________________________
@@ -373,9 +376,9 @@ namespace DE {
             auto ib = IndexBuffer::Create(indices, 36);
             auto vb = VertexBuffer::Create({{BufferElementType::Float3}, 0}, 8, vertices);
 
-            m_Resources.cube = VertexArray::Create();
-            m_Resources.cube->SetIndexBuffer(ib);
-            m_Resources.cube->AddVertexBuffer(vb);
+            resources_.Cube = VertexArray::Create();
+            resources_.Cube->SetIndexBuffer(ib);
+            resources_.Cube->AddVertexBuffer(vb);
         }
         //*ScreenQuad
         {
@@ -412,13 +415,13 @@ namespace DE {
             auto vb = VertexBuffer::Create({BufferElementType::Float2, BufferElementType::Float2}, 4, vertices);
             auto ib = IndexBuffer::Create(indices, 6);
 
-            m_Resources.screen_quad = VertexArray::Create();
-            m_Resources.screen_quad->SetIndexBuffer(ib);
-            m_Resources.screen_quad->AddVertexBuffer(vb);
+            resources_.ScreenQuad = VertexArray::Create();
+            resources_.ScreenQuad->SetIndexBuffer(ib);
+            resources_.ScreenQuad->AddVertexBuffer(vb);
         }
 
         //*___Shaders_____________________________________________________________________________________________________________________________________________________________________________
-        Path shaders = Config::GetPath(DE_CFG_EXECUTABLE_PATH) / "../DummyEngine/Core/Rendering/Shaders";
+        Path shaders = Config::Get().ExecutablePath / "../DummyEngine/Core/Rendering/Shaders";
         //*EquirectangularToCubeMap
         {
             std::vector<ShaderPart> parts = {
@@ -426,7 +429,7 @@ namespace DE {
                 {ShaderPartType::Fragment, shaders / "Fragment/EquirectangularToCubeMap.fs"},
             };
 
-            m_Resources.equirectangular_to_cubemap = Shader::Create(parts);
+            resources_.EquirectangularToCubemap = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
@@ -434,7 +437,7 @@ namespace DE {
                 {ShaderPartType::Fragment, shaders / "Fragment/CubeMapSample.fs"},
             };
 
-            m_Resources.skybox = Shader::Create(parts);
+            resources_.Skybox = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
@@ -442,7 +445,7 @@ namespace DE {
                 {ShaderPartType::Fragment, shaders / "Fragment/CubeMapConvolution.fs"},
             };
 
-            m_Resources.convolution = Shader::Create(parts);
+            resources_.Convolution = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
@@ -450,7 +453,7 @@ namespace DE {
                 {ShaderPartType::Fragment, shaders / "Fragment/CubeMapPrefilter.fs"},
             };
 
-            m_Resources.pre_filter_convolution = Shader::Create(parts);
+            resources_.PreFilterConvolution = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
@@ -458,7 +461,7 @@ namespace DE {
                 {ShaderPartType::Fragment, shaders / "Fragment/BRDFConvolution.fs"},
             };
 
-            m_Resources.brdf_convolution = Shader::Create(parts);
+            resources_.BRDFConvolution = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
@@ -466,7 +469,7 @@ namespace DE {
                 {ShaderPartType::Fragment, shaders / "Fragment/BrightnessFilter.fs"}
             };
 
-            m_Resources.brightness_filter = Shader::Create(parts);
+            resources_.BrightnessFilter = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
@@ -474,7 +477,7 @@ namespace DE {
                 {ShaderPartType::Fragment, shaders / "Fragment/TexturedQuad.fs"}
             };
 
-            m_Resources.textured_quad = Shader::Create(parts);
+            resources_.TexturedQuad = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
@@ -482,7 +485,7 @@ namespace DE {
                 {ShaderPartType::Fragment, shaders / "Fragment/GaussianBlur.fs"}
             };
 
-            m_Resources.gaussian_blur = Shader::Create(parts);
+            resources_.GaussianBlur = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
@@ -490,7 +493,7 @@ namespace DE {
                 {ShaderPartType::Fragment,      shaders / "Fragment/Bloom.fs"}
             };
 
-            m_Resources.bloom = Shader::Create(parts);
+            resources_.Bloom = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
@@ -498,7 +501,7 @@ namespace DE {
                 {ShaderPartType::Fragment,   shaders / "Fragment/GammaHDR.fs"}
             };
 
-            m_Resources.gamma_hdr = Shader::Create(parts);
+            resources_.GammaHDR = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
@@ -506,7 +509,7 @@ namespace DE {
                 {ShaderPartType::Fragment, shaders / "Fragment/BloomUpsample.fs"}
             };
 
-            m_Resources.bloom_upsample = Shader::Create(parts);
+            resources_.BloomUpsample = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
@@ -514,24 +517,24 @@ namespace DE {
                 {ShaderPartType::Fragment, shaders / "Fragment/BloomDownsample.fs"}
             };
 
-            m_Resources.bloom_downsample = Shader::Create(parts);
+            resources_.BloomDownsample = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
-                {  ShaderPartType::Vertex,      shaders / "Vertex/DirectionalShadowMap.vs"},
+                {  ShaderPartType::Vertex,   shaders / "Vertex/DirectionalShadowMap.vs"},
                 {ShaderPartType::Fragment, shaders / "Fragment/DirectionalShadowMap.fs"}
             };
 
-            m_Resources.directional_shadow_map = Shader::Create(parts);
+            resources_.DirectionalShadowMap = Shader::Create(parts);
         }
         {
             std::vector<ShaderPart> parts = {
-                {ShaderPartType::Vertex,   shaders / "Vertex/OmnidirectionalShadowMap.vs"},
+                {  ShaderPartType::Vertex,   shaders / "Vertex/OmnidirectionalShadowMap.vs"},
                 {ShaderPartType::Fragment, shaders / "Fragment/OmnidirectionalShadowMap.fs"},
                 {ShaderPartType::Geometry, shaders / "Geometry/OmnidirectionalShadowMap.gs"}
             };
 
-            m_Resources.omnidirectional_shadow_map = Shader::Create(parts);
+            resources_.OmnidirectionalShadowMap = Shader::Create(parts);
         }
         {
             const size_t     sz     = 1024;
@@ -541,13 +544,13 @@ namespace DE {
             buffer->AddColorAttachment(Texture::Format::U8, Texture::Channels::RG);
             SetViewport(sz, sz);
             Clear();
-            Submit(m_Resources.screen_quad, m_Resources.brdf_convolution);
-            m_Resources.brdf = buffer->GetColorAttachment(0);
+            Submit(resources_.ScreenQuad, resources_.BRDFConvolution);
+            resources_.BRDF = buffer->GetColorAttachment(0);
         }
     }
 
     void Renderer::Statistics::Reset() {
-        m_DrawCallsAmount = 0;
-        m_DrawnInstances  = 0;
+        DrawCallsAmount = 0;
+        DrawnInstances  = 0;
     }
-}  // namespace DE
+}  // namespace DummyEngine

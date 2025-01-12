@@ -32,8 +32,11 @@ BreakBeforeBraces: Custom
 NamespaceIndentation: All
 BinPackArguments: false
 BinPackParameters: false
+ReferenceAlignment: Left
 AlwaysBreakTemplateDeclarations: MultiLine
 AlignArrayOfStructures: Right
 AllowAllArgumentsOnNextLine: true
 AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: true
+IncludeBlocks: Preserve
+AllowShortBlocksOnASingleLine: Empty

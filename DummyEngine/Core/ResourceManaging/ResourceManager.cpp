@@ -1,10 +1,11 @@
-#include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
+#include "ResourceManager.h"
 
 #include "DummyEngine/Core/ResourceManaging/AssetManager.h"
 #include "DummyEngine/ToolBox/Loaders/ModelLoader.h"
 #include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
 
-namespace DE {
+namespace DummyEngine {
+
     SINGLETON_BASE(ResourceManager);
     S_INITIALIZE() {
         return Unit();
@@ -14,178 +15,186 @@ namespace DE {
     }
 
     S_METHOD_IMPL(bool, LoadShader, (UUID id), (id)) {
-        if (m_Shaders.contains(id)) {
-            LOG_WARNING("ResourceManager", "Shader (", id, ") was not loaded because already loaded");
+        if (shaders_.contains(id)) {
+            LOG_WARNING("Shader {} was not loaded because already loaded", id);
             return false;
         }
         auto asset = AssetManager::GetShaderAsset(id);
         if (!asset) {
-            LOG_WARNING("ResourceManager", "Shader (", id, ") was not loaded because does not exist in AssetManager");
+            LOG_WARNING("Shader {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
-        m_Shaders[id] = Shader::Create(asset.value().parts);
-        LOG_INFO("ResourceManager", "Shader (", id, ") was added");
+        shaders_[id] = Shader::Create(asset.value().Parts);
+        LOG_INFO("Shader {} was added", id);
         return true;
     }
     S_METHOD_IMPL(bool, LoadRenderMesh, (UUID id), (id)) {
-        if (m_RenderMeshes.contains(id)) {
-            LOG_WARNING("ResourceManager", "RenderMesh (", id, ") was not loaded because already loaded");
+        if (render_meshes_.contains(id)) {
+            LOG_WARNING("RenderMesh {} was not loaded because already loaded", id);
             return false;
         }
         auto asset = AssetManager::GetRenderMeshAsset(id);
         if (!asset) {
-            LOG_WARNING("ResourceManager", "RenderMesh (", id, ") was not loaded because does not exist in AssetManager");
+            LOG_WARNING("RenderMesh {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
-        m_RenderMeshes[id] = CreateRef<RenderMesh>(ModelLoader::Load(asset.value().loading_props));
-        LOG_INFO("ResourceManager", "RenderMesh (", id, ") was added");
+        auto model = ModelLoader::Load(asset.value().LoadingProps);
+        if (model == nullptr) {
+            return false;
+        }
+        render_meshes_[id] = CreateRef<RenderMesh>(model);
+        LOG_INFO("RenderMesh {} was added", id);
         return true;
     }
     S_METHOD_IMPL(bool, LoadHitBox, (UUID id), (id)) {
-        if (m_HitBoxes.contains(id)) {
-            LOG_WARNING("ResourceManager", "HitBox (", id, ") was not loaded because already loaded");
+        if (hit_boxes_.contains(id)) {
+            LOG_WARNING("HitBox {} was not loaded because already loaded", id);
             return false;
         }
         auto asset = AssetManager::GetRenderMeshAsset(id);
         if (!asset) {
-            LOG_WARNING("ResourceManager", "Hitbox (", id, ") was not loaded because does not exist in AssetManager");
+            LOG_WARNING("Hitbox {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
-        auto              mesh = ModelLoader::Load(asset.value().loading_props);
+        auto mesh = ModelLoader::Load(asset.value().LoadingProps);
+        if (mesh == nullptr) {
+            return false;
+        }
         std::vector<Vec3> vertices;
-        for (const auto& submesh : mesh->meshes) {
-            for (const auto& vert : submesh.vertices) {
-                vertices.push_back(vert.position);
+        for (const auto& submesh : mesh->Meshes) {
+            for (const auto& vert : submesh.Vertices) {
+                vertices.push_back(vert.Position);
             }
         }
-        m_HitBoxes.insert({id, CreateRef<Physics::ConvexHitbox>()});
-        m_HitBoxes[id]->Build(vertices);
-        LOG_INFO("ResourceManager", "Hitbox (", id, ") was added");
+        hit_boxes_.insert({id, CreateRef<Physics::ConvexHitbox>()});
+        hit_boxes_[id]->Build(vertices);
+        LOG_INFO("Hitbox {} was added", id);
         return true;
     }
     S_METHOD_IMPL(bool, LoadCubeMap, (UUID id), (id)) {
-        if (m_CubeMaps.contains(id)) {
-            LOG_WARNING("ResourceManager", "CubeMap (", id, ") was not loaded because already loaded");
+        if (cube_maps_.contains(id)) {
+            LOG_WARNING("CubeMap {} was not loaded because already loaded", id);
             return false;
         }
         auto asset = AssetManager::GetTextureAsset(id);
         if (!asset) {
-            LOG_WARNING("ResourceManager", "CubeMap (", id, ") was not loaded because does not exist in AssetManager");
+            LOG_WARNING("CubeMap {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
-        m_CubeMaps[id] = CubeMap::Create(TextureLoader::Load(asset.value().loading_props));
-        LOG_INFO("ResourceManager", "CubeMap (", id, ") was added");
+        cube_maps_[id] = CubeMap::Create(TextureLoader::Load(asset.value().LoadingProps));
+        LOG_INFO("CubeMap {} was added", id);
         return true;
     }
     S_METHOD_IMPL(bool, LoadTexture, (UUID id), (id)) {
-        if (m_Textures.contains(id)) {
-            LOG_WARNING("ResourceManager", "Texture (", id, ") was not loaded because already loaded");
+        if (textures_.contains(id)) {
+            LOG_WARNING("Texture {} was not loaded because already loaded", id);
             return false;
         }
         auto asset = AssetManager::GetTextureAsset(id);
         if (!asset) {
-            LOG_WARNING("ResourceManager", "Texture (", id, ") was not loaded because does not exist in AssetManager");
+            LOG_WARNING("Texture {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
-        m_Textures[id] = Texture::Create(*TextureLoader::Load(asset.value().loading_props));
-        LOG_INFO("ResourceManager", "Texture (", id, ") was added");
+        textures_[id] = Texture::Create(*TextureLoader::Load(asset.value().LoadingProps));
+        LOG_INFO("Texture {} was added", id);
         return true;
     }
 
     S_METHOD_IMPL(std::optional<Ref<Shader>>, GetShader, (UUID id), (id)) {
-        if (m_Shaders.contains(id)) {
-            return m_Shaders[id];
+        if (shaders_.contains(id)) {
+            return shaders_[id];
         }
         return {};
     }
     S_METHOD_IMPL(std::optional<Ref<RenderMesh>>, GetRenderMesh, (UUID id), (id)) {
-        if (m_RenderMeshes.contains(id)) {
-            return m_RenderMeshes[id];
+        if (render_meshes_.contains(id)) {
+            return render_meshes_[id];
         }
         return {};
     }
     S_METHOD_IMPL(std::optional<Ref<CubeMap>>, GetCubeMap, (UUID id), (id)) {
-        if (m_CubeMaps.contains(id)) {
-            return m_CubeMaps[id];
+        if (cube_maps_.contains(id)) {
+            return cube_maps_[id];
         }
         return {};
     }
     S_METHOD_IMPL(std::optional<Ref<Texture>>, GetTexture, (UUID id), (id)) {
-        if (m_Textures.contains(id)) {
-            return m_Textures[id];
+        if (textures_.contains(id)) {
+            return textures_[id];
         }
         return {};
     }
     S_METHOD_IMPL(std::optional<Ref<Physics::ConvexHitbox>>, GetHitBox, (UUID id), (id)) {
-        if (m_HitBoxes.contains(id)) {
-            return m_HitBoxes[id];
+        if (hit_boxes_.contains(id)) {
+            return hit_boxes_[id];
         }
         return {};
     }
 
     S_METHOD_IMPL(bool, HasShader, (UUID id), (id)) {
-        return m_Shaders.contains(id);
+        return shaders_.contains(id);
     }
     S_METHOD_IMPL(bool, HasRenderMesh, (UUID id), (id)) {
-        return m_RenderMeshes.contains(id);
+        return render_meshes_.contains(id);
     }
     S_METHOD_IMPL(bool, HasCubeMap, (UUID id), (id)) {
-        return m_CubeMaps.contains(id);
+        return cube_maps_.contains(id);
     }
     S_METHOD_IMPL(bool, HasTexture, (UUID id), (id)) {
-        return m_Textures.contains(id);
+        return textures_.contains(id);
     }
     S_METHOD_IMPL(bool, HasHitBox, (UUID id), (id)) {
-        return m_HitBoxes.contains(id);
+        return hit_boxes_.contains(id);
     }
 
     S_METHOD_IMPL(bool, DeleteShader, (UUID id), (id)) {
-        if (m_Shaders.contains(id)) {
-            m_Shaders.erase(id);
-            LOG_INFO("ResourceManager", "Shader (", id, ") was deleted");
+        if (shaders_.contains(id)) {
+            shaders_.erase(id);
+            LOG_INFO("Shader {} was deleted", id);
             return true;
         }
         return false;
     }
     S_METHOD_IMPL(bool, DeleteRenderMesh, (UUID id), (id)) {
-        if (m_RenderMeshes.contains(id)) {
-            m_RenderMeshes.erase(id);
-            LOG_INFO("ResourceManager", "RenderMesh (", id, ") was deleted");
+        if (render_meshes_.contains(id)) {
+            render_meshes_.erase(id);
+            LOG_INFO("RenderMesh {} was deleted", id);
             return true;
         }
         return false;
     }
     S_METHOD_IMPL(bool, DeleteCubeMap, (UUID id), (id)) {
-        if (m_CubeMaps.contains(id)) {
-            m_CubeMaps.erase(id);
-            LOG_INFO("ResourceManager", "CubeMap (", id, ") was deleted");
+        if (cube_maps_.contains(id)) {
+            cube_maps_.erase(id);
+            LOG_INFO("CubeMap {} was deleted", id);
             return true;
         }
         return false;
     }
     S_METHOD_IMPL(bool, DeleteHitBox, (UUID id), (id)) {
-        if (m_HitBoxes.contains(id)) {
-            m_HitBoxes.erase(id);
-            LOG_INFO("ResourceManager", "Hitbox (", id, ") was deleted");
+        if (hit_boxes_.contains(id)) {
+            hit_boxes_.erase(id);
+            LOG_INFO("Hitbox {} was deleted", id);
             return true;
         }
         return false;
     }
     S_METHOD_IMPL(bool, DeleteTexture, (UUID id), (id)) {
-        if (m_Textures.contains(id)) {
-            m_Textures.erase(id);
-            LOG_INFO("ResourceManager", "Texture (", id, ") was deleted");
+        if (textures_.contains(id)) {
+            textures_.erase(id);
+            LOG_INFO("Texture {} was deleted", id);
             return true;
         }
         return false;
     }
     S_METHOD_IMPL(Unit, Clear, (), ()) {
-        m_Shaders.clear();
-        m_RenderMeshes.clear();
-        m_CubeMaps.clear();
-        m_HitBoxes.clear();
-        m_Textures.clear();
-        LOG_INFO("ResourceManager", "Cleared all resources");
+        shaders_.clear();
+        render_meshes_.clear();
+        cube_maps_.clear();
+        hit_boxes_.clear();
+        textures_.clear();
+        LOG_INFO("Cleared all resources");
         return Unit();
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

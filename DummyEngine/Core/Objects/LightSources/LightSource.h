@@ -1,8 +1,9 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
-namespace DE {
+namespace DummyEngine {
+
     enum class LightSourceType {
         Direction = 0,
         Point     = 1,
@@ -14,15 +15,15 @@ namespace DE {
     U32             LightSourceTypeToId(LightSourceType type);
 
     struct LightSource {
-        LightSourceType type;
-        Vec3            ambient   = Vec3(1.0f);
-        Vec3            diffuse   = Vec3(1.0f);
-        Vec3            specular  = Vec3(1.0f);
-        Vec3            direction = Vec3(0.0f, -1.0f, 0.0f);
-        Vec3            position  = Vec3(0.0f);
-        Vec3            clq       = Vec3(1.0f, 0.007f, 0.0002f);
-        float           outer_cone_cos;
-        float           inner_cone_cos;
+        LightSourceType Type;
+        Vec3            Ambient   = Vec3(1.0f);
+        Vec3            Diffuse   = Vec3(1.0f);
+        Vec3            Specular  = Vec3(1.0f);
+        Vec3            Direction = Vec3(0.0f, -1.0f, 0.0f);
+        Vec3            Position  = Vec3(0.0f);
+        Vec3            CLQ       = Vec3(1.0f, 0.007f, 0.0002f);
+        float           OuterConeCosinus;
+        float           InnerConeCosinus;
     };
 
-}  // namespace DE
+}  // namespace DummyEngine

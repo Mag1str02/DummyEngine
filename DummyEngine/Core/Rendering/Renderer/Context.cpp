@@ -1,13 +1,13 @@
-#include "DummyEngine/Core/Rendering/Renderer/Context.h"
+#include "Context.h"
 
 #include "DummyEngine/Core/Application/Config.h"
-#include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLContext.h"
+#include "DummyEngine/Utils/Debug/Assert.h"
 
-namespace DE {
+namespace DummyEngine {
 
     Scope<Context> Context::Create(GLFWwindow* window) {
-        switch (Config::GetRenderAPI()) {
+        switch (Config::Get().RendererAPI) {  // Use config because renderer is not yet initialized
             case API::OpenGL: return CreateScope<GLContext>(window);
             case API::Vulkan: {
                 DE_ASSERT(false, "Attempt to create Context on VulkanAPI which is currently unsupported.");
@@ -22,4 +22,4 @@ namespace DE {
         }
         return nullptr;
     }
-}  // namespace DE
+}  // namespace DummyEngine

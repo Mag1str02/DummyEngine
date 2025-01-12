@@ -1,12 +1,12 @@
 #pragma once
 
-#include "DummyEditor/DummyEngineInclude.h"
-#include "DummyEditor/ImGuiUtils/ImGuiUtils.h"
+#include <string>
 
-namespace DE {
+namespace DummyEngine {
+
     class ImGuiPanel {
     public:
-        ImGuiPanel(const std::string& name) : m_Name(name) {}
+        explicit ImGuiPanel(const std::string& name) : m_Name(name) {}
         virtual ~ImGuiPanel() = default;
 
         virtual void       OnImGui() = 0;
@@ -19,4 +19,4 @@ namespace DE {
         bool        m_Controller = true;
         std::string m_Name       = "UnnamedPanel";
     };
-}  // namespace DE
+}  // namespace DummyEngine

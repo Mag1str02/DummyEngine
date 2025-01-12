@@ -1,10 +1,10 @@
 #pragma once
 
-#include "DummyEditor/DummyEngineInclude.h"
 #include "DummyEditor/ImGuiUtils/ImGuiPanel.h"
-#include "DummyEditor/ImGuiUtils/ImGuiUtils.h"
 
-namespace DE {
+#include <vector>
+
+namespace DummyEngine {
     class ImGuiManager {
     public:
         ImGuiManager() = default;
@@ -17,8 +17,9 @@ namespace DE {
         void LoadEditorResources();
 
     private:
-        void                     CreateDockingSpace();
-        ImGuiPanel*              m_MenuBar;
-        std::vector<ImGuiPanel*> m_Panels;
+        void CreateDockingSpace();
+
+        ImGuiPanel*              menu_bar_;
+        std::vector<ImGuiPanel*> panels_;
     };
-}  // namespace DE
+}  // namespace DummyEngine

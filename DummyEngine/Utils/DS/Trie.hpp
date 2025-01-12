@@ -1,38 +1,39 @@
 #pragma once
 
-#include "../Types/Types.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
-namespace DE {
+namespace DummyEngine {
+
     class Trie {
         struct Node {
-            Node(Ref<Node> &p, char prev) {
-                parent = p;
-                char_to_parent = prev;
+            Node(Ref<Node>& p, char prev) {
+                Parent       = p;
+                CharToParent = prev;
             }
 
-            std::vector<size_t> terminal_idx;
+            std::vector<size_t> TerminalIdx;
 
-            Ref<Node> parent;
-            char char_to_parent;
+            Ref<Node> Parent;
+            char      CharToParent;
 
-            std::unordered_map<char, Ref<Node>> next;
-            std::unordered_map<char, Ref<Node>> sons;
-            Ref<Node> suffix_link;
-            Ref<Node> super_suffix_link;
+            std::unordered_map<char, Ref<Node>> Next;
+            std::unordered_map<char, Ref<Node>> Sons;
+            Ref<Node>                           SuffixLink;
+            Ref<Node>                           SuperSuffixLink;
         };
 
-        Ref<Node> getSuffixLink(Ref<Node> v);
-        Ref<Node> getNext(Ref<Node> v, char c);
-        Ref<Node> getUp(Ref<Node> v);
+        Ref<Node> GetSuffixLink(Ref<Node> v);
+        Ref<Node> GetNext(Ref<Node> v, char c);
+        Ref<Node> GetUp(Ref<Node> v);
 
     public:
-
-        void Build(std::vector<std::string> &dict);
-        void AddWord(std::string &str);
+        void                          Build(std::vector<std::string>& dict);
+        void                          AddWord(std::string& str);
         std::vector<Ref<std::string>> Search(std::string needle);
 
     private:
-        Ref<Node> m_root;
-        std::vector<Ref<std::string>> m_words;
+        Ref<Node>                     root_;
+        std::vector<Ref<std::string>> words_;
     };
-}
+
+}  // namespace DummyEngine

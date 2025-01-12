@@ -1,77 +1,88 @@
-#include "DummyEngine/Core/Application/Application.h"
+#include "Application.h"
 
+#include "DummyEngine/Core/Application/ImGuiLayer.h"
+#include "DummyEngine/Core/Application/Input.h"
+#include "DummyEngine/Core/Application/Window.h"
+#include "DummyEngine/Core/Console/ConsoleLayer.hpp"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
+#include "DummyEngine/Utils/Debug/Profiler.h"
 
-namespace DE {
+#include <GLFW/glfw3.h>
+
+namespace DummyEngine {
+
     SINGLETON_BASE(Application);
     S_INITIALIZE() {
         // TODO: Customizeble name
-        m_Window = new Window(WindowState{.mode = WindowMode::Windowed, .name = "DummyEngine", .width = 1280, .height = 720});
-        DE_ASSERT(m_Window, "Failed to allocate Windows");
-        m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
+        window_ = new Window(WindowState{.Mode = WindowMode::Windowed, .Name = "DummyEngine", .Width = 1280, .Height = 720});
+        DE_ASSERT(window_, "Failed to allocate Windows");
+        window_->SetEventCallback([](Event& e) { Application::OnEvent(e); });
 
-        m_ImGuiLayer = new ImGuiLayer();
-        DE_ASSERT(m_ImGuiLayer, "Failed to allocate ImGuiLayer");
-        PushLayer(m_ImGuiLayer);
+        imgui_layer_ = new ImGuiLayer();
+        DE_ASSERT(imgui_layer_, "Failed to allocate ImGuiLayer");
+        PushLayer(imgui_layer_);
 
-        m_ConsoleLayer = new ConsoleLayer();
-        DE_ASSERT(m_ConsoleLayer, "Failed to allocate ConsoleLayer");
-        PushLayer(m_ConsoleLayer);
+        console_layer_ = new ConsoleLayer();
+        DE_ASSERT(console_layer_, "Failed to allocate ConsoleLayer");
+        PushLayer(console_layer_);
 
         SetUpCallbacks();
         return Unit();
     }
     S_TERMINATE() {
-        delete m_Window;
-        for (auto layer : m_Layers) {
+        for (auto layer : layers_) {
             layer->OnDetach();
             delete layer;
         }
-        m_Layers.clear();
+        layers_.clear();
+        delete window_;
         return Unit();
     }
 
     S_METHOD_IMPL(Unit, PushLayer, (Layer * layer), (layer)) {
-        m_Layers.push_back(layer);
-        layer->m_EventCallback = [this](Event& e) { OnEvent(e); };
+        layers_.push_back(layer);
+        layer->event_callback_ = [](Event& e) { Application::OnEvent(e); };
         layer->OnAttach();
         return Unit();
     }
     S_METHOD_IMPL(Unit, OnEvent, (Event & event), (event)) {
-        m_EventDispatcher.Dispatch(event);
-        for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); ++it) {
+        event_dispatcher_.Dispatch(event);
+        for (auto it = layers_.rbegin(); it != layers_.rend(); ++it) {
             (*it)->OnEvent(event);
         }
         return Unit();
     }
     S_METHOD_IMPL(Unit, Run, (), ()) {
-        double frame_begin = glfwGetTime(), frame_end, prev_frame_time = 0.001, fake_time;
-        while (!m_ShouldClose) {
+        double frame_begin = glfwGetTime();
+        double frame_end;
+        double prev_frame_time = 0.001;
+        while (!should_close_) {
+            DE_PROFILER_BEGIN_FRAME();
+            DE_PROFILE_SCOPE("Aplication loop");
+
             frame_end       = glfwGetTime();
             prev_frame_time = frame_end - frame_begin;
             frame_begin     = glfwGetTime();
 
-            DE_PROFILER_BEGIN_FRAME();
-
             Renderer::BeginFrame();
             Input::NewFrame();
 
-            m_Window->OnUpdate();
+            window_->OnUpdate();
             {
                 DE_PROFILE_SCOPE("Layers OnUpdate");
 
-                for (auto layer : m_Layers) {
+                for (auto layer : layers_) {
                     layer->OnUpdate(prev_frame_time);
                 }
             }
             {
                 DE_PROFILE_SCOPE("Layers OnImGuiRender");
                 Renderer::SetDefaultFrameBuffer();
-                m_ImGuiLayer->BeginFrame();
-                for (auto layer : m_Layers) {
+                imgui_layer_->BeginFrame();
+                for (auto layer : layers_) {
                     layer->OnImGuiRender();
                 }
-                m_ImGuiLayer->EndFrame();
+                imgui_layer_->EndFrame();
             }
 
             Renderer::EndFrame();
@@ -79,38 +90,38 @@ namespace DE {
         return Unit();
     }
     S_METHOD_IMPL(Window&, GetWindow, (), ()) {
-        return *m_Window;
+        return *window_;
     }
 
     void Application::SetUpCallbacks() {
-        m_EventDispatcher.AddEventListener<WindowResizeEvent>([this](WindowResizeEvent& event) { OnWindowResize(event); });
-        m_EventDispatcher.AddEventListener<WindowCloseEvent>([this](WindowCloseEvent& event) { OnWindowClose(event); });
-        m_EventDispatcher.AddEventListener<SetWindowModeFullscreenEvent>(
-            [this](SetWindowModeFullscreenEvent& event) { m_Window->FullScreen(event.GetMonitorId()); });
-        m_EventDispatcher.AddEventListener<SetWindowModeWindowedEvent>(
-            [this](SetWindowModeWindowedEvent& event) { m_Window->Windowed(event.GetWidth(), event.GetHeight(), event.GetXPos(), event.GetYPos()); });
-        m_EventDispatcher.AddEventListener<SetMouseLockEvent>([this](SetMouseLockEvent& event) {
-            m_Window->LockMouse();
+        event_dispatcher_.AddEventListener<WindowResizeEvent>([this](WindowResizeEvent& event) { OnWindowResize(event); });
+        event_dispatcher_.AddEventListener<WindowCloseEvent>([this](WindowCloseEvent& event) { OnWindowClose(event); });
+        event_dispatcher_.AddEventListener<SetWindowModeFullscreenEvent>(
+            [this](SetWindowModeFullscreenEvent& event) { window_->FullScreen(event.GetMonitorId()); });
+        event_dispatcher_.AddEventListener<SetWindowModeWindowedEvent>(
+            [this](SetWindowModeWindowedEvent& event) { window_->Windowed(event.GetWidth(), event.GetHeight(), event.GetXPos(), event.GetYPos()); });
+        event_dispatcher_.AddEventListener<SetMouseLockEvent>([this](SetMouseLockEvent& event) {
+            window_->LockMouse();
             Input::OnEvent(event);
         });
-        m_EventDispatcher.AddEventListener<SetMouseUnlockEvent>([this](SetMouseUnlockEvent& event) {
-            m_Window->UnlockMouse();
+        event_dispatcher_.AddEventListener<SetMouseUnlockEvent>([this](SetMouseUnlockEvent& event) {
+            window_->UnlockMouse();
             Input::OnEvent(event);
         });
-        m_EventDispatcher.AddEventListener<SetMouseLockToggleEvent>([this](SetMouseLockToggleEvent& event) {
-            m_Window->ToggleMouseLock();
+        event_dispatcher_.AddEventListener<SetMouseLockToggleEvent>([this](SetMouseLockToggleEvent& event) {
+            window_->ToggleMouseLock();
             Input::OnEvent(event);
         });
 
-        m_EventDispatcher.AddEventListener<KeyPressedEvent>(Input::OnEvent);
-        m_EventDispatcher.AddEventListener<KeyReleasedEvent>(Input::OnEvent);
-        m_EventDispatcher.AddEventListener<MouseMovedCallback>(Input::OnEvent);
+        event_dispatcher_.AddEventListener<KeyPressedEvent>(Input::OnEvent);
+        event_dispatcher_.AddEventListener<KeyReleasedEvent>(Input::OnEvent);
+        event_dispatcher_.AddEventListener<MouseMovedCallback>(Input::OnEvent);
     }
     void Application::OnWindowResize(WindowResizeEvent& e) {
         Renderer::SetViewport(e.GetWidth(), e.GetHeight());
     }
-    void Application::OnWindowClose(WindowCloseEvent& e) {
-        m_ShouldClose = true;
+    void Application::OnWindowClose(WindowCloseEvent&) {
+        should_close_ = true;
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

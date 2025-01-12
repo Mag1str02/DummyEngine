@@ -1,19 +1,21 @@
-#include "DummyEngine/Utils/Helpers/Timer.h"
+#include "Timer.h"
 
-namespace DE {
+namespace DummyEngine {
+
     Timer::Timer() {
-        m_StartTime = std::chrono::system_clock::now();
+        start_time_ = std::chrono::system_clock::now();
     }
 
     float Timer::Time() const {
-        return (std::chrono::system_clock::now() - m_StartTime).count();
+        return (std::chrono::system_clock::now() - start_time_).count();
     }
     float Timer::TimeM() const {
-        return (std::chrono::system_clock::now() - m_StartTime).count() * 1000;
+        return (std::chrono::system_clock::now() - start_time_).count() * 1000;
     }
     float Timer::Reset() {
-        float res   = (std::chrono::system_clock::now() - m_StartTime).count();
-        m_StartTime = std::chrono::system_clock::now();
+        float res   = (std::chrono::system_clock::now() - start_time_).count();
+        start_time_ = std::chrono::system_clock::now();
         return res;
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

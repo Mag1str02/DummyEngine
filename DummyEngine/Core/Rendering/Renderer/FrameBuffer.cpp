@@ -1,9 +1,10 @@
-#include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"
+#include "FrameBuffer.h"
 
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLFrameBuffer.h"
 
-namespace DE {
+namespace DummyEngine {
+
     Ref<FrameBuffer> FrameBuffer::Create(const FrameBufferProperties& properties) {
         switch (Renderer::CurrentAPI()) {
             case API::OpenGL: return CreateRef<GLFrameBuffer>(properties);
@@ -20,4 +21,5 @@ namespace DE {
         }
         return nullptr;
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

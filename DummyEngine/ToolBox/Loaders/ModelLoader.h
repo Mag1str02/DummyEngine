@@ -1,35 +1,44 @@
 #pragma once
 
-#include <assimp/scene.h>
+#include "DummyEngine/Core/ResourceManaging/Assets.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
 
+#include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 
-#include "DummyEngine/Core/ResourceManaging/Assets.h"
-
-namespace DE {
+namespace DummyEngine {
     namespace fs = std::filesystem;
 
     class ModelLoader {
+        LOG_AUTHOR(ModelLoader)
     public:
         static Ref<RenderMeshData> Load(const RenderMeshAsset::LoadingProperties& props);
 
     private:
-        enum ColorType { None = 0, Albedo, Diffuse, Specular, Ambient, ORM, Emission };
-
-        struct LoaderState {
-            size_t                             m_VerticesAmount;
-            size_t                             m_NodesAmount;
-            size_t                             m_CurrentMeshId;
-            size_t                             m_MeshesAmount;
-            Path                               m_CurrentDirectory;
-            RenderMeshAsset::LoadingProperties m_Props;
-
-            Ref<RenderMeshData>                        m_CurrentData;
-            std::unordered_map<Path, Ref<TextureData>> m_ModelTextures;
-            Assimp::Importer                           m_Importer;
+        enum ColorType {
+            None = 0,
+            Albedo,
+            Diffuse,
+            Specular,
+            Ambient,
+            ORM,
+            Emission,
         };
 
-        static LoaderState m_State;
+        struct LoaderState {
+            size_t                             VerticesAmount;
+            size_t                             NodesAmount;
+            size_t                             CurrentMeshID;
+            size_t                             MeshesAmount;
+            Path                               CurrentDirectory;
+            RenderMeshAsset::LoadingProperties Props;
+
+            Ref<RenderMeshData>                        CurrentData;
+            std::unordered_map<Path, Ref<TextureData>> ModelTextures;
+            Assimp::Importer                           Importer;
+        };
+
+        static LoaderState gState;
 
         static void LoadBone(Bone& bone, aiNodeAnim* node);
         static void ReadWeights(aiMesh* mesh);
@@ -44,5 +53,5 @@ namespace DE {
         static Ref<TextureData> GetTexture(aiMaterial* mat, aiTextureType type);
         static void             ReadModelProperties(aiNode* node, const aiScene* scene);
 
-    };  // namespace DE
-}  // namespace DE
+    };  // namespace DummyEngine
+}  // namespace DummyEngine

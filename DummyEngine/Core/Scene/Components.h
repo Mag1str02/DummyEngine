@@ -1,52 +1,45 @@
 #pragma once
 
-#include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
 #include "DummyEngine/Core/Rendering/Renderer/RenderStructs.h"
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 #include "DummyEngine/Core/Rendering/Renderer/SkyBox.h"
-//#include "DummyEngine/Core/SoundEngine/SoundsAndFactories.h"
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Types/UUID.h"
 
-namespace DE {
-//    struct AudioComponent {
-//        AudioComponent() = default;
-//
-//        Scope<Sound> sound;
-//        Path         path;
-//    };
+namespace DummyEngine {
 
     class IDComponent {
     public:
-        IDComponent()                   = default;
-        IDComponent(const IDComponent&) = default;
-        IDComponent(UUID uuid) : m_ID(uuid) {}
+        IDComponent() = default;
+        IDComponent(UUID uuid) : id_(uuid) {}  // NOLINT
+        operator UUID() const { return id_; }  // NOLINT
 
-        UUID        Get() const { return m_ID; }
-        std::string Hex() const { return m_ID; }
-
-        operator UUID() const { return m_ID; }
+        UUID        Get() const { return id_; }
+        std::string Hex() const { return id_; }
 
     private:
-        UUID m_ID;
+        UUID id_;
     };
 
     struct TagComponent {
         TagComponent() = default;
-        TagComponent(const std::string& tag) : tag(tag) {}
-        operator std::string() const { return tag; }
+        TagComponent(const std::string& tag) : Tag(tag) {}  // NOLINT
+        operator std::string() const { return Tag; }        // NOLINT
 
-        bool operator==(const TagComponent& other) const { return tag == other.tag; }
-        bool operator!=(const TagComponent& other) const { return tag != other.tag; }
-        bool operator<(const TagComponent& other) const { return tag < other.tag; }
-        bool operator>(const TagComponent& other) const { return tag > other.tag; }
+        bool operator==(const TagComponent& other) const { return Tag == other.Tag; }
+        bool operator!=(const TagComponent& other) const { return Tag != other.Tag; }
+        bool operator<(const TagComponent& other) const { return Tag < other.Tag; }
+        bool operator>(const TagComponent& other) const { return Tag > other.Tag; }
 
-        std::string tag;
+        std::string Tag;
     };
 
     struct TransformComponent {
-        Vec3 scale = Vec3(1.0), scale_offset = Vec3(1.0);
-        Vec3 translation = Vec3(0.0), translation_offset = Vec3(0.0);
-        Vec3 rotation = Vec3(0.0), rotation_offet = Vec3(0.0);
+        Vec3 Scale             = Vec3(1.0);
+        Vec3 ScaleOffset       = Vec3(1.0);
+        Vec3 Translation       = Vec3(0.0);
+        Vec3 TranslationOffset = Vec3(0.0);
+        Vec3 Rotation          = Vec3(0.0);
+        Vec3 RotationOffet     = Vec3(0.0);
 
         TransformComponent() = default;
 
@@ -55,17 +48,19 @@ namespace DE {
         Mat4 GetRotation() const;
         Mat4 GetScale() const;
     };
+
     struct ShaderComponent {
-        UUID id;
+        UUID        ID;
+        Ref<Shader> Shader;
 
-        Ref<Shader> shader;
-        Shader*     operator->() { return shader.get(); }
+        class Shader* operator->() { return Shader.get(); }
     };
-    struct RenderMeshComponent {
-        UUID id;
 
-        Ref<RenderMesh> mesh = nullptr;
-        RenderMesh*     operator->() { return mesh.get(); }
+    struct RenderMeshComponent {
+        UUID            ID;
+        Ref<RenderMesh> Mesh = nullptr;
+
+        RenderMesh* operator->() { return Mesh.get(); }
     };
 
     struct SkyBoxComponent {
@@ -73,16 +68,20 @@ namespace DE {
             CubeMap = 0,
             Equirectangular,
         };
-        TexType type;
-        UUID    id;
 
-        Ref<SkyBox> map;
-        SkyBox*     operator->() { return map.get(); }
-    };
-    template <typename T> struct hash;
+        TexType     Type;
+        UUID        ID;
+        Ref<SkyBox> SkyBox;
 
-    template <> struct hash<DE::TagComponent> {
-        std::size_t operator()(const DE::TagComponent& tag) const { return std::hash<std::string>()(tag); }
+        class SkyBox* operator->() { return SkyBox.get(); }
     };
 
-}  // namespace DE
+}  // namespace DummyEngine
+
+namespace std {
+
+    template <> struct hash<DummyEngine::TagComponent> {
+        std::size_t operator()(const DummyEngine::TagComponent& tag) const { return std::hash<std::string>()(tag); }
+    };
+
+}  // namespace std

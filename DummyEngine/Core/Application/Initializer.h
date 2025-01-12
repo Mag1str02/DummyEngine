@@ -1,7 +1,11 @@
 #pragma once
 
-namespace DE {
+#include "DummyEngine/Utils/Debug/Logger.h"
+
+namespace DummyEngine {
+
     class Initializer {
+        LOG_AUTHOR(Initializer)
     public:
         static void Initialize();
         static void Terminate();
@@ -15,4 +19,5 @@ namespace DE {
         static void DepTerminate();
         static void PostTerminate();
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

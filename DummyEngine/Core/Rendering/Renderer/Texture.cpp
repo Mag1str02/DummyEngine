@@ -1,9 +1,10 @@
-#include "DummyEngine/Core/Rendering/Renderer/Texture.h"
+#include "Texture.h"
 
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLTexture.h"
 
-namespace DE {
+namespace DummyEngine {
+
     std::string Texture::FormatToStr(Format format) {
         switch (format) {
             case Format::F16: return "F16";
@@ -95,4 +96,5 @@ namespace DE {
         }
         return Texture::Channels::None;
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

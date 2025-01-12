@@ -1,45 +1,47 @@
-#include "DummyEngine/Core/Animations/Animator.h"
+#include "Animator.h"
 
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 
-namespace DE {
-    Animator::Animator(Ref<Animation> animation) : m_FinalBoneMatrices(MAX_BONES, Mat4(1.0f)) {
-        m_CurrentTime      = 0.0;
-        m_CurrentAnimation = animation;
-        CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), Mat4(1.0f));
+namespace DummyEngine {
+
+    Animator::Animator(Ref<Animation> animation) : final_bone_matrices_(MAX_BONES, Mat4(1.0f)) {
+        current_time_      = 0.0;
+        current_animation_ = animation;
+        CalculateBoneTransform(&current_animation_->GetRootNode(), Mat4(1.0f));
     }
     void Animator::SetTime(float tm) {
-        auto next_time = fmod(tm, m_CurrentAnimation->GetDuration());
+        auto next_time = fmod(tm, current_animation_->GetDuration());
         // printf("Setting time %.06f\n", tm);
-        if (next_time != m_CurrentTime) {
-            m_CurrentTime = next_time;
-            CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), Mat4(1.0f));
+        if (next_time != current_time_) {
+            current_time_ = next_time;
+            CalculateBoneTransform(&current_animation_->GetRootNode(), Mat4(1.0f));
         }
     }
 
     void Animator::UpdateAnimation(float dt) {
-        SetTime(m_CurrentAnimation->GetTicksPerSecond() * dt + m_CurrentTime);
+        SetTime(current_animation_->GetTicksPerSecond() * dt + current_time_);
     }
 
     void Animator::SetMatricies(Ref<Shader> shader, const std::string& name) {
-        for (S32 i = 0; i < m_FinalBoneMatrices.size(); ++i) {
-            shader->SetMat4(StrCat(name, "[", i, "]"), m_FinalBoneMatrices[i]);
+        for (U32 i = 0; i < final_bone_matrices_.size(); ++i) {
+            shader->SetMat4(std::format("{}[{}]", name, i), final_bone_matrices_[i]);
         }
     }
     Ref<Animation> Animator::GetAnimation() {
-        return m_CurrentAnimation;
+        return current_animation_;
     }
 
     void Animator::CalculateBoneTransform(const Animation::Node* node, Mat4 parent_transform) {
-        Mat4      node_transform = node->transformation;
-        BoneInfo* bone_info      = m_CurrentAnimation->GetBone(node->name);
-        if (bone_info) {
-            node_transform                                   = bone_info->bone.GetTransform(m_CurrentTime);
-            m_FinalBoneMatrices[bone_info->bone.GetBoneID()] = parent_transform * node_transform * bone_info->offset;
+        Mat4      node_transform = node->Transformation;
+        BoneInfo* bone_info      = current_animation_->GetBone(node->Name);
+        if (bone_info != nullptr) {
+            node_transform                                    = bone_info->Bone.GetTransform(current_time_);
+            final_bone_matrices_[bone_info->Bone.GetBoneID()] = parent_transform * node_transform * bone_info->Offset;
         }
         Mat4 final_transform = parent_transform * node_transform;
-        for (S32 i = 0; i < node->childrens.size(); ++i) {
-            CalculateBoneTransform(&node->childrens[i], final_transform);
+        for (U32 i = 0; i < node->Childrens.size(); ++i) {
+            CalculateBoneTransform(&node->Childrens[i], final_transform);
         }
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

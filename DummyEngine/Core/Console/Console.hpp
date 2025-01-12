@@ -1,15 +1,17 @@
 #define once
 
-#include "DummyEngine/Utils/Base.h"
-#include "DummyEngine/Utils/Base/STDIncludes.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
 #include "DummyEngine/Utils/Helpers/Singleton.h"
-#include "DummyEngine/Utils/Helpers/StringOperations.h"
 #include "DummyEngine/Utils/Types/Types.h"
 
-namespace DE {
-    using ConsoleVariable = std::variant<int64_t, float, double, bool, std::string>;
+#include <map>
+
+namespace DummyEngine {
 
     class Console : public Singleton<Console> {
+        using Variable = std::variant<S64, float, double, bool, std::string>;
+
+        LOG_AUTHOR(Console)
         SINGLETON(Console)
     private:
         S_METHOD_DEF(std::string, VarToString, (const std::string& var))
@@ -25,12 +27,13 @@ namespace DE {
         S_METHOD_DEF(double, GetDouble, (std::string var))
         S_METHOD_DEF(bool, GetBool, (std::string var))
         S_METHOD_DEF(std::string, GetString, (std::string var))
-        S_METHOD_DEF(std::vector<std::string>, GetHints, (std::string& cmd))
+        S_METHOD_DEF(std::vector<std::string>, GetHints, (std::string & cmd))
     private:
-        std::vector<std::string> m_CmdHistory;
-        std::vector<std::string> m_LogHistory;
-        std::map<std::string, ConsoleVariable> m_Variables;
-        std::map<std::string, std::function<void(void)>> m_Callback;
-        std::vector<std::string> m_Commands;
+        std::vector<std::string>                         cmd_history_;
+        std::vector<std::string>                         log_history_;
+        std::map<std::string, Variable>                  variables_;
+        std::map<std::string, std::function<void(void)>> callback_;
+        std::vector<std::string>                         commands_;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

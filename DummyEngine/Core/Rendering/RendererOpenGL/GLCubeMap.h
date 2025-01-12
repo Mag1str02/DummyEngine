@@ -3,13 +3,16 @@
 #include <glad/glad.h>
 
 #include "DummyEngine/Core/Rendering/Renderer/CubeMap.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
 
-namespace DE {
+namespace DummyEngine {
     class GLCubeMap : public CubeMap {
+        LOG_AUTHOR(GLCubeMap)
     public:
-        GLCubeMap(const Ref<TextureData> data);
+        explicit GLCubeMap(const Ref<TextureData> data);
         GLCubeMap(U32 size, Texture::Format format, Texture::Channels channels, bool gen_mipmap, bool depth_map);
         virtual ~GLCubeMap();
+
         virtual void   Bind(U32 slot) const override;
         virtual float& GetLOD() override;
 
@@ -21,7 +24,7 @@ namespace DE {
 
     private:
         friend class GLFrameBuffer;
-        float  m_LOD = 0;
-        GLuint m_MapId;
+        float  lod_ = 0;
+        GLuint map_id_;
     };
-}  // namespace DE
+}  // namespace DummyEngine

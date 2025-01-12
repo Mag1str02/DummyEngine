@@ -1,7 +1,19 @@
-#include "DummyEditor/DummyEngineInclude.h"
 
-namespace DE {
+#pragma once
+
+#include "DummyEngine/Core/ResourceManaging/Assets.h"
+#include "DummyEngine/Core/Scripting/ScriptEngine.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
+#include "DummyEngine/Utils/Helpers/Singleton.h"
+
+#include <unordered_set>
+
+namespace DummyEngine {
+    class Scene;
+    class Entity;
+
     class ScriptManager : public Singleton<ScriptManager> {
+        LOG_AUTHOR(ScriptManager)
         SINGLETON(ScriptManager)
     public:
         S_METHOD_DEF(bool, LoadScripts, (const std::vector<ScriptAsset>& scripts));
@@ -14,7 +26,7 @@ namespace DE {
         using ScriptStates = std::unordered_map<Entity, std::unordered_map<std::string, Script::Field>>;
 
         ScriptStates SaveSciptStates(Ref<Scene> scene);
-        void         RestoreSciptStates(const ScriptStates& states, Ref<Scene> scene);
+        void         RestoreSciptStates(const ScriptStates& states);
 
         void* Clone(const Script::Field& field) const;
         void  Restore(ScriptComponent& script, const std::string& name, const Script::Field& field) const;
@@ -30,14 +42,15 @@ namespace DE {
         bool                       NeedToCompile(const Path& path);
         std::string                AvailableName();
 
-        std::unordered_set<Path> m_CompiledScripts;
-        std::string              m_LibraryName;
+        std::unordered_set<Path> compiler_scripts_;
+        std::string              library_name_;
 
-        const std::vector<ScriptAsset> m_EditorScriptAssets = {
+        const std::vector<ScriptAsset> editor_script_assets_ = {
             {UUID("0000000000000000000000000000f001"), "EditorCameraController", Path()}
         };
-        const std::unordered_map<std::string, UUID> m_EditorScriptNameToId = {
+        const std::unordered_map<std::string, UUID> editor_script_name_to_id_ = {
             {"EditorCameraController", UUID("0000000000000000000000000000f001")}
         };
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

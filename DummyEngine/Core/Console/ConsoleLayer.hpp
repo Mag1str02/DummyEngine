@@ -1,18 +1,24 @@
 #pragma once
-#include "DummyEngine/Core/Application/Layer.h"
 
-namespace DE {
+#include "DummyEngine/Core/Application/Layer.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
+
+namespace DummyEngine {
+
     class ConsoleLayer : public Layer {
+        LOG_AUTHOR(ConsoleLayer)
+    public:
         void OnAttach() override;
         void OnUpdate(float dt) override;
         void OnImGuiRender() override;
         void OnDetach() override;
 
     private:
-        bool        m_Show = false;
-        std::string m_Command;
-        int         m_historyPosition = 0;
-        bool        m_ScrollToBottom  = true;
-        bool        m_JustOpened      = false;
+        bool        show_ = false;
+        std::string command_;
+        U32         history_position_ = 0;
+        bool        scroll_to_bottom_ = true;
+        bool        just_opened_      = false;
     };
-}  // namespace DE
+
+}  // namespace DummyEngine

@@ -1,0 +1,1 @@
+add_external_library(GLAD NFD/src/include nfd)

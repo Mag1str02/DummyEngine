@@ -1,10 +1,10 @@
 #pragma once
 
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Types/Types.h"
 
-class GLFWwindow;
+struct GLFWwindow;
 
-namespace DE {
+namespace DummyEngine {
 
     class Context {
     public:
@@ -16,4 +16,4 @@ namespace DE {
         static Scope<Context> Create(GLFWwindow* window);
     };
 
-}  // namespace DE
+}  // namespace DummyEngine

@@ -1,9 +1,10 @@
-#include "DummyEngine/Core/Rendering/Renderer/Shader.h"
+#include "Shader.h"
 
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
 #include "DummyEngine/Core/Rendering/RendererOpenGL/GLShader.h"
 
-namespace DE {
+namespace DummyEngine {
+
     Ref<Shader> Shader::Create(const std::vector<ShaderPart>& initializers) {
         switch (Renderer::CurrentAPI()) {
             case API::OpenGL: return CreateRef<GLShader>(initializers);
@@ -21,4 +22,4 @@ namespace DE {
         return nullptr;
     }
 
-}  // namespace DE
+}  // namespace DummyEngine

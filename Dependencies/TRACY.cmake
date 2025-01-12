@@ -1,0 +1,7 @@
+set(TRACY_ON_DEMAND ON)
+set(TRACY_DELAYED_INIT ON)
+set(TRACY_MANUAL_LIFETIME ON)
+set(TRACY_FIBERS ON)
+set(TRACY_TIMER_FALLBACK ON)
+
+add_external_library(TRACY TRACY/public TracyClient)

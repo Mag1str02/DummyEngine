@@ -1,18 +1,19 @@
-#include "DummyEngine/Core/Scene/Components.h"
+#include "Components.h"
 
-namespace DE {
+namespace DummyEngine {
 
     Mat4 TransformComponent::GetTransform() const {
-        return glm::translate(glm::mat4(1.0f), translation + translation_offset) * glm::toMat4(glm::quat(glm::radians(rotation + rotation_offet))) *
-               glm::scale(glm::mat4(1.0f), scale * scale_offset);
+        return glm::translate(glm::mat4(1.0f), Translation + TranslationOffset) * glm::toMat4(glm::quat(glm::radians(Rotation + RotationOffet))) *
+               glm::scale(glm::mat4(1.0f), Scale * ScaleOffset);
     }
     Mat4 TransformComponent::GetTranslation() const {
-        return glm::translate(glm::mat4(1.0f), translation + translation_offset);
+        return glm::translate(glm::mat4(1.0f), Translation + TranslationOffset);
     }
     Mat4 TransformComponent::GetRotation() const {
-        return glm::toMat4(glm::quat(glm::radians(rotation + rotation_offet)));
+        return glm::toMat4(glm::quat(glm::radians(Rotation + RotationOffet)));
     }
     Mat4 TransformComponent::GetScale() const {
-        return glm::scale(glm::mat4(1.0f), scale * scale_offset);
+        return glm::scale(glm::mat4(1.0f), Scale * ScaleOffset);
     }
-}  // namespace DE
+
+}  // namespace DummyEngine

@@ -2,9 +2,9 @@
 
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Scene/Scene.h"
-#include "DummyEngine/Utils/Base.h"
+#include "DummyEngine/Utils/Helpers/CompilerSpecific.h"
 
-namespace DE {
+namespace DummyEngine {
 
     enum class ScriptFieldType {
         None = 0,
@@ -26,8 +26,8 @@ namespace DE {
         Entity,
     };
     struct ScriptClassField {
-        ScriptFieldType type;
-        U32             offset;
+        ScriptFieldType Type;
+        U32             Offset;
     };
 
     class Script {
@@ -41,12 +41,12 @@ namespace DE {
             Field(ScriptFieldType type, void* ptr);
             template <typename T> T&       Get();
             template <typename T> const T& Get() const;
-            ScriptFieldType                GetType() const { return m_Type; }
-            void*                          Get() const { return m_Data; }
+            ScriptFieldType                GetType() const { return type_; }
+            void*                          Get() const { return data_; }
 
         private:
-            ScriptFieldType m_Type;
-            void*           m_Data;
+            ScriptFieldType type_;
+            void*           data_;
         };
         class FieldIterator {
         public:
@@ -60,8 +60,8 @@ namespace DE {
             friend class Script;
             FieldIterator(Script* owner, Iterator it);
 
-            Iterator m_Iterator;
-            Script*  m_Script;
+            Iterator iterator_;
+            Script*  script_;
         };
 
         Script()                         = default;
@@ -73,13 +73,13 @@ namespace DE {
 
         virtual void OnAttach() {}
         virtual void OnRuntimeStart() {}
-        virtual void OnUpdate(float dt) {}
+        virtual void OnUpdate(float) {}
         virtual void OnRender() {}
         virtual void OnRuntimeStop() {}
         virtual void OnDetach() {}
 
-        FieldIterator begin();
-        FieldIterator end();
+        FieldIterator begin();  // NOLINT
+        FieldIterator end();    // NOLINT
 
         template <typename T> T& GetField(const std::string& name);
         ScriptFieldType          GetFieldType(const std::string& name) const;
@@ -102,37 +102,33 @@ namespace DE {
     std::string                           ScriptFieldTypeToString(ScriptFieldType type);
     template <typename T> ScriptFieldType TypeToScriptFieldType();
 
-    template <typename T, typename U> constexpr U32 OffsetOf(U T::*member) {
-        return (char*)&((T*)nullptr->*member) - (char*)nullptr;
+    // clang-format off
+    template <typename T, typename U> constexpr U32 OffsetOf(U T::* member) {
+        return (size_t)&((T*)nullptr->*member);
     }
+    // clang-format on
 
     template <typename T> T& Script::Field::Get() {
-        DE_ASSERT(m_Type == TypeToScriptFieldType<T>(),
-                  "Wrong field type (",
+        DE_ASSERT(type_ == TypeToScriptFieldType<T>(),
+                  "Wrong field type {} expected {}",
                   ScriptFieldTypeToString(TypeToScriptFieldType<T>()),
-                  ") expected (",
-                  ScriptFieldTypeToString(m_Type),
-                  ")");
-        return *(T*)m_Data;
+                  ScriptFieldTypeToString(type_));
+        return *(T*)data_;
     }
     template <typename T> const T& Script::Field::Get() const {
-        DE_ASSERT(m_Type == TypeToScriptFieldType<T>(),
-                  "Wrong field type (",
+        DE_ASSERT(type_ == TypeToScriptFieldType<T>(),
+                  "Wrong field type {} expected {}",
                   ScriptFieldTypeToString(TypeToScriptFieldType<T>()),
-                  ") expected (",
-                  ScriptFieldTypeToString(m_Type),
-                  ")");
-        return *(T*)m_Data;
+                  ScriptFieldTypeToString(type_));
+        return *(T*)data_;
     }
     template <typename T> T& Script::GetField(const std::string& name) {
         DE_ASSERT(GetClassFields().contains(name), "Wrong field name(", name, ")");
-        DE_ASSERT(GetClassFields().at(name).type == TypeToScriptFieldType<T>(),
-                  "Wrong field type (",
+        DE_ASSERT(GetClassFields().at(name).Type == TypeToScriptFieldType<T>(),
+                  "Wrong field type {} expected {}",
                   ScriptFieldTypeToString(TypeToScriptFieldType<T>()),
-                  ") expected (",
-                  ScriptFieldTypeToString(GetClassFields().at(name).type),
-                  ")");
-        return *(T*)((char*)this + GetClassFields().at(name).offset);
+                  ScriptFieldTypeToString(GetClassFields().at(name).Type));
+        return *(T*)((char*)this + GetClassFields().at(name).Offset);
     }
     template <typename T> T& Script::Add(const T& t) {
         DE_ASSERT(m_Entity.Valid(), "Using invalid entity in script");
@@ -151,21 +147,29 @@ namespace DE {
         m_Entity.Remove<T>();
     }
 
-#define FIELD(field)                                                                              \
-    {                                                                                             \
-#field, { TypeToScriptFieldType<decltype(field)>(), OffsetOf(&CurrentScriptType::field) } \
+#define FIELD(field_name, field)                                                          \
+    {                                                                                     \
+        field_name, {                                                                     \
+            TypeToScriptFieldType<decltype(field)>(), OffsetOf(&CurrentScriptType::field) \
+        }                                                                                 \
     }
 
-#define SCRIPT(type)                                                              \
-    static const std::unordered_map<std::string, ScriptClassField> s_ClassFields; \
-                                                                                  \
-protected:                                                                        \
-    virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const override { return s_ClassFields; }
+#define SCRIPT(type)                                                                                   \
+    static const std::unordered_map<std::string, ScriptClassField> s_ClassFields;                      \
+                                                                                                       \
+protected:                                                                                             \
+    virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const override { \
+        return s_ClassFields;                                                                          \
+    }
 
-#define SCRIPT_BASE(type, ...)                                                                    \
-    using CurrentScriptType                                                     = type;           \
-    const std::unordered_map<std::string, ScriptClassField> type::s_ClassFields = {__VA_ARGS__};  \
-    DE_SCRIPT_API Script*                                   type##Create() { return new type(); } \
-    DE_SCRIPT_API void                                      type##Delete(Script* script) { delete script; }
+#define SCRIPT_BASE(type, ...)                                                                   \
+    using CurrentScriptType                                                     = type;          \
+    const std::unordered_map<std::string, ScriptClassField> type::s_ClassFields = {__VA_ARGS__}; \
+    DE_SCRIPT_API Script*                                   type##Create() {                     \
+        return new type();                                     \
+    }                                                                                            \
+    DE_SCRIPT_API void type##Delete(Script* script) {                                            \
+        delete script;                                                                           \
+    }
 
-}  // namespace DE
+}  // namespace DummyEngine

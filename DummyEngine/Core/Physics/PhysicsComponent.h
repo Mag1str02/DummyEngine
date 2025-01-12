@@ -1,15 +1,19 @@
 #pragma once
 
-namespace DE::Physics {
-    struct PhysicsComponent {
-        Vec3  speed;
-        Vec3  rot_speed;
-        float inv_mass;
-        float inv_inertia;
-        bool  collidable;
-        bool  gravity;
+#include "DummyEngine/Utils/Types/Types.h"
 
-        Vec3 force;
-        Vec3 torque;
+namespace DummyEngine::Physics {
+
+    struct PhysicsComponent {
+        Vec3  Speed;
+        Vec3  RotationSpeed;
+        float InvertedMass;
+        float InvertedInertia;
+        bool  Collidable;
+        bool  Gravity;
+
+        Vec3 Force;
+        Vec3 Torque;
     };
-}  // namespace DE::Physics
+
+}  // namespace DummyEngine::Physics
