@@ -296,9 +296,9 @@ namespace DummyEngine {
         shadow_map_->SetDepthAttachment(Texture::Format::F32);
         Console::OnCommand("r_shadowmap_resize", [&]() {
             LOG_INFO("ShadowMap resize");
-            m_ShadowMap->Resize(static_cast<U32>(Console::GetInt("r_shadowmap_width")), static_cast<U32>(Console::GetInt("r_shadowmap_height")));
-            m_PointShadowCubemaps.clear();
-            m_PointShadowFrameBuffers.clear();
+            shadow_map_->Resize(static_cast<U32>(Console::GetInt("r_shadowmap_width")), static_cast<U32>(Console::GetInt("r_shadowmap_height")));
+            point_shadow_cubemaps_.clear();
+            point_shadow_map_.clear();
         });
     }
 }  // namespace DummyEngine
