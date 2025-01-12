@@ -300,6 +300,8 @@ namespace DE {
         Console::OnCommand("r_shadowmap_resize", [&]() {
             Logger::Log(LogMessageType::Info, "ShadowMap resize");
             m_ShadowMap->Resize(static_cast<U32>(Console::GetInt("r_shadowmap_width")), static_cast<U32>(Console::GetInt("r_shadowmap_height")));
+            m_PointShadowCubemaps.clear();
+            m_PointShadowFrameBuffers.clear();
         });
     }
 }  // namespace DE
