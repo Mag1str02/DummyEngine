@@ -23,7 +23,10 @@ namespace DummyEngine {
 
             std::string compile_command;
             compile_command.append(GetCompiler());
-            compile_command.append(" -c -std=c++20 -stdlib=libc++");
+            #ifndef DE_USE_GNU
+            compile_command.append(" -stdlib=libc++ ");
+            #endif
+            compile_command.append(" -c -std=c++20 ");
             compile_command.append(" -fPIC ");
             compile_command.append(AddDefines());
             compile_command.append(AddIncludeDirArguments());
@@ -69,7 +72,11 @@ namespace DummyEngine {
     private:
         std::string GetCompiler() {
             // TODO: Get compiler from config.
+#ifdef DE_USE_GNU
+            return "g++";
+#else
             return "clang++";
+#endif
         }
         void FixSlash(std::string& command) { std::replace(command.begin(), command.end(), '\\', '/'); }
 

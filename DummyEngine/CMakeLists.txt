@@ -13,6 +13,7 @@ target_compile_definitions(DummyEngineLib PUBLIC
     DE_ENABLE_PROFILER=1
     DE_ENABLE_ASSERTS=1
     DE_ENABLE_LOGGING=1
+    DE_USE_GNU=1
 )
 target_include_directories(DummyEngineLib PUBLIC ../.)
 add_warnings(DummyEngineLib)

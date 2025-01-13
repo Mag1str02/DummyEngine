@@ -68,7 +68,11 @@ namespace DummyEngine {
     private:
         std::string GetCompiler() {
             // TODO: Get compiler from config.
+#ifdef DE_USE_GNU
+            return "g++";
+#else 
             return "clang++";
+#endif            
         }
         void FixSlash(std::string& command) { std::replace(command.begin(), command.end(), '\\', '/'); }
 

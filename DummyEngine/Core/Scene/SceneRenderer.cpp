@@ -297,8 +297,13 @@ namespace DummyEngine {
         Console::OnCommand("r_shadowmap_resize", [&]() {
             LOG_INFO("ShadowMap resize");
             shadow_map_->Resize(static_cast<U32>(Console::GetInt("r_shadowmap_width")), static_cast<U32>(Console::GetInt("r_shadowmap_height")));
+<<<<<<< HEAD
             point_shadow_cubemaps_.clear();
             point_shadow_map_.clear();
+=======
+            point_shadow_map_.clear();
+            point_shadow_cubemaps_.clear();
+>>>>>>> 07c8431 (Add GCC support + force use X11 instead of Wayland)
         });
     }
 }  // namespace DummyEngine

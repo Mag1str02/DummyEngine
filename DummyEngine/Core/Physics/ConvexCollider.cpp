@@ -109,7 +109,7 @@ namespace DummyEngine {
 
         Vec3 norm(1e9);
         for (auto axle : axis) {
-            float min_a, max_a, min_b, max_b;
+            float min_a = 0, max_a = 0, min_b = 0, max_b = 0;
             for (size_t i = 0; i < hitbox_->points_.size(); i++) {
                 float proj = glm::dot(GetPoint(i), axle);
                 if (i == 0 || proj < min_a) {

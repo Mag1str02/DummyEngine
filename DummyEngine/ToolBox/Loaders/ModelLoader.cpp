@@ -246,10 +246,9 @@ namespace DummyEngine {
                 current_mesh.Indices.push_back(face.mIndices[j]);
             }
         }
-        if (mesh->mMaterialIndex >= 0) {
-            aiMaterial* material  = scene->mMaterials[mesh->mMaterialIndex];
-            current_mesh.Material = LoadMaterial(material);
-        }
+        // if (mesh->mMaterialIndex >= 0) {    // always true because of unsigned int  0 <= attachment_id
+        aiMaterial* material  = scene->mMaterials[mesh->mMaterialIndex];
+        current_mesh.Material = LoadMaterial(material);
         ++gState.CurrentMeshID;
     }
     Vec3 ModelLoader::GetColor(aiMaterial* mat, ColorType type) {

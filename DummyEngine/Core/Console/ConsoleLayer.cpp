@@ -21,7 +21,7 @@ namespace DummyEngine {
     void ConsoleLayer::OnImGuiRender() {
         if (show_) {
             if (ImGui::Begin("Console")) {
-                if (history_position_ >= Console::GetCmdHistory().size()) {
+                if (history_position_ >= static_cast<S32>(Console::GetCmdHistory().size())) {
                     command_          = "";
                     history_position_ = Console::GetCmdHistory().size() - 1;
                 }

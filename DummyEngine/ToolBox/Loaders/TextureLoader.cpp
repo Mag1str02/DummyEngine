@@ -8,8 +8,8 @@
 namespace DummyEngine {
 
     Ref<TextureData> TextureLoader::Load(const TextureAsset::LoadingProperties& props) {
-        void*           stb_data;
-        int             width, height, nr_channels;
+        void*           stb_data = nullptr;
+        int             width = 0, height = 0, nr_channels = 0;
         TextureChannels channels;
         std::string     channels_s;
         std::string     format_s;

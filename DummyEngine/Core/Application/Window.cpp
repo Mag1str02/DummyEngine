@@ -10,7 +10,7 @@ namespace DummyEngine {
     GLFWmonitor* GetMonitor(U32 id) {
         int           monitors_amount = 0;
         GLFWmonitor** monitors        = glfwGetMonitors(&monitors_amount);
-        DE_ASSERT(0 <= id && id < U32(monitors_amount), "Wrong monitor id {} should be between [0, {})", id, monitors_amount);
+        DE_ASSERT(id < U32(monitors_amount), "Wrong monitor id {} should be between [0, {})", id, monitors_amount); // id >= 0 because of unsigned int
         return monitors[id];
     }
 

@@ -113,7 +113,7 @@ namespace DummyEngine {
         return elements_.end();
     }
     const BufferElement& BufferLayout::operator[](U32 index) const {
-        DE_ASSERT(index >= 0 && index < elements_.size(), "Index out of bounce {} should be between [0,{})", index, elements_.size());
+        DE_ASSERT(index < elements_.size(), "Index out of bounce {} should be between [0,{})", index, elements_.size()); // already >= 0 because of U32
         return elements_[index];
     }
 

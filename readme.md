@@ -23,6 +23,7 @@ At the moment, the engine has not so much functionality. Here is a full function
     * `Scenes` - provides scene file format for loading and saving game scenes
     * `Logger and Profiler` - logger allows to track game and engine state while profiler allows to measure performance of engine, by measuring time of specified scopes
     * `Model Loading` - support of loading 3D models of most popular formats like fbx, gltf and obj   
+    * `Shadows` - support of rendering with shadows
 
 * Experimental (WIP):
 
@@ -43,8 +44,6 @@ At the moment, the engine has not so much functionality. Here is a full function
 
 * `Render Graph` - a graph that manages render passes and resources, allowing to exceute rendering in other thread
 * `Task System` - a system that will allow to pass long background tasks, like loading textures or modles to worker threads
-* `Shadows` - support of rendering with shadows
-
 
 ## Dependencies
 
@@ -70,7 +69,7 @@ At the moment, the engine has not so much functionality. Here is a full function
 * Macos (partial)
 
 **C++ Compiler:**
-* GCC (10.0.0+)
+* GCC (14.0.0+)
 * Clang (12.0.0+)
 * Apple Clang (12.0.0+)
 
