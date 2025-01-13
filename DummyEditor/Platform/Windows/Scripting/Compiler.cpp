@@ -68,7 +68,7 @@ namespace DummyEngine {
     private:
         std::string GetCompiler() {
             // TODO: Get compiler from config.
-#ifdef DE_USE_GNU
+#ifdef DE_USE_GNU_FOR_SCRIPTS
             return "g++";
 #else 
             return "clang++";

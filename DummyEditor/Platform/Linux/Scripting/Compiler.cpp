@@ -23,7 +23,7 @@ namespace DummyEngine {
 
             std::string compile_command;
             compile_command.append(GetCompiler());
-            #ifndef DE_USE_GNU
+            #ifndef DE_USE_GNU_FOR_SCRIPTS
             compile_command.append(" -stdlib=libc++ ");
             #endif
             compile_command.append(" -c -std=c++20 ");
@@ -72,7 +72,7 @@ namespace DummyEngine {
     private:
         std::string GetCompiler() {
             // TODO: Get compiler from config.
-#ifdef DE_USE_GNU
+#ifdef DE_USE_GNU_FOR_SCRIPTS
             return "g++";
 #else
             return "clang++";
