@@ -16,7 +16,7 @@ namespace DummyEngine {
     private:
         bool        show_ = false;
         std::string command_;
-        S32         history_position_ = 0; // signed, for possibility for -1 in runtime
+        S32         history_position_ = 0;
         bool        scroll_to_bottom_ = true;
         bool        just_opened_      = false;
     };

@@ -105,7 +105,7 @@ namespace DummyEngine {
     }
 
     Ref<Texture> GLFrameBuffer::GetColorAttachment(U32 attachment_id = 0) {
-        DE_ASSERT(attachment_id < color_attachments_.size(), "Color attachment with index {} does not exist", attachment_id); // already >= 0, because of U32
+        DE_ASSERT(attachment_id < color_attachments_.size(), "Color attachment with index {} does not exist", attachment_id);
         return color_attachments_[attachment_id].Texture;
     }
     Ref<Texture> GLFrameBuffer::GetDepthAttachment() {
