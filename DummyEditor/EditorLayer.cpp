@@ -242,7 +242,7 @@ namespace DummyEngine {
         viewport_.SetFrameBuffer(current_scene_->GetRenderer()->GetFrameBuffer());
         scene_state_        = SceneState::Editing;
         scene_script_state_ = SceneScriptState::Compiled;
-        current_scene_->LoadPhysics(current_scene_);
+        // current_scene_->LoadPhysics(current_scene_);
         LOG_INFO("Opened scene");
     }
     void EditorLayer::SaveScene(const Path& path) {

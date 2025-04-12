@@ -26,3 +26,6 @@
 	path = Dependencies/TRACY
 	url = https://github.com/Mag1str02/Tracy-Profiler
 	branch = client_only_0.11.1
+[submodule "Dependencies/REACTPHYSICS3D"]
+	path = Dependencies/REACTPHYSICS3D
+	url = https://github.com/DanielChappuis/reactphysics3d.git

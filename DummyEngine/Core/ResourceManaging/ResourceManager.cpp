@@ -46,31 +46,31 @@ namespace DummyEngine {
         LOG_INFO("RenderMesh {} was added", id);
         return true;
     }
-    S_METHOD_IMPL(bool, LoadHitBox, (UUID id), (id)) {
-        if (hit_boxes_.contains(id)) {
-            LOG_WARNING("HitBox {} was not loaded because already loaded", id);
-            return false;
-        }
-        auto asset = AssetManager::GetRenderMeshAsset(id);
-        if (!asset) {
-            LOG_WARNING("Hitbox {} was not loaded because does not exist in AssetManager", id);
-            return false;
-        }
-        auto mesh = ModelLoader::Load(asset.value().LoadingProps);
-        if (mesh == nullptr) {
-            return false;
-        }
-        std::vector<Vec3> vertices;
-        for (const auto& submesh : mesh->Meshes) {
-            for (const auto& vert : submesh.Vertices) {
-                vertices.push_back(vert.Position);
-            }
-        }
-        hit_boxes_.insert({id, CreateRef<Physics::ConvexHitbox>()});
-        hit_boxes_[id]->Build(vertices);
-        LOG_INFO("Hitbox {} was added", id);
-        return true;
-    }
+    // S_METHOD_IMPL(bool, LoadHitBox, (UUID id), (id)) {
+    //     if (hit_boxes_.contains(id)) {
+    //         LOG_WARNING("HitBox {} was not loaded because already loaded", id);
+    //         return false;
+    //     }
+    //     auto asset = AssetManager::GetRenderMeshAsset(id);
+    //     if (!asset) {
+    //         LOG_WARNING("Hitbox {} was not loaded because does not exist in AssetManager", id);
+    //         return false;
+    //     }
+    //     auto mesh = ModelLoader::Load(asset.value().LoadingProps);
+    //     if (mesh == nullptr) {
+    //         return false;
+    //     }
+    //     std::vector<Vec3> vertices;
+    //     for (const auto& submesh : mesh->Meshes) {
+    //         for (const auto& vert : submesh.Vertices) {
+    //             vertices.push_back(vert.Position);
+    //         }
+    //     }
+    //     hit_boxes_.insert({id, CreateRef<Physics::ConvexHitbox>()});
+    //     hit_boxes_[id]->Build(vertices);
+    //     LOG_INFO("Hitbox {} was added", id);
+    //     return true;
+    // }
     S_METHOD_IMPL(bool, LoadCubeMap, (UUID id), (id)) {
         if (cube_maps_.contains(id)) {
             LOG_WARNING("CubeMap {} was not loaded because already loaded", id);
@@ -124,12 +124,12 @@ namespace DummyEngine {
         }
         return {};
     }
-    S_METHOD_IMPL(std::optional<Ref<Physics::ConvexHitbox>>, GetHitBox, (UUID id), (id)) {
-        if (hit_boxes_.contains(id)) {
-            return hit_boxes_[id];
-        }
-        return {};
-    }
+    // S_METHOD_IMPL(std::optional<Ref<Physics::ConvexHitbox>>, GetHitBox, (UUID id), (id)) {
+    //     if (hit_boxes_.contains(id)) {
+    //         return hit_boxes_[id];
+    //     }
+    //     return {};
+    // }
 
     S_METHOD_IMPL(bool, HasShader, (UUID id), (id)) {
         return shaders_.contains(id);
@@ -143,9 +143,9 @@ namespace DummyEngine {
     S_METHOD_IMPL(bool, HasTexture, (UUID id), (id)) {
         return textures_.contains(id);
     }
-    S_METHOD_IMPL(bool, HasHitBox, (UUID id), (id)) {
-        return hit_boxes_.contains(id);
-    }
+    // S_METHOD_IMPL(bool, HasHitBox, (UUID id), (id)) {
+    //     return hit_boxes_.contains(id);
+    // }
 
     S_METHOD_IMPL(bool, DeleteShader, (UUID id), (id)) {
         if (shaders_.contains(id)) {
@@ -171,14 +171,14 @@ namespace DummyEngine {
         }
         return false;
     }
-    S_METHOD_IMPL(bool, DeleteHitBox, (UUID id), (id)) {
-        if (hit_boxes_.contains(id)) {
-            hit_boxes_.erase(id);
-            LOG_INFO("Hitbox {} was deleted", id);
-            return true;
-        }
-        return false;
-    }
+    // S_METHOD_IMPL(bool, DeleteHitBox, (UUID id), (id)) {
+    //     if (hit_boxes_.contains(id)) {
+    //         hit_boxes_.erase(id);
+    //         LOG_INFO("Hitbox {} was deleted", id);
+    //         return true;
+    //     }
+    //     return false;
+    // }
     S_METHOD_IMPL(bool, DeleteTexture, (UUID id), (id)) {
         if (textures_.contains(id)) {
             textures_.erase(id);
@@ -191,7 +191,7 @@ namespace DummyEngine {
         shaders_.clear();
         render_meshes_.clear();
         cube_maps_.clear();
-        hit_boxes_.clear();
+        // hit_boxes_.clear();
         textures_.clear();
         LOG_INFO("Cleared all resources");
         return Unit();

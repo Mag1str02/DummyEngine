@@ -7,7 +7,7 @@
 #include "DummyEngine/Core/ECS/ECS.h"                           // IWYU pragma: export
 #include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"         // IWYU pragma: export
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"  // IWYU pragma: export
-#include "DummyEngine/Core/Physics/PhysicsComponent.h"          // IWYU pragma: export
+// #include "DummyEngine/Core/Physics/PhysicsComponent.h"          // IWYU pragma: export
 #include "DummyEngine/Core/Rendering/Renderer/FrameBuffer.h"    // IWYU pragma: export
 #include "DummyEngine/Core/Rendering/Renderer/LocalBuffer.h"    // IWYU pragma: export
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"       // IWYU pragma: export

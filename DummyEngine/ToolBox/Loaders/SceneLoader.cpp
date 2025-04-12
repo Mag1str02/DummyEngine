@@ -3,7 +3,7 @@
 #include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/Core/ECS/ECS.h"
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"
-#include "DummyEngine/Core/Physics/PhysicsComponent.h"
+// #include "DummyEngine/Core/Physics/PhysicsComponent.h"
 #include "DummyEngine/Core/ResourceManaging/AssetManager.h"
 #include "DummyEngine/Core/ResourceManaging/ResourceManager.h"
 #include "DummyEngine/Core/Scene/Components.h"
@@ -157,15 +157,15 @@ namespace DummyEngine {
             }
         }
     }
-    template <> void SaveComponent<Physics::PhysicsComponent>(YAML::Node& n_entity, Entity entity) {
-        if (entity.Has<Physics::PhysicsComponent>()) {
-            const auto& phys                  = entity.Get<Physics::PhysicsComponent>();
-            n_entity["Physics"]["InvMass"]    = phys.InvertedMass;
-            n_entity["Physics"]["InvInertia"] = phys.InvertedInertia;
-            n_entity["Physics"]["Collidable"] = phys.Collidable;
-            n_entity["Physics"]["Gravity"]    = phys.Gravity;
-        }
-    }
+    // template <> void SaveComponent<Physics::PhysicsComponent>(YAML::Node& n_entity, Entity entity) {
+    //     if (entity.Has<Physics::PhysicsComponent>()) {
+    //         const auto& phys                  = entity.Get<Physics::PhysicsComponent>();
+    //         n_entity["Physics"]["InvMass"]    = phys.InvertedMass;
+    //         n_entity["Physics"]["InvInertia"] = phys.InvertedInertia;
+    //         n_entity["Physics"]["Collidable"] = phys.Collidable;
+    //         n_entity["Physics"]["Gravity"]    = phys.Gravity;
+    //     }
+    // }
 
     void SaveEntity(YAML::Node& n_entity, Entity entity) {
         SaveComponent<TagComponent>(n_entity, entity);
@@ -177,7 +177,7 @@ namespace DummyEngine {
         SaveComponent<LightSource>(n_entity, entity);
         SaveComponent<SkyBoxComponent>(n_entity, entity);
         SaveComponent<ScriptComponent>(n_entity, entity);
-        SaveComponent<Physics::PhysicsComponent>(n_entity, entity);
+        // SaveComponent<Physics::PhysicsComponent>(n_entity, entity);
     }
     YAML::Node SaveNode(SceneHierarchy::Node node) {
         YAML::Node res;
@@ -344,9 +344,9 @@ namespace DummyEngine {
         if (!ResourceManager::HasRenderMesh(id) && !ResourceManager::LoadRenderMesh(id)) {
             LOG_WARNING("RenderMesh {} not found in ResourceManager", id);
         }
-        if (!ResourceManager::HasHitBox(id) && !ResourceManager::LoadHitBox(id)) {
-            LOG_WARNING("Failed to load HitBox {}", id);
-        }
+        // if (!ResourceManager::HasHitBox(id) && !ResourceManager::LoadHitBox(id)) {
+        //     LOG_WARNING("Failed to load HitBox {}", id);
+        // }
         auto& meshes = entity.AddComponent<RenderMeshComponent>({id, ResourceManager::GetRenderMesh(id).value()->Copy()})->Mesh->GetSubMeshes();
 
         for (const auto& mat : n_component["Materials"]) {
@@ -434,17 +434,17 @@ namespace DummyEngine {
             LOG_INFO("Failed to create valid script: {}", script.ID());
         }
     }
-    template <> void LoadComponent<Physics::PhysicsComponent>(Ref<Scene>, YAML::Node n_component, Entity& entity) {
-        Physics::PhysicsComponent component{Vec3(0, 0, 0),
-                                            Vec3(0, 0, 0),
-                                            n_component["InvMass"].as<float>(),
-                                            n_component["InvInertia"].as<float>(),
-                                            n_component["Collidable"].as<bool>(),
-                                            n_component["Gravity"].as<bool>(),
-                                            Vec3(0, 0, 0),
-                                            Vec3(0, 0, 0)};
-        entity.AddComponent<Physics::PhysicsComponent>(component);
-    }
+    // template <> void LoadComponent<Physics::PhysicsComponent>(Ref<Scene>, YAML::Node n_component, Entity& entity) {
+    //     Physics::PhysicsComponent component{Vec3(0, 0, 0),
+    //                                         Vec3(0, 0, 0),
+    //                                         n_component["InvMass"].as<float>(),
+    //                                         n_component["InvInertia"].as<float>(),
+    //                                         n_component["Collidable"].as<bool>(),
+    //                                         n_component["Gravity"].as<bool>(),
+    //                                         Vec3(0, 0, 0),
+    //                                         Vec3(0, 0, 0)};
+    //     entity.AddComponent<Physics::PhysicsComponent>(component);
+    // }
 
     Entity LoadEntity(Ref<Scene> scene, YAML::Node n_entity) {
         Entity entity = scene->CreateEmptyEntity();
@@ -458,7 +458,7 @@ namespace DummyEngine {
         if (n_entity["LightSource"]) LoadComponent<LightSource>(scene, n_entity["LightSource"], entity);
         if (n_entity["SkyBox"]) LoadComponent<SkyBoxComponent>(scene, n_entity["SkyBox"], entity);
         if (n_entity["Script"]) LoadComponent<ScriptComponent>(scene, n_entity["Script"], entity);
-        if (n_entity["Physics"]) LoadComponent<Physics::PhysicsComponent>(scene, n_entity["Physics"], entity);
+        // if (n_entity["Physics"]) LoadComponent<Physics::PhysicsComponent>(scene, n_entity["Physics"], entity);
         return entity;
     }
     void LoadHierarchyNode(Ref<Scene> scene, YAML::Node n_array, SceneHierarchy::Node load_to) {

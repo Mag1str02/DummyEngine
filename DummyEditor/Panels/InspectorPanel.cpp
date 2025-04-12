@@ -5,7 +5,7 @@
 
 #include "DummyEngine/Core/Objects/Cameras/FPSCamera.h"
 #include "DummyEngine/Core/Objects/LightSources/LightSource.h"
-#include "DummyEngine/Core/Physics/PhysicsComponent.h"
+// #include "DummyEngine/Core/Physics/PhysicsComponent.h"
 #include "DummyEngine/Core/Scene/Components.h"
 #include "DummyEngine/Core/Scripting/Script.h"
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
@@ -167,22 +167,22 @@ namespace DummyEngine {
         }
     }
 
-    template <> void InspectorPanel::DrawComponentWidget<Physics::PhysicsComponent>() {
-        if (entity_.Has<Physics::PhysicsComponent>()) {
-            if (ImGui::CollapsingHeader("  PhysicsComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
-                auto&       phys    = entity_.Get<Physics::PhysicsComponent>();
-                const float min_mas = 0;
-                ImGui::Columns(2);
-                ImGuiUtils::EditProperty("Speed", phys.Speed);
-                ImGuiUtils::EditProperty("Rotspeed", phys.RotationSpeed);
-                ImGuiUtils::EditProperty("InvMass", ImGuiDataType_Float, &phys.InvertedMass, 0.01, &min_mas);
-                ImGuiUtils::EditProperty("InvInertia", ImGuiDataType_Float, &phys.InvertedInertia, 0.01, &min_mas);
-                ImGuiUtils::EditProperty("Collidable", phys.Collidable);
-                ImGuiUtils::EditProperty("Gravity", phys.Gravity);
-                ImGui::Columns(1);
-            }
-        }
-    }
+    // template <> void InspectorPanel::DrawComponentWidget<Physics::PhysicsComponent>() {
+    //     if (entity_.Has<Physics::PhysicsComponent>()) {
+    //         if (ImGui::CollapsingHeader("  PhysicsComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
+    //             auto&       phys    = entity_.Get<Physics::PhysicsComponent>();
+    //             const float min_mas = 0;
+    //             ImGui::Columns(2);
+    //             ImGuiUtils::EditProperty("Speed", phys.Speed);
+    //             ImGuiUtils::EditProperty("Rotspeed", phys.RotationSpeed);
+    //             ImGuiUtils::EditProperty("InvMass", ImGuiDataType_Float, &phys.InvertedMass, 0.01, &min_mas);
+    //             ImGuiUtils::EditProperty("InvInertia", ImGuiDataType_Float, &phys.InvertedInertia, 0.01, &min_mas);
+    //             ImGuiUtils::EditProperty("Collidable", phys.Collidable);
+    //             ImGuiUtils::EditProperty("Gravity", phys.Gravity);
+    //             ImGui::Columns(1);
+    //         }
+    //     }
+    // }
 
     void InspectorPanel::OnImGui() {
         DE_PROFILE_SCOPE("InspectorPanel OnImGui");
@@ -197,7 +197,7 @@ namespace DummyEngine {
                     DrawComponentWidget<LightSource>();
                     DrawComponentWidget<RenderMeshComponent>();
                     DrawComponentWidget<SkyBoxComponent>();
-                    DrawComponentWidget<Physics::PhysicsComponent>();
+                    // DrawComponentWidget<Physics::PhysicsComponent>();
                     AddComponent();
                 }
             }

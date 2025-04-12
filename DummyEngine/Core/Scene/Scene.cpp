@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-#include "DummyEngine/Core/Physics/Solver.hpp"
+// #include "DummyEngine/Core/Physics/Solver.hpp"
 #include "DummyEngine/Core/Scene/Components.h"
 #include "DummyEngine/Core/Scene/SceneHierarchy.h"
 #include "DummyEngine/Core/Scene/SceneRenderer.h"
@@ -50,10 +50,10 @@ namespace DummyEngine {
     }
     void Scene::OnUpdate(float dt) {
         DE_PROFILE_SCOPE("Scene OnUpdate");
-        if (physics_solver_) {
-            DE_PROFILE_SCOPE("Physics");
-            physics_solver_->OnUpdate(dt * 2);
-        }
+        // if (physics_solver_) {
+        //     DE_PROFILE_SCOPE("Physics");
+        //     physics_solver_->OnUpdate(dt * 2);
+        // }
         for (auto e : storage_->View<ScriptComponent>()) {
             auto& component = e.Get<ScriptComponent>();
             if (component.Valid()) {
@@ -96,7 +96,7 @@ namespace DummyEngine {
             DE_ASSERT(entity_by_id_.find(id) == entity_by_id_.end(), "UUID collision occured {}", id.Get());
             entity_by_id_[id] = entity;
         });
-        physics_solver_ = CreateRef<Physics::Solver>();
+        // physics_solver_ = CreateRef<Physics::Solver>();
         storage_->SetRemoveHandler<IDComponent>([this](Entity entity) { entity_by_id_.erase(entity.Get<IDComponent>()); });
     }
 
@@ -134,7 +134,7 @@ namespace DummyEngine {
     bool Scene::HasCamera() {
         return camera_.Valid();
     }
-    void Scene::LoadPhysics(Ref<Scene>& scene) {
-        physics_solver_->LoadScene(scene);
-    }
+    // void Scene::LoadPhysics(Ref<Scene>& scene) {
+    //     physics_solver_->LoadScene(scene);
+    // }
 }  // namespace DummyEngine
