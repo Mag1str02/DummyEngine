@@ -11,8 +11,8 @@ namespace DummyEngine {
     public:
         SharedObjectImpl() {}
         ~SharedObjectImpl() {
-            if (m_Handle) {
-                dlclose(m_Handle);
+            if (handle_) {
+                dlclose(handle_);
             }
         }
 
@@ -22,7 +22,7 @@ namespace DummyEngine {
         SharedObjectImpl& operator=(SharedObjectImpl&&)      = delete;
 
         bool Load(const Path& directory, const std::string& name) {
-            if (m_Handle && m_Valid) {
+            if (handle_ && valid_) {
                 LOG_WARNING("Library {} already loaded", name);
                 return false;
             }
@@ -36,56 +36,56 @@ namespace DummyEngine {
                 LOG_WARNING("Failed to load library {}", directory / (name + ".dylib"));
                 return false;
             }
-            if (m_Handle) {
-                dlclose(m_Handle);
+            if (handle_) {
+                dlclose(handle_);
             }
-            m_Handle    = new_handle;
-            m_Directory = directory;
-            m_Name      = name;
-            m_Valid     = true;
+            handle_    = new_handle;
+            directory_ = directory;
+            name_      = name;
+            valid_     = true;
             LOG_INFO("Loaded library {}", Config::RelativeToExecutable(directory / (name + ".dylib")));
             return true;
         }
-        void Invalidate() { m_Valid = false; }
+        void Invalidate() { valid_ = false; }
 
-        bool     Valid() const { return m_Valid && m_Handle; }
+        bool     Valid() const { return valid_ && handle_; }
         VoidFPtr GetFunction(const std::string& function_name) const {
-            if (!m_Handle) {
+            if (!handle_) {
                 return nullptr;
             }
-            return (VoidFPtr)dlsym(m_Handle, function_name.c_str());
+            return (VoidFPtr)dlsym(handle_, function_name.c_str());
         }
-        const Path&        GetDirectory() const { return m_Directory; }
-        const std::string& GetName() const { return m_Name; }
+        const Path&        GetDirectory() const { return directory_; }
+        const std::string& GetName() const { return name_; }
 
     private:
-        Path        m_Directory;
-        std::string m_Name;
-        void*       m_Handle = NULL;
-        bool        m_Valid  = false;
+        Path        directory_;
+        std::string name_;
+        void*       handle_ = NULL;
+        bool        valid_  = false;
     };
 
     SharedObject::SharedObject() {
-        m_Impl = CreateScope<SharedObjectImpl>();
+        impl_ = CreateScope<SharedObjectImpl>();
     }
     SharedObject::~SharedObject() {}
     bool SharedObject::Load(const Path& directory, const std::string& name) {
-        return m_Impl->Load(directory, name);
+        return impl_->Load(directory, name);
     }
     VoidFPtr SharedObject::GetFunction(const std::string& function_name) const {
-        return m_Impl->GetFunction(function_name);
+        return impl_->GetFunction(function_name);
     }
     const Path& SharedObject::GetDirectory() const {
-        return m_Impl->GetDirectory();
+        return impl_->GetDirectory();
     }
     const std::string& SharedObject::GetName() const {
-        return m_Impl->GetName();
+        return impl_->GetName();
     }
     void SharedObject::Invalidate() {
-        m_Impl->Invalidate();
+        impl_->Invalidate();
     }
     bool SharedObject::Valid() const {
-        return m_Impl->Valid();
+        return impl_->Valid();
     }
 
 }  // namespace DummyEngine

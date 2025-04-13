@@ -65,7 +65,7 @@ uniform sampler2D   u_ShadowMap;
 uniform float       u_ShadowFarPlane;
 uniform mat4        u_EnvRotation;
 uniform int         u_UsePointShadowMap;
-uniform samplerCube u_PointShadowMap[10];
+uniform samplerCube u_PointShadowMap[7];
 
 float ShadowImpact(vec4 pos);
 vec3  FresnelSchlick(float angle_cos, vec3 base_reflectivity);

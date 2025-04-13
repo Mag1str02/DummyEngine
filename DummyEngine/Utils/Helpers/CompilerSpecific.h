@@ -31,7 +31,7 @@
 
 #if DE_PLATFORM_MACOS
 #define DE_SCRIPT_API extern "C"
-#undef DE_COMPILER_PATH_HASH
+// #undef DE_COMPILER_PATH_HASH
 #endif
 
 namespace std {  // NOLINT

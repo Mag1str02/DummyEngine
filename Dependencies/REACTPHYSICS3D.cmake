@@ -1,0 +1,1 @@
+add_external_library(REACTPHYSICS3D reactphysics3d/include reactphysics3d)

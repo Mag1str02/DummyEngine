@@ -11,6 +11,16 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -stdlib=libc++")
     set(ENABLE_PRECOMPILED_HEADERS ON)
 endif()
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
+    set(HOMEBREW_LLVM_PATH "/opt/homebrew/opt/llvm")
+    
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isystem ${HOMEBREW_LLVM_PATH}/include/c++/v1")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L${HOMEBREW_LLVM_PATH}/lib -lc++ -Wl,-rpath,${HOMEBREW_LLVM_PATH}/lib")
+
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -stdlib=libc++ -nostdinc++ -std=c++20")
+    set(ENABLE_PRECOMPILED_HEADERS ON)
+endif()
 message(STATUS "CMAKE_CXX_COMPILER_ID: [${CMAKE_CXX_COMPILER_ID}]")
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++20")
