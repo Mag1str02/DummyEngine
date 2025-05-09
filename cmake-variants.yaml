@@ -6,6 +6,7 @@ buildType:
       long: Main development build type with optimized code and debug info
       buildType: ReleaseWithDebInfo
       settings:
+        DE_BUILD_MODE: Release
         DE_FORMAT_BEFORE_BUILD: OFF
         DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
@@ -19,6 +20,7 @@ buildType:
       long: Debug build type
       buildType: Debug
       settings:
+        DE_BUILD_MODE: Debug
         DE_FORMAT_BEFORE_BUILD: OFF
         DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
@@ -32,6 +34,7 @@ buildType:
       long: Optimized code with TSAN
       buildType: ReleaseWithDebInfo
       settings:
+        DE_BUILD_MODE: ReleaseTSAN
         DE_FORMAT_BEFORE_BUILD: OFF
         DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
@@ -45,6 +48,7 @@ buildType:
       long: Optimized code with ASAN
       buildType: ReleaseWithDebInfo
       settings:
+        DE_BUILD_MODE: ReleaseASAN
         DE_FORMAT_BEFORE_BUILD: OFF
         DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
@@ -58,6 +62,7 @@ buildType:
       long: Optimized code with MSAN
       buildType: ReleaseWithDebInfo
       settings:
+        DE_BUILD_MODE: ReleaseMSAN
         DE_FORMAT_BEFORE_BUILD: OFF
         DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
@@ -71,6 +76,7 @@ buildType:
       long: Runs clang-format before build, forces no PCH and runs clang-tidy checks
       buildType: ReleaseWithDebInfo
       settings:
+        DE_BUILD_MODE: ReleaseTidy
         DE_FORMAT_BEFORE_BUILD: ON
         DE_CLANG_TIDY_RUN_ON_COMPILATION: ON
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: ON

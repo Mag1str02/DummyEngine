@@ -26,3 +26,6 @@
 	path = Dependencies/TRACY
 	url = https://github.com/Mag1str02/Tracy-Profiler
 	branch = client_only_0.11.1
+[submodule "Dependencies/DUMMY_CONCURRENCY"]
+	path = Dependencies/DUMMY_CONCURRENCY
+	url = https://github.com/Mag1str02/DummyConcurrency
