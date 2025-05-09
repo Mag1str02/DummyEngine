@@ -1,4 +1,5 @@
 include(ASSIMP.cmake)
+include(DUMMY_CONCURRENCY.cmake)
 include(GLAD.cmake)
 include(GLFW.cmake)
 include(GLM.cmake)
@@ -19,6 +20,7 @@ function (link_dependencies TARGET)
         PUBLIC ${EXTERNAL_YAML_INDCLUDE_DIR}
         PUBLIC ${EXTERNAL_STB_IMAGE_INCLUDE_DIR}
         PUBLIC ${EXTERNAL_TRACY_INCLUDE_DIR}
+        PUBLIC ${EXTERNAL_DUMMY_CONCURRENCY_INCLUDE_DIR}
     )
     target_link_libraries(${TARGET}
         PUBLIC ${EXTERNAL_ASSIMP_LIBRARY}
@@ -30,6 +32,7 @@ function (link_dependencies TARGET)
         PUBLIC ${EXTERNAL_YAML_LIBRARY}
         PUBLIC ${EXTERNAL_STB_IMAGE_LIBRARY}
         PUBLIC ${EXTERNAL_TRACY_LIBRARY}
+        PUBLIC ${EXTERNAL_DUMMY_CONCURRENCY_LIBRARY}
     )
 endfunction(link_dependencies)
 
@@ -43,4 +46,5 @@ add_dependencies(BuildDependencies
     ${EXTERNAL_NFD_LIBRARY}
     ${EXTERNAL_YAML_LIBRARY}
     ${EXTERNAL_STB_IMAGE_LIBRARY}
+    ${EXTERNAL_DUMMY_CONCURRENCY_LIBRARY}
 )
