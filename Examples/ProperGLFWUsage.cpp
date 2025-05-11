@@ -3,6 +3,8 @@
 #include <GLFW/glfw3.h>
 // clang-format on
 
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
 #include <imgui.h>
 
 #include <DummyEngine/Utils/Debug/Assert.h>
@@ -35,6 +37,7 @@ public:
     }
     void Stop() {
         stop_flag_.store(true);
+        stopped_event_processing_.Wait();
 
         Submit(thread_pool_, []() { glfwTerminate(); });
 
@@ -68,6 +71,8 @@ private:
         if (!stop_flag_) {
             glfwPollEvents();  // TODO: wait
             Submit(thread_pool_, [this]() { ProcessEvents(); });
+        } else {
+            stopped_event_processing_.Fire();
         }
     }
 
@@ -75,6 +80,7 @@ private:
     ThreadPool thread_pool_;
 
     std::atomic<bool> stop_flag_ = false;
+    TEvent            stopped_event_processing_;
 };
 
 int main() {
@@ -84,13 +90,41 @@ int main() {
     auto* window = NFuture::Get(glfw.CreateWindow());
     glfwMakeContextCurrent(window);
     DE_ASSERT(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "Failed to load glad");
-    while (glfwWindowShouldClose(window) != GLFW_TRUE) {
-        const float v = (float)fabs(sin(glfwGetTime() * 2.f));
-        glClearColor(v, 1.0f - v, 0.0f, 0.f);
 
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Docking
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 410");
+
+    while (glfwWindowShouldClose(window) != GLFW_TRUE) {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        ImGui::ShowDemoWindow();
+
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(0, 0, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         glfwSwapBuffers(window);
     }
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     glfwMakeContextCurrent(nullptr);
 
     glfw.DestroyWindow(window);
