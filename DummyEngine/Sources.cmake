@@ -23,6 +23,7 @@ Core/Application/Input.cpp
 Core/Application/Initializer.cpp
 Core/Application/Config.cpp
 Core/Application/FileSystem.cpp
+Core/Application/GLFW.cpp
 
 Core/Console/ConsoleLayer.cpp
 Core/Console/Console.cpp

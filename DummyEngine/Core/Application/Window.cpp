@@ -1,5 +1,7 @@
 #include "Window.h"
 
+#include "GLFW.h"
+
 #include "DummyEngine/Utils/Debug/Profiler.h"
 
 #include <GLFW/glfw3.h>
@@ -7,15 +9,8 @@
 
 namespace DummyEngine {
 
-    GLFWmonitor* GetMonitor(U32 id) {
-        int           monitors_amount = 0;
-        GLFWmonitor** monitors        = glfwGetMonitors(&monitors_amount);
-        DE_ASSERT(id < U32(monitors_amount), "Wrong monitor id {} should be between [0, {})", id, monitors_amount);
-        return monitors[id];
-    }
-
     Window::Window(const WindowState& state) : state_(state) {
-        window_ = glfwCreateWindow(1280, 720, state_.Name.c_str(), nullptr, nullptr);
+        window_ = NFuture::Get(GLFW::CreateWindow());
         DE_ASSERT(window_, "Failed to create GLFW Window {}", state_.Name);
         LOG_INFO("Window created: {}", state_.Name);
 
@@ -59,17 +54,18 @@ namespace DummyEngine {
 
     void Window::LockMouse() {
         state_.MouseLocked = true;
-        glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        NFuture::Get(GLFW::SetCursorMode(window_, GLFW_CURSOR_DISABLED));
     }
     void Window::UnlockMouse() {
         state_.MouseLocked = false;
-        glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+        NFuture::Get(GLFW::SetCursorMode(window_, GLFW_CURSOR_NORMAL));
     }
     void Window::ToggleMouseLock() {
         if (state_.MouseLocked) {
-            glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            NFuture::Get(GLFW::SetCursorMode(window_, GLFW_CURSOR_NORMAL));
         } else {
-            glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            NFuture::Get(GLFW::SetCursorMode(window_, GLFW_CURSOR_DISABLED));
         }
         state_.MouseLocked = !state_.MouseLocked;
     }
@@ -77,7 +73,6 @@ namespace DummyEngine {
     void Window::OnUpdate() {
         DE_PROFILE_SCOPE("Window OnUpdate");
 
-        glfwPollEvents();
         context_->SwapBuffers();
     }
     void Window::SetEventCallback(EventCallback<Event> callback) {
@@ -92,16 +87,10 @@ namespace DummyEngine {
         DE_ASSERT(state_.Mode != WindowMode::None, "Wrong window mode");
         DE_ASSERT(state_.Width != 0 && state_.Height != 0, "Wrong window size ({},{}) expected non 0 sides", state_.Width, state_.Height);
         if (state_.Mode == WindowMode::Windowed) {
-            glfwSetWindowMonitor(window_, nullptr, state_.PosX, state_.PosY, state_.Width, state_.Height, 1000);
+            NFuture::Get(GLFW::DisableFullScreen(window_));
         }
         if (state_.Mode == WindowMode::FullScreen) {
-            GLFWmonitor*       monitor = GetMonitor(state_.MonitorID);
-            const GLFWvidmode* mode    = glfwGetVideoMode(monitor);
-            state_.Height              = mode->height;
-            state_.Width               = mode->width;
-            state_.PosX                = 0;
-            state_.PosY                = 0;
-            glfwSetWindowMonitor(window_, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+            NFuture::Get(GLFW::EnableFullScreen(window_, state_.MonitorID));
         }
     }
     void Window::SetupCallbacks() {
