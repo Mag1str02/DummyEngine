@@ -3,6 +3,8 @@
 #include "DummyEngine/Core/Application/Event.h"
 #include "DummyEngine/Utils/Helpers/Singleton.h"
 
+#include <vector>
+
 namespace DummyEngine {
 
     class Window;

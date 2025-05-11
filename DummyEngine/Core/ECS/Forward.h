@@ -3,7 +3,11 @@
 #include "DummyEngine/Utils/Debug/Assert.h"  // IWYU pragma: export
 #include "DummyEngine/Utils/Types/Types.h"   // IWYU pragma: export
 
-#include <typeindex>  // IWYU pragma: export
+#include <functional>     // IWYU pragma: export
+#include <queue>          // IWYU pragma: export
+#include <typeindex>      // IWYU pragma: export
+#include <unordered_map>  // IWYU pragma: export
+#include <vector>         // IWYU pragma: export
 
 namespace DummyEngine {
 

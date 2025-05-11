@@ -2,6 +2,9 @@
 
 #include "DummyEngine/Utils/Types/Types.h"
 
+#include <unordered_map>
+#include <vector>
+
 namespace DummyEngine {
 
     class Trie {

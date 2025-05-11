@@ -2,6 +2,10 @@
 
 #include "DummyEngine/Core/ECS/ECS.h"
 
+#include <queue>
+#include <variant>
+#include <vector>
+
 namespace DummyEngine {
 
     class SceneHierarchy {

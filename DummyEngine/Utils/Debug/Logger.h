@@ -4,7 +4,9 @@
 #include "DummyEngine/Utils/Helpers/Singleton.h"
 #include "DummyEngine/Utils/Types/Types.h"
 
+#include <deque>
 #include <fstream>
+#include <unordered_map>
 
 namespace DummyEngine {
 

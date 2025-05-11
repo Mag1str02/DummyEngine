@@ -1,9 +1,11 @@
-
+// clang-format off
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+// clang-format on
 
 #include <imgui.h>
 
+#include <DummyEngine/Utils/Debug/Assert.h>
 #include <DummyConcurrency/DummyConcurrency.hpp>
 
 using namespace DummyEngine;
@@ -86,8 +88,8 @@ int main() {
     auto* window = NFuture::Get(glfw.CreateWindow());
     glfwMakeContextCurrent(window);
     while (glfwWindowShouldClose(window) != GLFW_TRUE) {
-        const float v = (float) fabs(sin(glfwGetTime() * 2.f));
-        glClearColor(v , 1.0f, 0.0f, 0.f);
+        const float v = (float)fabs(sin(glfwGetTime() * 2.f));
+        glClearColor(v, 1.0f, 0.0f, 0.f);
 
         glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(window);

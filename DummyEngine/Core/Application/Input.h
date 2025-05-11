@@ -4,6 +4,8 @@
 #include "DummyEngine/Core/Application/KeyCodes.h"
 #include "DummyEngine/Utils/Helpers/Singleton.h"
 
+#include <deque>
+
 namespace DummyEngine {
 
     struct InputFrame {
