@@ -2,6 +2,8 @@
 
 #include "DummyEngine/Core/Rendering/Renderer/Shader.h"
 
+#include <format>
+
 namespace DummyEngine {
 
     Animator::Animator(Ref<Animation> animation) : final_bone_matrices_(MAX_BONES, Mat4(1.0f)) {

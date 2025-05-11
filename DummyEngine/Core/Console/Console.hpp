@@ -4,6 +4,8 @@
 #include "DummyEngine/Utils/Helpers/Singleton.h"
 #include "DummyEngine/Utils/Types/Types.h"
 
+#include <functional>
+#include <variant>
 #include <map>
 
 namespace DummyEngine {

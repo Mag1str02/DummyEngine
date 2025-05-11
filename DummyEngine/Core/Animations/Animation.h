@@ -2,6 +2,8 @@
 
 #include "DummyEngine/Core/Animations/Bone.h"
 
+#include <unordered_map>
+
 namespace DummyEngine {
 
     class Animation {

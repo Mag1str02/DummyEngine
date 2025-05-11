@@ -2,6 +2,8 @@
 
 #include "DummyEngine/Utils/Types/Types.h"
 
+#include <vector>
+
 namespace DummyEngine {
 
     struct KeyPosition {

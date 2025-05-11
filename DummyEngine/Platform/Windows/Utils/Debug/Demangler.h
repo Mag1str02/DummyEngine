@@ -1,7 +1,9 @@
 #pragma once
 
 #include <cxxabi.h>
+#include <stdlib.h>
 #include <string>
+#include <typeinfo>
 
 namespace DummyEngine {
 

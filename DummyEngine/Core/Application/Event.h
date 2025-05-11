@@ -2,6 +2,9 @@
 
 #include "DummyEngine/Utils/Types/Types.h"
 
+#include <functional>
+#include <vector>
+
 namespace DummyEngine {
     template <typename Event> using EventCallback = std::function<void(Event&)>;
 
