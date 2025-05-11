@@ -2,6 +2,7 @@
 
 #include "DummyEngine/Core/Application/Application.h"
 #include "DummyEngine/Core/Application/Config.h"
+#include "DummyEngine/Core/Application/GLFW.h"
 #include "DummyEngine/Core/Application/Input.h"
 #include "DummyEngine/Core/Console/Console.hpp"
 #include "DummyEngine/Core/Rendering/Renderer/Renderer.h"
@@ -14,10 +15,6 @@
 #include <imgui.h>
 
 namespace DummyEngine {
-    static void ErrorCallback(int, const char* description) {
-        fprintf(stderr, "Error: %s\n", description);
-        fflush(stderr);
-    }
 
     void Initializer::Initialize() {
         PreInitialize();
@@ -40,20 +37,9 @@ namespace DummyEngine {
     }
     void Initializer::DepInitialize() {
         LOG_INFO("Initializing dependencies");
-        //* Init GLFW
-        {
-            if (glfwInit() == GLFW_FALSE) {
-                DE_ASSERT(false, "Failed to initialize GLFW");
-            }
-            glfwSetErrorCallback(ErrorCallback);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-            ImGui::g_ImGuiFailAssert                                    = FailAssert;
-            ImGui::g_ExternalSettings.DragAndDropTooltipAlphaMultiplyer = 1.0;
-            LOG_INFO("Initialized GLFW");
-        }
+        GLFW::Initialize();
+        ImGui::g_ImGuiFailAssert                                    = FailAssert;
+        ImGui::g_ExternalSettings.DragAndDropTooltipAlphaMultiplyer = 1.0;
     }
     void Initializer::EngineInitialize() {
         DE_PROFILER_BEGIN_FRAME();
@@ -65,10 +51,15 @@ namespace DummyEngine {
         Input::Initialize();
         Application::Initialize();
         Renderer::Initialize();
+
+        GLFW::StartEventProcessing();
     }
 
     void Initializer::EngineTerminate() {
         LOG_INFO("Terminating Engine");
+
+        GLFW::StopEventProcessing();
+
         Renderer::Terminate();
         Application::Terminate();
         Input::Terminate();
@@ -79,7 +70,8 @@ namespace DummyEngine {
     void Initializer::DepTerminate() {
         LOG_INFO("Terminating dependencies");
         //* Terminate GLFW
-        { glfwTerminate(); }
+
+        GLFW::Terminate();
     }
     void Initializer::PostTerminate() {
         LOG_INFO("PostTerminating");
