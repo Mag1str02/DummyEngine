@@ -22,7 +22,7 @@ namespace DummyEngine {
         ImGuiIO& io = ImGui::GetIO();
 
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+        // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
         ImGui::StyleColorsDark();
 
         ImGui_ImplGlfw_InitForOpenGL(Application::GetInstance().window_->window_, true);
