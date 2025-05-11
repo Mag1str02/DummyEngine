@@ -44,10 +44,7 @@ public:
     Future<GLFWwindow*> CreateWindow() {
         return NFuture::Submit(thread_pool_, []() {
             auto* window = glfwCreateWindow(1280, 720, "Window", nullptr, nullptr);
-
-            glfwMakeContextCurrent(window);
-            gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-            glfwMakeContextCurrent(nullptr);
+            DE_ASSERT(window, "Failed to craete window");
             return window;
         });
     }
@@ -77,8 +74,7 @@ private:
 private:
     ThreadPool thread_pool_;
 
-    ManualLifetime<std::thread> thread_;
-    std::atomic<bool>           stop_flag_ = false;
+    std::atomic<bool> stop_flag_ = false;
 };
 
 int main() {
@@ -87,9 +83,10 @@ int main() {
     glfw.Start();
     auto* window = NFuture::Get(glfw.CreateWindow());
     glfwMakeContextCurrent(window);
+    DE_ASSERT(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "Failed to load glad");
     while (glfwWindowShouldClose(window) != GLFW_TRUE) {
         const float v = (float)fabs(sin(glfwGetTime() * 2.f));
-        glClearColor(v, 1.0f, 0.0f, 0.f);
+        glClearColor(v, 1.0f - v, 0.0f, 0.f);
 
         glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(window);
