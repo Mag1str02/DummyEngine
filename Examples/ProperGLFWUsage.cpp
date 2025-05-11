@@ -28,12 +28,12 @@ public:
         }
     }
     void Start() {
-        Submit(thread_pool_, [this]() {
-            InitGlfw();
-            ProcessEvents();
-        });
+        Submit(thread_pool_, [this]() { InitGlfw(); });
 
         thread_pool_.Start();
+    }
+    void StartPollingEvents() {
+        Submit(thread_pool_, [this]() { ProcessEvents(); });
     }
     void Stop() {
         stop_flag_.store(true);
@@ -93,15 +93,14 @@ int main() {
 
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
-    (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Docking
     ImGui::StyleColorsDark();
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 410");
 
+    glfw.StartPollingEvents();
     while (glfwWindowShouldClose(window) != GLFW_TRUE) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
