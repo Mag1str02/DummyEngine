@@ -3,6 +3,7 @@
 #include "Window.h"
 
 #include "DummyEngine/Utils/Helpers/Singleton.h"
+#include "DummyEngine/Utils/PCH/DC.h"
 
 struct GLFWwindow;
 
