@@ -2,6 +2,9 @@
 
 #include "DummyEngine/Utils/Types/Types.h"
 
+#include <queue>
+#include <vector>
+
 namespace DummyEngine {
 
     class EntityManager {
