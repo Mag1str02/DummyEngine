@@ -13,7 +13,7 @@ namespace DummyEngine {
         if (m_Controller) {
             if (ImGui::Begin(ICON_MD_SPEED "  Profiler")) {
 #if DE_ENABLE_PROFILER
-                RenderTimeLapse(Profiler::GetOldestFrame().Timelapses, 0);
+                // RenderTimeLapse(Profiler::GetOldestFrame().Timelapses, 0);
 #endif
             }
             ImGui::End();

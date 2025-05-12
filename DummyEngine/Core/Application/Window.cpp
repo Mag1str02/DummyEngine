@@ -1,5 +1,6 @@
 #include "Window.h"
 
+#include "Application.h"
 #include "GLFW.h"
 
 #include "DummyEngine/Utils/Debug/Profiler.h"
@@ -10,32 +11,19 @@
 namespace DummyEngine {
 
     Window::Window(const WindowState& state) : state_(state) {
-        window_ = NFuture::Get(GLFW::CreateWindow());
+        window_ = GLFW::CreateWindow() | NFuture::Get();
         DE_ASSERT(window_, "Failed to create GLFW Window {}", state_.Name);
         LOG_INFO("Window created: {}", state_.Name);
 
         context_ = Context::Create(window_);
         context_->Load();
 
-        SetupCallbacks();
-
         Invalidate();
     }
     Window::~Window() {
-        glfwDestroyWindow(window_);
+        GLFW::DestroyWindow(window_) | NFuture::Get();
     }
 
-    void Window::SetIcon(Path path) {
-        GLFWimage icon;
-        icon.pixels = stbi_load(path.string().c_str(), &icon.width, &icon.height, nullptr, 4);
-
-        if (icon.pixels == nullptr) {
-            LOG_WARNING("Failed to set window icon {}", path);
-            return;
-        }
-        glfwSetWindowIcon(window_, 1, &icon);
-        stbi_image_free(icon.pixels);
-    }
     void Window::FullScreen(U32 id) {
         state_.Mode      = WindowMode::FullScreen;
         state_.MonitorID = id;
@@ -54,29 +42,34 @@ namespace DummyEngine {
 
     void Window::LockMouse() {
         state_.MouseLocked = true;
-        NFuture::Get(GLFW::SetCursorMode(window_, GLFW_CURSOR_DISABLED));
+        SetCursorMode(GLFW_CURSOR_DISABLED);
     }
     void Window::UnlockMouse() {
         state_.MouseLocked = false;
 
-        NFuture::Get(GLFW::SetCursorMode(window_, GLFW_CURSOR_NORMAL));
+        SetCursorMode(GLFW_CURSOR_NORMAL);
     }
     void Window::ToggleMouseLock() {
         if (state_.MouseLocked) {
-            NFuture::Get(GLFW::SetCursorMode(window_, GLFW_CURSOR_NORMAL));
+            SetCursorMode(GLFW_CURSOR_NORMAL);
         } else {
-            NFuture::Get(GLFW::SetCursorMode(window_, GLFW_CURSOR_DISABLED));
+            SetCursorMode(GLFW_CURSOR_DISABLED);
         }
         state_.MouseLocked = !state_.MouseLocked;
+    }
+    void Window::SetCursorMode(U32 mode) {
+        GLFW::SetCursorMode(window_, mode) | NFuture::Get();
     }
 
     void Window::OnUpdate() {
         DE_PROFILE_SCOPE("Window OnUpdate");
 
+        auto events = GLFW::PullWindowEvents(window_);
+        for (const auto& event : events) {
+            Application::OnEvent(event);
+        }
+
         context_->SwapBuffers();
-    }
-    void Window::SetEventCallback(EventCallback<Event> callback) {
-        state_.EventCallback = callback;
     }
 
     const WindowState& Window::GetState() const {
@@ -92,77 +85,5 @@ namespace DummyEngine {
         if (state_.Mode == WindowMode::FullScreen) {
             NFuture::Get(GLFW::EnableFullScreen(window_, state_.MonitorID));
         }
-    }
-    void Window::SetupCallbacks() {
-        glfwSetWindowUserPointer(window_, &state_);
-
-        glfwSetWindowSizeCallback(window_, [](GLFWwindow* window, int width, int height) {
-            WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
-            state.Width        = width;
-            state.Height       = height;
-
-            WindowResizeEvent event(width, height);
-            state.EventCallback(event);
-        });
-
-        glfwSetWindowCloseCallback(window_, [](GLFWwindow* window) {
-            WindowState&     state = *(WindowState*)glfwGetWindowUserPointer(window);
-            WindowCloseEvent event;
-            state.EventCallback(event);
-        });
-
-        glfwSetKeyCallback(window_, [](GLFWwindow* window, int key, int, int action, int) {
-            if (key == -1) {
-                return;
-            }
-            WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
-            switch (action) {
-                case GLFW_PRESS: {
-                    KeyPressedEvent event(key);
-                    state.EventCallback(event);
-                    break;
-                }
-                case GLFW_RELEASE: {
-                    KeyReleasedEvent event(key);
-                    state.EventCallback(event);
-                    break;
-                }
-                case GLFW_REPEAT: {
-                    KeyPressedEvent event(key);
-                    state.EventCallback(event);
-                    break;
-                }
-            }
-        });
-
-        glfwSetMouseButtonCallback(window_, [](GLFWwindow* window, int button, int action, int) {
-            WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
-            switch (action) {
-                case GLFW_PRESS: {
-                    MouseButtonPressedEvent event(button);
-                    state.EventCallback(event);
-                    break;
-                }
-                case GLFW_RELEASE: {
-                    MouseButtonReleasedEvent event(button);
-                    state.EventCallback(event);
-                    break;
-                }
-            }
-        });
-
-        glfwSetScrollCallback(window_, [](GLFWwindow* window, double x_offset, double y_offset) {
-            WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
-
-            MouseScrolledEvent event((float)x_offset, (float)y_offset);
-            state.EventCallback(event);
-        });
-
-        glfwSetCursorPosCallback(window_, [](GLFWwindow* window, double x_pos, double y_pos) {
-            WindowState& state = *(WindowState*)glfwGetWindowUserPointer(window);
-
-            MouseMovedCallback event((float)x_pos, (float)y_pos);
-            state.EventCallback(event);
-        });
     }
 }  // namespace DummyEngine

@@ -1,215 +1,157 @@
 #pragma once
 
+#include "DummyEngine/Utils/Debug/Assert.h"
 #include "DummyEngine/Utils/Types/Types.h"
 
 #include <functional>
+#include <variant>
 #include <vector>
 
+struct GLFWwindow;
+struct GLFWmonitor;
+
 namespace DummyEngine {
-    template <typename Event> using EventCallback = std::function<void(Event&)>;
+    template <typename Event> using EventCallback = std::function<void(const Event&)>;
 
     enum class EventType {
         None = 0,
 
         //*Responding
 
+        Monitor,
+
+        WindowCursorEntered,
+        WindowFocus,
         WindowResize,
         WindowClose,
 
-        KeyPressed,
-        KeyReleased,
+        Key,
+        Char,
 
-        MouseButtonPressed,
-        MouseButtonReleased,
+        MouseButton,
         MouseScrolled,
-        MouseMoved,
+        MousePosition,
 
         //*Triggering
 
-        SetWindowModeWindowed,
-        SetWindowModeFullscreen,
-
+        SetWindowMode,
         SetMouseLock,
-        SetMouseUnlock,
-        SetMouseLockToggle,
 
         Count
     };
 
+    class Event;
+
+    template <EventType Type>
+    struct EventBase {
+        static constexpr EventType kType = Type;
+
+        GLFWwindow* Window;
+    };
+
+#define DECLARE_EVENT(name) struct name##Event : EventBase<EventType::name>
+
+    DECLARE_EVENT(WindowCursorEntered) {
+        int Entered;
+    };
+    DECLARE_EVENT(WindowFocus) {
+        int Focused;
+    };
+    DECLARE_EVENT(WindowResize) {
+        int Width;
+        int Height;
+    };
+    DECLARE_EVENT(WindowClose){};
+
+    DECLARE_EVENT(Key) {
+        int Key;
+        int Scancode;
+        int Action;
+        int Mods;
+    };
+    DECLARE_EVENT(Char) {
+        unsigned int C;
+    };
+
+    DECLARE_EVENT(MouseButton) {
+        int Button;
+        int Action;
+        int Mods;
+    };
+    DECLARE_EVENT(MouseScrolled) {
+        double XOffset;
+        double YOffset;
+    };
+    DECLARE_EVENT(MousePosition) {
+        double X;
+        double Y;
+    };
+
+    DECLARE_EVENT(Monitor) {
+        GLFWmonitor* Monitor;
+        int          Event;
+    };
+    DECLARE_EVENT(SetWindowMode) {
+        bool Fullscreen;
+        U32  MonitorId;
+    };
+    DECLARE_EVENT(SetMouseLock) {
+        enum State : U32 {
+            Lock,
+            UnLock,
+            Switch,
+        } Action;
+    };
+
     class Event {
+    private:
+        using Value = std::variant<    //
+            MonitorEvent,              //
+            WindowCursorEnteredEvent,  //
+            WindowFocusEvent,          //
+            WindowResizeEvent,         //
+            WindowCloseEvent,          //
+            KeyEvent,                  //
+            CharEvent,                 //
+            MouseButtonEvent,          //
+            MouseScrolledEvent,        //
+            MousePositionEvent,        //
+            SetWindowModeEvent,        //
+            SetMouseLockEvent          //
+            >;
+
     public:
-        virtual ~Event()                  = default;
-        virtual EventType GetType() const = 0;
+        template <typename T>
+        Event(T t) : type_(T::kType), value_(std::move(t)) {}  // NOLINT
+
+        EventType Type() const { return type_; }
+
+        template <typename T>
+        const T& As() const {
+            DE_ASSERT(type_ == T::kType, "Invalid event type");
+            return std::get<T>(value_);
+        }
+
+    private:
+        EventType type_;
+        Value     value_;
     };
 
     class EventDispatcher {
     public:
         template <typename ListeningEvent> void AddEventListener(EventCallback<ListeningEvent> callback) {
-            auto base_callback = [func = std::move(callback)](Event& e) { func(static_cast<ListeningEvent&>(e)); };
-            event_callbacks_[(size_t)ListeningEvent::Type()].push_back(base_callback);
+            auto base_callback = [func = std::move(callback)](const Event& e) { func(e.As<ListeningEvent>()); };
+            event_callbacks_[(size_t)ListeningEvent::kType].push_back(base_callback);
         }
 
-        void Dispatch(Event& event) {
-            for (auto& callback : event_callbacks_[(size_t)(event.GetType())]) {
+        void Dispatch(const Event& event) {
+            for (auto& callback : event_callbacks_[(size_t)(event.Type())]) {
                 callback(event);
             }
         }
 
     private:
         std::array<std::vector<EventCallback<Event>>, static_cast<size_t>(EventType::Count)> event_callbacks_;
-    };
-
-#define EVENT_TYPE(type)                         \
-    virtual EventType GetType() const override { \
-        return EventType::type;                  \
-    }                                            \
-    static EventType Type() {                    \
-        return EventType::type;                  \
-    }
-
-    //*Responding
-
-    class WindowResizeEvent : public Event {
-    public:
-        WindowResizeEvent(U32 width, U32 height) : width_(width), height_(height) {}
-
-        U32 GetWidth() const { return width_; }
-        U32 GetHeight() const { return height_; }
-
-        EVENT_TYPE(WindowResize);
-
-    private:
-        U32 width_;
-        U32 height_;
-    };
-    class WindowCloseEvent : public Event {
-    public:
-        WindowCloseEvent() {}
-
-        EVENT_TYPE(WindowClose);
-    };
-
-    class KeyPressedEvent : public Event {
-    public:
-        explicit KeyPressedEvent(U32 key) : key_code_(key) {}
-
-        U32 GetKey() const { return key_code_; }
-
-        EVENT_TYPE(KeyPressed);
-
-    private:
-        U32 key_code_;
-    };
-    class KeyReleasedEvent : public Event {
-    public:
-        explicit KeyReleasedEvent(U32 key) : key_code_(key) {}
-
-        U32 GetKey() const { return key_code_; }
-
-        EVENT_TYPE(KeyReleased);
-
-    private:
-        U32 key_code_;
-    };
-
-    class MouseButtonPressedEvent : public Event {
-    public:
-        explicit MouseButtonPressedEvent(U32 key) : key_code_(key) {}
-
-        U32 GetKey() const { return key_code_; }
-
-        EVENT_TYPE(MouseButtonPressed);
-
-    private:
-        U32 key_code_;
-    };
-    class MouseButtonReleasedEvent : public Event {
-    public:
-        explicit MouseButtonReleasedEvent(U32 key) : key_code_(key) {}
-
-        U32 GetKey() const { return key_code_; }
-
-        EVENT_TYPE(MouseButtonReleased);
-
-    private:
-        U32 key_code_;
-    };
-    class MouseScrolledEvent : public Event {
-    public:
-        MouseScrolledEvent(float x_offset, float y_offset) : x_pos_(x_offset), y_pos_(y_offset) {}
-
-        float GetXOffset() const { return x_pos_; }
-        float GetYOffset() const { return y_pos_; }
-
-        EVENT_TYPE(MouseScrolled);
-
-    private:
-        float x_pos_;
-        float y_pos_;
-    };
-    class MouseMovedCallback : public Event {
-    public:
-        MouseMovedCallback(float x_pos, float y_pos) : x_pos_(x_pos), y_pos_(y_pos) {}
-
-        float GetXPos() const { return x_pos_; }
-        float GetYPos() const { return y_pos_; }
-
-        EVENT_TYPE(MouseMoved);
-
-    private:
-        float x_pos_;
-        float y_pos_;
-    };
-
-    //*Triggering
-
-    class SetWindowModeWindowedEvent : public Event {
-    public:
-        explicit SetWindowModeWindowedEvent(U32 width = 1280, U32 height = 720, U32 x_pos = 100, U32 y_pos = 100) :
-            width_(width), height_(height), x_pos_(x_pos), y_pos_(y_pos) {}
-
-        U32 GetWidth() const { return width_; }
-        U32 GetHeight() const { return height_; }
-        U32 GetXPos() const { return x_pos_; }
-        U32 GetYPos() const { return y_pos_; }
-
-        EVENT_TYPE(SetWindowModeWindowed);
-
-    private:
-        U32 width_;
-        U32 height_;
-        U32 x_pos_;
-        U32 y_pos_;
-    };
-    class SetWindowModeFullscreenEvent : public Event {
-    public:
-        explicit SetWindowModeFullscreenEvent(U32 monitor_id) : monitor_id_(monitor_id) {}
-
-        U32 GetMonitorId() const { return monitor_id_; }
-
-        EVENT_TYPE(SetWindowModeFullscreen);
-
-    private:
-        U32 monitor_id_;
-    };
-
-    class SetMouseLockEvent : public Event {
-    public:
-        SetMouseLockEvent() {}
-
-        EVENT_TYPE(SetMouseLock);
-    };
-    class SetMouseUnlockEvent : public Event {
-    public:
-        SetMouseUnlockEvent() {}
-
-        EVENT_TYPE(SetMouseUnlock);
-    };
-    class SetMouseLockToggleEvent : public Event {
-    public:
-        SetMouseLockToggleEvent() {}
-
-        EVENT_TYPE(SetMouseLockToggle);
     };
 
 }  // namespace DummyEngine

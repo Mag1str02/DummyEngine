@@ -20,7 +20,7 @@ namespace DummyEngine {
     class Input : public Singleton<Input> {
         SINGLETON(Input)
     public:
-        S_METHOD_DEF(Unit, OnEvent, (Event & e));
+        S_METHOD_DEF(Unit, OnEvent, (const Event& e));
         S_METHOD_DEF(Unit, NewFrame, ());
         S_METHOD_DEF(Unit, SetFrameAmount, (size_t n));
 
