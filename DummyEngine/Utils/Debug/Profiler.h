@@ -54,12 +54,9 @@ namespace DummyEngine {
 }  // namespace DummyEngine
 
 #if DE_ENABLE_PROFILER
-#define DE_PROFILE_SCOPE(name)                       \
-    ProfilerScopeObject profiler_scope_object(name); \
-    ZoneScopedN(name)
+#define DE_PROFILE_SCOPE(name) ZoneScopedN(name)
 #define DE_PROFILER_BEGIN_FRAME() \
     do {                          \
-        Profiler::BeginFrame();   \
         FrameMark;                \
     } while (false)
 

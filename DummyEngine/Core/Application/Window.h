@@ -19,8 +19,6 @@ namespace DummyEngine {
         U32         PosY        = 100;
         U32         MonitorID   = 0;
         bool        MouseLocked = false;
-
-        EventCallback<Event> EventCallback = {};
     };
 
     class Window {
@@ -30,9 +28,7 @@ namespace DummyEngine {
         ~Window();
 
         void OnUpdate();
-        void SetEventCallback(EventCallback<Event> callback);
 
-        void SetIcon(Path path);
         void FullScreen(U32 monitor_id);
         void Windowed(U32 width = 1280, U32 height = 720, U32 x_pos = 100, U32 y_pos = 100);
 
@@ -46,9 +42,10 @@ namespace DummyEngine {
         friend class ImGuiLayer;
         friend class FileSystem;
 
-        void SetupCallbacks();
         void Invalidate();
+        void SetCursorMode(U32 mode);
 
+    private:
         WindowState    state_;
         GLFWwindow*    window_;
         Scope<Context> context_;

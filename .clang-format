@@ -33,7 +33,7 @@ NamespaceIndentation: All
 BinPackArguments: false
 BinPackParameters: false
 ReferenceAlignment: Left
-AlwaysBreakTemplateDeclarations: MultiLine
+BreakTemplateDeclarations: Leave
 AlignArrayOfStructures: Right
 AllowAllArgumentsOnNextLine: true
 AlignConsecutiveAssignments: true

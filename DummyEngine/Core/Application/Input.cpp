@@ -11,23 +11,24 @@ namespace DummyEngine {
     SINGLETON_BASE(Input);
     S_INITIALIZE() {
         max_frame_amount_ = Config::Get().MaxInputFrameAmount;
-        event_dispatcher_.AddEventListener<KeyPressedEvent>([this](KeyPressedEvent& event) {
-            DE_ASSERT(current_frame_.KeyStates.size() > event.GetKey(), "Bad key code: {}", event.GetKey());
-            current_frame_.KeyStates[event.GetKey()] = true;
-        });
-        event_dispatcher_.AddEventListener<KeyReleasedEvent>([this](KeyReleasedEvent& event) {
-            DE_ASSERT(current_frame_.KeyStates.size() > event.GetKey(), "Bad key code: {}", event.GetKey());
-            current_frame_.KeyStates[event.GetKey()] = false;
+
+        event_dispatcher_.AddEventListener<KeyEvent>([this](const KeyEvent& event) {
+            DE_ASSERT(current_frame_.KeyStates.size() > (U32)event.Key, "Bad key code: {}", event.Key);
+            current_frame_.KeyStates[event.Key] = event.Action;
         });
 
-        event_dispatcher_.AddEventListener<SetMouseLockEvent>([this](SetMouseLockEvent&) { current_frame_.MouseLocked = true; });
-        event_dispatcher_.AddEventListener<SetMouseUnlockEvent>([this](SetMouseUnlockEvent&) { current_frame_.MouseLocked = false; });
-        event_dispatcher_.AddEventListener<SetMouseLockToggleEvent>(
-            [this](SetMouseLockToggleEvent&) { current_frame_.MouseLocked = !current_frame_.MouseLocked; });
+        event_dispatcher_.AddEventListener<SetMouseLockEvent>([this](const SetMouseLockEvent& event) {
+            switch (event.Action) {
+                case SetMouseLockEvent::Lock: current_frame_.MouseLocked = true; return;
+                case SetMouseLockEvent::UnLock: current_frame_.MouseLocked = false; return;
+                case SetMouseLockEvent::Switch: current_frame_.MouseLocked = !current_frame_.MouseLocked; return;
+                default: DE_ASSERT(false, "Invalid value of action: {}", (U32)event.Action);
+            }
+        });
 
-        event_dispatcher_.AddEventListener<MouseMovedCallback>([this](MouseMovedCallback& event) {
-            current_frame_.PosX = event.GetXPos();
-            current_frame_.PosY = event.GetYPos();
+        event_dispatcher_.AddEventListener<MousePositionEvent>([this](const MousePositionEvent& event) {
+            current_frame_.PosX = event.X;
+            current_frame_.PosY = event.Y;
         });
 
         INewFrame();
@@ -37,7 +38,7 @@ namespace DummyEngine {
         return Unit();
     }
 
-    S_METHOD_IMPL(Unit, OnEvent, (Event & event), (event)) {
+    S_METHOD_IMPL(Unit, OnEvent, (const Event& event), (event)) {
         event_dispatcher_.Dispatch(event);
         return Unit();
     }

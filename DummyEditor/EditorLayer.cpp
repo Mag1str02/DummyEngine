@@ -321,7 +321,8 @@ namespace DummyEngine {
         if (Input::KeyDown(Key::LeftControl)) {
             if (Input::KeyReleased(Key::GraveAccent) && current_scene_ != nullptr) {
                 input_state_ = (input_state_ == InputState::ViewPort ? InputState::NonSpecified : InputState::ViewPort);
-                SetMouseLockToggleEvent event;
+                SetMouseLockEvent event;
+                event.Action = SetMouseLockEvent::Switch;
                 BroadcastEvent(event);
             }
             if (input_state_ != InputState::ViewPort) {

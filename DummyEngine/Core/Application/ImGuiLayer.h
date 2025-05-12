@@ -11,9 +11,13 @@ namespace DummyEngine {
 
         virtual void OnAttach() override;
         virtual void OnDetach() override;
+        virtual void OnEvent(const Event& event) override;
 
         void BeginFrame();
         void EndFrame();
+
+    private:
+        bool mouse_locked_ = false;
     };
 
 }  // namespace DummyEngine
