@@ -2,6 +2,7 @@
 
 #include "DummyEngine/Utils/Helpers/STDAdapters.h"  // IWYU pragma: export
 #include "DummyEngine/Utils/Helpers/Singleton.h"
+#include "DummyEngine/Utils/PCH/DC.h"
 #include "DummyEngine/Utils/Types/Types.h"
 
 #include <deque>
@@ -58,6 +59,8 @@ namespace DummyEngine {
             std::ofstream      Stream;
             U32                Depth = 32;
         };
+
+        FMutex                                     logs_mutex_;
         std::deque<Record>                         empty_;
         std::unordered_map<std::string, LogStream> streams_;
     };
