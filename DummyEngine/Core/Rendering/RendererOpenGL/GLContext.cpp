@@ -19,6 +19,8 @@ namespace DummyEngine {
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         DE_ASSERT(status, "Failed to initialize GLAD");
 
+        glfwSwapInterval(0);
+
         LOG_INFO("OpenGL loaded for context");
         LOG_INFO("Vendor {}, Renderer {}, Version {}", GL_STRING(GL_VENDOR), GL_STRING(GL_RENDERER), GL_STRING(GL_VERSION));
     }
