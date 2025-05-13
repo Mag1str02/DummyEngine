@@ -14,7 +14,7 @@ namespace DummyEngine {
 
         event_dispatcher_.AddEventListener<KeyEvent>([this](const KeyEvent& event) {
             DE_ASSERT(current_frame_.KeyStates.size() > (U32)event.Key, "Bad key code: {}", event.Key);
-            current_frame_.KeyStates[event.Key] = event.Action;
+            current_frame_.KeyStates[event.Key] = event.Action > 0;
         });
 
         event_dispatcher_.AddEventListener<SetMouseLockEvent>([this](const SetMouseLockEvent& event) {
