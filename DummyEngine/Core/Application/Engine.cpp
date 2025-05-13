@@ -2,6 +2,7 @@
 
 #include "Application.h"
 #include "Concurrency.h"
+#include "GLFW.h"
 #include "Initializer.h"
 
 namespace DummyEngine {
@@ -10,13 +11,16 @@ namespace DummyEngine {
     public:
         explicit Engine(FSetupApplication setup) : setup_function_(setup) {}
         int Run() {
+            GLFW::Initialize();
             Concurrency::Initialize();
 
             auto code = NFuture::Submit(Concurrency::GetEngineMainScheduler(), [this]() { return EngineMain(); });
             Concurrency::GetMainThreadScheduler().BecomeWorker();
 
+            auto return_code = std::move(code) | NFuture::Get();
             Concurrency::Terminate();
-            return std::move(code) | NFuture::Get();
+            GLFW::Terminate();
+            return return_code;
             // return 0;
         }
 
