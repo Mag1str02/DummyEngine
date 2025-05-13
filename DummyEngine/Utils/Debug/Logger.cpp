@@ -46,6 +46,7 @@ namespace DummyEngine {
     }
 
     S_METHOD_IMPL(bool, Open, (const std::string& log_name), (log_name)) {
+        std::lock_guard guard(logs_mutex_);
         auto [it, emplaced] = streams_.emplace(log_name, LogStream());
         if (!emplaced) {
             return false;
@@ -60,12 +61,14 @@ namespace DummyEngine {
         return true;
     }
     S_METHOD_IMPL(Unit, Close, (const std::string& log_name), (log_name)) {
+        std::lock_guard guard(logs_mutex_);
         streams_.erase(log_name);
         return Unit();
     }
 
     S_METHOD_IMPL(Unit, Log, (const std::string& log, Record&& record), (log, std::move(record))) {
-        auto it = streams_.find(log);
+        std::lock_guard guard(logs_mutex_);
+        auto            it = streams_.find(log);
         if (it == streams_.end()) {
             return Unit();
         }
@@ -86,12 +89,14 @@ namespace DummyEngine {
         return Unit();
     }
     S_METHOD_IMPL(const std::deque<Logger::Record>&, GetRecords, (const std::string& log), (log)) {
+        std::lock_guard guard(logs_mutex_);
         if (!streams_.contains(log)) {
             return empty_;
         }
         return streams_[log].Records;
     }
     S_METHOD_IMPL(Unit, SetLogDepth, (U32 depth, const std::string& log), (depth, log)) {
+        std::lock_guard guard(logs_mutex_);
         if (!streams_.contains(log)) {
             return Unit();
         }
