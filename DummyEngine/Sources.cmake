@@ -24,6 +24,7 @@ Core/Application/Initializer.cpp
 Core/Application/Config.cpp
 Core/Application/FileSystem.cpp
 Core/Application/Layer.cpp
+Core/Application/Engine.cpp
 Core/Application/GLFW.cpp
 
 Core/Console/ConsoleLayer.cpp
