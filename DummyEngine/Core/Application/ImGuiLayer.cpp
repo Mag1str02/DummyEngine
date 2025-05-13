@@ -96,24 +96,39 @@ namespace DummyEngine {
     void ImGuiLayer::BeginFrame() {
         DE_PROFILE_SCOPE("ImGuiLayer BeginFrame");
 
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+        {
+            DE_PROFILE_SCOPE("ImGui::OpenGL::NewFrame");
+            ImGui_ImplOpenGL3_NewFrame();
+        }
+        {
+            DE_PROFILE_SCOPE("ImGui::GLFW::NewFrame");
+            ImGui_ImplGlfw_NewFrame();
+        }
+        {
+            DE_PROFILE_SCOPE("ImGui::NewFrame");
+            ImGui::NewFrame();
+        }
     }
 
     void ImGuiLayer::EndFrame() {
         DE_PROFILE_SCOPE("ImGuiLayer EndFrame");
 
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        if ((ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) != 0) {
-            GLFWwindow* backup_current_context = glfwGetCurrentContext();
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-            glfwSwapInterval(0);
-            glfwMakeContextCurrent(backup_current_context);
+        {
+            DE_PROFILE_SCOPE("ImGui::Render");
+            ImGui::Render();
         }
+        {
+            DE_PROFILE_SCOPE("ImGui::RenderDrawData");
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        }
+
+        // if ((ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) != 0) {
+        //     GLFWwindow* backup_current_context = glfwGetCurrentContext();
+        //     ImGui::UpdatePlatformWindows();
+        //     ImGui::RenderPlatformWindowsDefault();
+        //     glfwSwapInterval(0);
+        //     glfwMakeContextCurrent(backup_current_context);
+        // }
     }
 
 }  // namespace DummyEngine
