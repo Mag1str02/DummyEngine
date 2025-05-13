@@ -24,25 +24,23 @@ namespace DummyEngine {
 
     SINGLETON_BASE(GLFW);
     S_INITIALIZE() {
-        NFuture::Submit(Concurrency::GetMainThreadScheduler(), [this]() {
-            InitGLFW();
-            return Unit();
-        }) | NFuture::Get();
-
+        InitGLFW();
         return Unit();
     }
     S_TERMINATE() {
-        stop_flag_.store(true);
-        stopped_event_processing_.Wait();
-
-        Submit(Concurrency::GetMainThreadScheduler(), []() { glfwTerminate(); });
-
+        DC_ASSERT(stopped_event_processing_.IsFired(), "Terminating before event processing stopped")
+        glfwTerminate();
         return Unit();
     }
 
     S_METHOD_IMPL(Unit, StartEventProcessing, (), ()) {
         Go(Concurrency::GetMainThreadScheduler(), [this]() {
             DE_PROFILE_SCOPE("GLFW::EventProcessing");
+
+            glfwSetMonitorCallback([](GLFWmonitor* monitor, int event) {
+                GLFW::GetInstance().OnMonitorEvent(monitor, event);  //
+            });
+
             while (!stop_flag_) {
                 DE_PROFILE_SCOPE("GLFW::EventProcessing::Step");
                 glfwPollEvents();
@@ -63,6 +61,7 @@ namespace DummyEngine {
             DE_PROFILE_SCOPE("GLFW::CreateWindow");
             auto* window = glfwCreateWindow(1280, 720, "Window", nullptr, nullptr);
             DE_ASSERT(window, "Failed to craete window");
+
             InstallCallbacks(window);
 
             std::lock_guard guard(events_mutex_);
@@ -124,10 +123,6 @@ namespace DummyEngine {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-        glfwSetMonitorCallback([](GLFWmonitor* monitor, int event) {
-            GLFW::GetInstance().OnMonitorEvent(monitor, event);  //
-        });
     }
 
     template <typename T>

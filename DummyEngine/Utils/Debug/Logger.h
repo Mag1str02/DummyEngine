@@ -38,9 +38,9 @@ namespace DummyEngine {
         };
 
     public:
-        static constexpr std::string kDefaultLog         = "";
-        static constexpr std::string kDefaultAuthor      = "";
-        static constexpr std::string kDefaultLogFileName = "Log.log";
+        static constexpr const char* kDefaultLog         = "";
+        static constexpr const char* kDefaultAuthor      = "";
+        static constexpr const char* kDefaultLogFileName = "Log.log";
 
         SINGLETON(Logger)
 

@@ -29,7 +29,6 @@ namespace DummyEngine {
         Config::Initialize();
         Console::Initialize();
         Logger::Initialize();
-        GLFW::Initialize();
 
         ImGui::g_ImGuiFailAssert                                    = FailAssert;
         ImGui::g_ExternalSettings.DragAndDropTooltipAlphaMultiplyer = 1.0;
@@ -65,7 +64,6 @@ namespace DummyEngine {
     void Initializer::PostTerminate() {
         LOG_INFO("Egnine PostTerminating...");
 
-        GLFW::Terminate();
         Logger::Terminate();
         Config::Terminate();
         Profiler::Terminate();
