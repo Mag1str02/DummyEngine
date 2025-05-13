@@ -17,6 +17,7 @@ Core/Animations/Animator.cpp
 Core/Animations/Bone.cpp
 
 Core/Application/Application.cpp
+Core/Application/Concurrency.cpp
 Core/Application/ImGuiLayer.cpp
 Core/Application/Window.cpp
 Core/Application/Input.cpp

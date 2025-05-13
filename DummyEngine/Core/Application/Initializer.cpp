@@ -11,20 +11,16 @@
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"
 #include "DummyEngine/Utils/Debug/Profiler.h"
 
-#include <GLFW/glfw3.h>
 #include <imgui.h>
 
 namespace DummyEngine {
 
     void Initializer::Initialize() {
         PreInitialize();
-        DepInitialize();
         EngineInitialize();
     }
-
     void Initializer::Terminate() {
         EngineTerminate();
-        DepTerminate();
         PostTerminate();
     }
 
@@ -33,13 +29,12 @@ namespace DummyEngine {
         Config::Initialize();
         Console::Initialize();
         Logger::Initialize();
-        LOG_INFO("Logger and config initialized");
-    }
-    void Initializer::DepInitialize() {
-        LOG_INFO("Initializing dependencies");
         GLFW::Initialize();
+
         ImGui::g_ImGuiFailAssert                                    = FailAssert;
         ImGui::g_ExternalSettings.DragAndDropTooltipAlphaMultiplyer = 1.0;
+
+        LOG_INFO("Engine PreInitialize complete");
     }
     void Initializer::EngineInitialize() {
         DE_PROFILER_BEGIN_FRAME();
@@ -67,14 +62,10 @@ namespace DummyEngine {
         ResourceManager::Terminate();
         AssetManager::Terminate();
     }
-    void Initializer::DepTerminate() {
-        LOG_INFO("Terminating dependencies");
-        //* Terminate GLFW
+    void Initializer::PostTerminate() {
+        LOG_INFO("Egnine PostTerminating...");
 
         GLFW::Terminate();
-    }
-    void Initializer::PostTerminate() {
-        LOG_INFO("PostTerminating");
         Logger::Terminate();
         Config::Terminate();
         Profiler::Terminate();

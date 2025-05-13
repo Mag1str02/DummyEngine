@@ -35,8 +35,6 @@ namespace DummyEngine {
         void OnMonitorEvent(GLFWmonitor* monitor, int event);
 
     private:
-        ThreadPool thread_pool_ = NDummyConcurrency::ThreadPool(1);
-
         FMutex                                              events_mutex_;
         std::unordered_map<GLFWwindow*, std::vector<Event>> window_events_;
 
