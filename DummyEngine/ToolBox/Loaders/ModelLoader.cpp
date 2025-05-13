@@ -278,8 +278,8 @@ namespace DummyEngine {
         mat->GetTexture(type, 0, &file_name);
 
         if (!gState.ModelTextures.contains(gState.CurrentDirectory / file_name.C_Str())) {
-            gState.ModelTextures[gState.CurrentDirectory / file_name.C_Str()] =
-                TextureLoader::Load({gState.CurrentDirectory / file_name.C_Str(), false});
+            auto texture = TextureLoader::Load({gState.CurrentDirectory / file_name.C_Str(), false}) | Futures::Get();
+            gState.ModelTextures[gState.CurrentDirectory / file_name.C_Str()] = texture.value();
         }
         return gState.ModelTextures[gState.CurrentDirectory / file_name.C_Str()];
     }

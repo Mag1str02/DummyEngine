@@ -9,6 +9,7 @@ namespace DummyEngine {
         AddIncludeDir("..");
         AddIncludeDir("../Dependencies/GLM");
         AddIncludeDir("../Dependencies/TRACY/public");
+        AddIncludeDir("../Dependencies/DUMMY_CONCURRENCY");
         AddLinkLibrary("DummyEngineLib");
         AddDefine("DE_ENABLE_LOGGING=" + std::to_string(DE_ENABLE_LOGGING));
         AddDefine("DE_ENABLE_ASSERTS=" + std::to_string(DE_ENABLE_ASSERTS));

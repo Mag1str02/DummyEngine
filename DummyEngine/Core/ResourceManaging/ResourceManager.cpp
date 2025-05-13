@@ -81,7 +81,8 @@ namespace DummyEngine {
             LOG_WARNING("CubeMap {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
-        cube_maps_[id] = CubeMap::Create(TextureLoader::Load(asset.value().LoadingProps));
+        auto texture   = TextureLoader::Load(asset.value().LoadingProps) | Futures::Get();
+        cube_maps_[id] = CubeMap::Create(*texture);
         LOG_INFO("CubeMap {} was added", id);
         return true;
     }
@@ -95,7 +96,8 @@ namespace DummyEngine {
             LOG_WARNING("Texture {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
-        textures_[id] = Texture::Create(*TextureLoader::Load(asset.value().LoadingProps));
+        auto texture  = TextureLoader::Load(asset.value().LoadingProps) | Futures::Get();
+        textures_[id] = Texture::Create(**texture);
         LOG_INFO("Texture {} was added", id);
         return true;
     }
