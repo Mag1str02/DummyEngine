@@ -11,7 +11,7 @@
 namespace DummyEngine {
 
     Window::Window(const WindowState& state) : state_(state) {
-        window_ = GLFW::CreateWindow() | NFuture::Get();
+        window_ = GLFW::CreateWindow() | Futures::Get();
         DE_ASSERT(window_, "Failed to create GLFW Window {}", state_.Name);
         LOG_INFO("Window created: {}", state_.Name);
 
@@ -21,7 +21,7 @@ namespace DummyEngine {
         Invalidate();
     }
     Window::~Window() {
-        GLFW::DestroyWindow(window_) | NFuture::Get();
+        GLFW::DestroyWindow(window_) | Futures::Get();
     }
 
     void Window::FullScreen(U32 id) {
@@ -58,7 +58,7 @@ namespace DummyEngine {
         state_.MouseLocked = !state_.MouseLocked;
     }
     void Window::SetCursorMode(U32 mode) {
-        GLFW::SetCursorMode(window_, mode) | NFuture::Get();
+        GLFW::SetCursorMode(window_, mode) | Futures::Get();
     }
 
     void Window::OnUpdate() {
@@ -80,10 +80,10 @@ namespace DummyEngine {
         DE_ASSERT(state_.Mode != WindowMode::None, "Wrong window mode");
         DE_ASSERT(state_.Width != 0 && state_.Height != 0, "Wrong window size ({},{}) expected non 0 sides", state_.Width, state_.Height);
         if (state_.Mode == WindowMode::Windowed) {
-            NFuture::Get(GLFW::DisableFullScreen(window_));
+            GLFW::DisableFullScreen(window_) | Futures::Get();
         }
         if (state_.Mode == WindowMode::FullScreen) {
-            NFuture::Get(GLFW::EnableFullScreen(window_, state_.MonitorID));
+            GLFW::EnableFullScreen(window_, state_.MonitorID) | Futures::Get();
         }
     }
 }  // namespace DummyEngine
