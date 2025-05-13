@@ -416,7 +416,8 @@ namespace DummyEngine {
                 LOG_WARNING("CubeMap {} not found in ResourceManager", id);
             } else {
                 auto        asset  = AssetManager::GetTextureAsset(id);
-                Ref<SkyBox> skybox = CreateRef<SkyBox>(TextureLoader::Load(asset.value().LoadingProps));
+                auto  texture = TextureLoader::Load(asset.value().LoadingProps) | Futures::Get();
+                Ref<SkyBox> skybox = CreateRef<SkyBox>(*texture);
                 entity.AddComponent<SkyBoxComponent>({type, id, skybox});
             }
         }

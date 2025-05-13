@@ -23,7 +23,7 @@ namespace DummyEngine {
 
             std::string compile_command;
             compile_command.append(GetCompiler());
-            compile_command.append(" -c -std=c++20");
+            compile_command.append(" -c -std=c++23");
             compile_command.append(" -fPIC ");
             compile_command.append(AddDefines());
             compile_command.append(AddIncludeDirArguments());

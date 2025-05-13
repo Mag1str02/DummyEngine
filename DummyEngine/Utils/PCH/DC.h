@@ -7,7 +7,8 @@ namespace DummyEngine {
     class Error {
     public:
         Error() = default;
-        explicit Error(const std::string& message) : message_(message) {}
+        Error(const std::string& message) : message_(message) {}  // NOLINT
+        Error(const char* message) : message_(message) {}         // NOLINT
 
         const std::string Message() const { return message_; }
 
@@ -23,17 +24,25 @@ namespace DummyEngine {
 
     namespace Results {
         using namespace NDummyConcurrency::NResult::NSyntax;
-    }
+
+        inline auto Failure(Error error) {
+            return std::unexpected(error);
+        }
+
+    }  // namespace Results
 
     namespace Fibers {
         using NDummyConcurrency::NFiber::Go;
         using NDummyConcurrency::NFiber::Yield;
+
     }  // namespace Fibers
 
     template <typename T>
-    using TryFuture = NDummyConcurrency::Future<std::expected<T, Error>>;
+    using Result = std::expected<T, Error>;
     template <typename T>
     using Future = NDummyConcurrency::Future<T>;
+    template <typename T>
+    using TryFuture = Future<Result<T>>;
 
     using NDummyConcurrency::NFiber::StackPool;
     using NDummyConcurrency::NRuntime::ExternalThreadPool;

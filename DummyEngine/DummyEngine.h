@@ -21,4 +21,5 @@
 #include "DummyEngine/Core/Scripting/ScriptEngine.h"            // IWYU pragma: export
 #include "DummyEngine/Utils/Debug/Profiler.h"                   // IWYU pragma: export
 #include "DummyEngine/Utils/Helpers/Random.h"                   // IWYU pragma: export
+#include "DummyEngine/Utils/PCH/DC.h"                           // IWYU pragma: export
 #include "DummyEngine/Utils/PCH/GLMIncludes.h"                  // IWYU pragma: export
