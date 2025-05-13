@@ -1,5 +1,7 @@
 #include "Profiler.h"
 
+#include <tracy/Tracy.hpp>
+
 namespace DummyEngine {
 
     ProfilerFrame::ProfilerFrame(U32 predicted_lapse_amount) {

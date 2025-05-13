@@ -1,5 +1,7 @@
 #include "GLFW.h"
 
+#include "Concurrency.h"
+
 #include "DummyEngine/Utils/Debug/Profiler.h"
 
 #include <GLFW/glfw3.h>
@@ -22,23 +24,24 @@ namespace DummyEngine {
 
     SINGLETON_BASE(GLFW);
     S_INITIALIZE() {
-        Submit(thread_pool_, [this]() { InitGLFW(); });
+        NFuture::Submit(Concurrency::GetMainThreadScheduler(), [this]() {
+            InitGLFW();
+            return Unit();
+        }) | NFuture::Get();
 
-        thread_pool_.Start();
         return Unit();
     }
     S_TERMINATE() {
         stop_flag_.store(true);
         stopped_event_processing_.Wait();
 
-        Submit(thread_pool_, []() { glfwTerminate(); });
+        Submit(Concurrency::GetMainThreadScheduler(), []() { glfwTerminate(); });
 
-        thread_pool_.Stop();
         return Unit();
     }
 
     S_METHOD_IMPL(Unit, StartEventProcessing, (), ()) {
-        Go(thread_pool_, [this]() {
+        Go(Concurrency::GetMainThreadScheduler(), [this]() {
             DE_PROFILE_SCOPE("GLFW::EventProcessing");
             while (!stop_flag_) {
                 DE_PROFILE_SCOPE("GLFW::EventProcessing::Step");
@@ -56,7 +59,7 @@ namespace DummyEngine {
     }
 
     S_METHOD_IMPL(Future<GLFWwindow*>, CreateWindow, (), ()) {
-        return NFuture::Submit(thread_pool_, [this]() -> GLFWwindow* {
+        return NFuture::Submit(Concurrency::GetMainThreadScheduler(), [this]() -> GLFWwindow* {
             DE_PROFILE_SCOPE("GLFW::CreateWindow");
             auto* window = glfwCreateWindow(1280, 720, "Window", nullptr, nullptr);
             DE_ASSERT(window, "Failed to craete window");
@@ -68,7 +71,7 @@ namespace DummyEngine {
         });
     }
     S_METHOD_IMPL(Future<Unit>, DestroyWindow, (GLFWwindow * window), (window)) {
-        return NFuture::Submit(thread_pool_, [this, window]() {
+        return NFuture::Submit(Concurrency::GetMainThreadScheduler(), [this, window]() {
             DE_PROFILE_SCOPE("GLFW::DestroyWindow");
             glfwDestroyWindow(window);
 
@@ -78,7 +81,7 @@ namespace DummyEngine {
         });
     }
     S_METHOD_IMPL(Future<Unit>, EnableFullScreen, (GLFWwindow * window, U32 monitor_id), (window, monitor_id)) {
-        return NFuture::Submit(thread_pool_, [window, monitor_id]() {
+        return NFuture::Submit(Concurrency::GetMainThreadScheduler(), [window, monitor_id]() {
             DE_PROFILE_SCOPE("GLFW::EnableFullScreen");
             GLFWmonitor*       monitor = GetMonitor(monitor_id);
             const GLFWvidmode* mode    = glfwGetVideoMode(monitor);
@@ -87,14 +90,14 @@ namespace DummyEngine {
         });
     }
     S_METHOD_IMPL(Future<Unit>, DisableFullScreen, (GLFWwindow * window), (window)) {
-        return NFuture::Submit(thread_pool_, [window]() {
+        return NFuture::Submit(Concurrency::GetMainThreadScheduler(), [window]() {
             DE_PROFILE_SCOPE("GLFW::DisableFullScreen");
             glfwSetWindowMonitor(window, nullptr, 100, 100, 1280, 720, 1000);
             return Unit();
         });
     }
     S_METHOD_IMPL(Future<Unit>, SetCursorMode, (GLFWwindow * window, U32 mode), (window, mode)) {
-        return NFuture::Submit(thread_pool_, [window, mode]() {
+        return NFuture::Submit(Concurrency::GetMainThreadScheduler(), [window, mode]() {
             DE_PROFILE_SCOPE("GLFW::SetCursorMode");
             glfwSetInputMode(window, GLFW_CURSOR, mode);
             return Unit();

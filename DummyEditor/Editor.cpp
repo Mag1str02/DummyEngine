@@ -9,5 +9,6 @@ namespace DummyEngine {
 }  // namespace DummyEngine
 
 int main() {
-    return DummyEngine::Main(DummyEngine::SetupApplication);
+    DummyEngine::Main(DummyEngine::SetupApplication);
+    return 0;
 }
