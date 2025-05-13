@@ -14,10 +14,10 @@ namespace DummyEngine {
             GLFW::Initialize();
             Concurrency::Initialize();
 
-            auto code = NFuture::Submit(Concurrency::GetEngineMainScheduler(), [this]() { return EngineMain(); });
+            auto code = Futures::Submit(Concurrency::GetEngineMainScheduler(), [this]() { return EngineMain(); });
             Concurrency::GetMainThreadScheduler().BecomeWorker();
 
-            auto return_code = std::move(code) | NFuture::Get();
+            auto return_code = std::move(code) | Futures::Get();
             Concurrency::Terminate();
             GLFW::Terminate();
             return return_code;
@@ -50,7 +50,9 @@ namespace DummyEngine {
 
     int Main(FSetupApplication setup) {
         Engine engine(setup);
-        return engine.Run();
+        auto code = engine.Run();
+        std::println("Exiting DummyEngine::Main");
+        return code;
     }
 
 }  // namespace DummyEngine
