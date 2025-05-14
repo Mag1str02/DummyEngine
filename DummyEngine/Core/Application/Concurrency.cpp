@@ -6,6 +6,7 @@ namespace DummyEngine {
     S_INITIALIZE() {
         fiber_invoker_.Construct(&stack_pool_, &back_ground_thread_pool_);
         back_ground_thread_pool_.SetInvoker(fiber_invoker_.Get());
+        engine_main_thread_pool_.SetInvoker(fiber_invoker_.Get());
         engine_main_thread_pool_.Start();
         back_ground_thread_pool_.Start();
         return Unit();

@@ -20,6 +20,10 @@ namespace DummyEngine {
         using NDummyConcurrency::NFuture::Submit;
 
         using namespace NDummyConcurrency::NFuture::NSyntax;
+
+        inline auto Failure() {
+            return NDummyConcurrency::NFuture::Failure(std::error_code());
+        }
     }  // namespace Futures
 
     namespace Results {
@@ -42,6 +46,10 @@ namespace DummyEngine {
     using Future = NDummyConcurrency::Future<T>;
     template <typename T>
     using TryFuture = Future<Result<T>>;
+    template <typename T>
+    using CopyFuture = NDummyConcurrency::NFuture::CopyFuture<T>;
+    template <typename T>
+    using CopyTryFuture = NDummyConcurrency::NFuture::CopyFuture<Result<T>>;
     template <typename T>
     using ManualLifetime = NDummyConcurrency::ManualLifetime<T>;
 
