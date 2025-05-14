@@ -13,8 +13,10 @@ namespace DummyEngine {
         S_METHOD_DEF(ExternalThreadPool&, GetMainThreadScheduler, ());
 
     private:
-        ExternalThreadPool main_thread_scheduler_;
-        ThreadPool         engine_main_thread_pool_  = ThreadPool(1);
-        ThreadPool         back_ground_thread_pool_ = ThreadPool(std::thread::hardware_concurrency());
+        ExternalThreadPool           main_thread_scheduler_;
+        StackPool                    stack_pool_;
+        ManualLifetime<FiberInvoker> fiber_invoker_;
+        ThreadPool                   engine_main_thread_pool_ = ThreadPool(1);
+        ThreadPool                   back_ground_thread_pool_ = ThreadPool(std::thread::hardware_concurrency());
     };
 }  // namespace DummyEngine

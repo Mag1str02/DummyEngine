@@ -43,6 +43,8 @@ namespace DummyEngine {
     using Future = NDummyConcurrency::Future<T>;
     template <typename T>
     using TryFuture = Future<Result<T>>;
+    template <typename T>
+    using ManualLifetime = NDummyConcurrency::ManualLifetime<T>;
 
     using NDummyConcurrency::NFiber::StackPool;
     using NDummyConcurrency::NRuntime::ExternalThreadPool;
