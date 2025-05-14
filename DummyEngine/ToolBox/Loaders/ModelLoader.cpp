@@ -222,9 +222,8 @@ namespace DummyEngine {
         const aiScene* scene = importer_.ReadFile(props_.Path.string(), flags);
 
         if (scene == nullptr || (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) != 0 || scene->mRootNode == nullptr) {
-            auto error = std::format("Failed to load model {} due: {}", Config::RelativeToExecutable(props_.Path), importer_.GetErrorString());
-            LOG_ERROR("{}", error);
-            return Results::Failure(error);
+            LOG_ERROR("Failed to load model {} due: {}", Config::RelativeToExecutable(props_.Path), importer_.GetErrorString());
+            return Results::Failure();
         }
 
         current_data_ = CreateRef<RenderMeshData>();

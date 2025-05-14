@@ -32,18 +32,16 @@ namespace DummyEngine {
                     format_s = "Float";
                     break;
                 case TextureFormat::None: {
-                    auto error = std::format("Texture was not loaded because of unspecified format (path='{}')", props.Path);
-                    LOG_WARNING("{}", error);
-                    return Results::Failure(error);
+                    LOG_WARNING("Texture was not loaded because of unspecified format (path='{}')", props.Path);
+                    return Results::Failure();
                 }
                 default: DE_ASSERT(false, "Unsupported texture format"); break;
             }
         }
 
         if (stb_data == nullptr) {
-            auto error = std::format("Failed to load texture {}", Config::RelativeToExecutable(props.Path));
-            LOG_ERROR("{}", error);
-            return Results::Failure(error);
+            LOG_ERROR("Failed to load texture {}", Config::RelativeToExecutable(props.Path));
+            return Results::Failure();
         }
 
         switch (nr_channels) {
