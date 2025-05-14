@@ -25,10 +25,9 @@ namespace DummyEngine {
     namespace Results {
         using namespace NDummyConcurrency::NResult::NSyntax;
 
-        inline auto Failure(Error error) {
-            return std::unexpected(error);
+        inline auto Failure() {
+            return NDummyConcurrency::NResult::Failure(std::error_code());
         }
-
     }  // namespace Results
 
     namespace Fibers {
@@ -38,7 +37,7 @@ namespace DummyEngine {
     }  // namespace Fibers
 
     template <typename T>
-    using Result = std::expected<T, Error>;
+    using Result = NDummyConcurrency::Result<T>;
     template <typename T>
     using Future = NDummyConcurrency::Future<T>;
     template <typename T>
