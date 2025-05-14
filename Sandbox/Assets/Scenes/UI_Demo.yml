@@ -1,0 +1,94 @@
+Scene:
+  Name: UI_Demo
+  Assets:
+    Textures:
+      Sky:
+        Path: Assets/Textures/Skyboxes/Sky.png
+        FlipUV: false
+        UUID: 8911b8a8458923946819fb45fbb794fd
+  Hierarchy:
+    - Node:
+        Name: UI
+        Childs:
+          - Entity:
+              Tag: RootUIContainer
+              UUID: 00000000000000000000000000000001
+              UIContainer:
+                Position: [0.0, 0.0]
+                Size: [1.0, 1.0]
+                IsVisible: true
+                Name: "Root Container"
+                Color: [0.1, 0.1, 0.1, 0.8]
+                BackgroundTexture: ""
+              UIWidgetHierarchyComponent:
+                Parent: ~
+                Children:
+                  - 00000000000000000000000000000002
+                  - 00000000000000000000000000000003
+                  - 00000000000000000000000000000004
+                  - 00000000000000000000000000000005
+          - Entity:
+              Tag: DemoText
+              UUID: 00000000000000000000000000000002
+              UIText:
+                Position: [0.05, 0.85]
+                Size: [0.4, 0.1]
+                IsVisible: true
+                Name: "Demo Text"
+                Color: [0, 0, 0, 0]
+                Text: "Привет, DummyEngine!"
+                Font: "Default"
+                TextColor: [1.0, 1.0, 1.0, 1.0]
+              UIWidgetHierarchyComponent:
+                Parent: 00000000000000000000000000000001
+                Children: []
+          - Entity:
+              Tag: DemoButton
+              UUID: 00000000000000000000000000000003
+              UIButton:
+                Position: [0.05, 0.7]
+                Size: [0.3, 0.1]
+                IsVisible: true
+                Name: "Demo Button"
+                Color: [0.2, 0.6, 1.0, 1.0]
+                Text: "Нажми меня!"
+                NormalTexture: ""
+                HoveredTexture: ""
+                PressedTexture: ""
+              UIWidgetHierarchyComponent:
+                Parent: 00000000000000000000000000000001
+                Children: []
+          - Entity:
+              Tag: DemoCheckbox
+              UUID: 00000000000000000000000000000004
+              UICheckbox:
+                Position: [0.05, 0.55]
+                Size: [0.05, 0.05]
+                IsVisible: true
+                Name: "Demo Checkbox"
+                Color: [0.8, 0.8, 0.8, 1.0]
+                Text: "Чекбокс"
+                CheckedTexture: ""
+                UncheckedTexture: ""
+                IsChecked: false
+              UIWidgetHierarchyComponent:
+                Parent: 00000000000000000000000000000001
+                Children: []
+          - Entity:
+              Tag: DemoTextField
+              UUID: 00000000000000000000000000000005
+              UITextField:
+                Position: [0.05, 0.4]
+                Size: [0.4, 0.1]
+                IsVisible: true
+                Name: "Demo TextField"
+                Color: [1.0, 1.0, 1.0, 1.0]
+                Text: ""
+                Font: "Default"
+                FontSize: 18.0
+                TextColor: [0.0, 0.0, 0.0, 1.0]
+                BackgroundTexture: ""
+                Placeholder: "Введите текст..."
+              UIWidgetHierarchyComponent:
+                Parent: 00000000000000000000000000000001
+                Children: [] 
