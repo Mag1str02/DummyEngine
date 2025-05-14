@@ -38,11 +38,11 @@ namespace DummyEngine {
             LOG_WARNING("RenderMesh {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
-        auto model = ModelLoader::Load(asset.value().LoadingProps);
-        if (model == nullptr) {
+        auto model = ModelLoader::Load(asset.value().LoadingProps) | Futures::Get();
+        if (!model) {
             return false;
         }
-        render_meshes_[id] = CreateRef<RenderMesh>(model);
+        render_meshes_[id] = CreateRef<RenderMesh>(*model);
         LOG_INFO("RenderMesh {} was added", id);
         return true;
     }
@@ -56,10 +56,11 @@ namespace DummyEngine {
             LOG_WARNING("Hitbox {} was not loaded because does not exist in AssetManager", id);
             return false;
         }
-        auto mesh = ModelLoader::Load(asset.value().LoadingProps);
-        if (mesh == nullptr) {
+        auto mesh_result = ModelLoader::Load(asset.value().LoadingProps) | Futures::Get();
+        if (mesh_result) {
             return false;
         }
+        const auto& mesh = mesh_result.value();
         std::vector<Vec3> vertices;
         for (const auto& submesh : mesh->Meshes) {
             for (const auto& vert : submesh.Vertices) {

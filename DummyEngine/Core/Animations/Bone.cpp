@@ -4,7 +4,7 @@ namespace DummyEngine {
 
     Bone::Bone(const std::string& name, U32 id) : name_(name), id_(id) {}
 
-    Mat4 Bone::GetTransform(float animation_time) {
+    Mat4 Bone::GetTransform(float animation_time) const {
         Mat4 translation = InterpolatePosition(animation_time);
         Mat4 rotation    = InterpolateRotation(animation_time);
         Mat4 scale       = InterpolateScaling(animation_time);
@@ -17,7 +17,17 @@ namespace DummyEngine {
         return id_;
     }
 
-    float Bone::GetScaleFactor(float prev_time, float next_time, float time) {
+    void Bone::AddPosition(KeyPosition position) {
+        positions_.emplace_back(position);
+    }
+    void Bone::AddRotation(KeyRotation rotation) {
+        rotations_.emplace_back(rotation);
+    }
+    void Bone::AddScale(KeyScale scale) {
+        scales_.emplace_back(scale);
+    }
+
+    float Bone::GetScaleFactor(float prev_time, float next_time, float time) const {
         if ((next_time - prev_time) < 0.000001) {
             return 0;
         }
@@ -25,7 +35,7 @@ namespace DummyEngine {
         return scale;
     }
 
-    U32 Bone::GetPositionIndex(float time) {
+    U32 Bone::GetPositionIndex(float time) const {
         for (U32 i = 0; i < positions_.size() - 1; ++i) {
             if (time < positions_[i + 1].TimeStamp) {
                 return i;
@@ -33,7 +43,7 @@ namespace DummyEngine {
         }
         return positions_.size() - 1;
     }
-    U32 Bone::GetRotationIndex(float time) {
+    U32 Bone::GetRotationIndex(float time) const {
         for (U32 i = 0; i < rotations_.size() - 1; ++i) {
             if (time < rotations_[i + 1].TimeStamp) {
                 return i;
@@ -41,7 +51,7 @@ namespace DummyEngine {
         }
         return rotations_.size() - 1;
     }
-    U32 Bone::GetScaleIndex(float time) {
+    U32 Bone::GetScaleIndex(float time) const {
         for (U32 i = 0; i < scales_.size() - 1; ++i) {
             if (time < scales_[i + 1].TimeStamp) {
                 return i;
@@ -50,7 +60,7 @@ namespace DummyEngine {
         return scales_.size() - 1;
     }
 
-    Mat4 Bone::InterpolatePosition(float time) {
+    Mat4 Bone::InterpolatePosition(float time) const {
         if (positions_.empty()) {
             return Mat4(1.0);
         }
@@ -62,7 +72,7 @@ namespace DummyEngine {
         glm::vec3 pos   = glm::mix(positions_[i].Position, positions_[i + 1].Position, scale);
         return glm::translate(Mat4(1.0f), pos);
     }
-    Mat4 Bone::InterpolateRotation(float time) {
+    Mat4 Bone::InterpolateRotation(float time) const {
         if (rotations_.empty()) {
             return Mat4(1.0);
         }
@@ -74,7 +84,7 @@ namespace DummyEngine {
         glm::quat rotation = glm::slerp(rotations_[i].Orientation, rotations_[i + 1].Orientation, scale);
         return glm::toMat4(glm::normalize(rotation));
     }
-    Mat4 Bone::InterpolateScaling(float time) {
+    Mat4 Bone::InterpolateScaling(float time) const {
         if (scales_.empty()) {
             return Mat4(1.0);
         }

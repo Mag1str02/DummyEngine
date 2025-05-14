@@ -22,8 +22,9 @@ namespace DummyEngine {
         const std::unordered_map<std::string, S32>& GetBoneIDMap();
 
     private:
-        friend class ModelLoader;
+        friend class ModelLoaderImpl;
 
+    private:
         float                                duration_;
         int                                  ticks_per_second_;
         Node                                 root_node_;
