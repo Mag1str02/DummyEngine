@@ -341,7 +341,7 @@ namespace DummyEngine {
     }
     template <> void LoadComponent<RenderMeshComponent>(Ref<Scene>, YAML::Node n_component, Entity& entity) {
         UUID id = n_component["UUID"].as<std::string>();
-        if (!ResourceManager::HasRenderMesh(id) && !ResourceManager::LoadRenderMesh(id)) {
+        if (!ResourceManager::HasRenderMesh(id) && !(ResourceManager::LoadRenderMesh(id) | Futures::Get()).has_value()) {
             LOG_WARNING("RenderMesh {} not found in ResourceManager", id);
         }
         if (!ResourceManager::HasHitBox(id) && !ResourceManager::LoadHitBox(id)) {
@@ -415,9 +415,9 @@ namespace DummyEngine {
             if (!asset.has_value()) {
                 LOG_WARNING("CubeMap {} not found in ResourceManager", id);
             } else {
-                auto        asset  = AssetManager::GetTextureAsset(id);
-                auto  texture = TextureLoader::Load(asset.value().LoadingProps) | Futures::Get();
-                Ref<SkyBox> skybox = CreateRef<SkyBox>(*texture);
+                auto        asset   = AssetManager::GetTextureAsset(id);
+                auto        texture = TextureLoader::Load(asset.value().LoadingProps) | Futures::Get();
+                Ref<SkyBox> skybox  = CreateRef<SkyBox>(*texture);
                 entity.AddComponent<SkyBoxComponent>({type, id, skybox});
             }
         }
