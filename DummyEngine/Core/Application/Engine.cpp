@@ -14,7 +14,11 @@ namespace DummyEngine {
             GLFW::Initialize();
             Concurrency::Initialize();
 
-            auto code = Futures::Submit(Concurrency::GetEngineMainScheduler(), [this]() { return EngineMain(); });
+            constexpr U64 kSize = NDummyConcurrency::NFiber::SizeInBytes(NDummyConcurrency::NFiber::StackSize::Medium);
+            auto          code  = Futures::Go(
+                Concurrency::GetEngineMainScheduler(),
+                [this]() { return EngineMain(); },
+                Hint{.StackProvider = NDummyConcurrency::NFiber::InlineStackPool<kSize>()});
             Concurrency::GetMainThreadScheduler().BecomeWorker();
 
             auto return_code = std::move(code) | Futures::Get();
@@ -50,7 +54,7 @@ namespace DummyEngine {
 
     int Main(FSetupApplication setup) {
         Engine engine(setup);
-        auto code = engine.Run();
+        auto   code = engine.Run();
         std::println("Exiting DummyEngine::Main");
         return code;
     }
