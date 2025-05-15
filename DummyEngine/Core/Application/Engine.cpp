@@ -11,17 +11,20 @@ namespace DummyEngine {
     public:
         explicit Engine(FSetupApplication setup) : setup_function_(setup) {}
         int Run() {
+            Concurrency::Initialize();
             Profiler::Initialize();
             GLFW::Initialize();
-            Concurrency::Initialize();
+            Concurrency::Start();
 
             auto code = Futures::Submit(Concurrency::GetEngineMainScheduler(), [this]() { return EngineMain(); });
             Concurrency::GetMainThreadScheduler().BecomeWorker();
-
             auto return_code = std::move(code) | Futures::Get();
-            Concurrency::Terminate();
+
+            Concurrency::Stop();
             GLFW::Terminate();
             Profiler::Terminate();
+            Concurrency::Terminate();
+
             return return_code;
         }
 
