@@ -218,6 +218,7 @@ namespace DummyEngine {
         return FileSystem::SaveFileDialog("Dummy Engine Scene (*.yml)", "yml", "", Config::Get().ScenePath);
     }
     void EditorLayer::OpenScene(const Path& scene_path) {
+        auto start = std::chrono::high_resolution_clock::now();
         if (scene_path.empty()) {
             scene_file_data_ = SceneFileData();
             current_scene_   = CreateRef<Scene>();
@@ -243,7 +244,9 @@ namespace DummyEngine {
         scene_state_        = SceneState::Editing;
         scene_script_state_ = SceneScriptState::Compiled;
         current_scene_->LoadPhysics(current_scene_);
-        LOG_INFO("Opened scene");
+
+        std::chrono::duration<double> tm = (std::chrono::high_resolution_clock::now() - start);
+        LOG_INFO("Opened scene in {} seconds", tm);
     }
     void EditorLayer::SaveScene(const Path& path) {
         scene_file_data_.Hierarchy = SceneLoader::Deserialize(current_scene_);
