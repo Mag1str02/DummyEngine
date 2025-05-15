@@ -18,6 +18,7 @@ namespace DummyEngine {
 
     namespace Futures {
         using NDummyConcurrency::NFuture::Submit;
+        using NDummyConcurrency::NFuture::Go;
 
         using namespace NDummyConcurrency::NFuture::NSyntax;
 
@@ -53,7 +54,9 @@ namespace DummyEngine {
     template <typename T>
     using ManualLifetime = NDummyConcurrency::ManualLifetime<T>;
 
+    using NDummyConcurrency::NFiber::Hint;
     using NDummyConcurrency::NFiber::StackPool;
+    using NDummyConcurrency::NFiber::InlineStackPool;
     using NDummyConcurrency::NRuntime::ExternalThreadPool;
     using NDummyConcurrency::NRuntime::FiberInvoker;
     using NDummyConcurrency::NRuntime::IScheduler;
