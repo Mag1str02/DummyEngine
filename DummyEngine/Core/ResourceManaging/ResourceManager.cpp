@@ -1,6 +1,5 @@
 #include "ResourceManager.h"
 
-#include "DummyEngine/Core/Application/Concurrency.h"
 #include "DummyEngine/Core/ResourceManaging/AssetManager.h"
 #include "DummyEngine/ToolBox/Loaders/ModelLoader.h"
 #include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
@@ -18,7 +17,7 @@ namespace DummyEngine {
     S_METHOD_IMPL(TryFuture<Ref<RenderMeshData>>, LoadRenderMeshData, (UUID id), (id)) {
         if (render_meshes_.contains(id)) {
             LOG_WARNING("RenderMesh {} was not loaded because already loaded", id);
-            return Futures::Failure();
+            return render_meshes_.at(id);
         }
         auto asset = AssetManager::GetRenderMeshAsset(id);
         if (!asset) {
@@ -33,18 +32,40 @@ namespace DummyEngine {
     S_METHOD_IMPL(TryFuture<Ref<TextureData>>, LoadTextureData, (UUID id), (id)) {
         if (textures_.contains(id)) {
             LOG_WARNING("Texture {} was not loaded because already loaded", id);
-            return Futures::Failure();
+            return textures_.at(id);
         }
         auto asset = AssetManager::GetTextureAsset(id);
         if (!asset) {
             LOG_WARNING("Texture {} was not loaded because does not exist in AssetManager", id);
             return Futures::Failure();
         }
-        auto texture = TextureLoader::Load(asset.value().LoadingProps) | Futures::Copy();
 
-        textures_[id] = texture;
+        textures_[id] = TextureLoader::Load(asset.value().LoadingProps) | Futures::Copy();
         LOG_INFO("Texture {} was added", id);
-        return texture;
+        return textures_.at(id);
+    }
+    S_METHOD_IMPL(TryFuture<Ref<Physics::ConvexHitbox>>, LoadHitBox, (UUID id), (id)) {
+        if (hit_boxes_.contains(id)) {
+            LOG_WARNING("HitBox {} was not loaded because already loaded", id);
+            return hit_boxes_.at(id);
+        }
+        hit_boxes_[id] =              //
+            LoadRenderMeshData(id) |  //
+            Futures::MapOk([](Ref<RenderMeshData>&& mesh) {
+                std::vector<Vec3> vertices;
+                for (const auto& submesh : mesh->Meshes) {
+                    for (const auto& vert : submesh.Vertices) {
+                        vertices.push_back(vert.Position);
+                    }
+                }
+                auto hitbox = CreateRef<Physics::ConvexHitbox>();
+                hitbox->Build(vertices);
+                return hitbox;
+            }) |  //
+            Futures::Copy();
+
+        LOG_INFO("Hitbox {} was added", id);
+        return hit_boxes_.at(id).Copy();
     }
     S_METHOD_IMPL(bool, LoadShader, (UUID id), (id)) {
         if (shaders_.contains(id)) {
@@ -58,32 +79,6 @@ namespace DummyEngine {
         }
         shaders_[id] = Shader::Create(asset.value().Parts);
         LOG_INFO("Shader {} was added", id);
-        return true;
-    }
-    S_METHOD_IMPL(bool, LoadHitBox, (UUID id), (id)) {
-        if (hit_boxes_.contains(id)) {
-            LOG_WARNING("HitBox {} was not loaded because already loaded", id);
-            return false;
-        }
-        auto asset = AssetManager::GetRenderMeshAsset(id);
-        if (!asset) {
-            LOG_WARNING("Hitbox {} was not loaded because does not exist in AssetManager", id);
-            return false;
-        }
-        auto mesh_result = ModelLoader::Load(asset.value().LoadingProps) | Futures::Get();
-        if (mesh_result) {
-            return false;
-        }
-        const auto&       mesh = mesh_result.value();
-        std::vector<Vec3> vertices;
-        for (const auto& submesh : mesh->Meshes) {
-            for (const auto& vert : submesh.Vertices) {
-                vertices.push_back(vert.Position);
-            }
-        }
-        hit_boxes_.insert({id, CreateRef<Physics::ConvexHitbox>()});
-        hit_boxes_[id]->Build(vertices);
-        LOG_INFO("Hitbox {} was added", id);
         return true;
     }
     S_METHOD_IMPL(bool, LoadCubeMap, (UUID id), (id)) {
@@ -126,11 +121,11 @@ namespace DummyEngine {
         }
         return Results::Failure();
     }
-    S_METHOD_IMPL(std::optional<Ref<Physics::ConvexHitbox>>, GetHitBox, (UUID id), (id)) {
+    S_METHOD_IMPL(Result<Ref<Physics::ConvexHitbox>>, GetHitBox, (UUID id), (id)) {
         if (hit_boxes_.contains(id)) {
-            return hit_boxes_[id];
+            return hit_boxes_[id].Copy() | Futures::Get();
         }
-        return {};
+        return Results::Failure();
     }
 
     S_METHOD_IMPL(bool, HasShader, (UUID id), (id)) {

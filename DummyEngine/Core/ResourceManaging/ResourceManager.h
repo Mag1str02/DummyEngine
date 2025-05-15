@@ -13,16 +13,16 @@ namespace DummyEngine {
     public:
         S_METHOD_DEF(TryFuture<Ref<TextureData>>, LoadTextureData, (UUID id));
         S_METHOD_DEF(TryFuture<Ref<RenderMeshData>>, LoadRenderMeshData, (UUID id));
+        S_METHOD_DEF(TryFuture<Ref<Physics::ConvexHitbox>>, LoadHitBox, (UUID id));
 
         S_METHOD_DEF(bool, LoadShader, (UUID id));
         S_METHOD_DEF(bool, LoadCubeMap, (UUID id));
-        S_METHOD_DEF(bool, LoadHitBox, (UUID id));
 
         S_METHOD_DEF(Result<Ref<TextureData>>, GetTextureData, (UUID id));
         S_METHOD_DEF(Result<Ref<RenderMeshData>>, GetRenderMeshData, (UUID id));
+        S_METHOD_DEF(Result<Ref<Physics::ConvexHitbox>>, GetHitBox, (UUID id));
         S_METHOD_DEF(std::optional<Ref<Shader>>, GetShader, (UUID id));
         S_METHOD_DEF(std::optional<Ref<CubeMap>>, GetCubeMap, (UUID id));
-        S_METHOD_DEF(std::optional<Ref<Physics::ConvexHitbox>>, GetHitBox, (UUID id));
 
         S_METHOD_DEF(bool, HasTextureData, (UUID id));
         S_METHOD_DEF(bool, HasRenderMeshData, (UUID id));
@@ -39,12 +39,12 @@ namespace DummyEngine {
         S_METHOD_DEF(Unit, Clear, ());
 
     private:
-        std::unordered_map<UUID, CopyTryFuture<Ref<RenderMeshData>>> render_meshes_;
-        std::unordered_map<UUID, CopyTryFuture<Ref<TextureData>>>    textures_;
+        std::unordered_map<UUID, CopyTryFuture<Ref<RenderMeshData>>>        render_meshes_;
+        std::unordered_map<UUID, CopyTryFuture<Ref<TextureData>>>           textures_;
+        std::unordered_map<UUID, CopyTryFuture<Ref<Physics::ConvexHitbox>>> hit_boxes_;
 
-        std::unordered_map<UUID, Ref<Shader>>                shaders_;
-        std::unordered_map<UUID, Ref<CubeMap>>               cube_maps_;
-        std::unordered_map<UUID, Ref<Physics::ConvexHitbox>> hit_boxes_;
+        std::unordered_map<UUID, Ref<Shader>>  shaders_;
+        std::unordered_map<UUID, Ref<CubeMap>> cube_maps_;
     };
 
 }  // namespace DummyEngine
