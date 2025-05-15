@@ -11,6 +11,7 @@ namespace DummyEngine {
     public:
         explicit Engine(FSetupApplication setup) : setup_function_(setup) {}
         int Run() {
+            Profiler::Initialize();
             GLFW::Initialize();
             Concurrency::Initialize();
 
@@ -20,6 +21,7 @@ namespace DummyEngine {
             auto return_code = std::move(code) | Futures::Get();
             Concurrency::Terminate();
             GLFW::Terminate();
+            Profiler::Terminate();
             return return_code;
         }
 

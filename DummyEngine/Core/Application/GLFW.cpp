@@ -34,20 +34,25 @@ namespace DummyEngine {
     }
 
     S_METHOD_IMPL(Unit, StartEventProcessing, (), ()) {
-        Go(Concurrency::GetMainThreadScheduler(), [this]() {
-            DE_PROFILE_SCOPE("GLFW::EventProcessing");
+        Fibers::Go(Concurrency::GetMainThreadScheduler(),
+                   [this]() {
+                       DE_PROFILE_SCOPE("GLFW::EventProcessing");
 
-            glfwSetMonitorCallback([](GLFWmonitor* monitor, int event) {
-                GLFW::GetInstance().OnMonitorEvent(monitor, event);  //
-            });
+                       glfwSetMonitorCallback([](GLFWmonitor* monitor, int event) {
+                           GLFW::GetInstance().OnMonitorEvent(monitor, event);  //
+                       });
 
-            while (!stop_flag_) {
-                DE_PROFILE_SCOPE("GLFW::EventProcessing::Step");
-                glfwPollEvents();
-                Fibers::Yield();
-            }
-            stopped_event_processing_.Fire();
-        });
+                       while (!stop_flag_) {
+                           DE_PROFILE_SCOPE("GLFW::EventProcessing::Step");
+                           glfwPollEvents();
+                           Fibers::Yield();
+                       }
+                       stopped_event_processing_.Fire();
+                   },
+                   {
+                       .Name  = "GLFW Event Poller",
+                       .Group = 1,
+                   });
         return Unit();
     }
     S_METHOD_IMPL(Unit, StopEventProcessing, (), ()) {

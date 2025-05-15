@@ -29,3 +29,9 @@ endif()
 
 
 add_external_library(DUMMY_CONCURRENCY DUMMY_CONCURRENCY DummyConcurrency)
+target_include_directories(${EXTERNAL_DUMMY_CONCURRENCY_LIBRARY}
+    PUBLIC ${EXTERNAL_TRACY_INCLUDE_DIR}
+)
+target_link_libraries(${EXTERNAL_DUMMY_CONCURRENCY_LIBRARY}
+    PUBLIC ${EXTERNAL_TRACY_LIBRARY}
+)
