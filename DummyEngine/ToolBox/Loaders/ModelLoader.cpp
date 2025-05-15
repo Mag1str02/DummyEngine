@@ -255,16 +255,14 @@ namespace DummyEngine {
         current_directory_ = props_.Path.parent_path();
 
         ReadModelProperties(scene->mRootNode, scene);
+        LOG_INFO("Model {} loaded with {} meshes and {} verticies", Config::RelativeToExecutable(props_.Path), meshes_amount_, vertices_amount_);
+
         current_data_->Meshes.resize(meshes_amount_);
         meshes_material_.reserve(meshes_amount_);
         ProcessNode(scene->mRootNode, scene);
         if (current_data_->Animation) {
             ReadAnimation(*current_data_->Animation, scene);
         }
-        if (props_.Compress) {
-            current_data_->Compress();
-        }
-        LOG_INFO("Model {} loaded with {} meshes and {} verticies", Config::RelativeToExecutable(props_.Path), meshes_amount_, vertices_amount_);
 
         for (U32 i = 0; i < meshes_material_.size(); ++i) {
             auto result = std::move(meshes_material_[i]) | Futures::Get();
@@ -273,6 +271,10 @@ namespace DummyEngine {
                 return Results::Failure();
             }
             current_data_->Meshes[i].Material = std::move(result.value());
+        }
+
+        if (props_.Compress) {
+            current_data_->Compress();
         }
         return current_data_;
     }
