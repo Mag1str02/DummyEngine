@@ -15,7 +15,7 @@ namespace DummyEngine {
         return Unit();
     }
 
-    S_METHOD_IMPL(TryFuture<Ref<RenderMesh>>, LoadRenderMesh, (UUID id), (id)) {
+    S_METHOD_IMPL(TryFuture<Ref<RenderMeshData>>, LoadRenderMeshData, (UUID id), (id)) {
         if (render_meshes_.contains(id)) {
             LOG_WARNING("RenderMesh {} was not loaded because already loaded", id);
             return Futures::Failure();
@@ -25,15 +25,12 @@ namespace DummyEngine {
             LOG_WARNING("RenderMesh {} was not loaded because does not exist in AssetManager", id);
             return Futures::Failure();
         }
-        render_meshes_[id] = ModelLoader::Load(asset.value().LoadingProps) |                                            //
-                             Futures::Via(Concurrency::GetEngineMainScheduler()) |                                      //
-                             Futures::MapOk([](Ref<RenderMeshData>&& data) { return CreateRef<RenderMesh>(data); }) |  //
-                             Futures::Copy();
+        render_meshes_[id] = ModelLoader::Load(asset.value().LoadingProps) | Futures::Copy();
 
         LOG_INFO("RenderMesh {} was added", id);
         return render_meshes_[id];
     }
-    S_METHOD_IMPL(TryFuture<Ref<Texture>>, LoadTexture, (UUID id), (id)) {
+    S_METHOD_IMPL(TryFuture<Ref<TextureData>>, LoadTextureData, (UUID id), (id)) {
         if (textures_.contains(id)) {
             LOG_WARNING("Texture {} was not loaded because already loaded", id);
             return Futures::Failure();
@@ -43,10 +40,7 @@ namespace DummyEngine {
             LOG_WARNING("Texture {} was not loaded because does not exist in AssetManager", id);
             return Futures::Failure();
         }
-        auto texture = TextureLoader::Load(asset.value().LoadingProps) |                                 //
-                       Futures::Via(Concurrency::GetEngineMainScheduler()) |                             //
-                       Futures::MapOk([](Ref<TextureData>&& data) { return Texture::Create(*data); }) |  //
-                       Futures::Copy();
+        auto texture = TextureLoader::Load(asset.value().LoadingProps) | Futures::Copy();
 
         textures_[id] = texture;
         LOG_INFO("Texture {} was added", id);
@@ -114,11 +108,11 @@ namespace DummyEngine {
         }
         return {};
     }
-    S_METHOD_IMPL(Result<Ref<RenderMesh>>, GetRenderMesh, (UUID id), (id)) {
+    S_METHOD_IMPL(Result<Ref<RenderMeshData>>, GetRenderMeshData, (UUID id), (id)) {
         if (render_meshes_.contains(id)) {
             return render_meshes_[id].Copy() | Futures::Get();
         }
-        return {};
+        return Results::Failure();
     }
     S_METHOD_IMPL(std::optional<Ref<CubeMap>>, GetCubeMap, (UUID id), (id)) {
         if (cube_maps_.contains(id)) {
@@ -126,11 +120,11 @@ namespace DummyEngine {
         }
         return {};
     }
-    S_METHOD_IMPL(Result<Ref<Texture>>, GetTexture, (UUID id), (id)) {
+    S_METHOD_IMPL(Result<Ref<TextureData>>, GetTextureData, (UUID id), (id)) {
         if (textures_.contains(id)) {
             return textures_[id].Copy() | Futures::Get();
         }
-        return {};
+        return Results::Failure();
     }
     S_METHOD_IMPL(std::optional<Ref<Physics::ConvexHitbox>>, GetHitBox, (UUID id), (id)) {
         if (hit_boxes_.contains(id)) {
@@ -142,13 +136,13 @@ namespace DummyEngine {
     S_METHOD_IMPL(bool, HasShader, (UUID id), (id)) {
         return shaders_.contains(id);
     }
-    S_METHOD_IMPL(bool, HasRenderMesh, (UUID id), (id)) {
+    S_METHOD_IMPL(bool, HasRenderMeshData, (UUID id), (id)) {
         return render_meshes_.contains(id);
     }
     S_METHOD_IMPL(bool, HasCubeMap, (UUID id), (id)) {
         return cube_maps_.contains(id);
     }
-    S_METHOD_IMPL(bool, HasTexture, (UUID id), (id)) {
+    S_METHOD_IMPL(bool, HasTextureData, (UUID id), (id)) {
         return textures_.contains(id);
     }
     S_METHOD_IMPL(bool, HasHitBox, (UUID id), (id)) {
@@ -163,7 +157,7 @@ namespace DummyEngine {
         }
         return false;
     }
-    S_METHOD_IMPL(bool, DeleteRenderMesh, (UUID id), (id)) {
+    S_METHOD_IMPL(bool, DeleteRenderMeshData, (UUID id), (id)) {
         if (render_meshes_.contains(id)) {
             render_meshes_.erase(id);
             LOG_INFO("RenderMesh {} was deleted", id);
@@ -187,7 +181,7 @@ namespace DummyEngine {
         }
         return false;
     }
-    S_METHOD_IMPL(bool, DeleteTexture, (UUID id), (id)) {
+    S_METHOD_IMPL(bool, DeleteTextureData, (UUID id), (id)) {
         if (textures_.contains(id)) {
             textures_.erase(id);
             LOG_INFO("Texture {} was deleted", id);
