@@ -17,18 +17,34 @@ namespace DummyEngine {
     };
 
     namespace Futures {
-        using NDummyConcurrency::NFuture::Submit;
         using NDummyConcurrency::NFuture::Go;
+        using NDummyConcurrency::NFuture::Submit;
+
+        using NDummyConcurrency::NFuture::Ok;
+        using NDummyConcurrency::NFuture::Just;
 
         using namespace NDummyConcurrency::NFuture::NSyntax;
 
         inline auto Failure() {
             return NDummyConcurrency::NFuture::Failure(std::error_code());
         }
+
+        template <typename T>
+        std::vector<T> WaitAll(std::vector<NDummyConcurrency::Future<T>>&& futures) {
+            std::vector<T> results;
+            results.reserve(futures.size());
+            for (auto& future : futures) {
+                results.emplace_back(std::move(future) | Get());
+            }
+            return results;
+        }
     }  // namespace Futures
 
     namespace Results {
         using namespace NDummyConcurrency::NResult::NSyntax;
+
+        using NDummyConcurrency::NResult::Ok;
+        using NDummyConcurrency::NResult::Status;
 
         inline auto Failure() {
             return NDummyConcurrency::NResult::Failure(std::error_code());
@@ -55,8 +71,8 @@ namespace DummyEngine {
     using ManualLifetime = NDummyConcurrency::ManualLifetime<T>;
 
     using NDummyConcurrency::NFiber::Hint;
-    using NDummyConcurrency::NFiber::StackPool;
     using NDummyConcurrency::NFiber::InlineStackPool;
+    using NDummyConcurrency::NFiber::StackPool;
     using NDummyConcurrency::NRuntime::ExternalThreadPool;
     using NDummyConcurrency::NRuntime::FiberInvoker;
     using NDummyConcurrency::NRuntime::IScheduler;

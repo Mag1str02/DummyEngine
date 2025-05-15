@@ -16,7 +16,7 @@ namespace DummyEngine {
         LOG_AUTHOR(ScriptManager)
         SINGLETON(ScriptManager)
     public:
-        S_METHOD_DEF(bool, LoadScripts, (const std::vector<ScriptAsset>& scripts));
+        S_METHOD_DEF(TryFuture<Unit>, LoadScripts, (const std::vector<ScriptAsset>& scripts));
         S_METHOD_DEF(Unit, UnloadScripts, (const std::vector<ScriptAsset>& scripts));
         S_METHOD_DEF(bool, ReloadScripts, (const std::vector<ScriptAsset>& scripts, Ref<Scene> scene));
         S_METHOD_DEF(Unit, AttachScripts, (Ref<Scene> scene));
@@ -35,8 +35,9 @@ namespace DummyEngine {
         void LoadEditorLibrary();
         void LoadEditorScripts();
 
+        Result<Unit>               RecompileNeeded(const std::vector<ScriptAsset>& scripts);
         std::vector<U32>           RecompilationList(const std::vector<ScriptAsset>& scripts);
-        std::optional<Path>        CompileSelected(const std::vector<ScriptAsset>& scripts, const std::vector<U32> ids);
+        Result<Unit>               CompileSelected(const std::vector<ScriptAsset>& scripts, const std::vector<U32>& ids);
         std::optional<std::string> LinkLibrary(const std::vector<ScriptAsset>& scripts);
         bool                       SwapLibrary(const std::string& name);
         bool                       NeedToCompile(const Path& path);

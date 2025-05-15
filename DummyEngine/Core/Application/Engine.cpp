@@ -14,18 +14,13 @@ namespace DummyEngine {
             GLFW::Initialize();
             Concurrency::Initialize();
 
-            constexpr U64 kSize = NDummyConcurrency::NFiber::SizeInBytes(NDummyConcurrency::NFiber::StackSize::Medium);
-            auto          code  = Futures::Go(
-                Concurrency::GetEngineMainScheduler(),
-                [this]() { return EngineMain(); },
-                Hint{.StackProvider = NDummyConcurrency::NFiber::InlineStackPool<kSize>()});
+            auto code = Futures::Submit(Concurrency::GetEngineMainScheduler(), [this]() { return EngineMain(); });
             Concurrency::GetMainThreadScheduler().BecomeWorker();
 
             auto return_code = std::move(code) | Futures::Get();
             Concurrency::Terminate();
             GLFW::Terminate();
             return return_code;
-            // return 0;
         }
 
     private:

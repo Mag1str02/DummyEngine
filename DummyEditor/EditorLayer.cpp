@@ -218,6 +218,7 @@ namespace DummyEngine {
         return FileSystem::SaveFileDialog("Dummy Engine Scene (*.yml)", "yml", "", Config::Get().ScenePath);
     }
     void EditorLayer::OpenScene(const Path& scene_path) {
+        DE_PROFILE_SCOPE("EditorLayer::OpenScene");
         if (scene_path.empty()) {
             scene_file_data_ = SceneFileData();
             current_scene_   = CreateRef<Scene>();
@@ -226,9 +227,11 @@ namespace DummyEngine {
             if (!res) {
                 return;
             }
-            scene_file_data_ = res.value();
+            scene_file_data_    = res.value();
+            auto scripts_future = ScriptManager::LoadScripts(scene_file_data_.Assets.Scripts);
             LoadAssets();
-            if (!ScriptManager::LoadScripts(scene_file_data_.Assets.Scripts)) {
+            auto scripts_result = std::move(scripts_future) | Futures::Get();
+            if (!scripts_result.has_value()) {
                 return;
             }
             current_scene_ = SceneLoader::Serialize(scene_file_data_.Hierarchy);
@@ -278,6 +281,7 @@ namespace DummyEngine {
         }
         for (const auto& asset : scene_file_data_.Assets.RenderMeshes) {
             AssetManager::AddRenderMeshAsset(asset);
+            ResourceManager::LoadRenderMeshData(asset.ID) | Futures::Detach();
         }
         for (const auto& asset : scene_file_data_.Assets.Shaders) {
             AssetManager::AddShaderAsset(asset);
