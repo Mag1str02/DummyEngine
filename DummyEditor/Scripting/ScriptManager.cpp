@@ -30,6 +30,7 @@ namespace DummyEngine {
                Futures::Via(Concurrency::GetEngineBackgroundScheduler()) |                   //
                Futures::Map([this, scripts](auto&&) { return RecompileNeeded(scripts); }) |  //
                Futures::AndThen([this, scripts](auto&&) -> TryFuture<Unit> {
+                   DE_PROFILE_SCOPE("Linking scripts library");
                    auto new_library_name = LinkLibrary(scripts);
                    if (!new_library_name.has_value()) {
                        LOG_WARNING("Failed to link library {}", new_library_name.value());
@@ -49,6 +50,7 @@ namespace DummyEngine {
                });
     }
     S_METHOD_IMPL(Unit, UnloadScripts, (const std::vector<ScriptAsset>& scripts), (scripts)) {
+        DE_PROFILE_SCOPE("ScriptManager::UnloadScripts");
         for (const auto& script : scripts) {
             ScriptEngine::DeleteScript(script.ID);
         }
@@ -60,6 +62,7 @@ namespace DummyEngine {
         return Unit();
     }
     S_METHOD_IMPL(bool, ReloadScripts, (const std::vector<ScriptAsset>& scripts, Ref<Scene> scene), (scripts, scene)) {
+        DE_PROFILE_SCOPE("ScriptManager::ReloadScripts");
         if (scripts.empty()) {
             return true;
         }
@@ -91,6 +94,7 @@ namespace DummyEngine {
         return true;
     }
     S_METHOD_IMPL(Unit, AttachScripts, (Ref<Scene> scene), (scene)) {
+        DE_PROFILE_SCOPE("ScriptManager::AttachScripts");
         for (auto entity : scene->View<ScriptComponent>()) {
             auto& script_component = entity.Get<ScriptComponent>();
             if (script_component.Valid()) {
@@ -105,6 +109,7 @@ namespace DummyEngine {
     }
 
     Result<Unit> ScriptManager::RecompileNeeded(const std::vector<ScriptAsset>& scripts) {
+        DE_PROFILE_SCOPE("ScriptManager::RecompileNeeded");
         std::vector<U32> recompile_ids = RecompilationList(scripts);
         if (!recompile_ids.empty()) {
             return CompileSelected(scripts, recompile_ids);
@@ -114,6 +119,7 @@ namespace DummyEngine {
     }
 
     ScriptManager::ScriptStates ScriptManager::SaveSciptStates(Ref<Scene> scene) {
+        DE_PROFILE_SCOPE("ScriptManager::SaveSciptStates");
         ScriptStates states;
         for (auto entity : scene->View<ScriptComponent>()) {
             auto& script_component = entity.Get<ScriptComponent>();
@@ -126,6 +132,7 @@ namespace DummyEngine {
         return states;
     }
     void ScriptManager::RestoreSciptStates(const ScriptStates& states) {
+        DE_PROFILE_SCOPE("ScriptManager::RestoreSciptStates");
         for (auto it = states.begin(); it != states.end(); ++it) {
             auto        entity = it->first;
             const auto& state  = it->second;
@@ -194,12 +201,14 @@ namespace DummyEngine {
     }
 
     void ScriptManager::LoadEditorLibrary() {
+        DE_PROFILE_SCOPE("ScriptManager::LoadEditorLibrary");
         Ref<SharedObject> library               = CreateRef<SharedObject>();
         bool              editor_library_loaded = library->Load(Config::Get().ExecutablePath, DE_EDITOR_LIBRARY_NAME);
         DE_ASSERT(editor_library_loaded, "Failed to load editor library {}", DE_EDITOR_LIBRARY_NAME);
         ScriptEngine::AddLibrary(library);
     }
     void ScriptManager::LoadEditorScripts() {
+        DE_PROFILE_SCOPE("ScriptManager::LoadEditorScripts");
         for (const auto& asset : editor_script_assets_) {
             AssetManager::AddScriptAsset(asset);
             ScriptEngine::AddScript(asset.ID);
@@ -207,6 +216,7 @@ namespace DummyEngine {
     }
 
     std::vector<U32> ScriptManager::RecompilationList(const std::vector<ScriptAsset>& scripts) {
+        DE_PROFILE_SCOPE("ScriptManager::RecompilationList");
         std::vector<U32> recompile_ids;
         for (size_t i = 0; i < scripts.size(); ++i) {
             DE_ASSERT(fs::exists(scripts[i].Path), "Failed to find script source file {}", scripts[i].Path);
@@ -217,11 +227,13 @@ namespace DummyEngine {
         return recompile_ids;
     }
     Result<Unit> ScriptManager::CompileSelected(const std::vector<ScriptAsset>& scripts, const std::vector<U32>& ids) {
+        DE_PROFILE_SCOPE("ScriptManager::CompileSelected");
         std::vector<TryFuture<Path>> futures;
         futures.reserve(scripts.size());
         for (const auto& id : ids) {
             auto path             = scripts[id].Path;
             auto compilation_unit = Futures::Submit(Concurrency::GetEngineBackgroundScheduler(), [path]() -> Result<Path> {
+                DE_PROFILE_SCOPE("ScriptManager::CompileSelected (Compile File)");
                 if (!Compiler::Compile(path, PathToCompiledScript(path))) {
                     LOG_ERROR("Failed to compile script {}", path);
                     return Results::Failure();
@@ -245,6 +257,7 @@ namespace DummyEngine {
         return Results::Ok(Unit());
     }
     std::optional<std::string> ScriptManager::LinkLibrary(const std::vector<ScriptAsset>& scripts) {
+        DE_PROFILE_SCOPE("ScriptManager::LinkLibrary");
         std::vector<Path> compiled_sources;
         for (const auto& script : scripts) {
             compiled_sources.push_back(PathToCompiledScript(script.Path));
@@ -253,6 +266,7 @@ namespace DummyEngine {
         return (Compiler::Link(compiled_sources, Config::Get().ScriptCachePath, new_name) ? new_name : std::optional<std::string>());
     }
     bool ScriptManager::SwapLibrary(const std::string& name) {
+        DE_PROFILE_SCOPE("ScriptManager::SwapLibrary");
         Ref<SharedObject> library = CreateRef<SharedObject>();
         if (!library->Load(Config::Get().ScriptCachePath, name)) {
             return false;
@@ -265,6 +279,7 @@ namespace DummyEngine {
         return true;
     }
     bool ScriptManager::NeedToCompile(const Path& path) {
+        DE_PROFILE_SCOPE("ScriptManager::NeedToCompile");
         if (!compiler_scripts_.contains(path)) {
             return true;
         }
@@ -275,6 +290,7 @@ namespace DummyEngine {
         return fs::last_write_time(path) > fs::last_write_time(object);
     }
     std::string ScriptManager::AvailableName() {
+        DE_PROFILE_SCOPE("ScriptManager::AvailableName");
         // TODO: Generate available name properly
         if (library_name_.empty()) {
             return "ScriptLibrary0";

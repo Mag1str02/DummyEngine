@@ -82,6 +82,7 @@ namespace DummyEngine {
     }
 
     void ModelLoaderImpl::LoadBone(Bone& bone, aiNodeAnim* node) {
+        DE_PROFILE_SCOPE("ModelLoader::LoadBone");
         for (U32 i = 0; i < node->mNumPositionKeys; ++i) {
             auto        pos        = node->mPositionKeys[i].mValue;
             float       time_stamp = node->mPositionKeys[i].mTime;
@@ -124,6 +125,7 @@ namespace DummyEngine {
     }
 
     void ModelLoaderImpl::ReadWeights(aiMesh* mesh) {
+        DE_PROFILE_SCOPE("ModelLoader::ReadWeights");
         auto& model        = *current_data_;
         auto& current_mesh = model.Meshes[current_mesh_id_];
         if (!model.Animation) {
@@ -166,6 +168,7 @@ namespace DummyEngine {
         }
     }
     void ModelLoaderImpl::ReadBones(Animation& animation, const aiAnimation* anim) {
+        DE_PROFILE_SCOPE("ModelLoader::ReadBones");
         for (U32 i = 0; i < anim->mNumChannels; ++i) {
             auto channel   = anim->mChannels[i];
             auto bone_info = animation.GetBone(channel->mNodeName.data);
@@ -200,6 +203,7 @@ namespace DummyEngine {
 
     TryFuture<MaterialData> ModelLoaderImpl::LoadMaterial(aiMaterial* mat) {
         return Futures::Submit(Concurrency::GetEngineBackgroundScheduler(), [this, mat]() -> Result<MaterialData> {
+            DE_PROFILE_SCOPE("ModelLoader::LoadMaterial");
             try {
                 MaterialData material;
                 material.Diffuse  = GetColor(mat, ColorType::Diffuse);
@@ -237,7 +241,11 @@ namespace DummyEngine {
         if (props_.FlipUV) {
             flags |= aiProcess_FlipUVs;
         }
-        const aiScene* scene = importer_.ReadFile(props_.Path.string(), flags);
+        const aiScene* scene;
+        {
+            DE_PROFILE_SCOPE("ModelLoader::Load (ASSUMP ReadFile)");
+            scene = importer_.ReadFile(props_.Path.string(), flags);
+        }
 
         if (scene == nullptr || (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) != 0 || scene->mRootNode == nullptr) {
             LOG_ERROR("Failed to load model {} due: {}", Config::RelativeToExecutable(props_.Path), importer_.GetErrorString());
