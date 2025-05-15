@@ -25,7 +25,6 @@ namespace DummyEngine {
     }
 
     void Initializer::PreInitialize() {
-        Profiler::Initialize();
         Config::Initialize();
         Console::Initialize();
         Logger::Initialize();
@@ -66,6 +65,5 @@ namespace DummyEngine {
 
         Logger::Terminate();
         Config::Terminate();
-        Profiler::Terminate();
     }
 }  // namespace DummyEngine

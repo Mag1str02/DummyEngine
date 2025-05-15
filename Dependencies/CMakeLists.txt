@@ -1,5 +1,4 @@
 include(ASSIMP.cmake)
-include(DUMMY_CONCURRENCY.cmake)
 include(GLAD.cmake)
 include(GLFW.cmake)
 include(GLM.cmake)
@@ -8,6 +7,7 @@ include(NFD.cmake)
 include(YAML.cmake)
 include(STB_IMAGE.cmake)
 include(TRACY.cmake)
+include(DUMMY_CONCURRENCY.cmake)
 
 function (link_dependencies TARGET)
     target_include_directories(${TARGET}
