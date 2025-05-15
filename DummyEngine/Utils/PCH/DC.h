@@ -2,6 +2,8 @@
 
 #include <DummyConcurrency/DummyConcurrency.hpp>  // IWYU pragma: export
 
+#include <deque>
+
 namespace DummyEngine {
 
     class Error {
@@ -20,8 +22,8 @@ namespace DummyEngine {
         using NDummyConcurrency::NFuture::Go;
         using NDummyConcurrency::NFuture::Submit;
 
-        using NDummyConcurrency::NFuture::Ok;
         using NDummyConcurrency::NFuture::Just;
+        using NDummyConcurrency::NFuture::Ok;
 
         using namespace NDummyConcurrency::NFuture::NSyntax;
 
@@ -72,6 +74,7 @@ namespace DummyEngine {
 
     using NDummyConcurrency::NFiber::Hint;
     using NDummyConcurrency::NFiber::InlineStackPool;
+    using NDummyConcurrency::NFiber::IStackProvider;
     using NDummyConcurrency::NFiber::StackPool;
     using NDummyConcurrency::NRuntime::ExternalThreadPool;
     using NDummyConcurrency::NRuntime::FiberInvoker;
@@ -86,4 +89,39 @@ namespace DummyEngine {
     using TSpinLock  = NDummyConcurrency::NSynchronization::NThread::SpinLock;
     using TWaitGroup = NDummyConcurrency::NSynchronization::NThread::WaitGroup;
     using TEvent     = NDummyConcurrency::NSynchronization::NThread::Event;
+
+    class FiberGroupHintProvider : public NDummyConcurrency::NRuntime::IFiberHintProvider {
+    public:
+        explicit FiberGroupHintProvider(IStackProvider* stack_provider, const std::string& base_name, int32_t group) :
+            stack_provider_(stack_provider), group_(group), base_name_(base_name) {}
+
+        virtual Hint GetHint() override {
+            std::lock_guard guard(spin_lock_);
+            if (hints_pool_.empty()) {
+                names_.emplace_back(std::format("{} ({})\0", base_name_, names_.size()));
+                hints_pool_.emplace(Hint{
+                    .StackProvider = stack_provider_,
+                    .Name          = names_.back().c_str(),
+                    .Group         = group_,
+                });
+            }
+            Hint hint = hints_pool_.front();
+            hints_pool_.pop();
+            return hint;
+        }
+        virtual void ReturnHint(Hint hint) override {
+            std::lock_guard guard(spin_lock_);
+            hints_pool_.emplace(hint);
+        }
+
+    private:
+        TSpinLock               spin_lock_;
+        IStackProvider*         stack_provider_;
+        std::deque<std::string> names_;
+
+        std::queue<Hint> hints_pool_;
+
+        int32_t     group_;
+        std::string base_name_;
+    };
 }  // namespace DummyEngine

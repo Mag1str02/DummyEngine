@@ -368,12 +368,19 @@ namespace DummyEngine {
 
     void EditorLayer::LoadEditorResources() {}
     void EditorLayer::LoadIcons() {
-        auto play_data          = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/PlayButton.png"}) | Futures::Get();
-        auto pause_data         = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/PauseButton.png"}) | Futures::Get();
-        auto step_data          = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/StepButton.png"}) | Futures::Get();
-        auto stop_data          = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/StopButton.png"}) | Futures::Get();
-        auto build_data         = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/BuildButton.png"}) | Futures::Get();
-        auto build_and_run_data = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/BuildAndRunButton.png"}) | Futures::Get();
+        auto f_play_data          = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/PlayButton.png"});
+        auto f_pause_data         = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/PauseButton.png"});
+        auto f_step_data          = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/StepButton.png"});
+        auto f_stop_data          = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/StopButton.png"});
+        auto f_build_data         = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/BuildButton.png"});
+        auto f_build_and_run_data = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/BuildAndRunButton.png"});
+
+        auto play_data          = std::move(f_play_data) | Futures::GetOk();
+        auto pause_data         = std::move(f_pause_data) | Futures::GetOk();
+        auto step_data          = std::move(f_step_data) | Futures::GetOk();
+        auto stop_data          = std::move(f_stop_data) | Futures::GetOk();
+        auto build_data         = std::move(f_build_data) | Futures::GetOk();
+        auto build_and_run_data = std::move(f_build_and_run_data) | Futures::GetOk();
 
         DE_ASSERT(play_data, "Failed to load play icon");
         DE_ASSERT(pause_data, "Failed to load pause icon");
@@ -382,12 +389,12 @@ namespace DummyEngine {
         DE_ASSERT(build_data, "Failed to load build icon");
         DE_ASSERT(build_and_run_data, "Failed to load build and run icon");
 
-        resources_.PlayIcon        = Texture::Create({**play_data});
-        resources_.PauseIcon       = Texture::Create({**pause_data});
-        resources_.StepIcon        = Texture::Create({**step_data});
-        resources_.StopIcon        = Texture::Create({**stop_data});
-        resources_.BuildIcon       = Texture::Create({**build_data});
-        resources_.BuildAndRunIcon = Texture::Create({**build_and_run_data});
+        resources_.PlayIcon        = Texture::Create({*play_data});
+        resources_.PauseIcon       = Texture::Create({*pause_data});
+        resources_.StepIcon        = Texture::Create({*step_data});
+        resources_.StopIcon        = Texture::Create({*stop_data});
+        resources_.BuildIcon       = Texture::Create({*build_data});
+        resources_.BuildAndRunIcon = Texture::Create({*build_and_run_data});
     }
 
     //*___Other________________________________________________________________________________________________________________________________________________________________________________________
