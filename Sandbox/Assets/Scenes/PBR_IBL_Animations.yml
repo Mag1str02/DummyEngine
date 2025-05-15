@@ -65,13 +65,6 @@ Scene:
         UUID: 24116af57b632acd2464fbf641ae946a
         Vertex: Assets/Shaders/TexturedPhong/TexturedPhong.vs
         Fragment: Assets/Shaders/TexturedPhong/TexturedPhong.fs
-    Scripts:
-      SkyContoller:
-        Path: Assets/Scripts/Sky/SkyController.cpp
-        UUID: 15fa3d63323b421ce0329ae14b5d2111
-      SinMovement:
-        Path: Assets/Scripts/Gate/SinMovement.cpp
-        UUID: b54e9fbf43a0fd9437c0f2c1f19082ce
   Hierarchy:
     - Node:
         Name: Enviroment
@@ -110,12 +103,6 @@ Scene:
                 CLQ: [0, 0, 0.00100000005]
                 InnerCone: 0
                 OuterCone: 0
-              Script:
-                UUID: b54e9fbf43a0fd9437c0f2c1f19082ce
-                Fields:
-                  Speed: 1
-                  PosB: [0, 30, 60]
-                  PosA: [0, 0, -5]
           - Entity:
               Tag: Sky
               UUID: ed39f278255d3fc7823454ad61d716e5

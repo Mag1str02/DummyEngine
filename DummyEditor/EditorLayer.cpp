@@ -219,6 +219,10 @@ namespace DummyEngine {
     }
     void EditorLayer::OpenScene(const Path& scene_path) {
         DE_PROFILE_SCOPE("EditorLayer::OpenScene");
+        LOG_INFO("Opening scene {}", scene_path);
+
+        auto start = std::chrono::high_resolution_clock::now();
+
         if (scene_path.empty()) {
             scene_file_data_ = SceneFileData();
             current_scene_   = CreateRef<Scene>();
@@ -227,13 +231,15 @@ namespace DummyEngine {
             if (!res) {
                 return;
             }
-            scene_file_data_    = res.value();
+            scene_file_data_ = res.value();
+
             auto scripts_future = ScriptManager::LoadScripts(scene_file_data_.Assets.Scripts);
             LoadAssets();
             auto scripts_result = std::move(scripts_future) | Futures::Get();
             if (!scripts_result.has_value()) {
                 return;
             }
+            LOG_INFO("Serializing scene");
             current_scene_ = SceneLoader::Serialize(scene_file_data_.Hierarchy);
             if (current_scene_ == nullptr) {
                 return;
@@ -246,7 +252,9 @@ namespace DummyEngine {
         scene_state_        = SceneState::Editing;
         scene_script_state_ = SceneScriptState::Compiled;
         current_scene_->LoadPhysics(current_scene_);
-        LOG_INFO("Opened scene");
+
+        std::chrono::duration<double> duration = std::chrono::high_resolution_clock::now() - start;
+        LOG_INFO("Opened scene {} in {} seconds", scene_path, duration);
     }
     void EditorLayer::SaveScene(const Path& path) {
         scene_file_data_.Hierarchy = SceneLoader::Deserialize(current_scene_);
@@ -273,19 +281,23 @@ namespace DummyEngine {
     }
 
     void EditorLayer::LoadAssets() {
+        std::vector<TryFuture<Unit>> resources;
         for (const auto& asset : scene_file_data_.Assets.Textures) {
             AssetManager::AddTextureAsset(asset);
+            resources.emplace_back(ResourceManager::LoadTextureData(asset.ID) | Futures::MapOk([](auto&&) { return Unit(); }));
         }
         for (const auto& asset : scene_file_data_.Assets.Scripts) {
             AssetManager::AddScriptAsset(asset);
         }
         for (const auto& asset : scene_file_data_.Assets.RenderMeshes) {
             AssetManager::AddRenderMeshAsset(asset);
-            ResourceManager::LoadRenderMeshData(asset.ID) | Futures::Detach();
+            resources.emplace_back(ResourceManager::LoadRenderMeshData(asset.ID) | Futures::MapOk([](auto&&) { return Unit(); }));
+            resources.emplace_back(ResourceManager::LoadHitBox(asset.ID) | Futures::MapOk([](auto&&) { return Unit(); }));
         }
         for (const auto& asset : scene_file_data_.Assets.Shaders) {
             AssetManager::AddShaderAsset(asset);
         }
+        Futures::WaitAll(std::move(resources));
     }
     void EditorLayer::UnloadAssets() {
         for (const auto& asset : scene_file_data_.Assets.Textures) {
