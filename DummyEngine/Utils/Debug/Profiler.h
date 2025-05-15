@@ -51,6 +51,17 @@ namespace DummyEngine {
         ~ProfilerScopeObject();
     };
 
+    class ThreadFactory : public NDummyConcurrency::NRuntime::IThreadFactory {
+    public:
+        ThreadFactory(const std::string& base_name, int32_t group);
+        virtual std::thread LaunchThread(std::function<void()> main) override;
+
+    private:
+        std::deque<std::string> names_;
+        std::string             base_name_;
+        int32_t                 group_;
+    };
+
 }  // namespace DummyEngine
 
 #if DE_ENABLE_PROFILER

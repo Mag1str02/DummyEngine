@@ -21,7 +21,10 @@ namespace DummyEngine {
         ManualLifetime<FiberGroupHintProvider> fiber_hint_provider_;
         ManualLifetime<FiberInvoker>           fiber_invoker_;
 
-        ThreadPool engine_main_thread_pool_ = ThreadPool(1);
-        ThreadPool back_ground_thread_pool_ = ThreadPool(std::thread::hardware_concurrency() * 2);
+        ManualLifetime<ThreadFactory> main_factory_;
+        ManualLifetime<ThreadFactory> background_factory_;
+
+        ManualLifetime<ThreadPool> engine_main_thread_pool_;
+        ManualLifetime<ThreadPool> background_thread_pool_;
     };
 }  // namespace DummyEngine
