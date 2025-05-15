@@ -7,6 +7,7 @@ namespace DummyEngine {
     using namespace std::string_literals;
 
     Path FileSystem::OpenFileDialog(const std::string& description, const std::string& filter, const Path& default_path) {
+        DE_PROFILE_SCOPE("FileSystem::OpenFileDialog");
         Path path = Path();
         NFD_Init();
         nfdchar_t*      out_path;
@@ -26,6 +27,7 @@ namespace DummyEngine {
                                     const std::string& filter,
                                     const std::string& default_name,
                                     const Path&        default_path) {
+        DE_PROFILE_SCOPE("FileSystem::SaveFileDialog");
         Path path = Path();
         NFD_Init();
         nfdchar_t*      out_path;

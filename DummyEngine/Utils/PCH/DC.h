@@ -124,4 +124,5 @@ namespace DummyEngine {
         int32_t     group_;
         std::string base_name_;
     };
+
 }  // namespace DummyEngine

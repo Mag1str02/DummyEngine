@@ -62,4 +62,16 @@ namespace DummyEngine {
         Profiler::PopTimeLapse();
     }
 
+    ThreadFactory::ThreadFactory(const std::string& base_name, int32_t group) : base_name_(base_name), group_(group) {}
+    std::thread ThreadFactory::LaunchThread(std::function<void()> main) {
+        names_.emplace_back(std::format("{} ({})\0", base_name_, names_.size()));
+        const char* name  = names_.back().c_str();
+        // auto        group = group_;
+        return std::thread([main = std::move(main), name]() {
+            tracy::SetThreadName(name);
+            DE_PROFILE_SCOPE("Worker Thread Main");
+            main();
+        });
+    }
+
 }  // namespace DummyEngine
