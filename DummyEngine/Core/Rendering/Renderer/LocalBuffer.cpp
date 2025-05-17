@@ -34,9 +34,9 @@ namespace DummyEngine {
     }
     void LocalBuffer::Allocate(U32 size) {
         if (data_ != nullptr) {
-            free(data_);
+            delete (data_);
         }
-        data_ = (U8*)malloc(size);
+        data_ = new U8[size];
         size_ = size;
     }
 
