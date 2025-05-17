@@ -66,11 +66,16 @@ namespace DummyEngine {
     std::thread ThreadFactory::LaunchThread(std::function<void()> main) {
         names_.emplace_back(std::format("{} ({})\0", base_name_, names_.size()));
         const char* name  = names_.back().c_str();
-        // auto        group = group_;
-        return std::thread([main = std::move(main), name]() {
-            tracy::SetThreadName(name);
-            DE_PROFILE_SCOPE("Worker Thread Main");
-            main();
+        auto        group = group_;
+        return std::thread([main = std::move(main), name, group]() {
+            NDummyConcurrency::NImplementationLayer::Fiber fiber;
+            fiber.SetName(name, group);
+            NDummyConcurrency::NImplementationLayer::SwitchToFiber(fiber.Handle());
+            {
+                DE_PROFILE_SCOPE("Worker Thread Main");
+                main();
+            }
+            NDummyConcurrency::NImplementationLayer::SwitchToFiber(NDummyConcurrency::NImplementationLayer::FiberHandle());
         });
     }
 
