@@ -37,12 +37,21 @@ int main(int, char**) {
         return -1;
     }
     DE_ASSERT(gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress), "Failed to load glad");
+    SDL_GL_MakeCurrent(window, nullptr);
 
-    SDL_GL_MakeCurrent(window, gl_context);
-    SDL_GL_SetSwapInterval(1);  // Enable vsync
-    SDL_ShowWindow(window);
+    std::atomic<bool> done = false;
 
-    bool done = false;
+    std::thread render([&]() {
+        SDL_GL_MakeCurrent(window, gl_context);
+        SDL_GL_SetSwapInterval(1);  // Enable vsync
+        SDL_ShowWindow(window);
+
+        while (!done) {
+            glClearColor(1.0, 0, 1.0, 1.0);
+            glClear(GL_COLOR_BUFFER_BIT);
+            SDL_GL_SwapWindow(window);
+        }
+    });
 
     while (!done) {
         std::println("Start");
@@ -50,11 +59,8 @@ int main(int, char**) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) done = true;
         }
-
-        glClearColor(1.0, 0, 1.0, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT);
-        SDL_GL_SwapWindow(window);
     }
+    render.join();
 
     SDL_GL_DestroyContext(gl_context);
     SDL_DestroyWindow(window);
