@@ -10,7 +10,7 @@ namespace DummyEngine {
         engine_main_thread_pool_.Construct(main_factory_.Get(), 1);
         background_thread_pool_.Construct(background_factory_.Get(), std::thread::hardware_concurrency());
 
-        fiber_hint_provider_.Construct(&stack_pool_, "Background Fiber", 2);
+        fiber_hint_provider_.Construct(&stack_pool_, "Background Fiber", 3);
         fiber_invoker_.Construct(fiber_hint_provider_.Get(), background_thread_pool_.Get());
         background_thread_pool_->SetInvoker(fiber_invoker_.Get());
         return Unit();

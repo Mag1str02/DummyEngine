@@ -11,8 +11,9 @@ namespace DummyEngine {
     public:
         explicit Engine(FSetupApplication setup) : setup_function_(setup) {}
         int Run() {
-            Concurrency::Initialize();
             Profiler::Initialize();
+
+            Concurrency::Initialize();
             GLFW::Initialize();
             Concurrency::Start();
 
@@ -22,8 +23,9 @@ namespace DummyEngine {
 
             Concurrency::Stop();
             GLFW::Terminate();
-            Profiler::Terminate();
             Concurrency::Terminate();
+
+            Profiler::Terminate();
 
             return return_code;
         }
