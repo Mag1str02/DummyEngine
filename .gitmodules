@@ -29,3 +29,6 @@
 [submodule "Dependencies/DUMMY_CONCURRENCY"]
 	path = Dependencies/DUMMY_CONCURRENCY
 	url = https://github.com/Mag1str02/DummyConcurrency
+[submodule "Dependencies/SDL3"]
+	path = Dependencies/SDL3
+	url = https://github.com/libsdl-org/SDL

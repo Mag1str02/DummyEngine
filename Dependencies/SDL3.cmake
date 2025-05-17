@@ -1,0 +1,1 @@
+add_external_library(SDL3 SDL3/include SDL3-shared)

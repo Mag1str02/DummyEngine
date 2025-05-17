@@ -2,6 +2,7 @@ include(ASSIMP.cmake)
 include(GLAD.cmake)
 include(GLFW.cmake)
 include(GLM.cmake)
+include(SDL3.cmake)
 include(IMGUI.cmake)
 include(NFD.cmake)
 include(YAML.cmake)
@@ -13,6 +14,7 @@ function (link_dependencies TARGET)
     target_include_directories(${TARGET}
         PUBLIC ${EXTERNAL_ASSIMP_INCLUDE_DIR}
         PUBLIC ${EXTERNAL_GLAD_INCLUDE_DIR}
+        PUBLIC ${EXTERNAL_SDL3_INCLUDE_DIR}
         PUBLIC ${EXTERNAL_GLFW_INCLUDE_DIR}
         PUBLIC ${EXTERNAL_GLM_INCLUDE_DIR}
         PUBLIC ${EXTERNAL_IMGUI_INCLUDE_DIR}
@@ -25,6 +27,7 @@ function (link_dependencies TARGET)
     target_link_libraries(${TARGET}
         PUBLIC ${EXTERNAL_ASSIMP_LIBRARY}
         PUBLIC ${EXTERNAL_GLAD_LIBRARY}
+        PUBLIC ${EXTERNAL_SDL3_LIBRARY}
         PUBLIC ${EXTERNAL_GLFW_LIBRARY}
         PUBLIC ${EXTERNAL_GLM_LIBRARY}
         PUBLIC ${EXTERNAL_IMGUI_LIBRARY}
@@ -40,6 +43,7 @@ add_custom_target(BuildDependencies)
 add_dependencies(BuildDependencies 
     ${EXTERNAL_ASSIMP_LIBRARY}
     ${EXTERNAL_GLAD_LIBRARY}
+    ${EXTERNAL_SDL3_LIBRARY}
     ${EXTERNAL_GLFW_LIBRARY}
     ${EXTERNAL_GLM_LIBRARY}
     ${EXTERNAL_IMGUI_LIBRARY}
