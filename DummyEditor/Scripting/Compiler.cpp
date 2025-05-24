@@ -15,7 +15,7 @@ namespace DummyEngine {
         AddDefine("DE_ENABLE_ASSERTS=" + std::to_string(DE_ENABLE_ASSERTS));
         AddDefine("DE_ENABLE_PROFILER=" + std::to_string(DE_ENABLE_PROFILER));
         AddDefine("GLM_ENABLE_EXPERIMENTAL");
-
+        AddDefine("TRACY_ENABLE=true");
         return Unit();
     }
     S_TERMINATE() {
