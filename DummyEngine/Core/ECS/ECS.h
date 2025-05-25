@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DummyEngine/Utils/Debug/Demangler.h"                  // IWYU pragma: export
+#include "DummyEngine/Utils/Debug/Demangler.h"  // IWYU pragma: export
 
 #include "DummyEngine/Core/ECS/Implementation/ComponentArray.hpp"    // IWYU pragma: export
 #include "DummyEngine/Core/ECS/Implementation/ComponentManager.hpp"  // IWYU pragma: export

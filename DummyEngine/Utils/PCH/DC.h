@@ -1,8 +1,11 @@
 #pragma once
 
+#include "DummyEngine/Utils/Debug/Profiler.h"
+
 #include <DummyConcurrency/DummyConcurrency.hpp>  // IWYU pragma: export
 
 #include <deque>
+#include <queue>
 
 namespace DummyEngine {
 

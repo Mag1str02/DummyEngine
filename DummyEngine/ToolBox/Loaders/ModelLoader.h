@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DummyEngine/Core/ResourceManaging/Assets.h"
+#include "DummyEngine/Utils/PCH/DC.h"
 
 namespace DummyEngine {
     namespace fs = std::filesystem;

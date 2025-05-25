@@ -1,5 +1,7 @@
 #include "FileSystem.h"
 
+#include "DummyEngine/Utils/Debug/Profiler.h"
+
 #include <nfd.h>
 
 namespace DummyEngine {

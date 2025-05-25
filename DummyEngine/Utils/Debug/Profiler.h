@@ -3,6 +3,8 @@
 #include "DummyEngine/Utils/Helpers/Singleton.h"
 #include "DummyEngine/Utils/Types/Types.h"
 
+#include <DummyConcurrency/DummyConcurrency.hpp>
+
 #include <chrono>
 #include <queue>
 #include <stack>
