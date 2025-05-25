@@ -2,16 +2,24 @@
 
 #include "Storage.hpp"  // IWYU pragma: keep
 
+#include "DummyEngine/Core/ECS/ComponentArray.h"
+#include "DummyEngine/Core/ECS/ComponentManager.h"
 #include "DummyEngine/Core/ECS/Entity.h"
 #include "DummyEngine/Core/ECS/StorageView.h"
 
 namespace DummyEngine {
 
     template <typename... Components> StorageView<Components...>::StorageView(Storage* storage) {
+        const std::vector<U32>* min_entities        = nullptr;
+        auto                    update_min_entities = [&min_entities](const IComponentArray* array) {
+            const auto* entities = &array->GetEntities();
+            if (min_entities == nullptr || min_entities->size() > entities->size()) {
+                min_entities = entities;
+            }
+        };
+        ((update_min_entities(storage->component_manager_.GetComponentArray<Components>())), ...);
         auto signature = storage->component_manager_.BuildSignature<Components...>();
-        for (U32 entity = storage->entity_manager_.BeginEntity();  //
-             entity != storage->entity_manager_.EndEntity();       //
-             entity = storage->entity_manager_.NextEntity(entity)) {
+        for (const auto& entity : *min_entities) {
             if (!storage->component_manager_.Matches(entity, signature)) {
                 continue;
             }

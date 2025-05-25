@@ -20,6 +20,8 @@ namespace DummyEngine {
         template <typename... Components> Signature BuildSignature();
         bool                                        Matches(U32 id, const Signature& signature) const;
 
+        template <typename ComponentType> const IComponentArray* GetComponentArray() const;
+
     private:
         template <typename... Components> typename std::enable_if<sizeof...(Components) == 0, bool>::type ValidateComponents() const;
         template <typename T, typename... Components> bool                                                ValidateComponents() const;
