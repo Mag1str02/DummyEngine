@@ -54,7 +54,7 @@ buildType:
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
         DE_FORCE_NO_PCH: OFF
         DE_ENABLE_UBSAN: OFF
-        DE_ENABLE_ASAN: OFF
+        DE_ENABLE_ASAN: ON
         DE_ENABLE_TSAN: OFF
         DE_ENABLE_PROFILER: OFF
     ReleaseProfiler:

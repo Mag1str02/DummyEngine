@@ -21,7 +21,7 @@ namespace DummyEngine {
         return id_;
     }
     SceneHierarchy::Node SceneHierarchy::Node::GetParent() const {
-        DE_ASSERT(id_ == UINT32_MAX && owner_ != nullptr, "Use of GetParent on invalid SceneHierarchy::Node");
+        DE_ASSERT(id_ != UINT32_MAX && owner_ != nullptr, "Use of GetParent on invalid SceneHierarchy::Node (id={}, owner={})", id_, (void*)owner_);
         return Node(owner_, owner_->nodes_[id_].Parent);
     }
 

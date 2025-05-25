@@ -38,13 +38,14 @@ namespace DummyEngine {
         auto storage = storage_.lock();
         DE_ASSERT(storage, "Adding component to entity with destructed storage");
         auto ptr = storage->AddComponent<ComponentType>(id_, gen_, component);
-        //        DE_ASSERT(ptr, "Failed to add (", DemangledName<ComponentType>(), ") to entity (", id_, ")");
+        DE_ASSERT(ptr, "Failed to add (", DemangledName<ComponentType>(), ") to entity (", id_, ")");
         return *ptr;
     }
     template <typename ComponentType> ComponentType& Entity::Get() {
         auto storage = storage_.lock();
+        DE_ASSERT(storage, "Getting component of entity with destructed storage");
         auto ptr     = storage->GetComponent<ComponentType>(id_, gen_);
-        //        DE_ASSERT(ptr, "Failed to get (", DemangledName<ComponentType>(), ") of entity (", id_, ")");
+        DE_ASSERT(ptr, "Failed to get (", DemangledName<ComponentType>(), ") of entity (", id_, ")");
         return *ptr;
     }
     template <typename ComponentType> bool Entity::Has() const {

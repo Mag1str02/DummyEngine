@@ -64,17 +64,20 @@ namespace DummyEngine {
     S_METHOD_IMPL(bool, ReloadScripts, (const std::vector<ScriptAsset>& scripts, Ref<Scene> scene), (scripts, scene)) {
         DE_PROFILE_SCOPE("ScriptManager::ReloadScripts");
         if (scripts.empty()) {
+            LOG_INFO("Skipping reload scripts due to empty script list");
             return true;
         }
         std::vector<U32> recompile_ids = RecompilationList(scripts);
         if (recompile_ids.empty()) {
+            LOG_INFO("Skipping reload scripts due to all scripts are up to date");
             return true;
         }
 
         auto states = SaveSciptStates(scene);
 
         auto failed_file = CompileSelected(scripts, recompile_ids);
-        if (failed_file.has_value()) {
+        if (!failed_file.has_value()) {
+            LOG_WARNING("Failed to compile some scripts");
             return false;
         }
         auto new_library_name = LinkLibrary(scripts);
@@ -96,6 +99,7 @@ namespace DummyEngine {
     S_METHOD_IMPL(Unit, AttachScripts, (Ref<Scene> scene), (scene)) {
         DE_PROFILE_SCOPE("ScriptManager::AttachScripts");
         for (auto entity : scene->View<ScriptComponent>()) {
+            DE_ASSERT(entity.Valid(), "Bad entity");
             auto& script_component = entity.Get<ScriptComponent>();
             if (script_component.Valid()) {
                 script_component->AttachToScene(scene, entity);
@@ -234,10 +238,12 @@ namespace DummyEngine {
             auto path             = scripts[id].Path;
             auto compilation_unit = Futures::Submit(Concurrency::GetEngineBackgroundScheduler(), [path]() -> Result<Path> {
                 DE_PROFILE_SCOPE("ScriptManager::CompileSelected (Compile File)");
+                LOG_INFO("Compiling path {}", path);
                 if (!Compiler::Compile(path, PathToCompiledScript(path))) {
                     LOG_ERROR("Failed to compile script {}", path);
                     return Results::Failure();
                 }
+                LOG_INFO("Compiled path {}", path);
                 return Results::Ok(path);
             });
             futures.emplace_back(std::move(compilation_unit));

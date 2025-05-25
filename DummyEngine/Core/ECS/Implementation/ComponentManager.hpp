@@ -18,7 +18,9 @@ namespace DummyEngine {
                 array->RemoveComponent(entity_id);
             }
         }
-        signatures_[entity_id] = Signature();
+        if (signatures_.size() > entity_id) {
+            signatures_[entity_id] = Signature();
+        }
     }
     bool ComponentManager::Matches(U32 id, const Signature& signature) const {
         if (signatures_.size() <= id) {
