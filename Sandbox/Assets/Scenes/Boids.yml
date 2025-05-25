@@ -17,6 +17,10 @@ Scene:
         UUID: 24116af57b6022cd2464fbf641ae946a
         Vertex: Assets/Shaders/PBR/PBR.vs
         Fragment: Assets/Shaders/PBR/PBR.fs
+      Boids:
+        UUID: 24116af57b6022cd2464fbf641ae945c
+        Vertex: Assets/Shaders/Boid/Boid.vs
+        Fragment: Assets/Shaders/Boid/Boid.fs
     Scripts:
       BoidsController:
         Path: Assets/Scripts/Boids/BoidsController.cpp

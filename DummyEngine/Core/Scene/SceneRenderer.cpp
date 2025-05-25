@@ -290,6 +290,9 @@ namespace DummyEngine {
             }
         }
     }
+    void SceneRenderer::ForgetShader(UUID shader_id) {
+        shaders_.erase(shader_id);
+    }
     void SceneRenderer::InitializeShadowMap() {
         shadow_map_ =
             FrameBuffer::Create({static_cast<U32>(Console::GetInt("r_shadowmap_width")), static_cast<U32>(Console::GetInt("r_shadowmap_height"))});

@@ -117,7 +117,9 @@ namespace DummyEngine {
     }
     template <typename ComponentType> const IComponentArray* ComponentManager::GetComponentArray() const {
         auto it = component_arrays_.find(std::type_index(typeid(ComponentType)));
-        DE_ASSERT(it != component_arrays_.end(), "No component array for type {}", DemangledName<ComponentType>());
+        if (it == component_arrays_.end()) {
+            return nullptr;
+        }
         return it->second.get();
     }
 }  // namespace DummyEngine

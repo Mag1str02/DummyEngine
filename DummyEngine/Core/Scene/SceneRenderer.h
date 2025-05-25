@@ -23,6 +23,7 @@ namespace DummyEngine {
 
         void InitializeShadowMap();
         void RequestShader(UUID shader_id);
+        void ForgetShader(UUID shader_id);
 
     public:
         struct GraphicsSettings {
