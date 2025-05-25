@@ -66,7 +66,7 @@ Scene:
               Tag: Surface
               UUID: 30624f9f9f6a9301e3ee3e843d2c84a8
               Transformation:
-                Translation: [0, 2, 0]
+                Translation: [0, -2, 0]
                 TranslationOffset: [0, 0, 0]
                 Rotation: [0, 0, 0]
                 RotationOffset: [0, 0, 0]
@@ -92,6 +92,8 @@ Scene:
               Script:
                 UUID: 15fa3d63323bca9ceb7b9ae14b5d2222
                 Fields:
+                  BoundingBoxCenter: [0, 50, 0]
+                  BoundingBoxSize: 50
                   BoidsCount: 0
   RendererSettings:
     Bloom: false
