@@ -13,8 +13,8 @@ buildType:
         DE_FORCE_NO_PCH: OFF
         DE_ENABLE_UBSAN: OFF
         DE_ENABLE_ASAN: OFF
-        DE_ENABLE_MSAN: OFF
         DE_ENABLE_TSAN: OFF
+        DE_ENABLE_PROFILER: OFF
     Debug:
       short: Debug
       long: Debug build type
@@ -27,8 +27,8 @@ buildType:
         DE_FORCE_NO_PCH: OFF
         DE_ENABLE_UBSAN: OFF
         DE_ENABLE_ASAN: OFF
-        DE_ENABLE_MSAN: OFF
         DE_ENABLE_TSAN: OFF
+        DE_ENABLE_PROFILER: OFF
     ReleaseTSAN:
       short: ReleaseTSAN
       long: Optimized code with TSAN
@@ -41,8 +41,8 @@ buildType:
         DE_FORCE_NO_PCH: OFF
         DE_ENABLE_UBSAN: OFF
         DE_ENABLE_ASAN: OFF
-        DE_ENABLE_MSAN: OFF
         DE_ENABLE_TSAN: ON
+        DE_ENABLE_PROFILER: OFF
     ReleaseASAN:
       short: ReleaseASAN
       long: Optimized code with ASAN
@@ -54,23 +54,23 @@ buildType:
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
         DE_FORCE_NO_PCH: OFF
         DE_ENABLE_UBSAN: OFF
-        DE_ENABLE_ASAN: ON
-        DE_ENABLE_MSAN: OFF
+        DE_ENABLE_ASAN: OFF
         DE_ENABLE_TSAN: OFF
-    ReleaseMSAN:
-      short: ReleaseMSAN
-      long: Optimized code with MSAN
+        DE_ENABLE_PROFILER: OFF
+    ReleaseProfiler:
+      short: ReleaseProfiler
+      long: Optimized code with Tracy Profiler
       buildType: ReleaseWithDebInfo
       settings:
-        DE_BUILD_MODE: ReleaseMSAN
+        DE_BUILD_MODE: ReleaseProfiler
         DE_FORMAT_BEFORE_BUILD: OFF
         DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
         DE_FORCE_NO_PCH: OFF
         DE_ENABLE_UBSAN: OFF
         DE_ENABLE_ASAN: OFF
-        DE_ENABLE_MSAN: ON
         DE_ENABLE_TSAN: OFF
+        DE_ENABLE_PROFILER: ON
     ReleaseTidy:
       short: ReleaseTidy
       long: Runs clang-format before build, forces no PCH and runs clang-tidy checks
@@ -83,5 +83,5 @@ buildType:
         DE_FORCE_NO_PCH: ON
         DE_ENABLE_UBSAN: OFF
         DE_ENABLE_ASAN: OFF
-        DE_ENABLE_MSAN: OFF
         DE_ENABLE_TSAN: OFF
+        DE_ENABLE_PROFILER: OFF

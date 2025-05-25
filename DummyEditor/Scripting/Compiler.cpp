@@ -13,7 +13,9 @@ namespace DummyEngine {
         AddLinkLibrary("DummyEngineLib");
         AddDefine("DE_ENABLE_LOGGING=" + std::to_string(DE_ENABLE_LOGGING));
         AddDefine("DE_ENABLE_ASSERTS=" + std::to_string(DE_ENABLE_ASSERTS));
-        AddDefine("DE_ENABLE_PROFILER=" + std::to_string(DE_ENABLE_PROFILER));
+#if DE_ENABLE_PROFILER
+        AddDefine("DE_ENABLE_PROFILER");
+#endif
         AddDefine("GLM_ENABLE_EXPERIMENTAL");
         AddDefine("TRACY_ENABLE");
         AddDefine("TRACY_DELAYED_INIT");

@@ -10,11 +10,15 @@ namespace DummyEngine {
 
     SINGLETON_BASE(Profiler);
     S_INITIALIZE() {
+#if DE_ENABLE_PROFILER
         tracy::StartupProfiler();
+#endif
         return Unit();
     }
     S_TERMINATE() {
+#if DE_ENABLE_PROFILER
         tracy::ShutdownProfiler();
+#endif
         return Unit();
     }
 
