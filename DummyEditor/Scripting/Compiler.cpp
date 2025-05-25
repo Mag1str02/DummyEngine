@@ -15,7 +15,12 @@ namespace DummyEngine {
         AddDefine("DE_ENABLE_ASSERTS=" + std::to_string(DE_ENABLE_ASSERTS));
         AddDefine("DE_ENABLE_PROFILER=" + std::to_string(DE_ENABLE_PROFILER));
         AddDefine("GLM_ENABLE_EXPERIMENTAL");
-        AddDefine("TRACY_ENABLE=true");
+        AddDefine("TRACY_ENABLE");
+        AddDefine("TRACY_DELAYED_INIT");
+        AddDefine("TRACY_FIBERS");
+        AddDefine("TRACY_IMPORTS");
+        AddDefine("TRACY_MANUAL_LIFETIME");
+        AddDefine("TRACY_TIMER_FALLBACK");
         return Unit();
     }
     S_TERMINATE() {
