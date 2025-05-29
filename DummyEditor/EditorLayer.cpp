@@ -318,7 +318,7 @@ namespace DummyEngine {
         editor_camera_.AddComponent<FPSCamera>();
         editor_camera_.AddComponent<ScriptComponent>(ScriptEngine::CreateScript(ScriptManager::EditorScript("EditorCameraController")));
 
-        current_scene_->AttachSystem(ts_system_);
+        current_scene_->GetStorage()->AttachSystem(ts_system_);
         scene_hierarchy_.SetActiveScene(current_scene_);
         inspector_.SetScene(current_scene_);
         renderer_panel_.SetScene(current_scene_);

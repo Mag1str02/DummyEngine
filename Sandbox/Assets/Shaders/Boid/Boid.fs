@@ -98,23 +98,21 @@ vec3 SpotLightImpact(LightSource spot_light, vec3 v_Normal, vec3 view_direction,
 
 void main()
 {
-    // if (vec4(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)).a < 0.000000001) discard;
+    if (vec4(texture(u_Material.m_DiffuseMap, vs_in.TexCoords)).a < 0.000000001) discard;
 
-    // vec3 normalized_normal = normalize(vs_in.Normal);
-    // vec3 view_direction    = normalize(vs_in.CameraPos - vs_in.FragPos);
+    vec3 normalized_normal = normalize(vs_in.Normal);
+    vec3 view_direction    = normalize(vs_in.CameraPos - vs_in.FragPos);
 
-    // vec3 result = vec3(0.0);
+    vec3 result = vec3(0.0);
 
-    // for (int i = 0; i < u_LightAmount; ++i)
-    // {
-    //     if (lights[i].m_ConesAndType.z == 1) result += DirectionalLightImpact(lights[i], normalized_normal, view_direction);
-    //     if (lights[i].m_ConesAndType.z == 2) result += PointLightImpact(lights[i], normalized_normal, view_direction, vs_in.FragPos);
-    //     if (lights[i].m_ConesAndType.z == 3) result += SpotLightImpact(lights[i], normalized_normal, view_direction, vs_in.FragPos);
-    // }
-    // result += u_Material.m_Ambient * texture(u_Material.m_DiffuseMap, vs_in.TexCoords).rgb;
-    // result += u_Material.m_Emission * texture(u_Material.m_EmissionMap, vs_in.TexCoords).rgb * u_Material.m_EmissionStrength;
+    for (int i = 0; i < u_LightAmount; ++i)
+    {
+        if (lights[i].m_ConesAndType.z == 1) result += DirectionalLightImpact(lights[i], normalized_normal, view_direction);
+        if (lights[i].m_ConesAndType.z == 2) result += PointLightImpact(lights[i], normalized_normal, view_direction, vs_in.FragPos);
+        if (lights[i].m_ConesAndType.z == 3) result += SpotLightImpact(lights[i], normalized_normal, view_direction, vs_in.FragPos);
+    }
+    result += u_Material.m_Ambient * texture(u_Material.m_DiffuseMap, vs_in.TexCoords).rgb;
+    result += u_Material.m_Emission * texture(u_Material.m_EmissionMap, vs_in.TexCoords).rgb * u_Material.m_EmissionStrength;
 
-    // f_FragColor = vec4(result, 1.0);
-
-    f_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    f_FragColor = vec4(result, 1.0);
 }

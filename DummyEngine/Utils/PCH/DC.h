@@ -62,6 +62,10 @@ namespace DummyEngine {
 
     }  // namespace Fibers
 
+    namespace Runtime {
+        using NDummyConcurrency::NRuntime::Submit;
+    }
+
     template <typename T>
     using Result = NDummyConcurrency::Result<T>;
     template <typename T>

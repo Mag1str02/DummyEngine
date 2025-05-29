@@ -10,6 +10,7 @@
 namespace DummyEngine {
 
     template <typename... Components> StorageView<Components...>::StorageView(Storage* storage) {
+        DE_PROFILE_SCOPE("StorageView::StorageView");
         const std::vector<U32>* min_entities        = nullptr;
         auto                    update_min_entities = [&min_entities](const IComponentArray* array) {
             if (array == nullptr) {
@@ -20,11 +21,15 @@ namespace DummyEngine {
                 min_entities = entities;
             }
         };
-        ((update_min_entities(storage->component_manager_.GetComponentArray<Components>())), ...);
+        {
+            DE_PROFILE_SCOPE("StorageView::StorageView (UpdateMinEntities)");
+            ((update_min_entities(storage->component_manager_.GetComponentArray<Components>())), ...);
+        }
         auto signature = storage->component_manager_.BuildSignature<Components...>();
         if (min_entities == nullptr) {
             return;
         }
+        view_.reserve(min_entities->size());
         for (const auto& entity : *min_entities) {
             if (!storage->component_manager_.Matches(entity, signature)) {
                 continue;
@@ -45,6 +50,9 @@ namespace DummyEngine {
     }
     template <typename... Components> bool StorageView<Components...>::Empty() {
         return begin() == end();
+    }
+    template <typename... Components> const std::vector<Entity>& StorageView<Components...>::Entities() const {
+        return view_;
     }
 
 }  // namespace DummyEngine

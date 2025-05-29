@@ -1,6 +1,8 @@
 #include "DummyEngine/DummyEngine.h"
 
+#include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/random.hpp>
+#include <glm/gtx/compatibility.hpp>
 
 using namespace DummyEngine;
 
@@ -24,6 +26,12 @@ private:
     U32              boid_id_;
 };
 
+enum class UpdateType {
+    Observe,
+    Move,
+    Transform,
+};
+
 class BoidsController : public Script {
     SCRIPT(BoidsController)
     LOG_AUTHOR(BoidsController)
@@ -33,47 +41,73 @@ public:
         InitMesh();
         InitShader();
         LOG_INFO("Initialized boids controller");
+
+        auto storage = GetStorage();
+        storage->RegisterComponent<BoidComponent>();
     }
 
     virtual void OnUpdate(float dt) override {
-        for (auto& boid : boids_) {
-            boid.Get<BoidComponent>().ObserveOthers();
-        }
-        for (auto& boid : boids_) {
-            boid.Get<BoidComponent>().Move(dt);
-        }
+        UpdateBoids(UpdateType::Observe, dt);
+        UpdateBoids(UpdateType::Move, dt);
+        UpdateBoids(UpdateType::Transform, dt);
     }
     virtual void OnRender() override {
         ChangeBoidsCount();
         Render();
     }
     virtual void OnDetach() override {
+        auto storage = GetStorage();
         for (auto& boid : boids_) {
             boid.Destroy();
         }
-        GetStorage()->UnRegisterComponent<BoidComponent>();
+        storage->UnRegisterComponent<BoidComponent>();
+
         LOG_INFO("Destroyed boids component");
     }
 
-    
     Mat4& GetTransfrom(U32 boid_id) { return instance_buffer_->At(boid_id).Get<Mat4>(0); }
     float GetSpeed() { return speed_; }
+    float GetSteerStrength() { return steer_strength_; }
 
 private:
+    void UpdateBoids(UpdateType type, float dt) {
+        DE_PROFILE_SCOPE("BoidsController::Update");
+        U32        size       = boids_.size();
+        U32        group_size = std::max(size / std::thread::hardware_concurrency() / 4, 200u);
+        FWaitGroup wg;
+        for (U32 i = 0; i < size; i += group_size) {
+            wg.Add(1);
+            Runtime::Submit(Concurrency::GetEngineBackgroundScheduler(), [this, type, dt, i, group_size, &wg] {
+                DE_PROFILE_SCOPE("BoidsController::GroupUpdate");
+                U32 end = std::min<U32>(boids_.size(), i + group_size);
+                for (U32 k = i; k < end; ++k) {
+                    auto& comp = boids_[k].Get<BoidComponent>();
+                    switch (type) {
+                        case UpdateType::Transform: comp.UpdateTransform(); break;
+                        case UpdateType::Move: comp.Move(dt); break;
+                        case UpdateType::Observe: comp.ObserveOthers(); break;
+                    }
+                }
+                wg.Done();
+            });
+        }
+        wg.Wait();
+    }
+
     void Render() {
         DE_PROFILE_SCOPE("BoidsController::Render");
+        boid_material_.Albedo = albedo_;
+
         {
             DE_PROFILE_SCOPE("BoidsController::Render (PushData)");
 
-            for (auto& boid : boids_) {
-                boid.Get<BoidComponent>().UpdateTransform();
-            }
             instance_buffer_->PushData();
         }
         {
             DE_PROFILE_SCOPE("BoidsController::Render (InstancedRender)");
             boid_shader_->Bind();
-            boid_shader_->Bind();
+            boid_material_.Apply(boid_shader_);
+
             Renderer::GetRenderAPI().DrawInstanced(boids_vao_, boids_count_);
         }
     }
@@ -95,6 +129,7 @@ private:
         }
         if (changed) {
             LOG_INFO("Updated boids count");
+            UpdateBoids(UpdateType::Transform, 0);
         }
     }
     void InitMesh() {
@@ -132,6 +167,7 @@ private:
             boids_vao_->AddVertexBuffer(instance_buffer_);
             boids_vao_->SetIndexBuffer(index_buffer);
         }
+        boid_material_.Ambient = Vec3(0.2);
     }
     void InitShader() {
         auto id = UUID("24116af57b6022cd2464fbf641ae945c");
@@ -152,7 +188,6 @@ private:
         }
         boid_shader_ = shader.value();
     }
-
     Entity CreateBoid() {
         DE_PROFILE_SCOPE("BoidsController::CreateBoid");
         auto boid = GetScene()->CreateEmptyEntity();
@@ -162,8 +197,6 @@ private:
         auto scale     = Random::Float(0.5, 1);
         boid.Add<BoidComponent>(BoidComponent{pos, direction, scale, this, (U32)boids_.size()});
 
-        LOG_INFO("Created boid at pos {} with scale {}", pos, scale);
-
         return boid;
     }
 
@@ -172,20 +205,26 @@ private:
 
     U32   boids_count_         = 0;
     Vec3  bounding_box_center_ = Vec3(0.0f);
+    Vec3  albedo_              = Vec3(1.0f);
     U32   bounding_box_size_   = 10;
-    float speed_               = 0.01;
+    float speed_               = 1;
+    float steer_strength_      = 0.1f;
 
     std::vector<Entity> boids_;
 
     Ref<Shader>       boid_shader_;
     Ref<VertexArray>  boids_vao_;
     Ref<VertexBuffer> instance_buffer_;
+    Material          boid_material_;
 };
 
 SCRIPT_BASE(BoidsController,
             FIELD("BoidsCount", boids_count_),                 //
             FIELD("BoundingBoxSize", bounding_box_size_),      //
             FIELD("BoundingBoxCenter", bounding_box_center_),  //
+            FIELD("Albedo", albedo_),                          //
+            FIELD("Speed", speed_),                            //
+            FIELD("SteerStrength", steer_strength_),           //
 )
 
 BoidComponent::BoidComponent(Vec3 pos, Vec3 direction, float scale, BoidsController* controller, U32 boid_id) :
@@ -197,6 +236,9 @@ void BoidComponent::UpdateTransform() {
 }
 
 void BoidComponent::Move(float dt) {
-    pos_ += direction_ * dt;
+    pos_ += direction_ * dt * controller_->GetSpeed();
 }
-void BoidComponent::ObserveOthers() {}
+void BoidComponent::ObserveOthers() {
+    auto new_direction = glm::sphericalRand<float>(1.0);
+    direction_         = glm::normalize(glm::lerp(direction_, new_direction, controller_->GetSteerStrength()));
+}
