@@ -87,6 +87,7 @@ namespace DummyEngine {
         void                     AttachToScene(WeakRef<Scene> scene, Entity entity);
         bool                     AttachedToScene() const;
         Ref<Scene>               GetScene() const;
+        Ref<Storage>             GetStorage() const;
 
     protected:
         virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const = 0;
@@ -169,6 +170,7 @@ protected:                                                                      
         return new type();                                     \
     }                                                                                            \
     DE_SCRIPT_API void type##Delete(Script* script) {                                            \
+        script->OnDetach();                                                                      \
         delete script;                                                                           \
     }
 

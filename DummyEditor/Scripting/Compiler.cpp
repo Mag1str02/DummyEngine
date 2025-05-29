@@ -12,8 +12,10 @@ namespace DummyEngine {
         AddIncludeDir("../Dependencies/DUMMY_CONCURRENCY");
         AddLinkLibrary("DummyEngineLib");
         AddLinkLibrary("TracyClient");
+        AddLinkLibrary("DummyConcurrency");
         AddDefine("DE_ENABLE_LOGGING=" + std::to_string(DE_ENABLE_LOGGING));
         AddDefine("DE_ENABLE_ASSERTS=" + std::to_string(DE_ENABLE_ASSERTS));
+        AddDefine("DE_LIBRARY_CONSUMER");
 #if DE_ENABLE_PROFILER
         AddDefine("DE_ENABLE_PROFILER");
 #endif

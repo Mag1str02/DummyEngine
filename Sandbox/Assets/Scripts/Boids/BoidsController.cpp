@@ -1,8 +1,28 @@
 #include "DummyEngine/DummyEngine.h"
 
+#include <glm/gtc/random.hpp>
+
 using namespace DummyEngine;
 
-class BoidComponent {};
+class BoidsController;
+
+class BoidComponent {
+public:
+    explicit BoidComponent(Vec3 pos, Vec3 direction, float scale, BoidsController* controller, U32 boid_id);
+    virtual ~BoidComponent() = default;
+
+    void ObserveOthers();
+    void Move(float dt);
+    void UpdateTransform();
+
+private:
+    float scale_;
+    Vec3  pos_;
+    Vec3  direction_;
+
+    BoidsController* controller_;
+    U32              boid_id_;
+};
 
 class BoidsController : public Script {
     SCRIPT(BoidsController)
@@ -15,7 +35,14 @@ public:
         LOG_INFO("Initialized boids controller");
     }
 
-    virtual void OnUpdate(float) override {}
+    virtual void OnUpdate(float dt) override {
+        for (auto& boid : boids_) {
+            boid.Get<BoidComponent>().ObserveOthers();
+        }
+        for (auto& boid : boids_) {
+            boid.Get<BoidComponent>().Move(dt);
+        }
+    }
     virtual void OnRender() override {
         ChangeBoidsCount();
         Render();
@@ -24,18 +51,31 @@ public:
         for (auto& boid : boids_) {
             boid.Destroy();
         }
+        GetStorage()->UnRegisterComponent<BoidComponent>();
+        LOG_INFO("Destroyed boids component");
     }
+
+    
+    Mat4& GetTransfrom(U32 boid_id) { return instance_buffer_->At(boid_id).Get<Mat4>(0); }
+    float GetSpeed() { return speed_; }
 
 private:
     void Render() {
-        for (U32 i = 0; i < boids_.size(); ++i) {
-            const auto& transform                = boids_[i].Get<TransformComponent>();
-            instance_buffer_->At(i).Get<Mat4>(0) = transform.GetTransform();
+        DE_PROFILE_SCOPE("BoidsController::Render");
+        {
+            DE_PROFILE_SCOPE("BoidsController::Render (PushData)");
+
+            for (auto& boid : boids_) {
+                boid.Get<BoidComponent>().UpdateTransform();
+            }
+            instance_buffer_->PushData();
         }
-        instance_buffer_->PushData();
-        boid_shader_->Bind();
-        boid_shader_->Bind();
-        Renderer::GetRenderAPI().DrawInstanced(boids_vao_, boids_count_);
+        {
+            DE_PROFILE_SCOPE("BoidsController::Render (InstancedRender)");
+            boid_shader_->Bind();
+            boid_shader_->Bind();
+            Renderer::GetRenderAPI().DrawInstanced(boids_vao_, boids_count_);
+        }
     }
     void ChangeBoidsCount() {
         DE_PROFILE_SCOPE("BoidsController::ChangeBoidsCount");
@@ -117,14 +157,12 @@ private:
         DE_PROFILE_SCOPE("BoidsController::CreateBoid");
         auto boid = GetScene()->CreateEmptyEntity();
 
-        auto& transform       = boid.Add<TransformComponent>();
-        transform.Translation = bounding_box_center_;
-        transform.Translation.x += Random::Float(-(float)bounding_box_size_, +bounding_box_size_);
-        transform.Translation.y += Random::Float(-(float)bounding_box_size_, +bounding_box_size_);
-        transform.Translation.z += Random::Float(-(float)bounding_box_size_, +bounding_box_size_);
-        transform.Scale = Vec3(Random::Float(0.5, 1));
+        auto pos       = glm::linearRand(bounding_box_center_ - Vec3(bounding_box_size_), bounding_box_center_ + Vec3(bounding_box_size_));
+        auto direction = glm::sphericalRand(1.0);
+        auto scale     = Random::Float(0.5, 1);
+        boid.Add<BoidComponent>(BoidComponent{pos, direction, scale, this, (U32)boids_.size()});
 
-        LOG_INFO("Created boid at pos {} with scale {}", transform.Translation, transform.Scale);
+        LOG_INFO("Created boid at pos {} with scale {}", pos, scale);
 
         return boid;
     }
@@ -132,9 +170,10 @@ private:
 private:
     static constexpr U32 kBoidsLimit = 10'000;
 
-    U32  boids_count_         = 0;
-    Vec3 bounding_box_center_ = Vec3(0.0f);
-    U32  bounding_box_size_   = 10;
+    U32   boids_count_         = 0;
+    Vec3  bounding_box_center_ = Vec3(0.0f);
+    U32   bounding_box_size_   = 10;
+    float speed_               = 0.01;
 
     std::vector<Entity> boids_;
 
@@ -148,3 +187,16 @@ SCRIPT_BASE(BoidsController,
             FIELD("BoundingBoxSize", bounding_box_size_),      //
             FIELD("BoundingBoxCenter", bounding_box_center_),  //
 )
+
+BoidComponent::BoidComponent(Vec3 pos, Vec3 direction, float scale, BoidsController* controller, U32 boid_id) :
+    scale_(scale), pos_(pos), direction_(direction), controller_(controller), boid_id_(boid_id) {}
+
+void BoidComponent::UpdateTransform() {
+    controller_->GetTransfrom(boid_id_) =
+        glm::translate(pos_) * glm::toMat4(glm::quatLookAt(direction_, Vec3(0.0, 1.0, 0.0))) * glm::scale(Vec3(scale_));
+}
+
+void BoidComponent::Move(float dt) {
+    pos_ += direction_ * dt;
+}
+void BoidComponent::ObserveOthers() {}

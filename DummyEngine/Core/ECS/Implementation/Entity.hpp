@@ -7,6 +7,9 @@ namespace DummyEngine {
 #ifdef ECS_IMPLEMENTATION
     Entity::Entity() : id_(0), gen_(0) {}
 
+    Ref<Storage> Entity::GetStorage() const {
+        return storage_.lock();
+    }
     bool Entity::Valid() const {
         auto storage = storage_.lock();
         return storage && storage->Valid(id_, gen_);

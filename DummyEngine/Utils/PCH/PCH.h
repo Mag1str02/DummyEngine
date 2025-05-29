@@ -17,8 +17,8 @@
 #include "DummyEngine/Utils/Helpers/StringOperations.h"  // IWYU pragma: export
 #include "DummyEngine/Utils/Helpers/Timer.h"             // IWYU pragma: export
 
-#include "DummyEngine/Utils/Types/Constants.h"  // IWYU pragma: export
-#include "DummyEngine/Utils/Types/Types.h"      // IWYU pragma: export
-#include "DummyEngine/Utils/Types/UUID.h"       // IWYU pragma: export
+#include "DummyEngine/Utils/Types/Constants.h"   // IWYU pragma: export
+#include "DummyEngine/Utils/Types/Types.h"       // IWYU pragma: export
+#include "DummyEngine/Utils/Types/UUID.h"        // IWYU pragma: export
 
 #include "DC.h"

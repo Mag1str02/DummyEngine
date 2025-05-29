@@ -122,4 +122,7 @@ namespace DummyEngine {
     Ref<Scene> Script::GetScene() const {
         return m_Scene.lock();
     }
+    Ref<Storage> Script::GetStorage() const {
+        return m_Entity.GetStorage();
+    }
 }  // namespace DummyEngine
