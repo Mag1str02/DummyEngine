@@ -21,6 +21,7 @@ private:
     float scale_;
     Vec3  pos_;
     Vec3  direction_;
+    Vec3  new_direction_;
 
     BoidsController* controller_;
     U32              boid_id_;
@@ -43,7 +44,6 @@ public:
         LOG_INFO("Initialized boids controller");
 
         auto storage = GetStorage();
-        storage->RegisterComponent<BoidComponent>();
     }
 
     virtual void OnUpdate(float dt) override {
@@ -55,19 +55,9 @@ public:
         ChangeBoidsCount();
         Render();
     }
-    virtual void OnDetach() override {
-        auto storage = GetStorage();
-        for (auto& boid : boids_) {
-            boid.Destroy();
-        }
-        storage->UnRegisterComponent<BoidComponent>();
-
-        LOG_INFO("Destroyed boids component");
-    }
+    virtual void OnDetach() override { LOG_INFO("Destroyed boids component"); }
 
     Mat4& GetTransfrom(U32 boid_id) { return instance_buffer_->At(boid_id).Get<Mat4>(0); }
-    float GetSpeed() { return speed_; }
-    float GetSteerStrength() { return steer_strength_; }
 
 private:
     void UpdateBoids(UpdateType type, float dt) {
@@ -81,7 +71,7 @@ private:
                 DE_PROFILE_SCOPE("BoidsController::GroupUpdate");
                 U32 end = std::min<U32>(boids_.size(), i + group_size);
                 for (U32 k = i; k < end; ++k) {
-                    auto& comp = boids_[k].Get<BoidComponent>();
+                    auto& comp = boids_[k];
                     switch (type) {
                         case UpdateType::Transform: comp.UpdateTransform(); break;
                         case UpdateType::Move: comp.Move(dt); break;
@@ -117,18 +107,13 @@ private:
             boids_count_ = kBoidsLimit;
         }
         bool changed = boids_count_ != boids_.size();
-        if (changed) {
-            LOG_INFO("Updating boids count from {} to {}", boids_.size(), boids_count_);
-        }
         while (boids_count_ < boids_.size()) {
-            boids_.back().Destroy();
             boids_.pop_back();
         }
         while (boids_count_ > boids_.size()) {
             boids_.emplace_back(CreateBoid());
         }
         if (changed) {
-            LOG_INFO("Updated boids count");
             UpdateBoids(UpdateType::Transform, 0);
         }
     }
@@ -188,29 +173,34 @@ private:
         }
         boid_shader_ = shader.value();
     }
-    Entity CreateBoid() {
+    BoidComponent CreateBoid() {
         DE_PROFILE_SCOPE("BoidsController::CreateBoid");
-        auto boid = GetScene()->CreateEmptyEntity();
-
         auto pos       = glm::linearRand(bounding_box_center_ - Vec3(bounding_box_size_), bounding_box_center_ + Vec3(bounding_box_size_));
         auto direction = glm::sphericalRand(1.0);
         auto scale     = Random::Float(0.5, 1);
-        boid.Add<BoidComponent>(BoidComponent{pos, direction, scale, this, (U32)boids_.size()});
-
-        return boid;
+        return BoidComponent{pos, direction, scale, this, (U32)boids_.size()};
     }
 
 private:
+    friend class BoidComponent;
     static constexpr U32 kBoidsLimit = 10'000;
 
     U32   boids_count_         = 0;
     Vec3  bounding_box_center_ = Vec3(0.0f);
     Vec3  albedo_              = Vec3(1.0f);
-    U32   bounding_box_size_   = 10;
+    float bounding_box_size_   = 50;
     float speed_               = 1;
-    float steer_strength_      = 0.1f;
 
-    std::vector<Entity> boids_;
+    float random_weight_    = 1.0f;
+    float initial_weight_   = 1.0f;
+    float alignment_weight_ = 1.0f;
+    float avoid_weight_     = 1.0f;
+    float center_weight_    = 1.0f;
+    float border_weight_    = 1.0f;
+    float alignment_radius_ = 50.0f;
+    float avoid_radius_     = 50.0f;
+
+    std::vector<BoidComponent> boids_;
 
     Ref<Shader>       boid_shader_;
     Ref<VertexArray>  boids_vao_;
@@ -219,12 +209,21 @@ private:
 };
 
 SCRIPT_BASE(BoidsController,
-            FIELD("BoidsCount", boids_count_),                 //
-            FIELD("BoundingBoxSize", bounding_box_size_),      //
-            FIELD("BoundingBoxCenter", bounding_box_center_),  //
-            FIELD("Albedo", albedo_),                          //
-            FIELD("Speed", speed_),                            //
-            FIELD("SteerStrength", steer_strength_),           //
+            FIELD("Boids Count", boids_count_),                 //
+            FIELD("BoundingBox Size", bounding_box_size_),      //
+            FIELD("BoundingBox Center", bounding_box_center_),  //
+            FIELD("Albedo", albedo_),                           //
+
+            FIELD("Alignment Radius", alignment_radius_),  //
+            FIELD("Avoid Radius", avoid_radius_),          //
+            FIELD("Speed", speed_),                        //
+
+            FIELD("Weight Random", random_weight_),        //
+            FIELD("Weight Initial", initial_weight_),      //
+            FIELD("Weight Alignment", alignment_weight_),  //
+            FIELD("Weight Center", center_weight_),        //
+            FIELD("Weight Border", border_weight_),        //
+            FIELD("Weight Avoid", avoid_weight_),          //
 )
 
 BoidComponent::BoidComponent(Vec3 pos, Vec3 direction, float scale, BoidsController* controller, U32 boid_id) :
@@ -236,9 +235,76 @@ void BoidComponent::UpdateTransform() {
 }
 
 void BoidComponent::Move(float dt) {
-    pos_ += direction_ * dt * controller_->GetSpeed();
+    direction_ = new_direction_;
+    pos_ += direction_ * dt * controller_->speed_;
+
+    // auto box_size = Vec3(controller_->bounding_box_size_);
+    // auto box_min  = controller_->bounding_box_center_ - box_size;
+
+    // pos_ = glm::mod(pos_ - box_min, box_size * 2.0f) + box_min;
 }
 void BoidComponent::ObserveOthers() {
-    auto new_direction = glm::sphericalRand<float>(1.0);
-    direction_         = glm::normalize(glm::lerp(direction_, new_direction, controller_->GetSteerStrength()));
+    DE_PROFILE_SCOPE("BoidComponent::ObserveOthers");
+    // float total_weight = 0.001;
+    Vec3 total_vec = Vec3(0.0);
+
+    // Current direction
+    {
+        // total_weight += controller_->initial_weight_;
+        total_vec += direction_ * controller_->initial_weight_;
+    }
+
+    // Random
+    {
+        // total_weight += controller_->random_weight_;
+        total_vec += glm::sphericalRand<float>(1.0) * controller_->random_weight_;
+    }
+
+    // Border
+    {
+        // total_weight += controller_->random_weight_;
+
+        auto box_size = Vec3(controller_->bounding_box_size_);
+        auto box_min  = controller_->bounding_box_center_ - box_size;
+
+        glm::vec3 clamped    = glm::clamp(pos_, box_min, box_min + box_size * 2.0f);
+        auto      center_vec = (clamped - pos_);
+        total_vec += center_vec * controller_->border_weight_;
+    }
+
+    // Align and avoid
+    {
+        DE_PROFILE_SCOPE("BoidComponent::ObserveOthers (A&A)");
+        Vec3 alignment(0.0f);
+        Vec3 avoid(0.0f);
+        Vec3 center(0.0f);
+        U32  count_alignment = 0;
+        U32  count_avoid     = 0;
+
+        for (auto& boid : controller_->boids_) {
+            Vec3  pos_delta = pos_ - boid.pos_;
+            float distance  = glm::length(pos_delta);
+            center += boid.pos_;
+
+            if (distance < controller_->alignment_radius_) {
+                float strength = (controller_->alignment_radius_ - distance) / controller_->alignment_radius_;
+                alignment += boid.direction_ * strength;
+                ++count_alignment;
+            }
+            if (distance < controller_->avoid_radius_) {
+                float strength = (controller_->avoid_radius_ - distance) / controller_->avoid_radius_;
+                avoid += pos_delta * strength;
+                ++count_avoid;
+            }
+        }
+        alignment /= count_alignment;
+        avoid /= count_avoid;
+        center /= controller_->boids_count_;
+
+        total_vec += alignment * controller_->alignment_weight_;
+        total_vec += avoid * controller_->avoid_weight_;
+        total_vec += (center - pos_) * controller_->center_weight_;
+    }
+
+    new_direction_ = glm::normalize(total_vec);
 }
