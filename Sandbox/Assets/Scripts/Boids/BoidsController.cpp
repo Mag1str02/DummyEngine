@@ -62,14 +62,13 @@ public:
 private:
     void UpdateBoids(UpdateType type, float dt) {
         DE_PROFILE_SCOPE("BoidsController::Update");
-        U32        size       = boids_.size();
-        U32        group_size = std::max(size / std::thread::hardware_concurrency() / 4, 200u);
+        U32        size = boids_.size();
         FWaitGroup wg;
-        for (U32 i = 0; i < size; i += group_size) {
+        for (U32 i = 0; i < size; i += group_size_) {
             wg.Add(1);
-            Runtime::Submit(Concurrency::GetEngineBackgroundScheduler(), [this, type, dt, i, group_size, &wg] {
+            Runtime::Submit(Concurrency::GetEngineBackgroundScheduler(), [this, type, dt, i, &wg] {
                 DE_PROFILE_SCOPE("BoidsController::GroupUpdate");
-                U32 end = std::min<U32>(boids_.size(), i + group_size);
+                U32 end = std::min<U32>(boids_.size(), i + group_size_);
                 for (U32 k = i; k < end; ++k) {
                     auto& comp = boids_[k];
                     switch (type) {
@@ -114,7 +113,9 @@ private:
             boids_.emplace_back(CreateBoid());
         }
         if (changed) {
+            group_size_ = 20;
             UpdateBoids(UpdateType::Transform, 0);
+            LOG_INFO("Boids count changed to {} with group size {}", boids_count_, group_size_);
         }
     }
     void InitMesh() {
@@ -206,6 +207,7 @@ private:
     Ref<VertexArray>  boids_vao_;
     Ref<VertexBuffer> instance_buffer_;
     Material          boid_material_;
+    U32               group_size_;
 };
 
 SCRIPT_BASE(BoidsController,
