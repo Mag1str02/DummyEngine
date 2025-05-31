@@ -21,10 +21,12 @@ namespace DummyEngine {
 #if DE_ENABLE_PROFILER
         AddDefine("DE_ENABLE_PROFILER");
 #endif
+#if UNIX
+        AddDefine("UNIX");
+#endif
 #if TRACY_ENABLE
         AddDefine("TRACY_ENABLE");
 #endif
-
         AddDefine("TRACY_DELAYED_INIT");
         AddDefine("TRACY_FIBERS");
         AddDefine("TRACY_IMPORTS");
