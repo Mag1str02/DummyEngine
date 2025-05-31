@@ -198,8 +198,10 @@ private:
     float avoid_weight_     = 1.0f;
     float center_weight_    = 1.0f;
     float border_weight_    = 1.0f;
+
     float alignment_radius_ = 50.0f;
     float avoid_radius_     = 50.0f;
+    float center_radius_    = 50.0f;
 
     std::vector<BoidComponent> boids_;
 
@@ -216,8 +218,9 @@ SCRIPT_BASE(BoidsController,
             FIELD("BoundingBox Center", bounding_box_center_),  //
             FIELD("Albedo", albedo_),                           //
 
-            FIELD("Alignment Radius", alignment_radius_),  //
-            FIELD("Avoid Radius", avoid_radius_),          //
+            FIELD("Radius Alignment", alignment_radius_),  //
+            FIELD("Radius Avoid", avoid_radius_),          //
+            FIELD("Radius Center", center_radius_),        //
             FIELD("Speed", speed_),                        //
 
             FIELD("Weight Random", random_weight_),        //
@@ -282,11 +285,15 @@ void BoidComponent::ObserveOthers() {
         Vec3 center(0.0f);
         U32  count_alignment = 0;
         U32  count_avoid     = 0;
+        U32  count_center    = 0;
 
         for (auto& boid : controller_->boids_) {
             Vec3  pos_delta = pos_ - boid.pos_;
             float distance  = glm::length(pos_delta);
-            center += boid.pos_;
+            if (distance < controller_->center_radius_) {
+                center += boid.pos_;
+                ++count_center;
+            }
 
             if (distance < controller_->alignment_radius_) {
                 float strength = (controller_->alignment_radius_ - distance) / controller_->alignment_radius_;
@@ -299,9 +306,15 @@ void BoidComponent::ObserveOthers() {
                 ++count_avoid;
             }
         }
-        alignment /= count_alignment;
-        avoid /= count_avoid;
-        center /= controller_->boids_count_;
+        if (count_alignment != 0) {
+            alignment /= count_alignment;
+        }
+        if (count_avoid != 0) {
+            avoid /= count_avoid;
+        }
+        if (count_center != 0) {
+            center /= count_center;
+        }
 
         total_vec += alignment * controller_->alignment_weight_;
         total_vec += avoid * controller_->avoid_weight_;
