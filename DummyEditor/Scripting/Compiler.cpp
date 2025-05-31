@@ -9,11 +9,33 @@ namespace DummyEngine {
         AddIncludeDir("..");
         AddIncludeDir("../Dependencies/GLM");
         AddIncludeDir("../Dependencies/TRACY/public");
+        AddIncludeDir("../Dependencies/DUMMY_CONCURRENCY");
         AddLinkLibrary("DummyEngineLib");
+        AddLinkLibrary("TracyClient");
+        AddLinkLibrary("DummyConcurrency");
         AddDefine("DE_ENABLE_LOGGING=" + std::to_string(DE_ENABLE_LOGGING));
         AddDefine("DE_ENABLE_ASSERTS=" + std::to_string(DE_ENABLE_ASSERTS));
-        AddDefine("DE_ENABLE_PROFILER=" + std::to_string(DE_ENABLE_PROFILER));
+        AddDefine("DE_LIBRARY_CONSUMER");
         AddDefine("GLM_ENABLE_EXPERIMENTAL");
+
+#if DE_ENABLE_PROFILER
+        AddDefine("DE_ENABLE_PROFILER");
+#endif
+#if UNIX
+        AddDefine("UNIX");
+#endif
+#if TRACY_ENABLE
+        AddDefine("TRACY_ENABLE");
+#endif
+        AddDefine("TRACY_DELAYED_INIT");
+        AddDefine("TRACY_FIBERS");
+        AddDefine("TRACY_IMPORTS");
+        AddDefine("TRACY_MANUAL_LIFETIME");
+        AddDefine("TRACY_TIMER_FALLBACK");
+        AddDefine("TRACY_NO_CALLSTACK");
+        AddDefine("TRACY_NO_CALLSTACK_INLINES");
+        AddDefine("TRACY_NO_VSYNC_CAPTURE");
+        AddDefine("TRACY_NO_FRAME_IMAGE");
 
         return Unit();
     }

@@ -1,0 +1,37 @@
+set(DC_FORCE_BUILD_PRESET_OPTIONS OFF)
+set(DC_DEVELOPER_MODE OFF)
+
+if(DE_BUILD_MODE STREQUAL "Debug")
+    set(UBSAN OFF)
+    set(DC_BUILD_TYPE "Debug")
+elseif (DE_BUILD_MODE STREQUAL "Release")
+    set(UBSAN OFF)
+    set(DC_BUILD_TYPE "Release")
+elseif (DE_BUILD_MODE STREQUAL "ReleaseTSAN")
+    set(DC_BUILD_TYPE "Release")
+    set(UBSAN OFF)
+    set(ASAN OFF)
+    set(TSAN ON)
+elseif (DE_BUILD_MODE STREQUAL "ReleaseASAN")
+    set(DC_BUILD_TYPE "Release")
+    set(UBSAN OFF)
+    set(ASAN ON)
+    set(TSAN OFF)
+elseif (DE_BUILD_MODE STREQUAL "ReleaseProfiler")
+    set(UBSAN OFF)
+    set(DC_BUILD_TYPE "Release")
+elseif (DE_BUILD_MODE STREQUAL "ReleaseTidy")
+    set(UBSAN OFF)
+    set(DC_BUILD_TYPE "Release")
+else()
+    message(FATAL_ERROR "Unknown build mode: [${DE_BUILD_MODE}]")
+endif()
+
+
+add_external_library(DUMMY_CONCURRENCY DUMMY_CONCURRENCY DummyConcurrency)
+target_include_directories(${EXTERNAL_DUMMY_CONCURRENCY_LIBRARY}
+    PUBLIC ${EXTERNAL_TRACY_INCLUDE_DIR}
+)
+target_link_libraries(${EXTERNAL_DUMMY_CONCURRENCY_LIBRARY}
+    PUBLIC ${EXTERNAL_TRACY_LIBRARY}
+)

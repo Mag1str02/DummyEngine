@@ -1,11 +1,65 @@
 #include "ModelLoader.h"
 
+#include "DummyEngine/Core/Application/Concurrency.h"
 #include "DummyEngine/Core/Application/Config.h"
 #include "DummyEngine/ToolBox/Loaders/TextureLoader.h"
+#include "DummyEngine/Utils/Debug/Logger.h"
 
 #include <assimp/postprocess.h>
+#include <assimp/scene.h>
+#include <assimp/Importer.hpp>
 
 namespace DummyEngine {
+
+    class ModelLoaderImpl {
+    private:
+        LOG_AUTHOR(ModelLoader)
+
+        enum ColorType {
+            None = 0,
+            Albedo,
+            Diffuse,
+            Specular,
+            Ambient,
+            ORM,
+            Emission,
+        };
+
+    public:
+        explicit ModelLoaderImpl(const RenderMeshAsset::LoadingProperties& properties) : props_(properties) {}
+
+        Result<Ref<RenderMeshData>> Load();
+
+    private:
+        void LoadBone(Bone& bone, aiNodeAnim* node);
+        void ReadWeights(aiMesh* mesh);
+        void ReadBones(Animation& animation, const aiAnimation* anim);
+        void ReadAnimationNode(Animation::Node& node, const aiNode* src);
+        void ReadAnimation(Animation& animation, const aiScene* scene);
+        void FinalizeMaterials();
+
+        TryFuture<MaterialData>     LoadMaterial(aiMaterial* mat);
+        TryFuture<Ref<TextureData>> GetTexture(aiMaterial* mat, aiTextureType type);
+
+        void ProcessNode(aiNode* node, const aiScene* scene);
+        void ProcessMesh(aiMesh* mesh, const aiScene* scene);
+        Vec3 GetColor(aiMaterial* mat, ColorType type);
+        void ReadModelProperties(aiNode* node, const aiScene* scene);
+
+    private:
+        size_t                             vertices_amount_;
+        size_t                             nodes_amount_;
+        size_t                             current_mesh_id_;
+        size_t                             meshes_amount_;
+        Path                               current_directory_;
+        RenderMeshAsset::LoadingProperties props_;
+
+        Ref<RenderMeshData>                                       current_data_;
+        std::vector<TryFuture<MaterialData>>                      meshes_material_;
+        std::unordered_map<Path, CopyTryFuture<Ref<TextureData>>> model_textures_;
+        Assimp::Importer                                          importer_;
+    };
+
     Mat4 AssimpToGLM(const aiMatrix4x4& from) {
         Mat4 to;
         to[0][0] = from.a1;
@@ -27,7 +81,8 @@ namespace DummyEngine {
         return to;
     }
 
-    void ModelLoader::LoadBone(Bone& bone, aiNodeAnim* node) {
+    void ModelLoaderImpl::LoadBone(Bone& bone, aiNodeAnim* node) {
+        DE_PROFILE_SCOPE("ModelLoader::LoadBone");
         for (U32 i = 0; i < node->mNumPositionKeys; ++i) {
             auto        pos        = node->mPositionKeys[i].mValue;
             float       time_stamp = node->mPositionKeys[i].mTime;
@@ -36,7 +91,7 @@ namespace DummyEngine {
             data.Position.y = pos.y;
             data.Position.z = pos.z;
             data.TimeStamp  = time_stamp;
-            bone.positions_.push_back(data);
+            bone.AddPosition(data);
         }
 
         for (U32 i = 0; i < node->mNumRotationKeys; ++i) {
@@ -48,7 +103,7 @@ namespace DummyEngine {
             data.Orientation.z = rot.z;
             data.Orientation.w = rot.w;
             data.TimeStamp     = time_stamp;
-            bone.rotations_.push_back(data);
+            bone.AddRotation(data);
         }
 
         for (U32 i = 0; i < node->mNumScalingKeys; ++i) {
@@ -59,7 +114,7 @@ namespace DummyEngine {
             data.Scale.y   = scale.y;
             data.Scale.z   = scale.z;
             data.TimeStamp = time_stamp;
-            bone.scales_.push_back(data);
+            bone.AddScale(data);
         }
         // LOG_INFO("Loaded bone ({}|{}), with positions ({}), rotations ({}) and scales ({})",
         //          bone.GetBoneName(),
@@ -69,9 +124,10 @@ namespace DummyEngine {
         //          bone.m_Scales.size());
     }
 
-    void ModelLoader::ReadWeights(aiMesh* mesh) {
-        auto& model        = *gState.CurrentData;
-        auto& current_mesh = model.Meshes[gState.CurrentMeshID];
+    void ModelLoaderImpl::ReadWeights(aiMesh* mesh) {
+        DE_PROFILE_SCOPE("ModelLoader::ReadWeights");
+        auto& model        = *current_data_;
+        auto& current_mesh = model.Meshes[current_mesh_id_];
         if (!model.Animation) {
             return;
         }
@@ -111,7 +167,8 @@ namespace DummyEngine {
             }
         }
     }
-    void ModelLoader::ReadBones(Animation& animation, const aiAnimation* anim) {
+    void ModelLoaderImpl::ReadBones(Animation& animation, const aiAnimation* anim) {
+        DE_PROFILE_SCOPE("ModelLoader::ReadBones");
         for (U32 i = 0; i < anim->mNumChannels; ++i) {
             auto channel   = anim->mChannels[i];
             auto bone_info = animation.GetBone(channel->mNodeName.data);
@@ -126,7 +183,7 @@ namespace DummyEngine {
             LoadBone(bone_info->Bone, channel);
         }
     }
-    void ModelLoader::ReadAnimationNode(Animation::Node& node, const aiNode* src) {
+    void ModelLoaderImpl::ReadAnimationNode(Animation::Node& node, const aiNode* src) {
         node.Name           = src->mName.data;
         node.Transformation = AssimpToGLM(src->mTransformation);
         node.Childrens.resize(src->mNumChildren);
@@ -136,7 +193,7 @@ namespace DummyEngine {
             ReadAnimationNode(data, src->mChildren[i]);
         }
     }
-    void ModelLoader::ReadAnimation(Animation& animation, const aiScene* scene) {
+    void ModelLoaderImpl::ReadAnimation(Animation& animation, const aiScene* scene) {
         auto anim                   = scene->mAnimations[0];
         animation.duration_         = anim->mDuration;
         animation.ticks_per_second_ = anim->mTicksPerSecond;
@@ -144,67 +201,93 @@ namespace DummyEngine {
         ReadBones(animation, anim);
     }
 
-    ModelLoader::LoaderState ModelLoader::gState;
+    TryFuture<MaterialData> ModelLoaderImpl::LoadMaterial(aiMaterial* mat) {
+        return Futures::Submit(Concurrency::GetEngineBackgroundScheduler(), [this, mat]() -> Result<MaterialData> {
+            DE_PROFILE_SCOPE("ModelLoader::LoadMaterial");
+            try {
+                MaterialData material;
+                material.Diffuse  = GetColor(mat, ColorType::Diffuse);
+                material.Specular = GetColor(mat, ColorType::Specular);
+                material.Ambient  = GetColor(mat, ColorType::Ambient);
+                material.Albedo   = GetColor(mat, ColorType::Albedo);
+                material.ORM      = GetColor(mat, ColorType::ORM);
+                material.Emission = GetColor(mat, ColorType::Emission);
+                aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &material.Shininess);
 
-    MaterialData ModelLoader::LoadMaterial(aiMaterial* mat) {
-        MaterialData material;
-        material.Diffuse  = GetColor(mat, ColorType::Diffuse);
-        material.Specular = GetColor(mat, ColorType::Specular);
-        material.Ambient  = GetColor(mat, ColorType::Ambient);
-        material.Albedo   = GetColor(mat, ColorType::Albedo);
-        material.ORM      = GetColor(mat, ColorType::ORM);
-        material.Emission = GetColor(mat, ColorType::Emission);
-        aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &material.Shininess);
+                auto albedo   = GetTexture(mat, aiTextureType_DIFFUSE);
+                auto normal   = GetTexture(mat, aiTextureType_NORMALS);
+                auto orm      = GetTexture(mat, aiTextureType_METALNESS);
+                auto diffuse  = GetTexture(mat, aiTextureType_DIFFUSE);
+                auto specular = GetTexture(mat, aiTextureType_SPECULAR);
+                auto emissive = GetTexture(mat, aiTextureType_EMISSIVE);
 
-        material.AlbedoMap   = GetTexture(mat, aiTextureType_DIFFUSE);
-        material.NormalMap   = GetTexture(mat, aiTextureType_NORMALS);
-        material.ORMMap      = GetTexture(mat, aiTextureType_METALNESS);
-        material.DiffuseMap  = GetTexture(mat, aiTextureType_DIFFUSE);
-        material.SpecularMap = GetTexture(mat, aiTextureType_SPECULAR);
-        material.EmissionMap = GetTexture(mat, aiTextureType_EMISSIVE);
-        return material;
+                material.AlbedoMap   = std::move(albedo) | Futures::GetOk();
+                material.NormalMap   = std::move(normal) | Futures::GetOk();
+                material.ORMMap      = std::move(orm) | Futures::GetOk();
+                material.DiffuseMap  = std::move(diffuse) | Futures::GetOk();
+                material.SpecularMap = std::move(specular) | Futures::GetOk();
+                material.EmissionMap = std::move(emissive) | Futures::GetOk();
+
+                return material;
+            } catch (const std::exception& ex) {
+                return Results::Failure();
+            }
+        });
     }
 
-    Ref<RenderMeshData> ModelLoader::Load(const RenderMeshAsset::LoadingProperties& properties) {
-        gState.Props       = properties;
+    Result<Ref<RenderMeshData>> ModelLoaderImpl::Load() {
+        DE_PROFILE_SCOPE("ModelLoader::Load");
         unsigned int flags = aiProcess_Triangulate | aiProcess_CalcTangentSpace;
-        if (properties.FlipUV) {
+        if (props_.FlipUV) {
             flags |= aiProcess_FlipUVs;
         }
-        const aiScene* scene = gState.Importer.ReadFile(properties.Path.string(), flags);
+        const aiScene* scene;
+        {
+            DE_PROFILE_SCOPE("ModelLoader::Load (ASSUMP ReadFile)");
+            scene = importer_.ReadFile(props_.Path.string(), flags);
+        }
 
         if (scene == nullptr || (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) != 0 || scene->mRootNode == nullptr) {
-            LOG_ERROR("Failed to load model {} due: {}", Config::RelativeToExecutable(properties.Path), gState.Importer.GetErrorString());
-            return nullptr;
+            LOG_ERROR("Failed to load model {} due: {}", Config::RelativeToExecutable(props_.Path), importer_.GetErrorString());
+            return Results::Failure();
         }
 
-        gState.CurrentData = CreateRef<RenderMeshData>();
+        current_data_ = CreateRef<RenderMeshData>();
         if (scene->mNumAnimations > 0) {
-            gState.CurrentData->Animation = CreateRef<Animation>();
+            current_data_->Animation = CreateRef<Animation>();
         }
-        gState.CurrentMeshID    = 0;
-        gState.MeshesAmount     = 0;
-        gState.NodesAmount      = 0;
-        gState.VerticesAmount   = 0;
-        gState.CurrentDirectory = properties.Path.parent_path();
+        current_mesh_id_   = 0;
+        meshes_amount_     = 0;
+        nodes_amount_      = 0;
+        vertices_amount_   = 0;
+        current_directory_ = props_.Path.parent_path();
 
         ReadModelProperties(scene->mRootNode, scene);
-        gState.CurrentData->Meshes.resize(gState.MeshesAmount);
+        LOG_INFO("Model {} loaded with {} meshes and {} verticies", Config::RelativeToExecutable(props_.Path), meshes_amount_, vertices_amount_);
+
+        current_data_->Meshes.resize(meshes_amount_);
+        meshes_material_.reserve(meshes_amount_);
         ProcessNode(scene->mRootNode, scene);
-        if (gState.CurrentData->Animation) {
-            ReadAnimation(*gState.CurrentData->Animation, scene);
+        if (current_data_->Animation) {
+            ReadAnimation(*current_data_->Animation, scene);
         }
-        if (properties.Compress) {
-            gState.CurrentData->Compress();
+
+        for (U32 i = 0; i < meshes_material_.size(); ++i) {
+            auto result = std::move(meshes_material_[i]) | Futures::Get();
+            if (!result.has_value()) {
+                LOG_ERROR("Failed to load material {} of model {} due: {}", i, Config::RelativeToExecutable(props_.Path), importer_.GetErrorString());
+                return Results::Failure();
+            }
+            current_data_->Meshes[i].Material = std::move(result.value());
         }
-        LOG_INFO("Model {} loaded with {} meshes and {} verticies",
-                 Config::RelativeToExecutable(properties.Path),
-                 gState.MeshesAmount,
-                 gState.VerticesAmount);
-        return gState.CurrentData;
+
+        if (props_.Compress) {
+            current_data_->Compress();
+        }
+        return current_data_;
     }
 
-    void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene) {
+    void ModelLoaderImpl::ProcessNode(aiNode* node, const aiScene* scene) {
         for (size_t i = 0; i < node->mNumMeshes; ++i) {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
             ProcessMesh(mesh, scene);
@@ -213,9 +296,10 @@ namespace DummyEngine {
             ProcessNode(node->mChildren[i], scene);
         }
     }
-    void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
-        RenderMeshData&    model        = *gState.CurrentData;
-        RenderSubMeshData& current_mesh = model.Meshes[gState.CurrentMeshID];
+    void ModelLoaderImpl::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
+        DE_PROFILE_SCOPE("ModelLoader::ProcessMesh");
+        RenderMeshData&    model        = *current_data_;
+        RenderSubMeshData& current_mesh = model.Meshes[current_mesh_id_];
         for (size_t i = 0; i < mesh->mNumVertices; ++i) {
             Vertex3D vertex;
 
@@ -247,11 +331,12 @@ namespace DummyEngine {
             }
         }
         // if (mesh->mMaterialIndex >= 0) {    // always true because of unsigned int  0 <= attachment_id
-        aiMaterial* material  = scene->mMaterials[mesh->mMaterialIndex];
-        current_mesh.Material = LoadMaterial(material);
-        ++gState.CurrentMeshID;
+        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+        meshes_material_.emplace_back(LoadMaterial(material));
+        ++current_mesh_id_;
     }
-    Vec3 ModelLoader::GetColor(aiMaterial* mat, ColorType type) {
+    Vec3 ModelLoaderImpl::GetColor(aiMaterial* mat, ColorType type) {
+        DE_PROFILE_SCOPE("ModelLoader::GetColor");
         aiColor3D color(1.f, 1.f, 1.f);
         switch (type) {
             case ColorType::Diffuse: mat->Get(AI_MATKEY_COLOR_DIFFUSE, color); break;
@@ -267,30 +352,41 @@ namespace DummyEngine {
         Vec3 res(color.r, color.g, color.b);
         return res;
     }
-    Ref<TextureData> ModelLoader::GetTexture(aiMaterial* mat, aiTextureType type) {
+    TryFuture<Ref<TextureData>> ModelLoaderImpl::GetTexture(aiMaterial* mat, aiTextureType type) {
+        DE_PROFILE_SCOPE("ModelLoader::GetTexture");
         aiString file_name;
         Path     texture_path;
         if (mat->GetTextureCount(type) == 0) {
-            return nullptr;
+            return Futures::Ok(Ref<TextureData>());
         } else if (mat->GetTextureCount(type) > 1) {
             LOG_WARNING("Model has more multiple textures of same type. Loading only first one.");
         }
         mat->GetTexture(type, 0, &file_name);
 
-        if (!gState.ModelTextures.contains(gState.CurrentDirectory / file_name.C_Str())) {
-            gState.ModelTextures[gState.CurrentDirectory / file_name.C_Str()] =
-                TextureLoader::Load({gState.CurrentDirectory / file_name.C_Str(), false});
+        auto path = current_directory_ / file_name.C_Str();
+        if (!model_textures_.contains(path)) {
+            model_textures_[path] = TextureLoader::Load({path, false}) | Futures::Copy();
         }
-        return gState.ModelTextures[gState.CurrentDirectory / file_name.C_Str()];
+        return model_textures_[path];
     }
-    void ModelLoader::ReadModelProperties(aiNode* node, const aiScene* scene) {
-        ++gState.NodesAmount;
-        gState.MeshesAmount += node->mNumMeshes;
+    void ModelLoaderImpl::ReadModelProperties(aiNode* node, const aiScene* scene) {
+        DE_PROFILE_SCOPE("ModelLoader::ReadModelProperties");
+        ++nodes_amount_;
+        meshes_amount_ += node->mNumMeshes;
         for (size_t i = 0; i < node->mNumMeshes; ++i) {
-            gState.VerticesAmount += scene->mMeshes[node->mMeshes[i]]->mNumVertices;
+            vertices_amount_ += scene->mMeshes[node->mMeshes[i]]->mNumVertices;
         }
         for (size_t i = 0; i < node->mNumChildren; ++i) {
             ReadModelProperties(node->mChildren[i], scene);
         }
+    }
+
+    TryFuture<Ref<RenderMeshData>> ModelLoader::Load(const RenderMeshAsset::LoadingProperties& props) {
+        return Futures::Submit(                           //
+            Concurrency::GetEngineBackgroundScheduler(),  //
+            [props]() {
+                ModelLoaderImpl loader(props);
+                return loader.Load();  //
+            });
     }
 }  // namespace DummyEngine

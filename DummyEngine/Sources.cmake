@@ -17,12 +17,16 @@ Core/Animations/Animator.cpp
 Core/Animations/Bone.cpp
 
 Core/Application/Application.cpp
+Core/Application/Concurrency.cpp
 Core/Application/ImGuiLayer.cpp
 Core/Application/Window.cpp
 Core/Application/Input.cpp
 Core/Application/Initializer.cpp
 Core/Application/Config.cpp
 Core/Application/FileSystem.cpp
+Core/Application/Layer.cpp
+Core/Application/Engine.cpp
+Core/Application/GLFW.cpp
 
 Core/Console/ConsoleLayer.cpp
 Core/Console/Console.cpp

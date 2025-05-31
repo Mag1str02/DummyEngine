@@ -20,10 +20,10 @@ namespace DummyEngine {
         second_ = StrToHex(second);
     }
     UUID::operator std::string() const {
-        return std::format("{:032x}{:032x}", first_, second_);
+        return std::format("{:016x}{:016x}", first_, second_);
     }
     std::string UUID::Hex() const {
-        return std::format("{:032x}{:032x}", first_, second_);
+        return std::format("{:016x}{:016x}", first_, second_);
     }
 
     bool UUID::operator==(const UUID& other) const {

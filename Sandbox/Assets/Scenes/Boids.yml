@@ -1,0 +1,113 @@
+Scene:
+  Name: Scene
+  Assets:
+    Models:
+      CubeModel:
+        Path: Assets/Models/Cube/cube.obj
+        Compress: true
+        FlipUV: false
+        UUID: 02afee3bc1cb75b7d8b882a8667faa84
+    Textures:
+      Sky:
+        Path: Assets/Textures/Skyboxes/Sky.png
+        FlipUV: false
+        UUID: 8911b8a8458923946819fb45fbb794fd
+    Shaders:
+      PBR:
+        UUID: 24116af57b6022cd2464fbf641ae946a
+        Vertex: Assets/Shaders/PBR/PBR.vs
+        Fragment: Assets/Shaders/PBR/PBR.fs
+      Boids:
+        UUID: 24116af57b6022cd2464fbf641ae945c
+        Vertex: Assets/Shaders/Boid/Boid.vs
+        Fragment: Assets/Shaders/Boid/Boid.fs
+    Scripts:
+      BoidsController:
+        Path: Assets/Scripts/Boids/BoidsController.cpp
+        UUID: 15fa3d63323bca9ceb7b9ae14b5d2222
+  Hierarchy:
+    - Node:
+        Name: Enviroment
+        Childs:
+          - Entity:
+              Tag: Sun
+              UUID: 4c84709484f950496a723680ffa3dd15
+              Transformation:
+                Translation: [0, 0.230217576, -4.50119495]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [0.100000001, 0.100000001, 0.100000001]
+                ScaleOffset: [1, 1, 1]
+              Shader: 24116af57b6022cd2464fbf641ae946a
+              LightSource:
+                Type: Direction
+                Ambient: [0.0599078536, 0.0599078536, 0.0599078536]
+                Diffuse: [1, 1, 1]
+                Specular: [1, 1, 1]
+                Direction: [-1, -1, 0]
+                Position: [0, 0.230217576, -4.50119495]
+                CLQ: [0, 0, 0.00100000005]
+                InnerCone: 0
+                OuterCone: 0
+          - Entity:
+              Tag: Sky
+              UUID: ed39f278255d3fc7823454ad61d716e5
+              Transformation:
+                Translation: [16.9514027, 36.2624664, -97.3881531]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [180, 0, 0]
+                Scale: [1, 1, 1]
+                ScaleOffset: [1, 1, 1]
+              SkyBox:
+                Type: CubeMap
+                UUID: 8911b8a8458923946819fb45fbb794fd
+    - Node:
+        Name: Objects
+        Childs:
+          - Entity:
+              Tag: Surface
+              UUID: 30624f9f9f6a9301e3ee3e843d2c84a8
+              Transformation:
+                Translation: [0, -2, 0]
+                TranslationOffset: [0, 0, 0]
+                Rotation: [0, 0, 0]
+                RotationOffset: [0, 0, 0]
+                Scale: [500, 1, 500]
+                ScaleOffset: [1, 1, 1]
+              RenderModel:
+                UUID: 02afee3bc1cb75b7d8b882a8667faa84
+                Materials:
+                  - Type: PBR
+                    Albedo: [1, 1, 1]
+                    Ambient: [1, 1, 1]
+                    ORM: [0, 0.400000006, 0]
+                    Diffuse: [0.5, 0.5, 0.5]
+                    Specular: [0.5, 0.5, 0.5]
+                    Emission: [1, 1, 1]
+                    Shininess: 64
+                    EmissionStrength: 0
+                    MeshID: 0
+              Shader: 24116af57b6022cd2464fbf641ae946a
+          - Entity:
+              Tag: BoidsController
+              UUID: 30624b9f9f6a2301e1ee3e843d2c84a8
+              Script:
+                UUID: 15fa3d63323bca9ceb7b9ae14b5d2222
+                Fields:
+                  BoundingBoxCenter: [0, 50, 0]
+                  BoundingBoxSize: 50
+                  BoidsCount: 0
+  RendererSettings:
+    Bloom: false
+    BloomThreshold: 1
+    BloomSoftTreshold: 0
+    BloomDepth: 5
+    BloomRadius: 0.00499999989
+    BloomStrength: 0.00499999989
+    GammaToneMapping: false
+    Exposure: 3.55999994
+    Gamma: 0.360000014
+    UseDirectionalShadowMap: true
+    UsePointShadows: false

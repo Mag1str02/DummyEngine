@@ -4,6 +4,7 @@
 #include "DummyEngine/Utils/Debug/Logger.h"
 
 #include <unordered_set>
+#include <vector>
 
 namespace DummyEngine {
 
@@ -23,10 +24,10 @@ namespace DummyEngine {
 
             std::string compile_command;
             compile_command.append(GetCompiler());
-            #ifndef DE_USE_GNU_FOR_SCRIPTS
+#ifndef DE_USE_GNU_FOR_SCRIPTS
             compile_command.append(" -stdlib=libc++ ");
-            #endif
-            compile_command.append(" -c -std=c++20 ");
+#endif
+            compile_command.append(" -c -std=c++23 ");
             compile_command.append(" -fPIC ");
             compile_command.append(AddDefines());
             compile_command.append(AddIncludeDirArguments());

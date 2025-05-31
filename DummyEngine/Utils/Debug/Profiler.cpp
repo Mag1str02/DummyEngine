@@ -1,5 +1,7 @@
 #include "Profiler.h"
 
+#include <tracy/Tracy.hpp>
+
 namespace DummyEngine {
 
     ProfilerFrame::ProfilerFrame(U32 predicted_lapse_amount) {
@@ -8,11 +10,15 @@ namespace DummyEngine {
 
     SINGLETON_BASE(Profiler);
     S_INITIALIZE() {
+#if DE_ENABLE_PROFILER
         tracy::StartupProfiler();
+#endif
         return Unit();
     }
     S_TERMINATE() {
+#if DE_ENABLE_PROFILER
         tracy::ShutdownProfiler();
+#endif
         return Unit();
     }
 
@@ -58,6 +64,23 @@ namespace DummyEngine {
     }
     ProfilerScopeObject::~ProfilerScopeObject() {
         Profiler::PopTimeLapse();
+    }
+
+    ThreadFactory::ThreadFactory(const std::string& base_name, int32_t group) : base_name_(base_name), group_(group) {}
+    std::thread ThreadFactory::LaunchThread(std::function<void()> main) {
+        names_.emplace_back(std::format("{} ({})\0", base_name_, names_.size()));
+        const char* name  = names_.back().c_str();
+        auto        group = group_;
+        return std::thread([main = std::move(main), name, group]() {
+            NDummyConcurrency::NImplementationLayer::Fiber fiber;
+            fiber.SetName(name, group);
+            NDummyConcurrency::NImplementationLayer::SwitchToFiber(fiber.Handle());
+            {
+                DE_PROFILE_SCOPE("Worker Thread Main");
+                main();
+            }
+            NDummyConcurrency::NImplementationLayer::SwitchToFiber(NDummyConcurrency::NImplementationLayer::FiberHandle());
+        });
     }
 
 }  // namespace DummyEngine

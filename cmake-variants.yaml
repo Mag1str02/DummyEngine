@@ -6,76 +6,82 @@ buildType:
       long: Main development build type with optimized code and debug info
       buildType: ReleaseWithDebInfo
       settings:
+        DE_BUILD_MODE: Release
         DE_FORMAT_BEFORE_BUILD: OFF
         DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
         DE_FORCE_NO_PCH: OFF
         DE_ENABLE_UBSAN: OFF
         DE_ENABLE_ASAN: OFF
-        DE_ENABLE_MSAN: OFF
         DE_ENABLE_TSAN: OFF
+        DE_ENABLE_PROFILER: OFF
     Debug:
       short: Debug
       long: Debug build type
       buildType: Debug
       settings:
+        DE_BUILD_MODE: Debug
         DE_FORMAT_BEFORE_BUILD: OFF
         DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
         DE_FORCE_NO_PCH: OFF
         DE_ENABLE_UBSAN: OFF
         DE_ENABLE_ASAN: OFF
-        DE_ENABLE_MSAN: OFF
         DE_ENABLE_TSAN: OFF
+        DE_ENABLE_PROFILER: OFF
     ReleaseTSAN:
       short: ReleaseTSAN
       long: Optimized code with TSAN
       buildType: ReleaseWithDebInfo
       settings:
+        DE_BUILD_MODE: ReleaseTSAN
         DE_FORMAT_BEFORE_BUILD: OFF
         DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
         DE_FORCE_NO_PCH: OFF
-        DE_ENABLE_UBSAN: ON
+        DE_ENABLE_UBSAN: OFF
         DE_ENABLE_ASAN: OFF
-        DE_ENABLE_MSAN: OFF
         DE_ENABLE_TSAN: ON
+        DE_ENABLE_PROFILER: OFF
     ReleaseASAN:
       short: ReleaseASAN
       long: Optimized code with ASAN
       buildType: ReleaseWithDebInfo
       settings:
+        DE_BUILD_MODE: ReleaseASAN
         DE_FORMAT_BEFORE_BUILD: OFF
         DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
         DE_FORCE_NO_PCH: OFF
-        DE_ENABLE_UBSAN: ON
+        DE_ENABLE_UBSAN: OFF
         DE_ENABLE_ASAN: ON
-        DE_ENABLE_MSAN: OFF
         DE_ENABLE_TSAN: OFF
-    ReleaseMSAN:
-      short: ReleaseMSAN
-      long: Optimized code with MSAN
+        DE_ENABLE_PROFILER: OFF
+    ReleaseProfiler:
+      short: ReleaseProfiler
+      long: Optimized code with Tracy Profiler
       buildType: ReleaseWithDebInfo
       settings:
+        DE_BUILD_MODE: ReleaseProfiler
         DE_FORMAT_BEFORE_BUILD: OFF
         DE_CLANG_TIDY_RUN_ON_COMPILATION: OFF
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: OFF
         DE_FORCE_NO_PCH: OFF
-        DE_ENABLE_UBSAN: ON
+        DE_ENABLE_UBSAN: OFF
         DE_ENABLE_ASAN: OFF
-        DE_ENABLE_MSAN: ON
         DE_ENABLE_TSAN: OFF
+        DE_ENABLE_PROFILER: ON
     ReleaseTidy:
       short: ReleaseTidy
       long: Runs clang-format before build, forces no PCH and runs clang-tidy checks
       buildType: ReleaseWithDebInfo
       settings:
+        DE_BUILD_MODE: ReleaseTidy
         DE_FORMAT_BEFORE_BUILD: ON
         DE_CLANG_TIDY_RUN_ON_COMPILATION: ON
         DE_CLANG_TIDY_WARNINGS_AS_ERRORS: ON
         DE_FORCE_NO_PCH: ON
         DE_ENABLE_UBSAN: OFF
         DE_ENABLE_ASAN: OFF
-        DE_ENABLE_MSAN: OFF
         DE_ENABLE_TSAN: OFF
+        DE_ENABLE_PROFILER: OFF

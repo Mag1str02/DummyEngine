@@ -218,7 +218,10 @@ namespace DummyEngine {
         return FileSystem::SaveFileDialog("Dummy Engine Scene (*.yml)", "yml", "", Config::Get().ScenePath);
     }
     void EditorLayer::OpenScene(const Path& scene_path) {
+        DE_PROFILE_SCOPE("EditorLayer::OpenScene");
+
         auto start = std::chrono::high_resolution_clock::now();
+        LOG_INFO("Opening scene {}", scene_path);
         if (scene_path.empty()) {
             scene_file_data_ = SceneFileData();
             current_scene_   = CreateRef<Scene>();
@@ -228,10 +231,14 @@ namespace DummyEngine {
                 return;
             }
             scene_file_data_ = res.value();
+
+            auto scripts_future = ScriptManager::LoadScripts(scene_file_data_.Assets.Scripts);
             LoadAssets();
-            if (!ScriptManager::LoadScripts(scene_file_data_.Assets.Scripts)) {
+            auto scripts_result = std::move(scripts_future) | Futures::Get();
+            if (!scripts_result.has_value()) {
                 return;
             }
+            LOG_INFO("Serializing scene");
             current_scene_ = SceneLoader::Serialize(scene_file_data_.Hierarchy);
             if (current_scene_ == nullptr) {
                 return;
@@ -245,8 +252,8 @@ namespace DummyEngine {
         scene_script_state_ = SceneScriptState::Compiled;
         current_scene_->LoadPhysics(current_scene_);
 
-        std::chrono::duration<double> tm = (std::chrono::high_resolution_clock::now() - start);
-        LOG_INFO("Opened scene in {} seconds", tm);
+        std::chrono::duration<double> duration = std::chrono::high_resolution_clock::now() - start;
+        LOG_INFO("Opened scene {} in {} seconds", scene_path, duration);
     }
     void EditorLayer::SaveScene(const Path& path) {
         scene_file_data_.Hierarchy = SceneLoader::Deserialize(current_scene_);
@@ -273,18 +280,23 @@ namespace DummyEngine {
     }
 
     void EditorLayer::LoadAssets() {
+        std::vector<TryFuture<Unit>> resources;
         for (const auto& asset : scene_file_data_.Assets.Textures) {
             AssetManager::AddTextureAsset(asset);
+            resources.emplace_back(ResourceManager::LoadTextureData(asset.ID) | Futures::MapOk([](auto&&) { return Unit(); }));
         }
         for (const auto& asset : scene_file_data_.Assets.Scripts) {
             AssetManager::AddScriptAsset(asset);
         }
         for (const auto& asset : scene_file_data_.Assets.RenderMeshes) {
             AssetManager::AddRenderMeshAsset(asset);
+            resources.emplace_back(ResourceManager::LoadRenderMeshData(asset.ID) | Futures::MapOk([](auto&&) { return Unit(); }));
+            resources.emplace_back(ResourceManager::LoadHitBox(asset.ID) | Futures::MapOk([](auto&&) { return Unit(); }));
         }
         for (const auto& asset : scene_file_data_.Assets.Shaders) {
             AssetManager::AddShaderAsset(asset);
         }
+        Futures::WaitAll(std::move(resources));
     }
     void EditorLayer::UnloadAssets() {
         for (const auto& asset : scene_file_data_.Assets.Textures) {
@@ -306,7 +318,7 @@ namespace DummyEngine {
         editor_camera_.AddComponent<FPSCamera>();
         editor_camera_.AddComponent<ScriptComponent>(ScriptEngine::CreateScript(ScriptManager::EditorScript("EditorCameraController")));
 
-        current_scene_->AttachSystem(ts_system_);
+        current_scene_->GetStorage()->AttachSystem(ts_system_);
         scene_hierarchy_.SetActiveScene(current_scene_);
         inspector_.SetScene(current_scene_);
         renderer_panel_.SetScene(current_scene_);
@@ -324,7 +336,8 @@ namespace DummyEngine {
         if (Input::KeyDown(Key::LeftControl)) {
             if (Input::KeyReleased(Key::GraveAccent) && current_scene_ != nullptr) {
                 input_state_ = (input_state_ == InputState::ViewPort ? InputState::NonSpecified : InputState::ViewPort);
-                SetMouseLockToggleEvent event;
+                SetMouseLockEvent event;
+                event.Action = SetMouseLockEvent::Switch;
                 BroadcastEvent(event);
             }
             if (input_state_ != InputState::ViewPort) {
@@ -354,12 +367,19 @@ namespace DummyEngine {
 
     void EditorLayer::LoadEditorResources() {}
     void EditorLayer::LoadIcons() {
-        auto play_data          = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/PlayButton.png"});
-        auto pause_data         = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/PauseButton.png"});
-        auto step_data          = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/StepButton.png"});
-        auto stop_data          = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/StopButton.png"});
-        auto build_data         = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/BuildButton.png"});
-        auto build_and_run_data = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/BuildAndRunButton.png"});
+        auto f_play_data          = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/PlayButton.png"});
+        auto f_pause_data         = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/PauseButton.png"});
+        auto f_step_data          = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/StepButton.png"});
+        auto f_stop_data          = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/StopButton.png"});
+        auto f_build_data         = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/BuildButton.png"});
+        auto f_build_and_run_data = TextureLoader::Load({Config::Get().ExecutablePath / "Editor/Icons/BuildAndRunButton.png"});
+
+        auto play_data          = std::move(f_play_data) | Futures::GetOk();
+        auto pause_data         = std::move(f_pause_data) | Futures::GetOk();
+        auto step_data          = std::move(f_step_data) | Futures::GetOk();
+        auto stop_data          = std::move(f_stop_data) | Futures::GetOk();
+        auto build_data         = std::move(f_build_data) | Futures::GetOk();
+        auto build_and_run_data = std::move(f_build_and_run_data) | Futures::GetOk();
 
         DE_ASSERT(play_data, "Failed to load play icon");
         DE_ASSERT(pause_data, "Failed to load pause icon");

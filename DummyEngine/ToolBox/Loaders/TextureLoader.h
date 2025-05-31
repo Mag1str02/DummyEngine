@@ -9,7 +9,10 @@ namespace DummyEngine {
     class TextureLoader {
         LOG_AUTHOR(TextureLoader)
     public:
-        static Ref<TextureData> Load(const TextureAsset::LoadingProperties& props);
+        static TryFuture<Ref<TextureData>> Load(const TextureAsset::LoadingProperties& props);
+
+    private:
+        static Result<Ref<TextureData>> DoLoad(const TextureAsset::LoadingProperties& props);
     };
 
 }  // namespace DummyEngine

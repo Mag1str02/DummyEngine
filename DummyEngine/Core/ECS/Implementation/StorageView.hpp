@@ -2,56 +2,57 @@
 
 #include "Storage.hpp"  // IWYU pragma: keep
 
+#include "DummyEngine/Core/ECS/ComponentArray.h"
+#include "DummyEngine/Core/ECS/ComponentManager.h"
 #include "DummyEngine/Core/ECS/Entity.h"
 #include "DummyEngine/Core/ECS/StorageView.h"
 
 namespace DummyEngine {
 
-    template <typename... Components> StorageView<Components...>::Iterator::Iterator(U32 id, StorageView* v) : id_(id), view_(v) {}
-
-    template <typename... Components> bool StorageView<Components...>::Iterator::operator==(const Iterator& other) const {
-        return view_ == other.view_ && id_ == other.id_;
-    }
-    template <typename... Components> bool StorageView<Components...>::Iterator::operator!=(const Iterator& other) const {
-        return view_ != other.view_ || id_ != other.id_;
-    }
-
-    template <typename... Components> StorageView<Components...>::StorageView(Storage* storage) : storage_(storage) {
-        signature_ = storage_->component_manager_.BuildSignature<Components...>();
+    template <typename... Components> StorageView<Components...>::StorageView(Storage* storage) {
+        DE_PROFILE_SCOPE("StorageView::StorageView");
+        const std::vector<U32>* min_entities        = nullptr;
+        auto                    update_min_entities = [&min_entities](const IComponentArray* array) {
+            if (array == nullptr) {
+                return;
+            }
+            const auto* entities = &array->GetEntities();
+            if (min_entities == nullptr || min_entities->size() > entities->size()) {
+                min_entities = entities;
+            }
+        };
+        {
+            DE_PROFILE_SCOPE("StorageView::StorageView (UpdateMinEntities)");
+            ((update_min_entities(storage->component_manager_.GetComponentArray<Components>())), ...);
+        }
+        auto signature = storage->component_manager_.BuildSignature<Components...>();
+        if (min_entities == nullptr) {
+            return;
+        }
+        view_.reserve(min_entities->size());
+        for (const auto& entity : *min_entities) {
+            if (!storage->component_manager_.Matches(entity, signature)) {
+                continue;
+            }
+            Entity res;
+            res.id_      = entity;
+            res.gen_     = storage->entity_manager_.Generation(entity);
+            res.storage_ = storage->weak_from_this();
+            DE_ASSERT(res.Valid(), "Entity with id {} and generation {} is invalid", res.id_, res.gen_);
+            view_.emplace_back(std::move(res));
+        }
     }
     template <typename... Components> typename StorageView<Components...>::Iterator StorageView<Components...>::begin() {
-        Iterator res(storage_->entity_manager_.BeginEntity(), this);
-        if (!storage_->component_manager_.Matches(res.id_, signature_)) {
-            ++res;
-        }
-        return res;
+        return view_.begin();
     }
     template <typename... Components> typename StorageView<Components...>::Iterator StorageView<Components...>::end() {
-        return Iterator(storage_->entity_manager_.EndEntity(), this);
+        return view_.end();
     }
     template <typename... Components> bool StorageView<Components...>::Empty() {
         return begin() == end();
     }
-
-    template <typename... Components> typename StorageView<Components...>::Iterator& StorageView<Components...>::Iterator::operator++() {
-        do {
-            id_ = view_->storage_->entity_manager_.NextEntity(id_);
-        } while (id_ != view_->storage_->entity_manager_.EndEntity() && !view_->storage_->component_manager_.Matches(id_, view_->signature_));
-        return *this;
-    }
-    template <typename... Components> typename StorageView<Components...>::Iterator StorageView<Components...>::Iterator::operator++(int) {
-        auto res = *this;
-        do {
-            id_ = view_->storage_->entity_manager_.NextEntity(id_);
-        } while (id_ != view_->storage_->entity_manager_.EndEntity() && view_->storage_->component_manager_.Matches(id_, view_->signature_));
-        return res;
-    }
-    template <typename... Components> Entity StorageView<Components...>::Iterator::operator*() {
-        Entity res;
-        res.id_      = id_;
-        res.gen_     = view_->storage_->entity_manager_.Generation(id_);
-        res.storage_ = view_->storage_->weak_from_this();
-        return res;
+    template <typename... Components> const std::vector<Entity>& StorageView<Components...>::Entities() const {
+        return view_;
     }
 
 }  // namespace DummyEngine

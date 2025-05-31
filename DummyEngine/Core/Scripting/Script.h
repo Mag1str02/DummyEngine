@@ -4,6 +4,8 @@
 #include "DummyEngine/Core/Scene/Scene.h"
 #include "DummyEngine/Utils/Helpers/CompilerSpecific.h"
 
+#include <map>
+
 namespace DummyEngine {
 
     enum class ScriptFieldType {
@@ -32,7 +34,7 @@ namespace DummyEngine {
 
     class Script {
     private:
-        using Iterator = std::unordered_map<std::string, ScriptClassField>::const_iterator;
+        using Iterator = std::map<std::string, ScriptClassField>::const_iterator;
 
     public:
         class Field {
@@ -87,9 +89,10 @@ namespace DummyEngine {
         void                     AttachToScene(WeakRef<Scene> scene, Entity entity);
         bool                     AttachedToScene() const;
         Ref<Scene>               GetScene() const;
+        Ref<Storage>             GetStorage() const;
 
     protected:
-        virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const = 0;
+        virtual const std::map<std::string, ScriptClassField>& GetClassFields() const = 0;
 
         template <typename T> T&   Add(const T& t);
         template <typename T> T&   Get();
@@ -154,22 +157,23 @@ namespace DummyEngine {
         }                                                                                 \
     }
 
-#define SCRIPT(type)                                                                                   \
-    static const std::unordered_map<std::string, ScriptClassField> s_ClassFields;                      \
-                                                                                                       \
-protected:                                                                                             \
-    virtual const std::unordered_map<std::string, ScriptClassField>& GetClassFields() const override { \
-        return s_ClassFields;                                                                          \
+#define SCRIPT(type)                                                                         \
+    static const std::map<std::string, ScriptClassField> s_ClassFields;                      \
+                                                                                             \
+protected:                                                                                   \
+    virtual const std::map<std::string, ScriptClassField>& GetClassFields() const override { \
+        return s_ClassFields;                                                                \
     }
 
-#define SCRIPT_BASE(type, ...)                                                                   \
-    using CurrentScriptType                                                     = type;          \
-    const std::unordered_map<std::string, ScriptClassField> type::s_ClassFields = {__VA_ARGS__}; \
-    DE_SCRIPT_API Script*                                   type##Create() {                     \
+#define SCRIPT_BASE(type, ...)                                                         \
+    using CurrentScriptType                                           = type;          \
+    const std::map<std::string, ScriptClassField> type::s_ClassFields = {__VA_ARGS__}; \
+    DE_SCRIPT_API Script*                         type##Create() {                     \
         return new type();                                     \
-    }                                                                                            \
-    DE_SCRIPT_API void type##Delete(Script* script) {                                            \
-        delete script;                                                                           \
+    }                                                                                  \
+    DE_SCRIPT_API void type##Delete(Script* script) {                                  \
+        script->OnDetach();                                                            \
+        delete script;                                                                 \
     }
 
 }  // namespace DummyEngine

@@ -115,6 +115,10 @@ namespace DummyEngine {
             }
         }
         if (node.IsEntity()) {
+            if (!node.GetEntity().Valid()) {
+                node.Delete();
+                return;
+            }
             ImGuiUtils::ScopedID id(node.GetID());
             auto                 entity      = node.GetEntity();
             std::string          name        = "        " ICON_MD_CHECK_BOX_OUTLINE_BLANK "  " + entity.Get<TagComponent>().Tag;

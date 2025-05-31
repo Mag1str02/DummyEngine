@@ -52,9 +52,21 @@ namespace DummyEngine {
     template <typename ComponentType> void Storage::SetRemoveHandler(std::function<void(Entity)> func) {
         component_manager_.SetRemoveHandler<ComponentType>(func);
     }
+    template <typename ComponentType> void Storage::RegisterComponent() {
+        component_manager_.RegisterComponent<ComponentType>();
+    }
+    template <typename ComponentType> void Storage::UnRegisterComponent() {
+        component_manager_.UnregisterComponent<ComponentType>();
+    }
 
-    template <typename SystemType> void Storage::AttachSystem(std::shared_ptr<System> system) {
+    template <typename SystemType> void Storage::AttachSystem(std::shared_ptr<SystemType> system) {
         system_manager_.AttachSystem<SystemType>(system);
+    }
+    template <typename SystemType> void Storage::DettachSystem() {
+        system_manager_.DettachSystem<SystemType>();
+    }
+    template <typename Before, typename After> void Storage::AddDependency() {
+        system_manager_.AddDependency<Before, After>();
     }
 
     template <typename ComponentType> ComponentType* Storage::AddComponent(U32 id, U32 gen, const ComponentType& component) {

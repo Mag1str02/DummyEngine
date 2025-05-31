@@ -111,6 +111,7 @@ namespace DummyEngine {
     }
 
     ScriptProxy& ScriptProxyManager::GetProxy(U32 id) {
+        DE_ASSERT(id < proxys_.size(), "Invalid script id {} while proxys size is {}", id, proxys_.size());
         return proxys_[id];
     }
     U32 ScriptProxyManager::CreateProxy() {

@@ -2,6 +2,8 @@
 
 #include "DummyEngine/Core/Physics/Utils.hpp"
 
+#include <algorithm>
+
 namespace DummyEngine {
 
     void Physics::ConvexHitbox::Build(const std::vector<Vec3>& mesh) {

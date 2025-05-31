@@ -340,14 +340,14 @@ namespace DummyEngine {
         entity.AddComponent(transformation);
     }
     template <> void LoadComponent<RenderMeshComponent>(Ref<Scene>, YAML::Node n_component, Entity& entity) {
-        UUID id = n_component["UUID"].as<std::string>();
-        if (!ResourceManager::HasRenderMesh(id) && !ResourceManager::LoadRenderMesh(id)) {
+        UUID id               = n_component["UUID"].as<std::string>();
+        auto render_mesh_data = ResourceManager::GetRenderMeshData(id);
+        if (!render_mesh_data) {
             LOG_WARNING("RenderMesh {} not found in ResourceManager", id);
+            throw std::runtime_error(std::format("RenderMesh {} not found in ResourceManager", id));
         }
-        if (!ResourceManager::HasHitBox(id) && !ResourceManager::LoadHitBox(id)) {
-            LOG_WARNING("Failed to load HitBox {}", id);
-        }
-        auto& meshes = entity.AddComponent<RenderMeshComponent>({id, ResourceManager::GetRenderMesh(id).value()->Copy()})->Mesh->GetSubMeshes();
+        auto  render_mesh = CreateRef<RenderMesh>(render_mesh_data.value());
+        auto& meshes      = entity.AddComponent<RenderMeshComponent>({id, render_mesh})->Mesh->GetSubMeshes();
 
         for (const auto& mat : n_component["Materials"]) {
             U32   mesh_id             = mat["MeshID"].as<U32>();
@@ -415,8 +415,9 @@ namespace DummyEngine {
             if (!asset.has_value()) {
                 LOG_WARNING("CubeMap {} not found in ResourceManager", id);
             } else {
-                auto        asset  = AssetManager::GetTextureAsset(id);
-                Ref<SkyBox> skybox = CreateRef<SkyBox>(TextureLoader::Load(asset.value().LoadingProps));
+                auto        asset   = AssetManager::GetTextureAsset(id);
+                auto        texture = TextureLoader::Load(asset.value().LoadingProps) | Futures::Get();
+                Ref<SkyBox> skybox  = CreateRef<SkyBox>(*texture);
                 entity.AddComponent<SkyBoxComponent>({type, id, skybox});
             }
         }
@@ -544,6 +545,7 @@ namespace DummyEngine {
     //*~~~SceneLoader~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     std::optional<SceneFileData> SceneLoader::LoadScene(const Path& path) {
+        DE_PROFILE_SCOPE("SceneLoader::LoadScene");
         try {
             SceneFileData result;
             YAML::Node    n_scene = YAML::LoadFile(path.string())["Scene"];
@@ -559,6 +561,7 @@ namespace DummyEngine {
         }
     }
     Ref<Scene> SceneLoader::Serialize(const YAML::Node& hierarchy) {
+        DE_PROFILE_SCOPE("SceneLoader::Serialize");
         try {
             Ref<Scene> scene = CreateRef<Scene>();
             LoadHierarchyNode(scene, hierarchy, scene->GetHierarchyRoot());

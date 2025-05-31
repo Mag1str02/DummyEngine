@@ -38,15 +38,9 @@ namespace DummyEngine {
         void LoadPhysics(Ref<Scene>& scene);
 
         Ref<SceneRenderer>   GetRenderer() { return renderer_; }
+        Ref<Storage>         GetStorage() { return storage_; }
         SceneHierarchy::Node GetHierarchyRoot();
 
-        template <typename System> Ref<System> AttachSystem(Ref<System> system = nullptr) {
-            if (!system) {
-                system = CreateRef<System>();
-            }
-            storage_->AttachSystem<System>(system);
-            return system;
-        }
         template <typename... Components> StorageView<Components...> View() { return storage_->View<Components...>(); }
 
     private:

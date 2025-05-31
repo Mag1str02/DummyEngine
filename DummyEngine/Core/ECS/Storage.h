@@ -23,8 +23,13 @@ namespace DummyEngine {
         template <typename ComponentType> void SetAddHandler(std::function<void(Entity)> func);
         template <typename ComponentType> void SetRemoveHandler(std::function<void(Entity)> func);
 
-        template <typename SystemType> void AttachSystem(std::shared_ptr<System> system);
-        void                                UpdateSystems(float dt);
+        template <typename ComponentType> void RegisterComponent();
+        template <typename ComponentType> void UnRegisterComponent();
+
+        template <typename SystemType> void             AttachSystem(std::shared_ptr<SystemType> system);
+        template <typename SystemType> void             DettachSystem();
+        template <typename Before, typename After> void AddDependency();
+        void                                            UpdateSystems(float dt);
 
     private:
         template <typename... Components> friend class StorageView;

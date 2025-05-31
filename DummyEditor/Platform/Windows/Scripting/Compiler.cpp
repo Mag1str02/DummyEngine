@@ -4,6 +4,7 @@
 #include "DummyEngine/Utils/Debug/Logger.h"
 
 #include <unordered_set>
+#include <vector>
 
 namespace DummyEngine {
     class WindowsCompilerImpl : public CompilerImpl {
@@ -22,7 +23,7 @@ namespace DummyEngine {
 
             std::string compile_command;
             compile_command.append(GetCompiler());
-            compile_command.append(" -c -std=c++20");
+            compile_command.append(" -c -std=c++23");
             compile_command.append(" -fPIC ");
             compile_command.append(AddDefines());
             compile_command.append(AddIncludeDirArguments());
@@ -70,9 +71,9 @@ namespace DummyEngine {
             // TODO: Get compiler from config.
 #ifdef DE_USE_GNU_FOR_SCRIPTS
             return "g++";
-#else 
+#else
             return "clang++";
-#endif            
+#endif
         }
         void FixSlash(std::string& command) { std::replace(command.begin(), command.end(), '\\', '/'); }
 

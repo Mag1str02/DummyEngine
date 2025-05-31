@@ -7,6 +7,14 @@ macro(set_option option help value)
     endif()
 endmacro()
 
+if (NOT DE_BUILD_MODE)
+    if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+        set (DE_BUILD_MODE "Debug")
+    else()
+        set(DE_BUILD_MODE "Release")
+    endif()
+endif()
+
 
 message(STATUS "---Configuring-Project-Options-----------------------------------------------------------------")
 set_option(DE_FORMAT_BEFORE_BUILD "Runs clang-format on DummyEngine and DummyEditor before build" OFF)

@@ -20,6 +20,12 @@ namespace DummyEngine {
         template <typename... Components> Signature BuildSignature();
         bool                                        Matches(U32 id, const Signature& signature) const;
 
+        template <typename ComponentType> const IComponentArray* GetComponentArray() const;
+
+        template <typename ComponentType> void RegisterComponent();
+        template <typename ComponentType> void UnregisterComponent();
+        template <typename ComponentType> bool IsRegisteredComponent();
+
     private:
         template <typename... Components> typename std::enable_if<sizeof...(Components) == 0, bool>::type ValidateComponents() const;
         template <typename T, typename... Components> bool                                                ValidateComponents() const;
@@ -27,8 +33,7 @@ namespace DummyEngine {
         template <typename... Components> typename std::enable_if<sizeof...(Components) == 0, Signature>::type GetSignature() const;
         template <typename T, typename... Components> Signature                                                GetSignature() const;
 
-        void                                   ValidateSignature(U32 entity_id);
-        template <typename ComponentType> void RegisterComponent();
+        void ValidateSignature(U32 entity_id);
 
         std::unordered_map<std::type_index, std::shared_ptr<IComponentArray>> component_arrays_;
         std::unordered_map<std::type_index, U32>                              component_id_;

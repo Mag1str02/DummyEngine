@@ -4,6 +4,8 @@
 #include "DummyEngine/Core/Application/KeyCodes.h"
 #include "DummyEngine/Utils/Helpers/Singleton.h"
 
+#include <deque>
+
 namespace DummyEngine {
 
     struct InputFrame {
@@ -18,7 +20,7 @@ namespace DummyEngine {
     class Input : public Singleton<Input> {
         SINGLETON(Input)
     public:
-        S_METHOD_DEF(Unit, OnEvent, (Event & e));
+        S_METHOD_DEF(Unit, OnEvent, (const Event& e));
         S_METHOD_DEF(Unit, NewFrame, ());
         S_METHOD_DEF(Unit, SetFrameAmount, (size_t n));
 

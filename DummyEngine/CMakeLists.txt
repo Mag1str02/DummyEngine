@@ -10,10 +10,15 @@ add_library(DummyEngineLib SHARED
 )
 link_dependencies(DummyEngineLib)
 target_compile_definitions(DummyEngineLib PUBLIC 
-    DE_ENABLE_PROFILER=1
     DE_ENABLE_ASSERTS=1
     DE_ENABLE_LOGGING=1
 )
+
+if (${DE_ENABLE_PROFILER})
+    target_compile_definitions(DummyEngineLib PUBLIC 
+        DE_ENABLE_PROFILER
+    )
+endif()
 
 if (DE_USE_GNU_FOR_SCRIPTS)
     target_compile_definitions(DummyEngineLib PUBLIC DE_USE_GNU_FOR_SCRIPTS=1)

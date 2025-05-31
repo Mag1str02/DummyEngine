@@ -13,6 +13,8 @@ namespace DummyEngine {
         Entity& operator=(const Entity&) = default;
         Entity& operator=(Entity&&)      = default;
 
+        Ref<Storage> GetStorage() const;
+
         bool Valid() const;
         void Destroy();
 
@@ -22,6 +24,7 @@ namespace DummyEngine {
         template <typename ComponentType> ComponentType& Get();
         template <typename ComponentType> bool           Has() const;
         template <typename ComponentType> void           Remove();
+
 
         bool operator==(const Entity& other) const;
         bool operator!=(const Entity& other) const;

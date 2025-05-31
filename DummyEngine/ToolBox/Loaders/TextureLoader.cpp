@@ -1,5 +1,6 @@
 #include "TextureLoader.h"
 
+#include "DummyEngine/Core/Application/Concurrency.h"
 #include "DummyEngine/Core/Application/Config.h"
 
 #include <stb_image.h>
@@ -7,7 +8,9 @@
 
 namespace DummyEngine {
 
-    Ref<TextureData> TextureLoader::Load(const TextureAsset::LoadingProperties& props) {
+    Result<Ref<TextureData>> TextureLoader::DoLoad(const TextureAsset::LoadingProperties& props) {
+        DE_PROFILE_SCOPE("TextureLoader::DoLoad");
+
         void*           stb_data = nullptr;
         int             width = 0, height = 0, nr_channels = 0;
         TextureChannels channels;
@@ -15,25 +18,30 @@ namespace DummyEngine {
         std::string     format_s;
 
         auto res = CreateRef<TextureData>();
-
         stbi_set_flip_vertically_on_load(int(props.FlipUV));
 
-        switch (props.Format) {
-            case TextureFormat::U8:
-                stb_data = stbi_load(props.Path.string().c_str(), &width, &height, &nr_channels, 0);
-                format_s = "U8";
-                break;
-            case TextureFormat::Float:
-                stb_data = stbi_loadf(props.Path.string().c_str(), &width, &height, &nr_channels, 0);
-                format_s = "Float";
-                break;
-            case TextureFormat::None: LOG_WARNING("Texture was not loaded because of unspecified format"); return res;
-            default: DE_ASSERT(false, "Unsupported texture format"); break;
+        {
+            DE_PROFILE_SCOPE("TextureLoader::DoLoad (stbi load)");
+            switch (props.Format) {
+                case TextureFormat::U8:
+                    stb_data = stbi_load(props.Path.string().c_str(), &width, &height, &nr_channels, 0);
+                    format_s = "U8";
+                    break;
+                case TextureFormat::Float:
+                    stb_data = stbi_loadf(props.Path.string().c_str(), &width, &height, &nr_channels, 0);
+                    format_s = "Float";
+                    break;
+                case TextureFormat::None: {
+                    LOG_WARNING("Texture was not loaded because of unspecified format (path='{}')", props.Path);
+                    return Results::Failure();
+                }
+                default: DE_ASSERT(false, "Unsupported texture format"); break;
+            }
         }
 
         if (stb_data == nullptr) {
             LOG_ERROR("Failed to load texture {}", Config::RelativeToExecutable(props.Path));
-            return nullptr;
+            return Results::Failure();
         }
 
         switch (nr_channels) {
@@ -64,6 +72,10 @@ namespace DummyEngine {
 
         LOG_INFO("Texture {} loaded, channels ({}), format ({})", Config::RelativeToExecutable(props.Path), channels_s, format_s);
         return res;
+    }
+
+    TryFuture<Ref<TextureData>> TextureLoader::Load(const TextureAsset::LoadingProperties& props) {
+        return Futures::Submit(Concurrency::GetEngineBackgroundScheduler(), [props]() { return DoLoad(props); });
     }
 
 }  // namespace DummyEngine

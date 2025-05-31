@@ -18,7 +18,9 @@ namespace DummyEngine {
                 array->RemoveComponent(entity_id);
             }
         }
-        signatures_[entity_id] = Signature();
+        if (signatures_.size() > entity_id) {
+            signatures_[entity_id] = Signature();
+        }
     }
     bool ComponentManager::Matches(U32 id, const Signature& signature) const {
         if (signatures_.size() <= id) {
@@ -36,15 +38,18 @@ namespace DummyEngine {
 
     template <typename ComponentType> void ComponentManager::SetAddHandler(std::function<void(Entity)> func) {
         RegisterComponent<ComponentType>();
+        DE_ASSERT(IsRegisteredComponent<ComponentType>(), "Component is not registered");
         add_handlers_[std::type_index(typeid(ComponentType))] = func;
     }
     template <typename ComponentType> void ComponentManager::SetRemoveHandler(std::function<void(Entity)> func) {
         RegisterComponent<ComponentType>();
+        DE_ASSERT(IsRegisteredComponent<ComponentType>(), "Component is not registered");
         remove_handlers_[std::type_index(typeid(ComponentType))] = func;
     }
 
     template <typename ComponentType> ComponentType* ComponentManager::AddComponent(U32 entity_id, const ComponentType& component) {
         RegisterComponent<ComponentType>();
+        DE_ASSERT(IsRegisteredComponent<ComponentType>(), "Component is not registered");
         ValidateSignature(entity_id);
         signatures_[entity_id].Set(component_id_[std::type_index(typeid(ComponentType))], true);
         auto* c = reinterpret_cast<ComponentType*>(
@@ -104,13 +109,35 @@ namespace DummyEngine {
     }
 
     template <typename ComponentType> void ComponentManager::RegisterComponent() {
-        if (component_id_.find(std::type_index(typeid(ComponentType))) == component_id_.end()) {
-            auto default_handler                                  = [](Entity) {};
-            component_id_[std::type_index(typeid(ComponentType))] = component_id_.size();
-            component_arrays_[std::type_index(typeid(ComponentType))] =
-                std::make_shared<ComponentArray<ComponentType>>(ComponentArray<ComponentType>());
-            add_handlers_[std::type_index(typeid(ComponentType))]    = default_handler;
-            remove_handlers_[std::type_index(typeid(ComponentType))] = default_handler;
+        // TODO: make component registry and macro to register and unregister components.
+        // This is required to properly destruct all components from scrip library when it is being unloaded.
+        if (IsRegisteredComponent<ComponentType>()) {
+            return;
         }
+        // DE_ASSERT(!IsRegisteredComponent<ComponentType>(), "Component already registered");
+        auto default_handler                                      = [](Entity) {};
+        component_id_[std::type_index(typeid(ComponentType))]     = component_id_.size();
+        component_arrays_[std::type_index(typeid(ComponentType))] = std::make_shared<ComponentArray<ComponentType>>(ComponentArray<ComponentType>());
+        add_handlers_[std::type_index(typeid(ComponentType))]     = default_handler;
+        remove_handlers_[std::type_index(typeid(ComponentType))]  = default_handler;
+    }
+    template <typename ComponentType> void ComponentManager::UnregisterComponent() {
+        DE_ASSERT(IsRegisteredComponent<ComponentType>(), "Component is not registered");
+        DE_ASSERT(component_arrays_.at(std::type_index(typeid(ComponentType)))->GetEntities().empty(), "Not all components were deleted");
+
+        component_id_.erase(std::type_index(typeid(ComponentType)));
+        component_arrays_.erase(std::type_index(typeid(ComponentType)));
+        add_handlers_.erase(std::type_index(typeid(ComponentType)));
+        remove_handlers_.erase(std::type_index(typeid(ComponentType)));
+    }
+    template <typename ComponentType> bool ComponentManager::IsRegisteredComponent() {
+        return component_id_.find(std::type_index(typeid(ComponentType))) != component_id_.end();
+    }
+    template <typename ComponentType> const IComponentArray* ComponentManager::GetComponentArray() const {
+        auto it = component_arrays_.find(std::type_index(typeid(ComponentType)));
+        if (it == component_arrays_.end()) {
+            return nullptr;
+        }
+        return it->second.get();
     }
 }  // namespace DummyEngine

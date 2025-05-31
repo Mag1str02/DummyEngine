@@ -29,4 +29,8 @@ namespace DummyEngine {
         index_to_entity_.pop_back();
         entity_to_index_.erase(id);
     }
+    template <typename ComponentType> const std::vector<U32>& ComponentArray<ComponentType>::GetEntities() const {
+        return index_to_entity_;
+    }
+
 }  // namespace DummyEngine
